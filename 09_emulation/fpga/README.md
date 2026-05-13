@@ -1,4 +1,4 @@
-[← Plan](../../PLAN.md) · [FPGA Cores](README.md)
+[← Emulation](../README.md) · [FPGA Cores](README.md)
 
 # Emulation — FPGA Cores
 

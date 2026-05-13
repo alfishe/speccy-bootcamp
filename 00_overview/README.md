@@ -1,4 +1,4 @@
-[← Plan](../PLAN.md) · [Overview](README.md)
+[← Home](../README.md) · [Overview](README.md)
 
 # Overview
 

@@ -22,12 +22,14 @@ zx/
 │
 ├── 01_cpu/
 │   ├── z80_architecture.md
+│   ├── z80_addressing.md
+│   ├── z80_flags.md
 │   ├── z80_instruction_set.md
 │   ├── z80_undocumented.md
-│   ├── z80_interrupts.md
 │   ├── z80_timing.md
-│   ├── z80_block_instructions.md
-│   └── z80_vs_modern.md
+│   ├── z80_interrupts.md
+│   ├── z80_vs_modern.md
+│   ├── z80_coding_practices.md
 │
 ├── 02_hardware/
 │   ├── original/
@@ -38,11 +40,12 @@ zx/
 │   │   ├── zx_spectrum_plus2a_plus3.md
 │   │   ├── ula_architecture.md
 │   │   ├── ula_contention.md
+│   │   ├── ula_timing.md
 │   │   ├── power_supply.md
 │   │   ├── rom_contents.md
 │   │   ├── keyboard_matrix.md
 │   │   └── edge_connector.md
-│   ├── soviet/
+│   ├── clones/
 │   │   ├── README.md
 │   │   ├── pentagon.md
 │   │   ├── pentagon_1024.md
@@ -52,6 +55,7 @@ zx/
 │   │   ├── profi.md
 │   │   ├── byte.md
 │   │   ├── other_clones.md
+│   │   ├── clone_timing.md
 │   │   ├── ula_replacements.md
 │   │   └── sizif_harlequin.md
 │   └── newgen/
@@ -440,16 +444,17 @@ zx/
 | `timeline.md` | Visual timeline: chips, models, software milestones, demoscene firsts |
 | `glossary.md` | Platform-specific terminology (ATTR, ULA, contention, RASTER, TR-DOS, ESXDOS, etc.) |
 
-### 01 — Z80 CPU (Deep Dive)
+### 01 — Z80 CPU (~UM0080 Structure)
 
 | File | Topic |
 |---|---|
-| `z80_architecture.md` | Registers (AF/BC/DE/HL/AF'/BC'/DE'/HL', IX/IY, SP, PC, I, R), flag bits, register pairs, register file |
-| `z80_instruction_set.md` | Complete instruction reference with timing (T-states, M-cycles per instruction) |
-| `z80_undocumented.md` | Undocumented instructions: IX/IY half-register access, `OUT (C),0` behavior (varies by clone!), `LD A,I/R` flag quirks, MEMPTR/`WZ` internal register |
-| `z80_interrupts.md` | IM0/IM1/IM2 deep dive: vector tables, interrupt latency, NMI, ZX Spectrum INT chain, per-model INT timing |
-| `z80_timing.md` | M-cycle and T-state precise timing, memory contention, I/O port timing, wait states, per-model contention tables |
-| `z80_block_instructions.md` | LDIR/CPIR/OTIR deep dive: when they're faster than loops, interrupt interaction, real-world benchmarks |
+| `z80_architecture.md` | ~UM0080 Ch.1+2: CPU block diagram, register file (AF/BC/DE/HL/AF'/BC'/DE'/HL', IX/IY, SP, PC, I, R), ALU, 40-pin description. Brief note on MEMPTR/WZ → see `z80_undocumented.md` |
+| `z80_addressing.md` | Memory addressing modes: immediate, register, register indirect, indexed (IX/IY±d), relative, extended, bit, implied. I/O port addressing: IN/OUT port space, register B/C selects, port aliasing on ZX Spectrum bus |
+| `z80_flags.md` | Flag register F: S, Z, H, P/V, N, C — documented behavior per instruction group. Brief note on flag quirks → see `z80_undocumented.md` |
+| `z80_instruction_set.md` | ~UM0080 Ch.4: complete instruction reference with timing (T-states, M-cycles). Includes block instructions (LDIR/CPIR/OTIR). Brief note on undocumented opcodes → see `z80_undocumented.md` |
+| `z80_undocumented.md` | **Authoritative deep reference** for all undocumented behavior: IX/IY half-registers (IXH/IXL/IYH/IYL), `OUT (C),0` per-clone behavior, SLI and ghost opcodes, `LD A,I/R` flag corruption, block instruction flag quirks, DD/FD/FD CB/DD CB prefix oddities, MEMPTR/WZ internal register, R increment behavior, per-clone differences |
+| `z80_timing.md` | ~UM0080 Ch.3: M-cycles, T-states, bus timing diagrams, I/O port timing, WAIT pin mechanism, per-instruction cost tables, prefix byte timing, DRAM refresh, bus control signals |
+| `z80_interrupts.md` | ~UM0080 Ch.5: IM0/IM1/IM2, NMI, vector tables, interrupt latency, ZX Spectrum INT chain, per-model INT timing (48K/128K/Pentagon/Next) |
 | `z80_vs_modern.md` | Cross-platform comparison: Z80 vs 6502 vs 6809 vs modern cores (RP2040, ESP32) |
 
 ### 02 — Hardware (subfoldered by stream)
@@ -465,6 +470,7 @@ zx/
 | `zx_spectrum_plus2a_plus3.md` | +2A/+3: Amstrad gate array, +3 DOS, internal floppy, RAM banking differences |
 | `ula_architecture.md` | Ferranti ULA internals: video generation, memory arbitration, contention timing, CPU/ULA cycle interleaving |
 | `ula_contention.md` | Memory contention deep dive: when CPU is stalled, precise timing diagrams per model, impact on cycle-counted code |
+| `ula_timing.md` | ULA frame timing per model (48K/128K/+2A), memory contention (Ferranti 6-5-4-3-2-1-0-0, Amstrad gate array 1-0-7-6-5-4-3-2), contended I/O, multicolor effects, early/late timing drift, performance budget, screen update timing |
 | `power_supply.md` | PSU design: 9V unregulated, internal regulation, edge connector power pins |
 | `rom_contents.md` | ROM dissection: channel system, editor, BASIC interpreter, character set |
 | `keyboard_matrix.md` | 8x5 matrix, key codes, keyboard reading routine, BEEP key detection |
@@ -483,6 +489,7 @@ zx/
 | `profi.md` | Profi: Russian professional clone, ISA-like expansion, VGA output |
 | `byte.md` | Byte: Ukrainian clone, compact design |
 | `other_clones.md` | Dozens more: Hobbit, Leningrad (1/2), Mikrosha, Composite, Quorum (64/256), LEC (48/528), etc. |
+| `clone_timing.md` | Non-ULA clone video timing: Pentagon, Scorpion, Kay, ATM Turbo, FPGA implementations, clone detection techniques, demoscene multi-platform strategies |
 | `ula_replacements.md` | ULA replacement chips: Soviet-made gate arrays (Т34ВГ1, etc.), CMOS implementations, timing differences |
 | `sizif_harlequin.md` | Modern recreations: Sizif-512, Harlequin, Speccy 2010 — faithful hardware clones with modern components (Karabas family covered in newgen/) |
 
@@ -905,7 +912,7 @@ zx/
 |---|---|
 | `README.md` | Index — software emulation landscape |
 | `emulator_comparison.md` | Comprehensive comparison: Fuse, ZEsarUX, Spectaculator, CSpect, EightyOne, Unreal Speccy, SpecEmu — accuracy vs features |
-| `cycle_exact_accuracy.md` | Cycle-exact requirements: contention, floating bus, bus contention edge cases, what "accurate" means |
+| `cycle_exact_accuracy.md` | Cycle-exact requirements: frame timing divergence, CRT sync mechanism, host sync strategies (DRC, resampling), AY audio clocks, judder mitigation (5 techniques), emulator comparison (10 entries), worst-case conclusion |
 | `fuse.md` | Fuse: reference emulator, architecture, debugger, RZX recording |
 | `zesarux.md` | ZEsarUX: advanced debugging, reverse debugging, FPGA simulation, Next support |
 | `cspect.md` | CSpect: ZX Spectrum Next emulator, development focus |

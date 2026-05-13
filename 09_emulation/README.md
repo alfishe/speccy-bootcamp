@@ -1,0 +1,25 @@
+[← Home](../README.md) · [Emulation](README.md)
+
+# Emulation
+
+This section covers ZX Spectrum emulation in all its forms: software emulators, FPGA implementations, and MCU-based hardware replacements.
+
+---
+
+## Subdirectories
+
+| Directory | Topic | Status |
+|-----------|-------|--------|
+| [software/](software/) | Software emulators — Fuse, ZEsarUX, cycle-exact accuracy, test suites | Active |
+| [fpga/](fpga/) | FPGA cores — MiSTer, ZX-Uno, Harlequin/Sizif, implementation guides | Placeholder |
+| [mcu/](mcu/) | MCU emulation — Z80 on MCU, ULA on MCU, FDC, video adapters | Placeholder |
+
+## Articles
+
+### Software Emulators
+
+| # | Article | Description |
+|---|---------|------------|
+| 1 | [cycle_exact_accuracy.md](software/cycle_exact_accuracy.md) | Frame timing divergence, CRT sync mechanism, host sync strategies (DRC, resampling), AY-3-8912 audio clocks, judder mitigation (5 techniques with compute costs), emulator comparison (10 entries), worst-case Pentagon@60Hz conclusion |
+
+See [PLAN.md](../PLAN.md) for the full article catalog.

@@ -1,4 +1,4 @@
-[← Plan](../../PLAN.md) · [MCU Emulation](README.md)
+[← Emulation](../README.md) · [MCU Emulation](README.md)
 
 # Emulation — MCU Chip Emulation
 
