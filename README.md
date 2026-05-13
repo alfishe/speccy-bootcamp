@@ -40,9 +40,29 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 
 *Placeholder — content coming.*
 
-### 00 — Overview · 03 — I/O · 04 — OS · 05 — Development · 06 — RE · 07 — Toolchain · 08 — References
+### 00 — Overview · 03 — I/O · 04 — OS · 06 — RE · 07 — Toolchain · 08 — References
 
 *Placeholders — content coming. See [PLAN.md](PLAN.md) for the full catalog.*
+
+### 05 — Development
+
+#### Memory & I/O
+
+| Article | Description |
+|---------|------------|
+| [memory_map_48k.md](05_development/03_memory_and_io/memory_map_48k.md) | 16K/48K memory map: ROM, screen, attributes, system variables, RAM regions |
+| [memory_map_128k.md](05_development/03_memory_and_io/memory_map_128k.md) | 128K/+2 paging: 8 banks, #7FFD register, shadow screen, contended banks |
+| [io_ports.md](05_development/03_memory_and_io/io_ports.md) | I/O ports: partial decoding, #FE deep dive, #7FFD, AY, Kempston, per-model differences |
+| [screen_layout.md](05_development/03_memory_and_io/screen_layout.md) | Nonlinear framebuffer: three-thirds structure, address calculation, attribute file |
+
+#### Display & Timing
+
+| Article | Description |
+|---------|------------|
+| [video_frame_overview.md](05_development/05_display_and_timing/video_frame_overview.md) | PAL fundamentals, ULA frame cycle, T-state budget, contentious vs non-contentious time |
+| [video_frame_48k.md](05_development/05_display_and_timing/video_frame_48k.md) | 48K frame: T-state map, contention pattern, floating bus, performance budget |
+| [video_frame_128k.md](05_development/05_display_and_timing/video_frame_128k.md) | 128K frame: odd-bank contention, shadow screen, floating bus differences |
+| [video_frame_pentagon.md](05_development/05_display_and_timing/video_frame_pentagon.md) | Pentagon frame: 320 lines, binary counter, zero contention, 48.83 Hz |
 
 ### 09 — Emulation
 
@@ -70,13 +90,24 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 9. [Z80 Interrupts](01_cpu/z80_interrupts.md)
 10. [Cycle-Exact Emulation Accuracy](09_emulation/software/cycle_exact_accuracy.md)
 
+**Spectrum assembly programmers (memory, I/O, display):**
+
+11. [48K Memory Map](05_development/03_memory_and_io/memory_map_48k.md)
+12. [Screen Pixel Layout](05_development/03_memory_and_io/screen_layout.md)
+13. [I/O Ports](05_development/03_memory_and_io/io_ports.md)
+14. [128K Memory Map](05_development/03_memory_and_io/memory_map_128k.md)
+15. [Video Frame Overview](05_development/05_display_and_timing/video_frame_overview.md)
+16. [48K Video Frame](05_development/05_display_and_timing/video_frame_48k.md)
+17. [128K Video Frame](05_development/05_display_and_timing/video_frame_128k.md)
+18. [Pentagon Video Frame](05_development/05_display_and_timing/video_frame_pentagon.md)
+
 **Bridge to advanced optimization:**
 
-11. [Z80 Coding Practices](01_cpu/z80_coding_practices.md)
+19. [Z80 Coding Practices](01_cpu/z80_coding_practices.md)
 
 **Coming from modern platforms:**
 
-12. [Z80 vs Modern](01_cpu/z80_vs_modern.md)
+20. [Z80 vs Modern](01_cpu/z80_vs_modern.md)
 
 ---
 

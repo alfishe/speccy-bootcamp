@@ -444,18 +444,18 @@ zx/
 | `timeline.md` | Visual timeline: chips, models, software milestones, demoscene firsts |
 | `glossary.md` | Platform-specific terminology (ATTR, ULA, contention, RASTER, TR-DOS, ESXDOS, etc.) |
 
-### 01 — Z80 CPU (~UM0080 Structure)
+### 01 — Z80 CPU (~UM0080 Structure) ✅ COMPLETE
 
-| File | Topic |
-|---|---|
-| `z80_architecture.md` | ~UM0080 Ch.1+2: CPU block diagram, register file (AF/BC/DE/HL/AF'/BC'/DE'/HL', IX/IY, SP, PC, I, R), ALU, 40-pin description. Brief note on MEMPTR/WZ → see `z80_undocumented.md` |
-| `z80_addressing.md` | Memory addressing modes: immediate, register, register indirect, indexed (IX/IY±d), relative, extended, bit, implied. I/O port addressing: IN/OUT port space, register B/C selects, port aliasing on ZX Spectrum bus |
-| `z80_flags.md` | Flag register F: S, Z, H, P/V, N, C — documented behavior per instruction group. Brief note on flag quirks → see `z80_undocumented.md` |
-| `z80_instruction_set.md` | ~UM0080 Ch.4: complete instruction reference with timing (T-states, M-cycles). Includes block instructions (LDIR/CPIR/OTIR). Brief note on undocumented opcodes → see `z80_undocumented.md` |
-| `z80_undocumented.md` | **Authoritative deep reference** for all undocumented behavior: IX/IY half-registers (IXH/IXL/IYH/IYL), `OUT (C),0` per-clone behavior, SLI and ghost opcodes, `LD A,I/R` flag corruption, block instruction flag quirks, DD/FD/FD CB/DD CB prefix oddities, MEMPTR/WZ internal register, R increment behavior, per-clone differences |
-| `z80_timing.md` | ~UM0080 Ch.3: M-cycles, T-states, bus timing diagrams, I/O port timing, WAIT pin mechanism, per-instruction cost tables, prefix byte timing, DRAM refresh, bus control signals |
-| `z80_interrupts.md` | ~UM0080 Ch.5: IM0/IM1/IM2, NMI, vector tables, interrupt latency, ZX Spectrum INT chain, per-model INT timing (48K/128K/Pentagon/Next) |
-| `z80_vs_modern.md` | Cross-platform comparison: Z80 vs 6502 vs 6809 vs modern cores (RP2040, ESP32) |
+| File | Topic | Status |
+|---|---|---|
+| `z80_architecture.md` | ~UM0080 Ch.1+2: CPU block diagram, register file (AF/BC/DE/HL/AF'/BC'/DE'/HL', IX/IY, SP, PC, I, R), ALU, 40-pin description. Brief note on MEMPTR/WZ → see `z80_undocumented.md` | ✅ |
+| `z80_addressing.md` | Memory addressing modes: immediate, register, register indirect, indexed (IX/IY±d), relative, extended, bit, implied. I/O port addressing: IN/OUT port space, register B/C selects, port aliasing on ZX Spectrum bus | ✅ |
+| `z80_flags.md` | Flag register F: S, Z, H, P/V, N, C — documented behavior per instruction group. Brief note on flag quirks → see `z80_undocumented.md` | ✅ |
+| `z80_instruction_set.md` | ~UM0080 Ch.4: complete instruction reference with timing (T-states, M-cycles). Includes block instructions (LDIR/CPIR/OTIR). Brief note on undocumented opcodes → see `z80_undocumented.md` | ✅ |
+| `z80_undocumented.md` | **Authoritative deep reference** for all undocumented behavior: IX/IY half-registers (IXH/IXL/IYH/IYL), `OUT (C),0` per-clone behavior, SLI and ghost opcodes, `LD A,I/R` flag corruption, block instruction flag quirks, DD/FD/FD CB/DD CB prefix oddities, MEMPTR/WZ internal register, R increment behavior, per-clone differences | ✅ |
+| `z80_timing.md` | ~UM0080 Ch.3: M-cycles, T-states, bus timing diagrams, I/O port timing, WAIT pin mechanism, per-instruction cost tables, prefix byte timing, DRAM refresh, bus control signals | ✅ |
+| `z80_interrupts.md` | ~UM0080 Ch.5: IM0/IM1/IM2, NMI, vector tables, interrupt latency, ZX Spectrum INT chain, per-model INT timing (48K/128K/Pentagon/Next) | ✅ |
+| `z80_vs_modern.md` | Cross-platform comparison: Z80 vs 6502 vs 6809 vs modern cores (RP2040, ESP32) | ✅ |
 
 ### 02 — Hardware (subfoldered by stream)
 
@@ -470,7 +470,7 @@ zx/
 | `zx_spectrum_plus2a_plus3.md` | +2A/+3: Amstrad gate array, +3 DOS, internal floppy, RAM banking differences |
 | `ula_architecture.md` | Ferranti ULA internals: video generation, memory arbitration, contention timing, CPU/ULA cycle interleaving |
 | `ula_contention.md` | Memory contention deep dive: when CPU is stalled, precise timing diagrams per model, impact on cycle-counted code |
-| `ula_timing.md` | ULA frame timing per model (48K/128K/+2A), memory contention (Ferranti 6-5-4-3-2-1-0-0, Amstrad gate array 1-0-7-6-5-4-3-2), contended I/O, multicolor effects, early/late timing drift, performance budget, screen update timing |
+| `ula_timing.md` | ULA frame timing per model (48K/128K/+2A), memory contention (Ferranti 6-5-4-3-2-1-0-0, Amstrad gate array 1-0-7-6-5-4-3-2), contended I/O, multicolor effects, early/late timing drift, performance budget, screen update timing | ✅ |
 | `power_supply.md` | PSU design: 9V unregulated, internal regulation, edge connector power pins |
 | `rom_contents.md` | ROM dissection: channel system, editor, BASIC interpreter, character set |
 | `keyboard_matrix.md` | 8x5 matrix, key codes, keyboard reading routine, BEEP key detection |
@@ -489,7 +489,7 @@ zx/
 | `profi.md` | Profi: Russian professional clone, ISA-like expansion, VGA output |
 | `byte.md` | Byte: Ukrainian clone, compact design |
 | `other_clones.md` | Dozens more: Hobbit, Leningrad (1/2), Mikrosha, Composite, Quorum (64/256), LEC (48/528), etc. |
-| `clone_timing.md` | Non-ULA clone video timing: Pentagon, Scorpion, Kay, ATM Turbo, FPGA implementations, clone detection techniques, demoscene multi-platform strategies |
+| `clone_timing.md` | Non-ULA clone video timing: Pentagon, Scorpion, Kay, ATM Turbo, FPGA implementations, clone detection techniques, demoscene multi-platform strategies | ✅ |
 | `ula_replacements.md` | ULA replacement chips: Soviet-made gate arrays (Т34ВГ1, etc.), CMOS implementations, timing differences |
 | `sizif_harlequin.md` | Modern recreations: Sizif-512, Harlequin, Speccy 2010 — faithful hardware clones with modern components (Karabas family covered in newgen/) |
 
@@ -649,20 +649,20 @@ zx/
 | `c_with_sdcc.md` | C development with SDCC: Z80 backend, comparison with z88dk, when to use |
 | `mixed_c_asm.md` | Mixing C and assembly: calling conventions, inline asm, interop patterns |
 
-#### 05_development/03_memory_and_io/ — Memory Architecture
+#### 05_development/03_memory_and_io/ — Memory Architecture 📝 IN PROGRESS
 
-| File | Topic |
-|---|---|
-| `memory_map_48k.md` | 16K/48K memory map: ROM, screen, attributes, system vars, RAM |
-| `memory_map_128k.md` | 128K paging: 16K banks, ROM switching, screen banks, paging register (#7FFD) |
-| `memory_map_plus3.md` | +2A/+3 paging: 4 modes, #1FFD + #7FFD registers |
-| `memory_map_pentagon.md` | Pentagon memory: 512K/1024K expansions, paging scheme |
-| `memory_map_next.md` | ZX Spectrum Next memory: 2MB, banking, MMU |
-| `io_ports.md` | I/O port programming: how partial decoding works, reading/writing ports, port aliasing, the #FE port deep dive (border/speaker/mic/ear), memory paging ports (#7FFD/#1FFD), AY ports (#FFFD/#BFFD) — with decoding bitmask explanation and per-model differences table |
-| `contention_model.md` | Unified contention model: per-model timing, impact on code, workarounds |
-| `screen_layout.md` | Pixel screen layout: nonlinear addressing (character rows × 8 pixel rows), attribute file |
-| `system_variables.md` | System variables: ROM workspace, CHANS, PROG, VARS, FLAGS, TVARS |
-| `bank_switching_patterns.md` | Bank switching patterns: practical techniques for 128K+ development across models |
+| File | Topic | Status |
+|---|---|---|
+| `memory_map_48k.md` | 16K/48K memory map: ROM, screen, attributes, system vars, RAM | 📝 |
+| `memory_map_128k.md` | 128K paging: 16K banks, ROM switching, screen banks, paging register (#7FFD) | 📝 |
+| `memory_map_plus3.md` | +2A/+3 paging: 4 modes, #1FFD + #7FFD registers | |
+| `memory_map_pentagon.md` | Pentagon memory: 512K/1024K expansions, paging scheme | |
+| `memory_map_next.md` | ZX Spectrum Next memory: 2MB, banking, MMU | |
+| `io_ports.md` | I/O port programming: how partial decoding works, reading/writing ports, port aliasing, the #FE port deep dive (border/speaker/mic/ear), memory paging ports (#7FFD/#1FFD), AY ports (#FFFD/#BFFD) — with decoding bitmask explanation and per-model differences table | 📝 |
+| `contention_model.md` | Unified contention model: per-model timing, impact on code, workarounds | |
+| `screen_layout.md` | Pixel screen layout: nonlinear addressing (character rows × 8 pixel rows), attribute file | 📝 |
+| `system_variables.md` | System variables: ROM workspace, CHANS, PROG, VARS, FLAGS, TVARS | |
+| `bank_switching_patterns.md` | Bank switching patterns: practical techniques for 128K+ development across models | |
 
 #### 05_development/04_interrupts/ — Interrupt Programming
 
@@ -678,18 +678,18 @@ zx/
 | `interrupt_antipatterns.md` | Named antipatterns: The Slow ISR, The Re-Entry Gambler, The Missing EI, The Contended ISR |
 | `interrupt_cookbook.md` | Cookbook: frame counter, raster bar, music player ISR, multi-effect ISR, keyboard scan ISR |
 
-#### 05_development/05_display_and_timing/ — Video Subsystem
+#### 05_development/05_display_and_timing/ — Video Subsystem 📝 IN PROGRESS
 
-| File | Topic |
-|---|---|
-| `README.md` | Index — video subsystem overview, why frame timing is the single most important thing to understand on Spectrum |
+| File | Topic | Status |
+|---|---|---|
+| `README.md` | Index — video subsystem overview, why frame timing is the single most important thing to understand on Spectrum | |
 
-**Frame Generation — Per Model** | |
-| `video_frame_overview.md` | Video frame generation overview: PAL timing fundamentals (50Hz, 312/313 scanlines, 224 T-states/line), what the ULA does each frame, screen + border + blanking regions |
-| `video_frame_48k.md` | **48K ULA frame**: exact T-state map per scanline, pixel fetch pattern, contention windows (scanlines 64–255), INT position (scanline 248, T-state 0), floating bus behavior |
-| `video_frame_128k.md` | **128K / +2 frame**: same ULA core but contention differs, shadow screen bank, INT timing differences |
-| `video_frame_plus2a_plus3.md` | **+2A/+3 frame**: Amstrad gate array contention model, different timing from 48K/128K |
-| `video_frame_pentagon.md` | **Pentagon frame**: THE most important Soviet clone timing — different scanline count, different INT position, different contention — code that works on 48K WILL break here |
+**Frame Generation — Per Model** | | |
+| `video_frame_overview.md` | Video frame generation overview: PAL timing fundamentals (50Hz, 312/313 scanlines, 224 T-states/line), what the ULA does each frame, screen + border + blanking regions | 📝 |
+| `video_frame_48k.md` | **48K ULA frame**: exact T-state map per scanline, pixel fetch pattern, contention windows (scanlines 64–255), INT position (scanline 248, T-state 0), floating bus behavior | 📝 |
+| `video_frame_128k.md` | **128K / +2 frame**: same ULA core but contention differs, shadow screen bank, INT timing differences | 📝 |
+| `video_frame_plus2a_plus3.md` | **+2A/+3 frame**: Amstrad gate array contention model, different timing from 48K/128K | |
+| `video_frame_pentagon.md` | **Pentagon frame**: THE most important Soviet clone timing — different scanline count, different INT position, different contention — code that works on 48K WILL break here | 📝 |
 | `video_frame_scorpion.md` | **Scorpion frame**: timing differences, turbo mode impact on video |
 | `video_frame_other_soviet.md` | Other Soviet clone frames: ATM Turbo (3.5MHz AND 7MHz modes — 69888 vs 99880 T-states!), Kay, Profi (different paper offset: 12580T), Byte, Quorum, Leningrad, LEC — each may have unique timing |
 | `video_frame_next.md` | **ZX Spectrum Next frame**: configurable timing modes, 48K/128K/Pentagon timing compatibility, Layer 2 timing, copper sync |
@@ -912,7 +912,7 @@ zx/
 |---|---|
 | `README.md` | Index — software emulation landscape |
 | `emulator_comparison.md` | Comprehensive comparison: Fuse, ZEsarUX, Spectaculator, CSpect, EightyOne, Unreal Speccy, SpecEmu — accuracy vs features |
-| `cycle_exact_accuracy.md` | Cycle-exact requirements: frame timing divergence, CRT sync mechanism, host sync strategies (DRC, resampling), AY audio clocks, judder mitigation (5 techniques), emulator comparison (10 entries), worst-case conclusion |
+| `cycle_exact_accuracy.md` | Cycle-exact requirements: frame timing divergence, CRT sync mechanism, host sync strategies (DRC, resampling), AY audio clocks, judder mitigation (5 techniques), emulator comparison (10 entries), worst-case conclusion | ✅ |
 | `fuse.md` | Fuse: reference emulator, architecture, debugger, RZX recording |
 | `zesarux.md` | ZEsarUX: advanced debugging, reverse debugging, FPGA simulation, Next support |
 | `cspect.md` | CSpect: ZX Spectrum Next emulator, development focus |
@@ -951,10 +951,10 @@ zx/
 
 Articles are written in priority order. README.md is synthesized AFTER articles exist.
 
-- Tier 1: CPU core articles (z80_architecture, z80_timing, z80_interrupts)
-- Tier 2: Memory maps + I/O ports (foundation for everything else)
-- Tier 3: Display timing + screen layout (foundation for graphics)
-- Tier 4: Hardware per-stream articles
+- Tier 1: CPU core articles (z80_architecture, z80_timing, z80_interrupts) — ✅ **COMPLETE** (8 articles)
+- Tier 2: Memory maps + I/O ports (foundation for everything else) — 📝 **IN PROGRESS**
+- Tier 3: Display timing + screen layout (foundation for graphics) — 📝 **IN PROGRESS**
+- Tier 4: Hardware per-stream articles — 2 articles exist (ula_timing, clone_timing)
 - Tier 5: Everything else
 
 After articles exist: README.md (documentation map), TODO.md (gap analysis), section README.md indexes.

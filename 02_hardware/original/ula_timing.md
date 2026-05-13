@@ -234,6 +234,42 @@ LD   (HL),A       ; If HL points to contended memory:
 
 ---
 
+## Snow Effect — DRAM Refresh / ULA Bus Collision
+
+During the paper area, the ULA fetches screen bytes from RAM continuously — two memory accesses every 8 T-states (one pixel byte, one attribute byte). Most of the time the ULA wins the bus and the CPU is stalled by contention. But during the Z80's **DRAM refresh cycle**, the CPU drives the address bus with the current value of the **`I` (interrupt vector) and `R` (refresh) registers** (`I` as high byte, `R` as low byte). If that address lands in the ULA's display area, both chips drive the bus simultaneously.
+
+The visible result is **snow**: random single-byte corruption of the bitmap or attribute stream, appearing as bright speckles along the raster.
+
+### When Snow Occurs
+
+| `I` register value | Points to | Snow? |
+|-------------------|-----------|-------|
+| `I < #40` | ROM | **No** — ROM is not on the shared bus |
+| `#40 <= I <= #7F` | Screen RAM (`#4000`–`#7FFF`) | **Yes** — ULA and CPU both drive the DRAM bus |
+| `#80 <= I <= #BF` (48K) | Uncontended RAM (`#8000`–`#BFFF`) | **No** — different physical RAM |
+| `#C0 <= I <= #FF` (128K) | Banked RAM at `#C000` | **Depends** — snow appears if the visible screen bank (5 or 7) is paged there |
+
+### Per-Machine Snow Behavior
+
+| Machine | Snow? | Notes |
+|---------|-------|-------|
+| ZX Spectrum 48K / 128K / +2 / +3 | **Yes** | Classic Sinclair ULA arbitration produces snow when `I >= #40` |
+| Pentagon 128K / 1024 | **No** | Different memory access scheme, no contention, no refresh/ULA conflict |
+| Scorpion ZS-256 | **No** | Same as Pentagon — discrete logic, no bus conflict |
+| Most Soviet/Eastern European clones | **No** | Many use discrete logic replacing the ULA and don't reproduce the bus arbitration quirk |
+| ZX Spectrum Next | **Not by default** | Contention is emulated in configurable modes; snow is not emulated by default |
+| Emulators (Fuse, ZEsarUX, CSpect) | **Optional** | Many do not model snow; those that do usually offer it as a toggle |
+
+### Practical Implications
+
+1. **Avoid snow**: Keep `I < #40` (the BASIC ROM convention). The ROM's interrupt vector table at `#3C00`–`#3FFF` ensures no snow during normal operation.
+
+2. **Snow as a bug source**: Programs tested only on Pentagon (no snow) may have latent bugs — setting `I` into `#4000`–`#7FFF` causes corruption on real Sinclair hardware.
+
+3. **Snow as a demo effect**: Some demos intentionally set `I` into the display file to produce free animated noise — the snow effect costs zero CPU time.
+
+---
+
 ## Early vs. Late Timing
 
 On Ferranti ULA-based machines (48K, 128K, +2), there is a phenomenon known as **early timing** vs. **late timing**:
@@ -522,6 +558,7 @@ The Commodore 64 had **no CPU contention** for screen memory (separate RAM), but
 - **World of Spectrum, "48K Technical Reference"** ([worldofspectrum.org](https://worldofspectrum.org/faq/reference/48kreference.htm)) — Frame timing, memory map, ULA behavior
 - **Chris Smith, "The ZX Spectrum ULA: How to design a microcomputer"** — Hardware-level explanation of ULA bus arbitration
 - **Ramsoft, "The Complete ZX Spectrum Fault-Logging ROM Test"** — Real hardware timing measurements
+- **Bedazzle, "SpectraLab — ZX Spectrum Graphics Guide"** ([github.com/Bedazzle/SpectraLab](https://github.com/Bedazzle/SpectraLab)) — Snow effect per-machine behavior, DRAM refresh bus collision details
 - **Einar Saukas, "Bifrost² Multicolor Engine"** — Practical multicolor implementation with T-state counting
 
 ### Cross-References
