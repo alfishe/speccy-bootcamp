@@ -1,0 +1,70 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# AI tooling
+.claude/
+
+# Editor / IDE
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+Thumbs.db
+
+# Archives (reference only — don't store in repo)
+*.zip
+*.rar
+*.7z
+*.gz
+*.tar
+*.djvu
+*.arj
+
+# Binary blobs (ROM images, snapshots — too large for git, use Git LFS or external storage)
+*.rom
+*.bin
+*.sna
+*.z80
+*.szx
+*.tap
+*.tzx
+*.trz
+*.csw
+*.trd
+*.scl
+*.dsk
+*.fdi
+*.udi
+*.scp
+*.rzx
+*.hdf
+*.mgt
+*.img
+*.pzx
+*.poc
+*.mdr
+*.mdv
+
+# Binary executables
+*.exe
+*.com
+*.out
+*.o
+*.obj
+
+# Build artifacts
+*.tap
+*.sna
+*.z80
+*.trd
+*.dsk
+build/
+dist/
