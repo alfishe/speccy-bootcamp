@@ -245,6 +245,64 @@ Some emulators simply adjust the emulated CPU clock to produce a frame rate that
 
 ### What Real Emulators Do
 
+The table below uses two key terms for the **Video sync** column. In practice, most emulators use a **render queue** (double or triple buffering), so the behavior is more nuanced than simply "present when ready" vs "wait for VSync":
+
+```
+Emulation core  →  Render queue (1–3 frame slots)  →  Host display scanout
+   (guest speed)       (decouples guest from host)        (host VSync)
+
+The core renders each guest frame as a fast batch:
+  1. Execute 71,680 T-states (Pentagon) at full speed
+  2. Write completed pixel buffer into the render queue
+  3. Immediately start the next frame
+
+The host display scans out the most recent queued frame at each VSync.
+```
+
+- **Free-run** — the emulation core runs at the guest's real-time pace and does **not** throttle to the host's VSync. Each completed guest frame is pushed into the render queue; the core immediately starts the next frame. The host display picks whatever frame is at the front of the queue at each VSync (every 16.667 ms at 60 Hz). Since the guest produces frames every 20.481 ms and the host consumes every 16.667 ms, the two clocks drift continuously:
+  - With **double buffering** (no frame queue): the host may scan out a buffer that the core is currently writing into → **visible tearing** (a horizontal tear line that creeps vertically over time). This preserves **cycle-exact timing and pitch-perfect audio** but at the cost of a visible artifact.
+  - With **triple buffering / frame queue** (most modern implementations): completed guest frames are placed in a queue; the host always reads from the latest fully-written frame. This **eliminates tearing** but introduces 1–2 frames of latency and **judder** (the queue depth oscillates, sometimes showing the same guest frame twice at consecutive VSyncs).
+  - On a **VRR display** (G-Sync / FreeSync): the host adapts its scan rate to 48.83 Hz. No tearing, no judder, no queue oscillation — the display behaves like a CRT.
+
+- **VSync** — the emulator explicitly synchronizes with the host's VSync. The core waits for the next VSync before presenting the completed guest frame (or before starting the next frame). This guarantees **no tearing** and consistent queue depth, but the guest timing is now locked to the host clock. For the Pentagon at 48.83 Hz into 60 Hz, this produces **judder** because 48.83 does not divide evenly into 60 (see [What Happens on a Modern LCD](#what-happens-on-a-modern-lcd)). Some emulators use **VSync with frame skip** — they drop or duplicate guest frames to maintain the host's cadence, trading timing accuracy for visual smoothness.
+
+```
+Pentagon free-run on 60 Hz (double buffer):
+  Guest:    |--- F1 ---|--- F2 ---|--- F3 ---|--- F4 ---|    (20.48 ms each)
+  Host:     |- V -|- V -|- V -|- V -|- V -|- V -|      (16.67 ms each)
+  Display:  F0    F1↑   F1    F2↑   F2    F3↑         ↑ = tear point (buffer swap mid-scanout)
+
+Pentagon free-run on 60 Hz (triple buffer / queue):
+  Guest:    |--- F1 ---|--- F2 ---|--- F3 ---|--- F4 ---|
+  Queue:    [F0]  [F1]  [F1]  [F2]  [F2]  [F3]  [F3]    (depth oscillates 0–2)
+  Display:   F0    F1    F1    F2    F2    F3    F3      no tearing, but F1/F2/F3 shown twice → judder
+```
+
+The **Audio sync** column uses several terms. The key insight: **host audio APIs (DirectSound, WaveOut, SDL Audio, ALSA) do not understand virtual frame timing**. They open a hardware output stream at a fixed sample rate (e.g., 44,100 Hz) and request a fixed-size buffer from the application at a fixed interval (the hardware period, typically 5–20 ms). The audio API does not know or care that the emulator is running at 48.83 Hz — it just consumes whatever samples the application provides. The emulator's job is to continuously feed the right samples into that fixed-rate stream:
+
+```
+Host audio hardware: ticks at exactly 44,100 samples/second
+                   ↕  (hardware period: every 5–20 ms, asks for N samples)
+Host audio API:     DirectSound / WaveOut / SDL / ALSA — fixed rate, fixed buffer size
+                   ↕  (application provides exactly N samples per callback)
+Emulator audio:     generates samples at the guest's rate (derived from 3.5 MHz clock)
+                   ↕  (rate is NOT 44,100 Hz — it's ~44,127 Hz equivalent for Pentagon)
+
+The mismatch: guest produces ~903.2 samples per frame, host expects ~882 per period
+```
+
+- **Continuous resampling** — the emulator maintains a fractional sample position that tracks the guest audio stream. At each host audio callback, it reads from the guest stream at the exact rate needed to produce the requested number of host samples. Uses linear or sinc interpolation between guest samples. The guest clock is never adjusted; the resampler handles the non-integer ratio continuously. This is the most accurate approach.
+
+- **Per-frame resampling** — at the end of each guest frame, the emulator calculates how many host samples correspond to that frame's duration (e.g., 20.481 ms × 44,100 = 903.2 samples), then resamples the frame's audio output to exactly that count. The fractional remainder is carried forward to the next frame to prevent drift. Simple and effective, but can produce small per-frame artifacts if the resampler is not high-quality.
+
+- **DirectSound / WaveOut resampling** — the emulator uses Windows audio APIs (DirectSound or WaveOut) which operate at a fixed hardware sample rate. The emulator generates audio at the guest rate into an intermediate buffer, then resamples to the host rate when writing to the API's buffer. Functionally equivalent to continuous resampling — the API name just indicates the host-side audio output mechanism, not a different synchronization strategy.
+
+- **SDL audio resampling** — same principle as DirectSound, but using SDL's cross-platform audio callback API. The callback fires at the host's hardware rate; the emulator fills it by resampling from the guest stream.
+
+- **DRC adjusts audio rate** — Dynamic Rate Control (see [Strategy 2](#strategy-2-dynamic-rate-control-retroarch-approach)): the host measures the real-time drift between guest frames and host VSync, and slightly adjusts the resampling ratio (±0.1–0.5%) to keep audio and video synchronized. The audio API still runs at its fixed hardware rate — DRC just changes what the emulator *feeds* into it.
+
+- **Simple resampling** — basic linear interpolation or nearest-neighbor resampling. Low quality, may produce audible artifacts for the beeper's square-wave edges, but adequate for casual use.
+
 | Emulator | Video sync | Audio sync | Model support | Accuracy notes |
 |----------|-----------|-----------|---------------|----------------|
 | **Fuse** | Free-run or VSync with frame skip | Continuous resampling | 48K, 128K, +2A/+3, Pentagon, Scorpion, Timex | Reference open-source emulator, early/late timing toggle, contention model per-model |
