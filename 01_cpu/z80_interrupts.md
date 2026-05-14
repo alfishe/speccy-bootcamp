@@ -152,33 +152,32 @@ Note: The M1 cycle includes 2 automatic wait states (7T instead of the normal 4T
 The 48K ROM interrupt handler at `#0038` does the following:
 
 ```z80
-; Simplified 48K ROM interrupt handler at #0038
-; (actual ROM code is more complex)
-PUSH AF            ; Save registers
-PUSH BC
-PUSH DE
-PUSH HL
-; Update FRAMES counter (3-byte counter at #5C78)
-LD   HL,(#5C78)   ; Load current frame count
-INC  HL           ; Increment
-LD   (#5C78),HL
-LD   A,H
-OR   L
-JR   NZ,no_overflow
-LD   HL,#5C7A
-INC  (HL)         ; Increment high byte
-no_overflow:
-; Scan keyboard
-CALL #02BB        ; Keyboard scan routine
-; Generate border flash (if FLASH attribute active)
-; ...
-POP  HL           ; Restore registers
-POP  DE
-POP  BC
-POP  AF
-EI                 ; Re-enable interrupts
-RET                ; Return from interrupt
+; 48K ROM interrupt handler at #0038 (exact ROM disassembly)
+; Source: SkoolKit ROM disassembly
+MASKABLE_INTERRUPT:
+    PUSH AF            ; Save registers
+    PUSH HL
+    LD   HL,($5C78)   ; Load lower 2 bytes of FRAMES counter
+    INC  HL            ; Increment
+    LD   ($5C78),HL
+    LD   A,H
+    OR   L
+    JR   NZ,KEY_INT    ; Skip high byte if no overflow
+    INC  (IY+$40)      ; Increment FRAMES high byte (#5CB8)
+KEY_INT:
+    PUSH BC
+    PUSH DE
+    CALL KEYBOARD      ; Keyboard scan routine at #02BB
+    POP  DE
+    POP  BC
+    POP  HL
+    POP  AF
+    EI                 ; Re-enable interrupts
+    RET                ; Return from interrupt
 ```
+
+> [!NOTE]
+> The FLASH attribute is **not** processed by the ROM ISR. FLASH is implemented entirely in hardware by the ULA — it has an internal frame counter that toggles ink and paper for attribute bytes with bit 7 set, every 16 frames. No CPU code is involved.
 
 ### The Interrupt Handler Cost
 
@@ -228,7 +227,7 @@ IM2 provides **vectored interrupts** — different peripheral devices can direct
 
 ### Vector Table
 
-The vector table is a **256-byte table** in memory (occupying one page of 256 bytes). The I register holds the high byte of the table's address:
+The vector table is a **256-byte table** in memory (occupying one page of 256 bytes), plus one extra byte for the `V = #FF` edge case — see below. The I register holds the high byte of the table's address:
 
 ```
 Address = (I << 8) + data_bus_byte
@@ -244,8 +243,12 @@ Address = (I << 8) + data_bus_byte
 ├─────────────────────────┤
 │ I × 256 + 254           │ → Handler address for vector 254 (low byte)
 │ I × 256 + 255           │ → Handler address for vector 254 (high byte)
+│ (I+1) × 256 + 0        │ → High byte for vector 255       (must exist!)
 └─────────────────────────┘
 ```
+
+> [!WARNING]
+> When `V = #FF`, the Z80 reads bytes at `(I × 256 + #FF)` and `(I × 256 + #FF + 1)`. The second read **crosses into the next page**. A properly constructed table for the ZX Spectrum (where all bus values must be handled) requires **257 bytes**, not 256. See [interrupt_programming.md](../05_development/04_interrupts/interrupt_programming.md) for the full explanation.
 
 ### Timing
 
@@ -270,51 +273,23 @@ The IM2 interrupt acknowledge sequence takes **19 T-states**:
 ### Setting Up IM2
 
 ```z80
-; Set up IM2 with vector table at #FE00
+; Set up IM2 with 257-byte vector table at #FE00
+; All vectors point to handler at #FDFD
 DI                 ; Disable interrupts during setup
-LD   A,#FE         ; I register = #FE → table at #FE00-#FEFF
+LD   A,#FE         ; I register = #FE → table at #FE00
 LD   I,A
-; Fill vector table: all entries point to #FD00
-LD   HL,#FE00      ; Vector table start
-LD   DE,#FE01      ; Next address
-LD   (HL),#00      ; Low byte of handler
-INC  HL
-LD   (HL),#FD      ; High byte of handler
-LD   DE,#FE02      ; Source for block fill
-LD   BC,#00FE      ; 254 remaining bytes
-LDIR               ; Fill rest of table
+; Fill 257 bytes (#FE00-#FF00) with #FD
+LD   HL,#FE00      ; Table start
+LD   (HL),#FD      ; First byte
+LD   DE,#FE01      ; Destination for LDIR
+LD   BC,#0100      ; 256 more bytes (257 total)
+LDIR               ; Fill #FE01-#FF00 with #FD
 IM   2             ; Set interrupt mode 2
 EI                 ; Enable interrupts
 ```
 
 > [!WARNING]
-> On the ZX Spectrum, the data bus is **not reliably driven** during interrupt acknowledge — the ULA doesn't place a known vector on the bus. This means the vector byte is **undefined** (often #FF due to pull-up resistors). IM2 code must handle this by making all 128 possible vectors point to the same handler, or by placing the vector table at an address where (I×256 + any_byte) gives a valid handler address.
-
-### The "All Vectors to One Handler" Trick
-
-```z80
-; Place vector table at #FF00 — any vector byte produces #FFxx or #00xx
-; With I=#FF and table filled with #80,#FF:
-; Vector #00 → read #FF80 (from table at #FF00)
-; Vector #7E → read #FF80 (from table at #FF7E) — wait, that's different
-;
-; Better approach: fill table with pairs of bytes that all point to same address
-; For handler at #FD00:
-; Table: #00, #FD repeated 128 times
-; I = table page high byte
-
-LD   A,#FE
-LD   I,A
-; Fill #FE00-#FEFF with #00, #FD alternating
-LD   HL,#FE00
-LD   B,#0          ; 128 iterations (256 bytes)
-fill:
-LD   (HL),#00
-INC  HL
-LD   (HL),#FD
-INC  HL
-DJNZ fill
-```
+> On the ZX Spectrum, the data bus is **not reliably driven** during interrupt acknowledge — the ULA doesn't place a known vector on the bus. The vector byte is typically `#FF` due to pull-up resistors, but can be any value depending on the last bus cycle. The 257-byte table filled with a single value guarantees all 256 possible vectors resolve to the same handler. See [interrupt_programming.md](../05_development/04_interrupts/interrupt_programming.md) for a detailed walkthrough.
 
 ---
 
@@ -715,3 +690,4 @@ The Z80's interrupt system was one of its major selling points for embedded and 
 - [z80_flags.md](z80_flags.md) — P/V flag and IFF2 via `LD A,I`
 - [z80_undocumented.md](z80_undocumented.md) — IFF2 bug, interrupt-related undocumented behavior
 - [z80_instruction_set.md](z80_instruction_set.md) — EI, DI, IM, RETI, RETN instruction details
+- [interrupt_programming.md](../05_development/04_interrupts/interrupt_programming.md) — practical Spectrum interrupt programming: IM1/IM2 setup, ISR patterns, cookbook

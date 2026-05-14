@@ -7,5 +7,6 @@ ZX Spectrum ROM variants, DOS systems, and ROM-defined workspace. The Spectrum h
 | Article | Description |
 |---------|------------|
 | [system_variables.md](system_variables.md) | ROM-defined system variables: FRAMES counter, PROG/VARS pointers, keyboard state, display color, error handling, memory boundaries — the ROM's API surface |
+| [rom_128k.md](rom_128k.md) | 128K ROM 0: menu system, BASIC extensions (`PLAY`, `SOUND`, `BANK`), AY sound from BASIC, RAM disk, editor improvements |
 
 See [PLAN.md](../PLAN.md) for the full article catalog (ROM dissection, TR-DOS, +3 DOS, ESXDOS, NextZXOS, CP/M, FUZIX, BASIC dialects).
