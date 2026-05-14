@@ -604,9 +604,9 @@ zx/
 | File | Topic |
 |---|---|
 | `README.md` | Index — OS landscape across all tracks |
-| `rom_48k.md` | 48K ROM: BASIC interpreter, channel system, editor, character set, ROM routine addresses |
-| `system_variables.md` | ROM-defined system variables: FRAMES, PROG, VARS, CHANS, FLAGS, keyboard state, memory boundaries | 📝 |
-| `rom_128k.md` | 128K ROM 0 + ROM 1: menu system, 128K BASIC extensions, RAM disk |
+| `rom_48k.md` | 48K ROM: ROM map, RST vectors, key routines, channel/stream I/O, BASIC interpreter, editor, character set | ✅ |
+| `system_variables.md` | ROM-defined system variables: FRAMES, PROG, VARS, CHANS, FLAGS, keyboard state, memory boundaries | ✅ |
+| `rom_128k.md` | 128K ROM 0 + ROM 1: dual-ROM architecture, menu system, 128K BASIC extensions, RAM disk, full-screen editor | ✅ |
 | `rom_plus2.md` | +2 / +2A ROM variants |
 | `trdos.md` | TR-DOS: floppy disk OS, command set, file operations, hook codes, ROM structure |
 | `plus3dos.md` | +3 DOS: CP/M-compatible, file system, Resident System Extensions |

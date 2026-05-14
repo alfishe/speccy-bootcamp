@@ -1,0 +1,144 @@
+{
+    "title": "RAM Bridge: Source in ROM 0 → Destination in RAM (Bank 5)",
+    "subtitle": "Proportional vertical layout — #0000 at top, #3FFF/#7FFF at bottom",
+    "width": 820,
+    "height": 860,
+    "columns": [
+        {
+            "label": "Page 0: ROM 0",
+            "label_color": "blue",
+            "address_top": "#0000",
+            "address_bottom": "#3FFF",
+            "address_side": "left",
+            "total_bytes": 16384,
+            "column_height": 620,
+            "x_offset": 60,
+            "width": 250,
+            "y_start": 80,
+            "scale_note": "Bridge = 0.5% of ROM",
+            "sections": [
+                {
+                    "name": "rom0_body",
+                    "bytes": 12000,
+                    "min_height": 100,
+                    "title": "ROM 0",
+                    "lines": ["128K extensions", "RST vectors, ISR", "Editor engine", "BASIC extensions", "AY sound driver", "RAM disk manager", "ROM swap mechanism", "Messages & tables", "16384 bytes total"],
+                    "fill": "surface1"
+                },
+                {
+                    "name": "bridge_source",
+                    "bytes": 82,
+                    "min_height": 10,
+                    "title": "Bridge source (~82 bytes)",
+                    "highlight": "yellow"
+                },
+                {
+                    "name": "rom0_remainder",
+                    "bytes": 4302,
+                    "min_height": 60,
+                    "title": "Remaining ROM 0",
+                    "fill": "surface1",
+                    "dash": false
+                }
+            ]
+        },
+        {
+            "label": "Page 1: RAM Bank 5 (fixed)",
+            "label_color": "green",
+            "address_top": "#4000",
+            "address_bottom": "#7FFF",
+            "address_side": "right",
+            "total_bytes": 16384,
+            "column_height": 620,
+            "x_offset": 500,
+            "width": 250,
+            "y_start": 80,
+            "scale_note": "Bridge + vars = 0.5% of page",
+            "sections": [
+                {
+                    "name": "screen_pixels",
+                    "bytes": 6144,
+                    "min_height": 40,
+                    "title": "Screen pixel buffer",
+                    "lines": ["#4000–#57FF (6144 bytes)", "37% of page"],
+                    "fill": "surface1"
+                },
+                {
+                    "name": "attributes",
+                    "bytes": 768,
+                    "min_height": 20,
+                    "title": "Attributes #5800–#5AFF",
+                    "fill": "surface1"
+                },
+                {
+                    "name": "bridge_dest",
+                    "bytes": 58,
+                    "min_height": 12,
+                    "title": "Bridge destination (58 bytes)",
+                    "highlight": "green"
+                },
+                {
+                    "name": "bank_vars",
+                    "bytes": 30,
+                    "min_height": 10,
+                    "title": "BANK_M · TARGET · RETADDR · saved regs",
+                    "highlight": "green"
+                },
+                {
+                    "name": "sysvars",
+                    "bytes": 183,
+                    "min_height": 14,
+                    "title": "System variables #5C00–#5CB6",
+                    "fill": "surface1"
+                },
+                {
+                    "name": "channels",
+                    "bytes": 200,
+                    "min_height": 20,
+                    "title": "Channels, streams, workspace",
+                    "fill": "surface1"
+                },
+                {
+                    "name": "remaining",
+                    "bytes": 9001,
+                    "min_height": 80,
+                    "title": "Available bank 5 RAM",
+                    "lines": ["(~32KB remaining)"],
+                    "fill": "surface0",
+                    "dash": true
+                }
+            ]
+        }
+    ],
+    "arrows": [
+        {
+            "from_col": 0,
+            "from_section": "bridge_source",
+            "to_col": 1,
+            "to_section": "bridge_dest",
+            "label": "LDIR ~82 bytes",
+            "color": "red",
+            "curved": true,
+            "dash": "6,3"
+        }
+    ],
+    "callout": {
+        "title": "Magnified View: RAM Bridge Area (#5B00–#5B6C)",
+        "x": 110,
+        "y": 730,
+        "width": 600,
+        "height": 110,
+        "items": [
+            {"title": "SWAP", "subtitle": "#5B00 (16 bytes)", "width": 100, "height": 30, "highlight": "green"},
+            {"title": "STOO", "subtitle": "#5B10 (17 bytes)", "width": 80, "height": 30, "highlight": "green"},
+            {"title": "YOUNGER", "subtitle": "#5B21 (9 bytes)", "width": 75, "height": 30, "highlight": "green"},
+            {"title": "REGNUOY", "subtitle": "#5B2A (16 bytes)", "width": 80, "height": 30, "highlight": "green"},
+            {"title": "ONERR", "subtitle": "#5B3A (24 bytes)", "width": 80, "height": 30, "highlight": "green"}
+        ]
+    },
+    "legend": [
+        {"color": "yellow", "label": "Bridge source (in ROM — vanishes on swap)"},
+        {"color": "green", "label": "Bridge destination (in fixed RAM — always accessible)"},
+        {"color": "red", "label": "Critical / data flow arrow"}
+    ]
+}

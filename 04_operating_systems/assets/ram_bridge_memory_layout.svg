@@ -1,0 +1,186 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 860" font-family="'Menlo','Consolas','Courier New',monospace">
+  <!-- Background -->
+  <rect width="820" height="860" fill="#1e1e2e" rx="6"/>
+
+  <!-- Title -->
+  <text x="410" y="28" text-anchor="middle" fill="#cdd6f4" font-size="14" font-weight="bold">RAM Bridge: Source in ROM 0 → Destination in RAM (Bank 5)</text>
+  <text x="410" y="46" text-anchor="middle" fill="#9399b2" font-size="9">Proportional vertical layout — #0000 at top, #3FFF/#7FFF at bottom</text>
+
+  <!-- ==================== LEFT COLUMN: ROM 0 ==================== -->
+  <text x="185" y="68" text-anchor="middle" fill="#89b4fa" font-size="11" font-weight="bold">Page 0: ROM 0</text>
+
+  <!-- Column background -->
+  <rect x="60" y="80" width="250" height="620" fill="#313244" stroke="#585b70" stroke-width="1" rx="4"/>
+
+  <!-- Address labels -->
+  <text x="55" y="88" text-anchor="end" fill="#6c7086" font-size="8">#0000</text>
+  <text x="55" y="704" text-anchor="end" fill="#6c7086" font-size="8">#3FFF</text>
+
+  <!-- ROM 0 main content block (fills most of the column) -->
+  <rect x="70" y="90" width="230" height="448" fill="#45475a" stroke="#6c7086" stroke-width="1" rx="3"/>
+  <text x="185" y="180" text-anchor="middle" fill="#a6adc8" font-size="12" font-weight="bold">ROM 0</text>
+  <text x="185" y="198" text-anchor="middle" fill="#9399b2" font-size="9">128K extensions</text>
+  <text x="185" y="214" text-anchor="middle" fill="#9399b2" font-size="8">RST vectors, ISR</text>
+  <text x="185" y="228" text-anchor="middle" fill="#9399b2" font-size="8">I/O, keyboard, tape</text>
+  <text x="185" y="244" text-anchor="middle" fill="#9399b2" font-size="8">Editor engine</text>
+  <text x="185" y="260" text-anchor="middle" fill="#9399b2" font-size="8">BASIC extensions</text>
+  <text x="185" y="276" text-anchor="middle" fill="#9399b2" font-size="8">AY sound driver</text>
+  <text x="185" y="292" text-anchor="middle" fill="#9399b2" font-size="8">RAM disk manager</text>
+  <text x="185" y="316" text-anchor="middle" fill="#6c7086" font-size="8">···</text>
+  <text x="185" y="370" text-anchor="middle" fill="#9399b2" font-size="8">ROM swap mechanism</text>
+  <text x="185" y="386" text-anchor="middle" fill="#9399b2" font-size="8">Messages &amp; tables</text>
+  <text x="185" y="410" text-anchor="middle" fill="#6c7086" font-size="8">···</text>
+  <text x="185" y="510" text-anchor="middle" fill="#9399b2" font-size="8">16384 bytes total</text>
+
+  <!-- ~#3000 address marker -->
+  <text x="55" y="545" text-anchor="end" fill="#f9e2af" font-size="7">~#3000</text>
+
+  <!-- Bridge SOURCE (highlighted, proportionally small ~82 bytes in 16384) -->
+  <!-- True proportional height: 82/16384*620 ≈ 3px — shown at 10px minimum for visibility -->
+  <rect x="70" y="540" width="230" height="10" fill="#f9e2af" fill-opacity="0.25" stroke="#f9e2af" stroke-width="2" rx="2"/>
+  <text x="185" y="548" text-anchor="middle" fill="#f9e2af" font-size="7" font-weight="bold">Bridge source (~82 bytes)</text>
+
+  <!-- Below bridge source: rest of ROM 0 -->
+  <rect x="70" y="554" width="230" height="138" fill="#45475a" stroke="#6c7086" stroke-width="1" rx="3"/>
+  <text x="185" y="620" text-anchor="middle" fill="#9399b2" font-size="8">Remaining ROM 0</text>
+
+  <!-- ROM 1 ghost note -->
+  <rect x="70" y="570" width="230" height="18" fill="none" stroke="#6c7086" stroke-width="1" stroke-dasharray="3,3" rx="2"/>
+  <text x="185" y="583" text-anchor="middle" fill="#6c7086" font-size="7">ROM 1 replaces ALL of this when paged in</text>
+
+  <!-- Scale note -->
+  <text x="185" y="714" text-anchor="middle" fill="#6c7086" font-size="7">Bridge = 0.5% of ROM</text>
+
+  <!-- ==================== RIGHT COLUMN: RAM Bank 5 ==================== -->
+  <text x="625" y="68" text-anchor="middle" fill="#a6e3a1" font-size="11" font-weight="bold">Page 1: RAM Bank 5 (fixed)</text>
+
+  <!-- Column background -->
+  <rect x="500" y="80" width="250" height="620" fill="#313244" stroke="#585b70" stroke-width="1" rx="4"/>
+
+  <!-- Address labels -->
+  <text x="755" y="88" text-anchor="start" fill="#6c7086" font-size="8">#4000</text>
+  <text x="755" y="704" text-anchor="start" fill="#6c7068" font-size="8">#7FFF</text>
+
+  <!-- Screen pixel buffer (#4000-#57FF) — 6144 bytes → ~232px of 620 -->
+  <rect x="510" y="90" width="230" height="232" fill="#45475a" stroke="#6c7086" stroke-width="1" rx="3"/>
+  <text x="625" y="180" text-anchor="middle" fill="#a6adc8" font-size="10">Screen pixel buffer</text>
+  <text x="625" y="196" text-anchor="middle" fill="#9399b2" font-size="8">#4000–#57FF (6144 bytes)</text>
+  <text x="625" y="210" text-anchor="middle" fill="#9399b2" font-size="8">37% of page</text>
+
+  <!-- Attribute buffer (#5800-#5AFF) — 768 bytes → ~29px -->
+  <rect x="510" y="326" width="230" height="29" fill="#45475a" stroke="#6c7086" stroke-width="1" rx="3"/>
+  <text x="625" y="344" text-anchor="middle" fill="#a6adc8" font-size="8">Attributes #5800–#5AFF</text>
+
+  <!-- ~#5B00 address marker -->
+  <text x="755" y="362" text-anchor="start" fill="#a6e3a1" font-size="7">#5B00</text>
+
+  <!-- Bridge DESTINATION (#5B00-#5B3A) — 58 bytes → ~2px, shown at 10px -->
+  <rect x="510" y="358" width="230" height="12" fill="#a6e3a1" fill-opacity="0.25" stroke="#a6e3a1" stroke-width="2" rx="2"/>
+  <text x="625" y="367" text-anchor="middle" fill="#a6e3a1" font-size="7" font-weight="bold">Bridge destination (58 bytes)</text>
+
+  <!-- BANK_M and supporting vars (#5B52-#5B6C) — shown at 10px -->
+  <rect x="510" y="374" width="230" height="10" fill="#a6e3a1" fill-opacity="0.15" stroke="#a6e3a1" stroke-width="1.5" rx="2"/>
+  <text x="625" y="382" text-anchor="middle" fill="#a6e3a1" font-size="6">BANK_M · TARGET · RETADDR · saved regs</text>
+
+  <!-- ~#5C00 address marker -->
+  <text x="755" y="395" text-anchor="start" fill="#6c7086" font-size="7">#5C00</text>
+
+  <!-- System variables (#5C00-#5CB6) — 183 bytes → ~7px, shown at 12px -->
+  <rect x="510" y="388" width="230" height="14" fill="#45475a" stroke="#6c7086" stroke-width="1" rx="3"/>
+  <text x="625" y="399" text-anchor="middle" fill="#a6adc8" font-size="7">System variables #5C00–#5CB6</text>
+
+  <!-- Channels, streams, workspace -->
+  <rect x="510" y="406" width="230" height="20" fill="#45475a" stroke="#6c7086" stroke-width="1" rx="3"/>
+  <text x="625" y="420" text-anchor="middle" fill="#9399b2" font-size="7">Channels, streams, workspace</text>
+
+  <!-- Remaining bank 5 RAM -->
+  <rect x="510" y="430" width="230" height="262" fill="#313244" stroke="#585b70" stroke-width="1" stroke-dasharray="4,3" rx="3"/>
+  <text x="625" y="540" text-anchor="middle" fill="#6c7086" font-size="9">Available bank 5 RAM</text>
+  <text x="625" y="556" text-anchor="middle" fill="#6c7068" font-size="8">(~32KB remaining)</text>
+
+  <!-- Scale note -->
+  <text x="625" y="714" text-anchor="middle" fill="#6c7086" font-size="7">Bridge + vars = 0.5% of page</text>
+
+  <!-- ==================== LDIR ARROW ==================== -->
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#f38ba8"/>
+    </marker>
+  </defs>
+
+  <!-- Main arrow: bridge source → bridge destination -->
+  <path d="M 300 545 C 370 545, 430 364, 510 364" fill="none" stroke="#f38ba8" stroke-width="2.5" marker-end="url(#arr)" stroke-dasharray="6,3"/>
+
+  <!-- Arrow label -->
+  <rect x="355" y="440" width="90" height="34" fill="#1e1e2e" rx="3" stroke="#f38ba8" stroke-width="1"/>
+  <text x="400" y="455" text-anchor="middle" fill="#f38ba8" font-size="10" font-weight="bold">LDIR</text>
+  <text x="400" y="468" text-anchor="middle" fill="#f38ba8" font-size="7">~82 bytes at power-on</text>
+
+  <!-- ==================== MAGNIFIED CALLOUT ==================== -->
+  <rect x="110" y="730" width="600" height="110" fill="#1e1e2e" stroke="#585b70" stroke-width="1" rx="4"/>
+  <text x="410" y="748" text-anchor="middle" fill="#cdd6f4" font-size="10" font-weight="bold">Magnified View: RAM Bridge Area (#5B00–#5B6C)</text>
+
+  <!-- Connector lines from right column bridge area to callout -->
+  <line x1="510" y1="370" x2="460" y2="730" stroke="#585b70" stroke-width="1" stroke-dasharray="2,2"/>
+  <line x1="740" y1="370" x2="710" y2="730" stroke="#585b70" stroke-width="1" stroke-dasharray="2,2"/>
+
+  <!-- SWAP block -->
+  <rect x="120" y="760" width="100" height="30" fill="#a6e3a1" fill-opacity="0.15" stroke="#a6e3a1" stroke-width="1.5" rx="3"/>
+  <text x="170" y="772" text-anchor="middle" fill="#a6e3a1" font-size="8" font-weight="bold">SWAP</text>
+  <text x="170" y="784" text-anchor="middle" fill="#a6e3a1" font-size="7">#5B00 (16 bytes)</text>
+
+  <!-- STOO block -->
+  <rect x="226" y="760" width="80" height="30" fill="#a6e3a1" fill-opacity="0.15" stroke="#a6e3a1" stroke-width="1.5" rx="3"/>
+  <text x="266" y="772" text-anchor="middle" fill="#a6e3a1" font-size="8" font-weight="bold">STOO</text>
+  <text x="266" y="784" text-anchor="middle" fill="#a6e3a1" font-size="7">#5B10 (17 bytes)</text>
+
+  <!-- YOUNGER block -->
+  <rect x="312" y="760" width="75" height="30" fill="#a6e3a1" fill-opacity="0.15" stroke="#a6e3a1" stroke-width="1.5" rx="3"/>
+  <text x="350" y="772" text-anchor="middle" fill="#a6e3a1" font-size="8" font-weight="bold">YOUNGER</text>
+  <text x="350" y="784" text-anchor="middle" fill="#a6e3a1" font-size="7">#5B21 (9 bytes)</text>
+
+  <!-- REGNUOY block -->
+  <rect x="393" y="760" width="80" height="30" fill="#a6e3a1" fill-opacity="0.15" stroke="#a6e3a1" stroke-width="1.5" rx="3"/>
+  <text x="433" y="772" text-anchor="middle" fill="#a6e3a1" font-size="8" font-weight="bold">REGNUOY</text>
+  <text x="433" y="784" text-anchor="middle" fill="#a6e3a1" font-size="7">#5B2A (16 bytes)</text>
+
+  <!-- ONERR block -->
+  <rect x="479" y="760" width="80" height="30" fill="#a6e3a1" fill-opacity="0.15" stroke="#a6e3a1" stroke-width="1.5" rx="3"/>
+  <text x="519" y="772" text-anchor="middle" fill="#a6e3a1" font-size="8" font-weight="bold">ONERR</text>
+  <text x="519" y="784" text-anchor="middle" fill="#a6e3a1" font-size="7">#5B3A (24 bytes)</text>
+
+  <!-- Supporting vars -->
+  <rect x="565" y="760" width="135" height="14" fill="#a6e3a1" fill-opacity="0.1" stroke="#a6e3a1" stroke-width="1" rx="3"/>
+  <text x="633" y="770" text-anchor="middle" fill="#a6e3a1" font-size="7">OLDHL OLDBC OLDAF #5B52–#5B56</text>
+
+  <rect x="565" y="778" width="60" height="14" fill="#a6e3a1" fill-opacity="0.1" stroke="#a6e3a1" stroke-width="1" rx="3"/>
+  <text x="595" y="788" text-anchor="middle" fill="#a6e3a1" font-size="7">TARGET #5B58</text>
+
+  <rect x="630" y="778" width="70" height="14" fill="#a6e3a1" fill-opacity="0.1" stroke="#a6e3a1" stroke-width="1" rx="3"/>
+  <text x="665" y="788" text-anchor="middle" fill="#a6e3a1" font-size="7">RETADDR #5B5A</text>
+
+  <!-- BANK_M (most important var, highlighted) -->
+  <rect x="120" y="798" width="180" height="16" fill="#f38ba8" fill-opacity="0.15" stroke="#f38ba8" stroke-width="1.5" rx="3"/>
+  <text x="210" y="810" text-anchor="middle" fill="#f38ba8" font-size="8" font-weight="bold">BANK_M #5B5C — shadow of port #7FFD</text>
+
+  <!-- RAMERR -->
+  <rect x="306" y="798" width="100" height="16" fill="#45475a" stroke="#6c7086" stroke-width="1" rx="3"/>
+  <text x="356" y="810" text-anchor="middle" fill="#a6adc8" font-size="7">RAMERR #5B5E</text>
+
+  <!-- More 128K vars -->
+  <rect x="412" y="798" width="100" height="16" fill="#45475a" stroke="#6c7086" stroke-width="1" rx="3"/>
+  <text x="462" y="810" text-anchor="middle" fill="#9399b2" font-size="7">BAUD, SERFL...</text>
+
+  <rect x="518" y="798" width="182" height="16" fill="#45475a" stroke="#6c7068" stroke-width="1" rx="3"/>
+  <text x="609" y="810" text-anchor="middle" fill="#9399b2" font-size="7">FLAGS3, BANK678, RCLINE... up to TSTACK #5BFF</text>
+
+  <!-- ==================== LEGEND ==================== -->
+  <rect x="120" y="830" width="10" height="10" fill="#f9e2af" fill-opacity="0.25" stroke="#f9e2af" stroke-width="1.5" rx="2"/>
+  <text x="135" y="839" fill="#cdd6f4" font-size="7">Bridge source (in ROM — vanishes on swap)</text>
+
+  <rect x="350" y="830" width="10" height="10" fill="#a6e3a1" fill-opacity="0.25" stroke="#a6e3a1" stroke-width="1.5" rx="2"/>
+  <text x="365" y="839" fill="#cdd6f4" font-size="7">Bridge destination (in fixed RAM — always accessible)</text>
+
+  <rect x="600" y="830" width="10" height="10" fill="#f38ba8" fill-opacity="0.15" stroke="#f38ba8" stroke-width="1.5" rx="2"/>
+  <text x="615" y="839" fill="#cdd6f4" font-size="7">BANK_M (critical shadow)</text>
+</svg>

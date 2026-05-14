@@ -4,6 +4,14 @@
 
 Every visual effect on the ZX Spectrum that goes beyond static screens — multicolor, raster bars, sprite multiplexing, smooth scrolling — requires knowing **exactly where the CRT beam is** at every T-state. This article covers how to calculate beam position and the synchronization techniques that work across models.
 
+> [!NOTE]
+> This article focuses on **synchronization techniques and cross-platform strategies**. Per-model timing data (scanline counts, T-state maps, contention patterns) is in dedicated articles:
+> - [video_frame_48k.md](video_frame_48k.md) — 48K: 312 lines, 224T/line, ULA contention
+> - [video_frame_128k.md](video_frame_128k.md) — 128K/+2: 311 lines, 228T/line, odd-bank contention
+> - [video_frame_plus2a_plus3.md](video_frame_plus2a_plus3.md) — +2A/+3: gate array contention
+> - [video_frame_pentagon.md](video_frame_pentagon.md) — Pentagon: 320 lines, zero contention
+> - [clone_timing.md](../../02_hardware/clones/clone_timing.md) — Scorpion, Kay, ATM Turbo, ZX Evolution, Next, MiSTer
+
 ---
 
 ## The Raster Model
@@ -14,16 +22,20 @@ The video signal is generated scanline by scanline, top to bottom. At any instan
 Scanline 0   ──────────────────────────→   (INT fires here, T=0)
 Scanline 1   ──────────────────────────→
 ...
-Scanline 63  ──────────────────────────→   (last top border line)
-Scanline 64  ══════════════════════════→   (first paper line, contention starts)
+              (top border region)
 ...
-Scanline 255 ══════════════════════════→   (last paper line)
-Scanline 256 ──────────────────────────→   (first bottom border)
+              ══════════════════════════→   (first paper line, contention starts)
 ...
-Scanline 311 ──────────────────────────→   (last line, VBlank)
-                              ↓
+              ══════════════════════════→   (last paper line)
+...
+              ──────────────────────────→   (bottom border)
+...
+              ──────────────────────────→   (last line, VBlank)
+                            ↓
               Next frame, scanline 0, T=0 (INT fires)
 ```
+
+The exact scanline numbers for each region **vary by model**. See the per-model articles linked above for precise boundaries.
 
 ### Beam Position from T-state Count
 
@@ -36,27 +48,16 @@ line_t     = T_state % T_states_per_line
 
 | Model | T-states/line | Total lines | Paper start | Paper end |
 |-------|--------------|-------------|-------------|-----------|
-| 48K | 224 | 312 | Scanline 64 (T=14,336) | Scanline 255 (T=57,344) |
-| 128K/+2 | 228 | 311 | Scanline 64 (T=14,592) | Scanline 255 (T=58,140) |
-| Pentagon | 224 | 320 | Scanline 48 (T=10,752) | Scanline 239 (T=53,536) |
+| 48K | 224 | 312 | Scanline 64 | Scanline 255 |
+| 128K/+2 | 228 | 311 | Scanline 64 | Scanline 255 |
+| +2A/+3 | 228 | 311 | Scanline 64 | Scanline 255 |
+| Pentagon | 224 | 320 | Scanline 48 | Scanline 239 |
+| Scorpion | 224 | 312 | Scanline 64 | Scanline 255 |
 
-### Working Backward: T-state from Desired Position
+> [!WARNING]
+> The Pentagon's paper area starts at **scanline 48** (not 64 as on Sinclair models). Code that hardcodes "paper starts at scanline 64" will have a 16-scanline offset error on the Pentagon and other clones with different border sizes.
 
-```z80
-; Calculate T-state at which a given scanline starts (48K)
-; Input: B = target scanline (0-311)
-; Output: HL = T-state count
-ScanlineToTstate:
-    LD   HL,0
-    LD   A,B
-    OR   A
-    RET  Z               ; Scanline 0 = T-state 0
-    LD   DE,224           ; T-states per scanline
-.loop:
-    ADD  HL,DE
-    DJNZ .loop
-    RET
-```
+For a complete per-clone comparison including Kay, ATM Turbo, ZX Evolution, and FPGA implementations, see the [Per-Clone Comparison](../../02_hardware/clones/clone_timing.md#per-clone-comparison) table in `clone_timing.md`.
 
 ---
 
@@ -84,7 +85,7 @@ SyncToFrame:
 SyncToScanline:
     HALT                ; T≈13 (start of frame, scanline 0)
 
-    ; Calculate delay: (target_scanline × 224) - 13 T-states
+    ; Calculate delay: (target_scanline × T_per_line) - 13 T-states
     ; This loop burns exactly 23 T-states per iteration:
     ;   DEC BC = 6T, LD A,B = 4T, OR C = 4T, JR NZ = 12/7T
     ; Total loop: 26T when running, 23T on last iteration
@@ -106,6 +107,11 @@ SyncToScanline:
     RET
 ```
 
+**Model considerations**:
+- On 128K/+2/+2A/+3, T-states per line is **228** (not 224). Use `LD DE,228` for the per-line multiplier.
+- On the Pentagon, T-states per line is 224 (same as 48K), but paper starts at line 48 (not 64).
+- On all models, contention affects delay loop timing if the loop executes from contended memory during the paper area. Place timing-critical loops in **uncontended RAM** (`#8000`+ on 48K, any upper bank on 128K).
+
 ### Technique 3: Floating Bus — Raster Lock (48K/128K Only)
 
 See [floating_bus.md](floating_bus.md) for full details. The floating bus lets you detect the exact scanline by reading what the ULA is currently fetching.
@@ -121,9 +127,11 @@ WaitForRasterPosition:
     RET
 ```
 
+**Not available on all models**: The floating bus is unreliable or absent on the +2A/+3, Pentagon, Scorpion, and most clones. See [floating_bus.md](floating_bus.md) for per-model availability.
+
 ### Technique 4: Interrupt Timer — Cross-Platform
 
-For machines without a reliable floating bus (Pentagon, +2A/+3):
+For machines without a reliable floating bus (Pentagon, +2A/+3, clones):
 
 ```z80
 ; Use IM2 interrupt to maintain a scanline counter
@@ -144,36 +152,22 @@ ISR_Timer:
 ScanlineCount: DB 0
 ```
 
----
+### Technique 5: Hardware Line Interrupt (Next, TS-Conf)
 
-## Per-Model Raster Position Tables
+The ZX Spectrum Next and ZX Evolution (TS-Conf) provide a **programmable line interrupt** that fires at a specific scanline. This eliminates the need for timing loops:
 
-### 48K Raster Map
+```z80
+; ZX Spectrum Next: set line interrupt at scanline 100
+    LD   BC,#243B        ; NextReg select port
+    LD   A,#22            ; NextReg $22 = line interrupt line
+    OUT  (C),A
+    LD   BC,#253B        ; NextReg data port
+    LD   A,100            ; Fire at scanline 100
+    OUT  (C),A
+    ; Line interrupt fires automatically at the selected scanline
+```
 
-| Scanline | T-state start | Region | Content |
-|----------|--------------|--------|---------|
-| 0 | 0 | Top border | Border color |
-| 1–63 | 224–14,111 | Top border | Border color |
-| 64 | 14,336 | Paper start | First display line, contention begins |
-| 64–255 | 14,336–57,119 | Paper area | 192 display lines with contention |
-| 256 | 57,344 | Bottom border | Contention ends |
-| 256–311 | 57,344–69,663 | Bottom border + VBlank | No contention |
-| → 0 | 69,888 | Next frame | INT fires |
-
-### Pentagon Raster Map
-
-| Scanline | T-state start | Region | Content |
-|----------|--------------|--------|---------|
-| 0 | 0 | Top border | Border color |
-| 1–47 | 224–10,527 | Top border | Border color (shorter than 48K!) |
-| 48 | 10,752 | Paper start | First display line, **no contention** |
-| 48–239 | 10,752–53,375 | Paper area | 192 display lines, no contention |
-| 240 | 53,376 | Bottom border | — |
-| 240–319 | 53,376–71,455 | Bottom border + VBlank | — |
-| → 0 | 71,680 | Next frame | INT fires |
-
-> [!WARNING]
-> The Pentagon's paper area starts at **scanline 48** (not 64 as on 48K). Code that hardcodes "paper starts at scanline 64" will have a 16-scanline error on the Pentagon.
+For details, see [interrupt_programming.md](../04_interrupts/interrupt_programming.md) (peripheral interrupt sources).
 
 ---
 
@@ -220,6 +214,9 @@ ScanlineCount: DB 0
     ; Total ≈ 224T (adjust NOP count based on exact B loop overhead)
 ```
 
+> [!IMPORTANT]
+> These exact-T-state loops only work in **uncontended memory** during the **non-display period**. During the paper area on contended-memory models (48K, 128K, +2A/+3), each T-state may be stretched by contention wait states. On the **Pentagon and most clones**, there is no contention, so timing loops work reliably at all times. See [contention_model.md](../03_memory_and_io/contention_model.md) for details.
+
 ---
 
 ## Cross-Platform Raster Sync Strategy
@@ -241,35 +238,53 @@ RasterSync:
     ; Can use floating bus for precision
     HALT
     ; ... floating bus raster lock
+    ; T-states/line = 224, paper starts line 64
     RET
 
 .sync128K:
     ; Floating bus works with minor differences
     HALT
-    ; ... floating bus raster lock (same as 48K mostly)
+    ; ... floating bus raster lock
+    ; T-states/line = 228 (NOT 224!), paper starts line 64
     RET
 
 .syncPentagon:
     ; No floating bus — use HALT + calculated delay
     HALT
-    ; Paper starts at scanline 48 (T=10,752), not 64!
-    ; ... calculated delay loop
+    ; T-states/line = 224, paper starts line 48 (NOT 64!)
+    ; Zero contention — timing loops are reliable everywhere
     RET
 
 .syncGeneric:
     ; Safe fallback: HALT + delay, no floating bus
+    ; Assume 224T/line, paper at line 64
+    ; May be wrong — caller should detect the machine first
     HALT
-    ; ... conservative delay
     RET
 ```
+
+### Machine Detection for Raster Timing
+
+The most common detection method reads a timing-sensitive port and measures the response:
+
+- **FRAMES counter method**: Read the 3-byte FRAMES variable (`#5C78`), wait a known number of T-states, read again. The difference reveals the frame rate → machine type.
+- **Floating bus test**: Attempt to read the floating bus pattern. If it matches the 48K reference, it's a ULA machine. If absent, it's a clone.
+- **Port `#7FFD` test**: Write to the paging register. If it works, it's a 128K or better. If not, it's a 48K or clone without paging.
+
+For a complete machine detection routine, see [video_frame_pentagon.md](video_frame_pentagon.md#runtime-detection) which includes a detection code example.
 
 ---
 
 ## Cross-References
 
+- **Per-model frame timing** (scanline maps, contention patterns):
+  - [video_frame_48k.md](video_frame_48k.md)
+  - [video_frame_128k.md](video_frame_128k.md)
+  - [video_frame_plus2a_plus3.md](video_frame_plus2a_plus3.md)
+  - [video_frame_pentagon.md](video_frame_pentagon.md)
+- **Clone timing comparison** (Scorpion, Kay, ATM Turbo, ZX Evolution, Next, MiSTer): [clone_timing.md](../../02_hardware/clones/clone_timing.md)
 - **Floating bus** (ULA data reads for raster sync): [floating_bus.md](floating_bus.md)
-- **48K video frame** (complete scanline map): [video_frame_48k.md](video_frame_48k.md)
-- **128K video frame** (timing differences): [video_frame_128k.md](video_frame_128k.md)
-- **Pentagon frame** (different scanline count): [video_frame_pentagon.md](video_frame_pentagon.md)
-- **Contention model** (contention during timed delays): [contention_model.md](../03_memory_and_io/contention_model.md)
+- **Border effects** (raster bars, timing-safe writes): [border_effects.md](border_effects.md)
+- **Contention model** (how contention affects timing loops): [contention_model.md](../03_memory_and_io/contention_model.md)
 - **ULA timing** (hardware-level raster generation): [ula_timing.md](../../02_hardware/original/ula_timing.md)
+- **Interrupt programming** (HALT, IM2, hardware line interrupts): [interrupt_programming.md](../04_interrupts/interrupt_programming.md)
