@@ -10,3 +10,5 @@ Memory maps, I/O ports, contention, screen layout, system variables, and bank sw
 | [memory_map_128k.md](memory_map_128k.md) | 128K/+2 paging: 8 RAM banks, #7FFD register, ROM switching, shadow screen (double buffering), contended vs uncontended banks |
 | [io_ports.md](io_ports.md) | I/O port architecture: partial decoding, #FE deep dive (border/EAR/keyboard), #7FFD paging, AY ports, Kempston, per-model differences |
 | [screen_layout.md](screen_layout.md) | Nonlinear pixel framebuffer: three-thirds structure, address calculation, lookup tables, attribute file, column-major access |
+| [contention_model.md](contention_model.md) | Unified contention reference: per-model timing, delay patterns (Ferranti vs gate array), I/O contention, cross-platform strategy |
+| [bank_switching_patterns.md](bank_switching_patterns.md) | Practical 128K+ paging: #7FFD patterns, cross-bank data access, double buffering, +2A/+3 special modes, Pentagon extended memory |

@@ -1,9 +1,11 @@
-[← Plan](../PLAN.md) · [Operating Systems](README.md)
+[← Home](../README.md) · [Operating Systems](README.md)
 
 # Operating Systems
 
-This directory covers ZX Spectrum operating systems and ROM variants: 48K ROM, 128K ROM, TR-DOS, +3 DOS, ESXDOS, NextZXOS, CP/M, FUZIX, and BASIC dialects.
+ZX Spectrum ROM variants, DOS systems, and ROM-defined workspace. The Spectrum has no traditional OS — the ROM BASIC interpreter IS the operating system. Disk-based DOSes (TR-DOS, +3 DOS, ESXDOS) layer on top.
 
-See [PLAN.md](../PLAN.md) for the full article catalog.
+| Article | Description |
+|---------|------------|
+| [system_variables.md](system_variables.md) | ROM-defined system variables: FRAMES counter, PROG/VARS pointers, keyboard state, display color, error handling, memory boundaries — the ROM's API surface |
 
-This directory is a placeholder — content is coming.
+See [PLAN.md](../PLAN.md) for the full article catalog (ROM dissection, TR-DOS, +3 DOS, ESXDOS, NextZXOS, CP/M, FUZIX, BASIC dialects).

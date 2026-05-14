@@ -40,7 +40,13 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 
 *Placeholder — content coming.*
 
-### 00 — Overview · 03 — I/O · 04 — OS · 06 — RE · 07 — Toolchain · 08 — References
+### 04 — Operating Systems
+
+| Article | Description |
+|---------|------------|
+| [system_variables.md](04_operating_systems/system_variables.md) | ROM-defined system variables: FRAMES, PROG, VARS, CHANS, keyboard state, memory boundaries — the ROM's API surface |
+
+### 00 — Overview · 03 — I/O · 06 — RE · 07 — Toolchain · 08 — References
 
 *Placeholders — content coming. See [PLAN.md](PLAN.md) for the full catalog.*
 
@@ -54,6 +60,8 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [memory_map_128k.md](05_development/03_memory_and_io/memory_map_128k.md) | 128K/+2 paging: 8 banks, #7FFD register, shadow screen, contended banks |
 | [io_ports.md](05_development/03_memory_and_io/io_ports.md) | I/O ports: partial decoding, #FE deep dive, #7FFD, AY, Kempston, per-model differences |
 | [screen_layout.md](05_development/03_memory_and_io/screen_layout.md) | Nonlinear framebuffer: three-thirds structure, address calculation, attribute file |
+| [contention_model.md](05_development/03_memory_and_io/contention_model.md) | Unified contention reference: per-model timing, Ferranti vs gate array patterns, I/O contention |
+| [bank_switching_patterns.md](05_development/03_memory_and_io/bank_switching_patterns.md) | Practical 128K+ paging: #7FFD, cross-bank access, double buffering, +2A/+3 modes |
 
 #### Display & Timing
 
@@ -63,6 +71,12 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [video_frame_48k.md](05_development/05_display_and_timing/video_frame_48k.md) | 48K frame: T-state map, contention pattern, floating bus, performance budget |
 | [video_frame_128k.md](05_development/05_display_and_timing/video_frame_128k.md) | 128K frame: odd-bank contention, shadow screen, floating bus differences |
 | [video_frame_pentagon.md](05_development/05_display_and_timing/video_frame_pentagon.md) | Pentagon frame: 320 lines, binary counter, zero contention, 48.83 Hz |
+| [video_frame_plus2a_plus3.md](05_development/05_display_and_timing/video_frame_plus2a_plus3.md) | +2A/+3 frame: Amstrad gate array contention, different contended banks, no I/O contention |
+| [floating_bus.md](05_development/05_display_and_timing/floating_bus.md) | Floating bus: per-model behavior, raster sync via IN A,(#FF), why it fails on +2A/+3 and Pentagon |
+| [raster_timing.md](05_development/05_display_and_timing/raster_timing.md) | Beam position calculation, HALT-based sync, per-model raster maps, cross-platform strategy |
+| [color_system.md](05_development/05_display_and_timing/color_system.md) | Attribute byte, 8-color palette, attribute clash, ULAplus 64-color, Timex HiColor/HiRes |
+| [border_effects.md](05_development/05_display_and_timing/border_effects.md) | Border color via #FE, raster bars, rainbow borders, per-model timing |
+| [clone_video_modes.md](05_development/05_display_and_timing/clone_video_modes.md) | Clone video modes: GigaScreen, ATM hires, Profi 512×256, Kay CPLD, TS-Conf |
 
 ### 09 — Emulation
 

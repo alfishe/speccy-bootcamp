@@ -216,6 +216,7 @@ zx/
 │   │   ├── contention_timing.md
 │   │   ├── floating_bus.md
 │   │   ├── border_effects.md
+│   │   ├── clone_video_modes.md
 │   │   ├── interlace_and_flicker.md
 │   │   ├── color_system.md
 │   │   └── crt_output.md
@@ -604,6 +605,7 @@ zx/
 |---|---|
 | `README.md` | Index — OS landscape across all tracks |
 | `rom_48k.md` | 48K ROM: BASIC interpreter, channel system, editor, character set, ROM routine addresses |
+| `system_variables.md` | ROM-defined system variables: FRAMES, PROG, VARS, CHANS, FLAGS, keyboard state, memory boundaries | 📝 |
 | `rom_128k.md` | 128K ROM 0 + ROM 1: menu system, 128K BASIC extensions, RAM disk |
 | `rom_plus2.md` | +2 / +2A ROM variants |
 | `trdos.md` | TR-DOS: floppy disk OS, command set, file operations, hook codes, ROM structure |
@@ -659,10 +661,10 @@ zx/
 | `memory_map_pentagon.md` | Pentagon memory: 512K/1024K expansions, paging scheme | |
 | `memory_map_next.md` | ZX Spectrum Next memory: 2MB, banking, MMU | |
 | `io_ports.md` | I/O port programming: how partial decoding works, reading/writing ports, port aliasing, the #FE port deep dive (border/speaker/mic/ear), memory paging ports (#7FFD/#1FFD), AY ports (#FFFD/#BFFD) — with decoding bitmask explanation and per-model differences table | 📝 |
-| `contention_model.md` | Unified contention model: per-model timing, impact on code, workarounds | |
+| `contention_model.md` | Unified contention model: per-model timing, impact on code, workarounds | 📝 |
 | `screen_layout.md` | Pixel screen layout: nonlinear addressing (character rows × 8 pixel rows), attribute file | 📝 |
-| `system_variables.md` | System variables: ROM workspace, CHANS, PROG, VARS, FLAGS, TVARS | |
-| `bank_switching_patterns.md` | Bank switching patterns: practical techniques for 128K+ development across models | |
+| `system_variables.md` | System variables: ROM workspace, CHANS, PROG, VARS, FLAGS, TVARS — **see 04_operating_systems/** | 📝 |
+| `bank_switching_patterns.md` | Bank switching patterns: practical techniques for 128K+ development across models | 📝 |
 
 #### 05_development/04_interrupts/ — Interrupt Programming
 
@@ -688,7 +690,7 @@ zx/
 | `video_frame_overview.md` | Video frame generation overview: PAL timing fundamentals (50Hz, 312/313 scanlines, 224 T-states/line), what the ULA does each frame, screen + border + blanking regions | 📝 |
 | `video_frame_48k.md` | **48K ULA frame**: exact T-state map per scanline, pixel fetch pattern, contention windows (scanlines 64–255), INT position (scanline 248, T-state 0), floating bus behavior | 📝 |
 | `video_frame_128k.md` | **128K / +2 frame**: same ULA core but contention differs, shadow screen bank, INT timing differences | 📝 |
-| `video_frame_plus2a_plus3.md` | **+2A/+3 frame**: Amstrad gate array contention model, different timing from 48K/128K | |
+| `video_frame_plus2a_plus3.md` | **+2A/+3 frame**: Amstrad gate array contention model, different timing from 48K/128K | 📝 |
 | `video_frame_pentagon.md` | **Pentagon frame**: THE most important Soviet clone timing — different scanline count, different INT position, different contention — code that works on 48K WILL break here | 📝 |
 | `video_frame_scorpion.md` | **Scorpion frame**: timing differences, turbo mode impact on video |
 | `video_frame_other_soviet.md` | Other Soviet clone frames: ATM Turbo (3.5MHz AND 7MHz modes — 69888 vs 99880 T-states!), Kay, Profi (different paper offset: 12580T), Byte, Quorum, Leningrad, LEC — each may have unique timing |
@@ -698,14 +700,15 @@ zx/
 | `video_frame_comparison.md` | **Frame timing comparison matrix**: all models side-by-side — scanline count, T-states/line, INT position, contention start/end, total frame T-states, compatibility impact. **Source**: Unreal Speccy presets (Pentagon=71680T, Scorpion=69888T, Profi=69888T, ATM7MHz=99880T), ZXMAK2 model list (16+ clones), Fuse/ZEsarUX timing tables |
 
 **Timing-Dependent Effects** | |
-| `raster_timing.md` | Precise raster position: calculating beam position from T-state count, HALT-based sync, per-model raster position tables |
+| `raster_timing.md` | Precise raster position: calculating beam position from T-state count, HALT-based sync, per-model raster position tables | 📝 |
 | `contention_timing.md` | Contention timing deep dive: which T-states are stolen by ULA, per-model contention tables, impact on instruction timing during screen area |
-| `floating_bus.md` | Floating bus: what value appears when reading contended memory during ULA fetch, per-model behavior, use as raster sync trick, emulator differences |
-| `border_effects.md` | Border color changes: multicolor borders, raster bars, timing requirements per model |
+| `floating_bus.md` | Floating bus: what value appears when reading contended memory during ULA fetch, per-model behavior, use as raster sync trick, emulator differences | 📝 |
+| `border_effects.md` | Border color changes: multicolor borders, raster bars, timing requirements per model | 📝 |
 | `interlace_and_flicker.md` | 50Hz flicker, reduction approaches, double buffering on 128K |
 
 **Color System** | |
-| `color_system.md` | Attribute-based color: INK/PAPER, BRIGHT, FLASH — 8x8 cells, color clash as fundamental constraint |
+| `color_system.md` | Attribute-based color, ULA hardware palette, reference palettes (FUSE/Skoolkid/ZEsarUX), attribute clash, ULAplus 64-color, Timex HiColor/HiRes modes | 📝 |
+| `clone_video_modes.md` | Clone video modes beyond standard ULA: GigaScreen, ATM Turbo hires, Profi 512×256, Kay CPLD modes, TS-Conf | 📝 |
 | `crt_output.md` | RF/composite/RGB output, SCART wiring, modern VGA/HDMI adapters |
 
 #### 05_development/06_graphics/ — Graphics Techniques
@@ -952,8 +955,8 @@ zx/
 Articles are written in priority order. README.md is synthesized AFTER articles exist.
 
 - Tier 1: CPU core articles (z80_architecture, z80_timing, z80_interrupts) — ✅ **COMPLETE** (8 articles)
-- Tier 2: Memory maps + I/O ports (foundation for everything else) — 📝 **IN PROGRESS**
-- Tier 3: Display timing + screen layout (foundation for graphics) — 📝 **IN PROGRESS**
+- Tier 2: Memory maps + I/O ports (foundation for everything else) — 📝 **IN PROGRESS** (7 of 10)
+- Tier 3: Display timing + screen layout (foundation for graphics) — 📝 **IN PROGRESS** (12 of 19)
 - Tier 4: Hardware per-stream articles — 2 articles exist (ula_timing, clone_timing)
 - Tier 5: Everything else
 
