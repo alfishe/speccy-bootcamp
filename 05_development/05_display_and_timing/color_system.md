@@ -373,9 +373,9 @@ The dual screen enables instant page-flipping: render into the off-screen buffer
 ## Cross-References
 
 - **Screen layout** (pixel/attribute addressing): [screen_layout.md](../03_memory_and_io/screen_layout.md)
-- **48K memory map** (attribute file at #5800): [memory_map_48k.md](../03_memory_and_io/memory_map_48k.md)
+- **48K memory map** (attribute file at #5800): [memory_and_io_48k.md](../03_memory_and_io/memory_and_io_48k.md)
 - **Border effects** (multicolor borders, raster bars): [border_effects.md](border_effects.md)
 - **Multicolor overview** (timing-based attribute changes): [multicolor_overview.md](../06_graphics/multicolor_overview.md)
-- **I/O ports** (#FE border register): [io_ports.md](../03_memory_and_io/io_ports.md)
+- **I/O ports** (#FE border register): [memory_and_io_48k.md](../03_memory_and_io/memory_and_io_48k.md)
 - **Clone video modes** (GigaScreen, ATM hires, TS-Conf): [clone_video_modes.md](clone_video_modes.md)
 - **Clone timing** (per-model video timing): [clone_timing.md](../../02_hardware/clones/clone_timing.md)

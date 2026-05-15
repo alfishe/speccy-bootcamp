@@ -6,7 +6,7 @@ The ZX Spectrum 128K (1986) and its Amstrad successors (+2, +2A, +3) ship with t
 
 The 128K was designed by Sinclair Research (later Amstrad) as a follow-up to the 48K. Rather than rewrite the entire ROM, the engineers kept the proven 48K ROM intact as ROM 1 and created a new ROM 0 that adds a menu system, full-screen editor, AY sound driver, and RAM disk — calling into ROM 1 when it needs the standard BASIC interpreter. This split-ROM architecture is the defining characteristic of the 128K software platform.
 
-For the 48K ROM baseline, see [rom_48k.md](rom_48k.md). For the memory banking that makes dual-ROM possible, see [memory_map_128k.md](../05_development/03_memory_and_io/memory_map_128k.md).
+For the 48K ROM baseline, see [rom_48k.md](rom_48k.md). For the memory banking that makes dual-ROM possible, see [memory_and_io_128k.md](../05_development/03_memory_and_io/memory_and_io_128k.md).
 
 ---
 
@@ -1118,7 +1118,7 @@ A fully bank-aware ISR must either:
 
 - **48K ROM** (baseline ROM reference): [rom_48k.md](rom_48k.md)
 - **System variables** (FRAMES, BANK_M, RAM disk state): [system_variables.md](system_variables.md)
-- **128K memory map** (bank layout, paging): [memory_map_128k.md](../05_development/03_memory_and_io/memory_map_128k.md)
+- **128K memory map** (bank layout, paging): [memory_and_io_128k.md](../05_development/03_memory_and_io/memory_and_io_128k.md)
 - **Bank switching patterns**: [bank_switching_patterns.md](../05_development/03_memory_and_io/bank_switching_patterns.md)
 - **Interrupt programming** (AY interrupt, IM2, bank switching in ISR): [interrupt_programming.md](../05_development/04_interrupts/interrupt_programming.md)
-- **I/O ports** (#7FFD paging, #FFFD AY register): [io_ports.md](../05_development/03_memory_and_io/io_ports.md)
+- **I/O ports** (#7FFD paging, #FFFD AY register): [memory_and_io_128k.md](../05_development/03_memory_and_io/memory_and_io_128k.md)

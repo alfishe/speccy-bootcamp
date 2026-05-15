@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 380" font-family="'Menlo','Consolas','Courier New',monospace">
+  <rect x="0" y="0" width="680" height="380" fill="#1e1e2e" stroke="#6c7086" stroke-width="1" rx="6"/>
+  <text x="340" y="28" text-anchor="middle" fill="#cdd6f4" font-size="14" font-weight="bold">128K: Port #7FFD Decoding (74HC138)</text>
+
+  <!-- ===== Component: dec138 ===== -->
+  <rect x="280" y="116.0" width="150" height="128" fill="#313244" stroke="#9399b2" stroke-width="1.5" rx="2"/>
+  <text x="355" y="172" text-anchor="middle" fill="#cdd6f4" font-size="9" font-weight="bold">74HC138</text>
+  <text x="355" y="186" text-anchor="middle" fill="#9399b2" font-size="8">КР1533ИД7</text>
+  <line x1="262" y1="128.0" x2="280" y2="128.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="284" y="131.0" text-anchor="start" fill="#9399b2" font-size="7">A (A1)</text>
+  <line x1="262" y1="142.0" x2="280" y2="142.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="284" y="145.0" text-anchor="start" fill="#9399b2" font-size="7">B (A11)</text>
+  <line x1="262" y1="156.0" x2="280" y2="156.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="284" y="159.0" text-anchor="start" fill="#9399b2" font-size="7">C (A12)</text>
+  <line x1="262" y1="170.0" x2="280" y2="170.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="284" y="173.0" text-anchor="start" fill="#9399b2" font-size="7">G1 (A14)</text>
+  <line x1="262" y1="184.0" x2="280" y2="184.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="284" y="187.0" text-anchor="start" fill="#9399b2" font-size="7">/G2A (A15')</text>
+  <line x1="262" y1="198.0" x2="280" y2="198.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="284" y="201.0" text-anchor="start" fill="#9399b2" font-size="7">/G2B (IORQ')</text>
+  <line x1="430" y1="128.0" x2="448" y2="128.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="426" y="131.0" text-anchor="end" fill="#9399b2" font-size="7">Y7</text>
+  <line x1="430" y1="142.0" x2="448" y2="142.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="426" y="145.0" text-anchor="end" fill="#9399b2" font-size="7">Y6</text>
+  <line x1="430" y1="156.0" x2="448" y2="156.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="426" y="159.0" text-anchor="end" fill="#9399b2" font-size="7">Y5</text>
+  <line x1="430" y1="170.0" x2="448" y2="170.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="426" y="173.0" text-anchor="end" fill="#9399b2" font-size="7">Y4</text>
+  <line x1="430" y1="184.0" x2="448" y2="184.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="426" y="187.0" text-anchor="end" fill="#9399b2" font-size="7">Y3</text>
+  <line x1="430" y1="198.0" x2="448" y2="198.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="426" y="201.0" text-anchor="end" fill="#9399b2" font-size="7">Y2</text>
+  <line x1="430" y1="212.0" x2="448" y2="212.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="426" y="215.0" text-anchor="end" fill="#9399b2" font-size="7">Y1</text>
+  <line x1="430" y1="226.0" x2="448" y2="226.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="426" y="229.0" text-anchor="end" fill="#9399b2" font-size="7">Y0</text>
+
+  <!-- ===== Wire ===== -->
+  <line x1="100" y1="132" x2="181.0" y2="132" stroke="#89b4fa" stroke-width="1.5"/>
+  <line x1="181.0" y1="132" x2="181.0" y2="128.0" stroke="#89b4fa" stroke-width="1.5"/>
+  <line x1="181.0" y1="128.0" x2="262" y2="128.0" stroke="#89b4fa" stroke-width="1.5"/>
+
+  <!-- ===== Wire ===== -->
+  <line x1="100" y1="146" x2="181.0" y2="146" stroke="#89b4fa" stroke-width="1.5"/>
+  <line x1="181.0" y1="146" x2="181.0" y2="142.0" stroke="#89b4fa" stroke-width="1.5"/>
+  <line x1="181.0" y1="142.0" x2="262" y2="142.0" stroke="#89b4fa" stroke-width="1.5"/>
+
+  <!-- ===== Wire ===== -->
+  <line x1="100" y1="160" x2="181.0" y2="160" stroke="#89b4fa" stroke-width="1.5"/>
+  <line x1="181.0" y1="160" x2="181.0" y2="156.0" stroke="#89b4fa" stroke-width="1.5"/>
+  <line x1="181.0" y1="156.0" x2="262" y2="156.0" stroke="#89b4fa" stroke-width="1.5"/>
+
+  <!-- ===== Wire ===== -->
+  <line x1="100" y1="174" x2="181.0" y2="174" stroke="#89b4fa" stroke-width="1.5"/>
+  <line x1="181.0" y1="174" x2="181.0" y2="170.0" stroke="#89b4fa" stroke-width="1.5"/>
+  <line x1="181.0" y1="170.0" x2="262" y2="170.0" stroke="#89b4fa" stroke-width="1.5"/>
+
+  <!-- ===== Wire ===== -->
+  <line x1="100" y1="188" x2="240" y2="188" stroke="#89b4fa" stroke-width="1.5"/>
+  <line x1="240" y1="188" x2="240" y2="184.0" stroke="#89b4fa" stroke-width="1.5"/>
+  <line x1="240" y1="184.0" x2="262" y2="184.0" stroke="#89b4fa" stroke-width="1.5"/>
+
+  <!-- ===== Wire ===== -->
+  <line x1="100" y1="202" x2="240" y2="202" stroke="#f9e2af" stroke-width="1.5"/>
+  <line x1="240" y1="202" x2="240" y2="198.0" stroke="#f9e2af" stroke-width="1.5"/>
+  <line x1="240" y1="198.0" x2="262" y2="198.0" stroke="#f9e2af" stroke-width="1.5"/>
+
+  <!-- ===== Wire ===== -->
+  <line x1="448" y1="128.0" x2="524.0" y2="128.0" stroke="#a6e3a1" stroke-width="1.5"/>
+  <line x1="524.0" y1="128.0" x2="524.0" y2="132" stroke="#a6e3a1" stroke-width="1.5"/>
+  <line x1="524.0" y1="132" x2="600" y2="132" stroke="#a6e3a1" stroke-width="1.5"/>
+  <text x="96" y="135" text-anchor="end" fill="#89b4fa" font-size="8">A1</text>
+  <text x="96" y="149" text-anchor="end" fill="#89b4fa" font-size="8">A11</text>
+  <text x="96" y="163" text-anchor="end" fill="#89b4fa" font-size="8">A12</text>
+  <text x="96" y="177" text-anchor="end" fill="#89b4fa" font-size="8">A14</text>
+  <text x="96" y="191" text-anchor="end" fill="#89b4fa" font-size="8" text-decoration="overline">A15</text>
+  <text x="96" y="205" text-anchor="end" fill="#f9e2af" font-size="8" text-decoration="overline">IORQ</text>
+  <text x="604" y="135" text-anchor="start" fill="#a6e3a1" font-size="8">#7FFD CS -&gt; Paging Register</text>
+  <text x="80" y="70" text-anchor="start" fill="#6c7086" font-size="8">Address bus: A15 A14 A13 A12 A11 ... A1 A0</text>
+  <text x="80" y="85" text-anchor="start" fill="#89b4fa" font-size="8">Match:         0    1   x    1   1  ...  0  x</text>
+  <text x="80" y="100" text-anchor="start" fill="#9399b2" font-size="8">= #7FFD (A15=0, A14-A11=0111, A1=0)</text>
+  <text x="80" y="300" text-anchor="start" fill="#6c7086" font-size="7">74HC138 decodes 6 address lines -&gt; only 64 mirrors</text>
+  <text x="80" y="315" text-anchor="start" fill="#6c7086" font-size="7">A13 is DON'T CARE (x) -&gt; 2 groups of 64 mirrors</text>
+  <text x="80" y="330" text-anchor="start" fill="#6c7086" font-size="7">A0 is DON'T CARE -&gt; each mirror covers both even/odd</text>
+  <text x="80" y="350" text-anchor="start" fill="#fab387" font-size="7">Write-only port: data latched into 7474 flip-flops</text>
+  <text x="430" y="300" text-anchor="start" fill="#9399b2" font-size="7">Decoding expression:</text>
+  <text x="430" y="315" text-anchor="start" fill="#a6e3a1" font-size="7">#7FFD_CS = ~IORQ &amp; ~A15 &amp; A14</text>
+  <text x="430" y="330" text-anchor="start" fill="#a6e3a1" font-size="7">          &amp; A12 &amp; A11 &amp; ~A1</text>
+  <text x="430" y="350" text-anchor="start" fill="#6c7086" font-size="7">A13,A0 don't care -&gt; 64 mirrors</text>
+</svg>

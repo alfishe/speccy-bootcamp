@@ -56,9 +56,12 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 
 | Article | Description |
 |---------|------------|
-| [memory_map_48k.md](05_development/03_memory_and_io/memory_map_48k.md) | 16K/48K memory map: ROM, screen, attributes, system variables, RAM regions |
-| [memory_map_128k.md](05_development/03_memory_and_io/memory_map_128k.md) | 128K/+2 paging: 8 banks, #7FFD register, shadow screen, contended banks |
-| [io_ports.md](05_development/03_memory_and_io/io_ports.md) | I/O ports: partial decoding, #FE deep dive, #7FFD, AY, Kempston, per-model differences |
+| [io_port_decoding.md](05_development/03_memory_and_io/io_port_decoding.md) | I/O port concepts: partial decoding, masks, mirrors, conflicts |
+| [memory_and_io_48k.md](05_development/03_memory_and_io/memory_and_io_48k.md) | 16K/48K: memory map + #FE port (border, EAR, keyboard, beeper) |
+| [memory_and_io_128k.md](05_development/03_memory_and_io/memory_and_io_128k.md) | 128K/+2: 8 banks, #7FFD paging, shadow screen, AY ports |
+| [memory_and_io_plus3.md](05_development/03_memory_and_io/memory_and_io_plus3.md) | +2A/+3: #1FFD, 4 paging modes, true double buffering, +3 FDC |
+| [memory_and_io_pentagon.md](05_development/03_memory_and_io/memory_and_io_pentagon.md) | Pentagon: #EFF7 extended paging, Beta 128 FDC/TR-DOS, zero contention |
+| [memory_and_io_next.md](05_development/03_memory_and_io/memory_and_io_next.md) | ZX Spectrum Next: 2MB MMU, 8 KB pages, Layer 2/sprite/copper/DMA ports |
 | [screen_layout.md](05_development/03_memory_and_io/screen_layout.md) | Nonlinear framebuffer: three-thirds structure, address calculation, attribute file |
 | [contention_model.md](05_development/03_memory_and_io/contention_model.md) | Unified contention reference: per-model timing, Ferranti vs gate array patterns, I/O contention |
 | [bank_switching_patterns.md](05_development/03_memory_and_io/bank_switching_patterns.md) | Practical 128K+ paging: #7FFD, cross-bank access, double buffering, +2A/+3 modes |
@@ -106,14 +109,17 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 
 **Spectrum assembly programmers (memory, I/O, display):**
 
-11. [48K Memory Map](05_development/03_memory_and_io/memory_map_48k.md)
-12. [Screen Pixel Layout](05_development/03_memory_and_io/screen_layout.md)
-13. [I/O Ports](05_development/03_memory_and_io/io_ports.md)
-14. [128K Memory Map](05_development/03_memory_and_io/memory_map_128k.md)
-15. [Video Frame Overview](05_development/05_display_and_timing/video_frame_overview.md)
-16. [48K Video Frame](05_development/05_display_and_timing/video_frame_48k.md)
-17. [128K Video Frame](05_development/05_display_and_timing/video_frame_128k.md)
-18. [Pentagon Video Frame](05_development/05_display_and_timing/video_frame_pentagon.md)
+11. [I/O Port Decoding](05_development/03_memory_and_io/io_port_decoding.md)
+12. [48K Memory and I/O](05_development/03_memory_and_io/memory_and_io_48k.md)
+13. [128K Memory and I/O](05_development/03_memory_and_io/memory_and_io_128k.md)
+14. [+2A/+3 Memory and I/O](05_development/03_memory_and_io/memory_and_io_plus3.md)
+15. [Pentagon Memory and I/O](05_development/03_memory_and_io/memory_and_io_pentagon.md)
+16. [ZX Spectrum Next Memory and I/O](05_development/03_memory_and_io/memory_and_io_next.md)
+17. [Screen Pixel Layout](05_development/03_memory_and_io/screen_layout.md)
+18. [Video Frame Overview](05_development/05_display_and_timing/video_frame_overview.md)
+19. [48K Video Frame](05_development/05_display_and_timing/video_frame_48k.md)
+20. [128K Video Frame](05_development/05_display_and_timing/video_frame_128k.md)
+21. [Pentagon Video Frame](05_development/05_display_and_timing/video_frame_pentagon.md)
 
 **Bridge to advanced optimization:**
 

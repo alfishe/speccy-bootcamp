@@ -1,0 +1,85 @@
+{
+    "title": "128K: Port #7FFD Decoding (74HC138)",
+    "width": 680,
+    "height": 380,
+    "components": [
+        {
+            "id": "dec138",
+            "type": "74138",
+            "x": 280,
+            "y": 180,
+            "label": "74HC138 / \u041a\u04201533\u0418\u04147",
+            "left_pins": ["A (A1)", "B (A11)", "C (A12)", "G1 (A14)", "/G2A (A15')", "/G2B (IORQ')"],
+            "right_pins": ["Y7", "Y6", "Y5", "Y4", "Y3", "Y2", "Y1", "Y0"],
+            "width": 150
+        }
+    ],
+    "wires": [
+        {
+            "from": "port.p_a1",
+            "to": "dec138.A (A1)",
+            "label": "",
+            "color": "blue"
+        },
+        {
+            "from": "port.p_a11",
+            "to": "dec138.B (A11)",
+            "label": "",
+            "color": "blue"
+        },
+        {
+            "from": "port.p_a12",
+            "to": "dec138.C (A12)",
+            "label": "",
+            "color": "blue"
+        },
+        {
+            "from": "port.p_a14",
+            "to": "dec138.G1 (A14)",
+            "label": "",
+            "color": "blue"
+        },
+        {
+            "from": "port.p_a15",
+            "to": "dec138./G2A (A15')",
+            "label": "",
+            "color": "blue",
+            "mid_x": 240
+        },
+        {
+            "from": "port.p_iorq",
+            "to": "dec138./G2B (IORQ')",
+            "label": "",
+            "color": "yellow",
+            "mid_x": 240
+        },
+        {
+            "from": "dec138.Y7",
+            "to": "port.p_out",
+            "label": "",
+            "color": "green"
+        }
+    ],
+    "ports": [
+        { "id": "p_a1",   "x": 100, "y": 132, "label": "A1",    "direction": "in",  "color": "blue" },
+        { "id": "p_a11",  "x": 100, "y": 146, "label": "A11",   "direction": "in",  "color": "blue" },
+        { "id": "p_a12",  "x": 100, "y": 160, "label": "A12",   "direction": "in",  "color": "blue" },
+        { "id": "p_a14",  "x": 100, "y": 174, "label": "A14",   "direction": "in",  "color": "blue" },
+        { "id": "p_a15",  "x": 100, "y": 188, "label": "A15",   "direction": "in",  "color": "blue", "active_low": true },
+        { "id": "p_iorq", "x": 100, "y": 202, "label": "IORQ",  "direction": "in",  "color": "yellow", "active_low": true },
+        { "id": "p_out",  "x": 600, "y": 132, "label": "#7FFD CS -> Paging Register", "direction": "out", "color": "green" }
+    ],
+    "annotations": [
+        { "x": 80,  "y": 70,  "text": "Address bus: A15 A14 A13 A12 A11 ... A1 A0",  "color": "overlay0", "size": 8 },
+        { "x": 80,  "y": 85,  "text": "Match:         0    1   x    1   1  ...  0  x", "color": "blue", "size": 8 },
+        { "x": 80,  "y": 100, "text": "= #7FFD (A15=0, A14-A11=0111, A1=0)", "color": "overlay2", "size": 8 },
+        { "x": 80,  "y": 300, "text": "74HC138 decodes 6 address lines -> only 64 mirrors", "color": "overlay0", "size": 7 },
+        { "x": 80,  "y": 315, "text": "A13 is DON'T CARE (x) -> 2 groups of 64 mirrors", "color": "overlay0", "size": 7 },
+        { "x": 80,  "y": 330, "text": "A0 is DON'T CARE -> each mirror covers both even/odd", "color": "overlay0", "size": 7 },
+        { "x": 80,  "y": 350, "text": "Write-only port: data latched into 7474 flip-flops", "color": "peach", "size": 7 },
+        { "x": 430, "y": 300, "text": "Decoding expression:",                                  "color": "overlay2", "size": 7 },
+        { "x": 430, "y": 315, "text": "#7FFD_CS = ~IORQ & ~A15 & A14",                       "color": "green",    "size": 7 },
+        { "x": 430, "y": 330, "text": "          & A12 & A11 & ~A1",                       "color": "green",    "size": 7 },
+        { "x": 430, "y": 350, "text": "A13,A0 don't care -> 64 mirrors",                     "color": "overlay0", "size": 7 }
+    ]
+}

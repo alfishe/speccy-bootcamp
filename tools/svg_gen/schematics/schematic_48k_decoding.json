@@ -1,0 +1,62 @@
+{
+    "title": "48K: ULA Port #FE Decoding",
+    "width": 560,
+    "height": 300,
+    "components": [
+        {
+            "id": "inv_a0",
+            "type": "not",
+            "x": 160,
+            "y": 110,
+            "label": "TR6"
+        },
+        {
+            "id": "and_ula",
+            "type": "and",
+            "x": 310,
+            "y": 125,
+            "inputs": 2,
+            "label": ""
+        }
+    ],
+    "wires": [
+        {
+            "from": "port.p_a0",
+            "to": "inv_a0.in0",
+            "label": "",
+            "color": "blue"
+        },
+        {
+            "from": "inv_a0.out",
+            "to": "and_ula.in0",
+            "label": ""
+        },
+        {
+            "from": "port.p_iorq",
+            "to": "and_ula.in1",
+            "label": "",
+            "color": "yellow",
+            "mid_x": 270
+        },
+        {
+            "from": "and_ula.out",
+            "to": "port.p_cs",
+            "label": "",
+            "color": "green"
+        }
+    ],
+    "ports": [
+        { "id": "p_a0",   "x": 50,  "y": 110, "label": "A0",                 "direction": "in",  "color": "blue" },
+        { "id": "p_iorq", "x": 50,  "y": 160, "label": "IORQ",              "direction": "in",  "active_low": true, "color": "yellow" },
+        { "id": "p_cs",   "x": 510, "y": 125, "label": "ULA CS (active low)", "direction": "out", "color": "green" }
+    ],
+    "annotations": [
+        { "x": 60,  "y": 60,  "text": "Z80 Address Bus",  "color": "overlay0" },
+        { "x": 370, "y": 95,  "text": "ULA responds",    "color": "overlay2" },
+        { "x": 370, "y": 110, "text": "when A0=0",       "color": "overlay2" },
+        { "x": 60,  "y": 230, "text": "Ferranti ULA checks only A0 (1 line) -> 32,768 mirrors",  "color": "overlay0", "size": 7 },
+        { "x": 60,  "y": 245, "text": "TR6 inverter: A0=0 -> ULA selected", "color": "overlay0", "size": 7 },
+        { "x": 300, "y": 230, "text": "ULA_CS = ~IORQ & ~A0",   "color": "green",    "size": 7 },
+        { "x": 300, "y": 245, "text": "32,768 mirrors (A1-A15 don't care)", "color": "overlay0", "size": 7 }
+    ]
+}

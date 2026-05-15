@@ -60,11 +60,13 @@ Thumbs.db
 *.o
 *.obj
 
-# Build artifacts
-*.tap
-*.sna
-*.z80
-*.trd
-*.dsk
-build/
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution
+*.egg-info/
 dist/
+build/

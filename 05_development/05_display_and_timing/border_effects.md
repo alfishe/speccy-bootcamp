@@ -272,5 +272,5 @@ This means:
 - **Color system** (attribute colors, palette, ULAplus): [color_system.md](color_system.md)
 - **Raster timing** (HALT sync, beam position): [raster_timing.md](raster_timing.md)
 - **48K video frame** (scanline map): [video_frame_48k.md](video_frame_48k.md)
-- **I/O ports** (#FE register details): [io_ports.md](../03_memory_and_io/io_ports.md)
+- **I/O ports** (#FE register details): [memory_and_io_48k.md](../03_memory_and_io/memory_and_io_48k.md)
 - **Contention model** (I/O contention on Ferranti ULA): [contention_model.md](../03_memory_and_io/contention_model.md)

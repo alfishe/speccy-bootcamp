@@ -422,8 +422,8 @@ TR-DOS replaces the standard CHANS area with its own channel definitions:
 
 ## Cross-References
 
-- **48K memory map** (address ranges, contended regions): [memory_map_48k.md](../05_development/03_memory_and_io/memory_map_48k.md)
-- **128K memory map** (banking, 128K extensions): [memory_map_128k.md](../05_development/03_memory_and_io/memory_map_128k.md)
+- **48K memory map** (address ranges, contended regions): [memory_and_io_48k.md](../05_development/03_memory_and_io/memory_and_io_48k.md)
+- **128K memory map** (banking, 128K extensions): [memory_and_io_128k.md](../05_development/03_memory_and_io/memory_and_io_128k.md)
 - **Interrupt programming** (hooking #0038, ISR design): [interrupt_programming.md](../05_development/04_interrupts/interrupt_programming.md)
 - **ROM disassembly** (complete system variable reference): [skoolkid ROM sysvars](https://skoolkid.github.io/rom/buffers/sysvars.html)
-- **I/O ports** (#FE keyboard reading): [io_ports.md](../05_development/03_memory_and_io/io_ports.md)
+- **I/O ports** (#FE keyboard reading): [memory_and_io_48k.md](../05_development/03_memory_and_io/memory_and_io_48k.md)

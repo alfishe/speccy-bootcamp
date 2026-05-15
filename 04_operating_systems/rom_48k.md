@@ -1299,8 +1299,8 @@ The Spectrum ROM reflects the constraints of its era:
 ## Cross-References
 
 - **System variables** (FRAMES, PROG, VARS, CHANS, FLAGS, keyboard state): [system_variables.md](system_variables.md)
-- **48K memory map** (ROM region, screen, system vars): [memory_map_48k.md](../05_development/03_memory_and_io/memory_map_48k.md)
+- **48K memory map** (ROM region, screen, system vars): [memory_and_io_48k.md](../05_development/03_memory_and_io/memory_and_io_48k.md)
 - **128K ROM** (menu system, BASIC extensions, RAM disk): [rom_128k.md](rom_128k.md)
 - **Interrupt programming** (hooking #0038, ISR design): [interrupt_programming.md](../05_development/04_interrupts/interrupt_programming.md)
 - **Character set** (pixel layout, token table): [screen_layout.md](../05_development/03_memory_and_io/screen_layout.md)
-- **I/O ports** (#FE keyboard, beeper, border): [io_ports.md](../05_development/03_memory_and_io/io_ports.md)
+- **I/O ports** (#FE keyboard, beeper, border): [memory_and_io_48k.md](../05_development/03_memory_and_io/memory_and_io_48k.md)

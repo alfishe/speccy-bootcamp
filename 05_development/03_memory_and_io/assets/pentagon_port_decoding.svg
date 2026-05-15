@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 460" font-family="'Menlo','Consolas','Courier New',monospace">
+  <rect x="0" y="0" width="720" height="460" fill="#1e1e2e" stroke="#6c7086" stroke-width="1" rx="6"/>
+  <text x="360" y="28" text-anchor="middle" fill="#cdd6f4" font-size="14" font-weight="bold">Pentagon: #7FFD + #EFF7 Extended Decoding</text>
+
+  <!-- ===== Component: dec138 ===== -->
+  <rect x="240" y="80.0" width="150" height="100" fill="#313244" stroke="#9399b2" stroke-width="1.5" rx="2"/>
+  <text x="315" y="122" text-anchor="middle" fill="#cdd6f4" font-size="9" font-weight="bold">74HC138</text>
+  <text x="315" y="136" text-anchor="middle" fill="#9399b2" font-size="8">КР1533ИД7</text>
+  <line x1="222" y1="92.0" x2="240" y2="92.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="244" y="95.0" text-anchor="start" fill="#9399b2" font-size="7">A (A1)</text>
+  <line x1="222" y1="106.0" x2="240" y2="106.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="244" y="109.0" text-anchor="start" fill="#9399b2" font-size="7">B (A11)</text>
+  <line x1="222" y1="120.0" x2="240" y2="120.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="244" y="123.0" text-anchor="start" fill="#9399b2" font-size="7">C (A12)</text>
+  <line x1="222" y1="134.0" x2="240" y2="134.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="244" y="137.0" text-anchor="start" fill="#9399b2" font-size="7">G1 (A14)</text>
+  <line x1="222" y1="148.0" x2="240" y2="148.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="244" y="151.0" text-anchor="start" fill="#9399b2" font-size="7">/G2A (A15')</text>
+  <line x1="222" y1="162.0" x2="240" y2="162.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="244" y="165.0" text-anchor="start" fill="#9399b2" font-size="7">/G2B (IORQ')</text>
+  <line x1="390" y1="92.0" x2="408" y2="92.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="386" y="95.0" text-anchor="end" fill="#9399b2" font-size="7">Y7 (#7FFD)</text>
+
+  <!-- ===== Component: cmp688 ===== -->
+  <rect x="240" y="219.0" width="160" height="142" fill="#313244" stroke="#9399b2" stroke-width="1.5" rx="2"/>
+  <text x="320" y="282" text-anchor="middle" fill="#cdd6f4" font-size="9" font-weight="bold">74HC688</text>
+  <text x="320" y="296" text-anchor="middle" fill="#9399b2" font-size="8">КР1533СП1</text>
+  <line x1="222" y1="231.0" x2="240" y2="231.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="244" y="234.0" text-anchor="start" fill="#9399b2" font-size="7">P0 (A0)</text>
+  <line x1="222" y1="245.0" x2="240" y2="245.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="244" y="248.0" text-anchor="start" fill="#9399b2" font-size="7">P1 (A5)</text>
+  <line x1="222" y1="259.0" x2="240" y2="259.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="244" y="262.0" text-anchor="start" fill="#9399b2" font-size="7">P2 (A9)</text>
+  <line x1="222" y1="273.0" x2="240" y2="273.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="244" y="276.0" text-anchor="start" fill="#9399b2" font-size="7">P3 (A10)</text>
+  <line x1="222" y1="287.0" x2="240" y2="287.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="244" y="290.0" text-anchor="start" fill="#9399b2" font-size="7">P4 (A11)</text>
+  <line x1="222" y1="301.0" x2="240" y2="301.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="244" y="304.0" text-anchor="start" fill="#9399b2" font-size="7">P5 (A12)</text>
+  <line x1="222" y1="315.0" x2="240" y2="315.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="244" y="318.0" text-anchor="start" fill="#9399b2" font-size="7">P6 (A15)</text>
+  <line x1="222" y1="329.0" x2="240" y2="329.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="244" y="332.0" text-anchor="start" fill="#9399b2" font-size="7">P7 (1)</text>
+  <line x1="222" y1="343.0" x2="240" y2="343.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="244" y="346.0" text-anchor="start" fill="#9399b2" font-size="7">/G (IORQ')</text>
+  <line x1="400" y1="231.0" x2="418" y2="231.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="396" y="234.0" text-anchor="end" fill="#9399b2" font-size="7">/P=Q (#EFF7)</text>
+
+  <!-- ===== Wire ===== -->
+  <line x1="60" y1="110" x2="150" y2="110" stroke="#89b4fa" stroke-width="1.5"/>
+  <line x1="150" y1="110" x2="150" y2="92.0" stroke="#89b4fa" stroke-width="1.5"/>
+  <line x1="150" y1="92.0" x2="222" y2="92.0" stroke="#89b4fa" stroke-width="1.5"/>
+
+  <!-- ===== Wire ===== -->
+  <line x1="60" y1="240" x2="150" y2="240" stroke="#f9e2af" stroke-width="1.5"/>
+  <line x1="150" y1="240" x2="150" y2="162.0" stroke="#f9e2af" stroke-width="1.5"/>
+  <line x1="150" y1="162.0" x2="222" y2="162.0" stroke="#f9e2af" stroke-width="1.5"/>
+
+  <!-- ===== Wire ===== -->
+  <line x1="408" y1="92.0" x2="524.0" y2="92.0" stroke="#a6e3a1" stroke-width="1.5"/>
+  <line x1="524.0" y1="92.0" x2="524.0" y2="112" stroke="#a6e3a1" stroke-width="1.5"/>
+  <line x1="524.0" y1="112" x2="640" y2="112" stroke="#a6e3a1" stroke-width="1.5"/>
+
+  <!-- ===== Wire ===== -->
+  <line x1="60" y1="110" x2="150" y2="110" stroke="#89b4fa" stroke-width="1.5"/>
+  <line x1="150" y1="110" x2="150" y2="231.0" stroke="#89b4fa" stroke-width="1.5"/>
+  <line x1="150" y1="231.0" x2="222" y2="231.0" stroke="#89b4fa" stroke-width="1.5"/>
+
+  <!-- ===== Wire ===== -->
+  <line x1="60" y1="240" x2="150" y2="240" stroke="#f9e2af" stroke-width="1.5"/>
+  <line x1="150" y1="240" x2="150" y2="343.0" stroke="#f9e2af" stroke-width="1.5"/>
+  <line x1="150" y1="343.0" x2="222" y2="343.0" stroke="#f9e2af" stroke-width="1.5"/>
+
+  <!-- ===== Wire ===== -->
+  <line x1="418" y1="231.0" x2="529.0" y2="231.0" stroke="#cba6f7" stroke-width="1.5"/>
+  <line x1="529.0" y1="231.0" x2="529.0" y2="282" stroke="#cba6f7" stroke-width="1.5"/>
+  <line x1="529.0" y1="282" x2="640" y2="282" stroke="#cba6f7" stroke-width="1.5"/>
+  <text x="56" y="113" text-anchor="end" fill="#89b4fa" font-size="8">A15..A0</text>
+  <text x="56" y="243" text-anchor="end" fill="#f9e2af" font-size="8" text-decoration="overline">IORQ</text>
+  <text x="644" y="115" text-anchor="start" fill="#a6e3a1" font-size="8">#7FFD -&gt; Bank Reg (128K compat)</text>
+  <text x="644" y="285" text-anchor="start" fill="#cba6f7" font-size="8">#EFF7 -&gt; Ext Memory (512K+)</text>
+  <text x="60" y="44" text-anchor="start" fill="#6c7086" font-size="8">Pentagon: two-stage decoding for 128K compat + extended memory</text>
+  <text x="60" y="58" text-anchor="start" fill="#a6e3a1" font-size="7">#7FFD:  masked decode via 74138 (same as 128K Sinclair)</text>
+  <text x="60" y="72" text-anchor="start" fill="#cba6f7" font-size="7">#EFF7:  exact match via 74688 comparator (8 lines checked)</text>
+  <text x="60" y="380" text-anchor="start" fill="#6c7086" font-size="7">74688 compares 8 address lines against hardwired jumpers</text>
+  <text x="60" y="395" text-anchor="start" fill="#6c7086" font-size="7">Q inputs tied to Vcc/GND pattern matching #EFF7 = 1110_1111_1111_0111</text>
+  <text x="60" y="410" text-anchor="start" fill="#9399b2" font-size="7">Exact match = only 1 mirror address (no aliases)</text>
+  <text x="60" y="425" text-anchor="start" fill="#fab387" font-size="7">Combined with #7FFD bank -&gt; extended paging for 512K/1024K</text>
+  <text x="420" y="380" text-anchor="start" fill="#9399b2" font-size="7">Decoding expressions:</text>
+  <text x="420" y="395" text-anchor="start" fill="#a6e3a1" font-size="7">#7FFD_CS = ~IORQ &amp; ~A15 &amp; A14 &amp; A12</text>
+  <text x="420" y="410" text-anchor="start" fill="#a6e3a1" font-size="7">          &amp; A11 &amp; ~A1</text>
+  <text x="420" y="425" text-anchor="start" fill="#cba6f7" font-size="7">#EFF7_CS = ~IORQ &amp; {1,A15,A12,A11,A10,A9,A5,A0}</text>
+  <text x="420" y="440" text-anchor="start" fill="#cba6f7" font-size="7">          == 8'b1111_0111</text>
+</svg>

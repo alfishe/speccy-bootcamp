@@ -2,7 +2,7 @@
 
 # Bank Switching Patterns — Practical 128K+ Development
 
-How to use RAM paging on the ZX Spectrum 128K, +2A/+3, Pentagon, and beyond. This article focuses on practical code patterns — for the paging register hardware details, see [memory_map_128k.md](memory_map_128k.md) and [io_ports.md](io_ports.md).
+How to use RAM paging on the ZX Spectrum 128K, +2A/+3, Pentagon, and beyond. This article focuses on practical code patterns — for the paging register hardware details, see [memory_and_io_128k.md](memory_and_io_128k.md) and [io_port_decoding.md](io_port_decoding.md).
 
 ---
 
@@ -373,8 +373,10 @@ GetData:
 
 ## Cross-References
 
-- **128K memory map** (paging register, bank layout): [memory_map_128k.md](memory_map_128k.md)
-- **I/O ports** (#7FFD, #1FFD details): [io_ports.md](io_ports.md)
+- **128K memory map** (paging register, bank layout): [memory_and_io_128k.md](memory_and_io_128k.md)
+- **I/O port decoding** (masks, conflicts): [io_port_decoding.md](io_port_decoding.md)
+- **+2A/+3 memory and ports** (#1FFD, 4 paging modes): [memory_and_io_plus3.md](memory_and_io_plus3.md)
+- **Pentagon memory and ports** (EFF7, extended paging): [memory_and_io_pentagon.md](memory_and_io_pentagon.md)
 - **Contention model** (bank-based contention): [contention_model.md](contention_model.md)
 - **Double buffering** (shadow screen techniques): [double_buffering.md](../06_graphics/double_buffering.md)
 - **Clone timing** (Pentagon extended memory): [clone_timing.md](../../02_hardware/clones/clone_timing.md)

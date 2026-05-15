@@ -1,0 +1,90 @@
+{
+    "title": "Pentagon: #7FFD + #EFF7 Extended Decoding",
+    "width": 720,
+    "height": 460,
+    "components": [
+        {
+            "id": "dec138",
+            "type": "74138",
+            "x": 240,
+            "y": 130,
+            "label": "74HC138 / \u041a\u04201533\u0418\u04147",
+            "left_pins": ["A (A1)", "B (A11)", "C (A12)", "G1 (A14)", "/G2A (A15')", "/G2B (IORQ')"],
+            "right_pins": ["Y7 (#7FFD)"],
+            "width": 150
+        },
+        {
+            "id": "cmp688",
+            "type": "74688",
+            "x": 240,
+            "y": 290,
+            "label": "74HC688 / \u041a\u04201533\u0421\u041f1",
+            "left_pins": ["P0 (A0)", "P1 (A5)", "P2 (A9)", "P3 (A10)", "P4 (A11)", "P5 (A12)", "P6 (A15)", "P7 (1)", "/G (IORQ')"],
+            "right_pins": ["/P=Q (#EFF7)"],
+            "width": 160
+        }
+    ],
+    "wires": [
+        {
+            "from": "port.p_addr",
+            "to": "dec138.A (A1)",
+            "label": "",
+            "color": "blue",
+            "mid_x": 150
+        },
+        {
+            "from": "port.p_ctrl",
+            "to": "dec138./G2B (IORQ')",
+            "label": "",
+            "color": "yellow",
+            "mid_x": 150
+        },
+        {
+            "from": "dec138.Y7 (#7FFD)",
+            "to": "port.p_7ffd",
+            "label": "",
+            "color": "green"
+        },
+        {
+            "from": "port.p_addr",
+            "to": "cmp688.P0 (A0)",
+            "label": "",
+            "color": "blue",
+            "mid_x": 150
+        },
+        {
+            "from": "port.p_ctrl",
+            "to": "cmp688./G (IORQ')",
+            "label": "",
+            "color": "yellow",
+            "mid_x": 150,
+            "color": "yellow"
+        },
+        {
+            "from": "cmp688./P=Q (#EFF7)",
+            "to": "port.p_eff7",
+            "label": "",
+            "color": "mauve"
+        }
+    ],
+    "ports": [
+        { "id": "p_addr", "x": 60, "y": 110,  "label": "A15..A0", "direction": "in",  "color": "blue" },
+        { "id": "p_ctrl", "x": 60, "y": 240, "label": "IORQ",    "direction": "in",  "color": "yellow", "active_low": true },
+        { "id": "p_7ffd", "x": 640, "y": 112, "label": "#7FFD -> Bank Reg (128K compat)", "direction": "out", "color": "green" },
+        { "id": "p_eff7", "x": 640, "y": 282, "label": "#EFF7 -> Ext Memory (512K+)",    "direction": "out", "color": "mauve" }
+    ],
+    "annotations": [
+        { "x": 60, "y": 44,  "text": "Pentagon: two-stage decoding for 128K compat + extended memory", "color": "overlay0", "size": 8 },
+        { "x": 60, "y": 58,  "text": "#7FFD:  masked decode via 74138 (same as 128K Sinclair)",       "color": "green",   "size": 7 },
+        { "x": 60, "y": 72,  "text": "#EFF7:  exact match via 74688 comparator (8 lines checked)",    "color": "mauve",   "size": 7 },
+        { "x": 60, "y": 380, "text": "74688 compares 8 address lines against hardwired jumpers",      "color": "overlay0", "size": 7 },
+        { "x": 60, "y": 395, "text": "Q inputs tied to Vcc/GND pattern matching #EFF7 = 1110_1111_1111_0111", "color": "overlay0", "size": 7 },
+        { "x": 60, "y": 410, "text": "Exact match = only 1 mirror address (no aliases)",              "color": "overlay2", "size": 7 },
+        { "x": 60, "y": 425, "text": "Combined with #7FFD bank -> extended paging for 512K/1024K",    "color": "peach",    "size": 7 },
+        { "x": 420, "y": 380, "text": "Decoding expressions:",                                                 "color": "overlay2", "size": 7 },
+        { "x": 420, "y": 395, "text": "#7FFD_CS = ~IORQ & ~A15 & A14 & A12",                             "color": "green",    "size": 7 },
+        { "x": 420, "y": 410, "text": "          & A11 & ~A1",                                             "color": "green",    "size": 7 },
+        { "x": 420, "y": 425, "text": "#EFF7_CS = ~IORQ & {1,A15,A12,A11,A10,A9,A5,A0}",                 "color": "mauve",    "size": 7 },
+        { "x": 420, "y": 440, "text": "          == 8'b1111_0111",                                         "color": "mauve",    "size": 7 }
+    ]
+}

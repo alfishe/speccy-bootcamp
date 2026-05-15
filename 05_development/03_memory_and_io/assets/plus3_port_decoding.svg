@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 400" font-family="'Menlo','Consolas','Courier New',monospace">
+  <rect x="0" y="0" width="720" height="400" fill="#1e1e2e" stroke="#6c7086" stroke-width="1" rx="6"/>
+  <text x="360" y="28" text-anchor="middle" fill="#cdd6f4" font-size="14" font-weight="bold">+2A/+3: Dual Port Decode (#7FFD + #1FFD)</text>
+
+  <!-- ===== Component: gate_array ===== -->
+  <rect x="260" y="122.0" width="160" height="156" fill="#313244" stroke="#9399b2" stroke-width="1.5" rx="2"/>
+  <text x="340" y="196" text-anchor="middle" fill="#cdd6f4" font-size="9" font-weight="bold">Amstrad Gate Array</text>
+  <text x="340" y="210" text-anchor="middle" fill="#9399b2" font-size="7">74138</text>
+  <line x1="242" y1="134.0" x2="260" y2="134.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="264" y="137.0" text-anchor="start" fill="#9399b2" font-size="7">A15</text>
+  <line x1="242" y1="148.0" x2="260" y2="148.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="264" y="151.0" text-anchor="start" fill="#9399b2" font-size="7">A14</text>
+  <line x1="242" y1="162.0" x2="260" y2="162.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="264" y="165.0" text-anchor="start" fill="#9399b2" font-size="7">A13</text>
+  <line x1="242" y1="176.0" x2="260" y2="176.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="264" y="179.0" text-anchor="start" fill="#9399b2" font-size="7">A12</text>
+  <line x1="242" y1="190.0" x2="260" y2="190.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="264" y="193.0" text-anchor="start" fill="#9399b2" font-size="7">A11</text>
+  <line x1="242" y1="204.0" x2="260" y2="204.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="264" y="207.0" text-anchor="start" fill="#9399b2" font-size="7">A10</text>
+  <line x1="242" y1="218.0" x2="260" y2="218.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="264" y="221.0" text-anchor="start" fill="#9399b2" font-size="7">A1</text>
+  <line x1="242" y1="232.0" x2="260" y2="232.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="264" y="235.0" text-anchor="start" fill="#9399b2" font-size="7">IORQ</text>
+  <line x1="242" y1="246.0" x2="260" y2="246.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="264" y="249.0" text-anchor="start" fill="#9399b2" font-size="7">WR</text>
+  <line x1="242" y1="260.0" x2="260" y2="260.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="264" y="263.0" text-anchor="start" fill="#9399b2" font-size="7">MREQ</text>
+  <line x1="420" y1="134.0" x2="438" y2="134.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="416" y="137.0" text-anchor="end" fill="#9399b2" font-size="7">/ROMCS</text>
+  <line x1="420" y1="148.0" x2="438" y2="148.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="416" y="151.0" text-anchor="end" fill="#9399b2" font-size="7">/RAMCS</text>
+  <line x1="420" y1="162.0" x2="438" y2="162.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="416" y="165.0" text-anchor="end" fill="#9399b2" font-size="7">/7FFD_CS</text>
+  <line x1="420" y1="176.0" x2="438" y2="176.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="416" y="179.0" text-anchor="end" fill="#9399b2" font-size="7">/1FFD_CS</text>
+  <line x1="420" y1="190.0" x2="438" y2="190.0" stroke="#9399b2" stroke-width="1.5"/>
+  <text x="416" y="193.0" text-anchor="end" fill="#9399b2" font-size="7">CLK</text>
+
+  <!-- ===== Wire ===== -->
+  <line x1="80" y1="140" x2="170" y2="140" stroke="#89b4fa" stroke-width="1.5"/>
+  <line x1="170" y1="140" x2="170" y2="134.0" stroke="#89b4fa" stroke-width="1.5"/>
+  <line x1="170" y1="134.0" x2="242" y2="134.0" stroke="#89b4fa" stroke-width="1.5"/>
+
+  <!-- ===== Wire ===== -->
+  <line x1="80" y1="230" x2="170" y2="230" stroke="#f9e2af" stroke-width="1.5"/>
+  <line x1="170" y1="230" x2="170" y2="232.0" stroke="#f9e2af" stroke-width="1.5"/>
+  <line x1="170" y1="232.0" x2="242" y2="232.0" stroke="#f9e2af" stroke-width="1.5"/>
+
+  <!-- ===== Wire ===== -->
+  <line x1="438" y1="162.0" x2="539.0" y2="162.0" stroke="#a6e3a1" stroke-width="1.5"/>
+  <line x1="539.0" y1="162.0" x2="539.0" y2="172" stroke="#a6e3a1" stroke-width="1.5"/>
+  <line x1="539.0" y1="172" x2="640" y2="172" stroke="#a6e3a1" stroke-width="1.5"/>
+
+  <!-- ===== Wire ===== -->
+  <line x1="438" y1="176.0" x2="539.0" y2="176.0" stroke="#cba6f7" stroke-width="1.5"/>
+  <line x1="539.0" y1="176.0" x2="539.0" y2="186" stroke="#cba6f7" stroke-width="1.5"/>
+  <line x1="539.0" y1="186" x2="640" y2="186" stroke="#cba6f7" stroke-width="1.5"/>
+  <text x="76" y="143" text-anchor="end" fill="#89b4fa" font-size="8">A15..A0</text>
+  <text x="76" y="233" text-anchor="end" fill="#f9e2af" font-size="8">IORQ/WR</text>
+  <text x="644" y="175" text-anchor="start" fill="#a6e3a1" font-size="8">#7FFD Paging Reg</text>
+  <text x="644" y="189" text-anchor="start" fill="#cba6f7" font-size="8">#1FFD Ext Control</text>
+  <text x="60" y="60" text-anchor="start" fill="#6c7086" font-size="8">+2A/+3: Amstrad gate array integrates all decoding logic</text>
+  <text x="60" y="78" text-anchor="start" fill="#a6e3a1" font-size="7">#7FFD: A15=0, A14-A11=0111, A1=0  (128K compatible)</text>
+  <text x="60" y="93" text-anchor="start" fill="#cba6f7" font-size="7">#1FFD: A15=0, A14=0, A13-A11=111, A1=0  (+2A/+3 extra)</text>
+  <text x="60" y="320" text-anchor="start" fill="#6c7086" font-size="7">Gate array = custom ASIC, not discrete 74-series chips</text>
+  <text x="60" y="335" text-anchor="start" fill="#6c7086" font-size="7">Decodes 10+ address lines internally -&gt; minimal mirrors</text>
+  <text x="420" y="320" text-anchor="start" fill="#9399b2" font-size="7">Decoding expressions:</text>
+  <text x="420" y="335" text-anchor="start" fill="#a6e3a1" font-size="7">#7FFD_CS = ~IORQ &amp; ~A15 &amp; A14 &amp; A12 &amp; A11 &amp; ~A1</text>
+  <text x="420" y="350" text-anchor="start" fill="#cba6f7" font-size="7">#1FFD_CS = ~IORQ &amp; ~A15 &amp; ~A14 &amp; A13 &amp; A12 &amp; A11 &amp; ~A1</text>
+  <text x="420" y="365" text-anchor="start" fill="#fab387" font-size="7">4 paging modes = #7FFD[7] + #1FFD[1:0] combined</text>
+</svg>

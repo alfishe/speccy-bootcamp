@@ -205,6 +205,16 @@ Horizontal strip divided into bit fields. Each field is a rectangle with bit ran
 
 Boxes connected by labeled buses/arrows. Each box is a hardware component (ULA, CPU, RAM, ROM). Use semantic colors per component type.
 
+### Pattern: Schematic / Gate-Level Diagram
+
+IEEE/ANSI logic symbols (AND D-shape, OR shield, NOT triangle with bubble) connected by wires. MSI chips shown as rectangular boxes with labeled pins. Use the `gen_schematic.py` generator.
+
+```bash
+python3 tools/svg_gen/gen_schematic.py config.json -o output.svg
+```
+
+Component types: `not`, `buffer`, `and`, `nand`, `or`, `nor`, `xor`, `74138` (decoder), `74688` (comparator), `7474` (D-latch). Each component registers pin positions for automatic wire routing via `"from": "comp_id.pin"` references.
+
 ### Pattern: Timing Diagram
 
 Horizontal time axis with signal lines. High/low states shown as stepped lines. Use `overlay0` for inactive, `text` for active. Duration annotations above.
@@ -216,9 +226,15 @@ Horizontal time axis with signal lines. High/low states shown as stepped lines. 
 ```
 tools/svg_gen/
 ├── README.md                  # Tool reference (config format, CLI)
-├── gen_svg.py                 # Generator script
+├── GUIDE.md                   # This file — design principles
+├── gen_svg.py                 # Memory map generator
+├── gen_schematic.py           # Schematic diagram generator
 ├── ram_bridge_config.json     # Template: memory map with arrows
-└── (more templates...)
+└── schematics/                # Schematic configs
+    ├── schematic_48k_decoding.json
+    ├── schematic_128k_decoding.json
+    ├── schematic_plus3_decoding.json
+    └── schematic_pentagon_decoding.json
 
 NN_section/
 └── assets/

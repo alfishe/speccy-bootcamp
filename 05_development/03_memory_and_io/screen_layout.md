@@ -5,7 +5,7 @@
 The ZX Spectrum's pixel display at `#4000`–`#57FF` (6,144 bytes) stores a **256×192 monochrome image**. But unlike modern framebuffers where pixels are laid out sequentially row by row, the Spectrum uses a **nonlinear addressing scheme** inherited from the DRAM refresh pattern of the Ferranti ULA. This layout is the source of both the Spectrum's most frustrating programming constraint and its most creative demoscene tricks.
 
 > [!NOTE]
-> This article covers the **pixel buffer layout only** — how to calculate the address of any pixel and how to access the screen efficiently. For the attribute file (linearly addressed at `#5800`–`#5AFF`), see [memory_map_48k.md](memory_map_48k.md). For timing constraints on screen access (contention), see [ula_timing.md](../../02_hardware/original/ula_timing.md).
+> This article covers the **pixel buffer layout only** — how to calculate the address of any pixel and how to access the screen efficiently. For the attribute file (linearly addressed at `#5800`–`#5AFF`), see [memory_and_io_48k.md](memory_and_io_48k.md). For timing constraints on screen access (contention), see [contention_model.md](contention_model.md).
 
 ---
 
@@ -317,8 +317,8 @@ Attribute file (#5800–#5AFF, 768 bytes):
 
 ## Cross-References
 
-- **48K memory map** (what lives where): [memory_map_48k.md](memory_map_48k.md)
-- **128K memory map** (banking, shadow screen): [memory_map_128k.md](memory_map_128k.md)
-- **ULA timing and contention** (why screen access is slow during display): [ula_timing.md](../../02_hardware/original/ula_timing.md)
+- **48K memory and ports** (what lives where): [memory_and_io_48k.md](memory_and_io_48k.md)
+- **128K memory and ports** (banking, shadow screen): [memory_and_io_128k.md](memory_and_io_128k.md)
+- **Contention model** (why screen access is slow during display): [contention_model.md](contention_model.md)
 - **Graphics techniques** (sprites, scrolling, multicolor): [06_graphics/README.md](../06_graphics/README.md)
 - **Attribute color system** (INK, PAPER, BRIGHT, FLASH): [color_system.md](../05_display_and_timing/color_system.md)

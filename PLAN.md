@@ -179,16 +179,21 @@ zx/
 │   │   ├── c_with_sdcc.md
 │   │   └── mixed_c_asm.md
 │   ├── 03_memory_and_io/
-│   │   ├── memory_map_48k.md
-│   │   ├── memory_map_128k.md
-│   │   ├── memory_map_plus3.md
-│   │   ├── memory_map_pentagon.md
-│   │   ├── memory_map_next.md
-│   │   ├── io_ports.md
+│   │   ├── README.md
+│   │   ├── io_port_decoding.md
+│   │   ├── memory_and_io_48k.md
+│   │   ├── memory_and_io_128k.md
+│   │   ├── memory_and_io_plus3.md
+│   │   ├── memory_and_io_pentagon.md
+│   │   ├── memory_and_io_next.md
+│   │   ├── bank_switching_patterns.md
 │   │   ├── contention_model.md
 │   │   ├── screen_layout.md
-│   │   ├── system_variables.md
-│   │   └── bank_switching_patterns.md
+│   │   └── assets/                    # Generated SVG diagrams
+│   │       ├── 48k_port_decoding.svg
+│   │       ├── 128k_port_decoding.svg
+│   │       ├── plus3_port_decoding.svg
+│   │       └── pentagon_port_decoding.svg
 │   ├── 04_interrupts/
 │   │   ├── interrupt_overview.md
 │   │   ├── im1_programming.md
@@ -390,6 +395,18 @@ zx/
         ├── mcu_sd_interface.md
         ├── n_go.md
         └── mcu_design_patterns.md
+│
+├── tools/                            # SVG diagram generation tools
+│   └── svg_gen/
+│       ├── gen_svg.py               # Memory map / contention diagram generator
+│       ├── gen_schematic.py          # Gate-level schematic generator (74-series + Cyrillic Soviet chips)
+│       ├── README.md
+│       ├── GUIDE.md
+│       └── schematics/               # JSON configs for schematic SVGs
+│           ├── schematic_48k_decoding.json
+│           ├── schematic_128k_decoding.json
+│           ├── schematic_plus3_decoding.json
+│           └── schematic_pentagon_decoding.json
 ```
 
 > **Design principle**: 10 top-level sections (00-09). Subfolders only where genuine structural divergence exists:
@@ -651,20 +668,19 @@ zx/
 | `c_with_sdcc.md` | C development with SDCC: Z80 backend, comparison with z88dk, when to use |
 | `mixed_c_asm.md` | Mixing C and assembly: calling conventions, inline asm, interop patterns |
 
-#### 05_development/03_memory_and_io/ — Memory Architecture 📝 IN PROGRESS
+#### 05_development/03_memory_and_io/ — Memory Architecture and I/O ✅ COMPLETE
 
 | File | Topic | Status |
 |---|---|---|
-| `memory_map_48k.md` | 16K/48K memory map: ROM, screen, attributes, system vars, RAM | 📝 |
-| `memory_map_128k.md` | 128K paging: 16K banks, ROM switching, screen banks, paging register (#7FFD) | 📝 |
-| `memory_map_plus3.md` | +2A/+3 paging: 4 modes, #1FFD + #7FFD registers | |
-| `memory_map_pentagon.md` | Pentagon memory: 512K/1024K expansions, paging scheme | |
-| `memory_map_next.md` | ZX Spectrum Next memory: 2MB, banking, MMU | |
-| `io_ports.md` | I/O port programming: how partial decoding works, reading/writing ports, port aliasing, the #FE port deep dive (border/speaker/mic/ear), memory paging ports (#7FFD/#1FFD), AY ports (#FFFD/#BFFD) — with decoding bitmask explanation and per-model differences table | 📝 |
-| `contention_model.md` | Unified contention model: per-model timing, impact on code, workarounds | 📝 |
-| `screen_layout.md` | Pixel screen layout: nonlinear addressing (character rows × 8 pixel rows), attribute file | 📝 |
-| `system_variables.md` | System variables: ROM workspace, CHANS, PROG, VARS, FLAGS, TVARS — **see 04_operating_systems/** | 📝 |
-| `bank_switching_patterns.md` | Bank switching patterns: practical techniques for 128K+ development across models | 📝 |
+| `io_port_decoding.md` | I/O port concepts: partial decoding, masks, mirrors, conflicts, cross-model differences + **schematic diagrams** (74-series / Cyrillic Soviet chips) + **Verilog behavioral equivalents** per model | ✅ |
+| `memory_and_io_48k.md` | 16K/48K: memory map + #FE port (border, EAR, keyboard, beeper) | ✅ |
+| `memory_and_io_128k.md` | 128K/+2: 8 banks, #7FFD paging, shadow screen, AY ports | ✅ |
+| `memory_and_io_plus3.md` | +2A/+3: #1FFD, 4 paging modes, true double buffering, gate array contention, +3 FDC | ✅ |
+| `memory_and_io_pentagon.md` | Pentagon: #EFF7 extended paging, Beta 128 FDC/TR-DOS, zero contention, **port decoding schematic** | ✅ |
+| `memory_and_io_next.md` | ZX Spectrum Next: 2MB MMU (8 KB pages), compatibility modes, Layer 2/sprite/copper/DMA ports | ✅ |
+| `bank_switching_patterns.md` | Practical 128K+ paging: cross-bank copy, double buffering, +2A/+3 special modes, antipatterns | ✅ |
+| `screen_layout.md` | Nonlinear pixel framebuffer: three-thirds structure, address calculation, lookup tables | ✅ |
+| `contention_model.md` | Unified contention: Ferranti vs gate array, per-model timing, I/O contention, cross-platform strategy | ✅ |
 
 #### 05_development/04_interrupts/ — Interrupt Programming
 
@@ -950,7 +966,7 @@ zx/
 Articles are written in priority order. README.md is synthesized AFTER articles exist.
 
 - Tier 1: CPU core articles (z80_architecture, z80_timing, z80_interrupts) — ✅ **COMPLETE** (8 articles)
-- Tier 2: Memory maps + I/O ports (foundation for everything else) — 📝 **IN PROGRESS** (7 of 10)
+- Tier 2: Memory maps + I/O ports (model-specific memory and port articles) — ✅ **COMPLETE** (9 articles + 4 SVG schematics + Verilog equivalents)
 - Tier 3: Display timing + screen layout (foundation for graphics) — 📝 **IN PROGRESS** (12 of 19)
 - Tier 4: Hardware per-stream articles — 2 articles exist (ula_timing, clone_timing)
 - Tier 5: Everything else

@@ -5,7 +5,7 @@
 The ZX Spectrum 128K (toastrack) and +2 (grey) use the **same Ferranti ULA core** as the 48K for video generation — the frame is still 312 scanlines at 69,888 T-states. But the **contention behavior is different** because the 128K has 8 RAM banks instead of one contiguous block, and the ULA's screen fetches affect different banks depending on the paging configuration.
 
 > [!NOTE]
-> This article covers **only the differences** from the 48K frame. For the complete frame structure (PAL timing, scanline layout, INT position), see [video_frame_48k.md](video_frame_48k.md). For 128K memory paging, see [memory_map_128k.md](../03_memory_and_io/memory_map_128k.md).
+> This article covers **only the differences** from the 48K frame. For the complete frame structure (PAL timing, scanline layout, INT position), see [video_frame_48k.md](video_frame_48k.md). For 128K memory paging, see [memory_and_io_128k.md](../03_memory_and_io/memory_and_io_128k.md).
 
 ---
 
@@ -215,7 +215,7 @@ Most 48K code runs correctly on the 128K because the frame structure is identica
 
 - **48K frame** (base reference): [video_frame_48k.md](video_frame_48k.md)
 - **+2A/+3 frame** (Amstrad gate array): [video_frame_plus2a_plus3.md](video_frame_plus2a_plus3.md)
-- **128K memory map** (paging, banks): [memory_map_128k.md](../03_memory_and_io/memory_map_128k.md)
+- **128K memory map** (paging, banks): [memory_and_io_128k.md](../03_memory_and_io/memory_and_io_128k.md)
 - **ULA timing deep dive**: [ula_timing.md](../../02_hardware/original/ula_timing.md)
 - **Clone timing** (Pentagon, Scorpion): [clone_timing.md](../../02_hardware/clones/clone_timing.md)
 - **Floating bus** (complete reference): [floating_bus.md](floating_bus.md)

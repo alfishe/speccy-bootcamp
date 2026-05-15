@@ -267,7 +267,8 @@ ENDIF
 
 - **ULA timing deep dive** (hardware mechanism, contention patterns): [ula_timing.md](../../02_hardware/original/ula_timing.md)
 - **Clone timing** (per-clone contention behavior): [clone_timing.md](../../02_hardware/clones/clone_timing.md)
-- **48K memory map** (contended address ranges): [memory_map_48k.md](memory_map_48k.md)
-- **128K memory map** (bank-based contention): [memory_map_128k.md](memory_map_128k.md)
+- **48K memory and ports** (contended address ranges): [memory_and_io_48k.md](memory_and_io_48k.md)
+- **128K memory and ports** (bank-based contention): [memory_and_io_128k.md](memory_and_io_128k.md)
+- **+2A/+3 memory and ports** (gate array contention): [memory_and_io_plus3.md](memory_and_io_plus3.md)
 - **48K video frame** (contention windows per scanline): [video_frame_48k.md](../05_display_and_timing/video_frame_48k.md)
 - **Z80 timing** (per-instruction T-state costs): [z80_timing.md](../../01_cpu/z80_timing.md)

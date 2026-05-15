@@ -29,9 +29,18 @@ python3 gen_svg.py <config.json> [--output path.svg] [--type diagram_type]
 
 ## Supported Diagram Types
 
-### `memory_map` (default)
+### `memory_map` (gen_svg.py, default)
 
 Vertical proportional memory layout with columns, sections, arrows, and callout panels.
+
+### `schematic` (gen_schematic.py)
+
+Gate-level logic diagrams with IEEE/ANSI symbols (AND, OR, NOT, NAND, NOR, XOR), MSI chip packages (74HC138, 74HC688, 7474), wires, buses, and annotations. Supports dual chip labeling (Western / Soviet equivalents).
+
+```bash
+python3 tools/svg_gen/gen_schematic.py tools/svg_gen/schematics/schematic_48k_decoding.json \
+    -o 05_development/03_memory_and_io/assets/48k_port_decoding.svg
+```
 
 ## Config Format — `memory_map`
 
@@ -201,8 +210,14 @@ All color fields accept these palette names:
 
 ```
 tools/svg_gen/
-├── README.md                   # This file
-├── GUIDE.md                    # Design principles guide
-├── gen_svg.py                  # Generator script (Python 3, no dependencies)
-└── ram_bridge_config.json      # Template: memory map with source→destination
+├── README.md                        # This file
+├── GUIDE.md                         # Design principles guide
+├── gen_svg.py                       # Memory map SVG generator
+├── gen_schematic.py                 # Schematic SVG generator (gates, chips)
+├── ram_bridge_config.json           # Template: memory map with source→destination
+└── schematics/                      # Schematic diagram configs
+    ├── schematic_48k_decoding.json      # 48K ULA port #FE
+    ├── schematic_128k_decoding.json     # 128K port #7FFD (74HC138)
+    ├── schematic_plus3_decoding.json    # +2A/+3 dual port decode
+    └── schematic_pentagon_decoding.json # Pentagon #7FFD + #EFF7
 ```

@@ -310,6 +310,6 @@ isPentagon:
 - **Pentagon hardware** (design, discrete logic): [pentagon.md](../../02_hardware/clones/pentagon.md)
 - **48K frame** (base reference): [video_frame_48k.md](video_frame_48k.md)
 - **128K frame** (contention differences): [video_frame_128k.md](video_frame_128k.md)
-- **Pentagon memory** (512K/1024K expansions): [memory_map_pentagon.md](../03_memory_and_io/memory_map_pentagon.md)
+- **Pentagon memory** (512K/1024K expansions): [memory_and_io_pentagon.md](../03_memory_and_io/memory_and_io_pentagon.md)
 - **Emulation implications** (48.83 Hz on modern displays): [cycle_exact_accuracy.md](../../09_emulation/software/cycle_exact_accuracy.md)
 - **Video frame comparison** (all models side-by-side): [video_frame_comparison.md](video_frame_comparison.md)

@@ -1,0 +1,62 @@
+{
+    "title": "+2A/+3: Dual Port Decode (#7FFD + #1FFD)",
+    "width": 720,
+    "height": 400,
+    "components": [
+        {
+            "id": "gate_array",
+            "type": "74138",
+            "x": 260,
+            "y": 200,
+            "label": "Amstrad Gate Array",
+            "left_pins": ["A15", "A14", "A13", "A12", "A11", "A10", "A1", "IORQ", "WR", "MREQ"],
+            "right_pins": ["/ROMCS", "/RAMCS", "/7FFD_CS", "/1FFD_CS", "CLK"],
+            "width": 160
+        }
+    ],
+    "wires": [
+        {
+            "from": "port.p_bus",
+            "to": "gate_array.A15",
+            "label": "",
+            "color": "blue",
+            "mid_x": 170
+        },
+        {
+            "from": "port.p_ctrl",
+            "to": "gate_array.IORQ",
+            "label": "",
+            "color": "yellow",
+            "mid_x": 170
+        },
+        {
+            "from": "gate_array./7FFD_CS",
+            "to": "port.p_7ffd",
+            "label": "",
+            "color": "green"
+        },
+        {
+            "from": "gate_array./1FFD_CS",
+            "to": "port.p_1ffd",
+            "label": "",
+            "color": "mauve"
+        }
+    ],
+    "ports": [
+        { "id": "p_bus",   "x": 80,  "y": 140, "label": "A15..A0",    "direction": "in",  "color": "blue" },
+        { "id": "p_ctrl",  "x": 80,  "y": 230, "label": "IORQ/WR",   "direction": "in",  "color": "yellow" },
+        { "id": "p_7ffd",  "x": 640, "y": 172, "label": "#7FFD Paging Reg", "direction": "out", "color": "green" },
+        { "id": "p_1ffd",  "x": 640, "y": 186, "label": "#1FFD Ext Control", "direction": "out", "color": "mauve" }
+    ],
+    "annotations": [
+        { "x": 60,  "y": 60,  "text": "+2A/+3: Amstrad gate array integrates all decoding logic", "color": "overlay0", "size": 8 },
+        { "x": 60,  "y": 78,  "text": "#7FFD: A15=0, A14-A11=0111, A1=0  (128K compatible)",   "color": "green",   "size": 7 },
+        { "x": 60,  "y": 93,  "text": "#1FFD: A15=0, A14=0, A13-A11=111, A1=0  (+2A/+3 extra)", "color": "mauve",   "size": 7 },
+        { "x": 60,  "y": 320, "text": "Gate array = custom ASIC, not discrete 74-series chips",   "color": "overlay0", "size": 7 },
+        { "x": 60,  "y": 335, "text": "Decodes 10+ address lines internally -> minimal mirrors",  "color": "overlay0", "size": 7 },
+        { "x": 420, "y": 320, "text": "Decoding expressions:",                                             "color": "overlay2", "size": 7 },
+        { "x": 420, "y": 335, "text": "#7FFD_CS = ~IORQ & ~A15 & A14 & A12 & A11 & ~A1",             "color": "green",    "size": 7 },
+        { "x": 420, "y": 350, "text": "#1FFD_CS = ~IORQ & ~A15 & ~A14 & A13 & A12 & A11 & ~A1",     "color": "mauve",    "size": 7 },
+        { "x": 420, "y": 365, "text": "4 paging modes = #7FFD[7] + #1FFD[1:0] combined",             "color": "peach",    "size": 7 }
+    ]
+}

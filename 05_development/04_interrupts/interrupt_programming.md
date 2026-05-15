@@ -795,5 +795,5 @@ Always save and restore the bank register. Since `#7FFD` is write-only, track th
 - **ULA timing and contention** (per-scanline contention model): [ula_timing.md](../../02_hardware/original/ula_timing.md)
 - **System variables** (FRAMES at #5C78, keyboard state): [system_variables.md](../../04_operating_systems/system_variables.md)
 - **Bank switching** (128K paging, ISR considerations): [bank_switching_patterns.md](../03_memory_and_io/bank_switching_patterns.md)
-- **I/O ports** (#FE border, #FFFD AY register): [io_ports.md](../03_memory_and_io/io_ports.md)
+- **I/O ports** (#FE border, #FFFD AY register): [memory_and_io_48k.md](../03_memory_and_io/memory_and_io_48k.md)
 - **Clone timing** (per-model frame differences): [clone_timing.md](../../02_hardware/clones/clone_timing.md)
