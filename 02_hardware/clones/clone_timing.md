@@ -502,3 +502,4 @@ IN   A,(C)         ; Read hardware ID
 - [z80_timing.md](../../01_cpu/z80_timing.md) — Z80-intrinsic timing: T-states, M-cycles, bus timing
 - [z80_interrupts.md](../../01_cpu/z80_interrupts.md) — Interrupt timing per model, contention during interrupt handling
 - [z80_coding_practices.md](../../01_cpu/z80_coding_practices.md) — T-state budgeting, contention-aware coding patterns
+- [io_port_map.md](../../08_references/io_port_map.md) — Complete I/O port reference with per-model decoding bitmasks

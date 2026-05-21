@@ -236,3 +236,4 @@ Port    Function                                     +2A/+3 specific
 - **+3 DOS** (floppy file system): [plus3dos.md](../../04_operating_systems/plus3dos.md)
 - **+3 floppy hardware**: [plus3_floppy.md](../../03_io/storage/plus3_floppy.md)
 - **AY programming**: [ay_programming.md](../07_audio/ay_programming.md)
+- **Complete I/O port map** (all ports, all models, decoding bitmasks): [io_port_map.md](../../08_references/io_port_map.md)

@@ -48,7 +48,11 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 
 ### 00 — Overview · 03 — I/O · 06 — RE · 07 — Toolchain · 08 — References
 
-*Placeholders — content coming. See [PLAN.md](PLAN.md) for the full catalog.*
+| Article | Description |
+|---------|-------------|
+| [io_port_map.md](08_references/io_port_map.md) | Complete I/O port reference: every port across all models, Black_Cat table with annotations, decoding bitmasks, per-model differences |
+
+*Other sections are placeholders — content coming. See [PLAN.md](PLAN.md) for the full catalog.*
 
 ### 05 — Development
 

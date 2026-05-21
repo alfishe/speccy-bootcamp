@@ -380,3 +380,4 @@ GetData:
 - **Contention model** (bank-based contention): [contention_model.md](contention_model.md)
 - **Double buffering** (shadow screen techniques): [double_buffering.md](../06_graphics/double_buffering.md)
 - **Clone timing** (Pentagon extended memory): [clone_timing.md](../../02_hardware/clones/clone_timing.md)
+- **Complete I/O port map** (all paging port registers, all models): [io_port_map.md](../../08_references/io_port_map.md)

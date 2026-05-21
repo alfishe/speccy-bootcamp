@@ -392,3 +392,4 @@ Key differences: `P-RAMT` = `#7FFF` on 16K (vs `#FFFF` on 48K), much smaller BAS
 - **System variables** (complete reference): [system_variables.md](../../04_operating_systems/system_variables.md)
 - **48K ROM disassembly** (routines, entry points): [rom_48k.md](../../04_operating_systems/rom_48k.md)
 - **Z80 address bus** (how 16-bit addressing works): [z80_architecture.md](../../01_cpu/z80_architecture.md)
+- **Complete I/O port map** (all ports, all models, decoding bitmasks): [io_port_map.md](../../08_references/io_port_map.md)

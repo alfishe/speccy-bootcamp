@@ -569,3 +569,4 @@ The Commodore 64 had **no CPU contention** for screen memory (separate RAM), but
 - [z80_interrupts.md](../../01_cpu/z80_interrupts.md) — Interrupt timing, contention during interrupt handling
 - [z80_undocumented.md](../../01_cpu/z80_undocumented.md) — How prefix bytes affect T-state counts
 - [z80_architecture.md](../../01_cpu/z80_architecture.md) — CPU internal structure and bus interface
+- [io_port_map.md](../../08_references/io_port_map.md) — Complete I/O port reference with per-model decoding bitmasks
