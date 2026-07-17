@@ -795,3 +795,160 @@ This is the standard arrangement in AY chiptunes: one channel for melody, one fo
 In fast arpeggio-driven music (common in ZX Spectrum chiptunes), the noise period can be changed **per frame** to create evolving rhythmic textures. A pattern like R6 = [8, 4, 12, 6, 8, 4, 16, 8] played at 50 Hz creates a shuffle-like hi-hat pattern where each "hit" has a different timbre.
 
 ---
+
+## Digital Percussion
+
+The AY chip has no dedicated percussion synthesizer. Everything — kick drums, snares, hi-hats, toms, cymbals — must be built from the three tone generators, the noise generator, and the envelope. The result is a percussive vocabulary that is entirely defined by which resources you sacrifice for each hit.
+
+### The Drum Resource Budget
+
+Every drum hit consumes one or more AY resources for its duration. With only three channels and one shared envelope, percussion is a zero-sum game:
+
+| Drum Type | Resources Used | What You Lose | Duration |
+|-----------|---------------|---------------|----------|
+| **Kick (envelope)** | Ch A + envelope | Bass voice during kick | 1–3 frames |
+| **Kick (tone only)** | Ch A tone | One melodic channel | 1–2 frames |
+| **Snare (noise)** | Ch C + noise gen | Rhythm/arpeggio channel | 1–2 frames |
+| **Hi-hat (noise)** | Ch C + noise gen, very short | Brief rhythm interruption | <1 frame |
+| **Tom (pitched noise)** | Ch C + noise gen | Rhythm channel | 2–4 frames |
+| **Cymbal (noise sweep)** | Ch C + noise gen + envelope | Rhythm + envelope | 4–8 frames |
+
+### Envelope-Based Kick Drum
+
+The most powerful kick drum on the AY uses the envelope generator at a low audio frequency, routed to a channel with an ultrasonic carrier. This produces a rapidly descending pitch sweep — the classic "booom" of a synthesized kick:
+
+```z80
+; ============================================
+; Kick Drum — envelope-driven pitch sweep
+; Channel A: ultrasonic carrier + envelope
+; The envelope starts at high freq, sweeps down
+; ============================================
+
+KICK:
+        ; Set envelope period HIGH (fast) for initial attack
+        ; then let it sweep down via shape register
+        LD   BC,#FFFD
+        LD   A,#11              ; R11 = envelope fine
+        OUT  (C),A
+        LD   B,#BF
+        LD   A,#30              ; Start ~230 Hz
+        OUT  (C),A
+        LD   B,#FF
+        LD   A,#12              ; R12 = envelope coarse
+        OUT  (C),A
+        LD   B,#BF
+        XOR  A
+        OUT  (C),A
+
+        ; Channel A: envelope mode
+        LD   B,#FF
+        LD   A,#08
+        OUT  (C),A
+        LD   B,#BF
+        LD   A,#10              ; Envelope mode
+        OUT  (C),A
+
+        ; Single-shot decay (attack + decay + hold)
+        LD   B,#FF
+        LD   A,#13
+        OUT  (C),A
+        LD   B,#BF
+        LD   A,#09              ; Attack+decay+hold, single shot
+        OUT  (C),A              ; RESTARTS envelope
+        RET
+```
+
+The envelope shape `#09` (CONT=0, ALT=0, HOLD=1, ATK=1) produces a single attack-decay cycle: volume ramps up then falls to zero and stays there. The rapid envelope frequency modulating the ultrasonic carrier creates a descending pitch sweep that sounds like a kick drum body.
+
+### Percussion Pattern Table
+
+The standard approach to AY percussion is a **frame-based pattern table**. Each entry in the table specifies what happens on that video frame (1/50th of a second on PAL):
+
+```z80
+; 16-step drum pattern (one bar at 50Hz = 0.32s)
+; Each byte: bit 7 = kick, bit 6 = snare, bit 5 = hat
+DRUM_PATTERN:
+        DB   %10000000          ; Step  0: Kick
+        DB   %00100000          ; Step  1: Hat
+        DB   %00000000          ; Step  2: ---
+        DB   %00100000          ; Step  3: Hat
+        DB   %01000000          ; Step  4: Snare
+        DB   %00100000          ; Step  5: Hat
+        DB   %00000000          ; Step  6: ---
+        DB   %00100000          ; Step  7: Hat
+        DB   %10000000          ; Step  8: Kick
+        DB   %00100000          ; Step  9: Hat
+        DB   %00000000          ; Step 10: ---
+        DB   %00100000          ; Step 11: Hat
+        DB   %01000000          ; Step 12: Snare
+        DB   %00100000          ; Step 13: Hat
+        DB   %00000000          ; Step 14: ---
+        DB   %00100000          ; Step 15: Hat
+```
+
+The ISR reads one byte per frame, triggers the appropriate drum routine, and advances the pointer. This creates a classic four-on-the-floor drum pattern with hi-hat subdivisions.
+
+---
+
+## Advanced Sample Playback
+
+The [SID-Sound](#sid-sound-volume-modulated-ultrasonic-carrier) section covered the basics of 4-bit sample playback via volume register modulation. Here we push further: multi-channel mixing, higher bit depth, and synchronized speech.
+
+### Two-Channel Sample Mixing
+
+The AY has three volume registers (R8, R9, R10). By running two channels at ultrasonic carrier frequencies, you can output **two independent 4-bit samples per frame**. The mixing happens in the analog domain — the three channel outputs are summed by the output op-amp:
+
+```z80
+; ============================================
+; Dual-channel sample playback
+; Ch A + Ch B both at period 0 (ultrasonic)
+; R8 = Ch A volume (sample 1)
+; R9 = Ch B volume (sample 2)
+; Ch C remains free for melody
+; ============================================
+
+DUAL_PLAY:
+        LD   HL,SAMPLE_A       ; Channel A sample pointer
+        LD   DE,SAMPLE_B       ; Channel B sample pointer
+        LD   BC,LENGTH
+
+DUAL_LP:
+        ; Output sample A to R8
+        LD   A,(HL)
+        LD   (#BFFD),A          ; Direct write to data port
+        ; (Requires pre-selecting R8 via #FFFD first)
+
+        ; Output sample B to R9
+        INC  HL
+        LD   A,(DE)
+        LD   (#BFFD),A          ; (Requires pre-selecting R9)
+        INC  DE
+
+        DEC  BC
+        LD   A,B
+        OR   C
+        JR   NZ,DUAL_LP
+        RET
+```
+
+In practice, the register selection overhead means the inner loop is ~50-60 T-states per sample pair, giving a combined sample rate of ~6 kHz. The Channel C remains available for a melodic line or noise percussion.
+
+### 6-Bit Sample Playback Trick
+
+A lesser-known technique achieves **6-bit (64-level) sample resolution** by using two channels for a single sample. Channel A outputs the high 3 bits of the sample (shifted to logarithmic volume), and Channel B outputs the low 3 bits at a reduced volume. The analog sum produces 64 distinct levels instead of 16. This costs two channels for one sample, but the quality improvement is dramatic for speech playback.
+
+### Speech Synthesis
+
+Sampled speech was a showpiece feature on the ZX Spectrum. Games like *Ghosthack* and *Star Wars* used short pre-recorded phrases played through the AY. The typical approach:
+
+| Parameter | Value | Notes |
+|-----------|-------|-------|
+| Sample rate | 6–8 kHz | Telephone quality |
+| Bit depth | 4-bit (logarithmic) | 16 AY volume levels |
+| Duration | 1–3 seconds | "Game over", "Player one ready" |
+| Memory cost | 6–8 KB/second | After log conversion |
+| Compression | Delta modulation | 2 bits/sample → 50% smaller |
+
+For longer phrases, **delta modulation** is essential. Instead of storing the absolute volume for each sample, store only the *change* from the previous sample (±1, 0). This gives 4 samples per byte instead of 2, halving memory usage. The tradeoff is higher CPU cost per sample (the decoder must maintain a running accumulator) and susceptibility to drift errors.
+
+---

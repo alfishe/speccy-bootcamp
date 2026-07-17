@@ -6,7 +6,7 @@
 
 ## 1. Introduction
 
-In 2023, Shiru released *Ear Shaver* — an album of multi-channel polyphonic compositions running on a stock 48K ZX Spectrum with no hardware modifications. No AY chip. No Covox. Just the single-bit speaker connected to bit 4 of [ULA Port `#FE`](../../05_development/03_memory_and_io/memory_and_io_48k.md#io-port--fe-ula-control).
+In 2023, Shiru released *Ear Shaver* — an album of multi-channel polyphonic music that plays on a stock 48K ZX Spectrum. No AY chip. No Covox. No hardware modifications of any kind. Just the Z80 flipping bit 4 of [ULA Port `#FE`](../../05_development/03_memory_and_io/memory_and_io_48k.md#io-port--fe-ula-control) — the same pin Sinclair wired to a 22-millimeter speaker that was originally meant for little more than key-clicks and error beeps.
 
 - [▶️ Full album on YouTube](https://www.youtube.com/watch?v=IRfjnZGMEqc)
 - [🎧 Bandcamp (stream / buy)](https://shiru8bit.bandcamp.com/album/ear-shaver)
@@ -14,13 +14,13 @@ In 2023, Shiru released *Ear Shaver* — an album of multi-channel polyphonic co
 - [📦 Download .tap](http://shiru.untergrund.net/files/zx/earshaver.zip) — load in any emulator or [run in browser via JSSpeccy 3](https://jsspeccy.zxdemo.org/)
 - [📋 Spectrum Computing #41830](https://spectrumcomputing.co.uk/entry/41830/ZX-Spectrum/Ear_Shaver) · [Pouët](https://www.pouet.net/prod.php?which=94304) · [Demozoo](https://demozoo.org/productions/348270/)
 
-The album sounds like it should not exist. Multiple voices with independent pitch, duty-cycle envelopes producing distinct timbres, smooth pitch slides, and remarkably clean output. All of it synthesized in real-time by the Z80 at 3.5 MHz, toggling a single digital pin.
+If you have not heard it yet, stop reading and go listen. The album sounds like it should not exist. Multiple voices with independent pitch, smooth portamento slides, and instruments with distinct timbres — all synthesized live by a 3.5 MHz processor toggling a single digital pin. It is the kind of music that makes you understand why the 1-bit scene has been called the last unexplored frontier of chiptune.
 
-This document is a forensic teardown of the engine behind *Ear Shaver*. The analysis was performed by connecting to a live, paused emulation session via the Unreal-NG Automation WebAPI, dumping the Z80 registers, disassembling the code directly from memory, and extracting the pattern data. Every code listing, memory dump, and waveform diagram in this article was captured or generated from that snapshot.
+This article is a result of the technical analysis of the engine behind that sound. We will take it apart instruction by instruction and understand exactly how Shiru extracted polyphony from a pin.
 
 > [!IMPORTANT]
-> **Shiru (Shiru8bit)** is one of the most prolific composers and toolsmiths in the 1-bit music scene.
-> 
+> **Shiru (Shiru8bit)** has been writing music engines, trackers, and original compositions for 8-bit platforms since the late 1990s. *Ear Shaver* is the culmination of two decades of 1-bit engine design.
+>
 > - **Bandcamp:** [shiru8bit.bandcamp.com](https://shiru8bit.bandcamp.com)
 > - **Website:** [shiru.untergrund.net](http://shiru.untergrund.net)
 > - **SoundCloud:** [soundcloud.com/shiru8bit](https://soundcloud.com/shiru8bit)
@@ -32,7 +32,7 @@ This document is a forensic teardown of the engine behind *Ear Shaver*. The anal
 
 ## 2. Memory Layout of the Snapshot
 
-The *Ear Shaver* snapshot packs the entire album — engine, sequencer, and all composition data — into 48K of contiguous RAM. The following memory map was reconstructed from the RAM dump:
+The first question when disassembling any 48K program is: *where does everything live?* The Spectrum's memory map is rigid — screen at `#4000`, system variables next, and the rest is free program accessible RAM. The *Ear Shaver*  reveals an extreme design philosophy: nearly all of RAM is music.
 
 ![Ear Shaver Memory Map](assets/earshaver_memory_map.svg)
 
@@ -47,7 +47,7 @@ The *Ear Shaver* snapshot packs the entire album — engine, sequencer, and all 
 | `#D302` – `#D310` | 15 B | **Exit and cleanup** |
 | `#D311` – `#D34D` | 61 B | **Instrument pointer table** — 16-bit addresses into the pattern data, indexed by instrument number |
 
-The pattern data at `#5B00` occupies the vast majority of RAM — nearly 29 KB. This is the cost of storing an entire album. The engine itself (decompressor + player + all synthesis modes + tables) fits in roughly 850 bytes. This ratio — 97% music, 3% code — is characteristic of Shiru's extremely compact engine design.
+Let that sink in: the engine itself — decompressor, sequencer, all seven synthesis kernels, cleanup code, and instrument table — fits in roughly **850 bytes**. The remaining 29 KB is pure music data. That is a 97-to-3 ratio of content to code. Shiru did not write a music engine and then squeeze songs into it; he wrote the smallest possible engine and gave the music the room.
 
 ---
 
