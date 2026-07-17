@@ -6,20 +6,27 @@
 
 ## 1. Introduction
 
-In 2023, Shiru released *Ear Shaver* — an album of multi-channel polyphonic compositions running on a stock 48K ZX Spectrum with no hardware modifications. No AY chip. No Covox. Just the single-bit speaker connected to bit 4 of ULA Port `#FE`.
+In 2023, Shiru released *Ear Shaver* — an album of multi-channel polyphonic compositions running on a stock 48K ZX Spectrum with no hardware modifications. No AY chip. No Covox. Just the single-bit speaker connected to bit 4 of [ULA Port `#FE`](../../05_development/03_memory_and_io/memory_and_io_48k.md#io-port--fe-ula-control).
+
+- [▶️ Full album on YouTube](https://www.youtube.com/watch?v=IRfjnZGMEqc)
+- [🎧 Bandcamp (stream / buy)](https://shiru8bit.bandcamp.com/album/ear-shaver)
+- [☁️ SoundCloud playlist](https://soundcloud.com/shiru1bit/sets/ear-shaver)
+- [📦 Download .tap](http://shiru.untergrund.net/files/zx/earshaver.zip) — load in any emulator or [run in browser via JSSpeccy 3](https://jsspeccy.zxdemo.org/)
+- [📋 Spectrum Computing #41830](https://spectrumcomputing.co.uk/entry/41830/ZX-Spectrum/Ear_Shaver) · [Pouët](https://www.pouet.net/prod.php?which=94304) · [Demozoo](https://demozoo.org/productions/348270/)
 
 The album sounds like it should not exist. Multiple voices with independent pitch, duty-cycle envelopes producing distinct timbres, smooth pitch slides, and remarkably clean output. All of it synthesized in real-time by the Z80 at 3.5 MHz, toggling a single digital pin.
 
 This document is a forensic teardown of the engine behind *Ear Shaver*. The analysis was performed by connecting to a live, paused emulation session via the Unreal-NG Automation WebAPI, dumping the Z80 registers, disassembling the code directly from memory, and extracting the pattern data. Every code listing, memory dump, and waveform diagram in this article was captured or generated from that snapshot.
 
 > [!IMPORTANT]
-> **Shiru (Shiru8bit)** is one of the most prolific composers and toolsmiths in the 1-bit music scene. He authored [1tracker](http://shiru.untergrund.net/software.shtml), the cross-platform tracker for custom Z80 sound engines, as well as Beepola and BeepFX. His discography spans dozens of releases across Spectrum, NES, and Game Boy platforms.
+> **Shiru (Shiru8bit)** is one of the most prolific composers and toolsmiths in the 1-bit music scene.
 > 
 > - **Bandcamp:** [shiru8bit.bandcamp.com](https://shiru8bit.bandcamp.com)
 > - **Website:** [shiru.untergrund.net](http://shiru.untergrund.net)
 > - **SoundCloud:** [soundcloud.com/shiru8bit](https://soundcloud.com/shiru8bit)
 > - **ZX-Art:** [zxart.ee/eng/authors/s/shiru/](https://zxart.ee/eng/authors/s/shiru/)
 > - **1-Bit Portal:** [shiru.untergrund.net/1bit/](https://shiru.untergrund.net/1bit/)
+
 
 ---
 

@@ -535,3 +535,263 @@ Since all three channels share one envelope generator, you must decide how to al
 | `#0C` Decay-repeat | Fast buzz | Acid techno bass |
 
 ---
+
+## Note-Colored Noise
+
+The AY's noise generator is a **17-bit Linear Feedback Shift Register (LFSR)** that produces pseudo-random pulses. On its own, it sounds like white noise — the hiss of an untuned radio. But when mixed with a tone generator on the same channel, the AND combination produces **pitched noise**: noise that carries a discernible fundamental frequency. This is the foundation of all AY percussion synthesis, from simple snare clicks to expressive tom and cymbal sounds.
+
+### The Noise Generator Recap
+
+From the [Hardware Reference](ay_ym_synthesis.md):
+
+- **Register R6** sets the noise period (5-bit: values 1–31, with 0 treated as 1)
+- **Noise frequency**: `F(noise) = F(AY_clock) / (16 × NP)` — ranging from ~3,575 Hz (NP=31) to ~110,837 Hz (NP=1) on the ZX Spectrum
+- **The LFSR** has taps at bit positions 0 and 3, shifting right with XOR feedback
+- **Mixer register R7** independently enables or disables tone and noise for each channel
+
+> [!IMPORTANT]
+> The noise generator's minimum frequency (~3,575 Hz on the ZX) means the AY **cannot produce low-frequency rumble** via noise alone. Deep bass drums must use the envelope or tone generators, not noise.
+
+### The AND-Combination Effect
+
+When both tone and noise are enabled for a channel (via R7), the chip outputs the **logical AND** of the tone square wave and the noise bit. This is not additive mixing — it is bitwise multiplication:
+
+```
+Channel output = tone_output AND noise_output
+
+  tone  ___|‾‾‾‾‾|_______|‾‾‾‾‾|___    (square wave at pitch)
+  noise _|‾_|_|‾‾‾|_|_|‾|‾‾|_|‾|_     (random pulses)
+  AND   ___|_|___|_______|_|___|___    (gated noise — only when BOTH are high)
+```
+
+The tone square wave acts as a **gate** on the noise. When the tone is in its high phase, the noise passes through; when low, the channel is silent. This produces a distinctive sound: a burst of noise that pulses at the tone frequency. The perceived pitch comes from the regular on/off pattern, while the noise provides the harmonic richness.
+
+### Noise Period and Timbre
+
+The R6 noise period dramatically changes the character of percussion instruments:
+
+| R6 Value | Noise Freq (ZX) | Character | Instrument Application |
+|----------|-----------------|-----------|----------------------|
+| 1–3 | 37–111 kHz | Ultra-fine hiss | Cymbals, open hi-hat |
+| 4–8 | 14–28 kHz | Bright sizzle | Closed hi-hat, ride |
+| 9–16 | 7–12 kHz | Mid-range grit | Snare drum, hand clap |
+| 17–24 | 4.6–6.5 kHz | Buzzy, coarse | Tom, wood block |
+| 25–31 | 3.6–4.4 kHz | Dark, rumbly | Kick shell, bass drum attack |
+
+### Pitched Noise (Toms, Bongos)
+
+By setting a specific tone period on the noise channel and enabling both tone and noise in the mixer, you create **pitched percussion**. The tone period determines the fundamental pitch (like tuning a drum head), while the noise provides the body:
+
+```z80
+; ============================================
+; Pitched Tom Drum — noise colored by tone pitch
+; Uses Channel C with both tone + noise enabled
+; ============================================
+
+TOM_HIT:
+        ; Set Channel C tone period to drum pitch (e.g., ~150 Hz)
+        ; F = 1773400 / (16 * TP) = 150 → TP = 739
+        LD   BC,#FFFD
+        LD   A,#04              ; R4 = Channel C fine period
+        OUT  (C),A
+        LD   B,#BF
+        LD   A,#E3              ; 739 & 255 = 227 = #E3
+        OUT  (C),A
+        LD   B,#FF
+        LD   A,#05              ; R5 = Channel C coarse period
+        OUT  (C),A
+        LD   B,#BF
+        LD   A,#02              ; 739 >> 8 = 2
+        OUT  (C),A
+
+        ; Set noise period for buzzy body
+        LD   B,#FF
+        LD   A,#06              ; R6 = noise period
+        OUT  (C),A
+        LD   B,#BF
+        LD   A,#18              ; NP=24 → ~4.6 kHz coarse noise
+        OUT  (C),A
+
+        ; Mixer: enable tone + noise on Channel C only
+        LD   B,#FF
+        LD   A,#07
+        OUT  (C),A
+        LD   B,#BF
+        LD   A,#3B              ; %00111011 = tone C off→on, noise C on, rest off
+        OUT  (C),A              ; (tone C bit=0=ON, noise C bit=0=ON)
+
+        ; Route Channel C through envelope for decay
+        LD   B,#FF
+        LD   A,#10              ; R10 = Channel C volume
+        OUT  (C),A
+        LD   B,#BF
+        LD   A,#10              ; Bit 4 set = envelope mode
+        OUT  (C),A
+
+        ; Trigger fast decay envelope (snappy drum hit)
+        ; Set envelope period for ~30 Hz decay
+        LD   B,#FF
+        LD   A,#11              ; R11 = envelope fine
+        OUT  (C),A
+        LD   B,#BF
+        LD   A,#E8              ; EP = 232 → ~30 Hz
+        OUT  (C),A
+        LD   B,#FF
+        LD   A,#12              ; R12 = envelope coarse
+        OUT  (C),A
+        LD   B,#BF
+        XOR  A
+        OUT  (C),A
+
+        ; Restart envelope — decay shape
+        LD   B,#FF
+        LD   A,#13
+        OUT  (C),A
+        LD   B,#BF
+        LD   A,#0C              ; Decay-repeat: CONT=1,ALT=0,HOLD=0,ATK=0
+        OUT  (C),A              ; Writing R13 restarts envelope
+        RET
+```
+
+### Noise-Only Percussion (Snare, Hi-Hat)
+
+For unpitched percussion, disable the tone on the noise channel and rely solely on the noise generator with an envelope-controlled volume decay:
+
+```z80
+; ============================================
+; Snare Drum — pure noise with fast decay
+; Channel C: noise only, envelope-driven volume
+; ============================================
+
+SNARE_HIT:
+        ; Noise period for mid-range grit
+        LD   BC,#FFFD
+        LD   A,#06              ; R6 = noise period
+        OUT  (C),A
+        LD   B,#BF
+        LD   A,#0C              ; NP=12 → ~9.3 kHz bright snare
+        OUT  (C),A
+
+        ; Mixer: noise C only (tone C disabled)
+        LD   B,#FF
+        LD   A,#07
+        OUT  (C),A
+        LD   B,#BF
+        LD   A,#3F              ; %00111111 = all tone off, noise C on, noise A/B off
+        OUT  (C),A              ; Wait: bit 2=noise C (0=ON), bits 0-1=noise A/B
+        ; Actually #37 = %00110111 = noise C on (bit2=0), tone C off (bit5=1)
+
+        ; Volume via envelope
+        LD   B,#FF
+        LD   A,#10              ; R10 = Channel C volume
+        OUT  (C),A
+        LD   B,#BF
+        LD   A,#10              ; Envelope mode
+        OUT  (C),A
+
+        ; Fast decay (short, punchy)
+        LD   B,#FF
+        LD   A,#11
+        OUT  (C),A
+        LD   B,#BF
+        LD   A,#B0              ; EP=176 → ~39 Hz (fast)
+        OUT  (C),A
+        LD   B,#FF
+        LD   A,#12
+        OUT  (C),A
+        LD   B,#BF
+        XOR  A
+        OUT  (C),A
+
+        ; Single-shot decay
+        LD   B,#FF
+        LD   A,#13
+        OUT  (C),A
+        LD   B,#BF
+        LD   A,#09              ; Attack + decay + hold (single shot)
+        OUT  (C),A
+        RET
+```
+
+### Noise Sweep (Cymbal Crash, Wind)
+
+Rapidly changing the noise period register R6 creates a **sweep** effect. For a cymbal crash, start with a high noise frequency (R6=1) and sweep up to R6=20+ over several frames, paired with a long envelope decay:
+
+```z80
+; ============================================
+; Cymbal Crash — noise frequency sweep + long decay
+; Channel C: noise only, envelope-driven
+; ============================================
+
+CYMBAL:
+        LD   BC,#FFFD
+        LD   A,#06
+        OUT  (C),A
+        LD   B,#BF
+        LD   A,#01              ; Start: bright noise
+        OUT  (C),A
+
+        ; Long envelope decay (~2 Hz for sustained crash)
+        LD   B,#FF
+        LD   A,#11
+        OUT  (C),A
+        LD   B,#BF
+        LD   A,#E8              ; EP = 3500 → ~2 Hz
+        OUT  (C),A
+        LD   B,#FF
+        LD   A,#12
+        OUT  (C),A
+        LD   B,#BF
+        LD   A,#0D              ; High byte
+        OUT  (C),A
+
+        LD   B,#FF
+        LD   A,#13
+        OUT  (C),A
+        LD   B,#BF
+        LD   A,#0C              ; Repeating decay
+        OUT  (C),A
+
+        ; Sweep noise period over several frames
+        ; (Called each frame from the ISR)
+        LD   HL,NOISE_SWEEP_PTR
+        LD   A,(HL)
+        INC  (HL)
+        LD   HL,NOISE_SWEEP_TABLE
+        LD   C,A
+        LD   B,0
+        ADD  HL,BC
+        LD   A,(HL)
+        CP   #FF               ; End of table?
+        RET  Z
+
+        ; Write new noise period
+        LD   BC,#FFFD
+        LD   (#BFFD),A          ; Latch address
+        LD   B,#BF
+        OUT  (C),A
+        RET
+
+NOISE_SWEEP_TABLE:
+        DB   1,1,2,3,4,6,8,10,13,16,20,24,28,#FF
+```
+
+### Noise Modulation Across Channels
+
+A more advanced technique uses noise on one channel to **amplitude-modulate** a tone on another channel. Since the AY's three analog outputs are summed, a noise channel at full volume adds a noise floor that modulates the audible tone:
+
+```
+Channel A: clean melody (tone, fixed volume)
+Channel C: noise burst (noise, short envelope decay)
+
+→ When Channel C fires, the summed output = melody + noise burst
+→ Creates a realistic "drum + bass + melody" texture
+```
+
+This is the standard arrangement in AY chiptunes: one channel for melody, one for bass, and one (usually C) alternating between noise percussion and arpeggio fills.
+
+### Noise Period as Rhythmic Texture
+
+In fast arpeggio-driven music (common in ZX Spectrum chiptunes), the noise period can be changed **per frame** to create evolving rhythmic textures. A pattern like R6 = [8, 4, 12, 6, 8, 4, 16, 8] played at 50 Hz creates a shuffle-like hi-hat pattern where each "hit" has a different timbre.
+
+---
