@@ -413,6 +413,68 @@ def create_counter_vs_dds():
     print('✓ assets/earshaver_counter_vs_dds.svg')
 
 
+def create_envelope_diagram():
+    """Visualize how INC HX sweeps the duty cycle over time to create a volume envelope."""
+    fig, axs = plt.subplots(3, 1, figsize=(12, 8), sharex=True)
+
+    n_samples = 400
+    delta = 0x0A00
+    
+    h_values = np.zeros(n_samples, dtype=np.uint8)
+    acc = 0
+    for i in range(n_samples):
+        h_values[i] = (acc >> 8) & 0xFF
+        acc = (acc + delta) & 0xFFFF
+
+    # Simulate INC HX over time (envelope sweep from 128 to 255)
+    # IXH increases linearly over the n_samples from 128 to 255
+    ixh_values = np.linspace(128, 255, n_samples)
+    
+    xor_mask = 0xE0
+    pwm = np.zeros(n_samples, dtype=np.uint8)
+    for i in range(n_samples):
+        pwm[i] = 0xFF if (h_values[i] ^ xor_mask) < ixh_values[i] else 0x00
+
+    # Panel 1: IXH threshold sweeping up
+    axs[0].plot(range(n_samples), ixh_values, color=THEME['accent'], lw=2.5)
+    axs[0].fill_between(range(n_samples), 0, ixh_values, color=THEME['accent'], alpha=0.1)
+    axs[0].set_ylim(0, 270)
+    axs[0].set_yticks([0, 128, 255])
+    axs[0].set_yticklabels(['0', '128', '255'])
+    axs[0].set_ylabel('IXH Value', fontsize=10)
+    axs[0].set_title('Envelope Sweep: IXH increments on each outer loop (INC HX)', fontsize=11, fontweight='bold', loc='left')
+
+    # Panel 2: Resulting PWM wave
+    axs[1].fill_between(range(n_samples), 0, pwm, step='pre', color=THEME['yellow'], alpha=0.3)
+    axs[1].plot(range(n_samples), pwm, color=THEME['yellow'], drawstyle='steps-pre', lw=1.5)
+    axs[1].set_ylim(-20, 280)
+    axs[1].set_yticks([0, 255])
+    axs[1].set_yticklabels(['OFF', 'ON'])
+    axs[1].set_ylabel('OUT (#FE)', fontsize=10)
+    axs[1].set_title('Resulting PWM Wave: Duty cycle shrinks as threshold rises', fontsize=11, fontweight='bold', loc='left')
+
+    # Panel 3: Analog average (Volume)
+    rc = 8.0
+    analog = np.zeros(n_samples)
+    for i in range(1, n_samples):
+        target = pwm[i] / 255.0
+        analog[i] = analog[i-1] + (target - analog[i-1]) * (1 - np.exp(-1/rc))
+        
+    axs[2].plot(range(n_samples), analog, color=THEME['analog'], lw=2.5)
+    axs[2].fill_between(range(n_samples), 0, analog, color=THEME['analog'], alpha=0.2)
+    axs[2].set_ylim(0, 1.1)
+    axs[2].set_yticks([0, 0.5, 1.0])
+    axs[2].set_ylabel('Perceived Vol', fontsize=10)
+    axs[2].set_xlabel('Time (Loop Iterations)', fontsize=10)
+    axs[2].set_title('Sawtooth Volume Envelope: Sound thins and fades as pulse width approaches 0%', fontsize=11, fontweight='bold', loc='left')
+
+    apply_theme(fig, axs)
+    plt.tight_layout()
+    plt.savefig('assets/earshaver_envelope.svg', format='svg', facecolor=fig.get_facecolor())
+    plt.close()
+    print('✓ assets/earshaver_envelope.svg')
+
+
 if __name__ == '__main__':
     create_phase_accumulator()
     create_pwm_comparison()
@@ -420,4 +482,5 @@ if __name__ == '__main__':
     create_smc_diagram()
     create_memory_map()
     create_counter_vs_dds()
+    create_envelope_diagram()
     print('\nAll Ear Shaver diagrams generated.')

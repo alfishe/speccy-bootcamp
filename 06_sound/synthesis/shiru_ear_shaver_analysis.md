@@ -163,6 +163,8 @@ Every register in the Z80 is utilized. There is zero waste:
 | `B` | Outer loop counter (envelope duration) |
 | `BC` | Combined 16-bit note duration |
 
+To understand how this dense 120-T-state loop actually produces music, we need to break it down into its three core mechanisms: **Direct Digital Synthesis** (how it controls pitch), **Branchless PWM** (how it controls timbre), and **Time-Division Multiplexing** (how it plays two notes at once).
+
 ---
 
 ## 5. Technique Deep Dive: Direct Digital Synthesis (DDS)
@@ -236,6 +238,21 @@ SBC A, A        ;  4 T : Convert carry flag to full bitmask
 
 In 12 T-states, with **zero branching and zero timing variation**, the Z80 converts a continuously rising sawtooth into a variable-width pulse wave. The duty cycle is controlled entirely by the value in `IXH`:
 
+```mermaid
+flowchart LR
+    A["Sawtooth<br/>(Register A)"] --> CP{"Compare<br/>(CP IXH)"}
+    IXH["Threshold<br/>(IXH)"] --> CP
+    
+    CP -->|A < IXH| CF1["Carry = 1"]
+    CP -->|A >= IXH| CF0["Carry = 0"]
+    
+    CF1 --> SBC1["SBC A,A<br/>(A - A - 1)"]
+    CF0 --> SBC0["SBC A,A<br/>(A - A - 0)"]
+    
+    SBC1 --> OutFF["Result: #FF<br/>(Speaker ON)"]
+    SBC0 --> Out00["Result: #00<br/>(Speaker OFF)"]
+```
+
 ![PWM Duty Cycle Comparison](assets/earshaver_pwm_comparison.svg)
 
 ### Why IX Half-Registers?
@@ -259,17 +276,43 @@ After the inner loop (`C` iterations) completes, the code at `#D2EF` executes:
 
 Each time the inner loop completes a frame, `IXH` and `IXL` are incremented by 1. This means the duty cycle steadily increases from whatever starting value was set by the sequencer (e.g., `#80` for 50%) up toward `#FF` (99.6%) and eventually wraps to `#00` (0%). This produces a characteristic **sawtooth volume envelope** — the note attacks at a specific timbre, then the pulse width sweeps upward, thinning the sound until it fades away. The rate of this sweep is controlled by the inner loop count `C`: shorter inner loops mean faster envelope sweeps and more dynamic timbral movement.
 
+![Sawtooth Volume Envelope](assets/earshaver_envelope.svg)
+
 ---
 
 ## 7. Technique Deep Dive: Time-Division Multiplexing
 
 ### The Single-Pin Polyphony Problem
 
-With only one speaker pin, how do you play two notes simultaneously? The naive approach is to arithmetically sum the two channels — but summing requires additional CPU cycles for the math, and the result is a multi-bit value that cannot be directly output to a 1-bit port without yet another PWM loop. This cascading complexity drastically reduces the carrier frequency and increases audible noise.
+The *Ear Shaver* engine generates two simultaneous audio channels. To create the rich, textured compositions heard on the album — such as a lead melody playing over an independent bassline — the engine must synthesize multiple independent voices.
 
-### Interleaved Output via EXX
+But the ZX Spectrum only has one physical speaker pin, which means the hardware can only be in one of two states: ON (cone pushed out) or OFF (cone pulled in). There is no volume control, and no hardware mixer. 
 
-Shiru's solution is **Time-Division Multiplexing (TDM)**. The engine does not mix the channels. Instead, it fires Channel 1 to the speaker, then 60 T-states later fires Channel 2. The speaker cone and the human auditory system perform the mixing naturally by averaging the rapid alternation.
+This presents a massive mathematical problem for the CPU. If Channel 1 is outputting a wave, and Channel 2 is outputting a different wave, how do you play both through a single pin? 
+
+### Why Generate Them Separately?
+
+If we want to output a complex waveform that sounds like two notes, why calculate Channel 1 and Channel 2 separately and then mix them? Why not generate the combined sound in a single pass?
+
+The answer lies in the hardware limitations of the Z80:
+1. **No Hardware Math:** The Z80 has no multiply or divide instructions. The only way to generate a specific frequency in real-time is by repeatedly adding a frequency delta to a phase accumulator (`ADD HL, DE`). Because a melody and a bassline play different notes, they require two different frequency deltas advancing at different rates. You cannot advance two independent frequencies with a single `ADD`.
+2. **Memory Constraints:** The alternative to real-time math is a wavetable (pre-calculating the combined waves). However, storing raw audio for every possible chord and two-note combination would require megabytes of RAM. The ZX Spectrum only has 48 KB.
+
+Therefore, the Z80 *must* maintain two independent virtual channels (using two separate sets of CPU registers to do their own `ADD HL, DE` math) and then somehow merge those two independent results into a single output pin.
+
+There are two ways to solve this merging problem in software: **Arithmetic Mixing** (used in Mode 6) and **Interleaving** (used in Mode 7).
+
+### 1. The Hard Way: Arithmetic Mixing (Mode 6)
+
+The "true" way to mix audio is to arithmetically sum the two channels (`Channel 1 + Channel 2`). However, if both channels are ON (`1 + 1 = 2`), the result is a multi-bit value. You cannot send a `2` to a 1-bit port. The CPU must then perform complex thresholding, clipping, and saturation to convert that multi-level sum back into a 1-bit pulse stream. 
+
+As we will see later in **Mode 6**, this arithmetic mixing requires many CPU instructions (`ADD`, `SBC`, etc.). It is computationally expensive, which forces the synthesis loop to run slower. A slower loop means a lower sample rate, which introduces audible hum and whine.
+
+### 2. The Fast Way: Interleaved Output (Mode 7)
+
+To achieve the highest possible audio quality for the main voices, Mode 7 abandons arithmetic entirely. Shiru's solution is **Time-Division Multiplexing (TDM)**. 
+
+The engine does not mix the channels in software. Instead, it fires Channel 1's state directly to the speaker, waits exactly 60 T-states, and then fires Channel 2's state to the speaker. It relies entirely on the physical inertia of the speaker cone and the human eardrum to "smear" the rapid alternations together into a single perceived sound.
 
 The key enabler is the Z80's `EXX` instruction, which atomically swaps the primary register bank (`BC, DE, HL`) with the alternate bank (`BC', DE', HL'`) in just 4 T-states. Crucially, `EXX` does **not** swap the Accumulator (`A`).
 
@@ -361,13 +404,56 @@ The pattern data at `#5B00`–`#CDFF` is not stored as raw note bytes. It passes
 #D045: JR #F3          ; If 1, continue reading
 ```
 
-This is a **variable-length code** decoder, consistent with Elias gamma or similar entropy coding. Short, common values (like "repeat previous note" or "rest") encode in just 2–3 bits, while rare values (like instrument changes or large pitch jumps) use more bits. This compression allows the entire album to fit in the 29 KB pattern data region.
+This is a **variable-length code** decoder, consistent with Elias gamma or similar entropy coding. Short, common values encode in just 2–3 bits, while rare values use more bits:
+
+| Encoded Bits | Value/Command | Frequency |
+|---|---|---|
+| `0` | Repeat previous | Very High |
+| `10 x` | Small pitch delta | High |
+| `110 xxxx` | Large pitch jump | Medium |
+| `1110 xxxxxxxx` | Instrument change | Low |
+
+*(Conceptual example of how variable-length coding favors common events)*
+
+This aggressive bit-level compression is what allows an entire album's worth of multi-channel note data, timing, and instrument changes to squeeze into the 29 KB pattern data region.
+
+### The Streaming Architecture (Zero Buffering)
+
+A common question when analyzing compressed game or music engines is: *where is the decompression buffer?* In *Ear Shaver*, **there is no buffer**.
+
+The 29 KB of pattern data is streamed entirely on-the-fly, bit by bit, directly from RAM into the synthesis sequencer. 
+
+```mermaid
+flowchart LR
+    subgraph RAM ["Pattern Data (#5B00 - #CDFF)"]
+        Byte1["Byte N"] --> Byte2["Byte N+1"]
+    end
+    
+    subgraph CPU ["Z80 CPU"]
+        HL["Pointer (HL)"] -.->|"LD A,(HL)"| A
+        A["Accumulator (A)<br/>8-bit Sliding Window"]
+        Carry["Carry Flag (CF)<br/>Extracted Bit"]
+        A -->|"ADD A,A"| Carry
+    end
+    
+    subgraph Decoder ["Elias Gamma Logic"]
+        Carry -->|Shifted bit-by-bit| Value["Reconstructed Value<br/>(BC Register)"]
+    end
+    
+    Value -->|Pitch/Timing| Sequencer["Sequencer"]
+```
+
+To achieve this fast enough to not interrupt the music, the bit-reading routine at `#D047` uses a brilliant Z80 optimization: the **Sentinel Bit Trick**. 
+
+Instead of maintaining a separate CPU register to count from 0 to 7 (to know when a byte is empty and the next one needs to be loaded), it injects a `1` into the bottom of the accumulator using `RLA`. 
+
+Every `ADD A,A` instruction shifts a data bit out into the Carry Flag, while shifting a `0` into the bottom of `A`. When that sentinel `1` is finally shifted out into the Carry Flag (after 8 shifts), the accumulator becomes exactly `#00`. This natively triggers the Z80's Zero (`Z`) flag, immediately signaling the CPU to load the next byte from memory (`RET NZ` falls through). This trick completely eliminates loop-counter overhead during real-time decompression.
 
 ---
 
 ## 10. The Other Six Synthesis Modes
 
-While Mode 7 is the highest-quality path, the other modes serve specific musical purposes:
+If Mode 7 is the highest quality synthesis kernel, why use anything else? Because different musical elements require different sonic textures and CPU budgets. A harsh snare drum needs pure noise, while a sub-bass line might only need a simple square wave. By providing seven specialized kernels, the engine allows the sequencer to select the optimal synthesis method for each musical passage, trading features for speed or unique timbres when necessary.
 
 ### Mode 0 (`#D190`): Carry-Toggle
 
@@ -377,6 +463,9 @@ While Mode 7 is the highest-quality path, the other modes serve specific musical
 #D193: XOR A           ;  4 T : A = 0
 #D194: OUT (#FE),A     ; 11 T : Output silence
 #D196: JP #D19F        ; 10 T : Continue
+; -----------------------------------------
+; Total kernel: 43 T-states (on overflow) / 23 T-states (no overflow)
+; Full loop including overhead: ~94 T-states
 ```
 
 This is the simplest mode. It does not use PWM at all — it simply toggles the speaker whenever the phase accumulator overflows (carries). The output is a raw square wave with fixed 50% duty cycle. The frequency is determined entirely by `DE`. Used for bass notes where timbral complexity is unnecessary.
@@ -392,6 +481,9 @@ This is the simplest mode. It does not use PWM at all — it simply toggles the 
 #D1C7: EXX             ;  4 T
 #D1C8: ADD HL,DE       ; 11 T
 #D1C9: OUT (#FE),A     ; 11 T
+; -----------------------------------------
+; Total kernel: 59 T-states
+; Full loop including overhead: ~96 T-states
 ```
 
 Similar to Mode 7, but uses a **fixed threshold** (patched via SMC at `#D1C3`) instead of `IXH`. This is faster (no `DD`-prefixed opcode penalty) but less flexible — the duty cycle can only change between notes, not within a note. The `AND #1A` masks the output to specific bits of Port `#FE`, which controls the border color simultaneously with the speaker, creating the characteristic flashing-border visual effect during playback.
@@ -405,6 +497,9 @@ Similar to Mode 7, but uses a **fixed threshold** (patched via SMC at `#D1C3`) i
 #D25A: JR #02          ; 12 T : ...or not (timing balance)
 #D25C: XOR #1B         ;  7 T : Flip speaker + border bits
 #D25E: EXX             ;  4 T
+; -----------------------------------------
+; Total kernel: 38 T-states (constant time)
+; Full loop including overhead: ~86 T-states
 ```
 
 This mode uses `EX AF,AF'` (which swaps the accumulator and flags) to maintain a persistent toggle state across iterations. When the phase overflows, `XOR #1B` flips the speaker bit. The `JR C` / `JR` pair is a timing trick: both paths take exactly 12 T-states, maintaining constant loop timing regardless of whether an overflow occurred. This mode is used for metallic, harsh timbres and noise effects.
@@ -429,9 +524,29 @@ This mode uses `EX AF,AF'` (which swaps the accumulator and flags) to maintain a
 #D296: SBC A,A         ;  4 T : Convert to 1-bit
 #D297: AND C           ;  4 T : Apply port mask
 #D298: OUT (#FE),A     ; 11 T
+; -----------------------------------------
+; Total kernel: 98 T-states
+; Full loop including overhead: ~108 T-states
 ```
 
-This is the most computationally expensive mode. Instead of interleaving the channels, it **arithmetically sums** them using `ADD A,B` and then converts the multi-level sum back to 1-bit using a saturation/threshold circuit built from `SBC`/`ADD` pairs. This produces a cleaner mix at the cost of a lower effective sample rate (only one `OUT` per loop). It's used sparingly for specific passages where the interleaving artifacts of Mode 7 would be audible.
+```mermaid
+flowchart TD
+    subgraph LoopBody ["Mode 6 Synthesis Loop"]
+        Ch1Gen["Channel 1 Generation<br/>(ADD, SBC, AND)"]
+        SwapPrev["Context Swap & Add Prev<br/>(EXX, ADD, LD)"]
+        Ch2Gen["Channel 2 Generation<br/>(ADD, SBC, AND)"]
+        MixSat["Mix & Saturate<br/>(ADD, LD, ADD, SBC, LD)"]
+        Output["Convert & Output<br/>(SBC, AND, OUT)"]
+
+        Ch1Gen --> SwapPrev
+        SwapPrev --> Ch2Gen
+        Ch2Gen --> MixSat
+        MixSat --> Output
+    end
+    Output -->|Loop| Ch1Gen
+```
+
+This is the most computationally expensive mode. Instead of interleaving the channels over time, it **mathematically sums** their amplitudes using `ADD A,B` and then converts the multi-level sum back to 1-bit using a saturation/threshold circuit built from `SBC`/`ADD` pairs. This produces a cleaner mix at the cost of a lower effective sample rate (only one `OUT` per loop). It's used sparingly for specific passages where the interleaving artifacts of Mode 7 would be audible.
 
 ---
 
