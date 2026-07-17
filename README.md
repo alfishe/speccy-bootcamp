@@ -46,14 +46,6 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 |---------|------------|
 | [system_variables.md](04_operating_systems/system_variables.md) | ROM-defined system variables: FRAMES, PROG, VARS, CHANS, keyboard state, memory boundaries — the ROM's API surface |
 
-### 00 — Overview · 03 — I/O · 06 — RE · 07 — Toolchain · 08 — References
-
-| Article | Description |
-|---------|-------------|
-| [io_port_map.md](08_references/io_port_map.md) | Complete I/O port reference: every port across all models, Black_Cat table with annotations, decoding bitmasks, per-model differences |
-
-*Other sections are placeholders — content coming. See [PLAN.md](PLAN.md) for the full catalog.*
-
 ### 05 — Development
 
 #### Memory & I/O
@@ -85,11 +77,31 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [border_effects.md](05_development/05_display_and_timing/border_effects.md) | Border color via #FE, raster bars, rainbow borders, per-model timing |
 | [clone_video_modes.md](05_development/05_display_and_timing/clone_video_modes.md) | Clone video modes: GigaScreen, ATM hires, Profi 512×256, Kay CPLD, TS-Conf |
 
-### 09 — Emulation
+### 06 — Sound
+
+#### Synthesis Techniques
+
+| Article | Description |
+|---------|------------|
+| [ay_ym_synthesis.md](06_sound/synthesis/ay_ym_synthesis.md) | **Comprehensive AY/YM sound generation**: internal counter model, phase reset, sync-square, PWM, SID-sound, envelope exploitation, sample playback, drum synthesis |
+| [ay_ym_perception.md](06_sound/synthesis/ay_ym_perception.md) | **The AY Sound: Perception, Emotion, and the Hardware Soul** — ABC vs ACB holy war, AY vs YM differences, why real hardware sounds different, psychoacoustics, nostalgia, recapturing the sound |
+| [beeper_synthesis.md](06_sound/synthesis/beeper_synthesis.md) | **1-Bit Beeper Synthesis**: PWM engines, multi-channel tricks, DSP emulation physics |
+| [multitrack_multichip.md](06_sound/synthesis/multitrack_multichip.md) | Multi-track and multi-chip synthesis outline: TurboSound, cross-chip effects, synchronization |
+
+*See [06_sound/README.md](06_sound/README.md) for the full sound section catalog.*
+
+### 07 — Demoscene
+
+*Section scaffolded — content coming. See [07_demoscene/README.md](07_demoscene/README.md) for the planned article catalog.*
+
+### 00 — Overview · 03 — I/O · 08 — RE · 09 — Toolchain · 10 — References · 11 — Emulation
 
 | Article | Description |
 |---------|-------------|
-| [cycle_exact_accuracy.md](09_emulation/software/cycle_exact_accuracy.md) | Frame timing divergence, CRT vs LCD, host sync strategies, AY audio clocks, judder mitigation techniques, emulator comparison, worst-case Pentagon@60Hz conclusion |
+| [io_port_map.md](10_references/io_port_map.md) | Complete I/O port reference: every port across all models, Black_Cat table with annotations, decoding bitmasks, per-model differences |
+| [cycle_exact_accuracy.md](11_emulation/software/cycle_exact_accuracy.md) | Frame timing divergence, CRT vs LCD, host sync strategies, AY audio clocks, judder mitigation techniques, emulator comparison, worst-case Pentagon@60Hz conclusion |
+
+*Other sections are placeholders — content coming. See [PLAN.md](PLAN.md) for the full catalog.*
 
 ---
 
@@ -109,7 +121,7 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 7. [ULA Timing](02_hardware/original/ula_timing.md)
 8. [Clone Timing](02_hardware/clones/clone_timing.md)
 9. [Z80 Interrupts](01_cpu/z80_interrupts.md)
-10. [Cycle-Exact Emulation Accuracy](09_emulation/software/cycle_exact_accuracy.md)
+10. [Cycle-Exact Emulation Accuracy](11_emulation/software/cycle_exact_accuracy.md)
 
 **Spectrum assembly programmers (memory, I/O, display):**
 
@@ -125,13 +137,19 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 20. [128K Video Frame](05_development/05_display_and_timing/video_frame_128k.md)
 21. [Pentagon Video Frame](05_development/05_display_and_timing/video_frame_pentagon.md)
 
+**Sound and music programmers:**
+
+22. [1-Bit Beeper Synthesis](06_sound/synthesis/beeper_synthesis.md) — PWM fundamentals, emulation physics, multi-channel tracking
+23. [AY/YM Sound Generation](06_sound/synthesis/ay_ym_synthesis.md) — internal counter model, phase reset, sync-square, envelope exploitation
+24. [Multi-Track and Multi-Chip Synthesis](06_sound/synthesis/multitrack_multichip.md) — TurboSound, cross-chip effects
+
 **Bridge to advanced optimization:**
 
-19. [Z80 Coding Practices](01_cpu/z80_coding_practices.md)
+24. [Z80 Coding Practices](01_cpu/z80_coding_practices.md)
 
 **Coming from modern platforms:**
 
-20. [Z80 vs Modern](01_cpu/z80_vs_modern.md)
+25. [Z80 vs Modern](01_cpu/z80_vs_modern.md)
 
 ---
 

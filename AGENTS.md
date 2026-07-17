@@ -420,6 +420,23 @@ Before writing or expanding an article:
 
 ---
 
+## Automated Tooling & Scripts
+
+This knowledge base contains functional scripts to generate highly accurate, reproducible diagrams and assets. When writing articles, you are expected to use these tools to generate visual proofs rather than relying on ASCII art or external image search.
+
+### Available Tools
+- **`tools/waveform_generator/generate_waveforms.py`**
+  - **Purpose:** Generates precise, theme-compliant SVG diagrams demonstrating Z80 PWM, 1-bit speaker physics, aliasing, and mixing algorithms.
+  - **When to use:** Whenever documenting 1-bit sound engines, software DACs, or high-frequency toggle loops. Do NOT use ASCII art for waveforms. Use this script to generate a verifiable SVG and embed it.
+
+### Tool Quality Control Rule
+Every tool directory within this workspace **must** contain its own `AGENTS.md` file. This localized rule file must dictate:
+1. **Usage Guidelines:** Exact CLI commands and expected arguments.
+2. **Quality Control:** Rules for modifying the tool (e.g., maintaining theme parity, enforcing reproducibility).
+3. **Artifact Management:** How the tool manages metadata or outputs.
+
+---
+
 ## README Index Maintenance
 
 When creating or significantly expanding an article:

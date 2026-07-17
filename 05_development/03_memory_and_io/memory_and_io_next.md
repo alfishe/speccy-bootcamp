@@ -213,4 +213,4 @@ Port    Function                                     Next specific
 - **Next DMA**: [zx_next_dma.md](../../02_hardware/newgen/zx_next_dma.md)
 - **NextZXOS**: [nextzxos.md](../../04_operating_systems/nextzxos.md)
 - **Official Next documentation**: [zxnext.io](https://www.zxnext.io/)
-- **Complete I/O port map** (all ports, all models, decoding bitmasks): [io_port_map.md](../../08_references/io_port_map.md)
+- **Complete I/O port map** (all ports, all models, decoding bitmasks): [io_port_map.md](../../10_references/io_port_map.md)

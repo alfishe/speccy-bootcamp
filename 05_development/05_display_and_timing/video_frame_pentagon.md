@@ -197,7 +197,7 @@ Paper → Frame end:  56 lines (12,544 T)   80 lines (17,920 T)
 
 The Pentagon's non-standard frame rate of **~48.83 Hz** causes problems with:
 
-1. **Modern LCD monitors** (fixed 60 Hz): Frame rate mismatch causes judder and tearing. See [cycle_exact_accuracy.md](../../09_emulation/software/cycle_exact_accuracy.md) for a complete analysis.
+1. **Modern LCD monitors** (fixed 60 Hz): Frame rate mismatch causes judder and tearing. See [cycle_exact_accuracy.md](../../11_emulation/software/cycle_exact_accuracy.md) for a complete analysis.
 
 2. **PAL CRT TVs**: Most PAL TVs accept ±10% (45–55 Hz), so 48.83 Hz is **within tolerance** (only 2.34% below nominal 50 Hz). The picture will sync correctly.
 
@@ -311,5 +311,5 @@ isPentagon:
 - **48K frame** (base reference): [video_frame_48k.md](video_frame_48k.md)
 - **128K frame** (contention differences): [video_frame_128k.md](video_frame_128k.md)
 - **Pentagon memory** (512K/1024K expansions): [memory_and_io_pentagon.md](../03_memory_and_io/memory_and_io_pentagon.md)
-- **Emulation implications** (48.83 Hz on modern displays): [cycle_exact_accuracy.md](../../09_emulation/software/cycle_exact_accuracy.md)
+- **Emulation implications** (48.83 Hz on modern displays): [cycle_exact_accuracy.md](../../11_emulation/software/cycle_exact_accuracy.md)
 - **Video frame comparison** (all models side-by-side): [video_frame_comparison.md](video_frame_comparison.md)

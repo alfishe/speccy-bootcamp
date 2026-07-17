@@ -226,4 +226,4 @@ Port    Function                                     Pentagon specific
 - **TR-DOS** (disk operating system): [trdos.md](../../04_operating_systems/trdos.md)
 - **Beta 128 FDC** (WD1793/VG93): [fdc_vg93.md](../../03_io/storage/fdc_vg93.md)
 - **Pentagon hardware**: [pentagon.md](../../02_hardware/clones/pentagon.md)
-- **Complete I/O port map** (all ports, all models, decoding bitmasks): [io_port_map.md](../../08_references/io_port_map.md)
+- **Complete I/O port map** (all ports, all models, decoding bitmasks): [io_port_map.md](../../10_references/io_port_map.md)

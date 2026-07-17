@@ -75,7 +75,7 @@ Clock derivation (both 48K and Pentagon):
   Difference:          +2.56% T-states / +2.56% frame duration / −2.50% frame rate
 ```
 
-For the practical impact on emulation and cycle-exact accuracy requirements, see [cycle_exact_accuracy.md](../../09_emulation/software/cycle_exact_accuracy.md).
+For the practical impact on emulation and cycle-exact accuracy requirements, see [cycle_exact_accuracy.md](../../11_emulation/software/cycle_exact_accuracy.md).
 
 ```
 Pentagon frame layout (320 lines × 224 T-states = 71,680 T-states):
@@ -502,4 +502,4 @@ IN   A,(C)         ; Read hardware ID
 - [z80_timing.md](../../01_cpu/z80_timing.md) — Z80-intrinsic timing: T-states, M-cycles, bus timing
 - [z80_interrupts.md](../../01_cpu/z80_interrupts.md) — Interrupt timing per model, contention during interrupt handling
 - [z80_coding_practices.md](../../01_cpu/z80_coding_practices.md) — T-state budgeting, contention-aware coding patterns
-- [io_port_map.md](../../08_references/io_port_map.md) — Complete I/O port reference with per-model decoding bitmasks
+- [io_port_map.md](../../10_references/io_port_map.md) — Complete I/O port reference with per-model decoding bitmasks

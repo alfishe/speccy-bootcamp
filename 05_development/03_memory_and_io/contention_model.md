@@ -272,4 +272,4 @@ ENDIF
 - **+2A/+3 memory and ports** (gate array contention): [memory_and_io_plus3.md](memory_and_io_plus3.md)
 - **48K video frame** (contention windows per scanline): [video_frame_48k.md](../05_display_and_timing/video_frame_48k.md)
 - **Z80 timing** (per-instruction T-state costs): [z80_timing.md](../../01_cpu/z80_timing.md)
-- **Complete I/O port map** (which ports are contended per model): [io_port_map.md](../../08_references/io_port_map.md)
+- **Complete I/O port map** (which ports are contended per model): [io_port_map.md](../../10_references/io_port_map.md)

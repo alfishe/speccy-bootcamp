@@ -348,4 +348,4 @@ For complete bank-switching patterns, see [bank_switching_patterns.md](bank_swit
 - **Contention model** (bank-based contention): [contention_model.md](contention_model.md)
 - **128K ROM internals** (dual-ROM, RAM bridge): [rom_128k.md](../../04_operating_systems/rom_128k.md)
 - **AY programming** (register map, effects): [ay_programming.md](../07_audio/ay_programming.md)
-- **Complete I/O port map** (all ports, all models, decoding bitmasks): [io_port_map.md](../../08_references/io_port_map.md)
+- **Complete I/O port map** (all ports, all models, decoding bitmasks): [io_port_map.md](../../10_references/io_port_map.md)

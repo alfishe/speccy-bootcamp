@@ -259,7 +259,7 @@ The Z80 has **two separate 16-bit address spaces**:
 - Read with /IORQ + /RD, write with /IORQ + /WR
 
 > [!WARNING]
-> I/O port partial decoding is a major source of confusion and bugs. Different ZX Spectrum models and clones decode different address lines. Code that works on a 48K may crash on a Pentagon because a peripheral responds to a "mirrored" port that doesn't exist on the original hardware. See [z80_addressing.md](z80_addressing.md) and [io_port_map](../08_references/io_port_map.md) for per-model decoding details.
+> I/O port partial decoding is a major source of confusion and bugs. Different ZX Spectrum models and clones decode different address lines. Code that works on a 48K may crash on a Pentagon because a peripheral responds to a "mirrored" port that doesn't exist on the original hardware. See [z80_addressing.md](z80_addressing.md) and [io_port_map](../10_references/io_port_map.md) for per-model decoding details.
 
 ---
 

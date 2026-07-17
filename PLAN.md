@@ -251,21 +251,7 @@ zx/
 │   │   ├── timex_video_modes.md
 │   │   ├── next_layer2_graphics.md
 │   │   └── next_tilemap.md
-│   ├── 07_audio/
-│   │   ├── README.md
-│   │   ├── beeper.md
-│   │   ├── beeper_music_engines.md
-│   │   ├── ay_programming.md
-│   │   ├── ay_music_formats.md
-│   │   ├── turbosound_programming.md
-│   │   ├── turbosound_fm_programming.md
-│   │   ├── covox_programming.md
-│   │   ├── gs_programming.md
-│   │   ├── moonsound_programming.md
-│   │   ├── saa1099_programming.md
-│   │   ├── ay_effects.md
-│   │   ├── audio_pipeline_comparison.md
-│   │   └── audio_decision_guide.md
+│   ├── 07_audio/                     # MOVED to 06_sound/ — see below
 │   ├── 08_dos_tape/
 │   │   ├── README.md
 │   │   ├── tape_loading.md
@@ -289,21 +275,57 @@ zx/
 │   │   ├── sound_integration.md
 │   │   ├── ai_patterns.md
 │   │   └── game_case_studies.md
-│   └── 10_demoscene/
-│       ├── README.md
-│       ├── demoscene_history.md
-│       ├── effects_catalog.md
-│       ├── multicolor_techniques.md
-│       ├── precalc_trigonometry.md
-│       ├── compression_packing.md
-│       ├── size_coding.md
-│       ├── demo_frameworks.md
-│       ├── notable_demos.md
-│       ├── soviet_demo_scene.md
-│       ├── demoscene_platforms.md
-│       └── 1bit_music_scene.md
+│   └── 10_demoscene/                  # MOVED to 07_demoscene/ — see below
 │
-├── 06_reverse_engineering/
+├── 06_sound/
+│   ├── README.md                      # ✅ Section index
+│   ├── synthesis/
+│   │   ├── README.md
+│   │   ├── ay_ym_synthesis.md         # ✅ Comprehensive AY/YM sound generation
+│   │   ├── ay_ym_perception.md        # ✅ Perception, emotion, hardware soul
+│   │   ├── beeper_synthesis.md        # ✅ Done
+│   │   └── multitrack_multichip.md    # ✅ Multi-chip outline
+│   ├── hardware/
+│   │   ├── README.md
+│   │   ├── sound_overview.md          # 📄 Stub
+│   │   ├── ay_3_8912.md               # 📄 Stub
+│   │   ├── turbosound.md              # 📄 Stub
+│   │   ├── turbosound_fm.md           # 📄 Stub
+│   │   ├── covox_sounDrive.md         # 📄 Stub
+│   │   ├── gs_general_sound.md        # 📄 Stub
+│   │   ├── moonsound.md               # 📄 Stub
+│   │   ├── saa1099.md                 # 📄 Stub
+│   │   ├── zx_next_audio.md           # 📄 Stub
+│   │   └── stereo_audio.md            # 📄 Stub
+│   ├── trackers_and_formats/
+│   │   ├── README.md
+│   │   ├── tracker_history.md         # 📄 Stub
+│   │   ├── vortex_tracker.md          # 📄 Stub
+│   │   ├── arkos_tracker.md           # 📄 Stub
+│   │   ├── pt3_format.md              # 📄 Stub
+│   │   ├── ay_music_formats.md        # 📄 Stub
+│   │   └── psg_format.md              # 📄 Stub
+│   └── players/
+│       ├── README.md
+│       ├── ay_player_routines.md      # 📄 Stub
+│       ├── player_comparison.md       # 📄 Stub
+│       └── audio_decision_guide.md    # 📄 Stub
+│
+├── 07_demoscene/
+│   ├── README.md                      # ✅ Section index
+│   ├── demoscene_history.md           # 📄 Stub
+│   ├── effects_catalog.md             # 📄 Stub
+│   ├── multicolor_techniques.md       # 📄 Stub
+│   ├── precalc_trigonometry.md        # 📄 Stub
+│   ├── compression_packing.md         # 📄 Stub
+│   ├── size_coding.md                 # 📄 Stub
+│   ├── demo_frameworks.md             # 📄 Stub
+│   ├── notable_demos.md               # 📄 Stub
+│   ├── soviet_demo_scene.md           # 📄 Stub
+│   ├── demoscene_platforms.md         # 📄 Stub
+│   └── 1bit_music_scene.md            # 📄 Stub
+│
+├── 08_reverse_engineering/
 │   ├── methodology.md
 │   ├── game_protection.md
 │   ├── speedlock_alkatraz.md
@@ -315,7 +337,7 @@ zx/
 │   ├── snapshot_repair.md
 │   └── decompilation.md
 │
-├── 07_toolchain/
+├── 09_toolchain/
 │   ├── README.md
 │   ├── assembler_overview.md
 │   ├── zeus_assembler.md
@@ -355,7 +377,7 @@ zx/
 │   ├── asset_tools.md
 │   └── disassemblers.md
 │
-├── 08_references/
+├── 10_references/
 │   ├── z80_opcode_table.md
 │   ├── io_port_map.md
 │   ├── memory_maps.md
@@ -367,7 +389,7 @@ zx/
 │   ├── timing_reference.md
 │   └── pinouts.md
 │
-└── 09_emulation/
+└── 11_emulation/
     ├── software/
     │   ├── README.md
     │   ├── emulator_comparison.md
@@ -409,11 +431,12 @@ zx/
 │           └── schematic_pentagon_decoding.json
 ```
 
-> **Design principle**: 10 top-level sections (00-09). Subfolders only where genuine structural divergence exists:
+> **Design principle**: 12 top-level sections (00-11). Subfolders only where genuine structural divergence exists:
 > - `02_hardware/` — three physically different hardware streams
 > - `03_io/` — three I/O categories (storage/peripherals/networking)
-> - `05_development/` — 8-tier learning progression
-> - `09_emulation/` — three fundamentally different implementation approaches
+> - `05_development/` — 8-tier learning progression (audio and demoscene content moved to sections 06/07)
+> - `06_sound/` — four sound subsystems (synthesis/hardware/trackers/players)
+> - `11_emulation/` — three fundamentally different implementation approaches
 >
 > All other sections are flat. Articles note track-applicability inline.
 
@@ -764,7 +787,9 @@ zx/
 | `next_layer2_graphics.md` | ZX Next Layer 2: 256-color mode, direct pixel access, hardware acceleration |
 | `next_tilemap.md` | ZX Next tilemap: hardware scrolling, tile-based rendering |
 
-#### 05_development/07_audio/ — Audio Programming
+> **MOVED to [06_sound/](06_sound/README.md)** — Audio content has been promoted to its own root-level section. The planned articles below are tracked there.
+
+#### ~~05_development/07_audio/~~ → 06_sound/ — Audio Programming (MOVED)
 
 | File | Topic |
 |---|---|
@@ -814,7 +839,9 @@ zx/
 | `ai_patterns.md` | Game AI patterns: pathfinding on 8-bit, state machines, simple behavior trees |
 | `game_case_studies.md` | Case studies: analysis of notable game engines (Knight Lore, Elite, Head Over Heels, etc.) |
 
-#### 05_development/10_demoscene/ — Peak Techniques
+> **MOVED to [07_demoscene/](07_demoscene/README.md)** — Demoscene content has been promoted to its own root-level section. The planned articles below are tracked there.
+
+#### ~~05_development/10_demoscene/~~ → 07_demoscene/ — Peak Techniques (MOVED)
 
 | File | Topic |
 |---|---|
@@ -831,7 +858,70 @@ zx/
 | `demoscene_platforms.md` | Cross-platform: Spectrum vs C64 vs Amiga vs Atari ST — constraint comparison |
 | `1bit_music_scene.md` | 1-bit music scene: beeper engine evolution from 1982 to present |
 
-### 06 — Reverse Engineering
+### 06 — Sound
+
+#### 06_sound/synthesis/ — Synthesis Techniques
+
+| File | Topic | Status |
+|---|---|---|
+| `ay_ym_synthesis.md` | **Comprehensive AY/YM sound generation**: internal counter model, phase reset, sync-square, PWM, SID-sound, envelope exploitation, sample playback, drum synthesis | ✅ |
+| `ay_ym_perception.md` | **The AY Sound: Perception, Emotion, and the Hardware Soul** — ABC vs ACB holy war, AY vs YM differences, analog signal chain, psychoacoustics, nostalgia, recapturing the sound | ✅ |
+| `multitrack_multichip.md` | Multi-track and multi-chip synthesis outline: TurboSound, cross-chip effects, synchronization | ✅ |
+| `beeper_synthesis.md` | 1-bit beeper synthesis: PWM engines, multi-channel tricks, timing constraints | ✅ Done |
+
+#### 06_sound/hardware/ — Sound Card Hardware
+
+| File | Topic | Status |
+|---|---|---|
+| `ay_3_8912.md` | AY-3-8912 / YM2149F PSG: pinout, register map, clock domains, DAC, per-model differences | 📄 Stub |
+| `turbosound.md` | TurboSound: dual/triple AY, port decoding, programming model | 📄 Stub |
+| `turbosound_fm.md` | TurboSound FM: YM2203 (OPN) FM synthesis, 3 FM + 3 SSG channels | 📄 Stub |
+| `covox_sounDrive.md` | Covox (8-bit DAC), SounDrive (4×8-bit DAC): direct sample playback | 📄 Stub |
+| `gs_general_sound.md` | General Sound: dedicated Z80-based sound card, 4-channel sample mixing | 📄 Stub |
+| `moonsound.md` | MoonSound (OPL4/YMF278B): 24-channel wavetable + 18-channel FM | 📄 Stub |
+| `saa1099.md` | SAA1099 PSG: Philips sound chip, 6-channel stereo | 📄 Stub |
+| `zx_next_audio.md` | ZX Spectrum Next audio: 3× AY + beeper + DMA sample playback | 📄 Stub |
+| `stereo_audio.md` | Stereo audio modifications: ABC/ACB separation, BytesDelight | 📄 Stub |
+| `sound_overview.md` | Sound hardware ecosystem overview + decision guide | 📄 Stub |
+
+#### 06_sound/trackers_and_formats/ — Trackers, Editors & Formats
+
+| File | Topic | Status |
+|---|---|---|
+| `tracker_history.md` | Chronological history: Sound Tracker (1990) → Pro Tracker 3 → Vortex Tracker II → Arkos Tracker | 📄 Stub |
+| `vortex_tracker.md` | Vortex Tracker II: the de facto PC-based PT3 editor, format import/export | 📄 Stub |
+| `arkos_tracker.md` | Arkos Tracker 2/3: modern cross-platform AY/YM tracker with multi-PSG support | 📄 Stub |
+| `pt3_format.md` | PT3 module format specification: header, patterns, ornaments, instruments | 📄 Stub |
+| `ay_music_formats.md` | All AY music formats: module formats (.PT3/.ASC/.STC/.STP), register dumps (.PSG/.YM/.VTX), memory dumps (.AY) | 📄 Stub |
+| `psg_format.md` | PSG register dump format: frame structure, escape bytes, clock specification | 📄 Stub |
+
+#### 06_sound/players/ — Player Routines
+
+| File | Topic | Status |
+|---|---|---|
+| `ay_player_routines.md` | Player routine architecture: ISR integration, register write sequences, stack manipulation, timing budgets | 📄 Stub |
+| `player_comparison.md` | PT3 player vs Arkos players (AKG/AKM/AKY): speed, size, features comparison | 📄 Stub |
+| `audio_decision_guide.md` | Decision guide: which sound hardware + format + player to target for your project | 📄 Stub |
+
+### 07 — Demoscene
+
+All articles are 📄 Stub. See [07_demoscene/README.md](07_demoscene/README.md) for the section catalog.
+
+| File | Topic |
+|---|---|
+| `demoscene_history.md` | Western origins, Soviet explosion, modern revival, cultural impact |
+| `soviet_demo_scene.md` | Russian/Ukrainian scene: Pentagon-centric, notable groups (E-Mage, Extreme, Progress, Skrju) |
+| `demoscene_platforms.md` | Cross-platform comparison: Spectrum vs C64 vs Amiga vs Atari ST |
+| `effects_catalog.md` | Visual effects catalog: plasma, raycasting, 3D, multicolor, zoomers, tunnels, copper bars |
+| `multicolor_techniques.md` | Multicolor/attribute interrupt: 8×1 and 8×2 color resolution, race-the-beam timing |
+| `precalc_trigonometry.md` | Sine tables, fixed-point math, interpolation, lookup table compression |
+| `compression_packing.md` | MegaLZ, HRUM, ZX0 crunchers, depackers, memory-constrained decompression |
+| `size_coding.md` | 1K/4K/16K intro competitions: self-modifying code, code-as-data, extreme optimization |
+| `demo_frameworks.md` | Demo frameworks: effect sequencing, timing management, resource loading, music sync |
+| `notable_demos.md` | Analysis of landmark demos: techniques used, how they work, what made them groundbreaking |
+| `1bit_music_scene.md` | 1-bit music scene: beeper engine evolution from 1982 to present |
+
+### 08 — Reverse Engineering
 
 | File | Topic |
 |---|---|
@@ -846,9 +936,9 @@ zx/
 | `snapshot_repair.md` | Snapshot repair: fixing corrupted .SNA/.Z80, restoring tape data |
 | `decompilation.md` | Decompilation: Z80 → C reconstruction, tool-assisted approaches |
 
-### 07 — Toolchain
+### 09 — Toolchain
 
-#### 07_toolchain/ — Assemblers and Build Tools
+#### 09_toolchain/ — Assemblers and Build Tools
 
 | File | Topic |
 |---|---|
@@ -903,7 +993,7 @@ zx/
 | `asset_tools.md` | Asset pipeline tools: png2sprite, Vortex Tracker (AY music), font editors, image converters, ZX0/ZX7 compressors |
 | `disassemblers.md` | Disassemblers: DZ80, z80dasm, disassembly workflow, reassembly techniques |
 
-### 08 — References
+### 10 — References
 
 | File | Topic |
 |---|---|
@@ -918,9 +1008,9 @@ zx/
 | `timing_reference.md` | Consolidated timing: T-states per instruction, contention tables, interrupt timing per model |
 | `pinouts.md` | Pinout reference: edge connector, AY port, joystick ports, expansion bus |
 
-### 09 — Emulation (subfoldered)
+### 11 — Emulation (subfoldered)
 
-#### 09_emulation/software/ — Software Emulators
+#### 11_emulation/software/ — Software Emulators
 
 | File | Topic |
 |---|---|
@@ -932,7 +1022,7 @@ zx/
 | `cspect.md` | CSpect: ZX Spectrum Next emulator, development focus |
 | `test_suites.md` | Test suites: FUSE test suite, ZEXALL, Z80 exerciser, diagnostic ROMs, timing verification |
 
-#### 09_emulation/fpga/ — FPGA Cores
+#### 11_emulation/fpga/ — FPGA Cores
 
 | File | Topic |
 |---|---|
@@ -944,7 +1034,7 @@ zx/
 | `fpga_implementation.md` | FPGA implementation guide: ULA timing in HDL, contention state machines, T-state accuracy |
 | `fpga_timing_accuracy.md` | Timing accuracy: scanline-precise vs T-state-precise, common pitfalls, verification methods |
 
-#### 09_emulation/mcu/ — MCU Chip Emulation
+#### 11_emulation/mcu/ — MCU Chip Emulation
 
 | File | Topic |
 |---|---|
@@ -969,7 +1059,8 @@ Articles are written in priority order. README.md is synthesized AFTER articles 
 - Tier 2: Memory maps + I/O ports (model-specific memory and port articles) — ✅ **COMPLETE** (9 articles + 4 SVG schematics + Verilog equivalents)
 - Tier 3: Display timing + screen layout (foundation for graphics) — 📝 **IN PROGRESS** (12 of 19)
 - Tier 4: Hardware per-stream articles — 2 articles exist (ula_timing, clone_timing)
-- Tier 5: Everything else
+- Tier 5: Sound synthesis — 📝 **IN PROGRESS** (2 articles exist: ay_ym_synthesis comprehensive, multitrack_multichip outline)
+- Tier 6: Everything else
 
 After articles exist: README.md (documentation map), TODO.md (gap analysis), section README.md indexes.
 

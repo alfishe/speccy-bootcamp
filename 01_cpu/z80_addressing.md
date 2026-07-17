@@ -7,7 +7,7 @@ The Z80 has **10 addressing modes** — more than any contemporary 8-bit process
 The Z80 also has a **separate I/O address space** accessed through `IN` and `OUT` instructions. On the ZX Spectrum, I/O port partial decoding means that the 16-bit address bus is driven during I/O operations, but peripherals decode only a subset of address lines — creating port mirroring that differs per model.
 
 > [!NOTE]
-> For the complete instruction set using these modes, see [z80_instruction_set.md](z80_instruction_set.md). For how partial I/O decoding varies across ZX Spectrum models, see [io_port_map](../08_references/io_port_map.md).
+> For the complete instruction set using these modes, see [z80_instruction_set.md](z80_instruction_set.md). For how partial I/O decoding varies across ZX Spectrum models, see [io_port_map](../10_references/io_port_map.md).
 
 ---
 
@@ -300,7 +300,7 @@ This creates a **port mirroring** effect. Code that writes to `#01FE` will also 
 | ZX Spectrum Next | Many ports | Full decoding on most | Minimal mirroring |
 
 > [!WARNING]
-> **Code that uses "mirrored" port addresses will break on hardware that decodes more address lines.** A program that writes to `#01FE` to change the border will fail on a machine that decodes more than A0. Always use the canonical port address (`#FE`) to maximize compatibility. See [io_port_map](../08_references/io_port_map.md) for the complete per-model port decoding reference.
+> **Code that uses "mirrored" port addresses will break on hardware that decodes more address lines.** A program that writes to `#01FE` to change the border will fail on a machine that decodes more than A0. Always use the canonical port address (`#FE`) to maximize compatibility. See [io_port_map](../10_references/io_port_map.md) for the complete per-model port decoding reference.
 
 ### Safe I/O Port Access Pattern
 
@@ -473,5 +473,5 @@ Using `IN r,(C)` / `OUT (C),r` gives you **full 16-bit control** over the port a
 
 - [z80_architecture.md](z80_architecture.md) — register file and CPU internals
 - [z80_instruction_set.md](z80_instruction_set.md) — which instructions use which modes
-- [io_port_map](../08_references/io_port_map.md) — complete per-model port decoding reference
+- [io_port_map](../10_references/io_port_map.md) — complete per-model port decoding reference
 - [contention_model](../05_development/03_memory_and_io/contention_model.md) — how memory access timing varies by address

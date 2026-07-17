@@ -392,7 +392,7 @@ Port    Decoding       Direction   Function                        Models
 ──────────────────────────────────────────────────────────────────────────────
 
 For the COMPLETE port map covering ALL peripherals (FDC, IDE, mouse, sound cards),
-see the reference: [io_port_map.md](../../08_references/io_port_map.md)
+see the reference: [io_port_map.md](../../10_references/io_port_map.md)
 ```
 
 ---
@@ -413,7 +413,7 @@ Port    Decoding       Direction   Function                        Models
 ──────────────────────────────────────────────────────────────────────────────
 
 For the COMPLETE port map covering ALL peripherals (FDC, IDE, mouse, sound cards),
-see the reference: [io_port_map.md](../../08_references/io_port_map.md)
+see the reference: [io_port_map.md](../../10_references/io_port_map.md)
 ```
 
 ---

@@ -274,4 +274,4 @@ For detailed timing diagrams, contention patterns, and model-specific behavior:
 - **Interrupt programming**: [interrupt_overview.md](../04_interrupts/interrupt_overview.md)
 - **Race the beam** (timing-critical effects): [race_the_beam.md](../04_interrupts/race_the_beam.md)
 - **Screen pixel layout**: [screen_layout.md](../03_memory_and_io/screen_layout.md)
-- **Emulation implications** (non-standard frame rates on modern displays): [cycle_exact_accuracy.md](../../09_emulation/software/cycle_exact_accuracy.md)
+- **Emulation implications** (non-standard frame rates on modern displays): [cycle_exact_accuracy.md](../../11_emulation/software/cycle_exact_accuracy.md)

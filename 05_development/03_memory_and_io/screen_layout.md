@@ -322,4 +322,4 @@ Attribute file (#5800–#5AFF, 768 bytes):
 - **Contention model** (why screen access is slow during display): [contention_model.md](contention_model.md)
 - **Graphics techniques** (sprites, scrolling, multicolor): [06_graphics/README.md](../06_graphics/README.md)
 - **Attribute color system** (INK, PAPER, BRIGHT, FLASH): [color_system.md](../05_display_and_timing/color_system.md)
-- **Complete I/O port map** (all ports, all models, decoding bitmasks): [io_port_map.md](../../08_references/io_port_map.md)
+- **Complete I/O port map** (all ports, all models, decoding bitmasks): [io_port_map.md](../../10_references/io_port_map.md)
