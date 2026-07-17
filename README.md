@@ -86,7 +86,14 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [ay_ym_synthesis.md](06_sound/synthesis/ay_ym_synthesis.md) | **Comprehensive AY/YM sound generation**: internal counter model, phase reset, sync-square, PWM, SID-sound, envelope exploitation, sample playback, drum synthesis |
 | [ay_ym_perception.md](06_sound/synthesis/ay_ym_perception.md) | **The AY Sound: Perception, Emotion, and the Hardware Soul** — ABC vs ACB holy war, AY vs YM differences, why real hardware sounds different, psychoacoustics, nostalgia, recapturing the sound |
 | [beeper_synthesis.md](06_sound/synthesis/beeper_synthesis.md) | **1-Bit Beeper Synthesis**: PWM engines, multi-channel tricks, DSP emulation physics |
+| [shiru_ear_shaver_analysis.md](06_sound/synthesis/shiru_ear_shaver_analysis.md) | **Case Study:** Reverse engineering Shiru's *Ear Shaver* 1-bit engine |
 | [multitrack_multichip.md](06_sound/synthesis/multitrack_multichip.md) | Multi-track and multi-chip synthesis outline: TurboSound, cross-chip effects, synchronization |
+
+#### Sound Hardware
+
+| Article | Description |
+|---------|------------|
+| [covox_sounDrive.md](06_sound/hardware/covox_sounDrive.md) | **Covox & SounDrive**: 8-bit DAC hardware mixing, sample playback, Z80 bottlenecks, T-state limits |
 
 *See [06_sound/README.md](06_sound/README.md) for the full sound section catalog.*
 
@@ -140,16 +147,18 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 **Sound and music programmers:**
 
 22. [1-Bit Beeper Synthesis](06_sound/synthesis/beeper_synthesis.md) — PWM fundamentals, emulation physics, multi-channel tracking
-23. [AY/YM Sound Generation](06_sound/synthesis/ay_ym_synthesis.md) — internal counter model, phase reset, sync-square, envelope exploitation
-24. [Multi-Track and Multi-Chip Synthesis](06_sound/synthesis/multitrack_multichip.md) — TurboSound, cross-chip effects
+23. [Ear Shaver Case Study](06_sound/synthesis/shiru_ear_shaver_analysis.md) — Extreme 1-bit engine reverse engineering
+24. [Covox & SounDrive PCM Playback](06_sound/hardware/covox_sounDrive.md) — Resistor ladders and hardware mixing
+25. [AY/YM Sound Generation](06_sound/synthesis/ay_ym_synthesis.md) — internal counter model, phase reset, sync-square, envelope exploitation
+26. [Multi-Track and Multi-Chip Synthesis](06_sound/synthesis/multitrack_multichip.md) — TurboSound, cross-chip effects
 
 **Bridge to advanced optimization:**
 
-24. [Z80 Coding Practices](01_cpu/z80_coding_practices.md)
+27. [Z80 Coding Practices](01_cpu/z80_coding_practices.md)
 
 **Coming from modern platforms:**
 
-25. [Z80 vs Modern](01_cpu/z80_vs_modern.md)
+28. [Z80 vs Modern](01_cpu/z80_vs_modern.md)
 
 ---
 
