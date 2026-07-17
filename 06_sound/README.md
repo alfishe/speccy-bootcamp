@@ -28,6 +28,7 @@ Sound generation theory and practice — how to make the chips produce the sound
 | [ay_ym_synthesis.md](synthesis/ay_ym_synthesis.md) | **Comprehensive AY/YM sound generation**: internal counter model, register mechanics, phase reset, sync-square, PWM, envelope exploitation, SID-sound, sample playback |
 | [ay_ym_perception.md](synthesis/ay_ym_perception.md) | **The AY Sound: Perception, Emotion, and the Hardware Soul** — ABC vs ACB, AY vs YM, analog vs emulation, psychoacoustics, nostalgia, recapturing the sound |
 | [beeper_synthesis.md](synthesis/beeper_synthesis.md) | 1-bit beeper synthesis: PWM engines, multi-channel tricks, timing constraints |
+| [shiru_ear_shaver_analysis.md](synthesis/shiru_ear_shaver_analysis.md) | **Case Study:** Reverse engineering Shiru's *Ear Shaver* 1-bit engine via API forensics |
 | [multitrack_multichip.md](synthesis/multitrack_multichip.md) | Multi-track and multi-chip synthesis: TurboSound, interleaved channels, cross-chip effects, synchronization |
 
 ### [Sound Hardware](hardware/README.md) *(planned)*

@@ -569,11 +569,61 @@ The earliest and most CPU-efficient method is to apply bitwise logic to the curr
 - **OR Mixing:** If either channel is high, output `1`. This causes severe phase cancellation; if one channel is playing a wide pulse, it literally "drowns out" the other channels by pinning the speaker high.
 - **XOR Mixing:** Output `1` only if the channels are different. This was famously used by legends like Tim Follin. Mathematically, XORing two square waves acts as a **1-bit Ring Modulator**. It preserves both frequencies but introduces intense, metallic **Intermodulation Distortion (IMD)**, generating sum and difference frequencies that make the music sound incredibly gritty and aggressive.
 
+```z80
+; Simplified 2-Channel XOR Mixing Engine
+mixer_loop:
+        ; --- Channel 1 ---
+        DEC HL             ; Decrement Ch1 frequency counter
+        LD A, H
+        OR L
+        JR NZ, update_ch2  ; If not zero, skip to Ch2
+        
+        LD HL, (pitch1)    ; Reset Ch1 counter
+        LD A, (bit_state)  
+        XOR #10            ; Toggle bit 4 (XOR logic)
+        LD (bit_state), A  ; Save mixed state
+
+update_ch2:
+        ; --- Channel 2 ---
+        DEC DE             ; Decrement Ch2 frequency counter
+        LD A, D
+        OR E
+        JR NZ, output      ; If not zero, skip to output
+        
+        LD DE, (pitch2)    ; Reset Ch2 counter
+        LD A, (bit_state)
+        XOR #10            ; Toggle bit 4 again (XOR logic)
+        LD (bit_state), A  ; Save mixed state
+
+output:
+        LD A, (bit_state)
+        OUT (#FE), A       ; Output the logically XOR-mixed bit
+        JR mixer_loop
+```
+
 ### 2. Time-Division Multiplexing (Interleaving)
 Instead of mixing the bits mathematically, the engine simply switches focus so fast that the human ear (and speaker inertia) cannot tell.
 - **The Technique:** The engine rapidly loops: `Output Ch A -> Wait -> Output Ch B -> Wait -> Output Ch C`. 
 - **The Result:** The physical mass of the speaker cone cannot snap back and forth between the distinct channel outputs fast enough, so it naturally **averages** their positions in physical space.
 - **Pros/Cons:** This drastically reduces the nasty digital distortion of XOR mixing, producing much cleaner, distinct notes. However, because each channel only gets a fraction of the speaker's time, the overall volume of the music drops as more channels are added.
+
+```z80
+; Interleaved Mixing Loop (2 Channels)
+; Focus switches rapidly between channels, relying on 
+; physical speaker inertia to average the sound.
+interleave_loop:
+        ; --- Service Channel 1 ---
+        LD A, (ch1_state)
+        OUT (#FE), A       ; Drive speaker for Ch1
+        CALL update_ch1    ; Dec counter, toggle state if zero
+
+        ; --- Service Channel 2 ---
+        LD A, (ch2_state)
+        OUT (#FE), A       ; Drive speaker for Ch2
+        CALL update_ch2    ; Dec counter, toggle state if zero
+        
+        JR interleave_loop
+```
 
 ### 3. Pre-Summing and PWM (Software DAC)
 The most modern, advanced engines (like *Octode* or *Squeeker*) achieve incredibly clean, distortion-free mixing by turning the 1-bit pin into a virtual DAC (Digital-to-Analog Converter).
@@ -584,6 +634,32 @@ The most modern, advanced engines (like *Octode* or *Squeeker*) achieve incredib
   - Amplitude 4 = `1111` (100% Duty)
 - **The Result:** By firing these density patterns at ultrasonic speeds (~80 kHz), the speaker cone hovers at exact intermediate physical positions (0%, 25%, 50%, 100%).
 - **Why it matters:** This eliminates digital clipping and logical distortion entirely. The result sounds almost identical to music played through an AY chip or an Amiga DAC. The catch? It requires the Z80 CPU to run the mixing loop at absolute maximum speed, utilizing 100% of the processor and leaving zero cycles for rendering graphics or game logic.
+
+```z80
+; Pre-Summing PWM DAC Loop
+; The engine calculates the number of active channels (0-4)
+; and uses it to index a PWM bit-pattern array.
+pwm_loop:
+        ; Assume accumulator (A) holds the summed amplitude (0-4)
+        ; resulting from checking all four channel counters.
+        
+        LD HL, PWM_TABLE
+        ADD A, L
+        LD L, A            ; HL points to the PWM density pattern
+        
+        LD A, (HL)         ; Fetch PWM pattern (e.g. %10101010)
+        OUT (#FE), A       ; Fire density sequence to ULA
+        
+        ; ... update oscillators and sum again ...
+        JR pwm_loop
+
+PWM_TABLE:
+        DB %00000000       ; Amplitude 0 (0% duty, silence)
+        DB %10001000       ; Amplitude 1 (25% duty, soft)
+        DB %10101010       ; Amplitude 2 (50% duty, medium)
+        DB %11101110       ; Amplitude 3 (75% duty, loud)
+        DB %11111111       ; Amplitude 4 (100% duty, peak)
+```
 
 ---
 
@@ -615,6 +691,43 @@ To sound "authentic," emulators must pass the anti-aliased square waves through 
 
 ---
 
+## Z80 Physical Constraints and the Turbo Era
+
+### The Real-Time Synthesis Imperative (Why Not Pre-Render?)
+A common, logical assumption is that 1-bit polyphonic music is simply a pre-rendered audio stream that the Z80 decompresses and outputs to the port. If this were true, the number of musical channels wouldn't affect the playback loop speed.
+
+However, a pre-rendered 1-bit stream at a modest 17.7 kHz requires ~2.2 Kilobytes of RAM per second. A standard 3-minute song would require nearly **400 Kilobytes** of memory. Even with aggressive delta-packing or Lempel-Ziv compression, streaming audio is entirely impossible within the ZX Spectrum's 48K RAM limit.
+
+Therefore, the Z80 cannot just play an audio file; it must act as a **real-time algorithmic synthesizer**. 
+During playback, the Z80 simulates physical oscillators using its 16-bit registers:
+1. Decrement Channel 1's frequency counter (`DEC HL`).
+2. If it hits zero, flip Channel 1's bit state and reset the counter.
+3. Decrement Channel 2's frequency counter (`DEC DE`).
+4. If it hits zero, flip Channel 2's bit state.
+5. Mix the active channel states (via XOR, OR, or mathematical addition).
+6. Output the final mixed bit to the ULA port `#FE`.
+7. Loop back to step 1.
+
+This is exactly why **the channel count dictates the maximum sample rate**. Every single channel added to the polyphony requires injecting more `DEC`, `JR NZ`, and mixing instructions into that critical inner loop. 
+
+### The 3.5 MHz Hard Limit
+While the Z80 CPU in a standard 48K Spectrum runs at 3.54690 MHz, a software synthesis routine doing actual work (calculating LFSR noise, summing 4 channels, updating pointers, and manually flipping the single bit on the ULA) requires dozens or hundreds of T-states per loop. 
+
+Because of this, advanced multi-channel engines rarely achieve the theoretical ~78 kHz maximum carrier frequency. A complex 4-channel PWM engine might only manage a loop of 200 T-states, resulting in an effective sample rate of just **17.7 kHz**. This causes two physical problems:
+1. **Carrier Whine:** The PWM carrier frequency drops from ultrasonic into the audible human hearing range, creating a continuous high-pitched whine behind the music.
+2. **Frequency Resolution:** Lower sample rates mean fewer discrete frequencies can be accurately hit, causing tuning issues on higher notes.
+
+### The Value of Turbo Machines (7, 14, 28 MHz and ZX Next)
+Modern FPGA machines (like the ZX Spectrum Next) and Russian clones (Pentagon 1024SL, ATM Turbo) offer hardware "Turbo Modes" running at 7 MHz, 14 MHz, or 28 MHz. 
+
+Does this benefit 1-bit sound? Yes, but with a massive caveat:
+- **The Value (Higher Sample Rates):** If a modern engine is specifically compiled to target 28 MHz, that 17.7 kHz carrier frequency jumps to **141.6 kHz**. This entirely eliminates audible carrier whine, allows for crystal-clear 8-channel PWM mixing without distortion, and provides perfect pitch tuning resolution. The ZX Next community has seen releases of "Next-only" beeper engines that leverage 28 MHz to produce Amiga-quality sample playback through the 1-bit port.
+- **The Danger (Cycle-Exact Breakage):** Classic 1-bit engines are purely software-timed. They use fixed loops (like `DJNZ` or arrays of `NOP`s) tuned exactly to 3.54690 MHz. If you run a classic Tim Follin 48K engine on a 28 MHz machine, the music will simply play **8 times faster** and the pitch will be pitched up by 3 octaves. 
+
+Therefore, turbo modes are incredibly valuable for pushing the theoretical limits of 1-bit audio quality, but they absolutely require **turbo-aware engines** written or compiled specifically for those faster clock speeds.
+
+---
+
 ## The Aesthetic of Constraint
 
 ### Why Beeper Music Matters
@@ -630,6 +743,14 @@ This is what makes the beeper a living, evolving platform. Unlike the AY chip, w
 ---
 
 ## Modern Composition Tools and Frameworks
+
+> [!IMPORTANT]
+> **Shiru's 1-Bit Software Hub**
+> The modern beeper scene is largely driven by tools created by one legendary scener: **Shiru** (`shiru.untergrund.net`). If you are looking to get started, you must visit his software page. It is the definitive archive of 1-bit development tools, including:
+> - **[1tracker](https://shiru.untergrund.net/software.shtml):** A modular, cross-platform tracker supporting 30+ 1-bit engines and offering a scripting interface to develop your own custom Z80 synthesis algorithms.
+> - **[Beepola](https://shiru.untergrund.net/software.shtml):** The definitive, easy-to-use Windows tracker that bundles classic engines like Phaser and Tritone.
+> - **[BeepFX](https://shiru.untergrund.net/software.shtml):** A specialized sound effect generator that compiles purely algorithmic Z80 routines for 1-bit explosions and lasers without needing RAM-heavy samples.
+> - **[The 1-Bit Music Portal](https://shiru.untergrund.net/1bit/):** Shiru's massive central hub archiving 1-bit tools, engines, source code, and scene releases.
 
 Because 1-bit music is defined entirely by Z80 assembly algorithms (engines), you cannot simply drop an MP3 or a standard MIDI file onto a ZX Spectrum and expect it to play. Standard audio (like WAV) requires too much memory and CPU to bit-bang directly as PWM. 
 

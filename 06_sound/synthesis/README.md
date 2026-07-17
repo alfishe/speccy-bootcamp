@@ -16,6 +16,7 @@
 | [ay_ym_perception.md](ay_ym_perception.md) | **The AY Sound: Perception, Emotion, and the Hardware Soul** — ABC vs ACB holy war, AY vs YM differences, analog signal chain, psychoacoustics, nostalgia, recapturing the sound |
 | [multitrack_multichip.md](multitrack_multichip.md) | Multi-track and multi-chip synthesis outline: TurboSound, interleaved channels, cross-chip effects, synchronization |
 | [beeper_synthesis.md](beeper_synthesis.md) | **1-Bit Beeper Synthesis** — from ROM beep to multi-channel polyphony: PWM fundamentals, Tim Follin engines, Shiru's Tritone/QChan/Squat/1tracker, utz's Octode/Fluidcore, Earshaver, drum synthesis, sample playback, competition scene |
+| [shiru_ear_shaver_analysis.md](shiru_ear_shaver_analysis.md) | **Case Study: Shiru's *Ear Shaver* Engine** — forensic teardown of all 7 synthesis modes, DDS phase accumulators, branchless PWM via IX half-registers, time-division multiplexing, self-modifying code, stream compression, memory map, cross-platform portability |
 
 ---
 
