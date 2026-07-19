@@ -29,6 +29,7 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | Article | Description |
 |---------|------------|
 | [ula_timing.md](02_hardware/original/ula_timing.md) | ULA frame timing per model, memory contention, multicolor effects, early/late timing, performance budget |
+| [ula_architecture.md](02_hardware/original/ula_architecture.md) | Inside the Ferranti ULA: video pipeline, bus arbitration, #FE register, keyboard/tape/sound cells, revisions, gate arrays, replacements |
 
 #### Soviet Clone Ecosystem
 
