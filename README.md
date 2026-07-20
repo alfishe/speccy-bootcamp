@@ -98,7 +98,16 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 
 | Article | Description |
 |---------|------------|
-| [covox_sounDrive.md](06_sound/hardware/covox_sounDrive.md) | **Covox & SounDrive**: 8-bit DAC hardware mixing, sample playback, Z80 bottlenecks, T-state limits |
+| [sound_overview.md](06_sound/hardware/sound_overview.md) | **Sound hardware ecosystem overview + decision guide** — navigation hub for the entire subdirectory |
+| [ay_3_8912.md](06_sound/hardware/ay_3_8912.md) | AY-3-8912 / YM2149F PSG: pinout, register map, clock domains, DAC characteristics, per-model differences |
+| [stereo_audio.md](06_sound/hardware/stereo_audio.md) | Stereo audio modifications: ABC/ACB separation, BytesDelight |
+| [turbosound.md](06_sound/hardware/turbosound.md) | TurboSound: dual/triple AY, port decoding, programming model |
+| [turbosound_fm.md](06_sound/hardware/turbosound_fm.md) | TurboSound FM: YM2203 (OPN) FM synthesis, 3 FM + 3 SSG channels |
+| [saa1099.md](06_sound/hardware/saa1099.md) | SAA1099 PSG: Philips sound chip, 6-channel stereo |
+| [covox_sounDrive.md](06_sound/hardware/covox_sounDrive.md) | **Covox & SounDrive**: 8-bit DAC hardware mixing, sample playback, TLC7226CN quad DAC |
+| [gs_general_sound.md](06_sound/hardware/gs_general_sound.md) | General Sound: dedicated Z80-based sound card, 4-channel sample mixing |
+| [moonsound.md](06_sound/hardware/moonsound.md) | MoonSound (OPL4/YMF278B): 24-channel wavetable + 18-channel FM |
+| [zx_next_audio.md](06_sound/hardware/zx_next_audio.md) | ZX Spectrum Next audio: 3× AY + beeper + DMA sample playback |
 
 *See [06_sound/README.md](06_sound/README.md) for the full sound section catalog.*
 
@@ -152,19 +161,28 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 
 **Sound and music programmers:**
 
-22. [1-Bit Beeper Synthesis](06_sound/synthesis/beeper_synthesis.md) — PWM fundamentals, emulation physics, multi-channel tracking
-23. [Ear Shaver Case Study](06_sound/synthesis/shiru_ear_shaver_analysis.md) — Extreme 1-bit engine reverse engineering
-24. [Covox & SounDrive PCM Playback](06_sound/hardware/covox_sounDrive.md) — Resistor ladders and hardware mixing
-25. [AY/YM Sound Generation](06_sound/synthesis/ay_ym_synthesis.md) — internal counter model, phase reset, sync-square, envelope exploitation
-26. [Multi-Track and Multi-Chip Synthesis](06_sound/synthesis/multitrack_multichip.md) — TurboSound, cross-chip effects
+22. [Sound Hardware Ecosystem Overview](06_sound/hardware/sound_overview.md) — the decision guide; read this first to know which hardware to target
+23. [AY-3-8912 / YM2149F PSG Silicon](06_sound/hardware/ay_3_8912.md) — the foundation chip on every 128K and clone
+24. [Stereo Audio Modifications](06_sound/hardware/stereo_audio.md) — ABC/ACB/BytesDelight wiring
+25. [1-Bit Beeper Synthesis](06_sound/synthesis/beeper_synthesis.md) — PWM fundamentals, emulation physics, multi-channel tracking
+26. [Ear Shaver Case Study](06_sound/synthesis/shiru_ear_shaver_analysis.md) — Extreme 1-bit engine reverse engineering
+27. [AY/YM Sound Generation](06_sound/synthesis/ay_ym_synthesis.md) — internal counter model, phase reset, sync-square, envelope exploitation
+28. [TurboSound](06_sound/hardware/turbosound.md) — dual/triple AY bank-switching
+29. [TurboSound FM](06_sound/hardware/turbosound_fm.md) — YM2203 OPN FM expansion
+30. [Covox & SounDrive PCM Playback](06_sound/hardware/covox_sounDrive.md) — resistor ladders, TLC7226CN quad DAC, hardware mixing
+31. [General Sound](06_sound/hardware/gs_general_sound.md) — dedicated Z80 coprocessor sound card
+32. [MoonSound (OPL4)](06_sound/hardware/moonsound.md) — wavetable + FM synthesis
+33. [SAA1099 Philips PSG](06_sound/hardware/saa1099.md) — 6-channel stereo alternative
+34. [ZX Spectrum Next Audio](06_sound/hardware/zx_next_audio.md) — 3× FPGA AY + DMA + beeper
+35. [Multi-Track and Multi-Chip Synthesis](06_sound/synthesis/multitrack_multichip.md) — TurboSound, cross-chip effects
 
 **Bridge to advanced optimization:**
 
-27. [Z80 Coding Practices](01_cpu/z80_coding_practices.md)
+36. [Z80 Coding Practices](01_cpu/z80_coding_practices.md)
 
 **Coming from modern platforms:**
 
-28. [Z80 vs Modern](01_cpu/z80_vs_modern.md)
+37. [Z80 vs Modern](01_cpu/z80_vs_modern.md)
 
 ---
 

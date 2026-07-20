@@ -287,16 +287,16 @@ zx/
 │   │   └── multitrack_multichip.md    # ✅ Multi-chip outline
 │   ├── hardware/
 │   │   ├── README.md
-│   │   ├── sound_overview.md          # 📄 Stub
-│   │   ├── ay_3_8912.md               # 📄 Stub
-│   │   ├── turbosound.md              # 📄 Stub
-│   │   ├── turbosound_fm.md           # 📄 Stub
-│   │   ├── covox_sounDrive.md         # 📄 Stub
-│   │   ├── gs_general_sound.md        # 📄 Stub
-│   │   ├── moonsound.md               # 📄 Stub
-│   │   ├── saa1099.md                 # 📄 Stub
-│   │   ├── zx_next_audio.md           # 📄 Stub
-│   │   └── stereo_audio.md            # 📄 Stub
+│   │   ├── sound_overview.md          # ✅ Ecosystem overview + decision guide
+│   │   ├── ay_3_8912.md               # ✅ AY/YM PSG silicon reference
+│   │   ├── turbosound.md              # ✅ Dual/triple AY bank-switching
+│   │   ├── turbosound_fm.md           # ✅ YM2203 OPN FM expansion
+│   │   ├── covox_sounDrive.md         # ✅ Covox/SounDrive + TLC7226CN quad DAC
+│   │   ├── gs_general_sound.md        # ✅ General Sound Z80 coprocessor
+│   │   ├── moonsound.md               # ✅ MoonSound (OPL4) wavetable + FM
+│   │   ├── saa1099.md                 # ✅ Philips SAA1099 PSG
+│   │   ├── zx_next_audio.md           # ✅ ZX Spectrum Next 3×AY + DMA + beeper
+│   │   └── stereo_audio.md            # ✅ ABC/ACB/BytesDelight stereo mods
 │   ├── trackers_and_formats/
 │   │   ├── README.md
 │   │   ├── tracker_history.md         # 📄 Stub
