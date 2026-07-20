@@ -15,7 +15,7 @@ This continuity is the defining feature of the ecosystem. A `.PT3` module writte
 The article is organized into three eras plus the modern PC generation:
 
 1. **Era 1 (1985–2002): On-Spectrum trackers** — beeper trackers, AY trackers, the Pro Tracker lineage, and digital (Covox/GS) trackers.
-2. **Era 2 (2000–present): PC-based AY editors** — Vortex Tracker II (Bulba) and Arkos Tracker (Julien Nevo).
+2. **Era 2 (2000–present): PC-based AY editors** — Vortex Tracker II (Sergey Bulba) and Arkos Tracker (Julien Nevo).
 3. **Era 3 (2010s–present): Multi-platform and modern** — Vortex Tracker 3 (open-source C# port), Arkos Tracker 3, and web-based tools.
 
 ### Naming Convention
@@ -30,7 +30,7 @@ The article is organized into three eras plus the modern PC generation:
 | **Ornament** | A PT3-specific term for an arpeggio pattern — a list of pitch offsets applied to a note over time |
 | **Golden Disk Corp.** | St. Petersburg software house (sometimes spelled "Golden Disc") — authors of Pro Tracker 1.x/2.x/3.x |
 | **Bzyk** | Jarek Burczynski (Poland) — author of the original Sound Tracker (1990), the earliest AY grid tracker |
-| **Bulba (S.V.)** | Sergey Bulba — author of Vortex Tracker II (PC, 2000+), the standard PC-based PT3 editor. Often mistakenly credited with creating PT3 itself; he didn't — Golden Disk Corp. did |
+| **Bulba (S.V.)** | Sergey Bulba — author of Vortex Tracker II (PC, 2000+), the standard PC-based PT3 editor. |
 
 ---
 
@@ -219,7 +219,7 @@ Two formats dominate today: **PT3** (the on-Spectrum legacy, kept alive by VTII/
 
 ## References
 
-- [zxtunes.com software list](https://zxtunes.com/software_list.php) — authoritative catalogue of 30 Spectrum-native editors (Russian interface)
+- [zxtunes.com software list](https://zxtunes.com/software_list.php) — authoritative catalogue of 30 Spectrum-native editors (Russian)
 - [Bulba's Vortex Project](https://bulba.untergrund.net/) — Vortex Tracker II home, with the full import format list
 - [Arkos Tracker 3 on GitHub](https://github.com/ArkosTracker/arkestracker) — actively maintained source
 - [Vortex Tracker 3 on GitHub](https://github.com/RustyPixelsUK/VortexTracker3) — open-source VT II port

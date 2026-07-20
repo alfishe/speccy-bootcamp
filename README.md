@@ -109,6 +109,17 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [moonsound.md](06_sound/hardware/moonsound.md) | MoonSound (OPL4/YMF278B): 24-channel wavetable + 18-channel FM |
 | [zx_next_audio.md](06_sound/hardware/zx_next_audio.md) | ZX Spectrum Next audio: 3× AY + beeper + DMA sample playback |
 
+#### Trackers & Formats
+
+| Article | Description |
+|---------|------------|
+| [tracker_history.md](06_sound/trackers_and_formats/tracker_history.md) | **30-year history of ZX music editors** — beeper trackers (1985), Pro Tracker lineage (Golden Disk Corp.), VTII / Arkos split, modern cross-platform tools (AT3, VT3) |
+| [ay_music_formats.md](06_sound/trackers_and_formats/ay_music_formats.md) | **Master catalogue**: every AY/YM music file format (`.PT3`, `.PSG`, `.YM`, `.AY`, `.AKG`, etc.) — modules, dumps, containers, modern embedded |
+| [vortex_tracker.md](06_sound/trackers_and_formats/vortex_tracker.md) | Vortex Tracker II — the de facto PC-based PT3 editor (Bulba, 2000–present) |
+| [arkos_tracker.md](06_sound/trackers_and_formats/arkos_tracker.md) | Arkos Tracker 2/3 — modern cross-platform AY tracker (Targhan, 2003–present) |
+| [pt3_format.md](06_sound/trackers_and_formats/pt3_format.md) | PT3 module format — byte-level binary specification (header, patterns, samples, ornaments, player operation) |
+| [psg_format.md](06_sound/trackers_and_formats/psg_format.md) | PSG register dump format — universal pre-rendered AY register stream |
+
 *See [06_sound/README.md](06_sound/README.md) for the full sound section catalog.*
 
 ### 07 — Demoscene
@@ -175,6 +186,12 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 33. [SAA1099 Philips PSG](06_sound/hardware/saa1099.md) — 6-channel stereo alternative
 34. [ZX Spectrum Next Audio](06_sound/hardware/zx_next_audio.md) — 3× FPGA AY + DMA + beeper
 35. [Multi-Track and Multi-Chip Synthesis](06_sound/synthesis/multitrack_multichip.md) — TurboSound, cross-chip effects
+36. [Tracker History](06_sound/trackers_and_formats/tracker_history.md) — 30 years of ZX music editors: from Sound Tracker (1990) to Arkos Tracker 3
+37. [AY Music Formats](06_sound/trackers_and_formats/ay_music_formats.md) — master catalogue: `.PT3`, `.PSG`, `.YM`, `.AY`, `.AKG`, all module/dump/container formats
+38. [Vortex Tracker II](06_sound/trackers_and_formats/vortex_tracker.md) — the de facto PC-based PT3 editor
+39. [Arkos Tracker 2/3](06_sound/trackers_and_formats/arkos_tracker.md) — modern cross-platform alternative for new composers in 2025
+40. [PT3 Module Format](06_sound/trackers_and_formats/pt3_format.md) — byte-level binary specification of the de facto interchange format
+41. [PSG Register Dump Format](06_sound/trackers_and_formats/psg_format.md) — the universal pre-rendered AY dump format
 
 **Bridge to advanced optimization:**
 

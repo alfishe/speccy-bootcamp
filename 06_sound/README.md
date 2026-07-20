@@ -48,18 +48,18 @@ Hardware reference for every sound device across all three tracks.
 | [moonsound.md](hardware/moonsound.md) | MoonSound (OPL4/YMF278B): 24-channel wavetable + 18-channel FM |
 | [zx_next_audio.md](hardware/zx_next_audio.md) | ZX Spectrum Next audio: 3× AY + beeper + DMA sample playback |
 
-### [Trackers, Editors & Formats](trackers_and_formats/README.md) *(planned)*
+### [Trackers, Editors & Formats](trackers_and_formats/README.md)
 
-The software ecosystem for creating and storing AY/YM music.
+The software ecosystem for creating and storing AY/YM music — from the original Sound Tracker (1990) through modern cross-platform tools like Arkos Tracker 3.
 
 | Article | Description |
 |---------|-------------|
-| `tracker_history.md` | Chronological history: Sound Tracker (1990) → Pro Tracker 3 → Vortex Tracker II → Arkos Tracker |
-| `vortex_tracker.md` | Vortex Tracker II: the de facto PC-based PT3 editor, format import/export |
-| `arkos_tracker.md` | Arkos Tracker 2/3: modern cross-platform AY/YM tracker with multi-PSG support |
-| `pt3_format.md` | PT3 module format specification: header, patterns, ornaments, instruments |
-| `ay_music_formats.md` | All AY music formats: module formats (.PT3/.ASC/.STC/.STP), register dumps (.PSG/.YM/.VTX), memory dumps (.AY) |
-| `psg_format.md` | PSG register dump format: frame structure, escape bytes, clock specification |
+| [tracker_history.md](trackers_and_formats/tracker_history.md) | **30-year history of ZX music editors** — beeper trackers (1985), Pro Tracker lineage (Golden Disk Corp.), VTII / Arkos split, modern cross-platform tools |
+| [ay_music_formats.md](trackers_and_formats/ay_music_formats.md) | **Master catalogue**: every AY/YM music file format (`.PT3`, `.PSG`, `.YM`, `.AY`, `.AKG`, etc.) — modules, dumps, containers, modern embedded |
+| [vortex_tracker.md](trackers_and_formats/vortex_tracker.md) | Vortex Tracker II: the de facto PC-based PT3 editor (Bulba, 2000–present), universal import, TurboSound support |
+| [arkos_tracker.md](trackers_and_formats/arkos_tracker.md) | Arkos Tracker 2/3: modern cross-platform AY/YM tracker (Targhan, 2003–present), AKG/AKM/AKY players |
+| [pt3_format.md](trackers_and_formats/pt3_format.md) | PT3 module format specification: header, position table, ornaments, samples, patterns, player operation, sub-versions |
+| [psg_format.md](trackers_and_formats/psg_format.md) | PSG register dump format: frame structure, skip opcode, variants (`.YM`, `.VTX`), 20-byte playback routine |
 
 ### [Player Routines](players/README.md) *(planned)*
 
