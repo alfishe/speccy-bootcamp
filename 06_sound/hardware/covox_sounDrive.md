@@ -105,6 +105,94 @@ With SounDrive, the Z80 no longer has to do any math. It just fetches a byte for
 
 ![Software vs Hardware Mixing](assets/soundrive_mixing_comparison.svg)
 
+### The TLC7226CN — Single-Chip Quad DAC
+
+The original 1995 SounDrive built its four channels from discrete TTL: four octal latches (typically `74HC273`), four R-2R resistor networks (eight resistors each — thirty-two total), and four op-amp buffers (a quad LM324 or similar). That is roughly forty discrete parts dedicated to mixing. It works, but it consumes board space, requires close-tolerance resistors for linearity, and the resistor mismatch between channels causes audible stereo imbalance.
+
+Modern SounDrive implementations replace that entire parts pile with a single 20-pin IC: the **Texas Instruments TLC7226CN** — a monolithic **quad 8-bit digital-to-analog converter** with per-channel input latches, on-chip output buffer amplifiers, and a microprocessor-compatible bus interface. Four DACs, four latches, four op-amps, one chip.
+
+| Parameter | Value |
+|---|---|
+| **Resolution** | 8 bits (256 levels) per channel |
+| **Channels** | 4 (A, B, C, D) — independent latches |
+| **Package** | 20-pin DIP (also available in PLCC/SOIC) |
+| **Output type** | Voltage-mode with buffered amplifier, ~5 mA source/sink |
+| **Reference** | Single `Vref` pin shared by all 4 DACs (2 V to `VDD`−4 V) |
+| **Supplies** | `VDD` +5 V, `VSS` −5 V (or 0 V for single-supply) |
+| **Bus interface** | 8-bit data (`DB0..DB7`) + `A0`/`A1` register select + `/WR` strobe + `/CS` (tied low in SounDrive use) |
+| **Settling time** | ~6 µs typical (1 LSB accuracy) |
+
+### TLC7226CN Pinout (20-pin DIP)
+
+The pin layout deliberately separates analog (pins 1–6 and 19–20) from digital (pins 7–18) to minimize crosstalk. In typical SounDrive use the chip is strapped for single-supply operation (`VSS` = 0 V = `AGND`), `/CS` is tied low so the chip responds whenever `/WR` falls, and the four `OUTA..OUTD` pins route directly to the stereo op-amp mixer.
+
+```
+              ┌────────────┐
+        OUTB ─┤1         20├── OUTC
+        OUTA ─┤2         19├── OUTD
+         VSS ─┤3         18├── VDD
+         REF ─┤4         17├── A0
+        AGND ─┤5         16├── A1
+        DGND ─┤6         15├── /WR
+         DB7 ─┤7         14├── DB0
+         DB6 ─┤8         13├── DB1
+         DB5 ─┤9         12├── DB2
+         DB4 ─┤10        11├── DB3
+              └────────────┘
+```
+
+> [!NOTE]
+> The `A0`/`A1` inputs form a 2-bit register-select that picks which of the four DAC latches captures `DB0..DB7` on the rising edge of `/WR`. The four combinations map cleanly to SounDrive channels A/B/C/D, so the chip is functionally four SounDrive ports in one package.
+
+### Single-Chip vs. Discrete SounDrive
+
+The table below compares the two SounDrive hardware families. Both produce the same output to software — four bytes written to four I/O ports, four analog outputs summed into stereo — but the engineering trade-offs differ significantly.
+
+| Aspect | Original SounDrive (Flash Inc. 1995) | TLC7226CN SounDrive (e.g., Mick Lab ZXM-SoundCard) |
+|---|---|---|
+| **DAC core** | Discrete R-2R ladder (8 resistors/channel) | Monolithic thin-film R-2R on TLC7226 die |
+| **Input latches** | 4 × `74HC273` (or similar) octal latches | 4 on-chip latches included in TLC7226 |
+| **Output buffers** | 4 × op-amp (LM324 / LM358 quad) | 4 on-chip buffer amplifiers included in TLC7226 |
+| **Total parts for 4 channels** | ~40 components | 1 IC + 4 mixing resistors |
+| **Linearity** | ±1–2 LSB best-case; varies with resistor tolerance | ±1 LSB guaranteed by datasheet |
+| **Channel-to-channel match** | Limited by resistor matching (1% recommended) | Tight, all on same die |
+| **Settling time** | ~1 µs (limited by op-amp slew) | ~6 µs (slower — on-chip buffered output) |
+| **Cost (modern)** | Cheap jellybean parts | TLC7226CN now hard to find; often ~$5–10 NOS |
+| **Software compatibility** | Identical — both respond to ports `#0F`/`#1F`/`#4F`/`#5F` |
+
+The practical takeaway: for software, both families look identical. For hardware builders, the TLC7226 reduces board area and component count dramatically, but the original discrete design is easier to source parts for and faster in terms of analog settling time.
+
+### TLC7226 Bus Interface and Legacy Port Compatibility
+
+The TLC7226 exposes four register slots through `A0`/`A1`: `00`=DAC A, `01`=DAC B, `10`=DAC C, `11`=DAC D. In the simplest decoding scheme the four channels would occupy four consecutive ports (`#FB`, `#FC`, `#FD`, `#FE`). But Soviet SounDrive software expects the original Flash Inc. port map (`#0F`, `#1F`, `#4F`, `#5F`). A TLC7226-based SounDrive must therefore include a small programmable logic device (CPLD or PAL) that decodes the legacy port addresses and translates them into the correct `A0`/`A1` combination for the TLC7226.
+
+```mermaid
+flowchart LR
+    Z80["Z80 bus<br/>A0..A7, /IORQ, /WR"] --> CPLD["Address decode<br/>CPLD / PAL"]
+    CPLD -->|A0_sel, A1_sel| DAC["A0/A1 register select"]
+    CPLD -->|/WR strobe| DAC2["/WR strobe"]
+    Z80 -->|D0..D7| DAC3["TLC7226<br/>DB0..DB7"]
+    DAC3 --> OUTA[OUTA]
+    DAC3 --> OUTB[OUTB]
+    DAC3 --> OUTC[OUTC]
+    DAC3 --> OUTD[OUTD]
+```
+
+The decoding logic also handles the Kempston collision (`#1F`) by either routing that address to the joystick port exclusively or by gating SounDrive writes on a configuration bit set by the user.
+
+### Real-World Example: Mick Lab ZXM-SoundCard
+
+The **ZXM-SoundCard** series by Mick Laboratory (`micklab.ru`) is a documented real-world TLC7226-based SounDrive implementation. It is a multi-function sound card for ZX-Bus / Nemo-Bus machines (ZXM-Phoenix, KAY-256/1024) that combines:
+
+- **TSFM part** — two YM2203 OPN chips (ports `#BFFD` / `#FFFD`, NedoPC-compatible)
+- **SAA1099 part** — Philips PSG chip (ports `#FF` / `#1FF` write, `#04FF` / `#05FF` in later revisions)
+- **SounDrive part** — single TLC7226CN providing four 8-bit DAC channels
+
+The SounDrive part appears only in the **Middle** and **Extreme** board revisions; earlier revisions (00–03, Light) omit it. The card uses a CPLD for address decoding: an Altera **EPM7032STC44** in the Light/Middle revisions and an **EPM7064STC100** in the Extreme revision. The Extreme revision also adds software-selectable clock sources for the YM2203 chips (standard / Amstrad CPC / Atari ST frequencies) via a `#FFFC` configuration port.
+
+> [!NOTE]
+> The ZXM-SoundCard is interesting not because it is unique — there are several TLC7226-based SounDrive implementations in the Soviet clone ecosystem — but because the Mick Lab documentation includes full schematics, CPLD firmware source, and bill of materials for every revision. It is the best-documented reference for how a TLC7226 SounDrive is actually wired.
+
 ---
 
 ## 4. Practical Implementation
@@ -175,14 +263,20 @@ You might think: *"If `LDIR` is the fastest way to move memory, I should use `OU
 
 ## 6. Decision Matrix: Choosing a DAC
 
-If you are developing a modern game or demo and want to play digital samples, you have four main options:
+If you are developing a modern game or demo and want to play digital samples, you have four main options. These are **output method choices**, not platform choices — most methods span multiple hardware tracks. The deciding factor is not what machine the user has, but what sound hardware is fitted to it.
 
-| Target Hardware | Output Method | CPU Load | Quality / Polyphony |
+| Output Method | Typical Hardware | CPU Load | Quality / Polyphony |
 |---|---|---|---|
-| **Original 48K** | [1-Bit Beeper (PWM)](../synthesis/beeper_synthesis.md) | **100%** (halts game) | 1-4 channels, heavily distorted, gritty. |
-| **Original 128K** | [AY Volume Registers](../synthesis/ay_ym_techniques.md) | **100%** (halts game) | 3 channels. 4-bit logarithmic. Quiet and muddy. |
-| **Pentagon / Clones** | **Covox / SounDrive** | **95%** (leaves tiny slice for logic) | 4 channels. 8-bit linear stereo. Clear, punchy Amiga-like audio. |
-| **High-End Clones** | **[General Sound (GS)](gs_general_sound.md)** | **0%** (Fire and forget) | 4 channels, 8-bit. Handled entirely by the GS card's dedicated Z80! |
+| **1-Bit Beeper (PWM)** | Any 48K/128K (built-in speaker port) | **100%** (halts game) | 1–4 channels, heavily distorted, gritty. |
+| **AY Volume Registers** | Any AY-equipped machine | **100%** (halts game) | 3 channels. 4-bit logarithmic. Quiet and muddy. |
+| **Covox / SounDrive** | Any machine with the expansion fitted | **100%** (halts game) | 4 channels. 8-bit linear stereo. Clear, punchy Amiga-like audio. |
+| **[General Sound (GS)](gs_general_sound.md)** | Soviet clones with expansion slot | **0%** (fire and forget) | 4 channels, 8-bit. Handled entirely by the GS card's dedicated Z80. |
+
+> [!IMPORTANT]
+> These methods are **not exclusive to the platforms listed in column two** — those are simply where each method is most commonly encountered. The AY chip is built into every Pentagon; Covox works fine on an original 128K with a suitable expansion; a 48K without any sound add-on can still do beeper PWM. Choose the method first, then state your hardware requirement honestly to the user.
+
+> [!WARNING]
+> **The CPU load column is not a sliding scale.** Beeper, AY-sample, and Covox/SounDrive are all software-driven playback — the CPU is the playback clock. At a 19 kHz sample rate (see [Performance Reality Check](#performance-reality-check) below), a 4-channel SounDrive loop consumes the **entire** ~70,000-T-state frame budget. There is no leftover for any other activities during audible playback exceot brief keyboard polling. The advantage of Covox over AY-sample playback is **audio quality** (8-bit linear vs 4-bit logarithmic, plus true stereo), not CPU savings. Only the GS card actually offloads the CPU.
 
 ---
 
@@ -197,3 +291,5 @@ SounDrive transformed the Soviet demoscene. Trackers like **FlashTracker** and *
 - [I/O Port Map](../../10_references/io_port_map.md) — Complete port decoding for all clones, including SounDrive and Kempston conflicts.
 - [AY/YM Hardware Synthesis](../synthesis/ay_ym_synthesis.md) — Why the AY chip is bad at playing samples.
 - [General Sound (GS)](gs_general_sound.md) — The ultimate solution: putting a second Z80 entirely in charge of the audio.
+- [Texas Instruments TLC7226 Datasheet (PDF)](https://www.ti.com/lit/gpn/TLC7226) — Official datasheet for the TLC7226 quad 8-bit DAC used in modern single-chip SounDrive implementations.
+- [Mick Laboratory: ZXM-SoundCard](http://micklab.ru/My%20Soundcard/ZXMSoundCard.htm) *(in Russian)* — The best-documented TLC7226-based SounDrive reference. Full schematics, CPLD firmware source, and bill of materials for every board revision (00 through Extreme). The SounDrive part appears in the Middle and Extreme revisions alongside TSFM and SAA1099 sections.

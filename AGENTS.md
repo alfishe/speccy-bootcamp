@@ -32,6 +32,8 @@ Every article must note which track(s) it applies to. When behavior differs betw
 - **Soviet**: **zx-pk.ru** (the most concentrated knowledge base for Soviet clones — schematics, ROMs, modifications, discussions), nedoPC, TR-DOS documentation
 - **New Gen**: ZX Spectrum Next official docs (zxnext.io), TS-Conf documentation, SpeccyWiki
 
+**Track separation rule:** Original-track review articles (e.g., `03_io/peripherals/`, `02_hardware/original/`) must NOT carry full Soviet-clone or New Gen sections. Give them a short **Track Applicability** note (one paragraph with links) and put clone/Next variants in dedicated articles under `02_hardware/clones/` and `02_hardware/newgen/` — e.g., `clone_joysticks.md`, `zx_next_joystick.md`.
+
 ---
 
 ## Pre-Flight: Knowledge Base Scan (MANDATORY)

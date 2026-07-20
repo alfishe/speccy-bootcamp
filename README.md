@@ -30,16 +30,20 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 |---------|------------|
 | [ula_timing.md](02_hardware/original/ula_timing.md) | ULA frame timing per model, memory contention, multicolor effects, early/late timing, performance budget |
 | [ula_architecture.md](02_hardware/original/ula_architecture.md) | Inside the Ferranti ULA: video pipeline, bus arbitration, #FE register, keyboard/tape/sound cells, revisions, gate arrays, replacements |
+| [keyboard_matrix.md](02_hardware/original/keyboard_matrix.md) | The 8×5 keyboard matrix: membrane hardware, half-row scanning, ghosting, Interface 2/Sinclair/Cursor joystick mappings, game keyset conventions by genre and region, redefinable input |
 
 #### Soviet Clone Ecosystem
 
 | Article | Description |
 |---------|------------|
 | [clone_timing.md](02_hardware/clones/clone_timing.md) | Clone video timing — Pentagon, Scorpion, Kay, ATM Turbo, FPGA implementations, detection techniques |
+| [clone_joysticks.md](02_hardware/clones/clone_joysticks.md) | Built-in Kempston on clone motherboards, Beta 128 coexistence, two-player conventions, single-standard software culture |
 
 #### New Generation
 
-*Placeholder — content coming.*
+| Article | Description |
+|---------|------------|
+| [zx_next_joystick.md](02_hardware/newgen/zx_next_joystick.md) | ZX Next joystick: per-port modes (NextReg 0x05), dual Kempston #1F/#37, Mega Drive pads, Sinclair numbering trap |
 
 ### 04 — Operating Systems
 
@@ -106,6 +110,7 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 
 | Article | Description |
 |---------|-------------|
+| [joystick.md](03_io/peripherals/joystick.md) | Joystick interfaces: Kempston #1F, Sinclair/Interface 2, Cursor/Protek/AGF, Fuller, Timex, clone built-ins, unified multi-standard reader |
 | [io_port_map.md](10_references/io_port_map.md) | Complete I/O port reference: every port across all models, Black_Cat table with annotations, decoding bitmasks, per-model differences |
 | [cycle_exact_accuracy.md](11_emulation/software/cycle_exact_accuracy.md) | Frame timing divergence, CRT vs LCD, host sync strategies, AY audio clocks, judder mitigation techniques, emulator comparison, worst-case Pentagon@60Hz conclusion |
 
