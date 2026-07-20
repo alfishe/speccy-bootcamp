@@ -82,13 +82,15 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [border_effects.md](05_development/05_display_and_timing/border_effects.md) | Border color via #FE, raster bars, rainbow borders, per-model timing |
 | [clone_video_modes.md](05_development/05_display_and_timing/clone_video_modes.md) | Clone video modes: GigaScreen, ATM hires, Profi 512×256, Kay CPLD, TS-Conf |
 
-### 06 — Sound
+### 06 — Sound ✅ COMPLETE
 
 #### Synthesis Techniques
 
 | Article | Description |
 |---------|------------|
 | [ay_ym_synthesis.md](06_sound/synthesis/ay_ym_synthesis.md) | **Comprehensive AY/YM sound generation**: internal counter model, phase reset, sync-square, PWM, SID-sound, envelope exploitation, sample playback, drum synthesis |
+| [ay_ym_techniques.md](06_sound/synthesis/ay_ym_techniques.md) | **AY/YM Synthesis Techniques** — sync-square, PWM, SID-sound, buzzer bass, note-colored noise, drum synthesis, sample playback |
+| [ay_vs_ym.md](06_sound/synthesis/ay_vs_ym.md) | **AY vs YM Technical Comparison** — DAC ladder differences, 5-bit envelope on YM, DC offset, SEL pin, per-unit variation, emulator modeling |
 | [ay_ym_perception.md](06_sound/synthesis/ay_ym_perception.md) | **The AY Sound: Perception, Emotion, and the Hardware Soul** — ABC vs ACB holy war, AY vs YM differences, why real hardware sounds different, psychoacoustics, nostalgia, recapturing the sound |
 | [beeper_synthesis.md](06_sound/synthesis/beeper_synthesis.md) | **1-Bit Beeper Synthesis**: PWM engines, multi-channel tricks, DSP emulation physics |
 | [shiru_ear_shaver_analysis.md](06_sound/synthesis/shiru_ear_shaver_analysis.md) | **Case Study:** Reverse engineering Shiru's *Ear Shaver* 1-bit engine |
@@ -124,6 +126,15 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [psg_format.md](06_sound/trackers_and_formats/psg_format.md) | PSG register dump format — universal pre-rendered AY register stream |
 
 *See [06_sound/README.md](06_sound/README.md) for the full sound section catalog.*
+
+### 09 — Toolchain
+
+| Article | Description |
+|---------|-------------|
+| [native_toolchain.md](09_toolchain/native_toolchain.md) | **Native Spectrum toolchain** — assemblers and monitors that ran on the Spectrum itself (1982–2000s). Zeus, HiSoft DevPac / GENS-MONS, ALASM+STS, XAS; pre-assembler era; editor workflow evolution; Soviet vs Western toolchain split |
+| [cross_platform_toolchain.md](09_toolchain/cross_platform_toolchain.md) | **Modern cross-platform toolchain** — SjASMPlus, z88dk, SDCC, Pasmo, vasm, WLA-DX, zmac, RASM; VS Code + DeZog + Klive IDE; Fuse, ZEsarUX, CSpect, JSSpeccy 3, MAME; build systems, CI/CD, asset pipeline, recommended-setup decision matrix, worked Hello World example |
+
+*See [09_toolchain/README.md](09_toolchain/README.md) for the planned per-tool deep-dive catalog.*
 
 ### 07 — Demoscene
 
@@ -198,6 +209,11 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 42. [Arkos Tracker 2/3](06_sound/trackers_and_formats/arkos_tracker.md) — modern cross-platform alternative for new composers in 2025
 43. [PT3 Module Format](06_sound/trackers_and_formats/pt3_format.md) — byte-level binary specification of the de facto interchange format
 44. [PSG Register Dump Format](06_sound/trackers_and_formats/psg_format.md) — the universal pre-rendered AY dump format
+
+**Toolchain and development environment:**
+
+45. [Native Toolchain](09_toolchain/native_toolchain.md) — assemblers and monitors that ran on the Spectrum (1982–2000s): Zeus, DevPac, ALASM, XAS
+46. [Cross-Platform Toolchain](09_toolchain/cross_platform_toolchain.md) — modern development on PC/Mac/Linux: SjASMPlus, z88dk, VS Code, emulators, CI/CD
 
 **Bridge to advanced optimization:**
 

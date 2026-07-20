@@ -186,33 +186,66 @@ Ornament 0 is conventionally a single-byte `[0, $FF]` — "no arpeggio, play the
 
 ## Samples
 
-A **sample** in PT3 is an **instrument definition** — *not* a PCM sample. The name is a historical artifact from Pro Tracker 1.x where the term was used loosely. A PT3 sample encodes two things:
+A **sample** in PT3 is an **instrument definition** — *not* a PCM sample. The name is a historical artifact from Pro Tracker 1.x where the term was used loosely. A PT3 sample encodes, per tick:
 
-1. A **volume envelope** — how loud the note is at each tick (attack, decay, sustain, release shape).
-2. A **tone behavior** — whether the AY tone generator is on, off, or modulated in some way per tick.
+1. A **volume** — direct amplitude (0–15) or hardware-envelope driven
+2. A **tone behavior** — AY mixer bits (tone on/off, noise on/off) plus an optional per-tick frequency offset
+3. An **amplitude slide** — automatic per-tick volume delta built into the instrument
+4. An **envelope-period slide** — automatic per-tick envelope-speed delta
+5. A **hardware envelope enable flag** — routes amplitude through AY register 13's envelope generator
 
 The module has **32 sample slots** numbered 1–31 (slot 0 is conventionally unused or treated as "no instrument"). Each pattern row selects which sample is active on each channel.
 
 ### Sample Structure
 
-A sample is a list of **frames**, where each frame represents one tick of playback (typically 1/50 s on PAL). The sample runs through its frames in sequence, optionally looping. Each frame encodes:
+A sample is a list of **frames**, where each frame represents one tick of playback (typically 1/50 s on PAL). The sample runs through its frames in sequence, optionally looping.
 
-| Element | Bits | Meaning |
+Each frame is **4 bytes** — a 32-bit record that packs volume, flags, and three independent delta fields. The layout (from the canonical PT3 player source):
+
+#### Byte 0 — Slide and envelope flags
+
+| Bit | When set |
+|---|---|
+| 7 | **Amplitude sliding enabled** for this tick — apply a per-tick volume delta |
+| 6 | Amplitude slide direction: 1 = slide up, 0 = slide down |
+| 5 | Envelope-period slide direction: 1 = slide up, 0 = slide down |
+| 4–1 | Sign-extended envelope-period slide delta (4-bit signed value) |
+| 0 | **Hardware envelope enabled** for this tick — AY register 13 controls amplitude instead of the volume field |
+
+#### Byte 1 — Mixer, amplitude, more flags
+
+| Bit | When set |
+|---|---|
+| 7 | Envelope-period sliding enabled |
+| 6 | **Accumulate tone** — the per-frame frequency offset (bytes 2–3) is added to the previous tick's frequency rather than replacing it |
+| 5 | Envelope-slide parameter |
+| 4 | Together with bit 6, sets the AY mixer register value (tone on/off, noise on/off per channel) |
+| 3–0 | **Amplitude** (volume 0–15). Ignored when bit 0 of byte 0 is set (hardware envelope takes over) |
+
+#### Bytes 2–3 — Per-frame frequency offset
+
+A signed 16-bit value (little-endian) added to the note's base frequency for this tick. This is the mechanism behind **instrument-defined vibrato and glissando** — a sample can encode its own pitch wobble without using pattern effects.
+
+| Field | Size | Effect |
 |---|---|---|
-| **Volume** | 4 bits (0–15) | AY envelope amplitude for this tick. `$00` = silence, `$0F` = maximum |
-| **Flags** | 4 bits | Bit field controlling tone generator, envelope generator, noise generator |
+| Byte 2 | 8 bits (low) | Frequency offset, low byte |
+| Byte 3 | 8 bits (high) | Frequency offset, high byte (sign-extended) |
 
-The flag bits control how the AY chip's three signal generators (tone, noise, envelope) interact for this frame:
+### What Each Tick Produces
 
-| Bit | When set | When clear |
-|---|---|---|
-| Tone enable | Tone generator **off** for this frame (mute the pitch, leaving only noise/envelope) | Tone generator on (normal pitched note) |
-| Noise enable | Noise generator on | Noise off |
-| Envelope mode | Use AY hardware envelope generator (5 modes) | Use the volume field directly |
-| (reserved) | — | — |
+Every frame, the player computes the final AY register values for the channel:
+
+```
+AY_period    = frequency_table[note + ornament_offset] + sample_freq_offset
+AY_volume    = sample_amplitude + amplitude_slide_accumulator
+AY_envelope  = sample_envelope_shape (if bit 0 of frame byte 0 is set)
+AY_mixer     = sample_mixer_bits
+```
+
+The four-byte frame is what makes PT3 instruments expressive: a single sample can simultaneously control volume, pitch, envelope shape, envelope speed, and noise — all changing per tick without any pattern effects.
 
 > [!NOTE]
-> The exact bit assignment varies across PT3 sub-versions. PT3.4+ introduced a richer flag set enabling pitch-slides and per-frame frequency offsets. Bulba's reference PT3 Player Source documents the bit layout for each sub-version.
+> Earlier PT3 sub-versions (3.0–3.3) used a simpler 2-byte frame layout without the per-frame frequency offset (bytes 2–3) or the amplitude-slide machinery. PT3.4+ introduced the full 4-byte layout described here. Modern VTII-written modules always use the 4-byte layout.
 
 ### Sample Looping
 
@@ -240,15 +273,55 @@ Each pointer references the first byte of the sample's data (the loop-point/leng
 
 ### Sample Example: A Simple Plucked Lead
 
+A 16-frame plucked lead with linear volume decay, no envelope, no frequency offset, tone generator on. Each frame is 4 bytes — only the amplitude field (low nibble of byte 1) changes between frames:
+
 ```
 Length:     16 frames
 Loop point: 0 (won't be reached — no loop)
-Frames:     $F0 $E0 $D0 $C0 $B0 $A0 $90 $80
-            $70 $60 $50 $40 $30 $20 $10 $00
-            [Tone on, no envelope, no noise — just decaying volume]
+
+Frame 00 (vol 15): 00 F0 00 00    ; amp=F, no slide, no env, no freq offset
+Frame 01 (vol 14): 00 E0 00 00
+Frame 02 (vol 13): 00 D0 00 00
+Frame 03 (vol 12): 00 C0 00 00
+Frame 04 (vol 11): 00 B0 00 00
+Frame 05 (vol 10): 00 A0 00 00
+Frame 06 (vol  9): 00 90 00 00
+Frame 07 (vol  8): 00 80 00 00
+Frame 08 (vol  7): 00 70 00 00
+Frame 09 (vol  6): 00 60 00 00
+Frame 10 (vol  5): 00 50 00 00
+Frame 11 (vol  4): 00 40 00 00
+Frame 12 (vol  3): 00 30 00 00
+Frame 13 (vol  2): 00 20 00 00
+Frame 14 (vol  1): 00 10 00 00
+Frame 15 (vol  0): 00 00 00 00
+
+Total: 2 header bytes + 64 frame bytes = 66 bytes
 ```
 
 This produces a linear-decaying plucked tone — attack at full volume, linear fade to silence over 16 ticks. It is the most common shape for a melody instrument in AY chiptune music.
+
+### Sample Example: Sustained Lead with Built-in Vibrato
+
+A more interesting instrument — sustained (loops), with built-in per-tick vibrato via the frequency offset field:
+
+```
+Length:     8 frames
+Loop point: 0 (loops back to frame 0 for sustain)
+
+Frame 00 (vol 15, freq +0):    00 F0 00 00
+Frame 01 (vol 15, freq +20):   00 F0 20 00    ; +32 (pitch up)
+Frame 02 (vol 15, freq +40):   00 F0 40 00    ; +64 (further up)
+Frame 03 (vol 15, freq +20):   00 F0 20 00    ; back to +32
+Frame 04 (vol 15, freq -0):    00 F0 00 00
+Frame 05 (vol 15, freq -20):   00 F0 E0 FF    ; -32 (pitch down, signed)
+Frame 06 (vol 15, freq -40):   00 F0 C0 FF    ; -64
+Frame 07 (vol 15, freq -20):   00 F0 E0 FF    ; back to -32
+
+Total: 2 header bytes + 32 frame bytes = 34 bytes
+```
+
+The frequency offset field (bytes 2–3) is what produces the vibrato — no pattern effect needed. This is a key PT3 capability that earlier formats (`.STC`, `.ASC`) lacked.
 
 ---
 

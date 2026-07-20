@@ -26,6 +26,8 @@ Sound generation theory and practice — how to make the chips produce the sound
 | Article | Description |
 |---------|-------------|
 | [ay_ym_synthesis.md](synthesis/ay_ym_synthesis.md) | **Comprehensive AY/YM sound generation**: internal counter model, register mechanics, phase reset, sync-square, PWM, envelope exploitation, SID-sound, sample playback |
+| [ay_ym_techniques.md](synthesis/ay_ym_techniques.md) | **AY/YM Synthesis Techniques** — sync-square, PWM, SID-sound, buzzer bass, note-colored noise, drum synthesis, sample playback |
+| [ay_vs_ym.md](synthesis/ay_vs_ym.md) | **AY vs YM Technical Comparison** — DAC ladder differences, 5-bit envelope on YM, DC offset, SEL pin, per-unit variation, and how each major emulator models these details |
 | [ay_ym_perception.md](synthesis/ay_ym_perception.md) | **The AY Sound: Perception, Emotion, and the Hardware Soul** — ABC vs ACB, AY vs YM, analog vs emulation, psychoacoustics, nostalgia, recapturing the sound |
 | [beeper_synthesis.md](synthesis/beeper_synthesis.md) | 1-bit beeper synthesis: PWM engines, multi-channel tricks, timing constraints |
 | [shiru_ear_shaver_analysis.md](synthesis/shiru_ear_shaver_analysis.md) | **Case Study:** Reverse engineering Shiru's *Ear Shaver* 1-bit engine via API forensics |
@@ -64,15 +66,9 @@ The software ecosystem for creating and storing AY/YM music — from the origina
 | [pt3_format.md](trackers_and_formats/pt3_format.md) | PT3 module format specification: header, position table, ornaments, samples, patterns, player operation, sub-versions |
 | [psg_format.md](trackers_and_formats/psg_format.md) | PSG register dump format: frame structure, skip opcode, variants (`.YM`, `.VTX`), 20-byte playback routine |
 
-### [Player Routines](players/README.md) *(planned)*
+### ~~Player Routines~~ *(removed from plan)*
 
-How music data becomes sound on real hardware.
-
-| Article | Description |
-|---------|-------------|
-| `ay_player_routines.md` | Player routine architecture: ISR integration, register write sequences, stack manipulation, timing budgets |
-| `player_comparison.md` | PT3 player vs Arkos players (AKG/AKM/AKY): speed, size, features comparison |
-| `audio_decision_guide.md` | Decision guide: which sound hardware + format + player to target for your project |
+The planned `players/` subdirectory has been removed from the section plan. The relevant content is covered in existing articles: PT3 player operation is documented in [pt3_format.md](trackers_and_formats/pt3_format.md) § Player Routine Operation, Arkos player comparison is documented in [arkos_tracker.md](trackers_and_formats/arkos_tracker.md), and ISR/embedding considerations are touched on in [ay_ym_synthesis.md](synthesis/ay_ym_synthesis.md). Stub files remain in `players/` but are not tracked in the plan.
 
 ---
 

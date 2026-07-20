@@ -277,13 +277,16 @@ zx/
 │   │   └── game_case_studies.md
 │   └── 10_demoscene/                  # MOVED to 07_demoscene/ — see below
 │
-├── 06_sound/
+├── 06_sound/                         # ✅ SECTION COMPLETE
 │   ├── README.md                      # ✅ Section index
 │   ├── synthesis/
 │   │   ├── README.md
 │   │   ├── ay_ym_synthesis.md         # ✅ Comprehensive AY/YM sound generation
+│   │   ├── ay_ym_techniques.md        # ✅ Sync-square, PWM, SID-sound, buzzer bass, samples
+│   │   ├── ay_vs_ym.md                # ✅ AY vs YM technical comparison (DAC + emulation)
 │   │   ├── ay_ym_perception.md        # ✅ Perception, emotion, hardware soul
 │   │   ├── beeper_synthesis.md        # ✅ Done
+│   │   ├── shiru_ear_shaver_analysis.md # ✅ Shiru's Ear Shaver engine teardown
 │   │   └── multitrack_multichip.md    # ✅ Multi-chip outline
 │   ├── hardware/
 │   │   ├── README.md
@@ -297,22 +300,18 @@ zx/
 │   │   ├── saa1099.md                 # ✅ Philips SAA1099 PSG
 │   │   ├── zx_next_audio.md           # ✅ ZX Spectrum Next 3×AY + DMA + beeper
 │   │   └── stereo_audio.md            # ✅ ABC/ACB/BytesDelight stereo mods
-│   ├── trackers_and_formats/
-│   │   ├── README.md                  # ✅ Section index (9 articles)
-│   │   ├── tracker_history.md         # ✅ 30-year history (Bzyk/Golden Disk/Bulba/Targhan)
-│   │   ├── ay_music_formats.md        # ✅ Master format catalogue (361 lines)
-│   │   ├── sound_tracker.md           # ✅ Sound Tracker 1.1 (Bzyk 1990) — first AY grid editor
-│   │   ├── asc_sound_master.md        # ✅ Asc Sound Master (Sendetskiy 1992) — Soviet alternative
-│   │   ├── protracker.md              # ✅ Pro Tracker 1/2/3 (Golden Disk Corp. 1995-97)
-│   │   ├── vortex_tracker.md          # ✅ VTII PC-based PT3 editor (Bulba)
-│   │   ├── arkos_tracker.md           # ✅ AT2/3 modern cross-platform AY tracker
-│   │   ├── pt3_format.md              # ✅ PT3 binary format spec (502 lines)
-│   │   └── psg_format.md              # ✅ PSG register dump spec (270 lines)
-│   └── players/
-│       ├── README.md
-│       ├── ay_player_routines.md      # 📄 Stub
-│       ├── player_comparison.md       # 📄 Stub
-│       └── audio_decision_guide.md    # 📄 Stub
+│   └── trackers_and_formats/
+│       ├── README.md                  # ✅ Section index (9 articles)
+│       ├── tracker_history.md         # ✅ 30-year history (Bzyk/Golden Disk/Bulba/Targhan)
+│       ├── ay_music_formats.md        # ✅ Master format catalogue (361 lines)
+│       ├── sound_tracker.md           # ✅ Sound Tracker 1.1 (Bzyk 1990) — first AY grid editor
+│       ├── asc_sound_master.md        # ✅ Asc Sound Master (Sendetskiy 1992) — Soviet alternative
+│       ├── protracker.md              # ✅ Pro Tracker 1/2/3 (Golden Disk Corp. 1995-97)
+│       ├── vortex_tracker.md          # ✅ VTII PC-based PT3 editor (Bulba)
+│       ├── arkos_tracker.md           # ✅ AT2/3 modern cross-platform AY tracker
+│       ├── pt3_format.md              # ✅ PT3 binary format spec (502 lines)
+│       └── psg_format.md              # ✅ PSG register dump spec (270 lines)
+│   ~~players/~~                       # ❌ Removed from plan (see 06_sound/README.md)
 │
 ├── 07_demoscene/
 │   ├── README.md                      # ✅ Section index
@@ -342,6 +341,8 @@ zx/
 │
 ├── 09_toolchain/
 │   ├── README.md
+│   ├── native_toolchain.md ✅
+│   ├── cross_platform_toolchain.md ✅
 │   ├── assembler_overview.md
 │   ├── zeus_assembler.md
 │   ├── devpac_gens_mons.md
@@ -861,16 +862,19 @@ zx/
 | `demoscene_platforms.md` | Cross-platform: Spectrum vs C64 vs Amiga vs Atari ST — constraint comparison |
 | `1bit_music_scene.md` | 1-bit music scene: beeper engine evolution from 1982 to present |
 
-### 06 — Sound
+### 06 — Sound ✅ COMPLETE
 
 #### 06_sound/synthesis/ — Synthesis Techniques
 
 | File | Topic | Status |
 |---|---|---|
 | `ay_ym_synthesis.md` | **Comprehensive AY/YM sound generation**: internal counter model, phase reset, sync-square, PWM, SID-sound, envelope exploitation, sample playback, drum synthesis | ✅ |
+| `ay_ym_techniques.md` | **AY/YM Synthesis Techniques** — sync-square, PWM, SID-sound, buzzer bass, note-colored noise, drum synthesis, sample playback | ✅ |
+| `ay_vs_ym.md` | **AY vs YM Technical Comparison** — DAC ladder differences, 5-bit envelope on YM, DC offset, SEL pin, per-unit variation, emulator modeling | ✅ |
 | `ay_ym_perception.md` | **The AY Sound: Perception, Emotion, and the Hardware Soul** — ABC vs ACB holy war, AY vs YM differences, analog signal chain, psychoacoustics, nostalgia, recapturing the sound | ✅ |
 | `multitrack_multichip.md` | Multi-track and multi-chip synthesis outline: TurboSound, cross-chip effects, synchronization | ✅ |
 | `beeper_synthesis.md` | 1-bit beeper synthesis: PWM engines, multi-channel tricks, timing constraints | ✅ Done |
+| `shiru_ear_shaver_analysis.md` | **Case Study**: Shiru's Ear Shaver 1-bit engine teardown | ✅ Done |
 
 #### 06_sound/hardware/ — Sound Card Hardware
 
@@ -901,13 +905,15 @@ zx/
 | `pt3_format.md` | PT3 module format specification: header, position table, ornaments, samples, patterns, player operation, sub-versions | ✅ Done |
 | `psg_format.md` | PSG register dump format: frame structure, skip opcode, variants (`.YM`, `.VTX`), 20-byte playback routine | ✅ Done |
 
-#### 06_sound/players/ — Player Routines
+#### ~~06_sound/players/~~ — Player Routines (REMOVED FROM PLAN)
 
-| File | Topic | Status |
-|---|---|---|
-| `ay_player_routines.md` | Player routine architecture: ISR integration, register write sequences, stack manipulation, timing budgets | 📄 Stub |
-| `player_comparison.md` | PT3 player vs Arkos players (AKG/AKM/AKY): speed, size, features comparison | 📄 Stub |
-| `audio_decision_guide.md` | Decision guide: which sound hardware + format + player to target for your project | 📄 Stub |
+The planned `players/` subdirectory has been removed from the section plan. Relevant content is covered by:
+
+- [pt3_format.md](06_sound/trackers_and_formats/pt3_format.md) § Player Routine Operation (PT3 player architecture)
+- [arkos_tracker.md](06_sound/trackers_and_formats/arkos_tracker.md) (AKG/AKM/AKY player comparison)
+- [ay_ym_synthesis.md](06_sound/synthesis/ay_ym_synthesis.md) (ISR and embedding context)
+
+Stub files remain in `players/` but are not tracked.
 
 ### 07 — Demoscene
 
@@ -949,8 +955,8 @@ All articles are 📄 Stub. See [07_demoscene/README.md](07_demoscene/README.md)
 | File | Topic |
 |---|---|
 | `README.md` | Index — toolchain overview, recommended setup per target platform |
-
-**Assembler Overview** | |
+| `native_toolchain.md` | ✅ **Native Spectrum toolchain survey** — pre-assembler era, Zeus, HiSoft DevPac / GENS-MONS, ALASM+STS, XAS, minor native tools, editor workflow evolution (line → full-screen → TR-DOS), debugger/monitor traditions (MONS, STS, Zeus integrated), track differences (Western vs Soviet), when to choose native today |
+| `cross_platform_toolchain.md` | ✅ **Modern cross-platform toolchain survey** — why cross-platform won, modern pipeline diagram, SjASMPlus (primary recommendation), Pasmo, z88dk-z80asm, vasm, WLA-DX, zmac, RASM, minor alternatives; z88dk C toolkit, SDCC, Boriel ZX BASIC, Turbo Rascal; VS Code extensions (Z80 Macro-Assembler, Z80 Assembly Meter, DeZog, Klive IDE); emulators for development (Fuse, ZEsarUX, CSpect, JSSpeccy 3, MAME); build systems (Make, Deno, npm, CMake); testing and CI/CD; asset tools and binary packers; recommended-setup decision matrix; worked Hello World example; 6 common pitfalls |
 | `assembler_overview.md` | **Comprehensive assembler survey**: all known Z80 assemblers — native and cross-platform — with feature comparison matrix (macros, linking, output formats, ZX-specific features, Z80N support, active maintenance) |
 
 **ZX Spectrum Native Assemblers** (run on the Spectrum itself) | |
