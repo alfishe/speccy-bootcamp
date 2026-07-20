@@ -56,6 +56,9 @@ The software ecosystem for creating and storing AY/YM music — from the origina
 |---------|-------------|
 | [tracker_history.md](trackers_and_formats/tracker_history.md) | **30-year history of ZX music editors** — beeper trackers (1985), Pro Tracker lineage (Golden Disk Corp.), VTII / Arkos split, modern cross-platform tools |
 | [ay_music_formats.md](trackers_and_formats/ay_music_formats.md) | **Master catalogue**: every AY/YM music file format (`.PT3`, `.PSG`, `.YM`, `.AY`, `.AKG`, etc.) — modules, dumps, containers, modern embedded |
+| [sound_tracker.md](trackers_and_formats/sound_tracker.md) | **Sound Tracker 1.1** (Bzyk, 1990) — the first AY grid editor; established the pattern/sample/ornament paradigm inherited by every later tracker |
+| [asc_sound_master.md](trackers_and_formats/asc_sound_master.md) | **Asc Sound Master** (Sendetskiy, 1992) — Soviet alternative with envelope-mode-per-tick instrument model; `.ASC` / `.AS0` formats |
+| [protracker.md](trackers_and_formats/protracker.md) | **Pro Tracker 1/2/3** (Golden Disk Corp., 1995–1997) — the format-defining lineage that produced `.PT3`; 4 versions in 3 years |
 | [vortex_tracker.md](trackers_and_formats/vortex_tracker.md) | Vortex Tracker II: the de facto PC-based PT3 editor (Bulba, 2000–present), universal import, TurboSound support |
 | [arkos_tracker.md](trackers_and_formats/arkos_tracker.md) | Arkos Tracker 2/3: modern cross-platform AY/YM tracker (Targhan, 2003–present), AKG/AKM/AKY players |
 | [pt3_format.md](trackers_and_formats/pt3_format.md) | PT3 module format specification: header, position table, ornaments, samples, patterns, player operation, sub-versions |
