@@ -873,16 +873,16 @@ zx/
 
 | File | Topic | Status |
 |---|---|---|
-| `ay_3_8912.md` | AY-3-8912 / YM2149F PSG: pinout, register map, clock domains, DAC, per-model differences | 📄 Stub |
-| `turbosound.md` | TurboSound: dual/triple AY, port decoding, programming model | 📄 Stub |
-| `turbosound_fm.md` | TurboSound FM: YM2203 (OPN) FM synthesis, 3 FM + 3 SSG channels | 📄 Stub |
-| `covox_sounDrive.md` | Covox (8-bit DAC), SounDrive (4×8-bit DAC): direct sample playback | 📄 Stub |
-| `gs_general_sound.md` | General Sound: dedicated Z80-based sound card, 4-channel sample mixing | 📄 Stub |
-| `moonsound.md` | MoonSound (OPL4/YMF278B): 24-channel wavetable + 18-channel FM | 📄 Stub |
-| `saa1099.md` | SAA1099 PSG: Philips sound chip, 6-channel stereo | 📄 Stub |
-| `zx_next_audio.md` | ZX Spectrum Next audio: 3× AY + beeper + DMA sample playback | 📄 Stub |
-| `stereo_audio.md` | Stereo audio modifications: ABC/ACB separation, BytesDelight | 📄 Stub |
-| `sound_overview.md` | Sound hardware ecosystem overview + decision guide | 📄 Stub |
+| `sound_overview.md` | Sound hardware ecosystem overview + decision guide (taxonomy, chronology, decision matrix, consolidated comparison) | ✅ Done |
+| `ay_3_8912.md` | AY-3-8912 / YM2149F PSG: pinout, register map, clock domains, DAC, per-model differences | ✅ Done |
+| `stereo_audio.md` | Stereo audio modifications: ABC/ACB separation, BytesDelight | ✅ Done |
+| `turbosound.md` | TurboSound: dual/triple AY, port decoding, programming model | ✅ Done |
+| `turbosound_fm.md` | TurboSound FM: YM2203 (OPN) FM synthesis, 3 FM + 3 SSG channels | ✅ Done |
+| `saa1099.md` | SAA1099 PSG: Philips sound chip, 6-channel stereo | ✅ Done |
+| `covox_sounDrive.md` | Covox (8-bit DAC), SounDrive (4×8-bit DAC + TLC7226CN single-chip implementation): direct sample playback | ✅ Done |
+| `gs_general_sound.md` | General Sound: dedicated Z80-based sound card, 4-channel sample mixing | ✅ Done |
+| `moonsound.md` | MoonSound (OPL4/YMF278B): 24-channel wavetable + 18-channel FM, OPN-vs-OPL3 comparison | ✅ Done |
+| `zx_next_audio.md` | ZX Spectrum Next audio: 3× AY + beeper + DMA sample playback | ✅ Done |
 
 #### 06_sound/trackers_and_formats/ — Trackers, Editors & Formats
 
