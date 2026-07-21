@@ -146,6 +146,9 @@ The cross-platform assembler landscape is dominated by **SjASMPlus** as the prim
 
 **SjASMPlus** is the de facto standard cross-assembler for modern ZX Spectrum development. Originally based on SjASM by Aprisobal, it is now maintained by **z00m128** on GitHub under a BSD license.
 
+> [!TIP]
+> **Full deep-dive**: see [sjasmplus.md](sjasmplus.md) for a comprehensive 1300+ line reference covering every directive, the Lua scripting engine, ZX Spectrum Next Z80N support, the `DEVICE` virtual-memory model, SLD output for source-level debugging, and worked examples.
+
 Key features:
 
 - **3-pass design**: forward references resolved reliably
@@ -196,7 +199,7 @@ Pasmo's limitations: no Z80N support, no Lua scripting, limited output formats (
 - **Linker and librarian**: multi-object linking, library archives
 
 > [!WARNING]
-> **z88dk-z80asm is not the same project as z88dk itself.** z88dk is the full C toolkit (compiler + assembler + linker + libraries); z88dk-z80asm is just the assembler binary within it. Both are covered in [z88dk.md](z88dk.md) (planned). Do not confuse this with **z80asm** (different author, different project).
+> **z88dk-z80asm is not the same project as z88dk itself.** z88dk is the full C toolkit (compiler + assembler + linker + libraries); z88dk-z80asm is just the assembler binary within it. Both are covered in [z88dk.md](z88dk.md). Do not confuse this with **z80asm** (different author, different project).
 
 ### vasm (Portable Retargetable)
 
@@ -303,6 +306,9 @@ zcc +zx program.c -create-app -subtype=plus3
 zcc +zx -clib=ndos program.c -create-app -subtype=nex
 ```
 
+> [!TIP]
+> **For a complete reference on z88dk** — the two C libraries (classic vs newlib), the `+target` system, all major library APIs (`<arch/zx.h>`, `<graphics.h>`, `<games.h>`, `<sound.h>`, `<arch/zxn.h>`), `appmake` output formats, `#pragma output` symbols, calling conventions, mixing C with assembly, a worked example, and pitfalls — see [z88dk.md](z88dk.md).
+
 ### SDCC (Small Device C Compiler)
 
 **SDCC** is a standalone optimizing C compiler supporting several 8-bit CPUs including Z80, Z180, Rabbit 2000/3000, and others. For Spectrum development, SDCC is most commonly used **through the z88dk wrapper** — which provides the Spectrum-specific runtime, libraries, and build automation. Using SDCC standalone requires the developer to handle all of this manually.
@@ -357,11 +363,13 @@ LOOP UNTIL INKEY$ = " "
 
 ## IDEs and Editor Integration
 
-Modern Spectrum development is dominated by **Visual Studio Code** as the editor of choice, with several specialized extensions. Two integrated IDEs (DeZog, Klive) provide tighter round-trip debugging.
+Modern Spectrum development is split between **Visual Studio Code with Z80 extensions** (the dominant pattern for experienced developers) and **standalone IDEs** like Klive that bundle editor + emulator + debugger in a single application. Both approaches are valid; they trade flexibility for integration.
+
+The broader toolchain also includes **disassemblers and binary analysis tools** (covered in a dedicated subsection below) for reverse engineering work.
 
 ### VS Code Ecosystem (Dominant in 2025)
 
-The following VS Code extensions are recommended for Spectrum development:
+VS Code is the most common editor choice in 2025 because it is cross-platform, free, and has a thriving extension marketplace. The following VS Code extensions are recommended for Spectrum development, grouped by purpose:
 
 #### Z80 Macro-Assembler (Martin Bórik)
 
@@ -386,6 +394,39 @@ The **Z80 Assembly Meter** extension shows **T-state counts** in the VS Code sta
 
 The meter handles documented and undocumented Z80, Z80N, and common SjASMPlus fake instructions (like `LD HL,DE`).
 
+#### ASM Code Lens (Joachim 'maziac' Strobel)
+
+The **ASM Code Lens** extension by the same author as DeZog provides **inline annotation** above each assembly instruction:
+
+- **T-state count** displayed as a code-lens above every line
+- **Bytecode size** for each instruction shown inline
+- **Cumulative T-states** for a selected block of code
+- **Label addresses** displayed at definition site
+- **Problem matcher for SjASMPlus**: assembler errors become clickable inline diagnostics with correct file:line resolution
+
+This is the recommended companion to DeZog — both come from the same author and are designed to interoperate. The T-state annotations are particularly valuable for raster-synced routines where every cycle must be accounted for.
+
+#### Hex Editor (Microsoft)
+
+Microsoft's official **Hex Editor** extension enables binary inspection directly in VS Code. For Spectrum development, this is invaluable for:
+
+- Inspecting assembled `.tap`, `.sna`, `.scr` output byte-by-byte
+- Verifying tape headers (the 19-byte ZX Spectrum header block)
+- Examining binary assets included via `INCBIN`
+- Debugging memory dumps exported from emulators
+
+The Hex Editor shows hex + ASCII side-by-side, supports goto-offset, and handles large files (multi-megabyte TR-DOS images) without issue.
+
+#### C/C++ Extension (Microsoft)
+
+For z88dk-based C development, Microsoft's **C/C++ extension** provides:
+
+- **IntelliSense** for the z88dk headers (`<spectrum.h>`, `<games.h>`, `<conio.h>`)
+- **Build integration** via `tasks.json` calling `zcc`
+- **Debug integration** when combined with DeZog or a GDB bridge
+
+Configure the extension's `includePath` to point at z88dk's include directories (typically `/usr/share/z88dk/include` on Linux or `C:\z88dk\include` on Windows) for full IntelliSense coverage.
+
 #### DeZog (Z80 Debugger for VS Code)
 
 **DeZog** is a Z80 debugger integrated into VS Code. It supports multiple backends:
@@ -406,44 +447,251 @@ DeZog provides:
 
 DeZog is the recommended debugger for serious Spectrum development in 2025.
 
-#### Klive IDE (Dotneteer)
+#### Retro Assembler (Levente Bajczi)
 
-**Klive IDE** is a cross-platform IDE for the Spectrum (and ZX81) built on VS Code. It integrates:
+**Retro Assembler** is a multi-target assembler sold as a VS Code extension (with a standalone CLI). While not Spectrum-specific, it supports Z80, Z80N, 6502, 68000, and other retro CPUs in a single tool. Its strengths:
 
-- **Emulator** (in-editor Spectrum execution)
-- **Assembler** (built-in, SjASMPlus-compatible)
-- **Debugger** with breakpoints, memory view, register inspection
-- **Asset editors**: sprite editor, screen designer
-- **Disassembler** for reverse engineering
+- **Built directly into VS Code** as a language server — no external binary required
+- **Multi-CPU**: the same developer can target Spectrum (Z80), C64 (6502), and Amiga (68000) without switching tools
+- **Premium/paid model**: a license unlocks all features; a free tier covers small projects
 
-Klive is the right choice for developers who want a single integrated environment rather than assembling VS Code extensions themselves. It runs on Windows and macOS.
+Retro Assembler is the right choice for developers who already pay for it for other retro platforms and want one consistent assembler across their portfolio.
+
+#### Productivity and Workspace Extensions
+
+Several general-purpose VS Code extensions are nearly universal in Spectrum project setups:
+
+| Extension | Purpose |
+|---|---|
+| **Code Spell Checker** (Street Side Software) | Catches typos in labels, comments, and documentation. Spectrum projects often have many abbreviated identifier names that look like typos; configure a project-specific `words.txt` allowlist. |
+| **Todo Tree** (Gruntfuggly) | Highlights `TODO`, `FIXME`, `OPTIMIZE` comments and aggregates them in a sidebar tree. Useful for tracking optimization debt in cycle-count-critical code. |
+| **Better Comments** (Aaron Bond) | Color-codes comments by type (`!` for alerts, `?` for questions, `*` for highlights). Helpful for distinguishing timing warnings from explanatory prose in Z80 source. |
+| **File Icon Themes** (e.g., Material Icon Theme) | Provides distinct icons for `.tap`, `.sna`, `.tzx`, `.nex`, `.scr`, `.z80` files — visually distinguishes Spectrum file types in the explorer. |
+| **Rainbow Brackets / Indent Rainbow** | Visual aid for nested `IF`/`ENDIF`, `MACRO`/`ENDM`, `STRUCT`/`ENDS` blocks common in SjASMPlus source. |
+| **EditorConfig** | Enforces consistent indentation (typically 4 spaces for Z80 source) across team members. |
+
+These extensions are not Spectrum-specific, but they appear in nearly every recommended VS Code setup for retro development.
+
+#### Standalone Tools Launched from VS Code
+
+Several Spectrum tools are not VS Code extensions themselves but integrate well as external tools configured in `tasks.json` or `launch.json`:
+
+- **Fuse** — launch from VS Code terminal via `make run`
+- **ZEsarUX** — launch in debug mode, connect via DeZog remote protocol
+- **z88dk-appmake** — post-build packaging step (e.g., generate `.tap` from raw binary)
+- **bin2tap / bin2sna / bin2nex** — minimal format converters, easily invoked from a Makefile
+- **png2scr** — image asset pipeline, runs in build task
+
+This pattern (VS Code as the editor + Makefile-launched external tools) is the most common 2025 workflow.
+
+#### Klive IDE — See Standalone IDEs Below
+
+**Klive IDE** is sometimes confused with a VS Code extension, but it is actually a **standalone Electron-based IDE** (not a VS Code plugin). Klive bundles its own Z80 assembler, emulator, debugger, and asset editors into one installable application. See the [Klive IDE](#klive-ide-dotneteer--standalone-cross-platform) subsection under Standalone IDEs below for full feature coverage.
 
 ### Standalone IDEs
 
-- **ZXDevStudio** (Windows-only): older Windows IDE with integrated editor, assembler, and emulator; still used but less actively maintained than the VS Code ecosystem
-- **ZX Spin** (Windows-only): an older Windows IDE/emulator combination; popular in the late 2000s but largely superseded
+Standalone IDEs bundle editor, assembler, emulator, and debugger into a single installable application. They trade VS Code's massive extension ecosystem for **tighter integration**: one click takes source code from the editor to running inside the emulated machine, no Makefile or task configuration required.
+
+For developers who want an experience closer to modern IDEs (CLion, Visual Studio, Xcode) and dislike assembling their own VS Code extension stack, standalone IDEs are the right choice.
+
+#### Klive IDE (Dotneteer) — Standalone Cross-Platform
+
+<a id="klive-ide-dotneteer--standalone-cross-platform"></a>
+
+**Klive IDE** is the most feature-complete standalone IDE for ZX Spectrum development in 2025. Created and maintained by **Dotneteer** (the same author behind the older SpectNetIDE for Visual Studio 2017/2019), Klive is built on Electron and runs natively on **Windows and macOS**.
+
+Klive's signature feature is **one-click compile-and-run**: a single toolbar button takes source code from the editor, assembles it, injects it into the emulated machine, and starts execution — optionally in debug mode with breakpoints active. This eliminates the typical VS Code round-trip of build → launch emulator → attach debugger.
+
+**Supported target machines:**
+
+| Machine | Status |
+|---|---|
+| ZX Spectrum 48K | ✅ Stable |
+| ZX Spectrum 128K | ✅ Stable |
+| ZX Spectrum +2E / +3E | ✅ Stable (with `.dsk` disk image support) |
+| Cambridge Z88 | ✅ Stable |
+| ZX Spectrum Next | ⚠️ In progress (Z80N extensions, layer 2, sprites) |
+| ZX 80 / ZX 81 | 🔜 Planned |
+
+**Architecture**: Klive uses a **client-service architecture** — a backend service hosts the emulator and assembler, while the frontend IDE communicates via local RPC. This allows **dual-monitor mode**: place the emulator window on one screen and the IDE on another, with live state synchronized between them.
+
+**Built-in Z80 Assembler**: Klive ships its own Z80 assembler (the *Klive Z80 Assembler*), which produces debug symbol information that the IDE's source-level debugger consumes directly. This is the key integration point — no external symbol file configuration needed.
+
+**ZX BASIC support**: Klive integrates Boriel's ZX BASIC compiler, allowing mixed-language projects (Z80 assembly + ZX BASIC) within the same IDE.
+
+**Debugging views** (when the emulator is paused):
+
+- **CPU view**: full register state (including `R`, `I`, `IFF1`/`IFF2`, IM mode)
+- **ULA view**: BORDER color, ATTR state, AY register state where applicable
+- **Memory view** with live refresh, goto-address, and byte edit
+- **Disassembly view** with execution-point tracking (follows PC)
+- **System variables monitor**: displays ZX Spectrum ROM variables (`CHARS`, `ATTR_P`, `STK_END`, etc.) with friendly names
+- **BASIC listing export**: extracts and pretty-prints the current BASIC program from memory
+
+**Breakpoint types**: code execution breakpoints are stable. Memory read/write breakpoints and I/O read/write breakpoints are listed as planned features.
+
+**File format support**:
+
+- Loading: `.tap` (tape images), `.tzx` (enhanced tape), `.dsk` (+3 disk images)
+- Saving: `.tap`, `.tzx` with optional BASIC loader stub
+- Snapshots: full save/restore of machine state
+
+**Additional features**:
+
+- **Visual keyboard** (mockups of the 48K rubber-key and 128K keyboard layouts)
+- **CPU clock multiplier** (1×–24×) for fast testing of long-running programs
+- **Sound level control** with mute/unmute
+- **Interactive command panel**: issue CLI commands within the IDE for build, run, debug, export
+
+**Limitations**:
+
+- No Linux build (Windows + macOS only)
+- Built-in assembler is Klive-specific — projects using SjASMPlus-specific directives (Lua scripting, `DEVICE NEX`, `SAVENEX`) would need to adapt
+- ZX Spectrum Next support is incomplete as of 2025
+
+Klive is the right choice for developers who want a **polished, integrated IDE** and do not need the cross-platform Linux coverage or the SjASMPlus-specific directive set. It is particularly well-suited to **educational use** (one app to install, no extension juggling) and to **rapid prototyping** (one-click iteration).
+
+#### SpectNetIDE (Dotneteer) — Visual Studio 2017/2019
+
+**SpectNetIDE** is Dotneteer's earlier ZX Spectrum IDE, built as a **Visual Studio 2017/2019 extension** (not VS Code, not the cross-platform Visual Studio for Mac). It is the direct predecessor of Klive IDE and shares many architectural concepts.
+
+SpectNetIDE's relevance in 2025:
+
+- **Windows-only** and tied to Visual Studio 2017/2019 (which is itself tied to older Windows SDKs)
+- **Superseded by Klive** for new projects — Klive covers the same use cases cross-platform
+- **Still useful** for developers with existing Visual Studio investment who do not want to install a separate toolchain
+
+For new projects, choose **Klive** instead. SpectNetIDE is listed here for historical context and for developers already committed to the Visual Studio ecosystem.
+
+#### ZXDevStudio (Windows-Only, Aging)
+
+**ZXDevStudio** (sometimes styled *zDevStudio*) is an older Windows-native IDE that bundles editor, assembler (Pasmo), and emulator into a single application. Its key historical role was lowering the barrier to entry for Windows users in the late 2000s and 2010s.
+
+- **Integrated Pasmo assembler** — no separate toolchain installation required
+- **Bundled emulator** — basic Spectrum emulation for testing
+- **Asset tools** — sprite editor, screen designer
+- **Windows-only**, less actively maintained than Klive or the VS Code ecosystem
+
+ZXDevStudio remains a reasonable **classroom/teaching** choice on Windows where a single-application install is preferred over multi-tool setup, but new commercial or hobbyist projects should generally use Klive or VS Code + extensions.
+
+#### ZX Spin (Windows-Only, Legacy)
+
+**ZX Spin** is a Windows-native emulator with integrated development features that was popular in the late 2000s and early 2010s. Its distinctive features:
+
+- **Built-in Z80 assembler** accessible from within the emulator
+- **Built-in debugger** with breakpoints and memory inspection
+- **BASIC editor** for Sinclair BASIC development
+
+ZX Spin is now **largely superseded** by Fuse, ZEsarUX, and the modern Klive IDE. It remains in use among long-time Windows users familiar with its workflow, but new projects should not target it.
+
+#### Emulator-Attached Development Tools
+
+Several Spectrum emulators ship with **built-in development tools** that approach IDE-like functionality without being standalone IDEs:
+
+| Emulator | Dev Features | See |
+|---|---|---|
+| **ZEsarUX** | Full debugger, breakpoints, watchpoints, reverse debugging, Z80N support, disassembler | [Emulators section](#zesarux-zx-family-focus) above; planned [`zesarux.md`](../11_emulation/software/zesarux.md) deep dive |
+| **SpecEmu** | Cycle-exact emulation, debugger, accurate contention modeling — popular among demoscene developers | Planned [`specemu.md`](../11_emulation/software/specemu.md) deep dive |
+| **Unreal Speccy** | Popular Russian-origin emulator with built-in debugger; common in the post-Soviet demoscene | Planned [`unreal_speccy.md`](../11_emulation/software/unreal_speccy.md) deep dive |
+| **EightyOne** | Multi-machine emulator (ZX80, ZX81, ZX Spectrum, Jupiter Ace, Timex Sinclair) with debugging | Planned [`eightyone.md`](../11_emulation/software/eightyone.md) deep dive |
+| **zxsp** | Mac-native emulator with built-in debugger and disassembler | Planned [`zxsp.md`](../11_emulation/software/zxsp.md) deep dive |
+
+These are emulators first and development tools second — but for reverse engineering or casual debugging, their built-in tools may be sufficient without setting up a full IDE.
 
 ### Other Editors
 
-- **Vim / Neovim**: syntax files available for SjASMPlus, z88dk-z80asm
-- **Emacs**: z80-mode and asm-mode provide syntax highlighting
-- **Sublime Text**: community syntax definitions
-- **Kate**: SjASMPlus ships Kate syntax highlighting directly in its source distribution
+Power-user editors with Z80 syntax support but without deep IDE integration:
+
+- **Vim / Neovim**: syntax files available for SjASMPlus (`sjasmplus-vim`), z88dk-z80asm, and Pasmo. With ALE or LSP, basic linting is possible by wiring in the assembler as a fixer.
+- **Emacs**: `z80-mode` and `asm-mode` provide syntax highlighting; `flycheck` integration can call the assembler for inline errors.
+- **Sublime Text**: community syntax definitions on Package Control for SjASMPlus, z88dk-z80asm. Build systems can invoke the assembler via `Ctrl+B`.
+- **Kate**: SjASMPlus ships Kate syntax highlighting directly in its source distribution — first-class support for the editor's highlighting engine.
+- **JetBrains CLion / IntelliJ IDEA Community**: no dedicated Z80 plugin, but the `ASM` plugin provides generic syntax highlighting. Useful if the developer already uses JetBrains tooling.
+
+### Disassemblers and Binary Analysis Tools
+
+For reverse engineering work — analyzing existing Spectrum binaries, dumping ROM contents, examining commercial games for compatibility patches, or studying demoscene productions — the following tools are commonly used alongside the assembler/editor workflow.
+
+> [!TIP]
+> **For a complete reference on Z80 disassemblers** — covering linear (z80dasm, z88dk-dis), code-flow-graph (z80dismblr / DeZog), string-aware (z80-smart-disassembler), the Spectrum-native SkoolKit toolkit with its built-in cycle-exact simulator, IDA Pro, Ghidra, Reko, plus a decision tree, comparison matrices, and pitfalls — see [disassemblers.md](disassemblers.md). The notes below are a brief survey; the deep dive is the canonical reference.
+
+#### z80dasm (Open Source Command-Line Disassembler)
+
+**z80dasm** is the open-source command-line Z80 disassembler — the inverse of an assembler. It takes a raw Z80 binary (`.bin`, or extracted from a `.sna`/`.tap`) and produces Z80 assembly source. Its strengths:
+
+- **Cross-platform** (Linux, macOS, Windows, BSD)
+- **Undocumented instruction support**: emits `SLL`, `LD A,F`, and other undocumented opcodes
+- **Symbol table input**: feed it a known symbol map (from a game's published disassembly or a reverse-engineered .lbl file) to produce named labels instead of `L0001`, `L0002`, etc.
+- **Restrictable instruction set**: limit output to documented Z80 only (useful when disassembling for a strict compiler target)
+- **Block data detection**: heuristics for distinguishing code from data tables
+
+Typical workflow: extract code from a snapshot with a script, run `z80dasm`, hand-clean the output to add comments, then re-assemble with SjASMPlus.
+
+#### IDA Pro (Hex-Rays, Commercial)
+
+**IDA Pro** is the commercial industry-standard disassembler and decompiler. For Z80:
+
+- **Built-in Z80 processor module**: full Z80 instruction set including undocumented opcodes
+- **Interactive analysis**: rename labels, define data types, mark code blocks, annotate cross-references
+- **Decompiler**: the Hex-Rays decompiler does **not** support Z80 as of 2025 (no P-code emission for 8-bit CPUs)
+- **Scripting**: IDC or Python (via IDAPython) for automated analysis
+
+The older **IDA Free 3.7** (DOS-era freeware) supports Z80 and is sometimes referenced in retro projects, but its Turbo Vision interface is not practical for modern use.
+
+IDA Pro is the right choice for serious reverse engineering work where the **interactive analysis tools** (cross-references, type annotation, scripting) justify the license cost.
+
+#### Ghidra (NSA, Free)
+
+**Ghidra** is the NSA's open-source reverse engineering platform. Z80 support is available via a **community processor module** (not bundled by default):
+
+- **Decompiler**: Ghidra's decompiler **does** support Z80 via the community module — producing C-like pseudocode from Z80 binaries. This is the major advantage over IDA Pro for Z80 work.
+- **Free and cross-platform** (Linux, macOS, Windows)
+- **Scripting**: Java or Python (Jython)
+- **Shared project databases**: multiple analysts can collaborate on the same Ghidra project
+
+Ghidra is the right choice for **decompiler-assisted** Z80 reverse engineering at zero cost. The setup overhead (installing Ghidra, finding/installing the Z80 processor module) is higher than z80dasm or IDA Pro, but the decompiler output is uniquely valuable.
+
+#### Binary / Hex Editors
+
+For inspecting and patching raw binary files (`.tap`, `.sna`, `.scr`, TR-DOS images), a dedicated hex editor is essential:
+
+| Tool | Platforms | Use Case |
+|---|---|---|
+| **Hex Fiend** | macOS | Fast, native, free. The default choice on macOS. |
+| **HxD** | Windows | Fast, free, capable. The default choice on Windows. |
+| **wxHexEditor** | Linux / Win / Mac | Open source, handles large files, supports templates. |
+| **Hex Editor (Microsoft VS Code extension)** | Cross-platform | See VS Code section above; useful for in-editor inspection. |
+| **ImHex** | Cross-platform | Modern, pattern-language-based hex editor with struct templates — useful for defining `.tap` header layout as a reusable template. |
+
+#### Binary Diff and Patch Tools
+
+For distributing modifications (e.g., bug fixes to commercial games, translations, patches):
+
+- **xdelta3** / **bsdiff**: standard binary patch formats; widely used in the ROM-hacking community
+- **Flips / Floating IPS**: IPS and BPS patch formats popular for console ROMs, applicable to Spectrum binaries
+- **BinDiff / Diaphora**: semantic diffing of disassembled binaries (advanced use)
 
 ### IDE Comparison Matrix
 
-| Feature | VS Code + extensions | Klive IDE | ZXDevStudio |
-|---|---|---|---|
-| **Cross-platform** | ✅ (Win/Mac/Linux) | ⚠️ (Win/Mac) | ❌ (Windows only) |
-| **Integrated emulator** | ❌ (via DeZog bridge) | ✅ | ✅ |
-| **Source-level debugger** | ✅ (DeZog) | ✅ | ⚠️ |
-| **Asset editors** | ❌ (separate tools) | ✅ (sprite, screen) | ✅ |
-| **Disassembler** | ❌ (separate tool) | ✅ | ⚠️ |
-| **Active maintenance** | ✅ | ✅ | ⚠️ |
-| **Best for** | Power users, team projects | Integrated workflow | Legacy Windows users |
+The expanded IDE/tool landscape, with the most relevant options side-by-side:
+
+| Feature | VS Code + extensions | Klive IDE | SpectNetIDE | ZXDevStudio | ZX Spin | Vim/Emacs |
+|---|---|---|---|---|---|---|
+| **Cross-platform** | ✅ (Win/Mac/Linux) | ⚠️ (Win/Mac) | ❌ (Win + VS 2017/19) | ❌ (Win only) | ❌ (Win only) | ✅ (everywhere) |
+| **Integrated emulator** | ❌ (via DeZog) | ✅ (built-in) | ✅ (built-in) | ✅ (basic) | ✅ (built-in) | ❌ |
+| **Source-level debugger** | ✅ (DeZog) | ✅ | ✅ | ⚠️ (basic) | ⚠️ (basic) | ❌ |
+| **Built-in assembler** | ❌ (external) | ✅ (Klive Z80 Asm) | ✅ | ✅ (Pasmo) | ✅ | ❌ (external) |
+| **T-state meter** | ✅ (Z80 Asm Meter) | ⚠️ (planned) | ❌ | ❌ | ❌ | ❌ |
+| **Inline bytecode size** | ✅ (ASM Code Lens) | ⚠️ | ❌ | ❌ | ❌ | ❌ |
+| **Hex editor** | ✅ (MS Hex Editor) | ⚠️ (memory view) | ⚠️ | ⚠️ | ⚠️ | via plugins |
+| **Disassembler** | ❌ (external) | ✅ | ✅ | ⚠️ | ⚠️ | via plugins |
+| **Asset editors** | ❌ (external) | ✅ (planned) | ✅ | ✅ | ⚠️ | ❌ |
+| **ZX Spectrum Next support** | ✅ (via SjASMPlus/DeZog) | ⚠️ (in progress) | ❌ | ❌ | ❌ | via SjASMPlus |
+| **Active maintenance (2025)** | ✅ | ✅ | ❌ (superseded) | ⚠️ | ❌ | ✅ (editor core) |
+| **Best for** | Power users, team projects, CI | Integrated workflow, teaching | Legacy VS users | Legacy Windows classrooms | Historical only | Power users on Unix |
 
 > [!TIP]
-> **For new projects, use VS Code with the Z80 Macro-Assembler + Z80 Assembly Meter + DeZog extensions.** This combination is the most flexible, cross-platform, and actively maintained modern Spectrum development environment.
+> **For new projects, use VS Code with the Z80 Macro-Assembler + Z80 Assembly Meter + ASM Code Lens + DeZog extensions.** This combination is the most flexible, cross-platform, and actively maintained modern Spectrum development environment. Choose **Klive IDE** instead if you want a single-application integrated experience and do not need Linux or SjASMPlus-specific directives.
 
 ---
 
@@ -715,7 +963,7 @@ Different project types have different optimal toolchain setups. The table below
 | **Modern BASIC-flavored** | **Boriel ZX BASIC** compiler + Fuse for testing; VS Code for editing. |
 | **Multi-platform retro project** (Spectrum + C64 + NES) | **WLA-DX** for assembler consistency across platforms; per-platform emulators. |
 | **Educational / classroom** | **z88dk C** or **Boriel ZX BASIC**; **Fuse** with integrated debugger; pre-built VM image with all tools installed. |
-| **Reverse engineering** | **ZEsarUX** with reverse debugging; **DeZog** for source-level analysis (when source exists); dedicated disassembler tools (planned `disassemblers.md`). |
+| **Reverse engineering** | **ZEsarUX** with reverse debugging; **DeZog** for source-level analysis (when source exists); dedicated disassembler tools — see [disassemblers.md](disassemblers.md). |
 
 > [!TIP]
 > **Default recommendation for new Spectrum development in 2025**: SjASMPlus + VS Code (Z80 Macro-Assembler + Z80 Assembly Meter extensions) + Fuse or ZEsarUX + DeZog for debugging + Make or Deno for build + GitHub Actions for CI. This is the most productive combination and the one used by most active modern Spectrum developers.
@@ -914,7 +1162,21 @@ Planned emulator deep-dives in `11_emulation/software/`:
 - [Boriel ZX BASIC Compiler](https://www.boriel.com/post/the-zx-basic-compiler) — official site
 - [Klive IDE on GitHub](https://github.com/Dotneteer/kliveide) — source and documentation
 - [Klive IDE documentation](https://dotneteer.github.io/kliveide/) — user guide
+- [SpectNetIDE on GitHub](https://github.com/Dotneteer/spectnetide) — predecessor of Klive for Visual Studio 2017/2019
+- [Z80 Macro-Assembler (VS Code extension)](https://marketplace.visualstudio.com/items?itemName=mborik.z80-macroasm) — Martin Bórik's language support
+- [Z80 Assembly Meter (VS Code extension)](https://marketplace.visualstudio.com/items?itemName=theNestruo.z80-asm-meter) — Néstor Sancho's T-state meter
+- [ASM Code Lens (VS Code extension)](https://marketplace.visualstudio.com/items?itemName=maziac.asm-code-lens) — Joachim Strobel's inline annotation
+- [DeZog (VS Code extension)](https://marketplace.visualstudio.com/items?itemName=maziac.dezog) — Z80 debugger for VS Code
+- [Hex Editor (Microsoft VS Code extension)](https://marketplace.visualstudio.com/items?itemName=ms-vscode.hexeditor) — Microsoft's official hex editor
+- [Retro Assembler homepage](https://enginedesigns.net/) — multi-CPU assembler with VS Code extension
+- [z80dasm on GitHub](https://github.com/lvitals/z80dasm) — open-source Z80 disassembler
+- [IDA Pro homepage](https://hex-rays.com/ida-pro/) — commercial disassembler
+- [IDA Free](https://hex-rays.com/ida-free) — free IDA tier for non-commercial use
+- [Ghidra homepage](https://ghidra-sre.org/) — NSA's open-source reverse engineering platform
+- [Hex Fiend](https://hexfiend.com/) — macOS hex editor
+- [ImHex on GitHub](https://github.com/WerWolv/ImHex) — pattern-language hex editor
 - [Break Into Program — ZX Spectrum development with modern tools](http://www.breakintoprogram.co.uk/software_development/zx-spectrum-development-with-modern-tools) — Dean Belfield's reference toolchain guide
+- [Break Into Program — Installing and Configuring Visual Studio Code](http://www.breakintoprogram.co.uk/development-tools/installing-and-configuring-visual-studio-code) — VS Code Z80 setup walkthrough
 - [A Tour of Z80 Cross-Assemblers — Bumbershoot Software](https://bumbershootsoft.wordpress.com/2025/03/15/a-tour-of-z80-cross-assemblers/) — comparative review of cross-assemblers
 - [Stack Overflow: Favourite ZX Spectrum development tools](https://stackoverflow.com/questions/77507/what-are-your-favourite-zx-spectrum-development-tools) — community discussion (archived)
 - [Creating Future — ZX Spectrum Assembly Programming](https://www.creatingfuture.eu/2022/04/12/zx-spectrum-assembly-programming/) — modern tool survey

@@ -282,13 +282,309 @@ MONS was a separate program from GENS (the assembler). The developer assembled t
 
 ### The STS Tradition (Russian)
 
-**STS** (Step Trace System) was the Russian-scene debugger that paired with ALASM and ZXASM. STS was distinguished by **hardware-assisted debugging** on compatible clone hardware:
+**STS** (Step Trace System, also expanded as *Stalker Trace System* and retrospectively as *Stealth Monitor*) was the dominant Russian-scene debugger of the 1990s and the best-in-class monitor-debugger of the entire native Spectrum era. Originally developed by **Dmitry Partsyrny** (pen name **STALKER**) in **Kharkov, Ukraine** in 1994, STS was refined across versions 2.6, 3.3, 5.0, and later community-maintained releases through the late 1990s.
 
-- The Scorpion, Profi, and some Pentagon variants shipped with a **physical NMI button** wired to the Z80's NMI line
-- Pressing the button vectored execution to STS's ROM-resident handler, which captured register state and dropped into the STS display
-- This provided a hardware-assisted breakpoint *anywhere* in any program — including commercial games the developer was reverse engineering
+STS's significance is best understood by what it replaced. Before STS, Russian clone developers used a fragmented landscape of monitors ported or cloned from Western originals: **MONS 4** (HiSoft DevPac's monitor), **MON 2**, **FOXMON 128**, and **ADM 7.08**. Each had limitations — single-bank visibility, no disassembly, no register-set switching, no label integration. STS, designed from scratch for the 128K clone architecture, surpassed all of them and became the standard debugger at every major Russian demoscene party (CC, diHALT, CAFe, FunTop) through the late 1990s.
 
-STS was therefore not just a development tool but a **reverse engineering tool**. The Russian scene's strong reverse engineering tradition (visible in the many demoscene cracktros and intros from the era) was directly enabled by STS+NMI hardware.
+#### Version History
+
+| Version | Year | Source | Key additions |
+|---|---|---|---|
+| **STS 2.6** | 1994 | Spectrophoby #1 (StALKER / KVANtSOFt) | Original release: 19-byte resident, window panels, full disassembler with undocumented opcodes, register-set switching, single-breakpoint trap |
+| **STS 3.3** | 1995 | Stalker (Kharkov) | Disk error handling, label support, ALASM integration began |
+| **STS 5.0** | 1995–1996 | ZX-Ревю 1996 №9 | Full ALASM 3.5 integration (symbol-table bridge), separate Trace Call processing (`SS+Z` step-into vs `SS+X` step-over), Disasm-to-Disk with variable DEFB bytes per line, panel scroll without cursor move |
+| **STS 6.x** | Late 1990s | Community extensions | Windowing refinements, expanded label tables, post-Stalker community maintenance |
+
+STS was paired with **ALASM** (its primary integration partner) and also with **ZXASM 3.0** and **TASM 128**. The STS+ALASM combination on a Pentagon or Scorpion with TR-DOS was the standard professional Russian-scene development stack of the late 1990s.
+
+#### Architecture: The 19-Byte Resident
+
+STS's defining architectural innovation was its **two-component design**: a small resident routine that lived in the target program's memory, and a much larger monitor body that occupied an entire 16 KB RAM bank.
+
+**Memory layout** (128K Spectrum, STS v2.6+):
+
+| Region | Address range | Contents |
+|---|---|---|
+| `#0000–#3FFF` (ROM) | System ROM | 48K BASIC or 128K editor ROM; STS does **not** occupy this. |
+| `#4000–#7FFF` (RAM bank) | Target program or STS screen | When STS is active, page 7 is paged in here: this becomes the STS second screen + STS code. |
+| `#8000–#BFFF` (RAM bank) | Target program | STS occupies **none** of this when invoked — the user's program is intact here. |
+| `#C000–#FFFF` (page 5 / bank #13) | Target program | STS occupies **none** of this either. The 19-byte resident is the only footprint. |
+| Page 7 (when STS active) | All 16 KB | STS code body at `#DB00` (56064), ~9 KB; second screen at `#4000`-offset; STS font and panels share the rest. |
+
+STS itself resides in **page 7** (bank #16) — the same bank the 128K Spectrum normally reserves for the second display and TR-DOS work buffers. When STS is invoked, it pages itself in, takes over the screen, runs its monitor loop, and on exit pages the original bank back. The user's program memory is preserved across STS invocations; only the 19-byte resident lives in the target's address space.
+
+**The Resident** — STS's clever trick — is just **19 bytes** that the monitor installs in the target program's address space (the lower 48 KB, anywhere in `#4000..#BFEE` where free space can be found). The resident is what makes STS invocable from the target program without occupying main memory. Its job:
+
+- Catch the breakpoint trap (set via `W` command) and vector back into the monitor
+- Switch the paging register (`#7FFD`) to bring page 7 (STS) into view
+- Preserve enough register state for the monitor to display
+- Restore the 3 bytes at the breakpoint address (the trap replaced them)
+
+The resident is **dynamically modified** by the monitor — different breakpoint addresses, different paging states require different resident variants. The `[E]` (sEtup) command re-installs or relocates the resident.
+
+**Paging port**: STS uses `OUT (#FD),A` with `A < #20` to switch banks. This works because of the partial port decoding on clone hardware — the high byte of the address is ignored, and the value of `A` directly maps to the 128K `#7FFD` paging bits:
+
+```
+Bit:  F E D C B A 9 8 7 6 5 4 3 2 1 0
+Value:0 0 0 r s p a g 1 1 1 1 1 1 0 1
+
+where:
+  p a g  = RAM page (0–7)    → bits 0–2 of #7FFD
+  s      = screen select     → bit 3 of #7FFD
+  r      = ROM select        → bit 4 of #7FFD
+```
+
+This decoding matches the standard 128K Pentagon/Profi/Leningrad port scheme. STS does **not** work on hardware that decodes bits 8–15 of the port address (some unusual clones) without hardware modification.
+
+**Disk access via TR-DOS @-functions**: STS does **not** include its own disk driver. It calls the TR-DOS ROM's `@` functions (`@READ`, `@WRITE`, etc.) directly. This means:
+
+- STS does not corrupt TR-DOS system variables (`#5CCB`–`#5D15`)
+- Programs being debugged that *do* use those variables (custom loaders, copy protection) keep their state intact
+- STS cannot read non-TR-DOS disk formats natively (the @-functions assume 256-byte TR-DOS sectors) — though single-sector reads from MS-DOS or iS-DOS disks are possible via direct sector addressing
+
+#### User Interface: Window Panels and the 6×8 Font
+
+STS's UI was a **window-panel interface** running in full-screen mode on the second display. This was a significant departure from the line-oriented MONS tradition and brought the Spectrum debugger closer to the look-and-feel of contemporary PC debuggers (Turbo Debugger, CodeView).
+
+**Panel modes** — the central workspace has two switchable views:
+
+| Mode | Toggle | What it shows |
+|---|---|---|
+| **Disassembler** | `[SS+4]` (cycles to this) | Memory decoded as Z80 mnemonics, including **all undocumented instructions** (`SLL`, `LD A,F`, etc.). PC cursor (white highlight) tracks the current execution point. |
+| **List** (hex dump) | `[SS+4]` (cycles back) | Raw memory in hex + ASCII side-by-side, cursor-addressable for byte editing. Used for inspecting data tables, sprite data, font data — anything that does not disassemble cleanly. |
+
+Both panels honor the current **Bank** setting (`[B]` command) — STS can display any of the eight 16 KB RAM pages of the 128K Spectrum, not just the visible page 5. This was a major advantage over MONS, which could only see the currently-paged bank.
+
+**Window management** commands:
+
+- `[SS+1]` — Zoom/Unzoom the active panel (toggle between split-view and full-screen single panel)
+- `[SS+2]` — Move panel up/down (rearrange the split)
+- `[SS+8]`, `[SS+9]` — Scroll panel content **without moving the cursor** (v5.0+); useful for peeking at adjacent memory while keeping the cursor on the line of interest
+- `[CS+1]` — Toggle User Screen (switch between STS display and the program's own screen — see below)
+- `[CS+3]` / `[CS+U]` — Page Up
+- `[CS+4]` / `[CS+Y]` — Page Down
+
+**The 6×8 font**: STS uses a custom 6×8 pixel font instead of the standard 8×8 Spectrum ROM font. This fits **42 characters per line** instead of the standard 32 — a 31% density increase that matters enormously for hex+ASCII displays and disassembly listings. The font is built into STS in page 7 and does not consume target-program memory.
+
+**User Screen toggle** (`[CS+1]`): STS preserves the target program's screen by using the 128K's second screen for itself. Pressing `[CS+1]` flips between the STS display and the program's actual display — invaluable for debugging games and demos that draw to the screen. The target's display is *not* corrupted by STS being invoked.
+
+**Number base toggle** (`[SS+3]`): all numeric displays switch between decimal and hexadecimal. Useful when the target program's documentation (or magazine articles) quote addresses in decimal.
+
+**Error signaling via BORDER**: STS uses the Spectrum's border color as a status indicator, since the border is the one display element always visible regardless of panel state:
+
+| BORDER color | Meaning |
+|---|---|
+| Red | Search pattern not found in 64 KB (Find command exhausted all banks) |
+| Cyan | Disk full (Save command failed) |
+| Yellow | Sector number > 15 (warning — likely a TR-DOS catalog error) |
+
+#### Command Reference
+
+STS's command set is keyboard-driven, with single-key and `Symbol Shift + key` / `Caps Shift + key` chords. The `SS` and `CS` notation follows Russian-scene convention (SS = Symbol Shift, also Russian-mode toggle on Cyrillic keyboards; CS = Caps Shift).
+
+**Memory and navigation:**
+
+| Key | Command | Description |
+|---|---|---|
+| `M` | set Memory address | Set the address at which the panel displays. |
+| `B` | set Bank | Set the `#7FFD` paging value (RAM page, screen, ROM). Bits 5–7 forced to 0; bit 3 forced to 1 (screen 1, STS's own). |
+| `E` | sEtup | Resident address, key-click sound on/off, panel colors, cursor attributes (byte value). Exit with `SPACE` or `CS+SPACE`. |
+
+**Memory operations:**
+
+| Key | Command | Description |
+|---|---|---|
+| `I` | fIll block | Fill a memory range with a 1–8 byte pattern. The `▒` character marks the end of the pattern. Use `CS+0` (DELETE) to shorten. |
+| `O` | cOpy block | Copy a memory block to a new address. ⚠️ **Does not restore the resident** — if the copy overwrites the resident, STS cannot be invoked again until reinstalled via `E`. |
+| `F` | Find bytes/text | Search for a byte pattern with an **AND mask** — bits where the mask is 1 must match; bits where the mask is 0 are ignored. Searches all 64 KB across all banks with the current Bank setting. BORDER turns red if not found. |
+| `N` | find Next | Continue search from cursor. In List mode, searches at the cursor position; in Disassembler mode, searches at the top of the panel (because Z80 instructions have variable length). |
+
+**Disk operations** (via TR-DOS `@` functions — system variables preserved):
+
+| Key | Command | Description |
+|---|---|---|
+| `L` | Load file | Read a named TR-DOS file. STS reads the catalog first and shows the file's Start address and Length from the directory entry. |
+| `S` | Save file | Write a named TR-DOS file. |
+| `SS+L` | Load sectors | Read 1–255 TR-DOS sectors into any RAM page (except page 7). Does not modify any system variables. Current track/sector can be queried by pressing `SS+L` then `ENTER` (analog of the `#5CF4`–`#5CFF` variables). |
+| `SS+S` | Save sectors | Write 1–255 sectors. Same constraints as `SS+L`. |
+
+`SS+ENTER` (v5.0+) during filename entry: write the file to its **original disk location** (in-place update). This was OldMan's invention and eliminated the TR-DOS problem of leftover duplicate files.
+
+**Debug commands:**
+
+| Key | Command | Description |
+|---|---|---|
+| `W` | BreakPoint | Set a software breakpoint. Replaces 3 bytes at the target address with a trap; the resident catches the trap and returns to STS. **Only one breakpoint at a time.** Does not use the stack. Original 3 bytes are restored on return. |
+| `SS+Z` | Step command | Execute one Z80 instruction, then return to STS. (v5.0+: step-into for `CALL` — descends into subroutines.) |
+| `SS+X` | (v5.0+) | Step-over for `CALL` — sets a temporary breakpoint at the instruction after the `CALL` and runs. |
+| `SS+T` | Skip command | "Jump over" the current instruction (RAM only). Uses `W` to set a one-shot breakpoint after the instruction. |
+| `SS+K` | Jump to PC | Run from the address in the PC register. White PC cursor shows the resume line. STS screen remains visible. |
+| `J` | Jump to address | Run from an arbitrary address. Sets User screen first. Returns via breakpoint. |
+| `T` | trace | Continuous step mode, with or without screen indication (without = faster). Internally emulates `SS+Z`. |
+| `X` | Alt register | Toggle between primary (`AF`, `BC`, `DE`, `HL`) and alternate (`AF'`, `BC'`, `DE'`, `HL'`) register sets in the display. |
+
+**Quit options** (`Q`):
+
+- **To TASM 128** — restore stack, set Bank=`#14`, `JP #C000` (re-enters TASM at its entry point)
+- **To BASIC / ZXASM** — restore stack, set Bank=`#10`, `RET` (returns to BASIC or ZXASM's caller)
+- **Restart TR-DOS** — set Bank=`#10`, `JP 0` to TR-DOS ROM (warm boot the disk OS)
+
+**Escape**: `CS+SPACE` cancels any in-progress command input.
+
+**Label support** (v5.0+, with ALASM 3.5 integration — see below):
+
+- `SS+5` — toggle label display; STS reads the ALASM label table to render symbolic names instead of bare addresses in the disassembly panel
+
+#### Debugging Model: Single Breakpoint, R Tracking, Step Variants
+
+STS's debugging model is built around three constraints of native Spectrum debugging: (1) the Z80 has no hardware breakpoint registers, (2) the 19-byte resident must stay tiny, and (3) the target program's stack cannot be trusted. STS's solutions to these constraints are the source of its reputation as best-in-class.
+
+**The breakpoint trap mechanism**:
+
+STS implements breakpoints by **patching the target instruction with a 3-byte jump to the resident**. The mechanism:
+
+```z80
+; Before: target code at #8000:
+#8000  CD 23 80     CALL #8023      ; original instruction (3 bytes)
+
+; After: STS sets breakpoint via W command:
+#8000  CD xx yy     CALL RESIDENT   ; 3 bytes replaced with CALL to resident entry
+                                  ; (resident's address is patched in)
+```
+
+When the target executes the patched instruction, control transfers to the 19-byte resident, which:
+
+1. Saves the Z80 register state (AF, BC, DE, HL, IX, IY, SP, PC, I, R — including the **R register refresh counter**, which STS uniquely tracks)
+2. Restores the original 3 bytes at the breakpoint address
+3. Switches the paging register to bring page 7 (STS) into view
+4. Jumps into the STS monitor body
+
+The trap is **stack-free** — the resident uses fixed addresses in page 7 to save state, not `PUSH` instructions. This is critical because the target program may have corrupted SP, may be running with SP pointing to nonexistent memory, or may be inside an interrupt handler with very little stack headroom.
+
+**The single-breakpoint limitation**: Because the resident is only 19 bytes, only one trap address is recorded at a time. Setting a new `W` breakpoint clears the previous one. For workflows requiring multiple breakpoints, STS developers fell back on step-tracing (the `T` command).
+
+**Step / Skip / Trace variants** (the most sophisticated single-step system on any Spectrum debugger):
+
+| Command | Behavior | Use case |
+|---|---|---|
+| `SS+Z` (step) | Execute the current instruction. If it is a `CALL`, descend into the subroutine (step-into). | Default single-step for tracing algorithm flow. |
+| `SS+X` (step-over, v5.0+) | If the current instruction is a `CALL`, set a temporary breakpoint at the return address and run. The subroutine executes at full speed; control returns to STS at the instruction after the `CALL`. | Skip over library routines, BIOS calls, well-tested subroutines. |
+| `SS+T` (skip) | "Jump over" the current instruction **without executing it**. Sets a one-shot breakpoint at PC + instruction_length and runs from there. RAM only (does not work on ROM). | Skip an instruction that is known to crash or hang — for example, a `HALT` or an infinite loop being debugged. |
+| `T` (trace) | Continuous `SS+Z` in a loop, with optional screen refresh between instructions. Without screen refresh, runs at full speed until a breakpoint or ESC. | Fast tracing through long routines where per-instruction inspection is not needed until something interesting happens. |
+
+**R-register tracking**: The Z80's **R register** (refresh counter) increments with each instruction executed and is rarely surfaced by debuggers. STS displays and tracks R, which matters for two reasons:
+
+1. Programs that read R (for random number generation, copy protection, or cycle counting) can be debugged with their R-dependent behavior intact
+2. The Z80's `LD A,R` and `LD R,A` instructions affect interrupt timing (IFF2 is copied to the parity flag during `LD A,R`); STS's R tracking ensures these subtle effects are observable
+
+**Register set switching** (`X` command): The Z80 has two complete register sets — primary (`AF`, `BC`, `DE`, `HL`) and alternate (`AF'`, `BC'`, `DE'`, `HL'`). Programs that use `EXX` to swap between them (common in interrupt handlers and tight inner loops) are difficult to debug without seeing both sets simultaneously. STS's `X` command toggles the display between primary and alternate, allowing the developer to inspect whichever set the program is currently *not* using.
+
+#### ALASM 3.5 Integration: The Symbol-Table Bridge
+
+The most significant feature of STS 5.0 was its **tight integration with ALASM 3.5**, the leading Russian-scene assembler of 1995–1996. Before this, STS (like all Spectrum debuggers) displayed only numeric addresses in its disassembly panel — `CALL #8023`, `JP #C015`, `LD HL,(#5B5C)`. The developer had to mentally translate these numbers back to the labels in their source code. This cognitive overhead was the single biggest productivity tax on native Spectrum development.
+
+STS 5.0 + ALASM 3.5 eliminated this overhead via a **shared symbol-table protocol**:
+
+```mermaid
+flowchart LR
+    A[ALASM 3.5 source] --> B[ALASM label table]
+    B -->|page+address written to STS header| C[STS 5.0]
+    C -->|reads label table at runtime| D[Disassembly panel]
+    D --> E[CALL PrintString instead of CALL #8023]
+```
+
+**The handshake**: When ALASM 3.5 is launched, it locates the STS resident in memory, then writes **three pieces of information** into a fixed header location inside STS's page-7 body:
+
+1. **ALASM's own page number** — so STS knows where ALASM's code lives if it needs to call back
+2. **The label table's page number** — which 16 KB bank contains the label table
+3. **The label table's address** within that page
+
+With this information, STS 5.0's disassembler can resolve any address against the label table and display the corresponding symbolic name. The `SS+5` command toggles label display on/off.
+
+**The compatibility constraint**: This handshake is **version-specific**. ALASM 3.5 expects STS 5.0's header layout; STS 5.0 expects ALASM 3.5's label table format. Using STS 4.x or earlier with ALASM 3.5 does not work (the header is at the wrong offset). Using STS 5.0 with ALASM 3.0 or earlier also does not work (the label table layout differs). The ZX-Ревю 1996 №9 article explicitly warns: "using other versions of STS with ALASM 3.5 is undesirable" — meaning the integration silently produces wrong labels rather than crashing.
+
+**Why this was groundbreaking**: Symbolic debugging — seeing `CALL PrintString` instead of `CALL #8023` — was a feature of high-end PC debuggers (Turbo Debugger, CodeView) that Spectrum developers had only read about. STS 5.0 + ALASM 3.5 brought it to a 3.5 MHz Z80 with 128 KB of RAM. This was the closest the native Spectrum toolchain ever came to matching the cross-platform development experience that would displace it within five years.
+
+#### Hardware Compatibility and the NMI Button
+
+STS was designed for the 128K clone hardware that dominated the Russian scene. Its port-decoding assumptions and memory model were tuned to specific clone architectures.
+
+**Compatible hardware** (verified by the Spectrophoby #1 article, 1995):
+
+| Clone | Compatibility | Notes |
+|---|---|---|
+| **Pentagon 128** | ✅ Full | STS's primary target. The most common Russian clone. |
+| **Profi** | ✅ Full | Similar port decoding to Pentagon. |
+| **Leningrad 1/2** | ⚠️ Requires "proper expansion" | Some Leningrad variants decode port bits differently; STS works only on correctly-modified units. |
+| **Kharkov** | ✅ Full | STS's home city — local clones were naturally compatible. |
+| **Krasnodar** | ✅ Full | Same Pentagon-style decoding. |
+| **Scorpion ZS-256** | ✅ Full | Scorpion has its own Shadow Service Monitor (see below), but STS runs alongside it. |
+| **ATM Turbo** | ⚠️ Varies by mode | ATM's PC-compatible modes change port decoding. |
+| **Original 128K / +2 / +3** | ⚠️ Works with caveats | Sinclair hardware decodes `#7FFD` differently from clones; some STS features (specifically the `OUT (#FD),A` shortcut) may not work without adaptation. |
+
+**Incompatible hardware**: Clones that decode additional port address bits (bits 8–15) — typically professional or unusual designs — require hardware modification to run STS. The Spectrophoby article notes this and promises that "version 3 will remove this constraint" (which did not happen in mainline STS).
+
+**The NMI Button**:
+
+The hardware feature that defined STS's reverse-engineering role was the **physical NMI (Non-Maskable Interrupt) button** wired to the Z80's NMI line on certain clones:
+
+| Clone | NMI button stock? | Notes |
+|---|---|---|
+| **Scorpion ZS-256** | ✅ Yes — labeled "Magic Button" | Scorpion's own Shadow Service Monitor (in ROM) handles the NMI by default. STS replaces or coexists with this handler. |
+| **Profi** | ✅ Yes (most variants) | Profi's hardware design included NMI as a debugging aid from the start. |
+| **Pentagon 128** | ⚠️ Varies | Official Pentagon spec includes NMI; some clone builders omitted it to save cost. Aftermarket NMI kits were common. |
+| **Leningrad, Kay, others** | ⚠️ Often retrofitted | The NMI button was such a common modification that russian-scene BBSes distributed NMI-kit wiring diagrams. |
+
+When the NMI button is pressed during program execution, the Z80 vectors to address `#0066` (the NMI handler entry point). On a Scorpion, this is in ROM and triggers the Shadow Service Monitor. On clones running STS, STS installs its own `#0066` handler that vectors into the resident, which captures full register state and drops into the STS display.
+
+This combination — **NMI button + STS handler** — gave Russian-scene developers a **hardware breakpoint anywhere in any program**:
+
+- During commercial game execution (to find copy protection or cheat codes)
+- During demoscene production playback (to extract effects or study techniques)
+- Inside crashed programs where the target's own stack and register state are corrupted
+- Inside interrupt handlers and timing-critical loops where a software breakpoint would change timing
+
+> [!IMPORTANT]
+> The Russian scene's strong reverse-engineering tradition — visible in the thousands of demoscene cracktros, training menus, and game modifications produced from 1992 through the 2000s — was directly enabled by the NMI+STS combination. Without a hardware way to break into arbitrary programs, much of this work would have been impractical. The Scorpion's stock Magic Button was the gold standard; Pentagon and Profi owners added NMI kits to match.
+
+**Comparison to the Scorpion Shadow Service Monitor**: The Scorpion ZS-256 shipped with a built-in ROM-resident debugger called the **Shadow Service Monitor**, activated by the Magic Button (NMI). This was a competent monitor-debugger in its own right — memory display, register inspection, breakpoints. STS, however, offered significantly more: the window-panel UI, the disassembler with undocumented opcodes, the symbol-table integration with ALASM, multi-bank visibility, and the step variants (`SS+Z` / `SS+X` / `SS+T`). Many Scorpion owners installed STS as a replacement for or supplement to the Shadow Service Monitor.
+
+#### Why STS Was Best-in-Class
+
+STS surpassed every other native Spectrum monitor-debugger of its era. The comparison table below summarizes the gap:
+
+| Capability | MONS 4 (DevPac) | MON 2 | FOXMON 128 | ADM 7.08 | **STS 5.0** |
+|---|---|---|---|---|---|
+| **Origin** | UK (HiSoft) | Russia (port) | Russia (Fox) | Russia | Russia (Kharkov) |
+| **Year** | 1983–1988 | early 1990s | early 1990s | early 1990s | 1994–1996 |
+| **Memory footprint in target** | ~1 KB | ~1 KB | ~512 B | ~512 B | **19 bytes** |
+| **Multi-bank visibility** (128K) | ❌ | ⚠️ (limited) | ✅ | ⚠️ | ✅ (all 8 pages) |
+| **Window-panel UI** | ❌ (line) | ❌ | ⚠️ (basic) | ❌ | ✅ (zoom, scroll, move) |
+| **Disassembler with undocumented ops** | ❌ | ❌ | ⚠️ | ❌ | ✅ |
+| **6×8 font (42 chars/line)** | ❌ (32 chars) | ❌ | ❌ | ❌ | ✅ |
+| **Number base toggle (Dec/Hex)** | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **R register tracking** | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Register set switching (`X`)** | ❌ | ❌ | ⚠️ | ❌ | ✅ |
+| **Step-over (`SS+X`)** | ❌ | ❌ | ❌ | ❌ | ✅ (v5.0+) |
+| **Skip instruction (`SS+T`)** | ❌ | ❌ | ❌ | ❌ | ✅ |
+| **Symbolic labels** | ❌ | ❌ | ❌ | ❌ | ✅ (with ALASM 3.5) |
+| **AND-mask Find** | ❌ (exact) | ⚠️ | ⚠️ | ❌ | ✅ |
+| **Sector-level disk I/O** | ❌ | ❌ | ⚠️ | ❌ | ✅ (1–255 sectors) |
+| **NMI button integration** | ❌ | ⚠️ | ⚠️ | ⚠️ | ✅ (full handler) |
+| **Stack-free breakpoint trap** | ❌ (uses stack) | ❌ | ⚠️ | ❌ | ✅ |
+| **TR-DOS @-function disk access** | N/A | ⚠️ | ✅ | ✅ | ✅ (system vars preserved) |
+| **Disasm-to-Disk** | ❌ | ❌ | ⚠️ | ❌ | ✅ (variable DEFB bytes) |
+| **User Screen toggle** | ❌ | ❌ | ⚠️ | ❌ | ✅ (preserves program screen) |
+
+STS's advantages cluster in five areas:
+
+1. **Tiny footprint**: 19 bytes vs. 512 B–1 KB for competitors. STS could debug programs that had no room for a larger resident — including 1K and 4K demoscene intros where every byte counted.
+2. **Symbolic debugging**: The ALASM 3.5 label integration was unique. No other native Spectrum debugger could display source-level labels.
+3. **Multi-bank visibility**: Full 128K awareness. Competitors could only see the currently-paged bank, missing data and code in other banks.
+4. **Step variants**: Four distinct single-step modes (`SS+Z`, `SS+X`, `SS+T`, `T`) versus the single "step" command on other debuggers.
+5. **Undocumented opcodes**: The disassembler correctly emitted `SLL`, `LD A,F`, etc. — critical for the demoscene, where undocumented opcodes were used routinely for size optimization.
+
+The result was that by 1996, STS had effectively eliminated its Russian-scene competitors. MON 2, FOXMON 128, and ADM 7.08 persisted only on machines where STS could not run (port-decoding incompatibilities) or with developers who had grown up with them and saw no reason to switch. STS became the **universal debugger** of the late native era.
 
 ### The Zeus Integrated Tradition
 
@@ -296,15 +592,21 @@ STS was therefore not just a development tool but a **reverse engineering tool**
 
 ### Capability Comparison
 
+A higher-level comparison across the three debugger traditions (STS is covered in depth above; this table summarizes the top-level differences):
+
 | Capability | MONS (DevPac) | STS (ALASM/ZXASM) | Zeus Monitor |
 |---|---|---|---|
 | Memory display/edit | ✅ | ✅ | ✅ |
-| Register display | ✅ | ✅ | ✅ |
+| Register display (incl. R) | ⚠️ (no R) | ✅ (full, with R) | ⚠️ (no R) |
+| Multi-bank visibility | ❌ (one bank) | ✅ (all 8 pages) | ⚠️ (varies) |
 | Breakpoints | ✅ (software trap) | ✅ (software + hardware NMI) | ✅ (software trap) |
-| Single-step | ✅ | ✅ | ✅ |
-| Disassembly | ✅ (read-only) | ✅ | ✅ (in editor) |
-| Integrated with editor | ❌ (separate program) | ⚠️ (separate but tightly coupled) | ✅ (one program) |
-| Hardware NMI support | ❌ | ✅ (Scorpion/Profi/Pentagon) | ⚠️ (emulated in Zeus 4) |
+| Step-into / step-over | ⚠️ (step only) | ✅ (`SS+Z` / `SS+X` / `SS+T` / `T`) | ⚠️ (step + trace) |
+| Disassembly with undocumented ops | ❌ | ✅ | ⚠️ |
+| Symbolic labels | ❌ | ✅ (with ALASM 3.5) | ✅ (within Zeus source) |
+| Integrated with editor | ❌ (separate program) | ⚠️ (separate but tightly coupled via label table) | ✅ (one program) |
+| Hardware NMI support | ❌ | ✅ (Scorpion/Profi/Pentagon with NMI kit) | ⚠️ (emulated in Zeus 4) |
+| Target memory footprint | ~1 KB | **19 bytes** | ~1 KB |
+| Window-panel UI | ❌ (line-oriented) | ✅ (zoom, scroll, move) | ✅ (full-screen) |
 
 ### Hardware-Assisted Debugging Tricks
 
@@ -315,6 +617,100 @@ Beyond the STS NMI button, native-era developers invented several hardware-assis
 - **Custom NMI cartridges**: developers without STS-compatible clones built simple NMI-button cartridges that vectored to a tiny monitor routine
 
 These tricks were the 1980s equivalent of today's In-Circuit Emulator (ICE) debugging.
+
+### The Post-Native Lineage: Modern Emulator Debuggers
+
+When post-Soviet development migrated from real hardware to PC emulators in the late 1990s and early 2000s, the STS tradition did not die — it moved *into the host*. The first generation of Windows-based Spectrum emulators was written by the same developers (and the same audience) who had built the native assemblers and monitor-debuggers. Their built-in debuggers are direct descendants of STS, often written as deliberate re-creations of its workflow with features STS could never offer because it had to fit in a 19-byte resident.
+
+For modern reverse engineering and demoscene development, these emulator debuggers **replaced** STS-class monitors. The decision row in [When to Choose Native](#when-to-choose-native-decision-guide) reflects this: native monitor-debuggers are now primarily of historical interest, and the practical work happens in emulator debuggers.
+
+#### UnrealSpeccy (SMT, original)
+
+The direct spiritual successor to STS. Author **SMT** (with contributions from Dexus, Alone Coder, and deathsoft); final version 0.36.7 circa 2008. The UnrealSpeccy credits string explicitly thanks *"Stalker — thanks for STS"* — confirming direct lineage.
+
+UnrealSpeccy's monitor exceeds STS in almost every dimension:
+
+| Capability | STS 5.0 | UnrealSpeccy 0.36.7 |
+|---|---|---|
+| Code breakpoints | 1 (single) | **Unlimited** |
+| Conditional expressions | ❌ | ✅ C-like syntax, e.g. `(out & 0FF)==0FD && (val&7)==3` |
+| Memory-access breakpoints | ❌ (exec only) | ✅ separate R / W / X flags |
+| On-screen watches | ❌ | ✅ arbitrary C expressions, e.g. `M(pc)==0CB && pc->1 >= 10` |
+| Built-in assembler | ❌ (disasm only) | ✅ assemble-as-you-type at cursor |
+| Step variants | `SS+Z` / `SS+X` / `SS+T` / `T` | `F7` step, `F8` trace-skip-calls, `F11` run-until-SP-returns |
+| Cursor positions | 1 (backstack via Backspace) | **8 slots** (`Ctrl+1`..`Ctrl+8` save, `1`..`8` go) |
+| Symbol/label loading | ALASM 3.5 only | **Same 3-method scheme**: XAS7, ALASM 4.42–5.0x, ALASM+STS (press `Ctrl-A`) |
+| Memory-ripper tool | ❌ | ✅ marks read/written bytes, replaces unreferenced with `#CF` |
+| Disk editor | sector load/save only | ✅ both physical-track and logical-sector views |
+| Target footprint | 19 bytes (resident) | 0 (host-side debugger) |
+
+The continuity is striking: UnrealSpeccy's `Ctrl-A` label-loading dialog supports the *exact same three methods* as STS 5.0's symbol-table bridge (XAS7 in bank 6; ALASM 4.42–5.0x in pages 1–7; ALASM+STS in bank 7). UnrealSpeccy is effectively what STS would have become if it had run on the host PC instead of inside the Spectrum.
+
+#### Unreal Speccy Portable (djdron, scor)
+
+A cross-platform port of the UnrealSpeccy core. The **portable version** was created by djdron and scor; the original PC version was by SMT, Dexus, Alone Coder, and deathsoft. The portable rewrite targets Windows, Linux, macOS, Symbian, WinMobile, Dingoo A320, Android, PSP, and Raspberry Pi — a deliberately portable C++ core designed to seed the mobile/handheld Spectrum ecosystem.
+
+The portable version **focuses on the emulation core**, not the debugger. Most of UnrealSpeccy's monitor features (conditional breakpoints, ripper tool, label loading) were trimmed in the port. It is the right choice for playing software on a non-Windows host, but for serious debugging work, use the original UnrealSpeccy or unreal-ng.
+
+#### ZXMAK2 (zxmak)
+
+A .NET-based emulator with the strongest hardware-model coverage of any Spectrum emulator. Written in C#, requires .NET Framework 4 and DirectX 9 (or Mono on Linux). Evolution: ZXMAK (C++, 2001–2003) → ZXMAK.NET (2005–2008, SourceForge) → ZXMAK2 (current, on GitHub).
+
+ZXMAK2's hallmark is the **"Virtual Machine" design**: emulated hardware can be changed on the fly without restarting the emulator. Supported models include 48, 128, +3, Pentagon 128/512/1024, Scorpion 256/1024 (with PROF-ROM variants), ATM 4.50, ATM 7.10, PentEvo 4096K, Profi 3.xx/5.xx, Sprinter, Quorum 64/256, Leningrad 1, BYTE 48K, and LEC 48/528 — plus a plugin system for custom configurations.
+
+ZXMAK2 is the only emulator that supports **every major Russian clone family** in a single binary. Its debugger is less feature-rich than UnrealSpeccy's (no conditional expressions, no ripper tool), but the model coverage makes it indispensable for debugging software that targets obscure clones. Recent additions include an Intel HEX file loader that bridges the modern cross-assembler workflow: assemble with SjASMPlus on the host, then load the resulting `.ihx` directly into ZXMAK2's address space.
+
+#### unreal-ng (alfishe)
+
+The bleeding edge of the STS tradition — a debugger-first emulator designed for the 2020s. Author **alfishe** describes it as *"a modern, scriptable, multi-instance ZX Spectrum/Pentagon emulator platform for developers, demosceners, reverse engineers, testing, visualization, and AI automation. Inspired by unreal speccy but went way far and beyond."*
+
+unreal-ng is a fully re-engineered, cross-platform core (Windows 32/64-bit, Linux 32/64-bit, macOS 64-bit) built with CMake + Qt 6.x. The architecture is explicitly modular: separate `core` (all emulation logic), GUI, tests, and benchmarks subprojects. Verification uses Google Test; performance uses Google Benchmark.
+
+What sets unreal-ng apart from every predecessor is its **automation surface**: multi-instance operation (run many emulated machines in parallel, useful for batch reverse engineering and CI), scripting, and an explicit "AI automation" target audience. This is the first Spectrum emulator designed for programmatic rather than interactive use as a first-class use case.
+
+#### ZX-M8XXX / ZX Matrix (Bedazzle)
+
+The most feature-rich modern Spectrum debugger, and the one that pushes furthest past the STS paradigm. Author **Bedazzle**; current version 0.15.16; vanilla JavaScript with zero build tools or dependencies — served as static files from any web server and opened in a modern browser. The credits string names JSSpeccy 3, EmuzWin, Swan, and ZXMAK2 as inspirations, but ZX-M8XXX has grown well past any of them in RE-tooling depth.
+
+ZX-M8XXX is what happens when the question changes from *"how do we replicate STS in software?"* to *"what would Ghidra-for-Spectrum look like?"* It supports 48K, 128K, +2, +2A, +3, Pentagon, Pentagon 1024, and Scorpion ZS 256 (the STS-era hardware families), but the supported-machines list is almost incidental — the point is the reverse-engineering workflow built on top.
+
+Debugger features unique to ZX-M8XXX (none of UnrealSpeccy / ZXMAK2 / unreal-ng / ZEsarUX / Fuse have all of these):
+
+| Feature | What it does |
+|---|---|
+| **Memory heatmap** | Visualizes which addresses were read/written/executed over a run, color-coded by access type. Reveals data vs. code regions at a glance — the ripper-tool concept from UnrealSpeccy, evolved into a live visualization. |
+| **Memory region marking** | Manual/auto classification of memory regions as code, data, text, or graphics. Auto-detection runs during execution. |
+| **Cross-references (XRefs)** | Tracks every reference to every labeled address (Ghidra/IDA-style). Click a label, see every callsite. |
+| **Subroutine detection + code folding** | Identifies `CALL`/`RET` boundaries automatically; subroutines can be collapsed/expanded in the disassembly view. |
+| **Runtime call stack tracking** | Tracks `CALL`/`RST`/`INT`/`RET` dynamically — the call stack that STS could only approximate via SP inspection. |
+| **Execution trace history** | 10,000-instruction rolling history with navigation; step backwards through execution. |
+| **Breakpoint ΔT counter** | Cycle-exact timing measurement between breakpoints — replaces the manual "set breakpoint at start, set breakpoint at end, subtract t-states" workflow. |
+| **Labels import/export** | Project-level label persistence; the symbol-table bridge generalized beyond ALASM 3.5 to any source format. |
+| **Project save/load** | Complete session state (breakpoints, labels, markings, bookmarks, watches) serialized for later resumption or sharing. |
+| **Graphics Viewer** | Sprite-search tool that scans memory for tile graphics with configurable dimensions. |
+| **Text Scanner** | String search across the whole address space. |
+| **OCR Text Ripper** | Screen-text recognition with custom cell sizes (4–8 × 4–16 px), grid origin offsets, font extraction from memory, and multi-charset support. |
+| **Game Mapper** | Captures game rooms, stitches them into a navigable map grid, exports as PNG or JSON. |
+| **Compare Tool** | Snapshot / binary / emulator-state diffing. |
+| **Explorer** | Universal file-format inspector (TAP/TZX/SNA/Z80/SZX/RZX/TRD/SCL/MGT/DSK/MDR/OPD/ZIP) with BASIC decoder, disassembly, hex dump, and disk-map visualization. |
+
+The integrated assembler is sjasmplus-compatible, so a developer can edit, assemble, debug, label, and export a reverse-engineered binary entirely inside one browser tab. The TR-DOS, +3 DSK, MGT, OPD, and Microdrive support plus 4-drive BetaDisk emulation mean every storage subsystem that ever shipped for the Spectrum is reachable from the same debugger.
+
+ZX-M8XXX is the *current state of the art* for Spectrum reverse engineering as of the mid-2020s. It is what a developer today should reach for when the task is "understand this binary" — not UnrealSpeccy, not ZEsarUX, not the original STS.
+
+#### The Western Ecosystem
+
+The Russian-language emulator tradition is the direct heir to STS, but the Western ecosystem has its own strong debuggers:
+
+- **ZEsarUX** (Cesar Hernandez González): cross-platform (Win/Mac/Linux/RPi), the reference emulator for timing accuracy and the only mature choice for TS/TC2068, Spectrum Next, and Chroma 81 debugging. Strong debugger with full register set, breakpoints, memory editor, disassembler, and TS-conf/Next-specific views.
+- **Fuse** (Free Unix Spectrum Emulator, the standard *nix emulator): a competent basic debugger exposed through the GTK/Qt UI. Less rich than UnrealSpeccy for reverse engineering, but the default install on most Linux distributions.
+- **EightyOne** (Charlie Robson): Windows-only, focused on Timex Sinclair machines (TS/TC2048/TC2068) and ZX80/81. Simpler debugger; the right choice when working with non-Sinclair-clone hardware variants.
+
+#### Why This Matters for the Native-vs-Cross-Platform Decision
+
+The lineage is the point. When a developer today wants the *STS workflow* — disassembly with labels, conditional breakpoints, step-into/over, register-set switching, multi-bank visibility, ripper-style code extraction — they no longer run STS on real hardware. They open UnrealSpeccy, ZXMAK2, or unreal-ng. The native monitor-debugger's feature set has been fully absorbed by the host-side emulator debugger, with substantial additions (unlimited breakpoints, conditional expressions, memory-access traps, host-side disk access, ripper tools).
+
+This is why the [When to Choose Native](#when-to-choose-native-decision-guide) decision guide lists native monitor-debuggers as historical rather than practical: the modern reverse-engineering environment *is* an emulator with a debugger, and the best of those emulators are the direct descendants of STS.
 
 ---
 
@@ -409,7 +805,7 @@ When restoring commercial-era source code from binaries, native assemblers can p
 |---|---|---|
 | **Learning Z80 basics** | You want period authenticity | You want fast iteration (recommended) |
 | **Demoscene intro (1k/4k)** | The compo requires native development | Cross-platform is fine; size-optimize with SjASMPlus |
-| **Reverse engineering** | You need cycle-exact hardware observation | ZEsarUX or Fuse emulation is sufficient |
+| **Reverse engineering** | You need to debug code that rewrites the NMI handler, pages memory in ways the emulator does not model, or relies on analog hardware behavior | **ZX-M8XXX** (browser, reverse-engineering-first, recommended default). Alternatives by need: **UnrealSpeccy** (STS-successor, conditional breakpoints), **ZXMAK2** (widest clone coverage), **unreal-ng** (multi-instance / automation), **ZEsarUX** (Next/TS2068), **Fuse** (Linux default), **EightyOne** (ZX80/81). See [The Post-Native Lineage](#the-post-native-lineage-modern-emulator-debuggers) for the full landscape |
 | **ZX Next development** | You want Zeus 4's integrated experience | SjASMPlus + VS Code is more modern (recommended) |
 | **Restoring lost source** | Byte-exact assembler-quirk matching matters | Modern cross-assembler reconstruction is fine |
 
@@ -442,7 +838,20 @@ Planned per-tool deep-dives (separate articles in this directory):
 - [desdes.com — Zeus Z80 Assembler resources](https://www.desdes.com/products/oldfiles/zeus.htm) — modern Zeus distribution and extras
 - [Simon Goodwin's Zeus Next extras](https://simon.mooli.org.uk/nextech/z80n/index.html) — Z80N additions for Zeus on the ZX Next
 - [Wikipedia — Zeus Assembler](https://en.wikipedia.org/wiki/Zeus_Assembler) — historical summary
-- [zx-pk.ru](https://zx-pk.ru) — primary Russian-language forum; ALASM, XAS, and STS discussions concentrate here
+- [Wikipedia — Scorpion ZS-256](https://en.wikipedia.org/wiki/Scorpion_ZS-256) — Shadow Service Monitor and Magic Button documentation
+- [ZX-Ревю 1996 №9 — STS 5.0 monitor-debugger article](https://zxpress.ru/book_articles.php?id=670) — primary source for STS 5.0 features and ALASM 3.5 integration (Dmitry Partsyrny / STALKER, Kharkov)
+- [Spectrophoby #1 — STS Monitor 2.6 description](https://zxpress.ru/ru/ezines/spectrophoby/01/sts-monitor-6-2-sistemnyy-monitor-otladchik-dlya-zx-spectrum-128k-s-okonnym-interfeysom) — primary source for STS 2.6 architecture, command set, and hardware compatibility
+- [zxaaa.net — STS 3.3 Help demo](https://zxaaa.net/view_demo.php?id=1711) — downloadable STS 3.3 help program (Stalker, 1995, Kharkov)
+- [speccy.info — Stalker Stealth Monitor](https://speccy.info/Stalker_Stealth_Monitor) — Russian-language STS summary
+- [zxart.ee — Debugger archive (Russian)](https://zxart.ee/rus/soft/system-software/programming/debaggery/) — catalog of native Spectrum debuggers including STS, MONS, FOXMON, ADM
+- [zx-pk.ru](https://zx-pk.ru) — primary Russian-language forum; STS, ALASM, XAS, and NMI-kit discussions concentrate here
 - [Break Into Program — Retro Computer Festival 2024](http://www.breakintoprogram.co.uk/events/retro-computer-festival-2024-exhibit-4) — hands-on Zeus demonstration
 - [zxart.ee — Assembler/MCode archive](https://zxart.ee/eng/software/system-software/programming/assemblermcode/) — searchable archive of native assemblers
+- [UnrealSpeccy 0.36.7 documentation (SMT)](https://github.com/mkoloberdin/unrealspeccy/blob/master/doc/unreal_e.txt) — primary source for the original UnrealSpeccy monitor-debugger: unlimited conditional breakpoints, C-like watch expressions, XAS/ALASM label loading (same 3 methods as STS 5.0), ripper tool, and the explicit credit to STALKER for STS
+- [UnrealSpeccy source mirror (mkoloberdin)](https://github.com/mkoloberdin/unrealspeccy) — preserved source tree of the SMT/Dexus/Alone Coder original
+- [Unreal Speccy Portable (djdron/scor)](https://github.com/djdron/unrealspeccyp) — cross-platform port to Windows/Linux/macOS/Android/PSP/RPi/Dingoo; deliberately trimmed debugger feature set
+- [ZXMAK2 (zxmak)](https://github.com/zxmak/zxmak2) — .NET-based "Virtual Machine" emulator supporting 18+ clone families (48, 128, +3, Pentagon, Scorpion, ATM, PentEvo, Profi, Sprinter, Quorum, Leningrad, BYTE, LEC); on-the-fly hardware switching; Intel HEX loader for cross-assembly workflow
+- [unreal-ng (alfishe)](https://github.com/alfishe/unreal-ng) — modern re-engineered, scriptable, multi-instance, AI-automation-ready emulator platform; cross-platform CMake + Qt 6 build; the 2020s continuation of the UnrealSpeccy/STS lineage
+- [ZXMAK / ZXMAK.NET history](https://sourceforge.net/projects/zxmak-dotnet/files/zxmak-dotnet/) — earlier ZXMAK.NET releases (2005–2008), predecessor to ZXMAK2
+- [ZX-M8XXX / ZX Matrix (Bedazzle)](https://github.com/Bedazzle/ZX-M8XXX) — vanilla JavaScript reverse-engineering-first emulator with the most feature-rich Spectrum debugger available (memory heatmap, XRefs, code folding, runtime call stack, OCR text ripper, game mapper, integrated sjasmplus-compatible assembler, project save/load)
 
