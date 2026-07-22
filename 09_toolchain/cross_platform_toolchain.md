@@ -324,6 +324,9 @@ Key SDCC features:
 
 ### Boriel ZX BASIC (Modern BASIC Compiler)
 
+> [!TIP]
+> **This subsection is a brief survey.** For the canonical Boriel ZX BASIC reference — three-stage pipeline (`zxbpp` → `zxbc` → `zxbasm`), the full 8-type static type system (`UBYTE`/`BYTE`/`UINTEGER`/`INTEGER`/`ULONG`/`LONG`/`FIXED`/`FLOAT`), `SUB`/`FUNCTION` with `ByVal`/`ByRef`/`FastCall`/array parameters, structured control flow (`IF`/`FOR`/`DO`/`WHILE`/`SELECT CASE`), first-class inline `ASM ... END ASM` blocks with named-symbol interop, the ROM-binding standard library, the complete memory layout (ORG, stack, string heap, banked memory), the full command-line flag reference (`-O`/`-Z`/`-S`/`-H`/`--arch`/`--BASIC`/`--autorun`/`-F`), all output formats (`.bin`/`.tap`/`.tzx`/`.sna`/`.z80`), ZX Spectrum Next (`--arch zxnext`) Z80N opcode support, a worked game-loop example, comparison matrix vs z88dk C and pure assembly, and a decision tree — see [boriel_zxbasic.md](boriel_zxbasic.md).
+
 **Boriel ZX BASIC** is a modern BASIC dialect compiler that targets Z80 and specifically the ZX Spectrum. For developers who want **BASIC syntax with modern tooling**, this is the recommended choice.
 
 Key features:
@@ -371,6 +374,9 @@ Modern Spectrum development is split between **Visual Studio Code with Z80 exten
 The broader toolchain also includes **disassemblers and binary analysis tools** (covered in a dedicated subsection below) for reverse engineering work.
 
 ### VS Code Ecosystem (Dominant in 2025)
+
+> [!TIP]
+> **This section is a brief survey.** For the canonical VS Code integration reference — covering the complete extension ecosystem (DeZog, Z80 Macro-Assembler, Z80 Assembly Meter, ASM Code Lens, Hex Editor, Klive IDE, SpectNetIDE), workspace configuration, build tasks and problem matchers for SjASMPlus / z88dk / Boriel ZX BASIC, full `launch.json` debug configurations for ZEsarUX / CSpect / internal simulator backends, a complete worked end-to-end project setup (`.vscode/tasks.json` + `.vscode/launch.json` + `.vscode/settings.json` + sample source), comparison of stacks (DeZog + SjASMPlus + ZEsarUX vs Klive IDE vs SpectNetIDE), decision tree, best practices, and pitfalls — see [vscode_integration.md](vscode_integration.md).
 
 VS Code is the most common editor choice in 2025 because it is cross-platform, free, and has a thriving extension marketplace. The following VS Code extensions are recommended for Spectrum development, grouped by purpose:
 
@@ -1158,11 +1164,11 @@ Planned per-tool deep-dives:
 
 - `vscode_integration.md` — VS Code Z80 extensions in depth
 - `zdevstudio.md`, `zxdstudio.md`, `zx_spin.md` — standalone IDEs
-- `testing.md` — automated testing for Z80
 
 Descoped:
 
 - ~~`makefiles.md`~~ — build system setup is not Spectrum-specific; the worked example in [asset_tools.md](asset_tools.md) § Worked Example demonstrates a Makefile-driven pipeline
+- ~~`testing.md`~~ — generic test automation is not Spectrum-specific; see [debugging.md](debugging.md) § Recommended Workflows and § Best Practices for the end-to-end debug-and-verify loop
 
 Planned emulator deep-dives in `11_emulation/software/`:
 

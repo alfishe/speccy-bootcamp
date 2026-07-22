@@ -372,11 +372,11 @@ zx/
 │   ├── tasm_cross.md                    # Planned
 │   ├── as_macro_assembler.md            # Planned
 │   ├── zdevstudio.md                    # Planned
-│   ├── vscode_integration.md            # Planned
+│   ├── vscode_integration.md ✅          # Per-tool deep dive
 │   ├── zxdstudio.md                     # Planned
 │   ├── zx_spin.md                       # Planned
-│   ├── boriel_zxbasic.md                # Planned
-│   └── testing.md                       # Planned
+│   ├── boriel_zxbasic.md ✅              # Per-tool deep dive
+│   # ~~testing.md~~ — descoped (generic test automation is not Spectrum-specific; see debugging.md workflows)
 │   # ~~makefiles.md~~ — descoped (build system setup is not Spectrum-specific)
 │   # ~~zesarux_debug.md~~ / ~~fuse_debug.md~~ — folded into debugging.md
 │
@@ -986,18 +986,18 @@ All articles are 📄 Stub. See [07_demoscene/README.md](07_demoscene/README.md)
 
 **IDEs and Editor Integration** | |
 | `zdevstudio.md` | zDevStudio: open-source cross-platform IDE built on Pasmo, GUI for Z80 development |
-| `vscode_integration.md` | VS Code integration: Z80 macro-assembler extension, sjasmplus syntax highlighting, build tasks |
+| `vscode_integration.md` ✅ | **VS Code Integration** — canonical reference for VS Code as the ZX Spectrum IDE. Extension ecosystem (DeZog, Z80 Macro-Assembler, Z80 Assembly Meter, ASM Code Lens, Microsoft Hex Editor, Klive IDE, SpectNetIDE). DeZog deep dive with four backends (ZEsarUX, CSpect, MAME, internal simulator), SLD / `.lis` / `.cdb` symbol files, reverse debugging via ZEsarUX history. Build tasks + problem matchers for SjASMPlus / z88dk / Boriel ZX BASIC with multi-task pipelines. Full `launch.json` / `tasks.json` / `extensions.json` / `settings.json` worked project setup. Stack comparison (DeZog + SjASMPlus + ZEsarUX vs Klive IDE vs SpectNetIDE) with decision-tree mermaid. Best practices (committing `.vscode/`, pinning tool versions, multi-root workspaces) and pitfalls (port conflicts, stale SLD, source-path mismatches) |
 | `zxdstudio.md` | ZXDStudio: ZX Spectrum development IDE for Windows |
 | `zx_spin.md` | ZX Spin: Windows-based IDE with built-in assembler and emulator |
 
 **C Compilers** (assembly-adjacent) | |
 | `z88dk.md` ✅ | **z88dk** — the complete C development kit for the Z80 family: two C compilers (sccz80 + patched SDCC), classic + newlib libraries, the `+target` system (~100 machines), the `zcc` front-end pipeline, sections and calling conventions, full ZX Spectrum library API (`<arch/zx.h>`, `<graphics.h>`, `<games.h>`, `<sound.h>`, `<arch/zxn.h>`), `appmake` output formats, mixing C with assembly, worked example, pitfalls |
 | `sdcc.md` ✅ | **SDCC** — canonical standalone reference. Z80 port history (2003→2025), complete toolchain (`sdcc`, `sdasz80`, `sdldz80`, `sdcdb`, `makebin`, `ucsim`), Z80-specific flag reference, stack-based ABI (right-to-left push, caller-cleans, IX frame pointer), custom CRT0, `.cdb` debug format, integration with SjASMPlus, worked bare-metal 48K example, comparison vs z88dk-sdcc |
-| `boriel_zxbasic.md` | Boriel's ZX-Basic Compiler: cross-compiler from BASIC-like syntax to Z80 machine code, ZX Spectrum focused |
+| `boriel_zxbasic.md` ✅ | **Boriel ZX BASIC** — the modern BASIC cross-compiler (`zxbc`). Three-stage pipeline (`zxbpp`/`zxbc`/`zxbasm`), 8-type static type system, `SUB`/`FUNCTION` with `ByVal`/`ByRef`/`FastCall`, structured control flow, first-class inline `ASM` with named-symbol interop, ROM-binding standard library (`PRINT`/`PLOT`/`DRAW`/`CIRCLE`/`BEEP`), full memory layout (ORG, stack, string heap), complete CLI flag reference, all output formats (`.bin`/`.tap`/`.tzx`/`.sna`/`.z80`), ZX Spectrum Next support (`--arch zxnext`), worked game-loop example, comparison matrix vs z88dk C and pure assembly, decision-tree mermaid, pitfalls (heap exhaustion, ROM routine quirks, signed/unsigned promotion, ISRs hand-written) |
 
 **Build and Debug Tools** | |
 | `debugging.md` ✅ | **Debugging** — three-layer model: native monitor-debuggers (STS, MONS, Zeus Monitor), built-in emulator debuggers (ZEsarUX, Fuse, CSpect, UnrealSpeccy, ZXMAK2, MAME), and source-level / IDE-integrated debuggers (DeZog, z88dk-gdb, mainline GDB Z80 target since July 2021, SpectNetIDE, tagged-source Fuse). Compiler integration deep dive (SLD / `.lis` / `.map` / DWARF / `.cdb`). Comparison matrix across 8 debuggers, decision tree, three recommended end-to-end workflows, pitfalls |
-| `testing.md` | Testing: 48K vs 128K vs Pentagon vs Next compatibility testing |
+| ~~`testing.md`~~ | Descoped — generic test automation is not Spectrum-specific; the [debugging.md](09_toolchain/debugging.md) § Recommended Workflows article covers the end-to-end debug-and-verify loop, and cross-platform CI is documented in [cross_platform_toolchain.md](09_toolchain/cross_platform_toolchain.md) § Build Systems and CI/CD |
 | `asset_tools.md` ✅ | **Asset Pipeline** — three-stage model (authoring → conversion → integration). Screen graphics (`.scr`/`.sch`/`.nic`/`.chk`), software sprite layouts (unmasked/pre-shifted/masked/aligned/attribute-aware), ZX Spectrum Next hardware sprites, fonts (8×8 + FZX full spec), AY music (VTII `.pt3`, Arkos `.akg`/`.akm`), 1-bit beeper engines (Beepola, BeepFX), ayFX SFX, compression (ZX0/ZX1/ZX2/ZX7/MegaLZ/LZSA/APLIB/RCS), tile maps (Tiled), worked Makefile-driven pipeline |
 | `disassemblers.md` ✅ | **Disassemblers** — three approaches (linear, smart static, trace-driven). Tools: z80dasm (reversible with z80asm), z88dk-dis (multi-CPU + `.map` aware), z80dismblr / DeZog (code-flow-graph), z80-smart-disassembler (Python), SkoolKit (`.skool` format + cycle-exact Z80 simulator with MEMPTR/WZ + 128K banking), IDA Pro (no Hex-Rays for Z80), Ghidra (community Z80 module, undocumented-opcode caveats), Reko (.NET). Comparison matrices, decision tree, Fuse profiler + SkoolKit `trace.py` workflow |
 | ~~`zezarux_debug.md`~~ | Folded into `debugging.md` |
