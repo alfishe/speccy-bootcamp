@@ -151,9 +151,35 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 
 *See [09_toolchain/README.md](09_toolchain/README.md) for the section index, including planned per-tool deep dives (Pasmo, vasm, WLA-DX, zmac, RASM, Klive IDE, ZXDevStudio, etc.).*
 
-### 07 — Demoscene
+### 07 — Demoscene ✅ COMPLETE
 
-*Section scaffolded — content coming. See [07_demoscene/README.md](07_demoscene/README.md) for the planned article catalog.*
+#### History & Culture
+
+| Article | Description |
+|---------|-------------|
+| [demoscene_history.md](07_demoscene/demoscene_history.md) | ZX Spectrum demoscene: Western origins, Soviet explosion, modern revival, cultural impact |
+| [soviet_demo_scene.md](07_demoscene/soviet_demo_scene.md) | Russian/Ukrainian scene: Pentagon-centric development, FidoNet era, notable groups |
+| [demoscene_platforms.md](07_demoscene/demoscene_platforms.md) | Cross-platform comparison: Spectrum vs C64 vs Amiga vs Atari ST vs MSX vs Amstrad CPC |
+
+#### Techniques
+
+| Article | Description |
+|---------|-------------|
+| [effects_catalog.md](07_demoscene/effects_catalog.md) | Visual effects catalog: plasma, raycasting, 3D objects, multicolor, zoomers, tunnel effects, copper bars |
+| [multicolor_techniques.md](07_demoscene/multicolor_techniques.md) | Multicolor / attribute interrupt: 8×1 and 8×2 color resolution, race-the-beam timing, per-model differences |
+| [precalc_trigonometry.md](07_demoscene/precalc_trigonometry.md) | Sine tables, fixed-point math, interpolation, compression of lookup tables |
+| [compression_packing.md](07_demoscene/compression_packing.md) | 25 crunchers across 4 generations: ZX0/ZX1/ZX2/MegaLZ/Pletter/HRUM, depackers, RCS |
+| [size_coding.md](07_demoscene/size_coding.md) | 256 B / 1 K / 4 K / 16 K intro competitions: squeeze, reuse, math tricks, compression, ROM routines |
+
+#### Frameworks & Notable Works
+
+| Article | Description |
+|---------|-------------|
+| [demo_frameworks.md](07_demoscene/demo_frameworks.md) | Demo frameworks: effect sequencing, music synchronisation, memory layout, ISR architecture, part transitions |
+| [notable_demos.md](07_demoscene/notable_demos.md) | Analysis of landmark demos across four eras: Crack Intro (1986–89), Western Golden (1990–96), Soviet Peak (1996–2005), Modern Revival (2010–present) |
+| [1bit_music_scene.md](07_demoscene/1bit_music_scene.md) | 1-bit beeper music scene: hardware, techniques, engine lineage, composers, community |
+
+*See [07_demoscene/README.md](07_demoscene/README.md) for the section index.*
 
 ### 00 — Overview · 03 — I/O · 08 — RE · 09 — Toolchain · 10 — References · 11 — Emulation
 

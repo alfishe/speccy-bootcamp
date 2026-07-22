@@ -3,6 +3,8 @@
 # 07 — Demoscene
 
 > The ZX Spectrum demoscene represents the **absolute apex** of what can be squeezed from a 3.5 MHz Z80, an attribute-based color system, and contended memory. This section documents the techniques, history, and culture that produced effects people still find hard to believe came from 1980s hardware.
+>
+> **Status**: All 11 articles are complete (CC BY-SA 4.0). Cross-references between articles are verified. The section is the deepest single-source reference on the ZX Spectrum demoscene available in English as of 2024.
 
 ---
 
@@ -18,27 +20,27 @@ Demoscene techniques transcend normal game development. They push the hardware p
 
 | Article | Description |
 |---------|-------------|
-| `demoscene_history.md` *(planned)* | ZX Spectrum demoscene: Western origins, Soviet explosion, modern revival, cultural impact |
-| `soviet_demo_scene.md` *(planned)* | Russian/Ukrainian scene: unique effects, Pentagon-centric development, notable groups (E-Mage, Extreme, Progress, Skrju) |
-| `demoscene_platforms.md` *(planned)* | Cross-platform comparison: Spectrum vs C64 vs Amiga vs Atari ST — what each could do that others couldn't |
+| [demoscene_history.md](demoscene_history.md) | ZX Spectrum demoscene: Western origins, Soviet explosion, modern revival, cultural impact |
+| [soviet_demo_scene.md](soviet_demo_scene.md) | Russian/Ukrainian scene: unique effects, Pentagon-centric development, notable groups (Eternity, Brutal, X-Trade, Progress, Skrju) |
+| [demoscene_platforms.md](demoscene_platforms.md) | Cross-platform comparison: Spectrum vs C64 vs Amiga vs Atari ST vs MSX vs Amstrad CPC — what each could do that others couldn't |
 
 ### Techniques
 
 | Article | Description |
 |---------|-------------|
-| `effects_catalog.md` *(planned)* | Visual effects catalog: plasma, raycasting, 3D objects, multicolor, zoomers, tunnel effects, copper bars |
-| `multicolor_techniques.md` *(planned)* | Multicolor / attribute interrupt: 8×1 and 8×2 color resolution, race-the-beam timing, per-model differences |
-| `precalc_trigonometry.md` *(planned)* | Sine tables, fixed-point math, interpolation, compression of lookup tables |
-| `compression_packing.md` *(planned)* | MegaLZ, HRUM, Z80 crunchers, depackers, memory-constrained decompression |
-| `size_coding.md` *(planned)* | 1K/4K/16K intro competitions: self-modifying code, code-as-data, extreme optimization |
+| [effects_catalog.md](effects_catalog.md) | Visual effects catalog: plasma, raycasting, 3D objects, multicolor, zoomers, tunnel effects, copper bars |
+| [multicolor_techniques.md](multicolor_techniques.md) | Multicolor / attribute interrupt: 8×1 and 8×2 color resolution, race-the-beam timing, per-model differences |
+| [precalc_trigonometry.md](precalc_trigonometry.md) | Sine tables, fixed-point math, interpolation, compression of lookup tables |
+| [compression_packing.md](compression_packing.md) | 25 crunchers across 4 generations: ZX0/ZX1/ZX2/MegaLZ/Pletter/HRUM, depackers, RCS, worked example |
+| [size_coding.md](size_coding.md) | 256 B / 1 K / 4 K / 16 K intro competitions: squeeze, reuse, math tricks, compression, ROM routines |
 
 ### Frameworks & Notable Works
 
 | Article | Description |
 |---------|-------------|
-| `demo_frameworks.md` *(planned)* | Demo frameworks: effect sequencing, timing management, resource loading, music sync |
-| `notable_demos.md` *(planned)* | Analysis of landmark demos: techniques used, how they work, what made them groundbreaking |
-| `1bit_music_scene.md` *(planned)* | 1-bit music scene: beeper engine evolution from 1982 to present — see also [06_sound](../06_sound/README.md) |
+| [demo_frameworks.md](demo_frameworks.md) | Demo frameworks: effect sequencing, music synchronisation, memory layout, ISR architecture, part transitions |
+| [notable_demos.md](notable_demos.md) | Analysis of landmark demos across four eras: Crack Intro (1986–89), Western Golden (1990–96), Soviet Peak (1996–2005), Modern Revival (2010–present) |
+| [1bit_music_scene.md](1bit_music_scene.md) | 1-bit beeper music scene: hardware, techniques, engine lineage (Henry → Follin → Wham → QChan → Octode → Pusher/Squeeker), composers, community — see also [06_sound](../06_sound/README.md) |
 
 ---
 

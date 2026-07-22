@@ -914,23 +914,23 @@ The planned `players/` subdirectory has been removed from the section plan. Rele
 
 Stub files remain in `players/` but are not tracked.
 
-### 07 — Demoscene
+### 07 — Demoscene ✅ COMPLETE
 
-All articles are 📄 Stub. See [07_demoscene/README.md](07_demoscene/README.md) for the section catalog.
+All 11 articles are ✅ Complete (CC BY-SA 4.0). Cross-references verified. See [07_demoscene/README.md](07_demoscene/README.md) for the section catalog.
 
 | File | Topic |
 |---|---|
-| `demoscene_history.md` | Western origins, Soviet explosion, modern revival, cultural impact |
-| `soviet_demo_scene.md` | Russian/Ukrainian scene: Pentagon-centric, notable groups (E-Mage, Extreme, Progress, Skrju) |
-| `demoscene_platforms.md` | Cross-platform comparison: Spectrum vs C64 vs Amiga vs Atari ST |
-| `effects_catalog.md` | Visual effects catalog: plasma, raycasting, 3D, multicolor, zoomers, tunnels, copper bars |
-| `multicolor_techniques.md` | Multicolor/attribute interrupt: 8×1 and 8×2 color resolution, race-the-beam timing |
-| `precalc_trigonometry.md` | Sine tables, fixed-point math, interpolation, lookup table compression |
-| `compression_packing.md` | MegaLZ, HRUM, ZX0 crunchers, depackers, memory-constrained decompression |
-| `size_coding.md` | 1K/4K/16K intro competitions: self-modifying code, code-as-data, extreme optimization |
-| `demo_frameworks.md` | Demo frameworks: effect sequencing, timing management, resource loading, music sync |
-| `notable_demos.md` | Analysis of landmark demos: techniques used, how they work, what made them groundbreaking |
-| `1bit_music_scene.md` | 1-bit music scene: beeper engine evolution from 1982 to present |
+| `demoscene_history.md` | ✅ Western origins, Soviet explosion, modern revival, cultural impact (671 lines) |
+| `soviet_demo_scene.md` | ✅ Russian/Ukrainian scene: Pentagon-centric, FidoNet era, PT3 ecosystem, notable groups (722 lines) |
+| `demoscene_platforms.md` | ✅ Cross-platform comparison: Spectrum vs C64 vs Amiga vs Atari ST vs MSX vs Amstrad CPC (657 lines) |
+| `effects_catalog.md` | ✅ Visual effects catalog: plasma, raycasting, 3D, multicolor, zoomers, tunnels, copper bars (711 lines) |
+| `multicolor_techniques.md` | ✅ Multicolor/attribute interrupt: 8×1 and 8×2 color resolution, race-the-beam timing (781 lines) |
+| `precalc_trigonometry.md` | ✅ Sine tables, fixed-point math, interpolation, lookup table compression (783 lines) |
+| `compression_packing.md` | ✅ 25 crunchers across 4 generations: ZX0/ZX1/ZX2/MegaLZ/Pletter/HRUM, depackers, RCS (1054 lines) |
+| `size_coding.md` | ✅ 256 B / 1 K / 4 K / 16 K intro competitions: squeeze, reuse, math, compression, ROM routines (1044 lines) |
+| `demo_frameworks.md` | ✅ Demo frameworks: effect sequencing, music sync, memory layout, ISR, part transitions (898 lines) |
+| `notable_demos.md` | ✅ Analysis of landmark demos across four eras: Crack Intro, Western Golden, Soviet Peak, Modern Revival (599 lines) |
+| `1bit_music_scene.md` | ✅ 1-bit beeper music scene: hardware, techniques, engine lineage, composers, community (538 lines) |
 
 ### 08 — Reverse Engineering
 
