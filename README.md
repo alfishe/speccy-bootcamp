@@ -45,11 +45,42 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 |---------|------------|
 | [zx_next_joystick.md](02_hardware/newgen/zx_next_joystick.md) | ZX Next joystick: per-port modes (NextReg 0x05), dual Kempston #1F/#37, Mega Drive pads, Sinclair numbering trap |
 
-### 04 — Operating Systems
+### 04 — Operating Systems ✅ COMPLETE
+
+#### ROM Internals
 
 | Article | Description |
 |---------|------------|
+| [rom_48k.md](04_operating_systems/rom_48k.md) | 48K ROM: initialisation, RST vectors, command dispatch, calculator instruction set (66 ops), command handler internals, tape format |
+| [rom_128k.md](04_operating_systems/rom_128k.md) | 128K ROM 0: dual-ROM architecture, ROM call bridge, ROM swap calling convention, PLAY/SOUND/BANK handlers, AY-3-8912 register map, RAM disk, editor internals |
+| [rom_plus2.md](04_operating_systems/rom_plus2.md) | +2A/+3 ROM internals: 64 KB four-page layout, paging ports `#7FFD`/`#1FFD`, four paging modes (128K compat / all-RAM 0-3 / all-RAM 4-7 / Plus 3), CP/M boot, bugs |
 | [system_variables.md](04_operating_systems/system_variables.md) | ROM-defined system variables: FRAMES, PROG, VARS, CHANS, keyboard state, memory boundaries — the ROM's API surface |
+| [rom_versions.md](04_operating_systems/rom_versions.md) | ROM version catalogue: 48K Issues 1-6 CRC32 values, 128K, +2 grey, +2A/+3 four-page, localised ROMs, clone ROMs (Pentagon, Scorpion, ATM Turbo, ZX Evolution, Timex), modern replacements (SE BASIC, OpenSE, +3E, NextZXOS) |
+
+#### Disk Operating Systems
+
+| Article | Description |
+|---------|------------|
+| [trdos.md](04_operating_systems/trdos.md) | TR-DOS: the Soviet flat filesystem standard for Pentagon/Beta 128, 128 file slots, hook codes API, why it dominated the Russian scene |
+| [plus3dos.md](04_operating_systems/plus3dos.md) | +3 DOS: Amstrad's CP/M-compatible DOS for +2A/+3, BDOS layer, RSX-based BASIC integration (`LOAD "a:..."`, `CAT`, `FORMAT`) |
+| [esxdos.md](04_operating_systems/esxdos.md) | ESXDOS: modern Western DOS for DivIDE/DivMMC, FAT16/32, 8 KB dot-command overlays, hook codes API at `#0084` |
+| [is_dos.md](04_operating_systems/is_dos.md) | IS-DOS: 1990s Russian hierarchical filesystem alternative, MS-DOS-compatible 32-byte directory entries, subdirectories, attributes, jump-table API |
+| [nedo_dos.md](04_operating_systems/nedo_dos.md) | NedoDOS: modern DOS for ZX Evolution/NedoPC, FAT16/32 with VFAT long filenames, SD/CF/IDE, multiple partitions, NedoDOS Commander |
+| [nextzxos.md](04_operating_systems/nextzxos.md) | NextZXOS: ZX Spectrum Next OS, ESXDOS-derived API with Next hardware extensions, dot commands, SD card, layer 2 / sprite / tilemap |
+| [evo_os.md](04_operating_systems/evo_os.md) | ZX Evolution BIOS/OS: three-layer stack (boot ROM firmware, BaseConf FPGA bitstream, OS), Pentagon 1024 / ATM Turbo / TS-Conf configurations, boot process |
+
+#### Alternative Operating Systems
+
+| Article | Description |
+|---------|------------|
+| [cpm.md](04_operating_systems/cpm.md) | CP/M 2.2 on Spectrum: +3 bootable CP/M, ATM Turbo, Sprinter, BIOS/BDOS layer, file control blocks, CCP, the CP/M software library |
+| [fuzix.md](04_operating_systems/fuzix.md) | FUZIX: Alan Cox's Unix-like Z80 OS — ~24 KB kernel, ~70 Unix V7 syscalls, pre-emptive multitasking at 50 Hz VBLANK, FCC C compiler, targets 128K/+2A/+3/Pentagon/ATM/Sprinter/Evolution/Next |
+
+#### BASIC Dialects
+
+| Article | Description |
+|---------|------------|
+| [basic_dialects.md](04_operating_systems/basic_dialects.md) | Sinclair BASIC variants: 48K (1982), 128K (1986), +2/+2A/+3 (1987), TR-DOS ext, QL SuperBASIC (1984), SE BASIC / OpenSE (2002-2023), NextBASIC (2017). 17-feature comparison matrix |
 
 ### 05 — Development
 

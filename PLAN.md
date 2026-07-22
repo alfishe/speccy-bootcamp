@@ -642,26 +642,26 @@ zx/
 | `esp_wifi.md` | ESP-based WiFi: ESP8266/ESP32 modules for various Spectrum interfaces |
 | `zx_next_wifi.md` | ZX Spectrum Next WiFi: ESP module, TCP/IP stack |
 
-### 04 — Operating Systems
+### 04 — Operating Systems ✅ COMPLETE
 
-| File | Topic |
-|---|---|
-| `README.md` | Index — OS landscape across all tracks |
+| File | Topic | Status |
+|---|---|---|
+| `README.md` | Index — OS landscape across all tracks | ✅ |
 | `rom_48k.md` | 48K ROM: ROM map, RST vectors, key routines, channel/stream I/O, BASIC interpreter, editor, character set | ✅ |
 | `system_variables.md` | ROM-defined system variables: FRAMES, PROG, VARS, CHANS, FLAGS, keyboard state, memory boundaries | ✅ |
 | `rom_128k.md` | 128K ROM 0 + ROM 1: dual-ROM architecture, menu system, 128K BASIC extensions, RAM disk, full-screen editor | ✅ |
-| `rom_plus2.md` | +2 / +2A ROM variants |
-| `trdos.md` | TR-DOS: floppy disk OS, command set, file operations, hook codes, ROM structure |
-| `plus3dos.md` | +3 DOS: CP/M-compatible, file system, Resident System Extensions |
-| `is_dos.md` | IS-DOS: Russian disk OS, file system, differences from TR-DOS |
-| `nedo_dos.md` | NedoDOS: alternative DOS for Soviet clones |
-| `esxdos.md` | ESXDOS: DivIDE/DivMMC OS, .dot commands, FAT16/FAT32 |
-| `nextzxos.md` | NextZXOS: ZX Spectrum Next OS, .dot commands, SD card, file system |
-| `evo_os.md` | ZX Evolution BIOS/OS: BIOS calls, TR-DOS compatibility, SD card |
-| `cpm.md` | CP/M 2.2 on Spectrum: +3, ATM Turbo, Sprinter |
-| `fuzix.md` | FUZIX: Unix-like OS for Z80 systems, Spectrum port |
-| `basic_dialects.md` | Sinclair BASIC variants: 48K, 128K, TIMEX, Pentagon/Scorpion extensions, NextBASIC |
-| `rom_versions.md` | ROM version catalog: Sinclair, Amstrad, Russian, ProfROM, custom ROMs, differences |
+| `rom_plus2.md` | +2A/+3 ROM internals: 64 KB four-page layout, paging ports `#7FFD`/`#1FFD`, four paging modes, bugs | ✅ |
+| `trdos.md` | TR-DOS: the Soviet flat filesystem, 128 file slots, hook codes API, Pentagon/Beta 128 standard | ✅ |
+| `plus3dos.md` | +3 DOS: Amstrad's CP/M-compatible DOS, BDOS layer, RSX BASIC integration | ✅ |
+| `is_dos.md` | IS-DOS: Russian hierarchical filesystem, MS-DOS-compatible directory entries, jump-table API | ✅ |
+| `nedo_dos.md` | NedoDOS: modern DOS for ZX Evolution, FAT16/32 with VFAT LFN, SD/CF/IDE | ✅ |
+| `esxdos.md` | ESXDOS: modern DOS for DivIDE/DivMMC, FAT16/32, dot-command overlays, hook codes | ✅ |
+| `nextzxos.md` | NextZXOS: ZX Spectrum Next OS, ESXDOS-derived, Next hardware extensions | ✅ |
+| `evo_os.md` | ZX Evolution BIOS/OS: three-layer stack (boot ROM, BaseConf FPGA, OS), TS-Conf | ✅ |
+| `cpm.md` | CP/M 2.2 on Spectrum: +3 bootable, ATM Turbo, Sprinter, BIOS/BDOS, CCP, FCBs | ✅ |
+| `fuzix.md` | FUZIX: Alan Cox's Unix-like Z80 OS, ~24 KB kernel, ~70 Unix V7 syscalls, FCC compiler | ✅ |
+| `basic_dialects.md` | Sinclair BASIC variants: 48K, 128K, +2/+2A/+3, QL SuperBASIC, SE/OpenSE, NextBASIC | ✅ |
+| `rom_versions.md` | ROM version catalogue: 48K Issues 1-6 CRC32, 128K, +2A/+3, clone ROMs, modern replacements | ✅ |
 
 ### 05 — Development (Learning Progression)
 
