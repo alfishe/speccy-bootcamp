@@ -953,6 +953,9 @@ Scripts written for the old `tolua++` bindings may need adjustment: most binding
 
 ## Source-Level Debugging (SLD) Data
 
+> [!TIP]
+> **This section documents the SLD producer (SjASMPlus).** For the consumer side — how DeZog, CSpect, ZEsarUX, z88dk-gdb, and mainline GDB read SLD / `.map` / `.lis` / DWARF files, plus the full three-layer debugger model (native monitor-debuggers → emulator debuggers → source-level IDE debuggers) — see [debugging.md](debugging.md). That article is the canonical reference for **ZX Spectrum debugging tools** and includes a comparison matrix, decision tree, and three end-to-end workflows built around SjASMPlus + DeZog + ZEsarUX.
+
 The `--sld[=<file>]` CLI option tells SjASMPlus to emit a Source Level Debugging data file (default name: `<source>.sld.txt`). The SLD file maps every assembled byte back to its source file, line number, and surrounding label scope. DeZog (the VS Code Z80 debugger), CSpect, and ZEsarUX consume SLD files to provide source-level debugging — set a breakpoint on a Z80 source line, see variable names, step through source instead of disassembly.
 
 The SLD file format is line-oriented:

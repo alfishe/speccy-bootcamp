@@ -340,46 +340,45 @@ zx/
 │   └── decompilation.md
 │
 ├── 09_toolchain/
-│   ├── README.md
-│   ├── native_toolchain.md ✅
-│   ├── cross_platform_toolchain.md ✅
-│   ├── assembler_overview.md
-│   ├── zeus_assembler.md
-│   ├── devpac_gens_mons.md
-│   ├── alasm_sts.md
-│   ├── xas_assembler.md
-│   ├── tasm_native.md
-│   ├── zxasm_native.md
-│   ├── pikasm.md
-│   ├── laser_genius.md
-│   ├── avras.md
-│   ├── spectrum_basic_mcode.md
-│   ├── sjasmplus.md
-│   ├── pasmo.md
-│   ├── z88dk_z80asm.md
-│   ├── vasm.md
-│   ├── wla_dx.md
-│   ├── zmac.md
-│   ├── zasm_kio.md
-│   ├── tniasm.md
-│   ├── rasm.md
-│   ├── sarcasm.md
-│   ├── tasm_cross.md
-│   ├── as_macro_assembler.md
-│   ├── zdevstudio.md
-│   ├── vscode_integration.md
-│   ├── zxdstudio.md
-│   ├── zx_spin.md
-│   ├── z88dk.md
-│   ├── sdcc.md
-│   ├── boriel_zxbasic.md
-│   ├── makefiles.md
-│   ├── debugging.md
-│   ├── testing.md
-│   ├── zesarux_debug.md
-│   ├── fuse_debug.md
-│   ├── asset_tools.md
-│   └── disassemblers.md
+│   ├── README.md                       # ✅ Section index
+│   ├── native_toolchain.md ✅           # Survey
+│   ├── cross_platform_toolchain.md ✅   # Survey
+│   ├── sjasmplus.md ✅                  # Per-tool deep dive
+│   ├── z88dk.md ✅                       # Per-tool deep dive
+│   ├── sdcc.md ✅                        # Per-tool deep dive
+│   ├── debugging.md ✅                   # Per-tool deep dive
+│   ├── asset_tools.md ✅                 # Per-tool deep dive
+│   ├── disassemblers.md ✅               # Per-tool deep dive
+│   ├── assembler_overview.md            # Planned
+│   ├── zeus_assembler.md                # Planned
+│   ├── devpac_gens_mons.md              # Planned
+│   ├── alasm_sts.md                     # Planned
+│   ├── xas_assembler.md                 # Planned
+│   ├── tasm_native.md                   # Planned
+│   ├── zxasm_native.md                  # Planned
+│   ├── pikasm.md                        # Planned
+│   ├── laser_genius.md                  # Planned
+│   ├── avras.md                         # Planned
+│   ├── spectrum_basic_mcode.md          # Planned
+│   ├── pasmo.md                         # Planned
+│   ├── z88dk_z80asm.md                  # Planned
+│   ├── vasm.md                          # Planned
+│   ├── wla_dx.md                        # Planned
+│   ├── zmac.md                          # Planned
+│   ├── zasm_kio.md                      # Planned
+│   ├── tniasm.md                        # Planned
+│   ├── rasm.md                          # Planned
+│   ├── sarcasm.md                       # Planned
+│   ├── tasm_cross.md                    # Planned
+│   ├── as_macro_assembler.md            # Planned
+│   ├── zdevstudio.md                    # Planned
+│   ├── vscode_integration.md            # Planned
+│   ├── zxdstudio.md                     # Planned
+│   ├── zx_spin.md                       # Planned
+│   ├── boriel_zxbasic.md                # Planned
+│   └── testing.md                       # Planned
+│   # ~~makefiles.md~~ — descoped (build system setup is not Spectrum-specific)
+│   # ~~zesarux_debug.md~~ / ~~fuse_debug.md~~ — folded into debugging.md
 │
 ├── 10_references/
 │   ├── z80_opcode_table.md
@@ -992,18 +991,18 @@ All articles are 📄 Stub. See [07_demoscene/README.md](07_demoscene/README.md)
 | `zx_spin.md` | ZX Spin: Windows-based IDE with built-in assembler and emulator |
 
 **C Compilers** (assembly-adjacent) | |
-| `z88dk.md` | z88dk: full C compiler toolchain (SDCC + z80asm backend), library support, cross-platform targets, newlib vs classic |
-| `sdcc.md` | SDCC: Small Device C Compiler, Z80 backend, standalone use, comparison with z88dk |
+| `z88dk.md` ✅ | **z88dk** — the complete C development kit for the Z80 family: two C compilers (sccz80 + patched SDCC), classic + newlib libraries, the `+target` system (~100 machines), the `zcc` front-end pipeline, sections and calling conventions, full ZX Spectrum library API (`<arch/zx.h>`, `<graphics.h>`, `<games.h>`, `<sound.h>`, `<arch/zxn.h>`), `appmake` output formats, mixing C with assembly, worked example, pitfalls |
+| `sdcc.md` ✅ | **SDCC** — canonical standalone reference. Z80 port history (2003→2025), complete toolchain (`sdcc`, `sdasz80`, `sdldz80`, `sdcdb`, `makebin`, `ucsim`), Z80-specific flag reference, stack-based ABI (right-to-left push, caller-cleans, IX frame pointer), custom CRT0, `.cdb` debug format, integration with SjASMPlus, worked bare-metal 48K example, comparison vs z88dk-sdcc |
 | `boriel_zxbasic.md` | Boriel's ZX-Basic Compiler: cross-compiler from BASIC-like syntax to Z80 machine code, ZX Spectrum focused |
 
 **Build and Debug Tools** | |
-| `makefiles.md` | Build patterns: sjasmplus + z88dk Makefiles, cross-compilation, CI/CD |
-| `debugging.md` | Debugging: emulator breakpoints, serial output, real hardware, JTAG |
+| `debugging.md` ✅ | **Debugging** — three-layer model: native monitor-debuggers (STS, MONS, Zeus Monitor), built-in emulator debuggers (ZEsarUX, Fuse, CSpect, UnrealSpeccy, ZXMAK2, MAME), and source-level / IDE-integrated debuggers (DeZog, z88dk-gdb, mainline GDB Z80 target since July 2021, SpectNetIDE, tagged-source Fuse). Compiler integration deep dive (SLD / `.lis` / `.map` / DWARF / `.cdb`). Comparison matrix across 8 debuggers, decision tree, three recommended end-to-end workflows, pitfalls |
 | `testing.md` | Testing: 48K vs 128K vs Pentagon vs Next compatibility testing |
-| `zezarux_debug.md` | ZEsarUX as development tool: reverse debugging, breakpoint scripting |
-| `fuse_debug.md` | Fuse debugger: features, remote debugging |
-| `asset_tools.md` | Asset pipeline tools: png2sprite, Vortex Tracker (AY music), font editors, image converters, ZX0/ZX7 compressors |
-| `disassemblers.md` | Disassemblers: DZ80, z80dasm, disassembly workflow, reassembly techniques |
+| `asset_tools.md` ✅ | **Asset Pipeline** — three-stage model (authoring → conversion → integration). Screen graphics (`.scr`/`.sch`/`.nic`/`.chk`), software sprite layouts (unmasked/pre-shifted/masked/aligned/attribute-aware), ZX Spectrum Next hardware sprites, fonts (8×8 + FZX full spec), AY music (VTII `.pt3`, Arkos `.akg`/`.akm`), 1-bit beeper engines (Beepola, BeepFX), ayFX SFX, compression (ZX0/ZX1/ZX2/ZX7/MegaLZ/LZSA/APLIB/RCS), tile maps (Tiled), worked Makefile-driven pipeline |
+| `disassemblers.md` ✅ | **Disassemblers** — three approaches (linear, smart static, trace-driven). Tools: z80dasm (reversible with z80asm), z88dk-dis (multi-CPU + `.map` aware), z80dismblr / DeZog (code-flow-graph), z80-smart-disassembler (Python), SkoolKit (`.skool` format + cycle-exact Z80 simulator with MEMPTR/WZ + 128K banking), IDA Pro (no Hex-Rays for Z80), Ghidra (community Z80 module, undocumented-opcode caveats), Reko (.NET). Comparison matrices, decision tree, Fuse profiler + SkoolKit `trace.py` workflow |
+| ~~`zezarux_debug.md`~~ | Folded into `debugging.md` |
+| ~~`fuse_debug.md`~~ | Folded into `debugging.md` |
+| ~~`makefiles.md`~~ | Descoped — build system setup is not Spectrum-specific |
 
 ### 10 — References
 

@@ -311,6 +311,9 @@ zcc +zx -clib=ndos program.c -create-app -subtype=nex
 
 ### SDCC (Small Device C Compiler)
 
+> [!TIP]
+> **This subsection is a brief survey.** For the canonical standalone SDCC reference — Z80 port history, complete toolchain (`sdcc`, `sdasz80`, `sdldz80`, `sdcdb`, `makebin`, `ucsim`), Z80-specific flag reference, stack-based ABI, custom CRT0, `.cdb` debug format, integration with SjASMPlus, and a worked bare-metal 48K example — see [sdcc.md](sdcc.md).
+
 **SDCC** is a standalone optimizing C compiler supporting several 8-bit CPUs including Z80, Z180, Rabbit 2000/3000, and others. For Spectrum development, SDCC is most commonly used **through the z88dk wrapper** — which provides the Spectrum-specific runtime, libraries, and build automation. Using SDCC standalone requires the developer to handle all of this manually.
 
 Key SDCC features:
@@ -446,6 +449,9 @@ DeZog provides:
 - **Unit test framework** (assembly-based tests)
 
 DeZog is the recommended debugger for serious Spectrum development in 2025.
+
+> [!TIP]
+> **For a complete reference on ZX Spectrum debugging** — covering the three-layer model (native monitor-debuggers, built-in emulator debuggers, source-level / IDE-integrated debuggers), every major Spectrum tool (ZEsarUX, Fuse, CSpect, UnrealSpeccy, ZXMAK2, MAME, DeZog, z88dk-gdb, z88dk-ticks, mainline GDB with Z80 target since July 2021, SpectNetIDE, tagged-source Fuse), the SLD / `.lis` / `.map` / DWARF debug-metadata formats emitted by SjASMPlus and z88dk, a comparison matrix, decision tree, three recommended end-to-end workflows, best practices, and pitfalls — see [debugging.md](debugging.md). The notes below are a brief survey; the deep dive is the canonical reference.
 
 #### Retro Assembler (Levente Bajczi)
 
@@ -904,6 +910,9 @@ A typical modern Spectrum project's CI pipeline:
 
 ## Asset Tools
 
+> [!TIP]
+> **This section is a brief survey.** For the canonical reference on the ZX Spectrum asset pipeline — covering screen graphics (`.scr`, `.nic`, `.sch`), software and hardware sprites, fonts (8×8 and FZX), music (Vortex Tracker II, Arkos Tracker, Beepola), sound effects (ayFX, BeepFX), compression (ZX0, ZX1, ZX2, ZX7, MegaLZ, RCS), tile maps (Tiled), a full worked Makefile-driven pipeline, comparison matrix, decision tree, best practices, and pitfalls — see [asset_tools.md](asset_tools.md).
+
 Modern Spectrum projects have access to a healthy ecosystem of asset conversion tools, far more capable than the native-era sprite editors.
 
 ### Image → Spectrum Format
@@ -1136,17 +1145,24 @@ The **Z80 Macro-Assembler** VS Code extension needs the symbol file location con
 - [PT3 Format](../06_sound/trackers_and_formats/pt3_format.md) — the format VTII produces; embedded in Z80 programs
 - [Assembly Development](../05_development/02_assembly/README.md) — programming concepts the cross-platform toolchain supports
 
-Planned per-tool deep-dives (separate articles in this directory):
+Written per-tool deep-dives (in this directory):
 
-- `sjasmplus.md` — the recommended cross-assembler in detail
-- `z88dk.md` — the C toolkit in depth
-- `sdcc.md` — SDCC backend for Z80
+- [sjasmplus.md](sjasmplus.md) — the recommended cross-assembler in detail
+- [z88dk.md](z88dk.md) — the C toolkit in depth
+- [sdcc.md](sdcc.md) — SDCC backend for Z80
+- [asset_tools.md](asset_tools.md) — image/font/sprite/music asset pipeline
+- [debugging.md](debugging.md) — debugging strategies in detail
+- [disassemblers.md](disassemblers.md) — Z80 disassemblers and the SkoolKit toolkit
+
+Planned per-tool deep-dives:
+
 - `vscode_integration.md` — VS Code Z80 extensions in depth
 - `zdevstudio.md`, `zxdstudio.md`, `zx_spin.md` — standalone IDEs
-- `asset_tools.md` — image/font/sprite/music asset pipeline
-- `makefiles.md` — build orchestration patterns
-- `debugging.md` — debugging strategies in detail
 - `testing.md` — automated testing for Z80
+
+Descoped:
+
+- ~~`makefiles.md`~~ — build system setup is not Spectrum-specific; the worked example in [asset_tools.md](asset_tools.md) § Worked Example demonstrates a Makefile-driven pipeline
 
 Planned emulator deep-dives in `11_emulation/software/`:
 

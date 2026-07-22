@@ -129,12 +129,25 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 
 ### 09 — Toolchain
 
+**Survey articles**
+
 | Article | Description |
 |---------|-------------|
 | [native_toolchain.md](09_toolchain/native_toolchain.md) | **Native Spectrum toolchain** — assemblers and monitors that ran on the Spectrum itself (1982–2000s). Zeus, HiSoft DevPac / GENS-MONS, ALASM+STS, XAS; pre-assembler era; editor workflow evolution; Soviet vs Western toolchain split |
 | [cross_platform_toolchain.md](09_toolchain/cross_platform_toolchain.md) | **Modern cross-platform toolchain** — SjASMPlus, z88dk, SDCC, Pasmo, vasm, WLA-DX, zmac, RASM; VS Code + DeZog + Klive IDE; Fuse, ZEsarUX, CSpect, JSSpeccy 3, MAME; build systems, CI/CD, asset pipeline, recommended-setup decision matrix, worked Hello World example |
 
-*See [09_toolchain/README.md](09_toolchain/README.md) for the planned per-tool deep-dive catalog.*
+**Per-tool deep dives**
+
+| Article | Description |
+|---------|-------------|
+| [sjasmplus.md](09_toolchain/sjasmplus.md) | **SjASMPlus** — the de facto standard Z80 cross-assembler. Three-pass assembly, virtual device mode (14 machines), Lua scripting, ZX Spectrum Next Z80N support, complete output directives (SAVESNA/SAVETAP/SAVETRD/SAVENEX), SLD source-level debugging, comparison matrix against every alternative |
+| [z88dk.md](09_toolchain/z88dk.md) | **z88dk** — the complete C development kit for the Z80 family. Two C compilers (sccz80 + patched SDCC), classic + newlib libraries, the `+target` system, the `zcc` front-end, full ZX Spectrum library API, `appmake` output formats, mixing C with assembly, worked example |
+| [sdcc.md](09_toolchain/sdcc.md) | **SDCC** — the canonical reference for using the Small Device C Compiler standalone. Z80 port history, complete toolchain, Z80-specific flag reference, the stack-based ABI, custom CRT0, `.cdb` debug format, integration with SjASMPlus, worked bare-metal 48K example, and a comparison vs z88dk-sdcc |
+| [asset_tools.md](09_toolchain/asset_tools.md) | **Asset Pipeline** — the three-stage model (authoring → conversion → integration). Screen graphics (`.scr`/`.sch`/`.nic`), software sprites and Next hardware sprites, fonts (8×8 and FZX), AY music (VTII, Arkos) and 1-bit beeper engines (Beepola, BeepFX), compression (ZX0/ZX1/ZX2/ZX7/MegaLZ/RCS), tile maps, worked Makefile-driven pipeline |
+| [debugging.md](09_toolchain/debugging.md) | **Debugging** — the three-layer model: native monitor-debuggers (STS, MONS, Zeus Monitor), built-in emulator debuggers (ZEsarUX, Fuse, CSpect, UnrealSpeccy, ZXMAK2, MAME), and source-level / IDE-integrated debuggers (DeZog, z88dk-gdb, mainline GDB Z80 target, SpectNetIDE). Compiler-integration deep dive (SLD / `.lis` / `.map` / DWARF / `.cdb`), comparison matrix across 8 debuggers, three recommended workflows |
+| [disassemblers.md](09_toolchain/disassemblers.md) | **Disassemblers** — from raw Z80 bytes to annotated source. Three approaches (linear, smart static, trace-driven). z80dasm, z88dk-dis, z80dismblr / DeZog, z80-smart-disassembler, SkoolKit (with built-in cycle-exact Z80 simulator), IDA Pro, Ghidra (Z80 module caveats), Reko. Comparison matrices, decision tree, Fuse profiler + SkoolKit `trace.py` workflow |
+
+*See [09_toolchain/README.md](09_toolchain/README.md) for the section index, including planned per-tool deep dives (Pasmo, vasm, WLA-DX, zmac, RASM, Klive IDE, ZXDevStudio, Boriel ZX BASIC, testing, etc.).*
 
 ### 07 — Demoscene
 
@@ -214,6 +227,12 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 
 45. [Native Toolchain](09_toolchain/native_toolchain.md) — assemblers and monitors that ran on the Spectrum (1982–2000s): Zeus, DevPac, ALASM, XAS
 46. [Cross-Platform Toolchain](09_toolchain/cross_platform_toolchain.md) — modern development on PC/Mac/Linux: SjASMPlus, z88dk, VS Code, emulators, CI/CD
+47. [SjASMPlus](09_toolchain/sjasmplus.md) — the de facto standard Z80 cross-assembler: three-pass assembly, virtual device mode, Lua scripting, Z80N, SLD debugging, every output format
+48. [z88dk](09_toolchain/z88dk.md) — the complete C development kit: two compilers (sccz80 + SDCC), classic + newlib, `+target` system, full ZX Spectrum library API, mixing C with assembly
+49. [SDCC](09_toolchain/sdcc.md) — Small Device C Compiler standalone: stack-based ABI, custom CRT0, `.cdb` debug format, integration with SjASMPlus, when to choose over z88dk
+50. [Asset Tools](09_toolchain/asset_tools.md) — the asset pipeline: screen graphics, software/hardware sprites, fonts (8×8 + FZX), AY/beeper music, ZX0/ZX1/ZX7/MegaLZ compression, tile maps
+51. [Debugging](09_toolchain/debugging.md) — three-layer model (native / emulator / source-level), every major debugger, debug-metadata formats, comparison matrix, recommended workflows
+52. [Disassemblers](09_toolchain/disassemblers.md) — linear / smart static / trace-driven approaches, z80dasm, z88dk-dis, SkoolKit, IDA Pro, Ghidra, decision tree
 
 **Bridge to advanced optimization:**
 

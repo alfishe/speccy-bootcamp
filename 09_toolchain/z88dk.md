@@ -72,6 +72,9 @@ Select with `-compiler=sccz80` (default) or `-compiler=sdcc` on the `zcc` comman
 
 The `-v` (verbose) flag to `zcc` shows exactly which internal tools are invoked and with what arguments.
 
+> [!TIP]
+> **`z88dk-gdb` and `z88dk-ticks` are documented in depth in [debugging.md](debugging.md).** That article covers the full ZX Spectrum debugger landscape across three layers (native monitor-debuggers, emulator debuggers, source-level / IDE-integrated), with the complete `z88dk-gdb` + Fuse `gdbserver` workflow, the `.lis` / `.map` / `.list` debug-metadata pipeline, and a comparison against mainline GDB's Z80 target (merged July 2021). See especially [§ GDB-based Debuggers and the GDB Z80 Target](debugging.md#gdb-based-debuggers-and-the-gdb-z80-target) and [§ Compiler Integration](debugging.md#compiler-integration--producing-debug-metadata).
+
 ---
 
 ## Installation
@@ -839,6 +842,9 @@ zcc +zxn -clib=new -O3 hello.c -o hello.nex -create-app
 
 ## Comparison: z88dk vs Standalone SDCC
 
+> [!TIP]
+> **This section is the brief version.** For the canonical standalone SDCC reference — including the complete Z80-specific flag reference, the stack-based ABI, calling C from assembly and vice versa, custom CRT0, `.cdb` debug format and the `sdcdb` debugger, integration with SjASMPlus, and a worked bare-metal 48K Spectrum example — see [sdcc.md](sdcc.md). That article is the complement to this one: this article covers z88dk (which wraps SDCC); sdcc.md covers SDCC standalone.
+
 SDCC (Small Device C Compiler) is the other major open-source C compiler that targets the Z80. z88dk actually *includes* SDCC as one of its two backends, so the comparison is really "use SDCC inside z88dk" vs "use SDCC standalone":
 
 | Criterion | SDCC standalone | z88dk (with `-compiler=sdcc`) |
@@ -952,7 +958,7 @@ The two are complementary, not exclusive. The standard idiom for a serious Spect
 - [Cross-Platform Toolchain](cross_platform_toolchain.md) — survey article that situates z88dk among all the cross-platform tools (SjASMPlus, SDCC, Pasmo, vasm, etc.)
 - [sjasmplus.md](sjasmplus.md) — the natural complement: hand-written assembly for hot spots, IRQ handlers, and code that must fit in a tight space.
 - [native_toolchain.md](native_toolchain.md) — the pre-cross-platform world (zeus, devpac/gens-mons, alasm+sts, xas). Useful context for understanding why z88dk's API design choices look the way they do.
-- [../05_development/03_c_cross/](../05_development/03_c_cross/README.md) — C-language development patterns for the ZX Spectrum.
+- [../05_development/02_assembly/](../05_development/02_assembly/README.md) — Z80 assembly programming; see especially the planned `c_with_z88dk.md`, `c_with_sdcc.md`, and `mixed_c_asm.md` articles covering C-language development patterns and mixing C with assembly.
 - [../08_reverse_engineering/](../08_reverse_engineering/README.md) — z88dk's `z88dk-dis` and `z88dk-ticks` are foundational tools for binary analysis.
 - [../11_emulation/software/](../11_emulation/software/) — emulators (Fuse, ZEsarUX, CSpect) that load z88dk-produced `.tap` / `.sna` / `.nex` files.
 

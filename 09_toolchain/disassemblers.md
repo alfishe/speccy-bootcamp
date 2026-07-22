@@ -796,7 +796,7 @@ If you are disassembling a ZX Spectrum Next `.nex` file or a binary known to use
 - [Cross-Platform Toolchain](cross_platform_toolchain.md) — survey article situating disassemblers in the wider toolchain.
 - [sjasmplus.md](sjasmplus.md) — the assembler used for round-trip verification of disassembler output.
 - [z88dk.md](z88dk.md) — `z88dk-dis` is part of the z88dk toolkit; `z88dk-ticks` complements disassembly with cycle-counting emulation.
-- [native_toolchain.md](native_toolchain.md) — the in-emulator monitors (STS, Zeus, DevPac, ALASM, XAS) and modern emulator debuggers (UnrealSpeccy, ZXMAK2, ZX-M8XXX, ZEsarUX, Fuse) covered there.
+- [native_toolchain.md](native_toolchain.md) — the native monitor-debugger tradition (STS, Zeus Monitor, MONS/DevPac, ALASM, XAS) and the modern emulator monitors (UnrealSpeccy, ZXMAK2, ZX-M8XXX) that inherited it. For ZEsarUX, Fuse, CSpect, MAME as debugger hosts see [debugging.md](debugging.md).
 - [../08_reverse_engineering/](../08_reverse_engineering/README.md) — broader reverse engineering methodology.
 - [../05_development/02_assembly/](../05_development/02_assembly/README.md) — Z80 assembly programming (target language of disassembler output).
 - [../11_emulation/software/](../11_emulation/software/) — emulators (Fuse, ZEsarUX, CSpect, MAME) used for profiling and tracing.
