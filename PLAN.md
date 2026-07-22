@@ -561,39 +561,39 @@ zx/
 
 #### 03_io/storage/ — Tape, Disk, and File Formats
 
-| File | Topic |
-|---|---|
-| `README.md` | Index — storage evolution from tape to SD card |
-| **Tape** | |
-| `tape_interface.md` | EAR/MIC hardware: pilot tone, sync pulses, data encoding, Turbo LOAD speed-ups |
-| `tape_format.md` | Tape data format: blocks (header + data), checksums, baud rates (1500–3600 baud) |
-| `tap_format.md` | .TAP file format: pulse-level encoding, block structure |
-| `tzx_format.md` | .TZX file format: complete specification, all block types, turbo loading, custom loaders |
-| `csw_format.md` | .CSW (Compressed Square Wave): tape format for preservation |
-| `pzx_format.md` | .PZX: alternative tape format |
-| **Floppy Disk** | |
-| `beta_disk_interface.md` | Beta Disk Interface: WD1793 / KR1818VG93 FDC, TR-DOS integration, disk format |
-| `fdc_vg93.md` | KR1818VG93 / WD1793 FDC deep dive: registers, commands, timing, undocumented features, turbo mods |
-| `plus3_floppy.md` | +3 internal floppy: WD1772-based, +3 DOS format, drive geometry |
-| `trd_disk_format.md` | TR-DOS disk format: directory structure, file types (B, C, D, M, #), disk parameters (80 tracks × 10 sectors) |
-| `trd_scl_formats.md` | .TRD / .SCL disk image formats |
-| `dsk_fdi_formats.md` | .DSK / .EDSK / .FDI disk image formats (preservation-level) |
-| `udi_format.md` | .UDI universal disk image format |
-| `scp_format.md` | .SCP (SuperCard Pro) flux-level preservation format |
-| `mfm_encoding.md` | MFM encoding: how data is recorded on floppy, sync marks, address marks |
-| **Hard Disk / SD** | |
-| **Hard Disk** | |
-| `hdd_overview.md` | HDD on Spectrum: evolution from floppy to IDE to SD card, why HDD mattered for the Soviet scene |
-| `ide_interface.md` | IDE interfaces: DivIDE, SMUC, Nemo IDE, Z-Controller, KAY IDE — hardware comparison, port maps, pinouts |
-| `divide_divmmc.md` | DivIDE / DivMMC: IDE hard disk + ESXDOS, FAT file system, pocket-level storage |
-| `sd_interface.md` | SD card interfaces: DivMMC, ZXMMC, Next SD card, Z-Controller SD |
-| `hdf_mgt_formats.md` | .HDF / .MGT / .IMG hard disk and disk image formats |
-| `hdd_partitioning.md` | HDD partitioning and filesystems: FAT16/FAT32 on DivIDE, IS-DOS partitions, partition tables |
-| **Snapshots & Replay** | |
-| `sna_format.md` | .SNA snapshot format: 48K and 128K variants, header structure, limitations |
-| `z80_format.md` | .Z80 snapshot format: v1/v2/v3, compression, extended hardware info |
-| `szx_format.md` | .SZX snapshot format: ZEsarUX native |
-| `rzx_format.md` | .RZX replay format: input recording for deterministic replay, embedding, validation |
+| File | Topic | Status |
+|---|---|---|
+| `README.md` | Index — storage evolution from tape to SD card (Snapshots sub-section ✅ COMPLETE) | ✅ |
+| **Tape** | | |
+| `tape_interface.md` | EAR/MIC hardware: pilot tone, sync pulses, data encoding, Turbo LOAD speed-ups | ⬜ |
+| `tape_format.md` | Tape data format: blocks (header + data), checksums, baud rates (1500–3600 baud) | ⬜ |
+| `tap_format.md` | .TAP file format: pulse-level encoding, block structure | ⬜ |
+| `tzx_format.md` | .TZX file format: complete specification, all block types, turbo loading, custom loaders | ⬜ |
+| `csw_format.md` | .CSW (Compressed Square Wave): tape format for preservation | ⬜ |
+| `pzx_format.md` | .PZX: alternative tape format | ⬜ |
+| **Floppy Disk** | | |
+| `beta_disk_interface.md` | Beta Disk Interface: WD1793 / KR1818VG93 FDC, TR-DOS integration, disk format | ⬜ |
+| `fdc_vg93.md` | KR1818VG93 / WD1793 FDC deep dive: registers, commands, timing, undocumented features, turbo mods | ⬜ |
+| `plus3_floppy.md` | +3 internal floppy: WD1772-based, +3 DOS format, drive geometry | ⬜ |
+| `trd_disk_format.md` | TR-DOS disk format: directory structure, file types (B, C, D, M, #), disk parameters (80 tracks × 10 sectors) | ⬜ |
+| `trd_scl_formats.md` | .TRD / .SCL disk image formats | ⬜ |
+| `dsk_fdi_formats.md` | .DSK / .EDSK / .FDI disk image formats (preservation-level) | ⬜ |
+| `udi_format.md` | .UDI universal disk image format | ⬜ |
+| `scp_format.md` | .SCP (SuperCard Pro) flux-level preservation format | ⬜ |
+| `mfm_encoding.md` | MFM encoding: how data is recorded on floppy, sync marks, address marks | ⬜ |
+| **Hard Disk / SD** | | |
+| **Hard Disk** | | |
+| `hdd_overview.md` | HDD on Spectrum: evolution from floppy to IDE to SD card, why HDD mattered for the Soviet scene | ⬜ |
+| `ide_interface.md` | IDE interfaces: DivIDE, SMUC, Nemo IDE, Z-Controller, KAY IDE — hardware comparison, port maps, pinouts | ⬜ |
+| `divide_divmmc.md` | DivIDE / DivMMC: IDE hard disk + ESXDOS, FAT file system, pocket-level storage | ⬜ |
+| `sd_interface.md` | SD card interfaces: DivMMC, ZXMMC, Next SD card, Z-Controller SD | ⬜ |
+| `hdf_mgt_formats.md` | .HDF / .MGT / .IMG hard disk and disk image formats | ⬜ |
+| `hdd_partitioning.md` | HDD partitioning and filesystems: FAT16/FAT32 on DivIDE, IS-DOS partitions, partition tables | ⬜ |
+| **Snapshots & Replay** ✅ COMPLETE | | |
+| `sna_format.md` | .SNA snapshot format: 48K and 128K variants, header structure, limitations | ✅ |
+| `z80_format.md` | .Z80 snapshot format: v1/v2/v3, compression, extended hardware info | ✅ |
+| `szx_format.md` | .SZX snapshot format: ZEsarUX native | ✅ |
+| `rzx_format.md` | .RZX replay format: input recording for deterministic replay, embedding, validation | ✅ |
 
 #### 03_io/peripherals/ — Input, Output, and Sound Cards
 

@@ -214,13 +214,24 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 
 ### 00 — Overview · 03 — I/O · 08 — RE · 09 — Toolchain · 10 — References · 11 — Emulation
 
+**Section 03 — I/O (Storage / Peripherals / Networking)**
+
 | Article | Description |
 |---------|-------------|
+| [sna_format.md](03_io/storage/sna_format.md) | **.SNA snapshot format** — the original 1992 format (JPP emulator), 48K and 128K variants, 27-byte header, PC-on-the-stack trick, limitations |
+| [z80_format.md](03_io/storage/z80_format.md) | **.Z80 snapshot format** — the 1994 "rich" format by Glen Lleston, three versions (v1 48K, v2 128K, v3 clones+AY), hardware IDs, RLE compression |
+| [szx_format.md](03_io/storage/szx_format.md) | **.SZX snapshot format** — the modern ZEsarUX chunk-based (IFF-like) format, standard chunks (Z80R, RAM, AY16, CFGR), extensibility via skip-unknown |
+| [rzx_format.md](03_io/storage/rzx_format.md) | **.RZX replay format** — 2001 input-recording format for the RZX Archive, block-based, cryptographic signing, cycle-accurate replay |
 | [joystick.md](03_io/peripherals/joystick.md) | Joystick interfaces: Kempston #1F, Sinclair/Interface 2, Cursor/Protek/AGF, Fuller, Timex, clone built-ins, unified multi-standard reader |
+
+**Other sections**
+
+| Article | Description |
+|---------|-------------|
 | [io_port_map.md](10_references/io_port_map.md) | Complete I/O port reference: every port across all models, Black_Cat table with annotations, decoding bitmasks, per-model differences |
 | [cycle_exact_accuracy.md](11_emulation/software/cycle_exact_accuracy.md) | Frame timing divergence, CRT vs LCD, host sync strategies, AY audio clocks, judder mitigation techniques, emulator comparison, worst-case Pentagon@60Hz conclusion |
 
-*Other sections are placeholders — content coming. See [PLAN.md](PLAN.md) for the full catalog.*
+*Snapshots & Replay sub-section: ✅ COMPLETE (4/4). Other I/O sub-sections (tape, floppy, HDD/SD, peripherals, networking) are in progress — see [PLAN.md](PLAN.md).*
 
 ---
 
