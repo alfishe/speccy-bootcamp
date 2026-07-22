@@ -563,14 +563,14 @@ zx/
 
 | File | Topic | Status |
 |---|---|---|
-| `README.md` | Index — storage evolution from tape to SD card (Snapshots sub-section ✅ COMPLETE) | ✅ |
-| **Tape** | | |
-| `tape_interface.md` | EAR/MIC hardware: pilot tone, sync pulses, data encoding, Turbo LOAD speed-ups | ⬜ |
-| `tape_format.md` | Tape data format: blocks (header + data), checksums, baud rates (1500–3600 baud) | ⬜ |
-| `tap_format.md` | .TAP file format: pulse-level encoding, block structure | ⬜ |
-| `tzx_format.md` | .TZX file format: complete specification, all block types, turbo loading, custom loaders | ⬜ |
-| `csw_format.md` | .CSW (Compressed Square Wave): tape format for preservation | ⬜ |
-| `pzx_format.md` | .PZX: alternative tape format | ⬜ |
+| `README.md` | Index — storage evolution from tape to SD card (Snapshots + Tape sub-sections ✅ COMPLETE) | ✅ |
+| **Tape** ✅ COMPLETE | | |
+| `tape_interface.md` | EAR/MIC hardware: pilot tone, sync pulses, data encoding, Turbo LOAD speed-ups | ✅ |
+| `tape_format.md` | Tape data format: blocks (header + data), checksums, baud rates (1500–3600 baud) | ✅ |
+| `tap_format.md` | .TAP file format: pulse-level encoding, block structure | ✅ |
+| `tzx_format.md` | .TZX file format: complete specification, all block types, turbo loading, custom loaders | ✅ |
+| `csw_format.md` | .CSW (Compressed Square Wave): tape format for preservation | ✅ |
+| `pzx_format.md` | .PZX: alternative tape format | ✅ |
 | **Floppy Disk** | | |
 | `beta_disk_interface.md` | Beta Disk Interface: WD1793 / KR1818VG93 FDC, TR-DOS integration, disk format | ⬜ |
 | `fdc_vg93.md` | KR1818VG93 / WD1793 FDC deep dive: registers, commands, timing, undocumented features, turbo mods | ⬜ |
