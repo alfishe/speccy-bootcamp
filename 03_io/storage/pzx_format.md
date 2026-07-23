@@ -4,7 +4,7 @@
 
 The [.TAP](tap_format.md) and [.TZX](tzx_format.md) formats are block-based: they represent a tape as a sequence of logical blocks (headers, data blocks, silences, etc.). The [.CSW format](csw_format.md) is pulse-based but unstructured: it represents the tape as a flat stream of pulse widths. The **.PZX format** takes a middle path: it is **pulse-based but chunked**, combining the fidelity of .CSW with the structure of .TZX/.SZX.
 
-Created in 2010 by **Fredrik Öhrström** (a Spectrum enthusiast and emulator author), .PZX was designed to address the limitations of both .TZX (which struggles with some non-standard encodings) and .CSW (which lacks structure and metadata). The format uses an **IFF-like chunk structure** (similar to [.SZX](szx_format.md)) to organise the tape data into named, length-prefixed chunks, while preserving the pulse-level fidelity needed for accurate preservation.
+Created in 2010 by **Fredrik Öhrström** (a Spectrum enthusiast and emulator author), .PZX was designed to address the limitations of both .TZX (which struggles with some non-standard encodings) and .CSW (which lacks structure and metadata). The format uses an **IFF-like chunk structure** (similar to [.SZX](../snapshots/szx_format.md)) to organise the tape data into named, length-prefixed chunks, while preserving the pulse-level fidelity needed for accurate preservation.
 
 This article covers the .PZX format: its history, the chunk-based file structure, the pulse data representation, how to read and write .PZX files, and how it compares to .CSW and .TZX. For the higher-level tape formats, see [tap_format.md](tap_format.md) and [tzx_format.md](tzx_format.md). For the lower-level .CSW format, see [csw_format.md](csw_format.md).
 
@@ -70,7 +70,7 @@ Each chunk has:
 
 The loader reads chunks one at a time. If it doesn't recognise a chunk ID, it skips that chunk (using the length field) and continues.
 
-This is the same design as [.SZX](szx_format.md) (the snapshot format), and it has the same benefits: extensibility, robustness, and ease of parsing.
+This is the same design as [.SZX](../snapshots/szx_format.md) (the snapshot format), and it has the same benefits: extensibility, robustness, and ease of parsing.
 
 ### 1.4 Why .PZX matters
 
@@ -545,7 +545,9 @@ The total file size for a 48K program is typically about 100 KB.
 
 ### 10.2 The snapshot formats
 
-- [sna_format.md](sna_format.md), [z80_format.md](z80_format.md), [szx_format.md](szx_format.md), [rzx_format.md](rzx_format.md) — snapshot and replay formats. .PZX's chunk structure is inspired by .SZX.
+These live in the sibling [../snapshots/](../snapshots/README.md) directory.
+
+- [sna_format.md](../snapshots/sna_format.md), [z80_format.md](../snapshots/z80_format.md), [szx_format.md](../snapshots/szx_format.md), [rzx_format.md](../snapshots/rzx_format.md) — snapshot and replay formats. .PZX's chunk structure is inspired by .SZX.
 
 ### 10.3 Related topics
 

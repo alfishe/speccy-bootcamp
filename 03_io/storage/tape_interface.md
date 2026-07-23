@@ -646,7 +646,7 @@ For most software, the difference is invisible. But some copy-protected tapes (w
 
 When the Z80 reads from an "unconnected" port (or in some cases, when it reads from port `#FE` while the ULA is fetching video bytes), the byte returned may contain bits from the **floating bus** — random bits that depend on the video generator's internal state. Some software (notably some loaders) uses the floating bus as a timing reference or even as a source of pseudo-randomness.
 
-The floating bus is famously emulator-unfriendly: different emulators model it differently, and a program that relies on the floating bus may work on one emulator but not another. The .SZX snapshot format (see [szx_format.md](szx_format.md)) includes a "floating bus" flag for exactly this reason.
+The floating bus is famously emulator-unfriendly: different emulators model it differently, and a program that relies on the floating bus may work on one emulator but not another. The .SZX snapshot format (see [szx_format.md](../snapshots/szx_format.md)) includes a "floating bus" flag for exactly this reason.
 
 ### 8.7 The 128K / +2 / +3 differences
 
@@ -755,7 +755,7 @@ The bit-banging principles — tight timing loops, edge detection, careful conte
 
 ### 10.3 Related topics
 
-- [Snapshot formats](sna_format.md) — snapshots and tape files are the two main ways Spectrum software is preserved. Snapshots capture a single instant; tape files capture the loading process.
+- [Snapshot formats](../snapshots/README.md) — snapshots and tape files are the two main ways Spectrum software is preserved. Snapshots capture a single instant; tape files capture the loading process.
 - [Reverse engineering](../../08_reverse_engineering/) — many Spectrum reverse engineering projects begin with analysing a tape loader to extract the protected code.
 - [Demoscene](../../07_demoscene/) — many demos include custom loaders as part of the production. The loader is sometimes the most technically sophisticated part of the demo.
 

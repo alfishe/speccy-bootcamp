@@ -536,7 +536,9 @@ This is comparable to .TZX and larger than .TAP (which is about 49 KB for the sa
 
 ### 10.2 The snapshot formats
 
-- [sna_format.md](sna_format.md), [z80_format.md](z80_format.md), [szx_format.md](szx_format.md), [rzx_format.md](rzx_format.md) — snapshot and replay formats.
+These live in the sibling [../snapshots/](../snapshots/README.md) directory.
+
+- [sna_format.md](../snapshots/sna_format.md), [z80_format.md](../snapshots/z80_format.md), [szx_format.md](../snapshots/szx_format.md), [rzx_format.md](../snapshots/rzx_format.md) — snapshot and replay formats.
 
 ### 10.3 Related topics
 

@@ -76,6 +76,12 @@ zx/
 │       └── peridot.md
 │
 ├── 03_io/
+│   ├── snapshots/
+│   │   ├── README.md
+│   │   ├── sna_format.md
+│   │   ├── z80_format.md
+│   │   ├── szx_format.md
+│   │   └── rzx_format.md
 │   ├── storage/
 │   │   ├── README.md
 │   │   ├── tape_interface.md
@@ -98,11 +104,7 @@ zx/
 │   │   ├── divide_divmmc.md
 │   │   ├── sd_interface.md
 │   │   ├── hdf_mgt_formats.md
-│   │   ├── hdd_partitioning.md
-│   │   ├── sna_format.md
-│   │   ├── z80_format.md
-│   │   ├── szx_format.md
-│   │   └── rzx_format.md
+│   │   └── hdd_partitioning.md
 │   ├── peripherals/
 │   │   ├── README.md
 │   │   ├── keyboard.md
@@ -559,11 +561,21 @@ zx/
 
 ### 03 — I/O (subfoldered)
 
-#### 03_io/storage/ — Tape, Disk, and File Formats
+#### 03_io/snapshots/ — Machine-state Capture (Snapshots & Replay)
 
 | File | Topic | Status |
 |---|---|---|
-| `README.md` | Index — storage evolution from tape to SD card (Snapshots + Tape sub-sections ✅ COMPLETE) | ✅ |
+| `README.md` | Index — machine-state capture formats (state-at-an-instant + replay) | ✅ |
+| `sna_format.md` | .SNA snapshot format: 48K and 128K variants, header structure, limitations | ✅ |
+| `z80_format.md` | .Z80 snapshot format: v1/v2/v3, compression, extended hardware info | ✅ |
+| `szx_format.md` | .SZX snapshot format: ZEsarUX native | ✅ |
+| `rzx_format.md` | .RZX replay format: input recording for deterministic replay, embedding, validation | ✅ |
+
+#### 03_io/storage/ — Tape, Floppy, HDD, and SD Card Media Formats
+
+| File | Topic | Status |
+|---|---|---|
+| `README.md` | Index — storage media formats (Tape sub-section ✅ COMPLETE; Floppy/HDD-SD pending) | ✅ |
 | **Tape** ✅ COMPLETE | | |
 | `tape_interface.md` | EAR/MIC hardware: pilot tone, sync pulses, data encoding, Turbo LOAD speed-ups | ✅ |
 | `tape_format.md` | Tape data format: blocks (header + data), checksums, baud rates (1500–3600 baud) | ✅ |
@@ -589,11 +601,6 @@ zx/
 | `sd_interface.md` | SD card interfaces: DivMMC, ZXMMC, Next SD card, Z-Controller SD | ⬜ |
 | `hdf_mgt_formats.md` | .HDF / .MGT / .IMG hard disk and disk image formats | ⬜ |
 | `hdd_partitioning.md` | HDD partitioning and filesystems: FAT16/FAT32 on DivIDE, IS-DOS partitions, partition tables | ⬜ |
-| **Snapshots & Replay** ✅ COMPLETE | | |
-| `sna_format.md` | .SNA snapshot format: 48K and 128K variants, header structure, limitations | ✅ |
-| `z80_format.md` | .Z80 snapshot format: v1/v2/v3, compression, extended hardware info | ✅ |
-| `szx_format.md` | .SZX snapshot format: ZEsarUX native | ✅ |
-| `rzx_format.md` | .RZX replay format: input recording for deterministic replay, embedding, validation | ✅ |
 
 #### 03_io/peripherals/ — Input, Output, and Sound Cards
 

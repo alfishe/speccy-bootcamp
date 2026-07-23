@@ -214,16 +214,23 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 
 ### 00 — Overview · 03 — I/O · 08 — RE · 09 — Toolchain · 10 — References · 11 — Emulation
 
-**Section 03 — I/O (Storage / Peripherals / Networking)**
+**Section 03 — I/O (Snapshots / Storage / Peripherals / Networking)**
 
 *Snapshots & Replay sub-section: ✅ COMPLETE (4/4). Tape sub-section: ✅ COMPLETE (6/6). Other I/O sub-sections (floppy, HDD/SD, peripherals, networking) are in progress — see [PLAN.md](PLAN.md).*
 
+**Snapshots & Replay** — machine-state capture formats ([sub-section README](03_io/snapshots/README.md))
+
 | Article | Description |
 |---------|-------------|
-| [sna_format.md](03_io/storage/sna_format.md) | **.SNA snapshot format** — the original 1992 format (JPP emulator), 48K and 128K variants, 27-byte header, PC-on-the-stack trick, limitations |
-| [z80_format.md](03_io/storage/z80_format.md) | **.Z80 snapshot format** — the 1994 "rich" format by Glen Lleston, three versions (v1 48K, v2 128K, v3 clones+AY), hardware IDs, RLE compression |
-| [szx_format.md](03_io/storage/szx_format.md) | **.SZX snapshot format** — the modern ZEsarUX chunk-based (IFF-like) format, standard chunks (Z80R, RAM, AY16, CFGR), extensibility via skip-unknown |
-| [rzx_format.md](03_io/storage/rzx_format.md) | **.RZX replay format** — 2001 input-recording format for the RZX Archive, block-based, cryptographic signing, cycle-accurate replay |
+| [sna_format.md](03_io/snapshots/sna_format.md) | **.SNA snapshot format** — the original 1992 format (JPP emulator), 48K and 128K variants, 27-byte header, PC-on-the-stack trick, limitations |
+| [z80_format.md](03_io/snapshots/z80_format.md) | **.Z80 snapshot format** — the 1994 "rich" format by Glen Lleston, three versions (v1 48K, v2 128K, v3 clones+AY), hardware IDs, RLE compression |
+| [szx_format.md](03_io/snapshots/szx_format.md) | **.SZX snapshot format** — the modern ZEsarUX chunk-based (IFF-like) format, standard chunks (Z80R, RAM, AY16, CFGR), extensibility via skip-unknown |
+| [rzx_format.md](03_io/snapshots/rzx_format.md) | **.RZX replay format** — 2001 input-recording format for the RZX Archive, block-based, cryptographic signing, cycle-accurate replay |
+
+**Storage Media Formats** — tape, floppy, HDD, SD ([sub-section README](03_io/storage/README.md))
+
+| Article | Description |
+|---------|-------------|
 | [tape_interface.md](03_io/storage/tape_interface.md) | **Tape interface hardware** — EAR/MIC circuits, ULA, port `#FE` bit layout, ROM routines (SA-BYTES, LD-BYTES), pilot/sync pulses, bit encoding, turbo loaders |
 | [tape_format.md](03_io/storage/tape_format.md) | **Tape data format** — 17-byte header structure, four block types (Program/Array/Code), XOR checksum, multi-block files |
 | [tap_format.md](03_io/storage/tap_format.md) | **.TAP file format** — Thomas Schreiber's 1996 minimal format, just blocks with 2-byte length prefixes |

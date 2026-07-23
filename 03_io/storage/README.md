@@ -1,21 +1,12 @@
 [← Home](../../README.md) · [I/O](../) · [Storage](README.md)
 
-# I/O — Storage
+# I/O — Storage Media Formats
 
-This directory covers tape, floppy disk, hard disk, SD card, and snapshot/replay formats — every form of persistent state and input/output storage used by the ZX Spectrum ecosystem from 1982 to the present day.
+This directory covers **storage media formats** — tape, floppy disk, hard disk, and SD card. These are formats that represent data laid out on a physical (or emulated) medium, which the Spectrum loads through its tape input, floppy controller, or IDE/SD interface.
+
+Machine-state capture formats (snapshots and replay) live in a sibling directory: [../snapshots/](../snapshots/README.md). The split reflects a real distinction: a .TAP file is a sequence of pulses that the Spectrum's tape subsystem decodes, whereas a .SNA file is a frozen image of the machine itself. See the [snapshots README](../snapshots/README.md) for that side of the I/O picture.
 
 ## Article Index
-
-### Snapshots & Replay ✅ 4 articles complete
-
-The snapshot/replay formats — how Spectrum machine state is saved, shared, and reproduced.
-
-| File | Topic | Lines |
-|------|-------|-------|
-| [sna_format.md](sna_format.md) | **.SNA snapshot format** — the original 1992 format by Arnt Gulbrandsen (JPP emulator). 48K (49179 bytes) and 128K (131103 bytes) variants, the 27-byte header, the PC-on-the-stack trick, extension header for 128K, loader implementation, limitations (no AY, no clone state) | 548 |
-| [z80_format.md](z80_format.md) | **.Z80 snapshot format** — the 1994 "rich" format by Glen Lleston (Z80 emulator). Three versions: v1 (48K only, 30-byte header), v2 (128K, 23-byte extension), v3 (clones/AY/peripherals, 54-byte extension). Hardware ID system (0–26+), RLE compression via 0xED 0xED marker, per-page storage | 670 |
-| [szx_format.md](szx_format.md) | **.SZX snapshot format** — the modern chunk-based (IFF-like) format by César Hernández Bauset (ZEsarUX, ~2005). 8-byte file header ("ZXST" + version), standard chunks (Z80R, RAM, AY16, CFGR, BETA, PLSB, ZXRG, COPR, DMA, etc.), extensibility via skip-unknown-chunks rule, hardware IDs 0–28+ including Next and TS-Conf | 639 |
-| [rzx_format.md](rzx_format.md) | **.RZX replay format** — the 2001 input-recording format by the RZX Working Group (Andrew Broad, Phillip Kendall, et al.). Block-based (Creator/Snapshot/Input/Sign), records IN port reads rather than key presses (hardware-independent), embedded initial snapshot, cryptographic signing for the RZX Archive, T-states-per-frame for cycle-accurate replay | 628 |
 
 ### Tape ✅ 6 articles complete
 
@@ -59,19 +50,11 @@ The tape subsystem — hardware interface, logical data format, and the five maj
 
 ## Status
 
-**Snapshots & Replay sub-section: ✅ COMPLETE (4/4 articles).**
 **Tape sub-section: ✅ COMPLETE (6/6 articles).**
 
 The remaining two sub-sections (Floppy Disk, Hard Disk/SD) are planned but not yet written. See [PLAN.md](../../PLAN.md) for the full catalog and prioritisation.
 
 ## Reading Order
-
-**Snapshots & Replay (state at an instant):**
-
-1. [sna_format.md](sna_format.md) — the simplest format, foundational concepts (header layout, PC restoration, limitations).
-2. [z80_format.md](z80_format.md) — the most widely-used "rich" format; builds on .SNA concepts.
-3. [szx_format.md](szx_format.md) — the modern chunk-based approach; introduces IFF-like extensibility.
-4. [rzx_format.md](rzx_format.md) — a different paradigm: recording input over time rather than state at an instant.
 
 **Tape (signal representation, hardware to preservation):**
 
@@ -82,4 +65,4 @@ The remaining two sub-sections (Floppy Disk, Hard Disk/SD) are planned but not y
 5. [csw_format.md](csw_format.md) — the pulse-level preservation format: analog fidelity at the cost of size.
 6. [pzx_format.md](pzx_format.md) — a modern structured alternative to .CSW.
 
-The snapshots cover state-at-an-instant; the tape articles cover state-over-time (the loading process). Together with the planned floppy and HDD/SD articles, they will cover the full Spectrum storage ecosystem.
+The tape articles cover state-over-time (the loading process). The companion [snapshots sub-section](../snapshots/README.md) covers state-at-an-instant. Together with the planned floppy and HDD/SD articles, this directory will cover the full Spectrum storage media ecosystem.

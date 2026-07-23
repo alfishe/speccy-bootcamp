@@ -671,10 +671,12 @@ Today, the Spectrum's tape format is one of the best-preserved of the 1980s home
 
 ### 10.2 The snapshot formats
 
-- [sna_format.md](sna_format.md) — the .SNA snapshot format. Snapshots capture the machine state at a single instant; tape files capture the loading process. The two are complementary.
-- [z80_format.md](z80_format.md) — the .Z80 snapshot format.
-- [szx_format.md](szx_format.md) — the .SZX snapshot format.
-- [rzx_format.md](rzx_format.md) — the .RZX replay format.
+These live in the sibling [../snapshots/](../snapshots/README.md) directory.
+
+- [sna_format.md](../snapshots/sna_format.md) — the .SNA snapshot format. Snapshots capture the machine state at a single instant; tape files capture the loading process. The two are complementary.
+- [z80_format.md](../snapshots/z80_format.md) — the .Z80 snapshot format.
+- [szx_format.md](../snapshots/szx_format.md) — the .SZX snapshot format.
+- [rzx_format.md](../snapshots/rzx_format.md) — the .RZX replay format.
 
 ### 10.3 Related topics
 
