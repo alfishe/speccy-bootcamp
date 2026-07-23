@@ -63,16 +63,30 @@ The floppy subsystem — the IBM 3740 physical layer shared by every Spectrum di
 |------|-------|-------|
 | [disk_format_overview.md](disk_format_overview.md) | **Top-level comparison** — IBM 3740 physical layer, 4 logical formats side-by-side, 8 disk image formats at a glance, decision tree for choosing the right format | 488 |
 
-### Hard Disk / SD *(planned — not yet written)*
+### Hard Disk / SD ✅ 6 articles complete
 
-| File | Topic |
-|------|-------|
-| `hdd_overview.md` | HDD on Spectrum: evolution from floppy to IDE to SD card, why HDD mattered for the Soviet scene |
-| `ide_interface.md` | IDE interfaces: DivIDE, SMUC, Nemo IDE, Z-Controller, KAY IDE — hardware comparison, port maps, pinouts |
-| `divide_divmmc.md` | DivIDE / DivMMC: IDE hard disk + ESXDOS, FAT file system, pocket-level storage |
-| `sd_interface.md` | SD card interfaces: DivMMC, ZXMMC, Next SD card, Z-Controller SD |
-| `hdf_mgt_formats.md` | .HDF / .MGT / .IMG hard disk and disk image formats |
-| `hdd_partitioning.md` | HDD partitioning and filesystems: FAT16/FAT32 on DivIDE, IS-DOS partitions, partition tables |
+The mass-storage subsystem — the IDE and SD interfaces that gave the Spectrum megabyte-to-gigabyte capacity, the image formats that capture them, and the FAT/IS-DOS filesystems that organise them. Three generations of hardware (IDE → SD) with a common filesystem abstraction.
+
+**Overview (start here):**
+
+| File | Topic | Lines |
+|------|-------|-------|
+| [hdd_overview.md](hdd_overview.md) | **Top-level overview** — three generations (floppy → IDE → SD), why HDD mattered for the Soviet scene, modern landscape, cross-references | 190 |
+
+**Hardware interfaces:**
+
+| File | Topic | Lines |
+|------|-------|-------|
+| [ide_interface.md](ide_interface.md) | **IDE / PATA interfaces** — generic IDE block diagram, 40-pin connector pinout, port maps compared (DivIDE/SMUC/Nemo/ZC/ATM/KAY), Z80 read loop sketch | 406 |
+| [divide_divmmc.md](divide_divmmc.md) | **DivIDE / DivMMC hardware** — board architecture, NMI boot, conmem/mapram paging, divman/divese TR-DOS image emulation, card setup workflow (hardware companion to esxdos.md) | 293 |
+| [sd_interface.md](sd_interface.md) | **SD card interfaces (SD-SPI)** — SPI command frame, 5-step init handshake (CMD0/CMD8/CMD55+ACMD41/CMD58), Z80 bit-bang sketch, port maps (DivMMC/ZXMMC/Next/ZC), throughput table | 315 |
+
+**Filesystem and image formats:**
+
+| File | Topic | Lines |
+|------|-------|-------|
+| [hdd_partitioning.md](hdd_partitioning.md) | **Partitioning and filesystems** — MBR + 4-entry partition table, FAT12/16/32, BPB fields, 32-byte directory entries, LFN, cluster allocation, IS-DOS alternative, multi-partition layouts | 397 |
+| [hdf_mgt_formats.md](hdf_mgt_formats.md) | **Image formats** (.HDF / .IMG / .MGT / .VHD) — raw vs headered HDF, the four-names-for-same-thing problem, loopback mounting, sparse/compression, per-OS card creation commands | 238 |
 
 ---
 
@@ -80,8 +94,9 @@ The floppy subsystem — the IBM 3740 physical layer shared by every Spectrum di
 
 **Tape sub-section: ✅ COMPLETE (6/6 articles).**
 **Floppy sub-section: ✅ COMPLETE (13/13 articles).**
+**Hard Disk / SD sub-section: ✅ COMPLETE (6/6 articles).**
 
-The remaining sub-section (Hard Disk / SD) is planned but not yet written. See [PLAN.md](../../PLAN.md) for the full catalog and prioritisation.
+All three sub-sections of the storage media directory are now complete (25 articles total). See [PLAN.md](../../PLAN.md) for the full catalog.
 
 ## Reading Order
 
@@ -110,4 +125,13 @@ The remaining sub-section (Hard Disk / SD) is planned but not yet written. See [
 12. [udi_format.md](udi_format.md) — flux-level preservation format (`.UDI`).
 13. [scp_format.md](scp_format.md) — flux-level preservation format (`.SCP`).
 
-The tape articles cover state-over-time (the loading process). The companion [snapshots sub-section](../snapshots/README.md) covers state-at-an-instant. Together with the floppy and planned HDD/SD articles, this directory covers the full Spectrum storage media ecosystem.
+**Hard Disk / SD (overview → hardware → filesystem → image formats):**
+
+1. [hdd_overview.md](hdd_overview.md) — start here: the evolution floppy → IDE → SD, and the unifying FAT abstraction.
+2. [ide_interface.md](ide_interface.md) — the IDE protocol: 40-pin connector, port maps for every interface, Z80 read loop.
+3. [divide_divmmc.md](divide_divmmc.md) — the DivIDE/DivMMC hardware: NMI boot, ESXDOS, virtual-floppy emulation.
+4. [sd_interface.md](sd_interface.md) — the SD-SPI protocol: command frame, init handshake, port maps for every interface.
+5. [hdd_partitioning.md](hdd_partitioning.md) — what's inside the image: MBR, FAT16/32, BPB, directory entries, LFN, IS-DOS.
+6. [hdf_mgt_formats.md](hdf_mgt_formats.md) — the image formats themselves: .HDF, .IMG, .VHD, and the raw-image convention.
+
+The tape articles cover state-over-time (the loading process). The companion [snapshots sub-section](../snapshots/README.md) covers state-at-an-instant. Together with the floppy and HDD/SD articles, this directory covers the full Spectrum storage media ecosystem.

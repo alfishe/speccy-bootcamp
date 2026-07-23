@@ -579,7 +579,7 @@ zx/
 
 | File | Topic | Status |
 |---|---|---|
-| `README.md` | Index — storage media formats (Tape ✅ COMPLETE; Floppy ✅ COMPLETE; HDD-SD pending) | ✅ |
+| `README.md` | Index — storage media formats (Tape ✅ COMPLETE; Floppy ✅ COMPLETE; HDD/SD ✅ COMPLETE) | ✅ |
 | **Tape** ✅ COMPLETE | | |
 | `tape_interface.md` | EAR/MIC hardware: pilot tone, sync pulses, data encoding, Turbo LOAD speed-ups | ✅ |
 | `tape_format.md` | Tape data format: blocks (header + data), checksums, baud rates (1500–3600 baud) | ✅ |
@@ -605,14 +605,16 @@ zx/
 | `dsk_fdi_formats.md` | .DSK / .EDSK / .FDI image formats (CP/M / +3DOS / Opus containers) | ✅ |
 | `udi_format.md` | .UDI universal flux-level image format (preserves every magnetic transition) | ✅ |
 | `scp_format.md` | .SCP SuperCard Pro flux-level image format (gold-standard preservation) | ✅ |
-| **Hard Disk / SD** | | |
-| **Hard Disk** | | |
-| `hdd_overview.md` | HDD on Spectrum: evolution from floppy to IDE to SD card, why HDD mattered for the Soviet scene | ⬜ |
-| `ide_interface.md` | IDE interfaces: DivIDE, SMUC, Nemo IDE, Z-Controller, KAY IDE — hardware comparison, port maps, pinouts | ⬜ |
-| `divide_divmmc.md` | DivIDE / DivMMC: IDE hard disk + ESXDOS, FAT file system, pocket-level storage | ⬜ |
-| `sd_interface.md` | SD card interfaces: DivMMC, ZXMMC, Next SD card, Z-Controller SD | ⬜ |
-| `hdf_mgt_formats.md` | .HDF / .MGT / .IMG hard disk and disk image formats | ⬜ |
-| `hdd_partitioning.md` | HDD partitioning and filesystems: FAT16/FAT32 on DivIDE, IS-DOS partitions, partition tables | ⬜ |
+| **Hard Disk / SD** ✅ COMPLETE | | |
+| **Overview** | | |
+| `hdd_overview.md` | Top-level overview: three generations (floppy → IDE → SD), why HDD mattered for the Soviet scene, the unifying FAT abstraction | ✅ |
+| **Hardware interfaces** | | |
+| `ide_interface.md` | IDE / PATA interfaces: 40-pin connector pinout, port maps for DivIDE/SMUC/Nemo/ZC/ATM/KAY, Z80 read loop sketch | ✅ |
+| `divide_divmmc.md` | DivIDE / DivMMC hardware: board architecture, NMI boot, conmem/mapram paging, divman/divese TR-DOS image emulation (hardware companion to esxdos.md) | ✅ |
+| `sd_interface.md` | SD card interfaces (SD-SPI): SPI command frames, 5-step init handshake, Z80 bit-bang sketch, port maps for DivMMC/ZXMMC/Next/ZC | ✅ |
+| **Filesystem and image formats** | | |
+| `hdd_partitioning.md` | Partitioning and filesystems: MBR + 4-entry partition table, FAT12/16/32, BPB, directory entries, LFN, cluster allocation, IS-DOS | ✅ |
+| `hdf_mgt_formats.md` | Image formats (.HDF / .IMG / .MGT / .VHD): raw vs headered HDF, loopback mounting, sparse/compression, per-OS card creation | ✅ |
 
 #### 03_io/peripherals/ — Input, Output, and Sound Cards
 

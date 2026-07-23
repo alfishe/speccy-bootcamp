@@ -216,7 +216,7 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 
 **Section 03 — I/O (Snapshots / Storage / Peripherals / Networking)**
 
-*Snapshots & Replay sub-section: ✅ COMPLETE (4/4). Tape sub-section: ✅ COMPLETE (6/6). Floppy sub-section: ✅ COMPLETE (13/13). Other I/O sub-sections (HDD/SD, peripherals, networking) are in progress — see [PLAN.md](PLAN.md).*
+*Snapshots & Replay sub-section: ✅ COMPLETE (4/4). Tape sub-section: ✅ COMPLETE (6/6). Floppy sub-section: ✅ COMPLETE (13/13). Hard Disk / SD sub-section: ✅ COMPLETE (6/6). Other I/O sub-sections (peripherals, networking) are in progress — see [PLAN.md](PLAN.md).*
 
 **Snapshots & Replay** — machine-state capture formats ([sub-section README](03_io/snapshots/README.md))
 
@@ -255,6 +255,17 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [udi_format.md](03_io/storage/udi_format.md) | **.UDI universal flux-level image** — preserves every magnetic transition |
 | [scp_format.md](03_io/storage/scp_format.md) | **.SCP SuperCard Pro flux-level image** — gold-standard preservation format |
 | [disk_format_overview.md](03_io/storage/disk_format_overview.md) | **Top-level comparison** — IBM 3740 physical layer, 4 logical formats, 8 image formats, decision tree |
+
+**Hard Disk / SD** — IDE / SD interfaces, FAT filesystem, image formats ([sub-section README](03_io/storage/README.md))
+
+| Article | Description |
+|---------|-------------|
+| [hdd_overview.md](03_io/storage/hdd_overview.md) | **Top-level overview** — three generations (floppy → IDE → SD), why HDD mattered for the Soviet scene, the unifying FAT abstraction |
+| [ide_interface.md](03_io/storage/ide_interface.md) | **IDE / PATA interfaces** — 40-pin connector, port maps for DivIDE/SMUC/Nemo/ZC/ATM/KAY, Z80 read loop sketch |
+| [divide_divmmc.md](03_io/storage/divide_divmmc.md) | **DivIDE / DivMMC hardware** — board architecture, NMI boot, conmem/mapram paging, divman/divese TR-DOS image emulation (hardware companion to esxdos.md) |
+| [sd_interface.md](03_io/storage/sd_interface.md) | **SD card interfaces (SD-SPI)** — SPI command frames, 5-step init handshake, Z80 bit-bang sketch, port maps for DivMMC/ZXMMC/Next/ZC |
+| [hdd_partitioning.md](03_io/storage/hdd_partitioning.md) | **Partitioning & filesystems** — MBR + 4-entry partition table, FAT12/16/32, BPB, directory entries, LFN, cluster allocation, IS-DOS |
+| [hdf_mgt_formats.md](03_io/storage/hdf_mgt_formats.md) | **Image formats** (.HDF / .IMG / .MGT / .VHD) — raw vs headered HDF, four-names-for-same-thing, loopback mounting, sparse/compression |
 | [joystick.md](03_io/peripherals/joystick.md) | Joystick interfaces: Kempston #1F, Sinclair/Interface 2, Cursor/Protek/AGF, Fuller, Timex, clone built-ins, unified multi-standard reader |
 
 **Other sections**
