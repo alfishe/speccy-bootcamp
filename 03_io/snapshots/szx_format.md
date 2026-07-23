@@ -1,4 +1,4 @@
-[← Home](../../README.md) · [I/O](../README.md) · [Storage](README.md)
+[← Home](../../README.md) · [I/O](../README.md) · [Snapshots](README.md)
 
 # The .SZX Snapshot Format
 
@@ -616,13 +616,13 @@ In practice, .SZX is most useful when both you and your target audience are usin
 
 ## §10. Cross-References
 
-### 10.1 Within the storage section
+### 10.1 Within the snapshots section
 
 - **[sna_format.md](sna_format.md)** — The simplest format. Read this first if you're new to snapshots.
 - **[z80_format.md](z80_format.md)** — The most widely-supported rich format. Shares the compression scheme used by .SZX's `RAM ` chunks.
 - **[rzx_format.md](rzx_format.md)** — The input recording format, used for replay rather than static snapshots.
 
-### 10.2 Outside the storage section
+### 10.2 Outside the snapshots section
 
 - **[../../04_operating_systems/nextzxos.md](../../04_operating_systems/nextzxos.md)** — The ZX Spectrum Next's OS, captured in detail by .SZX's `ZXRG`, `COPR`, and `DMA` chunks.
 - **[../../04_operating_systems/evo_os.md](../../04_operating_systems/evo_os.md)** — The ZX Evolution's BIOS/OS, captured by .SZX's `CFGR` extensions for the Evo hardware.

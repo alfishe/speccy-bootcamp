@@ -1,4 +1,4 @@
-[← Home](../../README.md) · [I/O](../README.md) · [Storage](README.md)
+[← Home](../../README.md) · [I/O](../README.md) · [Snapshots](README.md)
 
 # The .SNA Snapshot Format
 
@@ -523,18 +523,18 @@ For new snapshots, .Z80 or .SZX is recommended. But the .SNA format is not going
 
 ## §10. Cross-References
 
-### 10.1 Within the storage section
+### 10.1 Within the snapshots section
 
 - **[z80_format.md](z80_format.md)** — The .Z80 snapshot format, the more capable alternative. Read this if .SNA's limitations are a problem for your use case.
 - **[szx_format.md](szx_format.md)** — The .SZX snapshot format (ZEsarUX's native format), which captures even more state than .Z80.
 - **[rzx_format.md](rzx_format.md)** — The .RZX input recording format, used for deterministic replay rather than static snapshots.
 
-### 10.2 Outside the storage section
+### 10.2 Outside the snapshots section
 
 - **[../../04_operating_systems/rom_plus2.md](../../04_operating_systems/rom_plus2.md)** — The +2A/+3 ROM internals, including the four paging modes that .SNA cannot represent.
 - **[../../04_operating_systems/rom_48k.md](../../04_operating_systems/rom_48k.md)** — The 48K ROM that is assumed by every 48K .SNA file.
-- **[beta_disk_interface.md](beta_disk_interface.md)** — The Beta 128 disk interface, whose paged state is captured by the TR-DOS flag in 128K .SNA files.
-- **[tape_format.md](tape_format.md)** — The on-tape data format, the alternative to snapshots for distributing Spectrum software.
+- **[beta_disk_interface.md](../storage/beta_disk_interface.md)** — The Beta 128 disk interface, whose paged state is captured by the TR-DOS flag in 128K .SNA files.
+- **[tape_format.md](../storage/tape_format.md)** — The on-tape data format, the alternative to snapshots for distributing Spectrum software.
 
 ### 10.3 External resources
 

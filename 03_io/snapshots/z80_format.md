@@ -1,4 +1,4 @@
-[← Home](../../README.md) · [I/O](../README.md) · [Storage](README.md)
+[← Home](../../README.md) · [I/O](../README.md) · [Snapshots](README.md)
 
 # The .Z80 Snapshot Format
 
@@ -647,13 +647,13 @@ When in doubt, test your .Z80 file against multiple emulators.
 
 ## §10. Cross-References
 
-### 10.1 Within the storage section
+### 10.1 Within the snapshots section
 
 - **[sna_format.md](sna_format.md)** — The simpler .SNA format. Read this first if you're new to snapshots.
 - **[szx_format.md](szx_format.md)** — The .SZX format, ZEsarUX's chunk-based format for capturing even more state.
 - **[rzx_format.md](rzx_format.md)** — The .RZX input recording format, for replay rather than static snapshots.
 
-### 10.2 Outside the storage section
+### 10.2 Outside the snapshots section
 
 - **[../../04_operating_systems/rom_plus2.md](../../04_operating_systems/rom_plus2.md)** — The +2A/+3 ROM internals, including the `#1FFD` paging port captured by .Z80 v3.
 - **[../../04_operating_systems/rom_versions.md](../../04_operating_systems/rom_versions.md)** — ROM versions, for identifying which ROM is appropriate for a given hardware ID.
