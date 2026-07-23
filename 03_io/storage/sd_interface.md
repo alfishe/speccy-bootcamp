@@ -10,22 +10,6 @@
 
 ---
 
-## Roadmap
-
-| Section | Topic | Length |
-|---|---|---|
-| §1 | What an SD Interface Is — SPI mode and why the Spectrum uses it | medium |
-| §2 | Generic Block Diagram — the components every SD interface shares | short |
-| §3 | The SD-SPI Protocol — command set, responses, data transfer | long |
-| §4 | Port Maps Compared — DivMMC, ZXMMC, Next, Z-Controller | medium |
-| §5 | Interface-by-Interface — each card's hardware and quirks | medium |
-| §6 | Performance and Card Compatibility | medium |
-| §7 | Cross-references and License | short |
-
-Reading order: §1 → §2 → §3, then §5 for the interface you care about, then §6 if you are selecting or debugging a card. §4 is a reference table.
-
----
-
 ## §1. What an SD Interface Is
 
 ### 1.1 SD cards and their two protocols

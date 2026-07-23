@@ -12,23 +12,6 @@ This is the **filesystem companion** to the hardware articles: [ide_interface.md
 
 ---
 
-## Roadmap
-
-| Section | Topic | Length |
-|---|---|---|
-| §1 | Introduction — partitioning on the Spectrum | short |
-| §2 | The Master Boot Record and Partition Table | medium |
-| §3 | FAT: The Common Filesystem — BPB, FAT, root, data | long |
-| §4 | FAT16 vs FAT32 — the differences, LFN | medium |
-| §5 | The Cluster and Allocation Strategy | medium |
-| §6 | IS-DOS and Alternative Filesystems | medium |
-| §7 | Multi-Partition Layouts | short |
-| §8 | Cross-references and License | short |
-
-Reading order: §1 → §2 → §3 → §4, then §5 for the practical implications, §6 for the historical alternative. §7 and §8 are reference material.
-
----
-
 ## §1. Introduction
 
 ### 1.1 Why the Spectrum needs a partition table

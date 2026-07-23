@@ -10,21 +10,6 @@ This article covers the logical data format: the block structure, the header typ
 
 ---
 
-## Roadmap
-
-1. **What the tape data format is** — history, scope, the two-layer model
-2. **Block structure** — flag byte, header/data, checksum, final pulse
-3. **Header blocks** — the 17-byte header structure, filename, parameters
-4. **Block types** — Program, Number Array, Character Array, Code
-5. **Data blocks** — raw bytes following a header
-6. **Multi-block files** — the header + data sequence, multi-load files
-7. **The checksum** — XOR semantics, error detection capability
-8. **Compatibility and quirks** — non-standard blocks, custom loaders
-9. **Comparison with other formats** — how the Spectrum's format compares to C64, Amstrad, etc.
-10. **Cross-references** — where to go next
-
----
-
 ## §1. What the Tape Data Format Is
 
 ### 1.1 The two-layer model

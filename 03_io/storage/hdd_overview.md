@@ -12,21 +12,6 @@ This article is the **top-level index** into the hard-disk / SD documentation. I
 
 ---
 
-## Roadmap
-
-| Section | Topic | Length |
-|---|---|---|
-| §1 | Introduction — what "hard disk on a Spectrum" means | short |
-| §2 | Three Generations — floppy, IDE, SD | medium |
-| §3 | The Interfaces at a Glance — every HDD/SD interface compared | medium |
-| §4 | Why HDD Mattered for the Soviet Scene | medium |
-| §5 | The Modern Landscape (2024) | short |
-| §6 | Cross-references and License | short |
-
-Reading order: §1 → §2 → §3, then §4 for historical context, §5 for current practice. Readers who already know which interface they care about can skip to §3 and follow the link to the dedicated article.
-
----
-
 ## §1. Introduction
 
 ### 1.1 What "hard disk on a Spectrum" means

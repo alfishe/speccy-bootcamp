@@ -10,21 +10,6 @@
 
 ---
 
-## Roadmap
-
-| Section | Topic | Length |
-|---|---|---|
-| §1 | What .TRD and .SCL Are — purpose, history, when to use each | short |
-| §2 | The .TRD Format — sector-by-sector disk image | medium |
-| §3 | The .SCL Format — file-by-file logical image | medium |
-| §4 | .TRD vs. .SCL: Comparison and Use Cases | short |
-| §5 | Tools and Converters — emulators, editors, format converters | short |
-| §6 | Cross-references and License | short |
-
-Reading order: §1 → §2 → §3 → §4 → §5, with §6 as supplementary material.
-
----
-
 ## §1. What .TRD and .SCL Are
 
 ### 1.1 Why disk images?

@@ -10,26 +10,7 @@
 
 ---
 
-## Roadmap
-
-| Section | Topic | Length |
-|---|---|---|
-| §1 | What the Beta Disk Interface Is — history, UK pricing, ex-USSR replication | long |
-| §2 | Hardware Block Diagram — the chips and their connections | medium |
-| §3 | Port Map — the 4 I/O ports and how they are decoded | medium |
-| §4 | TR-DOS ROM Bank Switching — how the disk ROM takes over the Z80 | medium |
-| §5 | Drive Select, Motor, and Side Control — what each port bit does | medium |
-| §6 | Cable Pinout and Drive Compatibility — Shugart 34-pin, drives A–D | medium |
-| §7 | Variants — Beta 48, Beta 128, Soviet clones, Pentagon integration | medium |
-| §8 | Common Issues and Maintenance — what fails and how to fix it | short |
-| §9 | Modern Replacements — onboard FDC on ZX Evo / ZX Next / clones | short |
-| §10 | Cross-references — related articles and external references | short |
-
-Reading order: §1 → §2 → §3 (the core) → §4 → §5 → §6, with §7–§9 as reference material.
-
----
-
-## §1. What the Beta Disk Interface Is — History, Pricing, and the ex-USSR Replication
+## §1. Beta Disk Interface — Historical perspective
 
 ### 1.1 A short history
 

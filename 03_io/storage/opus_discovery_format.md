@@ -10,23 +10,6 @@
 
 ---
 
-## Roadmap
-
-| Section | Topic | Length |
-|---|---|---|
-| §1 | What the Opus Discovery Is — purpose, history, why it matters | short |
-| §2 | The Hardware — WD1770 controller, port map, edge-connector interface | medium |
-| §3 | The Physical Disk Format — geometry, MFM sectors, the IBM 3740 layer | medium |
-| §4 | The Logical Disk Format (MGT) — directory, file entries, allocation | medium |
-| §5 | The `.MGT` Disk Image Format — raw sector-dump format | short |
-| §6 | Variants — the +D, the Disciple, and the SAM Coupé MGT derivatives | short |
-| §7 | Tools and Editors — emulators, viewers, conversion utilities | short |
-| §8 | Cross-references and License | short |
-
-Reading order: §1 → §2 → §3 → §4 → §5 → §6 → §7, with §8 as supplementary material. Readers already familiar with the WD177x controller family can skip §2 and jump to §3.
-
----
-
 ## §1. What the Opus Discovery Is
 
 ### 1.1 Why a separate format?

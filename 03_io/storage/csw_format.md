@@ -12,21 +12,6 @@ This article covers the .CSW format: its history, the file structure, the compre
 
 ---
 
-## Roadmap
-
-1. **What the .CSW format is** — history, scope, design philosophy
-2. **The file structure** — header + compressed pulse data
-3. **The compression scheme** — run-length encoding of pulse widths
-4. **Writing a .CSW file** — generating a .CSW from a signal
-5. **Reading a .CSW file** — loading a .CSW into an emulator
-6. **Use cases** — when .CSW is the right choice
-7. **Compatibility and quirks** — emulator support, version differences
-8. **Comparison with .TZX and .TAP** — when to use which
-9. **Worked example** — a small .CSW in detail
-10. **Cross-references** — where to go next
-
----
-
 ## §1. What the .CSW Format Is
 
 ### 1.1 Origins

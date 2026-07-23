@@ -10,25 +10,6 @@
 
 ---
 
-## Roadmap
-
-| Section | Topic | Length |
-|---|---|---|
-| §1 | What TR-DOS Disk Format Is — logical layer above WD1793 sectors | short |
-| §2 | Disk Parameters — capacity, geometry, encoding | short |
-| §3 | Sector Layout — how the 9 sectors of track 0 are organised | short |
-| §4 | Directory Structure — the 128-entry catalog, 16 bytes per entry | medium |
-| §5 | File Types — B, C, D, M, # (Basic, Code, Data, Screen, Print) | medium |
-| §6 | Directory Entry Format — byte-by-byte breakdown | medium |
-| §7 | Disk Descriptor — the "system info" sector at the end of the catalog | medium |
-| §8 | Free-Space Tracking — how TR-DOS finds free sectors | short |
-| §9 | Boot Process — what happens when you type `*CAT` on a freshly-inserted disk | short |
-| §10 | Cross-references and License | short |
-
-Reading order: §1 → §2 → §3 → §4 → §5 → §6 → §7, with §8–§10 as supplementary material.
-
----
-
 ## §1. What TR-DOS Disk Format Is
 
 ### 1.1 The logical / physical boundary

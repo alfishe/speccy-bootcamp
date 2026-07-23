@@ -12,23 +12,6 @@ This article is the **hardware reference** for the IDE era: port maps, banking s
 
 ---
 
-## Roadmap
-
-| Section | Topic | Length |
-|---|---|---|
-| §1 | What an IDE Interface Is — the ATA protocol on an 8-bit bus | medium |
-| §2 | Generic Block Diagram — the components every IDE interface shares | short |
-| §3 | Port Maps Compared — every interface's I/O footprint | medium |
-| §4 | The 40-pin IDE Connector Pinout | medium |
-| §5 | Interface-by-Interface — DivIDE, Nemo, KAY, ATM/ZC, SMUC | long |
-| §6 | The IDE Programming Model — register file and PIO transfer | medium |
-| §7 | Common Issues and Modern SD Replacements | short |
-| §8 | Cross-references and License | short |
-
-Reading order: §1 → §2 → §3, then §5 for the interface you care about, then §6 if you intend to program the hardware directly. §4 is a reference; §7 and §8 are supplementary.
-
----
-
 ## §1. What an IDE Interface Is
 
 ### 1.1 IDE, ATA, PATA — three names for one protocol

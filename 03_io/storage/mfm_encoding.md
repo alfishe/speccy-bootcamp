@@ -10,21 +10,6 @@ This article covers MFM from the ground up: the bit cell model, the encoding rul
 
 ---
 
-## Roadmap
-
-1. **What MFM is** — history, scope, the problem MFM solves (clock recovery)
-2. **The bit cell and the window** — the 2 µs / 4 µs cells, clock bits vs data bits
-3. **The encoding rules** — how MFM turns bits into transitions
-4. **Sync marks** — the `A1` pattern with missing clock pulses, the key to frame synchronisation
-5. **Address marks** — IAM, IDAM, DAM, DDAM: marking the structural boundaries on the track
-6. **Reading MFM** — the PLL, the data separator, window discrimination, read clock recovery
-7. **Writing MFM** — write precompensation, write current, the format write process
-8. **Comparison with FM, M²FM, GCR, RLL** — why MFM won for floppies, density ratios
-9. **The real-world floppy signal** — flux transitions, index hole, track layout end-to-end
-10. **Cross-references** — where to go next
-
----
-
 ## §1. What MFM Encoding Is
 
 ### 1.1 The fundamental problem

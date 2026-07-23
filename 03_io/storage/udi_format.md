@@ -10,20 +10,6 @@
 
 ---
 
-## Roadmap
-
-| Section | Topic | Length |
-|---|---|---|
-| §1 | What .UDI Is — purpose, history, when to use it | short |
-| §2 | The .UDI Header and Information Block — file header, magic, geometry | medium |
-| §3 | The Track Data Block — per-track layout, sector info, weak bits | medium |
-| §4 | Tools and Converters — emulators, editors, format converters | short |
-| §5 | Cross-references and License | short |
-
-Reading order: §1 → §2 → §3 → §4, with §5 as supplementary material.
-
----
-
 ## §1. What .UDI Is
 
 ### 1.1 Why a "universal" format?

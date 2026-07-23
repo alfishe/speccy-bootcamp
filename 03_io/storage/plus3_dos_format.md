@@ -10,24 +10,6 @@
 
 ---
 
-## Roadmap
-
-| Section | Topic | Length |
-|---|---|---|
-| §1 | What +3DOS Is — purpose, history, when to use it | short |
-| §2 | The Physical Disk Layout — geometry, the +3's "reverse side" trick, the boot sector | medium |
-| §3 | The Disk Parameter Block (DPB) — the standard +3 DPB and its fields | medium |
-| §4 | The Directory Structure — 32-byte entries, allocation pointers, extents | medium |
-| §5 | File Types and Extensions — file-type bytes, common extensions | short |
-| §6 | Attribute Bytes — read-only, system, archive flags | short |
-| §7 | +3DOS vs CP/M 2.2 — what changed, what stayed | medium |
-| §8 | Tools and Editors — tools for working with +3DOS images | short |
-| §9 | Cross-references and License | short |
-
-Reading order: §1 → §2 → §3 → §4 → §5 → §6 → §7 → §8, with §9 as supplementary material. Readers already familiar with CP/M 2.2 can skip §3 and §4 and jump to §7 to see the differences.
-
----
-
 ## §1. What +3DOS Is
 
 ### 1.1 Why a separate format?

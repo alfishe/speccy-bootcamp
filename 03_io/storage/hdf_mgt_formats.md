@@ -12,23 +12,6 @@ This is the **image-format companion** to the hardware articles [ide_interface.m
 
 ---
 
-## Roadmap
-
-| Section | Topic | Length |
-|---|---|---|
-| §1 | Introduction — what a mass-storage image is | short |
-| §2 | The Raw Image Concept — the common case | medium |
-| §3 | `.HDF` — the hard-disk image format | medium |
-| §4 | `.IMG` — the generic raw image | medium |
-| §5 | `.MGT` — the floppy image (recap and cross-reference) | short |
-| §6 | Other Variants — `.VHD`, `.VFD`, `.DCK`, `.DSQ` | short |
-| §7 | Creating and Mounting Images — practical workflow | medium |
-| §8 | Cross-references and License | short |
-
-Reading order: §1 → §2 → §3 → §4, then §7 if you are creating or backing up an image. §5 and §6 are reference material.
-
----
-
 ## §1. Introduction
 
 ### 1.1 Why mass-storage images differ from floppy images

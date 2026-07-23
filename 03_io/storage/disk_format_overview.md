@@ -12,22 +12,6 @@ This article is the **top-level index** into the floppy documentation: it does n
 
 ---
 
-## Roadmap
-
-| Section | Topic | Length |
-|---|---|---|
-| §1 | Introduction — why so many formats, what unifies them | short |
-| §2 | The Shared Physical Layer — IBM 3740 sectors, MFM, the controller family | medium |
-| §3 | The Four Logical Formats Compared — TR-DOS, +3DOS, CP/M, MGT | medium |
-| §4 | File Header Conventions — the 9-byte Spectrum header | short |
-| §5 | Disk Image File Formats — `.TRD` to `.SCP` at a glance | medium |
-| §6 | Choosing the Right Format — decision tree for common tasks | short |
-| §7 | Cross-references and License | short |
-
-Reading order: §1 → §2 → §3 → §5 → §6, with §4 and §7 as supplementary material. Readers who already know which format they care about can skip directly to §6 and then follow the link to the dedicated article.
-
----
-
 ## §1. Introduction
 
 ### 1.1 Why there are so many formats

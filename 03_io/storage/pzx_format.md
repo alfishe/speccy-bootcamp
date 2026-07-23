@@ -10,21 +10,6 @@ This article covers the .PZX format: its history, the chunk-based file structure
 
 ---
 
-## Roadmap
-
-1. **What the .PZX format is** — history, scope, design philosophy
-2. **The file structure** — IFF-like chunks
-3. **The pulse data representation** — how pulses are stored
-4. **Writing a .PZX file** — generating a .PZX from a signal
-5. **Reading a .PZX file** — loading a .PZX into an emulator
-6. **Comparison with .CSW and .TZX** — when to use which
-7. **Use cases** — when .PZX is the right choice
-8. **Compatibility and quirks** — emulator support, version differences
-9. **Worked example** — a small .PZX in detail
-10. **Cross-references** — where to go next
-
----
-
 ## §1. What the .PZX Format Is
 
 ### 1.1 Origins

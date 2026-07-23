@@ -10,21 +10,6 @@ This article covers the hardware side of the tape interface: the EAR and MIC cir
 
 ---
 
-## Roadmap
-
-1. **What the tape interface is** — history, scope, why cassette storage
-2. **Hardware: the EAR and MIC circuits** — analog front-end, ULA, port `#FE`
-3. **The standard ROM load/save routines** — how the Spectrum's ROM reads and writes tape
-4. **Pilot tone and sync pulses** — the prelude that synchronises the loader
-5. **Data encoding** — the bit-level timing, baud rate, byte framing
-6. **Turbo LOAD speed-ups** — how commercial software loaded faster than the ROM
-7. **Writing a custom load routine** — bit-banging the EAR bit under CPU control
-8. **Compatibility and quirks** — contention, volume, edge cases
-9. **Comparison with other home computers** — how the Spectrum's tape compares
-10. **Cross-references** — where to go next
-
----
-
 ## §1. What the Tape Interface Is
 
 ### 1.1 Origins

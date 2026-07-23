@@ -12,23 +12,6 @@ It is the **hardware companion** to [esxdos.md](../04_operating_systems/esxdos.m
 
 ---
 
-## Roadmap
-
-| Section | Topic | Length |
-|---|---|---|
-| §1 | The DivIDE and DivMMC — introduction and shared identity | short |
-| §2 | The DivIDE Hardware — board anatomy, components, revisions | medium |
-| §3 | The DivMMC Hardware — the SD redesign and why it won | medium |
-| §4 | The Firmware Boot Sequence — power-on, NMI, ESXDOS paging in | medium |
-| §5 | TR-DOS Image Emulation — the divman / divese virtual floppy | medium |
-| §6 | Preparing the Storage Card — format, partitions, the SYS directory | medium |
-| §7 | Hardware Revisions and Clones — DivIDE 57c, DivMMC variants | short |
-| §8 | Cross-references and License | short |
-
-Reading order: §1 → §2 → §3 → §4, then §5 for the TR-DOS bridge, §6 when you are ready to set up a real card. §7 and §8 are reference material.
-
----
-
 ## §1. The DivIDE and DivMMC
 
 ### 1.1 Two cards, one identity

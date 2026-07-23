@@ -10,21 +10,6 @@
 
 ---
 
-## Roadmap
-
-| Section | Topic | Length |
-|---|---|---|
-| §1 | What .DSK / .EDSK / .FDI Are — purpose, history, when to use each | short |
-| §2 | The .DSK Format — the original "MV - CPC" sector-level image | medium |
-| §3 | The .EDSK Format — extended format with per-track size tables | medium |
-| §4 | The .FDI Format — Vincent Joguin's Full Disk Image | medium |
-| §5 | Tools and Converters — emulators, editors, format converters | short |
-| §6 | Cross-references and License | short |
-
-Reading order: §1 → §2 → §3 → §4 → §5, with §6 as supplementary material.
-
----
-
 ## §1. What .DSK / .EDSK / .FDI Are
 
 ### 1.1 Why preservation-level formats?

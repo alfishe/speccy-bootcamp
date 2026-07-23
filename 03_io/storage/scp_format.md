@@ -10,20 +10,6 @@
 
 ---
 
-## Roadmap
-
-| Section | Topic | Length |
-|---|---|---|
-| §1 | What .SCP Is — purpose, hardware, when to use it | short |
-| §2 | The .SCP Header and Disk Information Block — file header, magic, geometry | medium |
-| §3 | The Track Data Block — per-track flux cells, multi-revolution sampling | medium |
-| §4 | Tools and Converters — emulators, archival tools, format converters | short |
-| §5 | Cross-references and License | short |
-
-Reading order: §1 → §2 → §3 → §4, with §5 as supplementary material.
-
----
-
 ## §1. What .SCP Is
 
 ### 1.1 Flux-level preservation

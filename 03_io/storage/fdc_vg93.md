@@ -10,21 +10,6 @@ This article covers the WD1793 in depth: its pinout, its five internal registers
 
 ---
 
-## Roadmap
-
-1. **What the WD1793 is** — history, scope, role in the floppy stack
-2. **Pinout and hardware interface** — the 40-pin DIP, signal descriptions, connection to the host and drive
-3. **The register file** — the five host-visible registers (status, command, track, sector, data)
-4. **The command set** — Type I (positioning), Type II (read/write sector), Type III (read/write track), Type IV (force interrupt)
-5. **Command execution phases** — idle, command, execution, result phases, polling
-6. **Status register bit reference** — every bit explained, with implications
-7. **The KR1818VG93 Soviet clone** — what's identical, what's different, why it matters
-8. **Undocumented features and quirks** — side selection trick, multiple-step rates, DRQ timing
-9. **Turbo mods and speed improvements** — double-clocking, custom PLLs, modern replacements
-10. **Cross-references** — where to go next
-
----
-
 ## §1. What the WD1793 Is
 
 ### 1.1 History

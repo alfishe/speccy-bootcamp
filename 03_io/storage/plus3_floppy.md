@@ -10,25 +10,6 @@
 
 ---
 
-## Roadmap
-
-| Section | Topic | Length |
-|---|---|---|
-| §1 | What the +3 Floppy Subsystem Is — history, hardware choices, why the +3 is "different" | short |
-| §2 | Hardware Block Diagram — the chips on the +3 motherboard and their connections | medium |
-| §3 | Port Map — the +3's floppy ports (`#1F`, `#2F`, `#3F`) and how they interact with `#7FFD` | medium |
-| §4 | WD1772-PH Specifics — what's different from the WD1793 | medium |
-| §5 | Drive Geometry — the 3" single-sided 40-track drive and 3.5" replacements | short |
-| §6 | Cable Pinout and the +3's Special Wiring | medium |
-| §7 | Variants and Compatible Drives — 3", 3.5", gotek adapters | short |
-| §8 | Common Issues — belt replacement, head cleaning, +2A/+3 differences | medium |
-| §9 | Modern Replacements — Gotek on the +3, HxC, etc. | short |
-| §10 | Cross-references — sibling articles and external references | short |
-
-Reading order: §1 → §2 → §3 → §4 (the core), with §5–§9 as reference material.
-
----
-
 ## §1. What the +3 Floppy Subsystem Is
 
 ### 1.1 A short history

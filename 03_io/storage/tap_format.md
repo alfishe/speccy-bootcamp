@@ -10,21 +10,6 @@ This article covers the .TAP file format: its history, its simple file structure
 
 ---
 
-## Roadmap
-
-1. **What the .TAP format is** — history, scope, design philosophy
-2. **The file structure** — a sequence of blocks
-3. **The block format** — 2-byte length + data
-4. **Standard block types in .TAP** — header (0x00) and data (0xFF) blocks
-5. **Writing a .TAP file** — generating a .TAP from a program
-6. **Reading a .TAP file** — loading a .TAP into an emulator
-7. **Limitations** — what .TAP cannot represent
-8. **Comparison with .TZX** — when to use which
-9. **Worked example** — a small .TAP in hex
-10. **Cross-references** — where to go next
-
----
-
 ## §1. What the .TAP Format Is
 
 ### 1.1 Origins

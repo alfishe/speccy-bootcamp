@@ -10,21 +10,6 @@ This article covers the .TZX format in detail: its history, the file header, the
 
 ---
 
-## Roadmap
-
-1. **What the .TZX format is** — history, scope, design philosophy
-2. **The file header** — the 10-byte "ZXTape!" header
-3. **The block structure** — block ID + length + data
-4. **The standard block types** — normal speed, turbo speed, pure tone, pulse sequence, etc.
-5. **Turbo loader support** — how .TZX represents turbo loaders
-6. **Writing a .TZX file** — generating a .TZX from a program
-7. **Reading a .TZX file** — loading a .TZX into an emulator
-8. **Compatibility and quirks** — emulator support, version differences
-9. **Comparison with .TAP** — when to use which
-10. **Cross-references** — where to go next
-
----
-
 ## §1. What the .TZX Format Is
 
 ### 1.1 Origins

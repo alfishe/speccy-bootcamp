@@ -10,23 +10,6 @@
 
 ---
 
-## Roadmap
-
-| Section | Topic | Length |
-|---|---|---|
-| §1 | What CP/M Is — purpose, history, where it was used | short |
-| §2 | CP/M 2.2 Architecture — BIOS, BDOS, CCP, TPA | medium |
-| §3 | The Disk Parameter Block (DPB) — fields, conventions, worked examples | medium |
-| §4 | The File Control Block (FCB) — byte layout, extent semantics | medium |
-| §5 | CP/M on the Spectrum +3 — the bundled CP/M mode, hardware considerations | medium |
-| §6 | CP/M on Other Spectrum Clones — ATM Turbo, Sprinter, others | short |
-| §7 | Tools and Editors — `cpmtools`, emulators, conversion utilities | short |
-| §8 | Cross-references and License | short |
-
-Reading order: §1 → §2 → §3 → §4 → §5 → §6 → §7, with §8 as supplementary material. Readers already familiar with CP/M 2.2 can skip §2 and §3 and jump directly to §5 for the Spectrum-specific material.
-
----
-
 ## §1. What CP/M Is
 
 ### 1.1 Why CP/M matters
