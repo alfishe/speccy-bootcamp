@@ -171,13 +171,12 @@ Modern emulators and FPGA clones should decode bits 5 and 6 only (treating the F
 
 These four ports pass straight through to the WD1793's register-select pins, with `/CS` asserted. See [fdc_vg93.md §3](fdc_vg93.md) for the full description of what each register contains; for reference:
 
-```
-| Port | A1 | A0 | /RE=0 (read)  | /WE=0 (write) |
-| #1F  | 0  | 0  | Status        | Command        |
-| #3F  | 0  | 1  | Track         | Track          |
-| #5F  | 1  | 0  | Sector        | Sector         |
-| #7F  | 1  | 1  | Data          | Data           |
-```
+| Port | A1 | A0 | `/RE=0` (read) | `/WE=0` (write) |
+|---|---|---|---|---|
+| `#1F` | 0 | 0 | Status | Command |
+| `#3F` | 0 | 1 | Track  | Track   |
+| `#5F` | 1 | 0 | Sector | Sector  |
+| `#7F` | 1 | 1 | Data   | Data    |
 
 There is no wait between successive accesses — the TR-DOS ROM code is written with the assumption that every `IN` / `OUT` to these ports takes at least 5 µs (because of the WAIT-state generator in §2.3). Code that polls the status register in a tight loop will hit the WAIT state on every iteration.
 
@@ -185,22 +184,16 @@ There is no wait between successive accesses — the TR-DOS ROM code is written 
 
 Writing to port `#FF` latches an 8-bit byte into the Beta Disk Interface's **system control register**. The bit assignment below applies **uniformly** to the original Western Beta Disk Interface (Beta, Beta Plus, Beta 128) and to every Soviet clone (Pentagon, Scorpion, Profi, Kay, ATM Turbo, Leningrad). It is the single most important register in the entire interface:
 
-```
-| Bit | Write (control)                                        |
-|-----|--------------------------------------------------------|
-|  7  | (unused on original; see §3.3.4 for Soviet-clone use)  |
-|  6  | (unused)                                                |
-|  5  | Density select (0 = FM / single-density,                |
-|     |                  1 = MFM / double-density)              |
-|  4  | Head / side select (0 = side 0 / bottom,                |
-|     |                          1 = side 1 / top)              |
-|  3  | HLT gate (0 = blocks /HLT to FDC,                       |
-|     |              1 = normal — /HLT flows from FDC)          |
-|  2  | /MR (FDC master reset, active low —                     |
-|     |                              0 = reset, 1 = normal)     |
-|  1  | Drive select bit 1 (together with bit 0)               |
-|  0  | Drive select bit 0 (together with bit 1)                |
-```
+| Bit | Write (control) |
+|---|---|
+| 7 | (unused on original; see §3.3.4 for Soviet-clone use) |
+| 6 | (unused) |
+| 5 | Density select (0 = FM / single-density, 1 = MFM / double-density) |
+| 4 | Head / side select (0 = side 0 / bottom, 1 = side 1 / top) |
+| 3 | HLT gate (0 = blocks `/HLT` to FDC, 1 = normal — `/HLT` flows from FDC) |
+| 2 | `/MR` (FDC master reset, active low — 0 = reset, 1 = normal) |
+| 1 | Drive select bit 1 (together with bit 0) |
+| 0 | Drive select bit 0 (together with bit 1) |
 
 The drive-select field is **binary-encoded**, not one-hot: the four possible values select drives A through D.
 
@@ -250,18 +243,16 @@ On the **original Western Beta Disk Interface**, bits 6 and 7 are not connected 
 
 Reading port `#FF` returns a **status byte** assembled from the WD1793's two most important handshake lines:
 
-```
-| Bit | Read (status)                                    |
-|-----|--------------------------------------------------|
-|  7  | INTRQ (command completion interrupt request)     |
-|  6  | DRQ  (data request — byte ready in data register) |
-|  5  | (undefined; usually 0)                            |
-|  4  | (undefined; usually 0)                            |
-|  3  | (undefined; usually 0)                            |
-|  2  | (undefined; usually 0)                            |
-|  1  | (undefined; usually 0)                            |
-|  0  | (undefined; usually 0)                            |
-```
+| Bit | Read (status) |
+|---|---|
+| 7 | INTRQ (command completion interrupt request) |
+| 6 | DRQ (data request — byte ready in data register) |
+| 5 | (undefined; usually 0) |
+| 4 | (undefined; usually 0) |
+| 3 | (undefined; usually 0) |
+| 2 | (undefined; usually 0) |
+| 1 | (undefined; usually 0) |
+| 0 | (undefined; usually 0) |
 
 This is the standard polling interface used by all TR-DOS software (and by machine-code disk routines in games, demos, and copiers). The typical poll loop for waiting on a data byte during a sector read is:
 
