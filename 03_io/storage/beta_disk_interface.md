@@ -237,7 +237,7 @@ The reset behaviour of the WD1793 itself differs between the original WD1793 and
 
 #### 3.3.4 Note on bits 6 and 7
 
-On the **original Western Beta Disk Interface**, bits 6 and 7 are not connected on write — software should write them as `0`. Soviet clones (Pentagon, Scorpion) leave them unused as well, but a few later clone families (notably the ATM Turbo 2+ and some Profi revisions) repurpose bit 7 as a software-controlled TR-DOS ROM page-lock override. Software targeting the original hardware should not rely on this. See §4.2.4 for the discussion of the Soviet-clone `#FF` bit 7 override.
+On the **original Western Beta Disk Interface**, bits 6 and 7 are not connected on write — software should write them as `0`. Soviet clones (Pentagon, Scorpion, ATM Turbo, Profi) leave them unused as well. There is no verified implementation that repurposes these bits.
 
 ### 3.4 Reading port `#FF` — the status register
 
@@ -322,9 +322,9 @@ The first instruction the CPU executes after the swap is whatever byte the TR-DO
 
 The hardware does not require (or accept) any explicit "page-out" instruction. The moment the CPU's next instruction fetch lands in `#4000–#FFFF` — i.e., the CPU jumps to code in RAM — the flip-flop clears and the BASIC ROM returns to the `#0000–#3FFF` window. This is what makes TR-DOS calls transparent: the user's `RANDOMIZE USR 15619` pushes a return address (in RAM), the CPU fetches the first byte of the TR-DOS entry at `#3D03`, the ROM swaps in, TR-DOS runs, and when TR-DOS executes `RET` the CPU pops the return address (in RAM) and fetches its next instruction there — at which point the BASIC ROM is back.
 
-#### 4.2.4 Soviet clones: the `#FF` bit 7 override
+#### 4.2.4 Note on Soviet clones
 
-The original Beta Disk Interface relies solely on the M1-fetch decode described above. Some Soviet clones (in particular the Pentagon and Scorpion families) add an **optional software override**: bit 7 of port `#FF` (see §3.3) forces the TR-DOS ROM to stay mapped regardless of the address bus. This was added so that machine-code loaders could keep TR-DOS paged in while running their own code in RAM at `#4000–#FFFF` — useful for custom disk-copy routines that need to interleave user code in RAM with TR-DOS calls without the constant ROM-swapping overhead. Software targeting the original Beta Disk Interface cannot rely on this bit.
+The M1-fetch-triggered banking mechanism described above applies identically to every Soviet clone (Pentagon, Scorpion, ATM Turbo, Profi, Kay, Leningrad, ZX Evolution). No verified Soviet implementation adds a software override to the banking flip-flop; the mechanism is purely hardware address-decode in every documented case.
 
 ### 4.3 How the TR-DOS ROM hooks BASIC
 
@@ -539,16 +539,16 @@ The host-visible port map and the control-latch bit assignment are **identical**
 After the Beta Disk Interface's hardware was reverse-engineered in the late 1980s, dozens of Soviet companies and hobbyists produced clones. The most common ones are:
 
 - **Moscow / Leningrad / Kay Beta Disk clones** (various, 1989–1992) — direct PCB-level clones of the Beta 128, typically using the Soviet **KR1818VG93** second-source FDC (see §7.7). Compatible with TR-DOS 5.x without modification.
-- **Pentagon onboard FDC** (Pentagon 48, Pentagon 128, Pentagon 512, 1991–1996) — the Pentagon home-brew computer has the Beta Disk Interface port map built into its motherboard. Uses the KR1818VG93. The control latch on port `#FF` has the **same bit assignment as the original Beta Disk Interface**: bits 0–1 = drive select (binary), bit 2 = `/MR`, bit 3 = `HLT`, bit 4 = side, bit 5 = density, bits 6–7 = unused. The persistent Western myth that Pentagon uses port `#FF` bit 7 for the motor is wrong: the spindle motor on a Pentagon motherboard is wired exactly as on the original Beta Disk (logical-OR of "any drive selected" and `/HDLD`), and there is no separate motor bit anywhere in the Pentagon's port map.
+- **Pentagon onboard FDC** (Pentagon 48, Pentagon 128, Pentagon 512, 1991–1996) — the Pentagon home-brew computer has the Beta Disk Interface port map built into its motherboard. Uses the KR1818VG93. The control latch on port `#FF` has the **same bit assignment as the original Beta Disk Interface**: bits 0–1 = drive select (binary), bit 2 = `/MR`, bit 3 = `HLT`, bit 4 = side, bit 5 = density, bits 6–7 = unused. The spindle motor on a Pentagon motherboard is wired exactly as on the original Beta Disk (logical-OR of "any drive selected" and `/HDLD`); there is no separate motor bit in the Pentagon's port map.
 - **Scorpion ZS-256 onboard FDC** (Scorpion, 1992) — port-identical to the Pentagon and to the original Beta Disk. Uses KR1818VG93 or КР1818VG93 (interchangeable). Adds extra system ports elsewhere (`#1F` for memory banking, `#7F` for video page, etc.) but **does not** alter the Beta Disk Interface port `#FF` bit assignment.
 - **ATM Turbo 2+** and **Profi** — same Beta Disk port map, same `#FF` bits. Both machines add their own system ports for memory banking and video, but the FDC interface is the standard Beta Disk port map.
 - **ZX Evolution** (2010+) — modern Russian FPGA-based clone with a real floppy connector. The Beta Disk port map is implemented bit-for-bit in the FPGA, including the WAIT-state generator and the M1-fetch-triggered ROM banking. Bit-for-bit software compatible with the original.
 
 The reason all Soviet clones use the same `#FF` bit assignment is straightforward: TR-DOS 5.x ROMs were burned by the thousand and distributed as binaries, and any clone that deviated from the bit layout would have broken every existing piece of Soviet disk software. The economic pressure for compatibility was enormous.
 
-### 7.3 The non-existent "port `#FF` chaos"
+### 7.3 Port `#FF` layout uniformity across Soviet clones
 
-A persistent claim in some Western documentation is that Soviet clones "added motor and side bits to port `#FF` without standardising", creating a tangle of incompatible variants. This claim is **false**. The port `#FF` bit assignment is **unified across every Soviet clone** and matches the original Western Beta Disk Interface bit-for-bit:
+The port `#FF` bit assignment is identical on the original Western Beta Disk Interface (Beta, Beta Plus, Beta 128) and on every mainstream Soviet clone. There is no per-clone variant of the bit layout:
 
 | Bit | Original Beta Disk (1984–87) | Pentagon | Scorpion | ATM Turbo | Profi | ZX Evolution |
 |---|---|---|---|---|---|---|
@@ -561,21 +561,22 @@ A persistent claim in some Western documentation is that Soviet clones "added mo
 | 1 | Drive bit 1 | Drive bit 1 | Drive bit 1 | Drive bit 1 | Drive bit 1 | Drive bit 1 |
 | 0 | Drive bit 0 | Drive bit 0 | Drive bit 0 | Drive bit 0 | Drive bit 0 | Drive bit 0 |
 
-There are no "Pentagon bit 7 motor" or "Scorpion bit 4 side" variants. The likely origin of the myth:
+Verified by:
 
-1. Some early Western emulators implemented the Beta Disk Interface from the WD1793 datasheet alone, without access to Soviet documentation, and made up plausible-sounding motor and side bits.
-2. A few one-off homebrew Soviet PCBs (not the mainstream Pentagon / Scorpion / ATM Turbo / Profi lines) experimented with extra system ports that collided with `#FF` and required patching TR-DOS. These experiments were never standardised.
-3. The fact that TR-DOS 6.x, ETR-DOS, and Mr Gluk Reset Service *do* probe the hardware at boot is real — but they probe for memory-banking and video-page variants, not for `#FF` bit-layout variants.
+- Pomortzev, *TR-DOS for professionals and amateurs* (1994)
+- Larchenko & Rodionov, *TR-DOS disk controller programming* (ZX-Review 1994, no. 3–4)
+- [Mac Buster's Pentagon FAQ v1.0.2 (2001)](https://web.archive.org/web/20160318222622/http://zxspectrum.hal.varese.it/static/documenti/pentagon.txt)
+- The Sinclair ZX Specifications (problemkaputt.de)
 
-Modern emulators (UnrealSpeccy, ZEsarUX, FUSE, SpecEmu, Speccy2010, etc.) all implement the unified port `#FF` layout described in this article. Software that targets the Soviet clone scene can and should assume this layout.
+Mainstream Soviet clones using this exact layout: Pentagon 48 / 128 / 512, Scorpion ZS-256, ATM Turbo 1 / 2 / 2+, Profi, Kay 1024, Leningrad, ZX Evolution.
 
-A small subset of later Soviet machines (notably the **ATM Turbo 2+** in its CP/M mode, and the **Profi 5.x** in its "OS 9/X" experimental mode) repurpose port `#FF` bit 7 as a software-controlled TR-DOS ROM page-lock override for a small portion of their boot sequence. This override is invisible to TR-DOS software and does not affect the standard port `#FF` semantics.
+Modern emulators (UnrealSpeccy, ZEsarUX, FUSE, SpecEmu, Speccy2010) all implement this unified layout.
 
 ### 7.4 Pentagon / Scorpion specifics
 
 On Pentagon and Scorpion hardware, the Beta Disk Interface port map is **wired directly to the motherboard** — there is no external cartridge. The port addresses are the same (`#1F`–`#7F`, `#FF`), but the WAIT-state generator is implemented as part of the motherboard's Z80 I/O logic, not as a separate monostable.
 
-Both machines also have an **onboard TR-DOS ROM** (typically version 5.03 or 5.04) banked in using the same M1-fetch-triggered mechanism as the original Beta Disk Interface (see §4.2) — an instruction fetch from `#3D00–#3DFF` activates the TR-DOS ROM in place of the machine's main ROM. The TR-DOS ROM is soldered to the motherboard (often as part of a larger "BIOS" / system ROM that also contains a BASIC ROM and CP/M loader). Pentagon and Scorpion additionally expose the `#FF` bit 7 software override described in §4.2.4, which the original Beta Disk Interface does not have.
+Both machines also have an **onboard TR-DOS ROM** (typically version 5.03 or 5.04) banked in using the same M1-fetch-triggered mechanism as the original Beta Disk Interface (see §4.2) — an instruction fetch from `#3D00–#3DFF` activates the TR-DOS ROM in place of the machine's main ROM. The TR-DOS ROM is soldered to the motherboard (often as part of a larger "BIOS" / system ROM that also contains a BASIC ROM and CP/M loader).
 
 ### 7.5 Western variants and uncommon drives
 
