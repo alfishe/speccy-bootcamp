@@ -105,53 +105,37 @@ A real Beta Disk Interface cartridge contains the following components:
 
 ### 2.2 Signal flow
 
+```mermaid
+graph TB
+    subgraph S["ZX Spectrum"]
+        Z80["Z80 @ 3.5 MHz"]
+    end
+
+    subgraph C["Beta Disk Interface cartridge"]
+        DEC["Address decoder<br/>+ #3D00-#3DFF M1-fetch detector"]
+        WAIT["WAIT-state<br/>generator"]
+        FDC["WD1793 / KR1818VG93 FDC"]
+        LAT["Control latch<br/>8-bit, written via port #FF"]
+        HDR["34-pin Shugart header"]
+        ROM["TR-DOS ROM<br/>16 KB"]
+    end
+
+    DRV["Floppy drives A..D"]
+
+    Z80 -->|"A0..A15, D0..D7, /IORQ, /RD, /WR,<br/>/MREQ, /M1, /RFSH, /RESET, /ROMCS"| DEC
+    DEC -->|"/CS, A0, A1 (register select)"| FDC
+    DEC -->|"/ROMCS (bank in TR-DOS on<br/>M1-fetch from #3D00-#3DFF)"| ROM
+    WAIT -->|"/WAIT held low ~2 us on<br/>I/O to #1F-#FF"| Z80
+    FDC <-->|"D0..D7 (ports #1F/#3F/#5F/#7F)"| Z80
+    FDC -->|"step, dir, wd, wg"| HDR
+    FDC <-->|"tr00, idx, wp, hdld"| HDR
+    LAT <-->|"D0..D7 latch write (port #FF)"| Z80
+    LAT -->|"ds0..3 (decoded), /mtr, side"| HDR
+    HDR -->|"Shugart 34-pin cable"| DRV
+    ROM -->|"mapped at #0000-#3FFF<br/>while TR-DOS is banked in"| Z80
 ```
-                  ┌─────────────────────────────┐
-                  │        ZX Spectrum          │
-                  │  Z80 @ 3.5 MHz              │
-                  └──────┬──────────────────────┘
-                         │ A0..A15, D0..D7, /IORQ, /RD, /WR,
-                         │ /MREQ, /M1, /RFSH, /WAIT, /RESET,
-                         │ /ROMCS
-                         ▼
-            ┌────────────────────────────────────────┐
-            │   Beta Disk Interface cartridge        │
-            │                                        │
-            │   ┌────────────┐                       │
-            │   │   Address  │ ─── /CS, A0, A1 ──▶   │
-            │   │  decoder   │ ─── /ROMCS ───────▶   │
-            │   └─────┬──────┘                       │
-            │         │                              │
-            │   ┌─────▼────────────┐                 │
-            │   │  WAIT generator  │ ─── /WAIT ◀──── │
-            │   └──────────────────┘                 │
-            │                                        │
-            │   ┌──────────────────┐  D0..D7         │
-            │   │   WD1793 /       │ ◀──────────────▶│
-            │   │   KR1818VG93     │                 │
-            │   │   FDC            │                 │
-            │   └─────────┬────────┘                 │
-            │             │                          │
-            │             │   step / dir / wd / wg / │
-            │             │   tr00 / idx / wp / dso..3
-            │             ▼                          │
-            │   ┌──────────────────┐                 │
-            │   │  Control latch   │ ◀── port #FF ── │
-            │   │  (drive/motor/   │ ─── ds0..3, mtr,│
-            │   │   side)          │     side ─────▶ │
-            │   └─────────┬────────┘                 │
-            │             │                          │
-            │   ┌─────────▼────────┐                 │
-            │   │  34-pin Shugart  │ ─── to drives   │
-            │   │     header       │                 │
-            │   └──────────────────┘                 │
-            │                                        │
-            │   ┌──────────────────┐                 │
-            │   │   TR-DOS ROM     │ ◀── paged into  │
-            │   │   (16 KB)        │     #0000-#3FFF │
-            │   └──────────────────┘                 │
-            └────────────────────────────────────────┘
-```
+
+A few corrections from the older ASCII version of this diagram: the FDC does **not** output `ds0..3` (drive-select lines come exclusively from the control latch's 2-to-4 decoder fed by port `#FF` bits 0–1, see §5.1); and the FDC's handshake with the drive is **bidirectional** — `step`/`dir`/`wd`/`wg` are outputs, while `tr00`/`idx`/`wp`/`hdld` are inputs.
 
 The key thing to notice in this diagram is that **all host-visible control flows through three places**: the WD1793 register file (ports `#1F`, `#3F`, `#5F`, `#7F`), the control latch (port `#FF`), and the TR-DOS ROM paged into memory. There is no other software-visible state in the cartridge.
 
