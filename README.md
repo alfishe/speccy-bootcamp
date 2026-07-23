@@ -180,7 +180,14 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [boriel_zxbasic.md](09_toolchain/boriel_zxbasic.md) | **Boriel ZX BASIC** — the modern BASIC cross-compiler (`zxbc`) emitting native Z80 machine code. Three-stage pipeline (`zxbpp`/`zxbc`/`zxbasm`), 8-type static type system, `SUB`/`FUNCTION` with `ByVal`/`ByRef`/`FastCall`, structured control flow, first-class inline `ASM`, ROM-binding standard library, full CLI flag reference, all output formats (`.bin`/`.tap`/`.tzx`/`.sna`/`.z80`), worked game-loop example, comparison matrix vs z88dk C and pure assembly, decision tree |
 | [vscode_integration.md](09_toolchain/vscode_integration.md) | **VS Code Integration** — the canonical reference for VS Code as the ZX Spectrum IDE. Extension ecosystem (DeZog, Z80 Macro-Assembler, Z80 Assembly Meter, Hex Editor, Klive IDE, SpectNetIDE). DeZog deep dive — four backends (ZEsarUX, CSpect, MAME, internal simulator), reverse debugging via ZEsarUX history. Build tasks and problem matchers for SjASMPlus / z88dk / Boriel ZX BASIC. Complete worked `.vscode/` project setup. Stack comparison (DeZog+SjASMPlus+ZEsarUX vs Klive IDE vs SpectNetIDE), decision tree, best practices, pitfalls |
 
-*See [09_toolchain/README.md](09_toolchain/README.md) for the section index, including planned per-tool deep dives (Pasmo, vasm, WLA-DX, zmac, RASM, Klive IDE, ZXDevStudio, etc.).*
+### 03 — I/O — Peripherals (in progress)
+
+| Article | Description |
+|---------|-------------|
+| [interface1.md](03_io/peripherals/interface1.md) | **ZX Interface 1** (Sinclair, 1983) — triple-function expansion: Microdrive controller + RS-232 + ZX Net LAN. 8 KB shadow ROM paging via `M1` fetch at `#0008`, hook codes `#1B`–`#32`, ZX Microdrive sector format (254 × 543 bytes, bespoke non-CRC checksum), bit-bang RS-232, single-wire token bus for 64 Spectrums |
+| [joystick.md](03_io/peripherals/joystick.md) | Joystick interfaces: Kempston #1F, Sinclair/Interface 2, Cursor/Protek/AGF, Fuller, Timex, clone built-ins, unified multi-standard reader |
+
+*See [03_io/peripherals/README.md](03_io/peripherals/README.md) for the section index. Planned: keyboard, mouse, lightgun, Interface 2, Multiface, Z-Controller, MB02, ZX Bus, printers, video output.*
 
 ### 07 — Demoscene ✅ COMPLETE
 

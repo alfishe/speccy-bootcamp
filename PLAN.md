@@ -618,22 +618,22 @@ zx/
 
 #### 03_io/peripherals/ — Input, Output, and Sound Cards
 
-| File | Topic |
-|---|---|
-| `README.md` | Index — peripheral ecosystem across all tracks |
-| **Input** | |
+| File | Topic | Status |
+|---|---|---|
+| `README.md` | Index — peripheral ecosystem across all tracks | ✅ |
+| **Input** | | |
 | `keyboard.md` | Keyboard reading: 48K (IN), 128K (AY port), +2A/+3 differences, PS/2 on modern hardware |
-| `joystick.md` | Kempston (#1F), Sinclair 1/2, Fuller, Cursor, TG Entertainment joystick protocols |
+| `joystick.md` | Kempston (#1F), Sinclair 1/2, Fuller, Cursor, TG Entertainment joystick protocols | ✅ |
 | `mouse.md` | Mouse interfaces: Kempston mouse, AMX mouse, protocols |
 | `lightgun.md` | Light gun / gun stick: Magnum Light Phaser |
-| **Expansion Interfaces** | |
-| `interface1.md` | ZX Interface 1: ZX Net, RS-232, Microdrives |
+| **Expansion Interfaces** | | |
+| `interface1.md` | ZX Interface 1: ZX Net, RS-232, Microdrives | ✅ |
 | `interface2.md` | ZX Interface 2: ROM cartridges, joystick |
 | `multiface.md` | Multiface 128/3: snapshot tool, poke finder |
 | `z_controller.md` | Z-Controller: SD card interface for ZX Spectrum |
 | `mb02.md` | MB02 interface: 256K RAM, disk, clock, printer |
 | `zx_bus.md` | ZX Bus standard: expansion bus protocols, addressing, electrical specs |
-| **Output** | |
+| **Output** | | |
 | `printers.md` | ZX Printer (spark), RS-232 printers, SM640/SM646 (Soviet) |
 | `video_output.md` | RF modulator, composite video mod, RGB output (128K/+2/+3), SCART wiring, VGA adapters |
 | **Sound Cards** | |
