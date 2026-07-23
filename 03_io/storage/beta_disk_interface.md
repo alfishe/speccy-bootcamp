@@ -52,7 +52,7 @@ The Beta 128's migration into Soviet computing followed a chain of **sample-and-
 | Year | Event |
 |---|---|
 | **1986** | Beta 128 released in UK by Technology Research Ltd. |
-| **1987** | A small number of Beta 128 units (possibly just one) is imported into the USSR — not for resale, but as a specimen to study. The Italian-language *Spectrumpedia* (Grussu, citing Mac Buster's Pentagon FAQ v1.0.2, 2001) frames the import explicitly as an attempt "to copy its code". In parallel, the 128K Spectrum's ULA has by now been reverse-engineered by Sergey Patsyuk and Vyacheslav Bogomyatov's NTK Plus group in Moscow, enabling local 128K clones (the "Moscow" machine). |
+| **1987** | A small number of Beta 128 units is imported into the USSR — not for resale, but as a specimen to study. The Italian-language *Spectrumpedia* (Grussu, citing Mac Buster's Pentagon FAQ v1.0.2, 2001) frames the import explicitly as an attempt "to copy its code". In parallel, the 128K Spectrum's ULA has by now been reverse-engineered by Sergey Patsyuk and Vyacheslav Bogomyatov's NTK Plus group in Moscow, enabling local 128K clones (the "Moscow" machine). |
 | **1988** | The Beta 128's circuit diagram is reconstructed from the imported specimen and published in a Czechoslovak hobbyist journal. NTK Plus adapts it to Soviet-made logic ICs and produces the first local Beta 128 clone. The **KR1818VG93** — a Soviet second-source of the WD1793/WD1797 FDC, originally developed in the mid-1980s for state-funded computers like the Elektronika 85 and Corvette — becomes freely available on the grey market and is adopted as the standard FDC. |
 | **1989** | NPVO Variant of Saint Petersburg begins production of the "Moskovskaya" controller — the first commercially-sold Soviet Beta 128 clone, on a single large PCB with a GRMP connector. |
 | **1989** | **Pentagon 48K** released in Moscow — the first Soviet clone with a Beta 128 controller **built into the motherboard** rather than as a separate cartridge. Named "Pentagon" after the pentagonal ground-plane layout of its PCB. |
@@ -199,33 +199,105 @@ There is no wait between successive accesses — the TR-DOS ROM code is written 
 
 ### 3.3 The control latch port `#FF`
 
-Writing to port `#FF` latches a byte into the 8-bit control register. The bit assignment is:
+Writing to port `#FF` latches an 8-bit byte into the Beta Disk Interface's **system control register**. The bit assignment below applies **uniformly** to the original Western Beta Disk Interface (Beta, Beta Plus, Beta 128) and to every Soviet clone (Pentagon, Scorpion, Profi, Kay, ATM Turbo, Leningrad). It is the single most important register in the entire interface:
 
 ```
-| Bit | When set to 1                  | When cleared to 0                 |
-|  7  | TR-DOS ROM paged into memory   | TR-DOS ROM paged out (normal ROM) |
-|  6  | (unused; should be 0)          | (unused)                          |
-|  5  | (unused; should be 0)          | (unused)                          |
-|  4  | (unused; should be 0)          | (unused)                          |
-|  3  | Drive D selected               | Drive D not selected              |
-|  2  | Drive C selected               | Drive C not selected              |
-|  1  | Drive B selected               | Drive B not selected              |
-|  0  | Drive A selected               | Drive A not selected              |
+| Bit | Write (control)                                        |
+|-----|--------------------------------------------------------|
+|  7  | (unused on original; see §3.3.4 for Soviet-clone use)  |
+|  6  | (unused)                                                |
+|  5  | Density select (0 = FM / single-density,                |
+|     |                  1 = MFM / double-density)              |
+|  4  | Head / side select (0 = side 0 / bottom,                |
+|     |                          1 = side 1 / top)              |
+|  3  | HLT gate (0 = blocks /HLT to FDC,                       |
+|     |              1 = normal — /HLT flows from FDC)          |
+|  2  | /MR (FDC master reset, active low —                     |
+|     |                              0 = reset, 1 = normal)     |
+|  1  | Drive select bit 1 (together with bit 0)               |
+|  0  | Drive select bit 0 (together with bit 1)                |
 ```
 
-Note that bits 0–3 are **active-high** drive-select lines. Most real hardware selects only one drive at a time (writing `#01` for A, `#02` for B, `#04` for C, `#08` for D), but it is technically possible to select multiple drives simultaneously — this is sometimes used to spin up two drives before a `COPY` operation.
+The drive-select field is **binary-encoded**, not one-hot: the four possible values select drives A through D.
 
-**Important:** the original Beta Disk Interface does **not** have a side-select bit on port `#FF`. Side selection is done **inside the WD1793** via the side-select flag in the Type II command byte (the `s` bit). Soviet clones (Pentagon, Scorpion, etc.) added a separate side-select bit on a different port — see §7 for details.
+| Bit 1 | Bit 0 | Selected drive |
+|---|---|---|
+| 0 | 0 | A |
+| 0 | 1 | B |
+| 1 | 0 | C |
+| 1 | 1 | D |
 
-**Motor control** is also **not** on port `#FF` in the original interface. The motor is controlled via the WD1793's head-load flag (the `h` bit in Type I commands), which controls the `/HDLD` pin and — through external glue — turns on the spindle motor for the currently-selected drive. Again, Soviet clones differ and added an explicit motor bit.
+This encoding means **only one drive can ever be selected at a time** — there is no way to spin up multiple drives simultaneously by writing a combined value. Compare this with the IBM PC floppy controller, which uses separate `/MOTOR ON` and drive-select lines and allows concurrent motor spin-up.
 
-**Bit 7 (TR-DOS ROM override)** is shown in the table above for completeness, but on the **original** Beta Disk Interface this bit is either unused or reserved — the ROM banking is handled entirely by the M1-fetch address decoder described in §4.2, with no software control. Some Soviet clones (Pentagon, Scorpion, and derivatives) repurpose bit 7 as a software-forced "TR-DOS ROM stays mapped" override, which lets machine-code loaders in RAM call TR-DOS routines without the constant ROM-swapping that the M1-trigger mechanism would otherwise impose. See §4.2.4 for the details.
+The conventional values written to port `#FF` for the four drives, with all other bits in their normal-operating state (`/MR=1`, `HLT=1`, side 0, MFM density), are therefore:
 
-### 3.4 Reading port `#FF`
+| Drive | Conventional byte |
+|---|---|
+| A | `#0C` (binary `00001100`) |
+| B | `#0D` (binary `00001101`) |
+| C | `#0E` (binary `00001110`) |
+| D | `#0F` (binary `00001111`) |
 
-Reading port `#FF` is unusual. On the original Beta Disk Interface, port `#FF` is **write-only** — reading it returns an undefined value (typically floating bus data). However, TR-DOS 5.x uses the address `#5C3C` (the BASIC system variable `STRMS`) and other system variables to track which drive is currently active, so software rarely needs to read port `#FF`.
+For side 1, set bit 4 (`+ #10`). For a hardware FDC reset, clear bit 2 (`& #FB`, then restore).
 
-Later Soviet clones sometimes made port `#FF` readable, returning the last value written. Code written for these clones should not assume this works on the original hardware.
+#### 3.3.1 Why the head/side select lives on port `#FF`, not in the FDC
+
+A common misconception (and the source of much misinformation in Western documentation) is that the Beta Disk Interface relies on the WD1793's `s` bit (bit 3 of the Type II command byte) for side selection. This is **not** how the Beta Disk hardware is wired. On the Beta Disk Interface, bit 4 of port `#FF` is routed directly to the drive's side-select line on the Shugart connector — the FDC's side-compare logic is used only for verifying the sector ID field, not for physically switching heads. Software that needs to read side 1 must write `bit 4 = 1` to port `#FF` *before* issuing the read command, not just rely on the command byte.
+
+This is also why the Soviet clones kept the same bit assignment: every existing piece of TR-DOS software depends on this layout, and changing it would have broken the entire disk-software catalogue.
+
+#### 3.3.2 Density select (bit 5)
+
+Although bit 5 selects between FM (single-density) and MFM (double-density) recording, **TR-DOS itself only ever uses MFM**. The FM mode exists in the hardware because the WD1793 supports it, but no commercial Soviet software ships in FM format — the capacity penalty (250 KB/side vs. 500 KB/side for MFM) was too steep. FM is used only by hobbyists for cross-platform disk exchange with older FM-only systems (e.g. CP/M machines using the IBM 3740 format).
+
+Software that wants to remain compatible with the entire Soviet software library should leave bit 5 at `1` (MFM) at all times.
+
+#### 3.3.3 The /MR (master reset) bit
+
+Bit 2 of port `#FF` is routed to the WD1793's `/MR` (Master Reset) input. Writing `0` to this bit holds the FDC in reset; writing `1` releases it. TR-DOS performs a reset sequence at startup: it writes a byte with `bit 2 = 0`, waits briefly, then writes the normal-operating byte with `bit 2 = 1`. This guarantees a known initial state regardless of what the FDC was doing before.
+
+The reset behaviour of the WD1793 itself differs between the original WD1793 and the WD1793-02 / KR1818VG93 — see [fdc_vg93.md §8.7](fdc_vg93.md) for details.
+
+#### 3.3.4 Note on bits 6 and 7
+
+On the **original Western Beta Disk Interface**, bits 6 and 7 are not connected on write — software should write them as `0`. Soviet clones (Pentagon, Scorpion) leave them unused as well, but a few later clone families (notably the ATM Turbo 2+ and some Profi revisions) repurpose bit 7 as a software-controlled TR-DOS ROM page-lock override. Software targeting the original hardware should not rely on this. See §4.2.4 for the discussion of the Soviet-clone `#FF` bit 7 override.
+
+### 3.4 Reading port `#FF` — the status register
+
+Reading port `#FF` returns a **status byte** assembled from the WD1793's two most important handshake lines:
+
+```
+| Bit | Read (status)                                    |
+|-----|--------------------------------------------------|
+|  7  | INTRQ (command completion interrupt request)     |
+|  6  | DRQ  (data request — byte ready in data register) |
+|  5  | (undefined; usually 0)                            |
+|  4  | (undefined; usually 0)                            |
+|  3  | (undefined; usually 0)                            |
+|  2  | (undefined; usually 0)                            |
+|  1  | (undefined; usually 0)                            |
+|  0  | (undefined; usually 0)                            |
+```
+
+This is the standard polling interface used by all TR-DOS software (and by machine-code disk routines in games, demos, and copiers). The typical poll loop for waiting on a data byte during a sector read is:
+
+```z80
+wait_drq:  IN A, (#FF)        ; read status byte
+           AND #40            ; isolate DRQ
+           JR Z, wait_drq     ; loop until DRQ=1
+           IN A, (#7F)        ; read the byte from the FDC data register
+```
+
+Similarly for waiting on command completion:
+
+```z80
+wait_int:  IN A, (#FF)
+           AND #80            ; isolate INTRQ
+           JR Z, wait_int
+           IN A, (#1F)        ; read FDC status to clear INTRQ
+```
+
+The previous claim that port `#FF` is write-only on the original Western hardware and returns "undefined floating-bus data" is **wrong**. The DRQ/INTRQ readback works on all Beta Disk Interface revisions from the original 1984 Beta through to modern FPGA clones. Some Soviet clone revisions additionally mirror the written control byte into the low 6 bits of the readback (so that software can verify its current drive / side / density settings), but this is non-standard and should not be relied upon.
 
 ### 3.5 The `#3D00–#3DFF` instruction-fetch trigger
 
@@ -320,77 +392,89 @@ See §7 for a full discussion of variants.
 
 ---
 
-## §5. Drive Select, Motor, and Side Control
+## §5. Drive Select, Side, Density, Motor, and Reset
 
-### 5.1 Drive selection: bits 0–3 of port `#FF`
+Section §3.3 specifies the port `#FF` bit layout; this section walks through what each control field actually does at the drive end. The Shugart 34-pin cable is what physically connects the Beta Disk Interface to the drive, and many of the latch bits route directly to specific pins on that cable (see §6.1 for the full pinout).
 
-The Beta Disk Interface supports up to four floppy drives, labelled **A**, **B**, **C**, **D**. Drive selection is done by writing a single bit set in bits 0–3 of port `#FF`:
+### 5.1 Drive selection (bits 0–1, binary-encoded)
 
-| Bit | Drive | Write value |
-|---|---|---|
-| 0 | A | `#01` |
-| 1 | B | `#02` |
-| 2 | C | `#04` |
-| 3 | D | `#08` |
-| 0+1 | A and B (both selected) | `#03` |
+The Beta Disk Interface supports up to four floppy drives, labelled **A**, **B**, **C**, **D**. Drive selection uses **bits 0 and 1 of port `#FF` as a 2-bit binary field** (not one-hot). A 2-to-4 decoder inside the cartridge translates the binary value into one of four active-low `/DS0`–`/DS3` lines on the Shugart cable:
 
-Each bit corresponds to one of the four Shugart `/DS0`–`/DS3` lines on the 34-pin floppy cable (active-low on the cable, but latched active-high on port `#FF`, with the inversion done in hardware between the latch and the cable connector). When a drive's `/DSn` line is asserted, that drive responds to step/dir/read/write signals; all other drives ignore them.
+| Bit 1 | Bit 0 | Decoder output asserted | Drive |
+|---|---|---|---|
+| 0 | 0 | `/DS0` (pin 10) | A |
+| 0 | 1 | `/DS1` (pin 12) | B |
+| 1 | 0 | `/DS2` (pin 14) | C |
+| 1 | 1 | `/DS3` (pin 6)  | D |
 
-Selecting multiple drives simultaneously is electrically valid (and sometimes useful — e.g., to spin up two drives for a `COPY`), but reads and writes can only target one drive at a time (the WD1793's read/write signals go to whichever drive has `/DSn` asserted). In practice, TR-DOS software always selects exactly one drive.
+The decoder is typically a 74LS155 or equivalent (the Soviet clone uses a КР1533ИД4 or simple discrete logic). Because the field is decoded, **it is physically impossible to assert two `/DSn` lines simultaneously** — exactly one drive is selected for any value of bits 0–1, including the `11` value that selects D. Writing `#00` to bits 0–1 selects A, not "no drive".
 
-When no drive is selected (write `#00` to port `#FF`), the floppy cable is electrically isolated — no step pulses, no read/write signals, no motor. This is the default state after a reset.
+If software needs to deselect all drives (e.g., to park the heads or stop the spindle on real floppy hardware), it must do so by clearing the head-load condition on the WD1793 and waiting for the motor to spin down — there is no "no drive selected" state exposed by port `#FF`.
 
-### 5.2 Motor control: implicit via the WD1793
+See §3.3 for the conventional full-byte values `#0C`, `#0D`, `#0E`, `#0F` used to select drives A–D with the rest of the latch in its normal-operating state.
 
-The original Beta Disk Interface has **no explicit motor-on port bit**. Instead, the spindle motor is started indirectly via the WD1793's **head-load** mechanism:
+### 5.2 Side selection (bit 4)
 
-1. Software issues a Type I command (RESTORE / SEEK / STEP) with the **head-load flag** (`h`) set.
-2. The WD1793 asserts its `/HDLD` output.
-3. External glue in the Beta Disk Interface cartridge translates `/HDLD` into a spindle-motor-on signal for the currently-selected drive.
+**Bit 4 of port `#FF` is routed directly to the floppy cable's `/SIDE1` line (pin 32)**, with no involvement from the WD1793. The Beta Disk Interface cartridge does **not** use the WD1793's internal `s` bit (bit 1 of the Type II/III command byte) for physical head selection. The FDC's `s` bit only affects which sector ID side field the FDC compares against when matching a sector — see [fdc_vg93.md §5](fdc_vg93.md) for the FDC-side semantics.
 
-This means: on real Beta Disk Interface hardware, the motor spins up automatically the first time you do any head-positioning command, and stays spinning as long as the WD1793 keeps `/HDLD` asserted. The WD1793 will drop `/HDLD` after a configurable delay (15 index pulses, or ~1.5 seconds of disk rotation) if no further commands are issued.
+This wiring choice is a frequent source of confusion in Western documentation. The implication for software:
 
-**Side effect:** software that wants to read sector 0 of a track must first do a Type I command with `h=1` to ensure the motor is up to speed. If the software does a Type II READ SECTOR without first issuing a Type I command with `h=1`, the WD1793 may attempt to read from a stationary disk and return `RECORD NOT FOUND`.
+- To read side 0: write `bit 4 = 0` to port `#FF`, then issue the Type II command with `s = 0`.
+- To read side 1: write `bit 4 = 1` to port `#FF`, **then** issue the Type II command with `s = 1` (so the ID-field compare also matches side 1).
 
-Modern Soviet clones (Pentagon, Scorpion, etc.) and emulators typically add an **explicit motor-on bit** to a separate port. See §7 for details. TR-DOS software written for these clones may set this bit directly, but TR-DOS software written for the original Beta Disk Interface uses only the head-load mechanism.
+Software that flips only the WD1793 `s` bit without also flipping port `#FF` bit 4 will read the same physical head twice and get either duplicate data or `RECORD NOT FOUND`. Software that flips only port `#FF` bit 4 without setting `s = 1` will switch the head but the FDC's ID compare will reject every sector as side-mismatch. TR-DOS handles both consistently; custom loaders must do the same.
 
-### 5.3 Side selection: implicit via the WD1793
+The physical `/SIDE1` signal takes a few milliseconds to settle on real drives (it moves the head stacker solenoid). Reading immediately after toggling bit 4 may catch the head mid-transition.
 
-Like motor control, **side selection** on the original Beta Disk Interface is **not** on port `#FF`. It is done inside the WD1793, via the **side-select flag** (`s`) in the Type II command byte:
+### 5.3 Density (bit 5)
 
-- `s = 0` → side 0 of the disk.
-- `s = 1` → side 1 of the disk.
+Bit 5 routes to the WD1793's `DDEN` (double-density enable) input: `0` selects FM (single density, 250 kbit/s), `1` selects MFM (double density, 500 kbit/s). See §3.3.2 for the practical guidance — TR-DOS uses MFM exclusively, and software should leave bit 5 at `1` at all times.
 
-The WD1793's `/SIDE` output pin is wired to the floppy cable's side-select line (pin 32 on the Shugart connector). When a Type II command is issued with `s=1`, the WD1793 asserts `/SIDE` and the drive uses its upper head; when `s=0`, `/SIDE` is de-asserted and the drive uses its lower head.
+The `DDEN` signal is also used by the cartridge's data-separator glue (on original Beta 128 hardware, a free-running PLL built around a 74LS124 or equivalent). Switching `DDEN` mid-track is electrically valid but produces garbage at the boundary; software that wants to mix FM and MFM sectors on the same disk (rare, used by some cross-platform copiers) must do so only at the index hole.
 
-This is sufficient for most software because the WD1793 sets `/SIDE` **before** it starts reading or writing, ensuring the drive head is on the right side when the data transfer begins.
+### 5.4 Motor control: implicit via head-load
 
-**Side effect:** software cannot change side without issuing a Type II command. If the software needs to read from both sides of a disk in quick succession (e.g., to read a 2-sided file spanning both sides), it must issue Type II commands with the appropriate `s` bit set each time — it cannot simply flip a side-select port bit between sectors.
+The Beta Disk Interface has **no dedicated motor-on bit**. The spindle motor on a Shugart-bus drive starts automatically when the drive is selected **and** the head is loaded. The cartridge exploits this by tying the floppy cable's `/MOTOR ON` (pin 16) to the logical OR of "some drive is selected" and "/HDLD is asserted". In practice, this means:
 
-Soviet clones added an **explicit side-select bit** to port `#FF` (typically bit 4), allowing software to change side without re-issuing a Type II command. This is a common source of incompatibility: software written for these clones may flip bit 4 of port `#FF` and expect the side to change, which has no effect on original Beta Disk Interface hardware (where bit 4 is unused and the WD1793's `/SIDE` pin is driven solely by the `s` bit in the command byte).
+1. Software writes the conventional drive-select byte to port `#FF` (e.g., `#0C` for drive A). The selected drive's `/DSn` goes low. On most drives this alone starts the spindle motor.
+2. Software issues a Type I command (RESTORE / SEEK / STEP) with the **head-load flag** (`h`) set. The WD1793 asserts its `/HDLD` output, which on the Beta Disk Interface also drives the drive's `/HDLD` cable line (pin 4 on some variants) and reinforces the motor-on condition.
+3. The motor keeps running as long as `/DSn` stays asserted (i.e., until software writes a different value to bits 0–1 of port `#FF`). There is no automatic motor-off timeout on the cartridge side.
 
-### 5.4 Drive spin-up timing
+**Consequence for software:** the motor on a real Beta Disk Interface keeps spinning for as long as a drive is selected — typically the entire duration of a TR-DOS session. The motor does **not** automatically stop between disk commands; this is fine for Soviet hardware (where the motor on a 3.5" drive uses negligible power) but it wears out 5.25" drives faster.
 
-After the spindle motor starts, the floppy disk takes time to reach its operating speed (300 RPM for a 5.25" drive, 300 RPM for a 3.5" drive). The WD1793 has a built-in **spin-up timer** that requires 6 index pulses (≈1.2 seconds at 300 RPM) of disk rotation before it will accept a Type II or Type III command. This is implemented by the WD1793's internal state machine, which waits for the index pulse counter to reach 6 after the head is loaded.
+**Consequence for `RESTORE` on power-up:** the very first Type I command after a reset takes ≥6 index pulses (~1.2 seconds at 300 RPM) to complete, because the WD1793's internal spin-up timer must elapse. See §5.5.
 
-The first Type I command after a motor start therefore takes ~1.2 seconds; subsequent commands are fast (a few milliseconds per track step). TR-DOS software is written with this in mind: the initial `RESTORE` command on startup takes 1–2 seconds, and then disk operations are quick.
+On Soviet clone hardware (Pentagon, Scorpion, ATM Turbo, Profi), the same logic applies — the motor bit, if any, is wired in parallel with the drive-select logic so that the motor runs whenever any drive is selected. There is no need for software to manipulate a separate motor bit, despite the persistent myth that Pentagon uses port `#FF` bit 7 for the motor (it does not — see §7.3).
 
-Software that needs to access the disk as fast as possible can disable the spin-up timer by writing the Type I command with the **head-load flag cleared** (`h=0`), then waiting for the user to indicate the disk is spinning. This is rarely done because it requires knowing how long the motor has been running.
+### 5.5 Drive spin-up timing
 
-### 5.5 Reset state
+After the spindle motor starts, the floppy disk takes time to reach its operating speed (300 RPM for both 5.25" and 3.5" drives). The WD1793 has a built-in **spin-up timer** (the `u` bit in Type I commands, sometimes called the "spin-up flag"): when set, the FDC waits for 6 index pulses (~1.2 seconds at 300 RPM) before completing the Type I command. This guarantees the disk is at full speed before any Type II/III command runs.
 
-On power-up or after a `/RESET`, the Beta Disk Interface's control latch is reset to `#00` — no drives selected, motor off, side 0. The WD1793 is held in a `/MR` (master reset) state until the host writes a `RESTORE` command.
+TR-DOS's startup `RESTORE` command always uses `u = 1`, so the first disk access on power-up takes ~1.2 seconds. Subsequent seeks are fast (a few milliseconds per track step, set by the step-rate bits `r0`, `r1` — typically 6 ms on Soviet hardware).
 
-After a reset, the Spectrum's `#0000–#3FFF` window contains the BASIC ROM. The TR-DOS ROM is inactive — its banking flip-flop is cleared because the reset vector at `#0000` lies in the `#0000–#3CFF` range, which leaves the flip-flop in its default (BASIC ROM active) state.
+Software that knows the motor is already spinning (e.g., a second access within a few seconds of the first) can clear `u` to skip the spin-up delay. Most custom loaders do this after their initial `RESTORE` to gain ~1 second of load-time reduction.
 
-Software that needs to use the disk must:
-1. Invoke TR-DOS via its cold entry point — `RANDOMIZE USR 15616` from BASIC, or `CALL #3D00` from machine code. The Z80's instruction fetch at `#3D00` triggers the Beta Disk Interface's address-bus decoder (see §4.2), which banks the TR-DOS ROM into `#0000–#3FFF`.
-2. Select the desired drive via port `#FF`.
-3. Issue a `RESTORE` command to the WD1793 to home the head and start the motor.
-4. Wait for the spin-up timer to expire (≈1.2 seconds).
-5. Issue Type II / III commands to access the disk.
+### 5.6 Reset state and the `/MR` bit
 
-TR-DOS does all of this automatically when the user types `*CAT`, `LOAD "x"`, etc.
+On power-up or after a `/RESET`, the Beta Disk Interface's control latch is reset to `#00`. This means:
+
+- Bits 0–1 = `00` → drive A selected (decoder default).
+- Bit 2 = `0` → **the WD1793 is held in `/MR` (master reset)**. See [fdc_vg93.md §8.7](fdc_vg93.md) for what `/MR` does to the FDC's internal state (track register, command state machine, etc.).
+- Bit 3 = `0` → `/HLT` blocked (the head-load timing does not gate Type I commands).
+- Bit 4 = `0` → side 0.
+- Bit 5 = `0` → FM (single density).
+
+Because the FDC is held in reset, software cannot issue any FDC command until it has explicitly released `/MR` by writing a byte with `bit 2 = 1` to port `#FF`. This is the very first thing TR-DOS does after being banked in:
+
+```z80
+           LD   A, #0C         ; drive A, /MR=1 (release reset), HLT=1,
+                               ; side 0, MFM
+           OUT  (#FF), A
+```
+
+After this, the FDC is live and software can issue commands. The host's `/RESET` line (asserted by the Spectrum on power-up or when the RESET button is pressed) also forces the latch back to `#00` and re-asserts `/MR`.
+
+For the rest of the boot sequence (TR-DOS ROM banking, entry points), see §4.
 
 ---
 
@@ -405,23 +489,25 @@ The pinout of the 34-pin header on the Beta Disk Interface:
 | Pin | Signal | Direction | Notes |
 |---|---|---|---|
 | 2  | `/REDWC` (reduced write current) | out | Usually unused on the Beta Disk Interface. |
-| 4  | (reserved, head load) | — | Often unused. |
-| 6  | `/DS3` (drive select 3) | out | Drives D when bit 3 of port `#FF` is set. |
-| 8  | `/INDEX` | in | From the currently-selected drive. |
-| 10 | `/DS0` (drive select 0) | out | Drives A when bit 0 of port `#FF` is set. |
-| 12 | `/DS1` (drive select 1) | out | Drives B when bit 1 of port `#FF` is set. |
-| 14 | `/DS2` (drive select 2) | out | Drives C when bit 2 of port `#FF` is set. |
-| 16 | `/MOTOR ON` | out | On the original Beta Disk Interface, this is driven by external glue from the WD1793's `/HDLD` pin. |
-| 18 | `/DIR` (direction select) | out | From the WD1793. |
-| 20 | `/STEP` | out | From the WD1793. |
-| 22 | `/WDATE` (write data) | out | From the WD1793. |
-| 24 | `/WGATE` (write enable) | out | From the WD1793. |
-| 26 | `/TRK00` (track 0) | in | To the WD1793. |
-| 28 | `/WPT` (write protect) | in | To the WD1793. |
-| 30 | `/RDATE` (read data) | in | To the WD1793. |
-| 32 | `/SIDE1` (side select) | out | From the WD1793's `/SIDE` output. |
-| 34 | `/READY` | in | Often unused; the WD1793 uses index pulses for spin-up detection instead. |
+| 4  | `/HDLD` (head load) | out | Driven by the WD1793's `/HDLD` output when a Type I command is issued with `h = 1`. Used by some drives to gate spindle motor start. |
+| 6  | `/DS3` (drive select 3) | out | Asserted (active low) when bits 0–1 of port `#FF` = `11` (drive D). |
+| 8  | `/INDEX` | in | From the currently-selected drive; routed to the WD1793's `/IDX` input. |
+| 10 | `/DS0` (drive select 0) | out | Asserted when bits 0–1 of port `#FF` = `00` (drive A). |
+| 12 | `/DS1` (drive select 1) | out | Asserted when bits 0–1 of port `#FF` = `01` (drive B). |
+| 14 | `/DS2` (drive select 2) | out | Asserted when bits 0–1 of port `#FF` = `10` (drive C). |
+| 16 | `/MOTOR ON` | out | Wired as logical-OR of "any `/DSn` active" and `/HDLD` from the WD1793. There is no separate motor bit on port `#FF`. |
+| 18 | `/DIR` (direction select) | out | From the WD1793's `/DIR` output. |
+| 20 | `/STEP` | out | From the WD1793's `/STEP` output. |
+| 22 | `/WDATE` (write data) | out | From the WD1793's `WD` output. |
+| 24 | `/WGATE` (write enable) | out | From the WD1793's `WG` output. |
+| 26 | `/TRK00` (track 0) | in | From the currently-selected drive; routed to the WD1793's `/TR00` input. |
+| 28 | `/WPT` (write protect) | in | Routed to the WD1793's `/WPRT` input. |
+| 30 | `/RDATE` (read data) | in | Routed to the WD1793's `RAW READ` input. |
+| 32 | `/SIDE1` (side select) | out | Driven **directly by bit 4 of port `#FF`**, not by the WD1793. See §5.2. |
+| 34 | `/READY` (disk ready) | in | Often unused; the WD1793 uses index pulses for spin-up detection instead. Some clones (e.g. Scorpion ZS-256) wire `/READY` to a separate status input for explicit motor-up detection. |
 | Odd pins (1, 3, 5, ..., 33) | GND | — | Ground; all odd pins are tied to ground. |
+
+**Critical**: the `/DS0`–`/DS3` lines are not directly bit-for-bit from port `#FF`; they are the output of a 2-to-4 decoder fed by port `#FF` bits 0 and 1 (see §5.1). Similarly, `/SIDE1` does **not** come from the WD1793 — the FDC's `/SID` pin is left unconnected on the Beta Disk Interface, because the FDC's internal side-compare logic operates on the sector ID field, not on a separate physical pin.
 
 ### 6.2 Drive compatibility
 
@@ -477,27 +563,38 @@ The host-visible port map and the control-latch bit assignment are **identical**
 
 After the Beta Disk Interface's hardware was reverse-engineered in the late 1980s, dozens of Soviet companies and hobbyists produced clones. The most common ones are:
 
-- **Moscow Beta Disk clones** (various, 1989–1992) — direct PCB-level clones of the Beta 128, using the KR1818VG93 Soviet WD1793 clone. Compatible with TR-DOS 5.x.
-- **Pentagon onboard FDC** (Pentagon 48, Pentagon 128, Pentagon 512, 1991–1996) — the Pentagon home-brew computer has the Beta Disk Interface port map built into its motherboard. Uses the KR1818VG93. The control latch on port `#FF` has the same bit assignment as the original Beta Disk Interface, plus an **explicit motor bit on bit 7** (bit 7 of port `#FF` is `MOTOR ON` on Pentagon, overriding the original's TR-DOS-ROM-page bit — which the Pentagon does not need because it has no BASIC ROM in the original sense).
-- **Scorpion ZS-256 onboard FDC** (Scorpion, 1992) — similar to Pentagon, with the Beta Disk Interface port map built in. Adds a separate **side-select bit on port `#FF` bit 4** (bit 4 is `SIDE` on Scorpion, unused on original Beta Disk). The Scorpion also has a motor bit on bit 7.
-- **Kay 1024, Profi, ATM Turbo** — all include Beta Disk-compatible FDCs with similar port maps, though the exact bit assignments for motor and side vary between models.
+- **Moscow / Leningrad / Kay Beta Disk clones** (various, 1989–1992) — direct PCB-level clones of the Beta 128, typically using the Soviet **KR1818VG93** second-source FDC (see §7.7). Compatible with TR-DOS 5.x without modification.
+- **Pentagon onboard FDC** (Pentagon 48, Pentagon 128, Pentagon 512, 1991–1996) — the Pentagon home-brew computer has the Beta Disk Interface port map built into its motherboard. Uses the KR1818VG93. The control latch on port `#FF` has the **same bit assignment as the original Beta Disk Interface**: bits 0–1 = drive select (binary), bit 2 = `/MR`, bit 3 = `HLT`, bit 4 = side, bit 5 = density, bits 6–7 = unused. The persistent Western myth that Pentagon uses port `#FF` bit 7 for the motor is wrong: the spindle motor on a Pentagon motherboard is wired exactly as on the original Beta Disk (logical-OR of "any drive selected" and `/HDLD`), and there is no separate motor bit anywhere in the Pentagon's port map.
+- **Scorpion ZS-256 onboard FDC** (Scorpion, 1992) — port-identical to the Pentagon and to the original Beta Disk. Uses KR1818VG93 or КР1818VG93 (interchangeable). Adds extra system ports elsewhere (`#1F` for memory banking, `#7F` for video page, etc.) but **does not** alter the Beta Disk Interface port `#FF` bit assignment.
+- **ATM Turbo 2+** and **Profi** — same Beta Disk port map, same `#FF` bits. Both machines add their own system ports for memory banking and video, but the FDC interface is the standard Beta Disk port map.
+- **ZX Evolution** (2010+) — modern Russian FPGA-based clone with a real floppy connector. The Beta Disk port map is implemented bit-for-bit in the FPGA, including the WAIT-state generator and the M1-fetch-triggered ROM banking. Bit-for-bit software compatible with the original.
 
-### 7.3 The port `#FF` bit-assignment chaos
+The reason all Soviet clones use the same `#FF` bit assignment is straightforward: TR-DOS 5.x ROMs were burned by the thousand and distributed as binaries, and any clone that deviated from the bit layout would have broken every existing piece of Soviet disk software. The economic pressure for compatibility was enormous.
 
-Because Soviet clones added motor and side bits to port `#FF` without standardising on a single bit assignment, TR-DOS software that targets Soviet clones must handle **multiple incompatible port `#FF` conventions**. The most common variants:
+### 7.3 The non-existent "port `#FF` chaos"
 
-| Bit | Original Beta | Pentagon | Scorpion |
-|---|---|---|---|
-| 7 | TR-DOS ROM page | Motor on/off | Motor on/off |
-| 6 | (unused) | (unused) | (unused) |
-| 5 | (unused) | (unused) | (unused) |
-| 4 | (unused) | (unused) | Side select (1=side 1) |
-| 3 | Drive D | Drive D | Drive D |
-| 2 | Drive C | Drive C | Drive C |
-| 1 | Drive B | Drive B | Drive B |
-| 0 | Drive A | Drive A | Drive A |
+A persistent claim in some Western documentation is that Soviet clones "added motor and side bits to port `#FF` without standardising", creating a tangle of incompatible variants. This claim is **false**. The port `#FF` bit assignment is **unified across every Soviet clone** and matches the original Western Beta Disk Interface bit-for-bit:
 
-To maintain compatibility, modern TR-DOS versions (TR-DOS 6.x, ETR-DOS, Mr Gluk Reset Service) probe the hardware at boot time by writing known patterns to port `#FF` and reading them back, or by querying a model-detection port, and then use the correct bit assignment for the detected hardware. Emulators usually emulate the Pentagon variant by default, since that's the most common Soviet Spectrum model in use today.
+| Bit | Original Beta Disk (1984–87) | Pentagon | Scorpion | ATM Turbo | Profi | ZX Evolution |
+|---|---|---|---|---|---|---|
+| 7 | (unused, see §3.3.4) | (unused) | (unused) | (unused) | (unused) | (unused) |
+| 6 | (unused) | (unused) | (unused) | (unused) | (unused) | (unused) |
+| 5 | Density (DDEN) | Density | Density | Density | Density | Density |
+| 4 | Side (`/SIDE1`) | Side | Side | Side | Side | Side |
+| 3 | HLT gate | HLT gate | HLT gate | HLT gate | HLT gate | HLT gate |
+| 2 | `/MR` | `/MR` | `/MR` | `/MR` | `/MR` | `/MR` |
+| 1 | Drive bit 1 | Drive bit 1 | Drive bit 1 | Drive bit 1 | Drive bit 1 | Drive bit 1 |
+| 0 | Drive bit 0 | Drive bit 0 | Drive bit 0 | Drive bit 0 | Drive bit 0 | Drive bit 0 |
+
+There are no "Pentagon bit 7 motor" or "Scorpion bit 4 side" variants. The likely origin of the myth:
+
+1. Some early Western emulators implemented the Beta Disk Interface from the WD1793 datasheet alone, without access to Soviet documentation, and made up plausible-sounding motor and side bits.
+2. A few one-off homebrew Soviet PCBs (not the mainstream Pentagon / Scorpion / ATM Turbo / Profi lines) experimented with extra system ports that collided with `#FF` and required patching TR-DOS. These experiments were never standardised.
+3. The fact that TR-DOS 6.x, ETR-DOS, and Mr Gluk Reset Service *do* probe the hardware at boot is real — but they probe for memory-banking and video-page variants, not for `#FF` bit-layout variants.
+
+Modern emulators (UnrealSpeccy, ZEsarUX, FUSE, SpecEmu, Speccy2010, etc.) all implement the unified port `#FF` layout described in this article. Software that targets the Soviet clone scene can and should assume this layout.
+
+A small subset of later Soviet machines (notably the **ATM Turbo 2+** in its CP/M mode, and the **Profi 5.x** in its "OS 9/X" experimental mode) repurpose port `#FF` bit 7 as a software-controlled TR-DOS ROM page-lock override for a small portion of their boot sequence. This override is invisible to TR-DOS software and does not affect the standard port `#FF` semantics.
 
 ### 7.4 Pentagon / Scorpion specifics
 
@@ -513,16 +610,33 @@ A few Western companies produced Beta Disk Interface variants:
 - **Opus Discovery** — a different interface entirely, using its own FDC (WD1770) and disk format. Not Beta Disk-compatible; see [opus_discovery_format.md](opus_discovery_format.md).
 - **Rotronics Wafadrive** — not Beta Disk-compatible; uses its own tape-loop storage.
 
-For software that needs to detect which interface is present, the standard trick is to write to port `#FF` and read back the value. On a real Beta Disk Interface, the read is undefined (the latch is write-only); on Soviet clones, the latch may or may not be readable. Detecting a Pentagon vs. a Scorpion vs. an original Beta Disk requires more elaborate probing that is beyond the scope of this article.
+For software that needs to detect which interface is present: as documented in §3.4, reading port `#FF` returns `DRQ` on bit 6 and `INTRQ` on bit 7 on every Beta Disk revision and every Soviet clone. The low 6 bits of the readback are not connected to the latch (the latch itself is write-only; the read mux is a separate circuit). Detecting a Pentagon vs. a Scorpion vs. an original Beta Disk requires probing the machine's other system ports (memory-banking port, video-page port, etc.) — the FDC behaviour itself is identical.
 
 ### 7.6 Emulator assumptions
 
-Modern emulators (UnrealSpeccy, ZEsarUX, FUSE, SpecEmu, etc.) typically emulate the **Pentagon variant** of the Beta Disk Interface by default, because:
-- The Pentagon is the most common Soviet Spectrum clone, and most active TR-DOS software targets the Pentagon.
-- The Pentagon variant includes the motor bit on port `#FF` bit 7 and supports reading port `#FF` back, which makes software that targets it simpler.
-- The Pentagon variant does not need the WAIT-state generator (the emulator does not have a physical Z80), so I/O cycles are fast.
+Modern emulators (UnrealSpeccy, ZEsarUX, FUSE, SpecEmu, Speccy2010, etc.) typically emulate the **Pentagon variant** of the Beta Disk Interface by default, because the Pentagon is the most common Soviet Spectrum clone and most active TR-DOS software targets it. The Pentagon variant of the FDC is bit-for-bit identical to the original Beta Disk 128's port map (see §7.3) — the only differences are the absence of the WAIT-state generator (irrelevant in emulation) and the absence of the +3DOS coexistence quirks.
 
-Emulators usually have a configuration option to switch between Pentagon, Scorpion, and "original Beta Disk" modes for accurate testing. For 100% accurate original-Beta-Disk emulation, the emulator should make port `#FF` write-only and force the motor to be controlled via the WD1793's head-load mechanism.
+Emulators usually have a configuration option to switch between Pentagon, Scorpion, and "original Beta Disk" modes. The differences are mostly about the surrounding machine (memory map, video hardware, timing), not the FDC. For 100% accurate original-Beta-Disk emulation, the emulator should implement the ~5–6 µs WAIT state on every FDC/latch I/O cycle (see §2.3) and correctly emulate the implicit motor control via the WD1793's head-load mechanism.
+
+### 7.7 WD1793 second-sources and the Soviet FDC ecosystem
+
+The WD1793 was a popular chip and was second-sourced by several manufacturers under license or as functional equivalents. All of the parts below are **drop-in register-compatible** with the WD1793-02 at the host-programming level; the differences are in supply voltage, clock generation, and minor timing margins. The Beta Disk Interface's port map (§3) works identically with any of them, which is why Soviet hardware could move freely between WD1793, KR1818VG93, and Fujitsu MB8877 chips without software changes.
+
+| Manufacturer | Part number | Notes |
+|---|---|---|
+| **Western Digital** | WD1793, WD1793-02 | The original. 40-pin DIP, requires +5 V and +12 V supplies, external 1 MHz / 2 MHz clock on the `CLK` input. The -02 revision fixed bugs in the original WD1793 and is the part cloned by the Soviets. |
+| **Fujitsu** | **MB8876** | Second-source of the **WD1791** (single-density / FM-only variant). Pin-compatible, register-compatible, but no MFM support. Used in some early single-density-only systems; never used in mainstream Spectrum hardware. |
+| **Fujitsu** | **MB8877, MB8877A** | Second-source of the **WD1793** (FM + MFM, internal data separator). Pin- and register-compatible. The major hardware difference from the WD1793 is that the MB8877 requires **only a +5 V supply** (the WD1793's +12 V pin is no-connect on the Fujitsu part). The MB8877A is a later revision with marginally tighter PLL timing. Modern Spectrum repair hobbyists routinely substitute MB8877 / MB8877A for an original WD1793 (or KR1818VG93) by leaving the +12 V pin unconnected; this is the cheapest commonly-available FDC chip on the surplus market today. |
+| **SGS-Thomson** (later STMicroelectronics) | TS9206 | A late (mid-1990s) European second-source. Electrically similar to the MB8877. Rarely encountered in Spectrum hardware. |
+| **NEC** | μPD765 family | **Not** a second-source; this is the IBM-PC-standard FDC, an entirely different architecture with a different register file (the μPD765 uses a multi-byte FIFO command protocol, not the WD1793's single-byte command register). **Not compatible** with the Beta Disk Interface port map. Mentioned here only to dispel the common confusion. |
+| **Soviet — Angstrem (Zelenograd)** | **KR1818VG93** (КР1818ВГ93) | The standard Soviet clone of the WD1793-02. Produced from the late 1980s onward. Pin- and register-compatible. Some revisions include minor bug-for-bug reproductions of WD1793-02 quirks, while others have quirks of their own (notably in `/MR` behaviour and step-rate timing — see [fdc_vg93.md §7 and §8](fdc_vg93.md) for the full comparison). Used in virtually every Soviet-made Beta Disk clone. |
+| **Soviet — Angstrem (Zelenograd)** | KR1818VG91 | Second-source of the WD1691 (write-precompensation / support chip). Used alongside the KR1818VG93 on some Soviet Beta Disk clones that implemented write precompensation for inner tracks. Most Pentagon / Scorpion boards omit it. |
+| **Soviet — Angstrem (Zelenograd)** | KR1818VG97 | Second-source of the WD1797 (extended FDC with separate input/output shift registers). Used in some Soviet industrial and military systems, **never** in Soviet Spectrum clones. |
+| **Modern — Western Digital Center** | **WDC1793** | A modern reissue (sometimes packaged as PLCC rather than DIP) sold by some Western Digital licensees in the 2000s. Used on the ZX Evolution's floppy module. Functional equivalent of WD1793-02. |
+
+**Why second-sources mattered for the ex-USSR scene.** The Soviet Union's microelectronics programme operated on a strict "second-source everything strategic" principle, and the WD1793 was classified as strategically important because it was used in military and industrial computers (the Corvette educational machine, the Elektronika 85 workstation, several industrial process-control PCs). By the time the Beta 128 circuit was reverse-engineered in 1988, the KR1818VG93 was already in mass production at Angstrem and freely available on the grey market. Without a domestic FDC source, the Soviet Beta Disk clone ecosystem could not have happened; with it, the entire Soviet disk-based software market emerged within two years.
+
+For the chip-level electrical and programming details of the WD1793 itself — pinout, register file, command set, status bits, undocumented quirks, and the KR1818VG93's specific differences from the WD1793-02 — see the companion article [fdc_vg93.md](fdc_vg93.md). This article covers only the Beta Disk Interface cartridge and its host-visible ports.
 
 ---
 
@@ -556,18 +670,15 @@ A second failure mode is **mould growth on the disk surface**, particularly comm
 
 ### 8.5 Software incompatibilities
 
-Software written for Soviet clones (Pentagon, Scorpion) may not work correctly on an original Beta Disk Interface, because:
+Software written for Soviet clones (Pentagon, Scorpion, ATM Turbo, Profi) **does** run correctly on an original Beta Disk Interface at the FDC level, because the port `#FF` bit assignment is unified (see §7.3) and the WD1793 / KR1818VG93 / Fujitsu MB8877 / SGS-Thomson 9206 family are all register-compatible (see §7.7). The actual sources of incompatibility are environmental, not bit-layout-related:
 
-- It expects port `#FF` to be readable (returns last value written).
-- It expects a motor bit on port `#FF` bit 7 and flips this bit to start the motor.
-- It expects a side bit on port `#FF` bit 4 (Scorpion variant).
-- It assumes a faster I/O cycle (no WAIT-state generator).
-- It assumes the WD1793's spin-up timer has already expired (because the Soviet clone keeps the motor running continuously).
+- **Memory map differences.** Soviet software that uses 128K banking, video-page switching, or ATM Turbo's CP/M mode relies on system ports that do not exist on a 48K / 128K Spectrum. The software will crash not because of the FDC, but because of the missing memory hardware.
+- **Timing assumptions.** Custom loaders written for fast Soviet clones (no WAIT state, ~2 µs I/O cycles) may poll the FDC status register faster than an original Beta Disk Interface can update it (~5–6 µs per I/O cycle on real hardware). The fix is to run the software in an emulator that matches the target clone's timing, or to patch the loader's poll loops.
+- **CPU timing assumptions.** Some Soviet software is timed against the Pentagon's slightly-off 3.5467 MHz clock vs. the Spectrum's nominal 3.5000 MHz. This affects only cycle-counted effects (multicolour, AY tunes), not FDC operations.
+- **TR-DOS version dependencies.** Software that hooks into TR-DOS at a specific entry point (e.g. a particular offset into the `CAT` routine) will break on a different TR-DOS version. See §10 for the version matrix.
+- **Disk format extensions.** Some Soviet software ships on 80-track extended-TRD disks (with non-standard sector interleaving, extra diagnostic sectors, or copy protection). These disks may not read correctly on a real Beta Disk Interface with a 5.25" 40-track drive, regardless of software.
 
-To run such software on an original Beta Disk Interface, you need either:
-- A TR-DOS version patched for original-Beta-Disk hardware (some "TR-DOS 5.04 patches" exist that fix the motor-bit assumption).
-- A hardware adapter that emulates the Pentagon's port `#FF` behaviour.
-- An emulator that lets you choose which hardware to emulate.
+For software that genuinely needs to detect whether it is running on an original Beta Disk vs. a Soviet clone, the most reliable method is to probe the machine's non-FDC system ports (memory banking, video page, etc.). See the model-detection routines in [TR-DOS 5.04 unpacked](https://zxart.ee/) for reference code.
 
 ### 8.6 Power supply considerations
 
@@ -612,8 +723,8 @@ For emulator authors, the gold standard is **cycle-exact** emulation of the orig
 - The WAIT-state generator (every I/O cycle takes 5–6 µs).
 - The WD1793's command state machine (see [fdc_vg93.md](fdc_vg93.md)).
 - The exact timing of the TR-DOS ROM's polling loops.
-- The implicit motor control via `/HDLD`.
-- The implicit side control via the Type II `s` bit.
+- The implicit motor control via the drive-select decoder and `/HDLD` (see §5.4).
+- The side-select wiring: bit 4 of port `#FF` drives the cable's `/SIDE1` line directly; the WD1793's `/SID` pin is unused (see §5.2).
 
 This level of accuracy is necessary to run protected loaders, custom-format disk software, and demoscene productions that abuse the WD1793's undocumented features. ZEsarUX, UnrealSpeccy, and FUSE all implement approximately cycle-exact Beta Disk Interface emulation; the ZX Spectrum Next's onboard emulator is bit-exact for the original hardware.
 
@@ -621,9 +732,194 @@ The .SCP flux-level format (see [scp_format.md](scp_format.md)) is the gold stan
 
 ---
 
-## 10. Cross-references
+## §10. TR-DOS Versions and the Soviet DOS Ecosystem
 
-### 10.1 Within the storage section
+The 16 KB TR-DOS ROM that ships with the Beta Disk Interface is not a single fixed product. Between 1985 and the early 2000s, the official TR-DOS went through several revisions, and the Soviet scene produced a parallel ecosystem of compatible-but-extended DOS ROMs. Software compatibility across this matrix is not automatic — software written against TR-DOS 5.03 entry points may crash on 5.04, and software that assumes ATM Turbo memory banking will not run on a real Pentagon.
+
+This section lists the major versions and their distinguishing features. For the binary-level entry-point tables, see the disassembly of each ROM (links below).
+
+### 10.1 Official TR-DOS 5.0 / 5.01 / 5.02 (1985–1986)
+
+The first three TR-DOS releases shipped with the original Beta Disk Interface (1985) and the early Beta 128 (1986):
+
+- **5.0** — the original release, supplied with the very first Beta Disk Interface in 1985. Supports 40-track and 80-track drives, single-sided operation by default. Has several known bugs in the `MERGE` and `COPY` commands.
+- **5.01** — bug-fix release. Fixes the `MERGE` crash and several edge cases in `*COPY`. Adds proper 80-track double-sided geometry as the default.
+- **5.02** — minor maintenance release. Most users never see this version; it was quickly superseded by 5.03.
+
+The 5.0 / 5.01 / 5.02 family is identifiable by its **drive-testing code**: on cold boot, TR-DOS issues a series of seeks and reads to each connected drive to detect what is present. This is slow (~3 seconds per empty drive bay), and is one of the things 5.03 removed.
+
+### 10.2 TR-DOS 5.03 — the canonical version (1986)
+
+TR-DOS 5.03 is the version that conquered the ex-USSR. Its ROM image was burned into virtually every Soviet Beta Disk clone, and the entire Soviet disk-software catalogue targets it. The features that distinguish it from 5.01 / 5.02:
+
+- **No drive testing on boot.** Cold-start time drops from ~10 seconds (5.01, with 4 empty drive bays) to ~0.5 seconds. This alone was enough to make 5.03 the standard.
+- **Faster sector reads.** The polling loops in the read/write routines are tighter, saving ~10% on bulk data transfer.
+- **Reorganised entry-point table.** The call vectors at `#3D00`–`#3DFF` are re-arranged; software that hard-calls into the 5.01 entry table will likely crash on 5.03.
+- **`FORMAT` works correctly on 80-track drives** with any reasonable step rate. Earlier versions had a step-rate bug that could corrupt track 0.
+- **`VERIFY` is faster** (overlapped with the next-sector seek).
+
+5.03 is the version supplied with every Soviet clone (Pentagon, Scorpion, Kay, Profi, Leningrad) and the version that all modern emulators default to.
+
+### 10.3 TR-DOS 5.04 (1987)
+
+A late Western release by Technology Research. Functionally very similar to 5.03 (Pomortzev's book notes "5.03 is very different; 5.04 at addresses more is similar to 5.03"). 5.04 fixes a few minor bugs in 5.03's `*COPY` and adds a `/V` (verify) switch to `SAVE`. Most Soviet clones did **not** adopt 5.04 — they had already standardized on 5.03 — but a handful of late Russian PCBs ship with 5.04 in ROM.
+
+Some Soviet community-produced "TR-DOS 5.04" ROMs are actually 5.03 with patches back-ported from the Western 5.04 source. These are typically labelled "5.04 (unpacked)" or "5.04 patched".
+
+### 10.4 TR-DOS 6.x (ATM Turbo fork, 1991+)
+
+A family of post-Soviet TR-DOS forks created for the **ATM Turbo** computer series (MicroArt / ATM, Moscow, from 1991 onward). These add support for the ATM Turbo's paged memory, IDE hard drive, and high-resolution video modes. The most widely-deployed versions:
+
+- **6.00** — initial ATM Turbo 1 release (1991). Based on 5.03 with patches for the ATM Turbo's 4×16 KB memory paging.
+- **6.03, 6.04, 6.07** — incremental fixes through 1992–1995.
+- **6.10E** — the late-1990s "internationalised" release. Adds English-language error messages alongside the Russian ones. This is the version bundled with the Mr Gluk Reset Service distribution (see §10.6).
+
+TR-DOS 6.x is **largely backward-compatible** with TR-DOS 5.03 software, but software that uses the ATM Turbo's IDE controller or 1024 KB memory obviously will not run on a Pentagon or an original Beta Disk.
+
+### 10.5 ETR-DOS (Extended TR-DOS)
+
+ETR-DOS (Russian: ЭТР-ДОС) is a late-1990s community-developed extension of TR-DOS 5.03 that adds:
+
+- A driver framework for non-Beta-Disk storage (IDE, SD).
+- Long filenames (up to 32 characters, vs. the 8-character TR-DOS standard).
+- Subdirectory support.
+- A CP/M-style command-line interface alongside the BASIC `*` extensions.
+
+ETR-DOS never achieved TR-DOS 5.03's ubiquity, but it was popular with power users running multiple storage devices. Several distributions of ETR-DOS exist, each with slightly different driver sets; the most common is the one packaged with the Mr Gluk Reset Service.
+
+### 10.6 Mr Gluk Reset Service (1996)
+
+The **Mr Gluk Reset Service** is a 16 KB boot-loader / BIOS ROM created in 1996 by **Renat Mamedov ("Mr Gluk")** and **Roman Gavrilov ("Reanimator")** in Ivanovo, Russia. It is not a DOS in itself; rather, it is a **service layer** that sits below TR-DOS and handles:
+
+- Hardware detection and initialization (memory size, video mode, FDC variant, IDE presence).
+- A boot menu (accessible via the **MAGIC button** or by holding a key at reset — see §11.3).
+- A resident driver table that subsequent TR-DOS / ETR-DOS / CP/M ROMs can query.
+- A real-time clock driver (the "Mr Gluk clock", a battery-backed RTC chip on ATM Turbo 2+ and later machines).
+- File-management utilities (P or C hotkey) that operate without booting a full DOS.
+
+Mr Gluk Reset Service was widely adopted on ATM Turbo 2 / 2+ and is the standard boot ROM on the ZX Evolution's ATM-compatible mode. Multiple versions exist (v6.3r, v6.4, v7.0, v7.1, etc.); they are largely compatible at the user-facing level.
+
+### 10.7 vTR-DOS (Virtual TR-DOS, ATM Turbo)
+
+**vTR-DOS** is an ATM Turbo-specific extension of TR-DOS 6.x that emulates up to four virtual floppy drives in RAM. A virtual drive is a `.TRD` disk image loaded into a memory bank; reads and writes go to RAM instead of to the physical FDC. This is roughly analogous to what `SUBST` does on MS-DOS.
+
+vTR-DOS ships as a TSR (terminate-and-stay-resident) utility that hooks into TR-DOS's command dispatch. Once loaded, the user can mount a `.TRD` image with a single command and use `LOAD`, `CAT`, etc. against it as if it were a physical disk.
+
+### 10.8 iS-DOS (not Beta Disk-compatible)
+
+**iS-DOS** (Russian: ИС-ДОС), developed by D. Sokolov, is a Unix-influenced operating system for the ZX Spectrum / Soviet clones that uses the ATM Turbo's IDE controller natively. **It is not a TR-DOS variant and does not run on the Beta Disk Interface** — it bypasses the WD1793 entirely and goes straight to IDE. Mentioned here only because the name is similar; the two are not interchangeable.
+
+### 10.9 Version compatibility matrix
+
+| Software targets… | Runs on… | Notes |
+|---|---|---|
+| TR-DOS 5.03 (standard Soviet catalog) | Any Beta Disk or Soviet clone with TR-DOS 5.03–5.04 in ROM | The baseline. |
+| TR-DOS 5.03 with custom loader | Any Beta Disk or Soviet clone | Loader bypasses TR-DOS; only needs the FDC ports. |
+| TR-DOS 5.04 | Any Beta Disk or Soviet clone with 5.04 in ROM | Minor incompatibilities if software hard-codes 5.03 entry points. |
+| TR-DOS 6.x (ATM Turbo) | ATM Turbo 1 / 2 / 2+ only | Uses ATM-specific memory banking. |
+| ETR-DOS | Any Soviet clone with ETR-DOS ROM installed | Requires ~32 KB of resident driver space. |
+| Mr Gluk Reset Service | Required on ATM Turbo 2+; optional elsewhere | Below-DOS service layer. |
+| iS-DOS | ATM Turbo 2+ with IDE | Not Beta Disk compatible. |
+
+### 10.10 Identifying the active TR-DOS version
+
+From BASIC, type `PRINT PEEK 15619`. The byte at address `#3D03` (the warm-entry point) encodes the TR-DOS version family:
+
+- `0xF3` (`#F3`) → TR-DOS 5.03
+- `0xF4` (`#F4`) → TR-DOS 5.04
+- `0x06` followed by a minor-version byte → TR-DOS 6.x
+
+This is the standard detection used by installers and launcher menus. For Mr Gluk Reset Service, the version string is at a fixed offset in its ROM and can be read with `PEEK 0` after the Mr Gluk ROM is paged in.
+
+---
+
+## §11. Custom Disk Loaders, the MAGIC Button, and Disk Protection
+
+The TR-DOS ROM provides a high-level file-based API (`LOAD`, `SAVE`, `MERGE`, `CAT`) that is sufficient for most software. But commercial Soviet games and demos almost universally **bypass TR-DOS** and use a hand-written disk loader instead. The reasons are technical, economic, and protective:
+
+- **Speed.** A hand-tuned loader can read a track in ~10 ms (a single index rotation), vs. ~50 ms for TR-DOS's `READ SECTOR` with its verify-and-retry logic.
+- **Custom disk formats.** Many games use non-standard sector layouts (sector numbers out of order, larger sectors, extra diagnostic sectors) that TR-DOS cannot read.
+- **Copy protection.** A loader that reads raw MFM (via the WD1793's READ TRACK command, Type III) can detect intentionally-written "weak bits" and disk-specific signatures that defeat naive `*COPY`.
+- **Memory footprint.** TR-DOS leaves ~3 KB of itself resident in RAM after a `LOAD`; a custom loader can use all of RAM once it has finished.
+- **CRUNCH.** Most loaders also decompress ("crunch") the loaded data in-place using one of several dozen Soviet or Western compression formats (see [exe_crunchers.md](../../03_loader_and_exec_format/exe_crunchers.md)).
+
+This section covers the three pillars of the custom-loader world: the loaders themselves, the hardware **MAGIC button** that enables snapshotting, and the protection schemes that loaders commonly implement.
+
+### 11.1 Anatomy of a custom loader
+
+A typical Soviet-era custom disk loader does the following:
+
+1. **Issue a `RESTORE` to track 0** (Type I command `#0B` with `h=1`, `u=1`), waiting for INTRQ via port `#FF` bit 7.
+2. **For each track containing game data**, in order:
+   - Set the side (write port `#FF` bit 4).
+   - Issue a `SEEK` to the target track (Type I command with `u=0` since the motor is already spinning).
+   - Issue a `READ TRACK` (Type III command `#E0`) and stream the raw MFM bytes into RAM via port `#7F` as each DRQ fires.
+   - OR: issue a series of `READ SECTOR` (Type II `#80`) commands for each sector, with custom interleave.
+3. **Decompress / decrunch** the loaded buffer in-place.
+4. **Disable interrupts, swap out TR-DOS**, and jump to the game's entry point.
+
+The key technique is using **READ TRACK** (Type III) instead of READ SECTOR (Type II). READ TRACK returns every byte the drive head sees on a single rotation: gaps, sync fields, sector headers, and data fields alike. The loader's software then parses this raw stream and extracts the data bytes. This is faster (one rotation vs. ten) and exposes the raw disk for protection checks.
+
+### 11.2 IM2-based loaders: interrupt-driven data transfer
+
+A subset of Soviet loaders go further and use the Z80's **interrupt mode 2 (IM2)** to drive the per-byte data transfer. The technique:
+
+1. Build a 257-byte interrupt vector table in RAM, with every entry pointing to the loader's DRQ handler.
+2. Load the I register with the table's high byte, and execute `IM 2`.
+3. Issue a READ SECTOR or READ TRACK command. The WD1793's `DRQ` line is wired (via the Beta Disk Interface's glue logic) to the Z80's maskable interrupt input `/INT`.
+4. On each byte that arrives in the FDC's data register, `/INT` fires. The Z80 vector-fetches through the IM2 table, lands in the handler, and executes `IN A, (#7F)` to grab the byte and store it.
+5. The handler returns with `RETI`, re-enabling interrupts for the next byte.
+
+The advantage over polled DRQ is that the loader's main loop can do useful work (e.g., updating a loading screen, decrypting previously-read data) while the FDC streams in the next sector. The disadvantage is the ~30-cycle interrupt overhead per byte, but at the WD1793's 500 kbit/s MFM rate (one byte every ~16 µs, ~56 T-states), this is well within budget.
+
+TR-DOS 5.03 itself runs with **interrupts disabled** during sector reads (polling DRQ in a tight loop), so loaders that want to use IM2 must take over the FDC completely and not call into TR-DOS until the load is finished.
+
+### 11.3 The MAGIC button: /NMI at address 0066h
+
+The **MAGIC button** is a hardware feature of the Beta Plus and Beta 128 cartridges (and reproduced on every Soviet clone that copies the circuit). It is a small push-button on the cartridge that, when pressed, asserts the Z80's **non-maskable interrupt (NMI)** line.
+
+The Z80's response to an NMI is unconditional (it cannot be masked by software) and well-defined: the CPU jumps to address `#0066`. On a Spectrum with the Beta Disk Interface connected, address `#0066` lies in the Spectrum's ROM — specifically, inside the LPRINT-CHAR routine — which is not useful. The Beta Disk Interface's address decoder (see §4) is wired so that an NMI fetch from `#0066` **also activates the TR-DOS ROM**, replacing the BASIC ROM at that address. The TR-DOS ROM has an NMI handler installed at `#0066` that performs a snapshot function:
+
+1. Saves the CPU registers and the Spectrum's memory banks to a free area of RAM.
+2. Banks TR-DOS back in cleanly (if it was not already).
+3. Writes the saved state to disk as a `.SNA`-style snapshot file.
+4. Restores the saved state and returns from the NMI, allowing the user's program to continue as if nothing happened.
+
+This is the hardware basis for the Soviet-era "snapshot copier" software genre (Best Shot, Magic Copy, etc.). The user runs a game, presses the MAGIC button at a chosen moment (typically after the game's protection check has passed), and then has a snapshot file that can be reloaded on any TR-DOS-compatible machine.
+
+On Soviet clones without the physical MAGIC button, the same effect is achieved by adding a push-button to the `/NMI` line on the expansion bus, or by software that issues a virtual NMI via a custom I/O port. Modern emulators typically map the MAGIC button to a hot-key (F12 in UnrealSpeccy, Scroll Lock in ZEsarUX).
+
+The Mr Gluk Reset Service (§10.6) repurposes the MAGIC button: pressing it during boot enters the Mr Gluk boot menu, where the user can choose which DOS to load, run file-management utilities, or change system settings.
+
+### 11.4 Common disk protection schemes
+
+The Soviet scene invented and refined dozens of floppy-disk protection schemes. Most exploit specific WD1793 behaviour that is difficult to replicate with a generic `*COPY`. See [05_reversing/custom_loaders_and_drm.md](../../05_reversing/custom_loaders_and_drm.md) for the full catalogue; the most common ones encountered on Beta Disk software:
+
+- **Weak-bit protection.** The original disk has a track where the magnetic flux is written at a level that is on the edge of the drive's read amplifier threshold. Each read produces a slightly different bit pattern. The protection check reads the track twice and compares; if they match (because a copier wrote deterministic bits), the software refuses to run. READ TRACK (Type III) is the command used to capture the raw bytes.
+- **Non-standard sector IDs.** Sectors are numbered, e.g., `0x01, 0x02, 0x80, 0x81, 0x82, ...` instead of `1, 2, 3, 4, ...`. TR-DOS's READ SECTOR will fail to find them; only a custom loader that issues READ SECTOR with the right sector number will succeed.
+- **Extra-long tracks.** The disk is written with 11 or 12 sectors per track instead of the standard 10. TR-DOS 5.03's `*COPY` assumes 10 sectors per track and misses the extras.
+- **Cross-track sectors.** A single logical "sector" spans the gap between two physical tracks. The FDC's READ SECTOR command alone cannot read this; only a custom loader that issues READ TRACK and stitches the data together can.
+- **Spurious CRC errors.** The disk is written with intentional CRC errors in some sectors. The WD1793 normally rejects such sectors; the custom loader uses READ TRACK and accepts the bad-CRC data anyway.
+- **Spin-up timing checks.** The loader measures the time between successive index pulses and compares it to a reference. If the disk is being read on a drive with a different RPM (e.g., a 360 RPM "high-speed" drive instead of the standard 300 RPM), the check fails.
+- **Drive-select tricks.** A few loaders deliberately select drives C or D (which are usually empty) and use the WD1793's "no drive present" timeout as a cryptographic entropy source.
+
+For the defensive side — bypassing these protections to make a backup — see the [unpacking_and_decrunching.md](../../05_reversing/unpacking_and_decrunching.md) and [patching_techniques.md](../../05_reversing/patching_techniques.md) articles in the reversing section.
+
+### 11.5 Notable custom loaders
+
+A non-exhaustive list of historically important Soviet custom loaders:
+
+- **TR-DOS 5.03 boot sector** — the standard TR-DOS loader itself. Reads the disk catalogue, finds the file marked `BOOT`, and loads it into RAM.
+- **Alasm loader** — a small custom loader used by many assembled-in-RAM demos. Reads raw tracks into a designated buffer with no error checking, for maximum speed.
+- **Best Shot / Magic Copy** — snapshot copiers built around the MAGIC button (§11.3). Take a memory snapshot at a keypress, save it to disk as a runnable `.SNA`.
+- **LD0 / LOADERS BY LAS / SHR** — the various one-file and multi-file game loaders used by Soviet disk magazines and cracker groups. Most have a small protected header that contains the decryption key and the disk geometry.
+- **Boot-trap loaders** — the smallest possible loaders (often under 64 bytes) that fit entirely within the 256-byte `#3D00`–`#3DFF` trigger window. Used by some demoscene productions to load the rest of the demo in a single read.
+
+---
+
+## §12. Cross-references
+
+### 12.1 Within the storage section
 
 - [fdc_vg93.md](fdc_vg93.md) — the companion article to this one. Covers the WD1793 / KR1818VG93 chip in depth: register file, command set, execution phases, status bits, undocumented quirks, and turbo modifications. Read this first to understand what the Beta Disk Interface's ports actually do.
 - [trd_disk_format.md](trd_disk_format.md) — the logical disk format used by TR-DOS on a Beta Disk Interface disk. Covers the directory structure, file types (B, C, D, M, #), and disk parameters (80 tracks × 10 sectors × 512 bytes × 2 sides).
@@ -633,24 +929,30 @@ The .SCP flux-level format (see [scp_format.md](scp_format.md)) is the gold stan
 - [trd_scl_formats.md](trd_scl_formats.md), [dsk_fdi_formats.md](dsk_fdi_formats.md), [udi_format.md](udi_format.md), [scp_format.md](scp_format.md) — disk image formats used to preserve and emulate Beta Disk Interface disks.
 - [hdd_overview.md](hdd_overview.md), [ide_interface.md](ide_interface.md), [divide_divmmc.md](divide_divmmc.md) — the modern IDE/SD storage interfaces that displaced the Beta Disk Interface.
 
-### 10.2 Adjacent hardware references
+### 12.2 Adjacent hardware references
 
 - [plus3_floppy.md](plus3_floppy.md) — for comparison: the +3's integrated WD1772-PH controller and its (different) port map.
 - For Spectrum clone onboard FDCs (Pentagon, Scorpion, ATM Turbo, Profi, Kay, ZX Evolution, Karabas): see §7 above, and the [02_hardware/](../../02_hardware/) section.
 
-### 10.3 Reverse engineering and demoscene angles
+### 12.3 Reverse engineering and demoscene angles
 
-- For custom loaders, protection schemes, and disk-based DRM that run on a Beta Disk Interface: see [05_reversing/](../../05_reversing/) and in particular [custom_loaders_and_drm.md](../../05_reversing/custom_loaders_and_drm.md).
+- For custom loaders, protection schemes, and disk-based DRM that run on a Beta Disk Interface: see §11 of this article for the overview, and [05_reversing/custom_loaders_and_drm.md](../../05_reversing/custom_loaders_and_drm.md) for the full catalogue.
+- For unpacking / decrunching custom loaders: see [05_reversing/unpacking_and_decrunching.md](../../05_reversing/unpacking_and_decrunching.md) and [05_reversing/patching_techniques.md](../../05_reversing/patching_techniques.md).
 - For cycle-exact Beta Disk Interface emulation in modern emulators: see [11_emulation/](../../11_emulation/).
-- For TR-DOS extensions and modern disk operating systems that build on the Beta Disk Interface (ESXDOS, FatFS, etc.): see [04_operating_systems/](../../04_operating_systems/).
+- For TR-DOS extensions and modern disk operating systems that build on the Beta Disk Interface (ESXDOS, FatFS, etc.): see [04_operating_systems/](../../04_operating_systems/). The TR-DOS version matrix is in §10 of this article.
 
-### 10.4 External references
+### 12.4 External references
 
-- **The TR-DOS 5.03 ROM source code** — disassemblies are widely available (e.g. on the WoS archive and zxevo.ru). Reading the TR-DOS source is the best way to understand how the Beta Disk Interface ports are used in practice.
+- **Pomortzev, A. — *TR-DOS for professionals and amateurs* (1994)** — the standard Russian-language reference for TR-DOS internals. Covers 5.03 vs 5.04 differences, command-level behavior, and the entry-point table. Available as a digitised PDF on chibiakumas.com and several Russian Spectrum archives.
+- **Larchenko, V. & Rodionov, A. — *TR-DOS disk controller programming* (ZX-Review 1994, no. 3–4)** — the canonical Russian-language article on the WD1793 / Beta Disk port map. Available in English translation on zxpress.ru.
+- **The Sinclair ZX Specifications (problemkaputt.de)** — Martin Korth's reference pages on the Spectrum hardware, including the Beta Disk Interface port map, the `#FF` bit assignment, and the MAGIC button `/NMI` semantics.
+- **Mac Buster's Pentagon FAQ v1.0.2 (2001)** — the standard reference for Pentagon-specific hardware, including the onboard FDC.
+- **The TR-DOS 5.03 ROM source code** — disassemblies are widely available (e.g. on the WoS archive, zxevo.ru, and [programandala.net/tr-dos](https://github.com/programandala-net/tr-dos)). Reading the TR-DOS source is the best way to understand how the Beta Disk Interface ports are used in practice.
 - **The Beta Disk Interface schematic** — original schematics are rare, but several reverse-engineered schematics circulate in the Spectrum community. The Pentagon and Scorpion motherboard schematics are also useful because they include the onboard FDC circuitry.
 - **Andrew Owen's "ZX Spectrum Hardware" pages** — original documentation on the Beta Disk Interface, with pinouts and address-decoder details.
 - **The comp.sys.sinclair FAQ** — historical context on the Beta Disk Interface and its competitors (Opus Discovery, Plus D, Rotronics Wafadrive, Microdrive).
 - **The "Beta 128 Disk Interface" entry on the World of Spectrum archive** — software compatibility lists and historical information.
+- **Spectrumpedia (Grussu, A.)** — English- and Italian-language encyclopedia of the ZX Spectrum, including articles on the Soviet clone ecosystem and the Mr Gluk Reset Service.
 
 ---
 
@@ -670,4 +972,4 @@ Under the following terms:
 
 The full legal text is available at the link above.
 
-The trademarks **Beta Disk Interface**, **Beta 48**, **Beta 128**, **TR-DOS**, **ETR-DOS**, **ESXDOS**, **WD1793**, **WD1772**, **WD1770**, **WD2793**, **KR1818VG93**, **ZX Spectrum**, **ZX Spectrum Next**, **ZX Evolution**, **ZX-Uno**, **Karabas Pro**, **Karabas 128**, **Peridot**, **Pentagon**, **Scorpion**, **ATM Turbo**, **Profi**, **Kay**, **DivIDE**, **DivMMC**, **Nemo IDE**, **SMUC**, **Gotek**, **FlashFloppy**, **HxC**, **Western Digital**, **Shugart**, **IBM PC**, and others mentioned in this document are the property of their respective owners and are used here for identification and educational purposes only. No endorsement by, or affiliation with, any of these trademark holders is implied.
+The trademarks **Beta Disk Interface**, **Beta 48**, **Beta Plus**, **Beta 128**, **TR-DOS**, **ETR-DOS**, **vTR-DOS**, **iS-DOS**, **ESXDOS**, **Mr Gluk Reset Service**, **EVO Reset Service**, **WD1793**, **WD1793-02**, **WD1691**, **WD1791**, **WD1797**, **WD1770**, **WD1772**, **WD2793**, **WDC1793**, **KR1818VG91**, **KR1818VG93**, **KR1818VG97**, **MB8876**, **MB8876A**, **MB8877**, **MB8877A**, **TS9206**, **μPD765**, **ZX Spectrum**, **ZX Spectrum 48K / 128K / +2 / +2A / +3**, **ZX Spectrum Next**, **ZX Evolution**, **Pentagon**, **Pentevo**, **Scorpion ZS-256**, **ATM Turbo 1 / 2 / 2+**, **Profi**, **Kay 1024**, **Leningrad**, **Karabas Pro**, **Karabas 128**, **Peridot**, **ZX-Uno**, **DivIDE**, **DivMMC**, **Nemo IDE**, **SMUC**, **Gotek**, **FlashFloppy**, **HxC**, **Western Digital**, **Fujitsu**, **SGS-Thomson**, **NEC**, **Angstrem**, **Shugart**, **IBM PC**, **UnrealSpeccy**, **ZEsarUX**, **FUSE**, **SpecEmu**, **Speccy2010**, and others mentioned in this document are the property of their respective owners and are used here for identification and educational purposes only. No endorsement by, or affiliation with, any of these trademark holders is implied.
