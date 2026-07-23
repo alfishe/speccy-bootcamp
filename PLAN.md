@@ -579,7 +579,7 @@ zx/
 
 | File | Topic | Status |
 |---|---|---|
-| `README.md` | Index — storage media formats (Tape sub-section ✅ COMPLETE; Floppy/HDD-SD pending) | ✅ |
+| `README.md` | Index — storage media formats (Tape ✅ COMPLETE; Floppy ✅ COMPLETE; HDD-SD pending) | ✅ |
 | **Tape** ✅ COMPLETE | | |
 | `tape_interface.md` | EAR/MIC hardware: pilot tone, sync pulses, data encoding, Turbo LOAD speed-ups | ✅ |
 | `tape_format.md` | Tape data format: blocks (header + data), checksums, baud rates (1500–3600 baud) | ✅ |
@@ -587,20 +587,24 @@ zx/
 | `tzx_format.md` | .TZX file format: complete specification, all block types, turbo loading, custom loaders | ✅ |
 | `csw_format.md` | .CSW (Compressed Square Wave): tape format for preservation | ✅ |
 | `pzx_format.md` | .PZX: alternative tape format | ✅ |
-| **Floppy Disk** | | |
-| `beta_disk_interface.md` | Beta Disk Interface: WD1793 / KR1818VG93 FDC, TR-DOS integration, disk format | ⬜ |
-| `fdc_vg93.md` | KR1818VG93 / WD1793 FDC deep dive: registers, commands, timing, undocumented features, turbo mods | ⬜ |
-| `plus3_floppy.md` | +3 internal floppy HARDWARE ONLY: WD1772-PH, port map, drive geometry (+3 DOS format moves to plus3_dos_format.md) | ⬜ |
-| `disk_format_overview.md` | General floppy format overview: IBM 3740 physical sector layout shared by all Spectrum formats, comparison matrix across TR-DOS/+3/CP/M/Opus | ⬜ |
-| `trd_disk_format.md` | TR-DOS disk format: directory structure, file types (B, C, D, M, #), disk parameters (80 tracks × 10 sectors) | ⬜ |
-| `plus3_dos_format.md` | +3 DOS logical disk format: directory, extents, attribute bytes, +3DOS vs CP/M differences | ⬜ |
-| `cpm_disk_format.md` | CP/M 2.2 disk format on Spectrum: FCB-based layout, +3 CP/M, ATM Turbo, Sprinter, disk parameter block | ⬜ |
-| `opus_discovery_format.md` | Opus Discovery disk format: MFM/sector layout, MGT-style extension, Western alternative to TR-DOS/+3 | ⬜ |
-| `trd_scl_formats.md` | .TRD / .SCL disk image formats | ⬜ |
-| `dsk_fdi_formats.md` | .DSK / .EDSK / .FDI disk image formats (preservation-level) | ⬜ |
-| `udi_format.md` | .UDI universal disk image format | ⬜ |
-| `scp_format.md` | .SCP (SuperCard Pro) flux-level preservation format | ⬜ |
-| `mfm_encoding.md` | MFM encoding: how data is recorded on floppy, sync marks, address marks | ⬜ |
+| **Floppy Disk** ✅ COMPLETE | | |
+| `disk_format_overview.md` | Top-level comparison: IBM 3740 physical layer, 4 logical formats side-by-side, 8 disk image formats, decision tree | ✅ |
+| **Physical layer** | | |
+| `mfm_encoding.md` | MFM signal layer: IBM 3740 sectors, MFM bit encoding, address/data marks, CRC16, gap structure | ✅ |
+| `fdc_vg93.md` | WD1793 / KR1818VG93 FDC deep dive: 4 registers, Type I/II/III/IV commands, status bits, Soviet clone, turbo mods | ✅ |
+| **Hardware interfaces** | | |
+| `beta_disk_interface.md` | Beta Disk Interface: WD1793 controller, port map, TR-DOS ROM bank switching, cable, variants | ✅ |
+| `plus3_floppy.md` | +3 internal floppy hardware: WD1772-PH, port map, 720 KB geometry, cable pinout, modern replacements | ✅ |
+| **Logical disk formats** | | |
+| `trd_disk_format.md` | TR-DOS logical format (Soviet, 800 KB DSDD-10): 128 entries × 16 bytes, sector allocation, file types | ✅ |
+| `plus3_dos_format.md` | +3DOS logical format (UK, 720 KB DSDD-9, CP/M derivative): 32-byte entries, 1 KB blocks, extents, DPB | ✅ |
+| `cpm_disk_format.md` | CP/M 2.2 on Spectrum: BIOS/BDOS/CCP/TPA, FCB, DPB, +3/ATM Turbo/Sprinter variants | ✅ |
+| `opus_discovery_format.md` | Opus Discovery / MGT format (UK, 800 KB DSDD-10): WD1770, 256-byte entries, sector bitmap, linked-list chaining | ✅ |
+| **Disk-image file formats** | | |
+| `trd_scl_formats.md` | .TRD / .SCL image formats (TR-DOS containers) | ✅ |
+| `dsk_fdi_formats.md` | .DSK / .EDSK / .FDI image formats (CP/M / +3DOS / Opus containers) | ✅ |
+| `udi_format.md` | .UDI universal flux-level image format (preserves every magnetic transition) | ✅ |
+| `scp_format.md` | .SCP SuperCard Pro flux-level image format (gold-standard preservation) | ✅ |
 | **Hard Disk / SD** | | |
 | **Hard Disk** | | |
 | `hdd_overview.md` | HDD on Spectrum: evolution from floppy to IDE to SD card, why HDD mattered for the Soviet scene | ⬜ |

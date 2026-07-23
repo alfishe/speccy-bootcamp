@@ -216,7 +216,7 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 
 **Section 03 — I/O (Snapshots / Storage / Peripherals / Networking)**
 
-*Snapshots & Replay sub-section: ✅ COMPLETE (4/4). Tape sub-section: ✅ COMPLETE (6/6). Other I/O sub-sections (floppy, HDD/SD, peripherals, networking) are in progress — see [PLAN.md](PLAN.md).*
+*Snapshots & Replay sub-section: ✅ COMPLETE (4/4). Tape sub-section: ✅ COMPLETE (6/6). Floppy sub-section: ✅ COMPLETE (13/13). Other I/O sub-sections (HDD/SD, peripherals, networking) are in progress — see [PLAN.md](PLAN.md).*
 
 **Snapshots & Replay** — machine-state capture formats ([sub-section README](03_io/snapshots/README.md))
 
@@ -237,6 +237,24 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [tzx_format.md](03_io/storage/tzx_format.md) | **.TZX file format** — Tomaz Kac's 1996 comprehensive format, 30+ block types, turbo loader support, format of choice for preservation |
 | [csw_format.md](03_io/storage/csw_format.md) | **.CSW Compressed Square Wave** — Simon Owen's 2001 pulse-level preservation format, RLE compression, for analog protections |
 | [pzx_format.md](03_io/storage/pzx_format.md) | **.PZX format** — Fredrik Öhrström's 2010 chunk-based pulse format, T-state pulse widths, cycle-exact by design |
+
+**Floppy Disk** — physical layer, hardware interfaces, 4 logical formats, 8 image formats ([sub-section README](03_io/storage/README.md))
+
+| Article | Description |
+|---------|-------------|
+| [mfm_encoding.md](03_io/storage/mfm_encoding.md) | **MFM signal layer** — IBM 3740 sector format, MFM bit encoding, address/data marks, CRC16, gap structure, 250 kbit/s data rate |
+| [fdc_vg93.md](03_io/storage/fdc_vg93.md) | **WD1793 / KR1818VG93 FDC chip** — 4-register file, Type I/II/III/IV commands, status bits, Soviet clone, turbo mods |
+| [beta_disk_interface.md](03_io/storage/beta_disk_interface.md) | **Beta Disk Interface** (Soviet standard) — WD1793, port map, TR-DOS ROM bank switching, cable, variants |
+| [plus3_floppy.md](03_io/storage/plus3_floppy.md) | **+3 floppy hardware** — WD1772-PH, port map, 720 KB geometry, cable pinout, modern replacements |
+| [trd_disk_format.md](03_io/storage/trd_disk_format.md) | **TR-DOS logical format** (Soviet, 800 KB DSDD-10) — 128 entries × 16 bytes, sector allocation, file types |
+| [plus3_dos_format.md](03_io/storage/plus3_dos_format.md) | **+3DOS logical format** (CP/M derivative, 720 KB DSDD-9) — 32-byte entries, 1 KB blocks, extents, DPB |
+| [cpm_disk_format.md](03_io/storage/cpm_disk_format.md) | **CP/M 2.2 disk format** — BIOS/BDOS/CCP/TPA, FCB, DPB, +3/ATM Turbo/Sprinter variants |
+| [opus_discovery_format.md](03_io/storage/opus_discovery_format.md) | **Opus Discovery / MGT format** (UK, 800 KB DSDD-10) — WD1770, 256-byte entries, sector bitmap, linked-list chaining |
+| [trd_scl_formats.md](03_io/storage/trd_scl_formats.md) | **.TRD / .SCL image formats** — TR-DOS containers (raw sector dump vs file-level backup) |
+| [dsk_fdi_formats.md](03_io/storage/dsk_fdi_formats.md) | **.DSK / .EDSK / .FDI image formats** — CP/M / +3DOS / Opus containers |
+| [udi_format.md](03_io/storage/udi_format.md) | **.UDI universal flux-level image** — preserves every magnetic transition |
+| [scp_format.md](03_io/storage/scp_format.md) | **.SCP SuperCard Pro flux-level image** — gold-standard preservation format |
+| [disk_format_overview.md](03_io/storage/disk_format_overview.md) | **Top-level comparison** — IBM 3740 physical layer, 4 logical formats, 8 image formats, decision tree |
 | [joystick.md](03_io/peripherals/joystick.md) | Joystick interfaces: Kempston #1F, Sinclair/Interface 2, Cursor/Protek/AGF, Fuller, Timex, clone built-ins, unified multi-standard reader |
 
 **Other sections**
