@@ -1,8 +1,6 @@
 # SD Card Interfaces on the ZX Spectrum
 
-**Scope:** A hardware-level comparison of every significant **SD card** interface that brought Secure Digital storage to the ZX Spectrum family and its clones — the **DivMMC**, **ZXMMC**, the **ZX Spectrum Next** internal slots, and the **Z-Controller**.
-
-This article is the **SD counterpart** to [ide_interface.md](ide_interface.md): where that article covers the IDE/ATA parallel protocol and its host adapters, this one covers the **SPI-mode SD protocol** and its host adapters. The two share a destination — a FAT volume full of Spectrum software — but speak entirely different device protocols to reach it.
+**Scope:** A hardware-level comparison of every significant **SD card** interface that brought Secure Digital storage to the ZX Spectrum family and its clones — the **DivMMC**, **ZXMMC**, the **ZX Spectrum Next** internal slots, and the **Z-Controller** — together with the **SPI-mode SD protocol** that all of them must implement. The IDE/ATA parallel protocol and its host adapters are covered in the sibling article [ide_interface.md](ide_interface.md); both families share the same destination (a FAT volume of Spectrum software) but speak entirely different device protocols.
 
 **Audience:** Hardware-level emulator authors modelling the DivMMC's SPI engine, demoscene coders writing direct-to-card loaders, retro-hardware builders choosing between a DivMMC and a bare ZXMMC kit, and anyone curious how a 1982 computer reads a 32 GB MicroSD card in 2024.
 
@@ -91,8 +89,6 @@ The **SPI bridge** is the SD-specific component. It exposes a small register fil
 The **connector** is a 9-pin SD socket (full-size SD) or an 8-pin MicroSD socket, carrying the four SPI signals plus 3.3V power and ground.
 
 ## §3. The SD-SPI Protocol
-
-This section covers the protocol that every Spectrum SD interface must implement. It is the SD equivalent of [ide_interface.md §6](ide_interface.md). The port-map differences in §4 are only variations on how the Z80 reaches the four SPI lines.
 
 ### 3.1 The four wires
 

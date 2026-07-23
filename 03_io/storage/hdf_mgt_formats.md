@@ -138,7 +138,7 @@ For mass-storage purposes, `.MGT` is included here only to distinguish it from t
 - A `.MGT` is geometry-fixed (80 cylinders × 2 heads × 10 sectors × 512 bytes = 819,200 bytes). The reader assumes this geometry; there is no header.
 - A `.MGT` is **not** interchangeable with a `.IMG` or `.HDF`, because the latter start with an MBR and the former do not.
 
-The `.MGT` is the floppy counterpart of `.TRD` (TR-DOS) and `.DSK` (+3DOS/CP/M). It is covered in this article only because the PLAN groups it with the hard-disk formats; for the byte-level details, follow the cross-reference to the Opus article.
+The `.MGT` is the floppy counterpart of `.TRD` (TR-DOS) and `.DSK` (+3DOS/CP/M). For the byte-level MGT layout, see [opus_discovery_format.md §5](opus_discovery_format.md).
 
 ## §6. Other Variants
 
@@ -153,17 +153,13 @@ For Spectrum use, a `.VHD` is usually a **fixed-size** disk — a raw image with
 These are floppy-disk image extensions, not hard-disk formats:
 
 - **`.VFD`** (Virtual Floppy Disk) — a generic floppy image format used by some emulators; usually a raw 720 KB or 800 KB dump.
-- **`.DCK`** and **`.DSQ`** — Disciple and +D-specific floppy image variants, related to `.MGT` but with interface-specific extensions. Covered in [opus_discovery_format.md §5.4](opus_discovery_format.md).
-
-They appear in this article for completeness but are not used for mass-storage emulation.
+- **`.DCK`** and **`.DSQ`** — Disciple and +D-specific floppy image variants, related to `.MGT` but with interface-specific extensions. See [opus_discovery_format.md §5.4](opus_discovery_format.md). These are floppy-only formats, not used for mass-storage emulation.
 
 ### 6.3 Compressed variants: `.HZF`, `.gz`, `.zip`
 
 Some emulators accept **compressed** images: a raw `.IMG` or `.HDF` compressed with gzip (`.img.gz`) or stored inside a `.zip`. The emulator decompresses on the fly. The `.HZF` extension (used by HZX Spectrum emulator) is a gzipped raw image with a magic header. These are conveniences, not distinct formats — the uncompressed content is a standard raw image.
 
 ## §7. Creating and Mounting Images
-
-This section is the practical workflow guide: how to build a mass-storage image on a modern PC, populate it with Spectrum software, and use it in an emulator or write it to a real card.
 
 ### 7.1 Creating a blank `.IMG` on each OS
 

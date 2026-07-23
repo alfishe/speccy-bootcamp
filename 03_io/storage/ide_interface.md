@@ -167,8 +167,6 @@ A Spectrum builder almost always ends up with a CF socket rather than a true har
 
 ## §5. Interface-by-Interface
 
-This section is the per-interface reference. Each subsection covers the hardware, its port map, its banking scheme, and its quirks.
-
 ### 5.1 The DivIDE
 
 The **DivIDE** (Zeax, 2007) is the most widely used IDE interface on the Spectrum. It is a rear-edge expansion card containing:
@@ -253,8 +251,6 @@ The SMUC's significance is that it brought **PC peripherals** to the Spectrum wo
 The ZX Evolution (2010) includes a SMUC-compatible ISA bridge as part of its standard I/O, so ZX Evolution owners have SMUC IDE available without a separate expansion.
 
 ## §6. The IDE Programming Model
-
-This section covers the protocol that lies behind every interface: the **IDE register file** and the **PIO read/write sequence**. The host adapter differences in §5 are only address-decoding variations on this single underlying protocol.
 
 ### 6.1 The Command Block register file
 

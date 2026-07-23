@@ -108,8 +108,6 @@ The 1 MB offset (LBA 2048) is a modern convention for **4 KB alignment**: flash 
 
 ## §3. FAT: The Common Filesystem
 
-This section covers the on-disk structure of a FAT volume — the structure ESXDOS, NextZXOS, and every PC reads. The full FAT specification runs to hundreds of pages; this article covers only what a Spectrum programmer or emulator author needs.
-
 ### 3.1 The volume layout
 
 A FAT volume (the region inside one partition) is laid out as four contiguous regions:

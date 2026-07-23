@@ -14,7 +14,7 @@
 
 | Section | Topic | Length |
 |---|---|---|
-| §1 | What the Beta Disk Interface Is — history, hardware, significance | short |
+| §1 | What the Beta Disk Interface Is — history, UK pricing, ex-USSR replication | long |
 | §2 | Hardware Block Diagram — the chips and their connections | medium |
 | §3 | Port Map — the 4 I/O ports and how they are decoded | medium |
 | §4 | TR-DOS ROM Bank Switching — how the disk ROM takes over the Z80 | medium |
@@ -29,34 +29,77 @@ Reading order: §1 → §2 → §3 (the core) → §4 → §5 → §6, with §7�
 
 ---
 
-## §1. What the Beta Disk Interface Is
+## §1. What the Beta Disk Interface Is — History, Pricing, and the ex-USSR Replication
 
 ### 1.1 A short history
 
-The Beta Disk Interface was released in 1985 by **Technology Research Ltd (Technology Research UK / TR Ltd.)**, a small British company founded by Andrew Owen. It was the first affordable floppy-disk storage system for the ZX Spectrum, predating Sinclair's own ZX Interface 1 + Microdrive by a year and Sinclair's +3 internal drive by two years.
+The Beta Disk Interface was released in 1985 by **Technology Research Ltd (Technology Research UK / TR Ltd.)**, a small British company founded by Andrew Owen. It was the first affordable **true floppy-disk** storage system for the ZX Spectrum — a distinction it holds over Sinclair's earlier **ZX Interface 1 + Microdrive** (1983), which was a tape-loop stringy-floppy rather than a real disk. The Beta Disk Interface predated Sinclair's first true floppy machine, the +3 with its internal 3" drive, by two years.
 
 The interface shipped with two products:
 
 - **The hardware**: a black plastic cartridge-style module that plugs onto the rear edge connector of the Spectrum (16/48 / 48+ / 128 / +2 / +3 — mechanically compatible with all Toastrack/Amstrad-era machines through adapter cables). It exposes a single **Shugart 34-pin** floppy connector and supports up to four drives (A, B, C, D).
 - **The software**: a 16 KB **TR-DOS ROM** (versions 5.0, 5.1, 5.2, 5.3, 5.4 — the canonical version is 5.03 / 5.04) that occupies memory at `#3D00–#3FFF` (when paged in) and adds BASIC keywords (`CAT`, `LOAD`, `SAVE`, `MERGE`, `ERASE`, `FORMAT`, `COPY`, `MOVE`) plus a `*` command-line interface for disk operations.
 
-The original hardware used a Western Digital **WD1793** floppy controller (single-sided, single-density). Later variants used double-density-capable WD2793 or the Soviet KR1818VG93 clone; the host interface is identical in all cases.
+The original 1985 hardware used a Western Digital **WD1793** floppy controller (single-sided, single-density). The revised **Beta 128** model (1986) used double-density-capable WD2793 or the Soviet KR1818VG93 clone; the host interface is identical in all cases. The Beta 128 is the canonical model that dominated ex-USSR computing.
 
-### 1.2 Why it mattered
+### 1.2 UK launch pricing and competitive landscape
 
-In 1985, the Spectrum's only storage was cassette tape. Loading a 48 KB program from tape took 3–5 minutes (more for protected loaders); loading the same program from a TR-DOS floppy took 1–3 seconds. The Beta Disk Interface transformed the Spectrum from a toy computer into a usable productivity machine and catalysed a Soviet-bloc disk software market that lasted until the early 2000s.
+Contemporary UK retail prices for the Beta Disk Interface and its direct competitors:
 
-In the West, the Beta Disk Interface lost market share rapidly after 1987 to the +3 (with its integrated drive and +3 DOS) and to cheaper tape-based loading systems. In the USSR and Eastern Bloc, however, the Beta Disk Interface (and its many locally-made clones) became the **de facto** disk standard, and TR-DOS remained the dominant disk operating system for the Spectrum until the platform's commercial death.
+| Product | Year | Price | Storage type |
+|---|---|---|---|
+| ZX Interface 1 + Microdrive + 4 carts (bundle) | 1983 | £99.95 | Tape-loop ("stringy floppy") |
+| Opus Discovery, single 3" drive | 1984 | £199.95 | True floppy, 178 KB/disk |
+| Opus Discovery, dual drive | 1984 | £329.95 | True floppy |
+| **Beta Disk Interface** (interface only) | 1985 | **£109.25** | True floppy |
+| **Beta Disk Interface + one drive** | 1985 | **£249.75** | True floppy |
+| **Beta 128** (revised interface) | 1986 | comparable | True floppy |
+| Sinclair +3 (whole computer, drive included) | 1987 | £199.99 | True floppy, 178 KB/disk |
 
-The Soviet **Pentagon** and **Scorpion** home-brew computers (1989–1991 onward) cloned the Beta Disk Interface's port map verbatim, ensuring binary compatibility with TR-DOS software. Modern hardware (ZX Evolution, ZX Spectrum Next, Karabas, DivMMC-environment boot from SD) still implements the Beta Disk port map for backward compatibility.
+The Beta Disk Interface sat between the cheap-but-limited Microdrive bundle and the more expensive Opus Discovery. Its UK market position was ultimately eroded by the +3 (1987), which included a drive in the base machine for less than the cost of a Beta Disk + standalone drive. In the West, the Beta Disk Interface was a niche product by 1988.
 
-### 1.3 What it is, in one paragraph
+### 1.3 Why it mattered: the ex-USSR replication
 
-The Beta Disk Interface is a small piece of glue logic between the Z80 CPU and a single WD1793 floppy controller chip. The glue does four things: (1) it decodes a 4-byte window of the Z80's I/O address space (ports `#1F`, `#3F`, `#5F`, `#7F`) into the WD1793's register-select and chip-select lines; (2) it latches the floppy-drive select, motor-on, and side-select signals into a small external register on port `#FF`; (3) it generates a WAIT state on every I/O cycle so the slow WD1793 can keep up with the Z80; and (4) it pages a 16 KB TR-DOS ROM into the Spectrum's memory map when the Z80 writes to a "magic" address. Everything else — command sequences, status polling, data transfer — is done by the TR-DOS ROM software via the WD1793's registers.
+In 1985, the Spectrum's only storage was cassette tape. Loading a 48 KB program from tape took 3–5 minutes (more for protected loaders); loading the same program from a TR-DOS floppy took 1–3 seconds. In the West, that speed-up was a convenience; in the Soviet bloc, it became the foundation of an entire software market that lasted until the early 2000s.
 
-### 1.4 Scope of this article vs. the FDC article
+The Beta Disk Interface's UK commercial life was short. After 1987, the +3 (with its integrated drive and +3DOS) and cheaper tape-based loaders eroded its Western market share. The opposite happened in the USSR and Eastern Bloc: the Beta Disk Interface (and its locally-made clones) became the **de facto** disk standard, and TR-DOS remained the dominant disk operating system for the Spectrum until the platform's commercial death.
 
-This article is about the **host interface**: what the Z80 sees when it does `IN` / `OUT` to ports `#1F`–`#7F`, what the address decoder does, and how the ROM is banked. The internal behaviour of the WD1793 chip — its command set, status register, timing, undocumented quirks, and Soviet-clone differences — is covered in [fdc_vg93.md](fdc_vg93.md). Read that article for the "what the FDC does" half of the story; read this article for the "what the Z80 has to do to drive the FDC" half.
+#### 1.3.1 The replication timeline
+
+The Beta 128's migration into Soviet computing followed a four-year chain of reverse-engineering and cloning:
+
+| Year | Event |
+|---|---|
+| **1986** | Beta 128 released in UK by Technology Research Ltd. |
+| **1987** | Beta 128 imported to USSR at approximately £70 per unit — cheap enough to enter the country in quantity. The 128K Spectrum's ULA is "completely cracked" the same year, enabling local 128K clones. |
+| **mid-1988** | Circuit diagram of the Beta 128 is reverse-engineered, adapted to Soviet-made logic ICs, and **published**. The **KR1818VG93** (Soviet clone of WD1793) becomes the standard FDC chip. The design is now free to copy. |
+| **1989** | **Pentagon 48K** released in Moscow — the first Soviet clone with a Beta 128 controller **built into the motherboard** rather than as a separate cartridge. Named "Pentagon" after the pentagonal ground-plane layout of its PCB. |
+| **1990** | **Pentagon 128K** (with AY sound and ZX-Lprint printer interface added). |
+| **1991–1996** | Pentagon PCB is "copied all over the ex-USSR". Mass production runs through state electronics plants, frequently assembled after-hours on programmable soldering stations. |
+| **1992** | Approximately 3 million Spectrum users in the ex-USSR (per Pentagon FAQ). **Scorpion ZS-256** (Sergey Zonov, St. Petersburg) launches as a high-end, also Beta-compatible, alternative. |
+
+#### 1.3.2 Why Beta Disk locked in (three reinforcing reasons)
+
+Three factors compounded to make Beta 128 effectively unchallengeable in the ex-USSR market:
+
+1. **It was cracked first.** The Beta 128 circuit was reverse-engineered and publicized in mid-1988, before any competing Western disk interface reached the Soviet Union. Once the schematic and the KR1818VG93 chip were in the wild, copying was free — state fabs stamped the FDC by the thousand, and any competing interface would have had to overcome Beta 128's head start.
+
+2. **TR-DOS lived in EPROM.** Because the OS was burned into a 16 KB ROM, not loaded from disk, every clone "just worked" with the same DOS — no driver fragmentation, no chicken-and-egg boot problem, no version skew. A user could swap disks between a Pentagon, a Scorpion, and a Profi without thinking about it.
+
+3. **Pentagon integrated it onboard.** By soldering the Beta 128 controller directly onto the motherboard (rather than as a separate cartridge), the Pentagon made every Pentagon machine a Beta Disk machine by default. The Pentagon was the cheapest and most-copied Soviet clone, so its design choice became the de facto standard. Buyers did not choose Beta Disk; they got it whether they wanted it or not.
+
+The lock-in was total. An often-quoted observation from the era: by 1992, "every new program (game or system one) released in ExUSSR will be Beta 128 only." Tape effectively vanished from the Soviet scene years before it did from the Western one — the inverse of the conventional history, where the West kept tape dominant for games until the late 1980s.
+
+#### 1.3.3 Modern hardware inheritance
+
+Modern Spectrum-clone and FPGA hardware still implements the Beta Disk port map for backward compatibility with the TR-DOS software catalogue:
+
+- **ZX Evolution** (Pentagon-based FPGA redesign) — full Beta 128 compatibility.
+- **ZX Spectrum Next** — Beta 128 port map implemented in the FPGA, in addition to the newer DivMMC/SD storage.
+- **Karabas** (open-hardware Pentagon successor) — same.
+- **DivMMC/DivIDE boot path** — emulates a Beta 128 floppy during the ESXDOS boot sequence, so TR-DOS software can launch from SD card.
+
+The Beta Disk Interface is, as a result, the longest-lived storage interface in the Spectrum ecosystem: designed in 1985, locked in by 1990, and still emulated in 2024 — a forty-year run driven almost entirely by its ex-USSR adoption.
 
 ---
 

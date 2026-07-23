@@ -16,7 +16,7 @@ It is the **hardware companion** to [esxdos.md](../04_operating_systems/esxdos.m
 
 | Section | Topic | Length |
 |---|---|---|
-| §1 | What This Article Covers — the relationship to the OS article | short |
+| §1 | The DivIDE and DivMMC — introduction and shared identity | short |
 | §2 | The DivIDE Hardware — board anatomy, components, revisions | medium |
 | §3 | The DivMMC Hardware — the SD redesign and why it won | medium |
 | §4 | The Firmware Boot Sequence — power-on, NMI, ESXDOS paging in | medium |
@@ -29,30 +29,17 @@ Reading order: §1 → §2 → §3 → §4, then §5 for the TR-DOS bridge, §6 
 
 ---
 
-## §1. What This Article Covers
+## §1. The DivIDE and DivMMC
 
-### 1.1 Two articles, one system
+### 1.1 Two cards, one identity
 
-The DivIDE and DivMMC are **hardware**; ESXDOS is the **software** that runs on them. The split between this article and [esxdos.md](../04_operating_systems/esxdos.md) follows that line:
-
-| Topic | Covered in |
-|---|---|
-| Board components, port map, cable | This article (and [ide_interface.md](ide_interface.md)) |
-| The boot sequence, NMI hook, ROM paging | This article (§4) |
-| The TR-DOS virtual-floppy layer | This article (§5) |
-| How to format and populate the storage card | This article (§6) |
-| The ESXDOS dot-command syntax and catalogue | [esxdos.md](../04_operating_systems/esxdos.md) §4 |
-| The ESXDOS assembly API (`M_GETSETDRV`, `F_OPEN`, ...) | [esxdos.md](../04_operating_systems/esxdos.md) §6 |
-| The FAT16/FAT32 filesystem internals | [esxdos.md](../04_operating_systems/esxdos.md) §5 and [hdd_partitioning.md](hdd_partitioning.md) |
-| The programming model (how to call ESXDOS from Z80) | [esxdos.md](../04_operating_systems/esxdos.md) §7 |
-
-If you are holding a physical card and asking "what do I plug into it and what files go where?", you are in the right article. If you are writing Z80 code that opens a file, switch to the ESXDOS article.
-
-### 1.2 The shared identity
-
-The crucial fact about the DivIDE and DivMMC is that **they present the same interface to software**. Both decode the same I/O ports (`#E3`–`#E7`), both page their firmware ROM into the same address window, both hook the same NMI vector, and both run the same ESXDOS firmware. Software written for a DivIDE runs unchanged on a DivMMC, and vice versa.
+The **DivIDE** (Dylan N. Smith, "Zeax", 2007) and the **DivMMC** (Zoxon, 2013) are the two expansion cards that together define modern real-hardware Spectrum mass storage. Both decode the same I/O ports (`#E3`–`#E7`), both page their firmware ROM into the same address window, both hook the same NMI vector, and both run the same **ESXDOS** firmware. Software written for a DivIDE runs unchanged on a DivMMC, and vice versa.
 
 The difference is purely at the storage-medium layer: the DivIDE speaks IDE/ATA to a CompactFlash card or hard disk, while the DivMMC speaks SPI to an SD card. The ESXDOS firmware contains both drivers and auto-detects which hardware it is running on. From the user's and the programmer's perspective, the two cards are interchangeable — which is why the SD-based DivMMC has so thoroughly displaced the IDE-based DivIDE since 2013.
+
+### 1.2 Hardware here, software elsewhere
+
+The DivIDE and DivMMC are **hardware**; ESXDOS is the **software** that runs on them. This article covers the boards themselves, the boot sequence, the TR-DOS virtual-floppy emulation layer, and how to prepare the storage card. The ESXDOS dot-command syntax, the assembly API (`M_GETSETDRV`, `F_OPEN`, …), and the FAT internals are covered in the companion article [esxdos.md](../04_operating_systems/esxdos.md). In short: if you are holding a physical card and asking what to plug in and where files go, read on; if you are writing Z80 code that opens a file, switch to [esxdos.md](../04_operating_systems/esxdos.md).
 
 ## §2. The DivIDE Hardware
 
@@ -177,8 +164,6 @@ For the vast majority of the TR-DOS library — games that load and run, demos t
 An analogous mechanism emulates the **tape interface**. A `.TAP` or `.TZX` file on the storage volume can be "inserted" as if it were a tape; the DivIDE firmware intercepts the ROM's `LD-BYTES` routine (or feeds pulses to port `#FE`) and streams the file's data into the loading routine. This lets tape-era software run from the storage card with no conversion. See [tap_format.md](tap_format.md) and [tzx_format.md](tzx_format.md) for the image formats.
 
 ## §6. Preparing the Storage Card
-
-This section is the practical setup guide: how to format the CompactFlash or SD card on a modern PC and where to put files so that the DivIDE/DivMMC finds them. The full filesystem internals are in [esxdos.md §5](../04_operating_systems/esxdos.md) and [hdd_partitioning.md](hdd_partitioning.md); this is the quick-start version.
 
 ### 6.1 Format: FAT16 or FAT32
 
