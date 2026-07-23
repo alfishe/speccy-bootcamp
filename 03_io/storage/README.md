@@ -27,8 +27,12 @@ The tape subsystem — hardware interface, logical data format, and the five maj
 |------|-------|
 | `beta_disk_interface.md` | Beta Disk Interface: WD1793 / KR1818VG93 FDC, TR-DOS integration, disk format |
 | `fdc_vg93.md` | KR1818VG93 / WD1793 FDC deep dive: registers, commands, timing, undocumented features, turbo mods |
-| `plus3_floppy.md` | +3 internal floppy: WD1772-based, +3 DOS format, drive geometry |
+| `plus3_floppy.md` | +3 internal floppy HARDWARE ONLY: WD1772-PH, port map, drive geometry (+3 DOS format moves to plus3_dos_format.md) |
+| `disk_format_overview.md` | General floppy format overview: IBM 3740 physical sector layout shared by all Spectrum formats, comparison matrix across TR-DOS/+3/CP/M/Opus |
 | `trd_disk_format.md` | TR-DOS disk format: directory structure, file types (B, C, D, M, #), disk parameters (80 tracks × 10 sectors) |
+| `plus3_dos_format.md` | +3 DOS logical disk format: directory, extents, attribute bytes, +3DOS vs CP/M differences |
+| `cpm_disk_format.md` | CP/M 2.2 disk format on Spectrum: FCB-based layout, +3 CP/M, ATM Turbo, Sprinter, disk parameter block |
+| `opus_discovery_format.md` | Opus Discovery disk format: MFM/sector layout, MGT-style extension, Western alternative to TR-DOS/+3 |
 | `trd_scl_formats.md` | .TRD / .SCL disk image formats |
 | `dsk_fdi_formats.md` | .DSK / .EDSK / .FDI disk image formats (preservation-level) |
 | `udi_format.md` | .UDI universal disk image format |
