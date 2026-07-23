@@ -10,9 +10,9 @@
 
 ---
 
-## §1. Beta Disk Interface — Historical perspective
+## §1. The Beta Disk Interface
 
-### 1.1 A short history
+### 1.1 Origins and product positioning
 
 The Beta Disk Interface was released in 1985 by **Technology Research Ltd (Technology Research UK / TR Ltd.)**, a small British company founded by Andrew Owen. It was the first affordable **true floppy-disk** storage system for the ZX Spectrum — a distinction it holds over Sinclair's earlier **ZX Interface 1 + Microdrive** (1983), which was a tape-loop stringy-floppy rather than a real disk. The Beta Disk Interface predated Sinclair's first true floppy machine, the +3 with its internal 3" drive, by two years.
 
@@ -39,13 +39,13 @@ Contemporary UK retail prices for the Beta Disk Interface and its direct competi
 
 The Beta Disk Interface sat between the cheap-but-limited Microdrive bundle and the more expensive Opus Discovery. Its UK market position was ultimately eroded by the +3 (1987), which included a drive in the base machine for less than the cost of a Beta Disk + standalone drive. In the West, the Beta Disk Interface was a niche product by 1988.
 
-### 1.3 Why it mattered: the ex-USSR replication
+### 1.3 The ex-USSR replication
 
 In 1985, the Spectrum's only storage was cassette tape. Loading a 48 KB program from tape took 3–5 minutes (more for protected loaders); loading the same program from a TR-DOS floppy took 1–3 seconds. In the West, that speed-up was a convenience; in the Soviet bloc, it became the foundation of an entire software market that lasted until the early 2000s.
 
 The Beta Disk Interface's UK commercial life was short. After 1987, the +3 (with its integrated drive and +3DOS) and cheaper tape-based loaders eroded its Western market share. The opposite happened in the USSR and Eastern Bloc: the Beta Disk Interface (and its locally-made clones) became the **de facto** disk standard, and TR-DOS remained the dominant disk operating system for the Spectrum until the platform's commercial death.
 
-#### 1.3.1 The replication timeline
+### 1.4 The replication timeline
 
 The Beta 128's migration into Soviet computing followed a four-year chain of reverse-engineering and cloning:
 
@@ -59,7 +59,7 @@ The Beta 128's migration into Soviet computing followed a four-year chain of rev
 | **1991–1996** | Pentagon PCB is "copied all over the ex-USSR". Mass production runs through state electronics plants, frequently assembled after-hours on programmable soldering stations. |
 | **1992** | Approximately 3 million Spectrum users in the ex-USSR (per Pentagon FAQ). **Scorpion ZS-256** (Sergey Zonov, St. Petersburg) launches as a high-end, also Beta-compatible, alternative. |
 
-#### 1.3.2 Why Beta Disk locked in (three reinforcing reasons)
+### 1.5 Why Beta Disk locked in
 
 Three factors compounded to make Beta 128 effectively unchallengeable in the ex-USSR market:
 
@@ -71,7 +71,7 @@ Three factors compounded to make Beta 128 effectively unchallengeable in the ex-
 
 The lock-in was total. An often-quoted observation from the era: by 1992, "every new program (game or system one) released in ExUSSR will be Beta 128 only." Tape effectively vanished from the Soviet scene years before it did from the Western one — the inverse of the conventional history, where the West kept tape dominant for games until the late 1980s.
 
-#### 1.3.3 Modern hardware inheritance
+### 1.6 Modern hardware inheritance
 
 Modern Spectrum-clone and FPGA hardware still implements the Beta Disk port map for backward compatibility with the TR-DOS software catalogue:
 
