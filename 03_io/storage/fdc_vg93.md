@@ -21,14 +21,17 @@ The WD179x series was introduced by **Western Digital Corporation** in 1977 as t
 - **Simplified host interface** with a smaller register file.
 - **Built-in write precompensation** and PLL data separator (the FD1771 required external circuitry).
 
-The WD179x series consists of four variants, differing in the data separator implementation:
+The WD179x series consists of several variants. The key differences are in **data-bus polarity** (true vs inverted) and **density support** (FM+MFM vs FM-only). All members with the same density support share the same data separator (internal monolithic PLL on the -3/-4/-5/-7, identical to the -1/-2 except for the bus polarity):
 
-| Part | Data separator | Used in |
-|------|----------------|--------|
-| **WD1791** | External (requires a separate PLL chip) | Rare; mostly prototype systems |
-| **WD1792** | External (FM only — for compatibility with FD1771 software) | Rare |
-| **WD1793** | **Internal (monolithic PLL)** | **The standard for Spectrum floppy systems** |
-| **WD1794/1795/1797** | Variants for single-density-only or different drive configurations | Not used on Spectrum |
+| Part | Data bus | Density | Used in |
+|------|----------|---------|---------|
+| **WD1791** | Inverted (`/DAL`) | FM + MFM | Rare; requires external data separator on some boards. |
+| **WD1792** | Inverted (`/DAL`) | FM only (single density) | Rare; FD1771-compatible. |
+| **WD1793** | **True (non-inverted DAL)** | FM + MFM | **The standard for Spectrum floppy systems.** |
+| **WD1794** | True | FM only (single density) | Not used on Spectrum. |
+| **WD1795 / WD1797** | True | FM + MFM, with side-select output | Not used on Spectrum; differs in pinout to expose SSO. |
+
+Per the WD1793 datasheet (reproduced on MSX Info Pages): "The 1793 is identical to the 1791 except the Data Access Lines are TRUE (for systems that utilize true data buses). The 1792 and 1794 are 'single density only' versions of the 1791 and 1793 respectively. The 1795/7 has a side select output for controlling double sided drives."
 
 The WD1793 is the variant used in the Spectrum ecosystem because it has an internal PLL (no external data separator required) and supports both FM and MFM. The Beta Disk Interface, the original TR-DOS cartridge, the Kay interface, the Scorpion interface, the Pentagon's onboard FDC, and many Soviet clones all use the WD1793 (or its KR1818VG93 clone).
 
@@ -93,27 +96,27 @@ The WD1793 is a 40-pin DIP (Dual Inline Package) chip. This section covers its p
 
 ```
                   +-----+--+-----+
-        RESET --->|1  +-+--+  40|<--- VCC (+5V)
-          RTN --->|2         39|<--- /WE
-          /MR --->|3         38|<--- /RE
+        RESET --->|1  +-+--+   40|<--- VCC (+5V)
+          RTN --->|2           39|<--- /WE
+          /MR --->|3           38|<--- /RE
          /ENP --->|4   WD1793  37|<--- A0
-         /IW --->|5         36|<--- A1
-          /CS --->|6         35|<--- /DAL7
-          INTRQ ->|7         34|<-> DAL6
-       /CLK488 -->|8         33|<-> DAL5
-          DIR --->|9         32|<-> DAL4
-          STEP -->|10        31|<-> DAL3
-        /WDATA -->|11        30|<-> DAL2
-         /WGATE -->|12        29|<-> DAL1
-       /TRK00 <---|13        28|<-> DAL0
-         /IP <----|14        27|---> /MR
-         WPRT <---|15        26|---> /ENP
-         /DD <----|16        25|---> RCLK
-         /DS0 --->|17        24|---> VFOC
-         /DS1 --->|18        23|---> TG43
-         HLD --->|19        22|---> READY
-         HLT <---|20        21|---> GND
-                  +-----------+
+         /IW --->|5            36|<--- A1
+          /CS --->|6           35|<--- /DAL7
+          INTRQ ->|7           34|<-> DAL6
+       /CLK488 -->|8           33|<-> DAL5
+          DIR --->|9           32|<-> DAL4
+          STEP -->|10          31|<-> DAL3
+        /WDATA -->|11          30|<-> DAL2
+         /WGATE -->|12         29|<-> DAL1
+       /TRK00 <---|13          28|<-> DAL0
+         /IP <----|14          27|---> /MR
+         WPRT <---|15          26|---> /ENP
+         /DD <----|16          25|---> RCLK
+         /DS0 --->|17          24|---> VFOC
+         /DS1 --->|18          23|---> TG43
+         HLD --->|19           22|---> READY
+         HLT <---|20           21|---> GND
+                 +---------------+
 ```
 
 (Schematic representation. Pin assignments may vary slightly between manufacturers; the above is the canonical WD1793 layout.)
@@ -209,18 +212,18 @@ These are standard Z80 I/O cycles. From the Z80's perspective, accessing the FDC
 
 ### 3.4 The Status register (overview)
 
-The Status register is the primary way the host monitors the FDC. Its 7 bits (bit 7 is reserved/unused) report the current state of the chip:
+The Status register is the primary way the host monitors the FDC. The meaning of each bit is **context-dependent** — it depends on which command type (I, II, III, or idle) is currently executing. The overview below uses the Type I assignment; the full per-type table is in §6.
 
-| Bit | Name | Meaning (varies by command type — see §6 for full table) |
-|-----|------|-----------------------------------------------------------|
-| 7 | MOTOR ON | 1 = motor has been started (always reads 1 on most WD1793) |
-| 6 | WRITE PROTECT | 1 = disk is write-protected (Type I) |
-| 5 | SPIN UP | 1 = motor spin-up complete (Type I, after 6 revolutions) |
-| 4 | RECORD NOT FOUND | 1 = sector ID not found or CRC error (Type II/III) |
-| 3 | CRC ERROR | 1 = CRC mismatch in ID or data field |
-| 2 | TRACK 00 | 1 = head is at track 0 (Type I) |
-| 1 | INDEX | 1 = index pulse present (Type I) — pulses once per revolution |
-| 0 | BUSY | 1 = command in progress; 0 = command complete |
+| Bit | Type I name | Type II/III name | Source (hardware signal) |
+|-----|-------------|------------------|--------------------------|
+| 7 | NOT READY | NOT READY | Inverted `/READY` input, ORed with `/MR` (reset state) |
+| 6 | WRITE PROTECT | WRITE PROTECT (writes only) | Inverted `/WPRT` input |
+| 5 | HEAD LOADED | RECORD TYPE (read) / WRITE FAULT (write) | Type I: AND of HLD and HLT. Type II read: data address mark (`#FB`=0, `#F8`=1). Type II/III write: write-fault input. |
+| 4 | SEEK ERROR | RECORD NOT FOUND (RNF) | Type I: target track not verified. Type II/III: target sector ID not found. |
+| 3 | CRC ERROR | CRC ERROR | CRC mismatch in ID field (Type I verify, READ ADDRESS) or data field (READ SECTOR) |
+| 2 | TRACK 00 | LOST DATA | Type I: inverted `/TRK00` input. Type II/III: host failed to service DRQ within one byte window. |
+| 1 | INDEX | DRQ | Type I: inverted `/IP` input (pulses once per revolution). Type II/III: copy of internal DRQ signal. |
+| 0 | BUSY | BUSY | Command in progress (1) or complete (0) |
 
 Bit 0 (**BUSY**) is the most important: the host polls this bit to know when a command has finished. Most programming patterns look like:
 
@@ -287,15 +290,24 @@ All Type I commands share this byte layout:
 
 ```
 Bit:    7  6  5  4  3  2  1  0
-        ---type---  u  h  v  e  r  r
-        =000       |  |  |  |  |-- step rate (see below)
-                    |  |  |  |-- verify (1 = verify track 0 / target)
-                    |  |  |-- head load (1 = load head after seek)
-                    |  |-- update Track register (STEP/STEP-IN/STEP-OUT only)
-                    |-- unused in RESTORE/SEEK
+        ---type---  T  h  V  r1 r0
+        =000       |  |  |  |-- step rate (see table below)
+                    |  |  |-- V: verify (1 = read first ID field and check track number against Track register)
+                    |  |-- h: head load (1 = assert HLD after stepping)
+                    |-- T: update Track register (STEP / STEP-IN / STEP-OUT only; ignored on RESTORE/SEEK)
 ```
 
-The **step rate** field (bits 1–0) selects how fast the stepper motor pulses are issued:
+The five Type I commands are distinguished by bits 7–4 (with bit 4 being the update flag for the three STEP variants):
+
+| Command   | Bit pattern `7 6 5 4` |
+|-----------|------------------------|
+| RESTORE   | `0 0 0 0` |
+| SEEK      | `0 0 0 1` |
+| STEP      | `0 0 1 T` (T = update Track register) |
+| STEP-IN   | `0 1 0 T` |
+| STEP-OUT  | `0 1 1 T` |
+
+The **step rate** field (bits 1–0) selects how fast the stepper motor pulses are issued. The rates below are for the standard 8 MHz / 2 MHz WD1793 clock; see §8.4 for how they scale with non-standard clocks:
 
 | Bits 1–0 | Step rate | Typical use |
 |----------|-----------|-------------|
@@ -343,11 +355,11 @@ These three commands step the head **one track** in a specific direction:
 
 | Command | Byte (with flags) | Direction | Updates Track register? |
 |---------|-------------------|-----------|-------------------------|
-| STEP    | `#2x` (0010xxxx)  | Same as last STEP | If bit 4 (u) = 1 |
-| STEP-IN  | `#4x` (0100xxxx)  | Inward (higher tracks) | If bit 4 (u) = 1 |
-| STEP-OUT | `#6x` (0110xxxx)  | Outward (lower tracks) | If bit 4 (u) = 1 |
+| STEP    | `#2x` (0010xxxx)  | Same as last STEP | If bit 4 (T) = 1 |
+| STEP-IN  | `#4x` (0100xxxx)  | Inward (higher tracks) | If bit 4 (T) = 1 |
+| STEP-OUT | `#6x` (0110xxxx)  | Outward (lower tracks) | If bit 4 (T) = 1 |
 
-The **update bit** (bit 4) controls whether the Track register is updated. With `u=1`, the Track register is incremented (STEP-IN) or decremented (STEP-OUT) by 1. With `u=0`, the Track register is unchanged — useful when deliberately desynchronising the FDC's notion of position from the physical head position (a common trick in copy protection).
+The **update bit** (bit 4, T) controls whether the Track register is updated. With `T=1`, the Track register is incremented (STEP-IN) or decremented (STEP-OUT) by 1. With `T=0`, the Track register is unchanged — useful when deliberately desynchronising the FDC's notion of position from the physical head position (a common trick in copy protection).
 
 STEP (without -IN or -OUT) repeats the direction of the previous STEP command. This is rarely used in practice; most code uses STEP-IN and STEP-OUT explicitly.
 
@@ -358,11 +370,12 @@ These single-step commands are typically used only in low-level drivers (e.g., t
 Type I commands have two flags related to the head load solenoid:
 
 - **h** (bit 3): Head load. If 1, the FDC asserts HLD to engage the read/write head against the disk after stepping.
-- **e** (bit 2, when h=1): Head settle delay. If 1, the FDC waits for the HLT (Head Load Timing) input to be asserted before completing the command. If 0, the FDC waits a fixed 15 ms.
+- **V** (bit 2): Verify. If 1, the FDC reads the first sector's ID field after stepping and checks that its track number matches the Track register. Sets SEEK ERROR (Status bit 4) on mismatch or ID-field CRC error.
+- The **head settle delay** (15 ms after HLD) is implicit — the FDC always waits 15 ms after asserting HLD before completing the command. There is no separate command-bit control for this on the WD1793. The HLT input is sampled after the 15 ms delay and gates the HEAD LOADED status bit (Status bit 5).
 
-The HLT input is driven by the drive (typically via a 555 timer or a Hall-effect sensor) and indicates that the head has physically settled against the disk after the solenoid engages. Waiting for HLT ensures reliable reads after head loading.
+The HLT input is driven by the drive (typically via a 555 timer or a Hall-effect sensor) and indicates that the head has physically settled against the disk after the solenoid engages. The HEAD LOADED status bit is the logical AND of HLD and HLT — so if HLT is never asserted (as on most Spectrum interfaces that do not wire HLT to the controller), HEAD LOADED reads 0 even after HLD is asserted.
 
-Most Spectrum software uses `h=1, e=0` (load head, wait fixed 15 ms) because the drives used with the Spectrum typically do not connect HLT to the controller. Some TR-DOS versions use `h=1, e=1` and rely on a pull-up on the HLT input (which makes HLT appear always asserted after ~15 ms anyway).
+Most Spectrum software uses `h=1, V=0` (load head, do not verify) because verification requires a readable sector ID and adds a revolution of latency. RESTORE with `V=1` is typically used only during drive-detection or alignment checks.
 
 ---
 
@@ -374,21 +387,25 @@ Type II commands transfer data between a sector on the disk and the host. There 
 
 ```
 Bit:    7  6  5  4  3  2  1  0
-        --type--  m  s  e  b  a  0
-        =01/10    |  |  |  |  |
-                   |  |  |  |  |-- 0 (reserved)
-                   |  |  |  |-- 0 (reserved)
-                   |  |  |-- 30 ms settling delay after head load
-                   |  |-- side select (1 = side 1, 0 = side 0)
-                   |-- multi-sector (1 = read/write multiple sectors)
+        --type--  m  S  E  C  a  0
+        =10        |  |  |  |  |  0 (reserved)
+                   |  |  |  |-- a0: Data Address Mark (WRITE SECTOR only; 0 = `#FB`, 1 = `#F8` deleted DAM)
+                   |  |  |-- C: Side Compare Enable (0 = disable side compare, 1 = enable)
+                   |  |-- E: 15 ms head-settling delay when stepping is needed (0 = no delay, 1 = wait 15 ms)
+                   |-- S: Side Compare Value (0 = compare for side 0, 1 = compare for side 1)
+                   |-- m: Multiple Record (0 = single sector, 1 = multi-sector)
 ```
 
-The two flag bits that matter most:
+The flags most relevant to driver authors:
 
 - **m** (bit 4): **Multi-record**. If 1, the FDC reads/writes multiple consecutive sectors in a single command. After each sector, the Sector register is incremented and the FDC continues to the next sector. If 0, only the sector in the Sector register is transferred.
-- **s** (bit 3): **Side select**. Used on double-sided drives to select the head. Note that some interfaces (e.g., Beta Disk Interface) instead handle side selection through a separate I/O port, making this bit redundant.
+- **C** (bit 2): **Side compare enable**. If 0, the FDC does not compare the side byte in the sector ID field at all — any side value matches. If 1, the FDC compares the sector ID's side byte against the **S** bit (bit 3) and only matches sectors where they are equal.
+- **S** (bit 3): **Side compare value**. When C=1, sectors with side byte = S are matched. S also drives the SSO (Side Select Output) pin directly during Type II/III commands; this is independent of the C bit's compare behaviour.
+- **a0** (bit 1, WRITE SECTOR only): Selects the Data Address Mark. 0 = `#FB` (normal), 1 = `#F8` (deleted). READ SECTOR reads either mark and reports it via RECORD TYPE (Status bit 5).
 
-The **e** bit (bit 2) adds a 30 ms head-settling delay if the head was not loaded when the command began. This is rarely needed in practice because Type I commands typically load the head first.
+The **E** bit (bit 2 of Type III commands, or bit 2 with different meaning on Type II commands that include head load) adds a 15 ms head-settling delay when stepping is needed. This is rarely needed in practice because Type I commands typically load the head first.
+
+Note: many Spectrum interfaces (including the Beta Disk Interface) route side selection through a separate system control port (`#FF` bit 4) that drives the drive's `/SIDE1` input directly, bypassing the FDC's SSO pin. On these interfaces the FDC's S/C bits are still relevant for ID-field matching but do not affect which physical head is active.
 
 #### READ SECTOR (command byte `#8x` = `1000xxxx`)
 
@@ -445,7 +462,7 @@ If the disk is write-protected, the FDC terminates immediately with WRITE PROTEC
 
 If the host fails to provide a byte within the window, LOST DATA is set and the FDC writes `#00` in place of the missing byte (corrupting the data field but maintaining sector structure).
 
-WRITE SECTOR also supports the **deleted data address mark** via the **a** bit (bit 1) of the command byte. If `a=1`, the FDC writes a DDAM (`#F8`) instead of a DAM (`#FB`) before the data. This is used to mark sectors as "deleted" or "special" — some copy protection schemes use this to flag hidden or intentionally damaged sectors.
+WRITE SECTOR also supports the **deleted data address mark** via the **a0** bit (bit 1) of the command byte. If `a0=1`, the FDC writes a DDAM (`#F8`) instead of a DAM (`#FB`) before the data. This is used to mark sectors as "deleted" or "special" — some copy protection schemes use this to flag hidden or intentionally damaged sectors. READ SECTOR reads either mark transparently; the type is reported in Status bit 5 (RECORD TYPE: 1 = deleted DAM, 0 = normal DAM).
 
 #### Multi-sector operations
 
@@ -478,11 +495,24 @@ The ID field consists of 6 bytes:
 | 0 | Track number (from the disk's ID field) |
 | 1 | Side number (0 or 1) |
 | 2 | Sector number |
-| 3 | Sector length code (`#00`=128, `#01`=256, `#02`=512, `#03`=1024) |
+| 3 | Sector length code (see table below) |
 | 4 | CRC byte 1 |
 | 5 | CRC byte 2 |
 
-These 6 bytes are returned through the Data register (one DRQ per byte). The host reads them by polling DRQ and reading the Data register six times. The Sector register is also updated with byte 2 (the sector number) — this is a side effect that can confuse drivers that don't expect it.
+The **sector length code** (byte 3 of the ID field) selects the data-field length for that sector. The code is the upper 2 bits of a 1-byte field; the lower 6 bits are reserved:
+
+| Code (bits 7–6 of byte 3) | Sector length | Used in |
+|----------------------------|---------------|---------|
+| `00` | 128 bytes | Rare on Spectrum; some CP/M formats |
+| `01` | 256 bytes | **Standard for TR-DOS / Beta Disk** |
+| `10` | 512 bytes | Standard for +3 DOS, Opus Discovery, IBM-PC |
+| `11` | 1024 bytes | Rare; some CP/M and server-grade formats |
+
+The encoding follows the formula `length = 128 << code`, so the same field can describe any of the four sizes. The unreal-ng FDC implementation confirms this: `_sectorSize = 128 << (idAddressMark->sector_size & 0x03)`.
+
+The 6 ID-field bytes are returned through the Data register (one DRQ per byte). The host reads them by polling DRQ and reading the Data register six times. The Sector register is also updated with byte 2 (the sector number) — this is a side effect that can confuse drivers that don't expect it.
+
+If no ID field is encountered within a disk revolution (i.e., the track is unformatted), READ ADDRESS does **not** set RNF — instead it keeps spinning. Per the unreal-ng implementation the search times out after 5 revolutions (about 1 second at 300 RPM) and the command completes with whatever partial data was collected.
 
 READ ADDRESS is useful for:
 - Enumerating the sectors on a track (call it repeatedly while the disk rotates, collecting every sector ID).
@@ -497,8 +527,9 @@ The host reads the bytes through the Data register, just like READ SECTOR, but i
 
 READ TRACK has important caveats:
 - **Sync marks are not preserved**. The `A1*` patterns with missing clock bits cannot be represented in the byte stream — the FDC substitutes normal `#A1` bytes. So the raw track image is not bit-exact.
+- **Per the WD1793 datasheet**: "The ID Address Mark, ID field, ID CRC bytes, DAM, Data and Data CRC bytes for each sector will be correct. The gap bytes may be read incorrectly during write-splice time because of synchronization." In other words, the structural bytes (address marks, ID fields, data fields, CRCs) are reliably reproduced; only the gap fill bytes (the long runs of `#4E`) may differ between reads.
 - **Bit slip may occur** if the PLL loses lock during gap regions (long runs of `#4E` bytes). The FDC's PLL is designed to recover from this, but READ TRACK can produce slightly different byte counts between reads.
-- **The total byte count is approximately 6250** for a standard MFM track, but the actual count varies by ±50 bytes depending on motor speed and exact index hole position.
+- **The total byte count is approximately 6250** for a standard MFM track at 250 kbit/s / 300 RPM, but the actual count varies by ±50 bytes depending on motor speed (±2%) and exact index-hole position.
 
 READ TRACK is used almost exclusively for copy protection analysis — to inspect the raw track layout and detect non-standard patterns. It is rarely used in normal software.
 
@@ -549,26 +580,27 @@ WRITE TRACK requires the disk to be **not write-protected**. If it is, the FDC t
 
 ### 4.4 Type IV command — FORCE INTERRUPT
 
-**FORCE INTERRUPT** (command byte `#Dx` = `1101xxxx`) is the only Type IV command. It terminates the current command immediately and asserts INTRQ.
+**FORCE INTERRUPT** (command byte `#Dx` = `1101xxxx`) is the only Type IV command. It can be written at any time — even when another command is BUSY (it is the only command with this property). If a command is executing, it is terminated immediately and the BUSY bit is cleared. If no command is executing, FORCE INTERRUPT simply updates the Status register to reflect Type I semantics and asserts INTRQ (subject to the condition bits).
 
-The low 4 bits select when to assert the interrupt:
+The low 4 bits select when INTRQ is asserted:
 
-| Bits 3–0 | Condition |
-|----------|-----------|
-| `0000`   | Immediately (terminate unconditionally) |
-| `0001`   | On next index pulse |
-| `0010`   | On ready-to-not-ready transition (drive goes not ready) |
-| `0100`   | On ready-to-not-ready... (rarely used variant) |
-| `1000`   | (rarely used) |
+| Bits 3–0 | Mnemonic | Condition |
+|----------|----------|----------|
+| `0000`   | —        | No interrupt is generated (command terminates silently, BUSY clears, no INTRQ). |
+| `0001`   | i0       | On the next **not-ready → ready** transition of the `/READY` input (disk inserted / drive spun up). |
+| `0010`   | i1       | On the next **ready → not-ready** transition of the `/READY` input (disk removed / drive stopped). |
+| `0100`   | i2       | On the next **index pulse** (`/IP` assertion). |
+| `1000`   | i3       | **Immediate** interrupt. INTRQ asserts right away. Per the WD datasheet, this condition "requires a reset" — the FDC will not accept further commands until the Status register is read or the Command register is written again. |
 
-The most common use is `#D0` (immediate). FORCE INTERRUPT does not reset the FDC; it just stops whatever command is in progress and returns the chip to idle. The Status register is updated to reflect the state at termination.
+Multiple condition bits can be set simultaneously (e.g. `#0F` = any of the four conditions). If no condition bit is set (`#D0`), the command just terminates the current operation without generating an INTRQ.
 
 Typical uses:
-- **Aborting a stuck READ SECTOR**. If a read is taking too long (e.g., the disk is not spinning or the sector is corrupt), FORCE INTERRUPT lets the host regain control.
-- **Implementing a timeout**. The host issues a READ SECTOR, sets a timer, and if the timer expires before INTRQ, it issues FORCE INTERRUPT to abort.
-- **Returning to idle before issuing a new command**. Although writing any new command implicitly aborts the current one, FORCE INTERRUPT is the clean way to do it.
+- **Aborting a stuck READ SECTOR**. If a read is taking too long (e.g., the disk is not spinning or the sector is corrupt), `#D0` lets the host regain control immediately.
+- **Implementing a timeout**. The host issues a READ SECTOR, sets a timer, and if the timer expires before INTRQ, it issues `#D0` to abort.
+- **Waiting for the index pulse without a command**. `#D4` (i2 set) arms an interrupt that fires on the next index pulse; useful for measuring revolution time or synchronising to the disk.
+- **Waiting for disk insertion**. `#D1` (i0 set) arms an interrupt that fires when `/READY` goes high — useful for change-detection in DOS shells.
 
-FORCE INTERRUPT is also the **only command that can be issued while the FDC is BUSY**. Other commands written during execution are ignored (or, on some variants, cause undefined behaviour).
+Writing a Type I/II/III command implicitly aborts the current command (the FDC does not queue commands), but FORCE INTERRUPT is the **clean** way to abort because it does not start a new command's execution phase.
 
 ---
 
@@ -645,28 +677,28 @@ WRITE SECTOR is similar, but the data flow direction is reversed, and the host m
 
 If the host fails to provide a byte within the window (about 27 µs at 250 kbit/s MFM), FDC writes `#00` in its place and sets LOST DATA. This corrupts the sector but maintains track structure — subsequent sectors are still readable.
 
-### 5.4 The idle phase and the motor-on timer
+### 5.4 The idle phase
 
-When no command is executing, the FDC is in the **idle phase**. In idle, the FDC continuously polls the drive interface for the index pulse (to support FORCE INTERRUPT with the "on index" condition) and the /TRK00 sensor.
+When no command is executing, the FDC is in the **idle phase**. In idle, the FDC continuously polls the drive interface for the index pulse (to support FORCE INTERRUPT with the i2 / index-pulse condition) and the `/TRK00` sensor.
 
-When the FDC enters idle after a Type I command with the **spin-up** flag, it starts an internal **motor-on timer** of 6 revolutions (about 1.2 seconds at 300 RPM). The Motor On bit (Status bit 7) reflects this timer: it stays 1 for the duration of the timer, then drops to 0. Some software uses this bit to detect whether the motor has been started recently (e.g., to skip motor spin-up on the next access).
+There is **no internal motor-on timer on the WD1793**. The Status bit 7 (NOT READY) is a direct combinational copy of the inverted `/READY` input (ORed with the `/MR` reset state). Motor control is purely external: the host (or the interface logic) turns the spindle motor on or off via drive-select lines, and the drive asserts `/READY` only when a disk is inserted and spinning at the correct speed. Software that needs to wait for motor spin-up must poll NOT READY until it clears (or wait a fixed ~1 second at 300 RPM after switching the motor on).
 
 ### 5.5 Polling during execution: DRQ vs INTRQ
 
 There are two distinct signals the host can poll:
 
-- **DRQ (Data Request)**: Asserted by the FDC when the Data register is ready for the next byte transfer. Set during the execution phase of Type II/III commands. The host must service DRQ within the byte window or lose data.
-- **INTRQ (Interrupt Request)**: Asserted by the FDC when a command completes (or when FORCE INTERRUPT fires). Stays asserted until the host reads the Status register or writes a new command.
+- **DRQ (Data Request)**: Asserted by the FDC when the Data register is ready for the next byte transfer. Set during the execution phase of Type II/III commands. The host must service DRQ within the byte window (32 µs at 250 kbit/s MFM, 64 µs at 125 kbit/s FM — 114 or 228 Z80 T-states at 3.5 MHz) or lose data.
+- **INTRQ (Interrupt Request)**: Asserted by the FDC when a command completes (or when a FORCE INTERRUPT condition fires). Stays asserted until the host reads the Status register **or** writes a new command byte to the Command register — whichever happens first. This reset-on-Status-read / reset-on-Command-write semantics is common to all command types.
 
-The WD1793 exposes DRQ on a separate pin from the host bus. Some interfaces (e.g., Beta Disk Interface) make DRQ visible as bit 7 of a separate "system" port (often at `#FF`). Other interfaces only expose DRQ through the Status register (bit 1 during Type II execution). The exact wiring is interface-specific.
+The WD1793 exposes DRQ on a separate pin from the host bus. Some interfaces (e.g., Beta Disk Interface) make DRQ visible as bit 6 of a separate "system" port (port `#FF`). Other interfaces only expose DRQ through the Status register (bit 1 during Type II/III execution). The exact wiring is interface-specific.
 
-Servicing DRQ fast enough is **the** critical performance problem on the WD1793. At 250 kbit/s MFM, the byte window is only 32 µs (4 µs × 8 bits). In Z80 terms, that's about 128 T-states — tight enough that polling loops must be hand-optimised, and any memory contention (on the 48K Spectrum, contended memory accesses during the loading delay the loop) can cause lost data.
+Servicing DRQ fast enough is **the** critical performance problem on the WD1793. At 250 kbit/s MFM, the byte window is only 32 µs. In Z80 cycles at 3.5 MHz, that's about 114 T-states — tight enough that polling loops must be hand-optimised, and any memory contention (on the 48K Spectrum, contended memory accesses during the loading delay the loop) can cause lost data.
 
 ### 5.6 INTRQ handling: polling vs interrupts
 
 The simplest INTRQ handling is **polling**: the host sits in a tight loop reading the Status register, waiting for BUSY to clear. This wastes CPU time but is universally compatible.
 
-A more sophisticated approach uses the Z80's **interrupt mechanism**: the interface's INTRQ pin is wired to the Z80's /INT pin, and the host's interrupt handler is invoked when INTRQ asserts. This is more efficient (the host can do other work while the FDC runs) but requires the interface hardware to provide a clean interrupt vector and the host software to set up an interrupt table.
+A more sophisticated approach uses the Z80's **interrupt mechanism**: the interface's INTRQ pin is wired to the Z80's `/INT` pin, and the host's interrupt handler is invoked when INTRQ asserts. This is more efficient (the host can do other work while the FDC runs) but requires the interface hardware to provide a clean interrupt vector and the host software to set up an interrupt table.
 
 Most TR-DOS routines use polling, because:
 - The FDC operations are short enough that the polling overhead is acceptable.
@@ -674,6 +706,11 @@ Most TR-DOS routines use polling, because:
 - The original Beta Disk Interface did not wire INTRQ to the Z80's interrupt controller.
 
 The +3 DOS ROM does use interrupts for some operations, taking advantage of the +3's more integrated hardware design.
+
+**Important INTRQ semantics** (per the WD1793 datasheet, verified in the unreal-ng implementation):
+- INTRQ is asserted at the end of **every** command's result phase, including commands that terminate due to an error or due to FORCE INTERRUPT.
+- INTRQ is reset by either (a) reading the Status register or (b) writing a new command byte to the Command register. Writing a new command without first reading the Status register is legal and clears the pending INTRQ.
+- If FORCE INTERRUPT is issued with all four condition bits clear (`#D0`), the command terminates but INTRQ is **not** asserted. With any of i0–i3 set, INTRQ is asserted either immediately (i3) or when the condition fires (i0/i1/i2).
 
 ---
 
@@ -687,38 +724,42 @@ Type I commands (RESTORE, SEEK, STEP, STEP-IN, STEP-OUT) update the Status regis
 
 | Bit | Name | Meaning |
 |-----|------|---------|
-| 7 | MOTOR ON | 1 = motor-on timer still running (6 revolutions since motor start) |
-| 6 | WRITE PROTECT | 1 = the disk in the selected drive is write-protected |
-| 5 | SPIN UP | 1 = motor spin-up complete (only meaningful if the spin-up flag was set in the command) |
-| 4 | NOT USED | Reads 0 |
-| 3 | CRC ERROR | 1 = CRC error in the ID field (only set if verify was requested) |
-| 2 | TRACK 00 | 1 = head is currently at track 0 (asserted by the drive's /TRK00 sensor) |
-| 1 | INDEX | 1 = index pulse present (pulses once per revolution, for ~4 ms) |
-| 0 | BUSY | 1 = command in progress |
+| 7 | NOT READY | Inverted copy of the `/READY` input, ORed with the reset state (`/MR`). 1 = drive not ready (no disk, or motor not up to speed); 0 = drive ready. Type I commands execute regardless of `/READY`. |
+| 6 | WRITE PROTECT | Inverted copy of the `/WPRT` input. 1 = disk in the selected drive is write-protected. |
+| 5 | HEAD LOADED | Logical AND of the internally-driven HLD signal and the externally-sampled HLT input. 1 = head solenoid is energised **and** the drive confirms head contact. On Spectrum interfaces that leave HLT disconnected (the common case), this bit reads 0 even when HLD is asserted. |
+| 4 | SEEK ERROR | 1 = verify failed: the track number read from the first ID field did not match the Track register, or the ID field had a CRC error. Only meaningful when the V bit was set in the command. Cleared to 0 when the Status register is read. |
+| 3 | CRC ERROR | 1 = CRC mismatch in the ID field (only set if verify was requested, V=1). Cleared when the Status register is read. |
+| 2 | TRACK 00 | Inverted copy of the `/TRK00` input. 1 = head is currently at track 0. |
+| 1 | INDEX | Inverted copy of the `/IP` input. Pulses 1 for the duration of the index pulse (~4 ms at 300 RPM, ~3.3 ms at 360 RPM) once per disk revolution. |
+| 0 | BUSY | 1 = command in progress; 0 = command complete. |
 
-Bit 5 (SPIN UP) is the most useful here: it tells the host whether the disk is up to speed. If a command is issued without waiting for SPIN UP, the FDC may fail to read the disk correctly because the bit timing is wrong (the disk is spinning too slowly for the PLL to lock).
+Bit 5 (HEAD LOADED) is the most useful for knowing whether the drive's read/write head is actually engaged with the media. Because the original WD1793 datasheet specifies that HEAD LOADED = HLD AND HLT, and most Spectrum interfaces leave HLT floating or tied to a fixed level, drivers cannot rely on this bit alone — they typically infer head-loaded state from whether a Type I command with `h=1` has been issued recently.
 
-Bit 1 (INDEX) is also useful: it pulses once per revolution. Drivers that need to time a full revolution (e.g., to detect a "missing" sector for copy protection) can poll this bit.
+Bit 1 (INDEX) is also useful: it pulses once per revolution. Drivers that need to time a full revolution (e.g., to detect a "missing" sector for copy protection, or to measure RPM) poll this bit.
 
 ### 6.2 Status bits during Type II commands
 
-Type II commands (READ SECTOR, WRITE SECTOR) use a different bit layout:
+Type II commands (READ SECTOR, WRITE SECTOR) use a different bit layout from Type I:
 
 | Bit | Name | Meaning |
 |-----|------|---------|
-| 7 | MOTOR ON | 1 = motor-on timer still running |
-| 6 | LOST DATA / WRITE PROTECT | READ SECTOR: 1 = host failed to read Data register in time (byte lost). WRITE SECTOR: 1 = disk is write-protected. |
-| 5 | RECORD TYPE | 1 = the sector read had a Deleted Data Address Mark (`#F8` instead of `#FB`). READ SECTOR only. |
-| 4 | RECORD NOT FOUND | 1 = the requested sector ID was not found on the track, OR the ID field had a CRC error |
-| 3 | CRC ERROR | 1 = CRC error in the data field (or in the ID field, if RECORD NOT FOUND is also set) |
-| 2 | LOST DATA | 1 = host failed to service DRQ in time during execution (separate from bit 6 on some variants) |
-| 1 | DRQ | 1 = Data register contains a byte that needs servicing (read) or is ready for the next byte (write) |
-| 0 | BUSY | 1 = command in progress |
+| 7 | NOT READY | Inverted copy of the `/READY` input, ORed with the reset state. 1 = drive not ready. Type II commands do **not** execute when `/READY` is low; the command terminates immediately with INTRQ and no data transfer. |
+| 6 | WRITE PROTECT (writes) / 0 (reads) | WRITE SECTOR only: inverted copy of the `/WPRT` input. Always reads 0 on READ SECTOR. Cleared when the Status register is read. |
+| 5 | RECORD TYPE (reads) / WRITE FAULT (writes) | READ SECTOR: reflects the data-field address mark — 1 = `#F8` (Deleted Data Address Mark), 0 = `#FB` (normal Data Address Mark). WRITE SECTOR: inverted copy of the write-fault input from the drive; on most Spectrum interfaces this input is hardwired inactive and the bit always reads 0. |
+| 4 | RECORD NOT FOUND (RNF) | 1 = no sector on the track had an ID field matching Track register + Sector register + (if C=1) S bit. Also set when the ID field had a CRC error. Cleared when the Status register is read. |
+| 3 | CRC ERROR | 1 = CRC mismatch. If RNF (bit 4) is also set, the error was in the ID field; otherwise it was in the data field. Cleared when the Status register is read. |
+| 2 | LOST DATA | 1 = the host failed to service DRQ within one byte window (32 µs at 250 kbit/s MFM, 64 µs at 125 kbit/s FM). Cleared when the Status register is read. |
+| 1 | DRQ | Copy of the internal DRQ signal. 1 = the Data register contains a byte that needs reading (read) or is ready for the next byte (write). Cleared when the Data register is serviced. |
+| 0 | BUSY | 1 = command in progress; 0 = command complete. |
 
 The key bits for error handling are:
-- Bit 4 (RECORD NOT FOUND): the sector wasn't there. Most likely the track number or sector number in the registers is wrong.
-- Bit 3 (CRC ERROR): the data on the disk is corrupted. The host should retry, and if the error persists, mark the sector as bad.
-- Bit 6 (LOST DATA on read, WRITE PROTECT on write): indicates the host failed to keep up with the FDC's data rate.
+- Bit 7 (NOT READY): no disk in the drive, or drive not spun up. The command does not execute at all.
+- Bit 4 (RECORD NOT FOUND): the sector wasn't there. Most likely the track number or sector number in the registers is wrong, or the ID-field CRC failed so the FDC could not confirm the match.
+- Bit 3 (CRC ERROR): the data on the disk is corrupted. The host should retry, and if the error persists, mark the sector as bad. If RNF is also set, the corruption was in the ID field rather than the data field.
+- Bit 6 (WRITE PROTECT on writes): the disk is write-protected; no data was written.
+- Bit 2 (LOST DATA): the host failed to keep up with the FDC's data rate. The transfer continued with the lost byte replaced by `#00` on writes, or skipped on reads.
+
+**INTRQ reset behaviour**: INTRQ is asserted at command completion and stays asserted until the host reads the Status register **or** writes a new command byte to the Command register. This is true for all command types.
 
 ### 6.3 Status bits during Type III commands
 
@@ -726,31 +767,33 @@ Type III commands (READ ADDRESS, READ TRACK, WRITE TRACK) use yet another layout
 
 | Bit | Name | Meaning |
 |-----|------|---------|
-| 7 | MOTOR ON | 1 = motor-on timer still running |
-| 6 | WRITE PROTECT | WRITE TRACK only: 1 = disk is write-protected. Otherwise 0. |
-| 5 | 0 | Always 0 |
-| 4 | RECORD NOT FOUND | READ ADDRESS / READ TRACK: 1 = no ID field found (no sector on the track) |
-| 3 | CRC ERROR | 1 = CRC error in the ID field read |
-| 2 | LOST DATA | 1 = host failed to service DRQ in time |
-| 1 | DRQ | 1 = Data register needs servicing |
-| 0 | BUSY | 1 = command in progress |
+| 7 | NOT READY | Inverted `/READY` input, ORed with reset state. As with Type II, Type III commands do not execute when `/READY` is low. |
+| 6 | WRITE PROTECT | WRITE TRACK only: inverted copy of the `/WPRT` input. Always 0 on READ ADDRESS / READ TRACK. |
+| 5 | WRITE FAULT (writes) / 0 (reads) | WRITE TRACK only: inverted copy of the write-fault input. Always 0 on reads. |
+| 4 | 0 | Always 0 (no RNF condition for Type III — READ ADDRESS reads the next ID field regardless of match, READ TRACK reads the entire revolution, WRITE TRACK writes the entire revolution). |
+| 3 | CRC ERROR | READ ADDRESS only: 1 = CRC mismatch in the ID field that was just read. Always 0 on READ TRACK / WRITE TRACK. |
+| 2 | LOST DATA | 1 = host failed to service DRQ in time (32 µs MFM / 64 µs FM). |
+| 1 | DRQ | Copy of internal DRQ signal. |
+| 0 | BUSY | 1 = command in progress. |
 
-For WRITE TRACK, bit 6 (WRITE PROTECT) is checked at the start of the command. If set, the command terminates immediately without writing anything.
+For WRITE TRACK, bit 6 (WRITE PROTECT) is checked at the start of the command. If set, the command terminates immediately without writing anything. For READ ADDRESS, the CRC ERROR bit reflects the validity of the most recent ID field read.
 
 ### 6.4 Status bits during idle (no command executing)
 
-When no command is executing, the Status register reflects the drive's current state:
+When no command is executing, the Status register reflects the Type I bit layout (the FDC's reset / idle state uses Type I semantics):
 
 | Bit | Name | Meaning |
 |-----|------|---------|
-| 7 | MOTOR ON | 1 = motor-on timer still running |
-| 6 | WRITE PROTECT | 1 = current disk is write-protected |
-| 5 | TRACK 00 (some variants) or 0 | On the WD1793 proper, bit 5 is 0 in idle; on some clones it mirrors TRACK 00. |
-| 4 | 0 | Always 0 |
-| 3 | 0 | Always 0 |
-| 2 | TRACK 00 | 1 = head is at track 0 |
-| 1 | INDEX | Pulses once per revolution |
-| 0 | BUSY | Always 0 in idle |
+| 7 | NOT READY | Inverted `/READY`, ORed with `/MR` (reset). |
+| 6 | WRITE PROTECT | Inverted `/WPRT`. |
+| 5 | HEAD LOADED | AND of HLD and HLT. After reset, HLD is deasserted so this reads 0. |
+| 4 | SEEK ERROR | Reads 0 (no verify has been run since reset). |
+| 3 | CRC ERROR | Reads 0 (no ID-field check has been run since reset). |
+| 2 | TRACK 00 | Inverted `/TRK00`. |
+| 1 | INDEX | Inverted `/IP` (pulses once per revolution). |
+| 0 | BUSY | Always 0 in idle. |
+
+Note that bits 4, 3, 5 (SEEK ERROR, CRC ERROR, HEAD LOADED) are **sticky** in some implementations — once set, they remain until the next Status-register read clears them. The WD1793 datasheet specifies this reset-on-read behaviour for SEEK ERROR and CRC ERROR; HEAD LOADED follows the live HLD AND HLT state. Emulator authors should verify the exact reset behaviour against the specific FDC variant they are modelling.
 
 ### 6.5 Common status-reading patterns
 
@@ -832,12 +875,11 @@ These physical differences do not affect the chip's behaviour in a Spectrum clon
 
 ### 7.3 Functional differences
 
-The KR1818VG93 was reverse-engineered from the WD1793-02 die mask, so its behaviour matches the WD1793-02 for all documented features. There are a few subtle differences in undocumented behaviour:
+The KR1818VG93 was reverse-engineered from the WD1793-02 die mask, so its behaviour matches the WD1793-02 for all documented features. The differences observed on real hardware are in undocumented behaviour and analog characteristics, not in the documented command set:
 
-- **Motor-on timer duration**: On the WD1793-02, the motor-on timer is approximately 6 revolutions (1.2 seconds at 300 RPM). On the KR1818VG93, the timer is closer to 9 revolutions (1.8 seconds). This affects software that uses the MOTOR ON bit (Status bit 7) for timing-sensitive operations.
 - **Step rate accuracy**: The KR1818VG93's step rate generator is less precise than the WD1793's. The 6 ms setting is typically 6.0 ms on the WD1793 but can be 6.2–6.5 ms on the KR1818VG93. This is rarely a problem because most drives tolerate ±10% step rate variation.
 - **PLL lock time**: The internal PLL on the KR1818VG93 takes slightly longer to lock to the MFM bit clock than the WD1793's PLL. On marginal disks (with weak signals or off-speed motors), the KR1818VG93 may produce more read errors.
-- **Undocumented bits in Status register**: Bit 7 (MOTOR ON) reads differently on some KR1818VG93 lots. The official documentation says it should mirror the motor-on timer, but some chips always read it as 1.
+- **NOT READY bit latency**: Status bit 7 (NOT READY) is documented as a combinational copy of the inverted `/READY` input. On some KR1818VG93 lots, the bit's response to a `/READY` transition can be delayed by a few hundred nanoseconds relative to the WD1793-02. This is invisible to polling software but matters for cycle-exact emulator implementation.
 
 None of these differences cause incompatibility with normal software. They become relevant only when emulating the FDC precisely (e.g., for cycle-exact emulator implementation) or when running software that depends on specific undocumented timing.
 
@@ -918,12 +960,6 @@ The /MR pin (pin 3, also called /MR or "Master Reset" on some variants) is docum
 
 Software that uses /MR must account for this: on the original WD1793, the Track register retains its value across /MR, so the host must issue a RESTORE after reset. On the -02 and KR1818VG93, the Track register is undefined and must be initialised.
 
-### 8.8 The spin-up detection bug
-
-The SPIN UP bit (Status bit 5) is supposed to indicate that the motor has been running for at least 6 revolutions. But on some WD1793 lots, the bit is set after only 3 revolutions (a hardware bug in the divider chain). Software that depends on the exact spin-up time may fail on these lots.
-
-The bug is benign in practice (3 revolutions is enough spin-up for most drives), but it means that the FDC cannot be used as a precise timer without calibration.
-
 ---
 
 ## §9. Turbo Mods and Speed Improvements
@@ -958,7 +994,7 @@ The external PLL can lock to weaker signals and tolerate more motor speed variat
 
 Without modifying hardware, software can achieve modest speed-ups by:
 
-- **Skipping the spin-up wait**: standard drivers wait for SPIN UP before each access. Turbo loaders skip this wait on the assumption that the motor is already up to speed.
+- **Skipping the NOT READY poll**: standard drivers wait for Status bit 7 (NOT READY) to clear before each access. Turbo loaders skip this wait on the assumption that the motor is already up to speed and `/READY` is asserted.
 - **Using multi-sector reads**: instead of issuing READ SECTOR for each sector, issue one READ SECTOR with `m=1` to read the entire track in one command. This avoids the per-sector index-pulse wait.
 - **Overlapping seeks and reads**: issue a SEEK, then start a READ SECTOR on the new track before the head has fully settled. Risky, but works on most drives.
 - **Reading from uncontended memory**: on the 48K Spectrum, contended memory accesses delay the polling loop, causing lost data. Turbo loaders copy their inner DRQ-polling loop to upper RAM (uncontended) before reading.
@@ -1009,11 +1045,13 @@ See [divide_divmmc.md](divide_divmmc.md) and [ide_interface.md](ide_interface.md
 
 ### 10.4 External references
 
-- **Western Digital WD1771 / WD1791 / WD1793 / WD1795 / WD1797 data sheets** — the original source documents. The WD1793 is the 5 V single-density FDC used in the Beta Disk Interface. The WD179X family extends it to double density with an external data separator.
+- **Western Digital FD179X-02 datasheet** — the original primary source. Reproduced electronically at <https://www.retrotechnology.com/herbs_stuff/WD179X.PDF> and <http://info-coach.fr/atari/documents/general/fd/WD177x-00.pdf>. Covers all four Type I–IV commands, the full per-command status bit table, electrical characteristics, and timing diagrams.
+- **WD1793 on MSX Info Pages (Hans Otten)** — faithful electronic reproduction of the WD1793 datasheet with the IBM 34 format layout and the Type III data-pattern encoding table. <https://hansotten.file-hunter.com/technical-info/wd1793/>.
 - **KR1818VG93 data sheet (Russian)** — the Soviet clone's official documentation. Differs from the WD data sheet in a few minor timing parameters (see §7).
-- **app.note 17 "Floppy Disk Controller Design"** (Western Digital) — design notes for using the WD179X family, including recommended PLL circuits and write-precompensation values.
+- **app.note 17 "Floppy Disk Controller Design" (Western Digital)** — design notes for using the WD179X family, including recommended PLL circuits and write-precompensation values.
 - **The "WD179X" entry in the sparetimegizmos.com FPGA FDC project** — an open-source HDL implementation of the WD1793, useful for understanding the chip's state machine.
 - **The FDC directory at zxevo.ru** — Russian-language community documentation on Beta Disk Interface clones and turbo modifications.
+- **unreal-ng emulator source** (`alfishe/unreal-ng` on GitHub) — a modern re-engineering of Unreal Speccy with a full C++ WD1793 model. The relevant files live in `core/src/emulator/io/fdc/`: `wd1793.cpp`, `wd1793.h`, `wd1793state.h`, `mfm_parser.h`. The `WD_STATUS` enum in `wd1793.h` defines all status bit constants; `WD93Counters` in `wd1793state.h` documents the byte-transfer windows (32 µs MFM / 64 µs FM) and the 5-revolution RNF timeout. Used as a primary reference for the FDC state machine in this article.
 
 ---
 
