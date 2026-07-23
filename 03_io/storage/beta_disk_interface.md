@@ -19,7 +19,7 @@ The Beta Disk Interface was released in 1985 by **Technology Research Ltd (Techn
 The interface shipped with two products:
 
 - **The hardware**: a black plastic cartridge-style module that plugs onto the rear edge connector of the Spectrum (16/48 / 48+ / 128 / +2 / +3 — mechanically compatible with all Toastrack/Amstrad-era machines through adapter cables). It exposes a single **Shugart 34-pin** floppy connector and supports up to four drives (A, B, C, D).
-- **The software**: a 16 KB **TR-DOS ROM** (versions 5.0, 5.1, 5.2, 5.3, 5.4 — the canonical version is 5.03 / 5.04) that occupies memory at `#3D00–#3FFF` (when paged in) and adds BASIC keywords (`CAT`, `LOAD`, `SAVE`, `MERGE`, `ERASE`, `FORMAT`, `COPY`, `MOVE`) plus a `*` command-line interface for disk operations.
+- **The software**: a 16 KB **TR-DOS ROM** (versions 5.0, 5.1, 5.2, 5.3, 5.4 — the canonical version is 5.03 / 5.04) that, when banked in, takes over the **entire** `#0000–#3FFF` window (displacing the BASIC ROM), and adds BASIC keywords (`CAT`, `LOAD`, `SAVE`, `MERGE`, `ERASE`, `FORMAT`, `COPY`, `MOVE`) plus a `*` command-line interface for disk operations. The banking is triggered automatically by the interface's address decoder whenever the CPU fetches an instruction from the 256-byte window `#3D00–#3DFF`; no software `OUT` is required. See §4 for the full mechanism.
 
 The original 1985 hardware used a Western Digital **WD1793** floppy controller (single-sided, single-density). The revised **Beta 128** model (1986) used double-density-capable WD2793 or the Soviet KR1818VG93 clone; the host interface is identical in all cases. The Beta 128 is the canonical model that dominated ex-USSR computing.
 
@@ -93,7 +93,7 @@ A real Beta Disk Interface cartridge contains the following components:
 | Component | Purpose | Notes |
 |---|---|---|
 | **Edge connector** | Plugs onto the Spectrum's rear expansion bus | All 86 pins of the ZX Spectrum edge connector are passed through to a second connector on the back of the cartridge, allowing further peripherals to be daisy-chained. |
-| **Address decoder** | Decodes I/O ports `#1F`, `#3F`, `#5F`, `#7F`, `#FF` and memory window `#3D00–#3FFF` | Implemented as a small PAL or as discrete 74LS-series logic depending on the board revision. |
+| **Address decoder** | Decodes I/O ports `#1F`, `#3F`, `#5F`, `#7F`, `#FF` and the instruction-fetch trigger window `#3D00–#3DFF` (together with `/M1`, `/MREQ`, `/RD`) | Implemented as a small PAL or as discrete 74LS-series logic depending on the board revision. |
 | **TR-DOS ROM** | 16 KB EPROM (27128 or equivalent) holding the TR-DOS 5.x code | Mapped into the Spectrum's `#0000–#3FFF` slot when paged in. |
 | **WD1793 / KR1818VG93 FDC** | The floppy controller chip itself | See [fdc_vg93.md](fdc_vg93.md) for full details. |
 | **Control latch (74LS273 or equivalent)** | 8-bit latch holding drive-select / motor / side bits | Written via port `#FF`. |
@@ -218,15 +218,17 @@ Note that bits 0–3 are **active-high** drive-select lines. Most real hardware 
 
 **Motor control** is also **not** on port `#FF` in the original interface. The motor is controlled via the WD1793's head-load flag (the `h` bit in Type I commands), which controls the `/HDLD` pin and — through external glue — turns on the spindle motor for the currently-selected drive. Again, Soviet clones differ and added an explicit motor bit.
 
+**Bit 7 (TR-DOS ROM override)** is shown in the table above for completeness, but on the **original** Beta Disk Interface this bit is either unused or reserved — the ROM banking is handled entirely by the M1-fetch address decoder described in §4.2, with no software control. Some Soviet clones (Pentagon, Scorpion, and derivatives) repurpose bit 7 as a software-forced "TR-DOS ROM stays mapped" override, which lets machine-code loaders in RAM call TR-DOS routines without the constant ROM-swapping that the M1-trigger mechanism would otherwise impose. See §4.2.4 for the details.
+
 ### 3.4 Reading port `#FF`
 
 Reading port `#FF` is unusual. On the original Beta Disk Interface, port `#FF` is **write-only** — reading it returns an undefined value (typically floating bus data). However, TR-DOS 5.x uses the address `#5C3C` (the BASIC system variable `STRMS`) and other system variables to track which drive is currently active, so software rarely needs to read port `#FF`.
 
 Later Soviet clones sometimes made port `#FF` readable, returning the last value written. Code written for these clones should not assume this works on the original hardware.
 
-### 3.5 Memory-mapped ports
+### 3.5 The `#3D00–#3DFF` instruction-fetch trigger
 
-In addition to the five I/O ports above, the Beta Disk Interface responds to a write at memory address `#3D00–#3DFF` as a "page the TR-DOS ROM in" trigger. Any write to this 256-byte window flips the Beta Disk Interface's page latch, swapping the Spectrum's `#0000–#3FFF` ROM window to point to the TR-DOS ROM instead of the BASIC ROM. See §4 for the full mechanism.
+The Beta Disk Interface also monitors the CPU's address bus and control lines. When the Z80 performs an **instruction fetch** — that is, when `/M1`, `/MREQ`, and `/RD` are all asserted (low) simultaneously — and the address bus carries a value in `#3D00–#3DFF`, the interface activates the TR-DOS ROM in place of the BASIC ROM. The 256-byte window is the **trigger**, not the ROM's mapping range; once activated, the TR-DOS ROM occupies the full `#0000–#3FFF`. Note that the trigger fires only on an instruction fetch — a data read such as `LD A, (#3D2A)` does **not** activate TR-DOS. The full mechanism is described in §4.
 
 ---
 
@@ -238,46 +240,72 @@ The ZX Spectrum's ROM (`#0000–#3FFF`, 16 KB) contains the BASIC interpreter an
 
 When TR-DOS is paged in, the BASIC interpreter is gone — there is no BASIC, no syntax checking, no editor. The TR-DOS ROM is a self-contained piece of code that handles disk operations and then returns control to the original ROM. This is conceptually similar to how the +3 uses its `+3DOS` calls (the `DOS` hook at `#0008`), but the mechanism is different.
 
-### 4.2 The paging mechanism
+### 4.2 The paging mechanism: M1-fetch-triggered address decode
 
-The Beta Disk Interface uses a **simple flip-flop page latch**: writing to any address in the `#3D00–#3DFF` range toggles the latch. The latch controls a multiplexer between the Spectrum's on-board ROM and the TR-DOS ROM. When the latch is set, the TR-DOS ROM responds to memory accesses at `#0000–#3FFF`; when cleared, the on-board ROM does.
+The Beta Disk Interface banks its ROM in and out by **watching the Z80's instruction-fetch cycle**. A small piece of combinational logic monitors the address bus (A0–A15) together with the `/M1`, `/MREQ`, and `/RD` lines, and toggles a flip-flop that selects which of two 16 KB ROMs — the Spectrum's on-board BASIC ROM or the TR-DOS ROM — responds to the `#0000–#3FFF` window.
 
-Once paged in, the TR-DOS ROM stays in place until it explicitly pages itself out (by writing to a "page out" address that the Beta Disk Interface's address decoder recognises — typically `#3D00` for page-in and a different address in `#3D00–#3DFF` for page-out, depending on the board revision). The TR-DOS ROM code at the end of every command sequence writes to the page-out address to return control to the BASIC ROM.
+The decode logic:
 
-The actual addresses used for page-in and page-out vary slightly across revisions. The canonical values, used by TR-DOS 5.03 and most emulators:
-
-| Address | Action |
+| Condition | Effect on flip-flop |
 |---|---|
-| `#3D00` | Page TR-DOS ROM **out** (BASIC ROM active) |
-| `#3D02` | Page TR-DOS ROM **in** (TR-DOS ROM active, edge-triggered) |
-| `#3D03` | Some clones use this as an alternative page-in address |
+| `/M1` asserted **and** address in `#3D00–#3DFF` | **Set** the flip-flop → TR-DOS ROM active |
+| `/M1` asserted **and** address in `#4000–#FFFF` | **Clear** the flip-flop → BASIC ROM active |
+| `/M1` asserted **and** address in `#0000–#3CFF` | No change (whichever ROM is currently selected stays selected) |
+| `/M1` negated (data read, write, interrupt acknowledge) | No change |
 
-Writing to **any** address in `#3D00–#3DFF` is sufficient to page the ROM in on real hardware, because the address decoder ignores the low bits. TR-DOS itself uses `#3D02` as a convention.
+The flip-flop's output drives a multiplexer on the `#0000–#3FFF` chip-select lines. The currently-selected ROM responds to **all** memory accesses in that window, not just instruction fetches — but the flip-flop itself only changes state on instruction-fetch events.
+
+#### 4.2.1 Why `#3D00–#3DFF`?
+
+In the standard Spectrum ROM, the 256-byte region `#3D00–#3DFF` holds the **character font bitmap** (the 8×8 pixel patterns for the ASCII characters). It is data, never code: the BASIC interpreter never executes instructions there. Intercepting instruction fetches in this range is therefore unambiguous — no legitimate BASIC ROM code path is ever broken by the swap. The choice of `#3D00–#3DFF` as the trigger window is a direct consequence of this: it lets the Beta Disk Interface hijack the address bus without ever conflicting with normal BASIC execution.
+
+#### 4.2.2 What activates and what does not
+
+The trigger fires only on an actual instruction fetch (opcode read) — **not** on a data read, a write, or an interrupt-vector read. Concretely:
+
+- `RANDOMIZE USR 15619` from BASIC → the CPU eventually does an M1 fetch at `#3D03` → **TR-DOS activates**.
+- `LD A, (#3D2A)` → ordinary data read at `#3D2A` → **no effect** (BASIC ROM stays active).
+- `LD (#3D2A), A` → write at `#3D2A` → **no effect**.
+- `CALL #3D03` from a machine-code program → M1 fetch at `#3D03` → **TR-DOS activates**.
+
+The first instruction the CPU executes after the swap is whatever byte the TR-DOS ROM happens to have at the trigger offset. TR-DOS is laid out so that the bytes at `#3D00`, `#3D03`, `#3D13`, `#3D2F` are deliberately placed `JP` / `NOP` / `RET` opcodes that route execution to the appropriate TR-DOS routine. See §4.4 for the entry-point table.
+
+#### 4.2.3 Automatic page-out
+
+The hardware does not require (or accept) any explicit "page-out" instruction. The moment the CPU's next instruction fetch lands in `#4000–#FFFF` — i.e., the CPU jumps to code in RAM — the flip-flop clears and the BASIC ROM returns to the `#0000–#3FFF` window. This is what makes TR-DOS calls transparent: the user's `RANDOMIZE USR 15619` pushes a return address (in RAM), the CPU fetches the first byte of the TR-DOS entry at `#3D03`, the ROM swaps in, TR-DOS runs, and when TR-DOS executes `RET` the CPU pops the return address (in RAM) and fetches its next instruction there — at which point the BASIC ROM is back.
+
+#### 4.2.4 Soviet clones: the `#FF` bit 7 override
+
+The original Beta Disk Interface relies solely on the M1-fetch decode described above. Some Soviet clones (in particular the Pentagon and Scorpion families) add an **optional software override**: bit 7 of port `#FF` (see §3.3) forces the TR-DOS ROM to stay mapped regardless of the address bus. This was added so that machine-code loaders could keep TR-DOS paged in while running their own code in RAM at `#4000–#FFFF` — useful for custom disk-copy routines that need to interleave user code in RAM with TR-DOS calls without the constant ROM-swapping overhead. Software targeting the original Beta Disk Interface cannot rely on this bit.
 
 ### 4.3 How the TR-DOS ROM hooks BASIC
 
 When the TR-DOS ROM is paged in, it copies a small set of hooks into the Spectrum's RAM (specifically, it patches the BASIC command table and the channel definitions). After this, the BASIC keywords `LOAD`, `SAVE`, `MERGE`, `VERIFY`, etc. are redefined to call TR-DOS routines instead of the cassette routines. The `*` (star) command is also installed, allowing direct access to TR-DOS commands like `*CAT`, `*FORMAT`, `*COPY`.
 
-The hook installation is performed by entering TR-DOS via its entry point at `#3D03` (which the user does by typing `RANDOMIZE USR 15616` in BASIC, or by pressing a special key combination on machines where TR-DOS is pre-installed in ROM space). From this point, all disk operations go through TR-DOS without any explicit "page in" calls from user code.
+The hook installation is performed by entering TR-DOS via its **cold entry point** at `#3D00` (decimal 15616 — the user types `RANDOMIZE USR 15616`). The M1 fetch at `#3D00` triggers the address-bus decoder (see §4.2), the TR-DOS ROM takes over `#0000–#3FFF`, and the TR-DOS init routine patches the BASIC command table in RAM. From this point, all disk operations go through TR-DOS transparently: each installed hook routine internally executes `CALL #3D03` to re-trigger the banking whenever a disk operation is needed.
 
-### 4.4 The 4-byte entry stub
+### 4.4 The entry points
 
-When the user calls `RANDOMIZE USR 15616` (decimal) — or, equivalently, executes `RST #08 DW hook` — the Spectrum's CPU eventually ends up executing a tiny stub at `#3D00` (or `#3D02`). This stub is **always** present in the Spectrum's memory map, even when TR-DOS is not paged in, because the Beta Disk Interface's address decoder forces the stub bytes onto the data bus when the CPU reads addresses `#3D00–#3D03`.
+The Beta Disk Interface does **not** inject any hidden stub bytes into the Spectrum's memory map. When TR-DOS is inactive, the bytes at `#3D00–#3DFF` are simply the BASIC ROM's character font bitmap — there is no bootloader lurking in that range. The banking hardware triggers purely on the address-bus state during an instruction fetch (see §4.2); the first byte the CPU actually executes after the swap is the byte the TR-DOS ROM has at the fetched offset, which TR-DOS deliberately lays out as a jump or a no-op.
 
-The stub is 4 bytes long and looks like:
+The user-visible entry points, all located inside the `#3D00–#3DFF` trigger window:
 
-```
-#3D00:  LD BC, #0101   ; placeholder; really: jump to TR-DOS entry
-#3D03:  ...
-```
+| Address | Decimal | Purpose |
+|---|---|---|
+| `#3D00` | 15616 | **Cold entry**. Initialise the interface, format a fresh disk if requested, drop to the `*` command prompt. Invoked from BASIC as `RANDOMIZE USR 15616`. |
+| `#3D03` | 15619 | **Warm entry**. Re-enter TR-DOS after the BASIC keyword hooks are already installed. Used internally by the patched `LOAD` / `SAVE` / `*CAT` keywords. |
+| `#3D13` | 15635 | Low-level entry used by some machine-code loaders for raw sector reads/writes. |
+| `#3D2F` | 15663 | **Indirect-call trampoline**. The caller pushes the TR-DOS subroutine address onto the stack, then `JP #3D2F`. The M1 fetch at `#3D2F` banks TR-DOS in, the trampoline `RET`s into the requested subroutine, and the subroutine's final `RET` pops the caller's address (in RAM) — at which point the BASIC ROM is back. This is the standard way for machine-code programs to call TR-DOS internal routines without writing their own banking glue. |
 
-The exact bytes vary by Beta Disk Interface revision, but the effect is: "page TR-DOS in and jump to the TR-DOS entry point." This is how TR-DOS is bootstrapped into existence from the BASIC environment.
+When the user types `RANDOMIZE USR 15616`, the Spectrum BASIC interpreter pushes the return address (a location in RAM around `#5Cxx`), then the CPU performs an M1 fetch at `#3D00`. The Beta hardware triggers on the address-bus state, the TR-DOS ROM takes over the `#0000–#3FFF` window mid-cycle, and the CPU reads the TR-DOS ROM's byte at offset `#3D00` (typically a `JP` to the cold-init routine elsewhere in the TR-DOS ROM) and executes it.
 
 ### 4.5 What happens during TR-DOS execution
 
 Once TR-DOS is paged in, the spectrum's `#0000–#3FFF` window contains TR-DOS code. The interrupt vector table at `#0000–#00FF` is replaced, so RST instructions go to TR-DOS handlers. The TR-DOS code uses the WD1793 ports (`#1F`, `#3F`, `#5F`, `#7F`) and the control latch (`#FF`) to perform disk I/O, and it uses the Spectrum's normal RAM (`#4000–#FFFF`) for buffers and state.
 
-When TR-DOS is done with a command, it writes to `#3D00` to page the BASIC ROM back in, restores the BASIC command hooks (so the BASIC interpreter's next `LOAD` will still go through TR-DOS), and returns to the caller. From the user's point of view, TR-DOS is "always there" once activated.
+When TR-DOS finishes a command, it executes `RET`. The CPU pops the caller's return address (which is in RAM, somewhere in `#4000–#FFFF`) and fetches its next instruction from there; the moment that M1 fetch lands in `#4000–#FFFF`, the Beta Disk Interface's address decoder clears the TR-DOS-active flip-flop and the BASIC ROM returns to the `#0000–#3FFF` window automatically. No explicit "page-out" write is performed, and none is needed.
+
+The BASIC command hooks installed by TR-DOS (see §4.3) remain resident in RAM. The next time the user types `LOAD`, `SAVE`, or `*`, the hook routine — which lives in RAM — executes a `CALL #3D03`, which again triggers the M1-fetch mechanism, banks TR-DOS back in, and the cycle repeats. From the user's point of view, TR-DOS is "always there" once activated, even though the TR-DOS ROM itself is only mapped into `#0000–#3FFF` during the actual disk operation.
 
 ### 4.6 Compatibility with the 128K / +2 / +3
 
@@ -352,10 +380,10 @@ Software that needs to access the disk as fast as possible can disable the spin-
 
 On power-up or after a `/RESET`, the Beta Disk Interface's control latch is reset to `#00` — no drives selected, motor off, side 0. The WD1793 is held in a `/MR` (master reset) state until the host writes a `RESTORE` command.
 
-After a reset, the Spectrum's `#0000–#3FFF` window contains the BASIC ROM (the TR-DOS ROM is not paged in). The 4-byte stub at `#3D00–#3D03` is present but inactive until written to.
+After a reset, the Spectrum's `#0000–#3FFF` window contains the BASIC ROM. The TR-DOS ROM is inactive — its banking flip-flop is cleared because the reset vector at `#0000` lies in the `#0000–#3CFF` range, which leaves the flip-flop in its default (BASIC ROM active) state.
 
 Software that needs to use the disk must:
-1. Page TR-DOS in by writing to `#3D00–#3DFF` (or via the entry point at `RANDOMIZE USR 15616`).
+1. Invoke TR-DOS via its cold entry point — `RANDOMIZE USR 15616` from BASIC, or `CALL #3D00` from machine code. The Z80's instruction fetch at `#3D00` triggers the Beta Disk Interface's address-bus decoder (see §4.2), which banks the TR-DOS ROM into `#0000–#3FFF`.
 2. Select the desired drive via port `#FF`.
 3. Issue a `RESTORE` command to the WD1793 to home the head and start the motor.
 4. Wait for the spin-up timer to expire (≈1.2 seconds).
@@ -474,7 +502,7 @@ To maintain compatibility, modern TR-DOS versions (TR-DOS 6.x, ETR-DOS, Mr Gluk 
 
 On Pentagon and Scorpion hardware, the Beta Disk Interface port map is **wired directly to the motherboard** — there is no external cartridge. The port addresses are the same (`#1F`–`#7F`, `#FF`), but the WAIT-state generator is implemented as part of the motherboard's Z80 I/O logic, not as a separate monostable.
 
-Both machines also have an **onboard TR-DOS ROM** (typically version 5.03 or 5.04) paged in the same way as the original Beta Disk Interface — writing to `#3D00–#3DFF` toggles the page latch. The ROM is soldered to the motherboard (often as part of a larger "BIOS" / system ROM that also contains a BASIC ROM and CP/M loader).
+Both machines also have an **onboard TR-DOS ROM** (typically version 5.03 or 5.04) banked in using the same M1-fetch-triggered mechanism as the original Beta Disk Interface (see §4.2) — an instruction fetch from `#3D00–#3DFF` activates the TR-DOS ROM in place of the machine's main ROM. The TR-DOS ROM is soldered to the motherboard (often as part of a larger "BIOS" / system ROM that also contains a BASIC ROM and CP/M loader). Pentagon and Scorpion additionally expose the `#FF` bit 7 software override described in §4.2.4, which the original Beta Disk Interface does not have.
 
 ### 7.5 Western variants and uncommon drives
 
