@@ -27,15 +27,15 @@ The original 1985 hardware used a Western Digital **WD1793** floppy controller (
 
 Contemporary UK retail prices for the Beta Disk Interface and its direct competitors:
 
-| Product | Year | Price | Storage type |
-|---|---|---|---|
-| ZX Interface 1 + Microdrive + 4 carts (bundle) | 1983 | £99.95 | Tape-loop ("stringy floppy") |
-| Opus Discovery, single 3" drive | 1984 | £199.95 | True floppy, 178 KB/disk |
-| Opus Discovery, dual drive | 1984 | £329.95 | True floppy |
-| **Beta Disk Interface** (interface only) | 1985 | **£109.25** | True floppy |
-| **Beta Disk Interface + one drive** | 1985 | **£249.75** | True floppy |
-| **Beta 128** (revised interface) | 1986 | comparable | True floppy |
-| Sinclair +3 (whole computer, drive included) | 1987 | £199.99 | True floppy, 178 KB/disk |
+| Product | Year | Price |
+|---|---|---|
+| ZX Interface 1 + Microdrive + 4 carts (bundle) | 1983 | £99.95 |
+| Opus Discovery, single 3" drive | 1984 | £199.95 |
+| Opus Discovery, dual drive | 1984 | £329.95 |
+| **Beta Disk Interface** (interface only) | 1985 | **£109.25** |
+| **Beta Disk Interface + one drive** | 1985 | **£249.75** |
+| **Beta 128** (revised interface) | 1986 | comparable |
+| Sinclair +3 (whole computer, drive included) | 1987 | £199.99 |
 
 The Beta Disk Interface sat between the cheap-but-limited Microdrive bundle and the more expensive Opus Discovery. Its UK market position was ultimately eroded by the +3 (1987), which included a drive in the base machine for less than the cost of a Beta Disk + standalone drive. In the West, the Beta Disk Interface was a niche product by 1988.
 
