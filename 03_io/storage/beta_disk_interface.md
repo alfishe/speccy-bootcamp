@@ -47,13 +47,14 @@ The Beta Disk Interface's UK commercial life was short. After 1987, the +3 (with
 
 ### 1.4 The replication timeline
 
-The Beta 128's migration into Soviet computing followed a four-year chain of reverse-engineering and cloning:
+The Beta 128's migration into Soviet computing followed a chain of **sample-and-reverse-engineer**, not commercial import. There is no evidence of mass sales or even quantity imports of the original UK hardware: a single unit (or at most a handful) entered the USSR in 1987, was studied, and within a year had been cloned from Soviet-made parts. From that point on, every Beta Disk controller in the Eastern Bloc was a domestic clone — the Western product itself was no longer needed.
 
 | Year | Event |
 |---|---|
 | **1986** | Beta 128 released in UK by Technology Research Ltd. |
-| **1987** | Beta 128 imported to USSR at approximately £70 per unit — cheap enough to enter the country in quantity. The 128K Spectrum's ULA is "completely cracked" the same year, enabling local 128K clones. |
-| **mid-1988** | Circuit diagram of the Beta 128 is reverse-engineered, adapted to Soviet-made logic ICs, and **published**. The **KR1818VG93** (Soviet clone of WD1793) becomes the standard FDC chip. The design is now free to copy. |
+| **1987** | A small number of Beta 128 units (possibly just one) is imported into the USSR — not for resale, but as a specimen to study. The Italian-language *Spectrumpedia* (Grussu, citing Mac Buster's Pentagon FAQ v1.0.2, 2001) frames the import explicitly as an attempt "to copy its code". In parallel, the 128K Spectrum's ULA has by now been reverse-engineered by Sergey Patsyuk and Vyacheslav Bogomyatov's NTK Plus group in Moscow, enabling local 128K clones (the "Moscow" machine). |
+| **1988** | The Beta 128's circuit diagram is reconstructed from the imported specimen and published in a Czechoslovak hobbyist journal. NTK Plus adapts it to Soviet-made logic ICs and produces the first local Beta 128 clone. The **KR1818VG93** — a Soviet second-source of the WD1793/WD1797 FDC, originally developed in the mid-1980s for state-funded computers like the Elektronika 85 and Corvette — becomes freely available on the grey market and is adopted as the standard FDC. |
+| **1989** | NPVO Variant of Saint Petersburg begins production of the "Moskovskaya" controller — the first commercially-sold Soviet Beta 128 clone, on a single large PCB with a GRMP connector. |
 | **1989** | **Pentagon 48K** released in Moscow — the first Soviet clone with a Beta 128 controller **built into the motherboard** rather than as a separate cartridge. Named "Pentagon" after the pentagonal ground-plane layout of its PCB. |
 | **1990** | **Pentagon 128K** (with AY sound and ZX-Lprint printer interface added). |
 | **1991–1996** | Pentagon PCB is "copied all over the ex-USSR". Mass production runs through state electronics plants, frequently assembled after-hours on programmable soldering stations. |
