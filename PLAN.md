@@ -622,9 +622,9 @@ zx/
 |---|---|---|
 | `README.md` | Index — peripheral ecosystem across all tracks | ✅ |
 | **Input** | | |
-| `keyboard.md` | Keyboard reading: 48K (IN), 128K (AY port), +2A/+3 differences, PS/2 on modern hardware |
+| `keyboard.md` | Keyboard reading: 48K (IN), 128K (AY port), +2A/+3 differences, PS/2 on modern hardware | ✅ |
 | `joystick.md` | Kempston (#1F), Sinclair 1/2, Fuller, Cursor, TG Entertainment joystick protocols | ✅ |
-| `mouse.md` | Mouse interfaces: Kempston mouse, AMX mouse, protocols |
+| `mouse.md` | Mouse interfaces: Kempston mouse, AMX mouse, protocols | ✅ |
 | `lightgun.md` | Light gun / gun stick: Magnum Light Phaser |
 | **Expansion Interfaces** | | |
 | `interface1.md` | ZX Interface 1: ZX Net, RS-232, Microdrives | ✅ |

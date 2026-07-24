@@ -187,9 +187,11 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [interface1.md](03_io/peripherals/interface1.md) | **ZX Interface 1** (Sinclair, 1983) — triple-function expansion: Microdrive controller + RS-232 + ZX Net LAN. 8 KB shadow ROM paging via `M1` fetch at `#0008`, hook codes `#1B`–`#32`, ZX Microdrive sector format (254 × 543 bytes, bespoke non-CRC checksum), bit-bang RS-232, single-wire token bus for 64 Spectrums |
 | [interface2.md](03_io/peripherals/interface2.md) | **ZX Interface 2** (Sinclair, 1983) — twin-joystick + ROM-cartridge expansion. MT62001 joystick decode IC, 28-pin cartridge socket mirroring 27128 EPROM pinout, `/ROMCS` pull-up disables internal ROM at `#0000-#3FFF`, the 10 released cartridges, +2A/+3 incompatibility (two-diode fix), homebrew cartridge ecosystem |
 | [multiface.md](03_io/peripherals/multiface.md) | **Multiface (One / 128 / 3)** (Romantic Robot, 1986–1988) — hardware overlay peripheral: 8 KB ROM + 8 KB RAM paged in via NMI vector fetch at `#0066`, three model variants with distinct port maps (`#9F`/`#1F` for MF1, `#BF`/`#3F` for MF128, `#3F`/`#BF` for MF3), `+3` paging-port back doors (`#7F3F`/`#1F3F`), stealth mode, dump-file format (precursor to `.z80`), Genie disassembler and Lifeguard poke-finder ecosystem, cultural impact on cheat codes and snapshots |
+| [keyboard.md](03_io/peripherals/keyboard.md) | **Keyboard Reading** — software-side companion to `keyboard_matrix.md`. Half-row scan idiom, 40-key scan, ghosting and the QAOP/CS consensus, per-model differences (48K ULA, 128K AY port B, +2A/+3 multi-stage, PS/2 via Next/DivMMC/Harlequin), debounce/auto-repeat/redefine patterns, 10 pitfalls |
+| [mouse.md](03_io/peripherals/mouse.md) | **Mouse Interfaces** — Kempston Mouse (8-bit absolute counters at `#FBDF`/`#FFDF`/`#FADF`, quadrature decode in hardware) vs AMX Mouse (1-bit relative polling at `#1F`/`#3F`/`#DF`, conflict with Kempston joystick), Kempston Mouse Turbo PS/2, K-MOUSE Turbo, Next PS/2 mouse, PS/2 protocol primer, 10 pitfalls |
 | [joystick.md](03_io/peripherals/joystick.md) | Joystick interfaces: Kempston #1F, Sinclair/Interface 2, Cursor/Protek/AGF, Fuller, Timex, clone built-ins, unified multi-standard reader |
 
-*See [03_io/peripherals/README.md](03_io/peripherals/README.md) for the section index. Planned: keyboard, mouse, lightgun, Interface 2, Z-Controller, MB02, ZX Bus, printers, video output.*
+*See [03_io/peripherals/README.md](03_io/peripherals/README.md) for the section index. Planned: lightgun, Z-Controller, MB02, ZX Bus, printers, video output.*
 
 ### 07 — Demoscene ✅ COMPLETE
 
