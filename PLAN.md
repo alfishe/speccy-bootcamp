@@ -630,7 +630,7 @@ zx/
 | `interface1.md` | ZX Interface 1: ZX Net, RS-232, Microdrives | ✅ |
 | `interface2.md` | ZX Interface 2: ROM cartridges, joystick, MT62001 decode | ✅ |
 | `multiface.md` | Multiface One/128/3: snapshot tool, poke finder, NMI overlay | ✅ |
-| `z_controller.md` | Z-Controller: SD card interface for ZX Spectrum |
+| `z_controller.md` | Z-Controller: SD card interface for ZX Spectrum | ✅ |
 | `mb02.md` | MB02 interface: 256K RAM, disk, clock, printer | ✅ |
 | `zx_bus.md` | ZX Bus standard: expansion bus protocols, addressing, electrical specs | ✅ |
 | **Output** | | |
