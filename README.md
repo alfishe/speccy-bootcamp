@@ -192,8 +192,9 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [joystick.md](03_io/peripherals/joystick.md) | Joystick interfaces: Kempston #1F, Sinclair/Interface 2, Cursor/Protek/AGF, Fuller, Timex, clone built-ins, unified multi-standard reader |
 | [printers.md](03_io/peripherals/printers.md) | **Printers** — ZX Printer (1981, spark / electro-erosion, port `#FB` with `A2=0` decode, paper-start latch bit 7, next-pixel latch bit 0, +9V power removed on +2A/+3), Alphacom 32 thermal alternative, Centronics adapters (Kempston/DK'Tronics data `#0F` / status `#1F` / hardware-strobe on write), Soviet SM640 (IEEE 488/IEC 625) and SM646 (Centronics, GOST 19768-74 Cyrillic), Retro-Printer modern emulation, 10 pitfalls |
 | [zx_bus.md](03_io/peripherals/zx_bus.md) | **ZX Bus** — the 56-pin (28+28) expansion edge connector: full pinout, signal groups (address / data / control / interrupts / power), per-model differences (16K/48K vs 128K/+2 vs +2A/+3 — `+9V`/`/ROMCS` removal, `/ROM1OE`+`/ROM2OE` replacement), `/ROMCS` overlay trick, no `/RAMCS`, `M1`-triggered overlays, DMA via `/BUSRQ`/`/BUSACK`, peripheral stacking order, 12 pitfalls |
+| [mb02.md](03_io/peripherals/mb02.md) | **MB-02 / MB-02+** — Czech all-in-one disk/DMA/memory/RTC/IDE expansion (8BC group, ~1996; ~90 units made): WD2797 FDC with HD floppies (1.4-1.8 MB), Z80-DMA (RFT U858D required due to BS-DOS init-order bug), 128K-512K SRAM, RTC-72421, full port map, BS-DOS, Hood's NMI menu, MB03+ Ultimate FPGA successor |
 
-*See [03_io/peripherals/README.md](03_io/peripherals/README.md) for the section index. Planned: lightgun, Z-Controller, MB02, video output.*
+*See [03_io/peripherals/README.md](03_io/peripherals/README.md) for the section index. Planned: lightgun, Z-Controller, video output.*
 
 ### 07 — Demoscene ✅ COMPLETE
 
