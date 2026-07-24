@@ -185,9 +185,11 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | Article | Description |
 |---------|-------------|
 | [interface1.md](03_io/peripherals/interface1.md) | **ZX Interface 1** (Sinclair, 1983) — triple-function expansion: Microdrive controller + RS-232 + ZX Net LAN. 8 KB shadow ROM paging via `M1` fetch at `#0008`, hook codes `#1B`–`#32`, ZX Microdrive sector format (254 × 543 bytes, bespoke non-CRC checksum), bit-bang RS-232, single-wire token bus for 64 Spectrums |
+| [interface2.md](03_io/peripherals/interface2.md) | **ZX Interface 2** (Sinclair, 1983) — twin-joystick + ROM-cartridge expansion. MT62001 joystick decode IC, 28-pin cartridge socket mirroring 27128 EPROM pinout, `/ROMCS` pull-up disables internal ROM at `#0000-#3FFF`, the 10 released cartridges, +2A/+3 incompatibility (two-diode fix), homebrew cartridge ecosystem |
+| [multiface.md](03_io/peripherals/multiface.md) | **Multiface (One / 128 / 3)** (Romantic Robot, 1986–1988) — hardware overlay peripheral: 8 KB ROM + 8 KB RAM paged in via NMI vector fetch at `#0066`, three model variants with distinct port maps (`#9F`/`#1F` for MF1, `#BF`/`#3F` for MF128, `#3F`/`#BF` for MF3), `+3` paging-port back doors (`#7F3F`/`#1F3F`), stealth mode, dump-file format (precursor to `.z80`), Genie disassembler and Lifeguard poke-finder ecosystem, cultural impact on cheat codes and snapshots |
 | [joystick.md](03_io/peripherals/joystick.md) | Joystick interfaces: Kempston #1F, Sinclair/Interface 2, Cursor/Protek/AGF, Fuller, Timex, clone built-ins, unified multi-standard reader |
 
-*See [03_io/peripherals/README.md](03_io/peripherals/README.md) for the section index. Planned: keyboard, mouse, lightgun, Interface 2, Multiface, Z-Controller, MB02, ZX Bus, printers, video output.*
+*See [03_io/peripherals/README.md](03_io/peripherals/README.md) for the section index. Planned: keyboard, mouse, lightgun, Interface 2, Z-Controller, MB02, ZX Bus, printers, video output.*
 
 ### 07 — Demoscene ✅ COMPLETE
 
