@@ -539,31 +539,54 @@ Since only two bits of MEMPTR are visible at a time, extracting the full 16-bit 
 
 ### MEMPTR Update Rules
 
-MEMPTR is updated by specific instruction groups:
+MEMPTR is updated by specific instruction groups. The table below lists every known instruction that modifies MEMPTR, including block-repeat variants:
 
-| Instruction | MEMPTR Value After Execution |
-|-------------|------------------------------|
-| `LD A,(addr)` | `addr + 1` |
-| `LD (addr),A` | `(addr+1) & #FF` in low byte, A in high byte |
-| `LD A,(BC)` / `LD A,(DE)` | `rp + 1` |
-| `LD (BC),A` / `LD (DE),A` | `(rp+1) & #FF` in low, A in high |
-| `LD rp,(addr)` / `LD (addr),rp` | `addr + 1` |
-| `EX (SP),rp` | value of rp after exchange |
-| `ADD/ADC/SBC HL,rr` | `HL_before + 1` |
-| `RLD` / `RRD` | `HL + 1` |
-| `JR/DJNZ/RET/RETI/RST` | target address |
-| `JP nn` / `CALL nn` | `nn` (even if conditional and not taken!) |
-| `IN A,(n)` | `(A_before << 8) + n + 1` |
-| `IN r,(C)` | `BC + 1` |
-| `OUT (n),A` | `(n+1) & #FF` in low, A in high |
-| `OUT (C),r` | `BC + 1` |
-| Any `(IX+d)` / `(IY+d)` instruction | `IX + d` / `IY + d` |
-| `CPI` | `MEMPTR + 1` |
-| `CPD` | `MEMPTR − 1` |
-| `LDIR` (when BC≠1) | `PC + 1` |
-| `LDIR` (when BC=1) | unchanged |
-| `INI` | `BC_before_B_dec + 1` |
-| `OUTI` | `BC_after_B_dec + 1` |
+| Instruction | MEMPTR Value After Execution | Notes |
+|-------------|------------------------------|-------|
+| **Load / Store** | | |
+| `LD A,(addr)` | `addr + 1` | |
+| `LD (addr),A` | `(addr+1) & #FF` low, A high | †BM1 |
+| `LD A,(BC)` / `LD A,(DE)` | `rp + 1` | |
+| `LD (BC),A` / `LD (DE),A` | `(rp+1) & #FF` low, A high | †BM1 |
+| `LD rp,(addr)` / `LD (addr),rp` | `addr + 1` | |
+| `EX (SP),rp` | value of rp after exchange | |
+| **Arithmetic** | | |
+| `ADD/ADC/SBC HL,rr` | `HL_before + 1` | |
+| `RLD` / `RRD` | `HL + 1` | |
+| **Control Transfer** | | |
+| `JR/DJNZ/RET/RETI/RST` | target address | |
+| `JP nn` / `CALL nn` | `nn` (even if conditional and not taken!) | |
+| Interrupt call (INT/NMI) | vector address | Same as `CALL` |
+| **I/O** | | |
+| `IN A,(n)` | `(A_before << 8) + n + 1` | |
+| `IN r,(C)` | `BC + 1` | |
+| `OUT (n),A` | `(n+1) & #FF` low, A high | †BM1 |
+| `OUT (C),r` | `BC + 1` | |
+| **Indexed** | | |
+| Any `(IX+d)` / `(IY+d)` instruction | `IX + d` / `IY + d` | |
+| **Block Search** | | |
+| `CPI` | `MEMPTR + 1` | |
+| `CPD` | `MEMPTR − 1` | |
+| `CPIR` (when BC≠1 and A≠(HL)) | `PC + 1` each iteration | Repeats; final step as `CPI` |
+| `CPIR` (when BC=1 or A=(HL)) | `MEMPTR + 1` | As `CPI` |
+| `CPDR` (when BC≠1 and A≠(HL)) | `PC + 1` each iteration | Repeats; final step as `CPD` |
+| `CPDR` (when BC=1 or A=(HL)) | `MEMPTR − 1` | As `CPD` |
+| **Block Transfer** | | |
+| `LDIR` (when BC≠1) | `PC + 1` | Repeats |
+| `LDIR` (when BC=1) | unchanged | Final step |
+| `LDDR` (when BC≠1) | `PC + 1` | Repeats |
+| `LDDR` (when BC=1) | unchanged | Final step |
+| **Block I/O** | | |
+| `INI` | `BC_before_B_dec + 1` | B not yet decremented |
+| `IND` | `BC_before_B_dec − 1` | B not yet decremented |
+| `OUTI` | `BC_after_B_dec + 1` | B already decremented |
+| `OUTD` | `BC_after_B_dec − 1` | B already decremented |
+| `INIR` (final, B=0) | `#100 + C + 1` | Each step as `INI`; B reaches 0 |
+| `INDR` (final, B=0) | `#100 + C − 1` | Each step as `IND`; B reaches 0 |
+| `OTIR` (final, B=0) | `C + 1` | Each step as `OUTI`; B already 0 |
+| `OTDR` (final, B=0) | `C − 1` | Each step as `OUTD`; B already 0 |
+
+> **†BM1** — On the КР1858ВМ1 (BM1) Soviet Z80 clone, the high byte of MEMPTR is **0** instead of **A** after these instructions. This is a reliable software detection method — see [§7 Clone Detection](#7-clone-detection-and-differences).
 
 ### Why MEMPTR Matters
 
@@ -572,6 +595,10 @@ MEMPTR is updated by specific instruction groups:
 2. **Clone detection**: Some Soviet clones (КР1858ВМ1, T34VM1) handle MEMPTR differently for `LD (addr),A` and `OUT (n),A`. This provides a software method to detect specific Z80 clone types.
 
 3. **Democode**: A few ZX Spectrum demos use MEMPTR-based techniques, though this is rare because the two-bit-at-a-time access makes it impractical for performance-critical code.
+
+### Attribution
+
+The comprehensive MEMPTR update rules documented above were discovered by **boo_boo** (Vladimir Kladov) and published in 2006 on [zx.pk.ru](http://zx.pk.ru). The key breakthrough was the **CPI increment technique**: since `CPI` increments MEMPTR by exactly 1, executing `CPI` in a loop and reading bits 13 and 11 of MEMPTR via `BIT n,(HL)` flags (F5/F3) after each step allows full reconstruction of the 16-bit MEMPTR value. This technique was then applied systematically to every Z80 instruction to build the complete table above. The original research is preserved as a [gist by drhelius](https://gist.github.com/drhelius/8497817).
 
 ---
 

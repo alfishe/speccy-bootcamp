@@ -372,6 +372,21 @@ On the 48K ZX Spectrum, the NMI line is **not connected to any hardware** — th
 
 The **Multiface 128** and similar devices use NMI to activate — pressing the Multiface button triggers NMI, which jumps to #0066 where the Multiface ROM is paged in.
 
+### NMI as an Attack Vector and Anti-Debugging Countermeasures
+
+Because NMI **cannot be masked by software**, it is a powerful tool for breaking into running programs — every hardware debugger, from the Multiface to the Soviet MAGIC button (see [beta_disk_interface.md §11.3](../03_io/storage/beta_disk_interface.md)), relies on this property. Copy-protected software developed several countermeasures to detect or resist NMI-based debugging:
+
+| Technique | How It Works | Limitation |
+|-----------|-------------|------------|
+| **Stack canary** | Place a known value at the current SP before entering protected code; check afterward. NMI pushes 2 bytes (return address) to SP, overwriting the canary | Only detects that NMI fired — doesn't prevent it. The 2 overwritten bytes are unrecoverable |
+| **Stack relocation** | Point SP at read-only memory, I/O port space, or a critical memory region (e.g. video RAM). When NMI fires, the stack push writes to the chosen address, causing a bus conflict or corrupting visible screen data | Defeats simple snapshot/debugger tools that expect a valid stack. Some advanced monitors (e.g. Scorpion Shadow Monitor) save SP before the push and use their own internal stack |
+| **`#0066` vector hijacking** | In RAM mode (CP/M, or machines with RAM at `#0000`), overwrite the NMI handler address `#0066` with a reset, crash, or decoy routine | Only works if user code controls `#0000`. Hardware-debugger ROMs (Scorpion, Multiface) bank in their own ROM at `#0000`, overriding user code at the vector |
+| **R register checking** | Read the R (refresh) register at two points in a timing-critical loop. If R has advanced more than expected, a debugger has injected extra cycles (single-stepping, tracing) | The Scorpion Shadow Monitor preserves R exactly, defeating this check. Software-only debuggers (STS, MONS) corrupt R |
+| **Timing-window checks** | Use a tight loop calibrated to the frame timing. An NMI injects 11+ T-states, causing the loop to miss its window (e.g. late raster effect, missed frame) | Cannot be defeated — the NMI always costs cycles. But hardware debuggers minimize the window by restoring exact timing on return |
+
+> [!WARNING]
+> The Z80 NMI pushes the return address (2 bytes) onto the **current stack** before jumping to `#0066`. These 2 bytes are **permanently overwritten** — no NMI handler can recover them. If the protected program stored critical data at that stack location, correct resumption after NMI is impossible. This is a hardware limitation, not a software bug.
+
 ---
 
 ## EI/DI Timing and the One-Instruction Delay
