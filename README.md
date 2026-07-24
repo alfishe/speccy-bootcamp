@@ -190,8 +190,10 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [keyboard.md](03_io/peripherals/keyboard.md) | **Keyboard Reading** — software-side companion to `keyboard_matrix.md`. Half-row scan idiom, 40-key scan, ghosting and the QAOP/CS consensus, per-model differences (48K ULA, 128K AY port B, +2A/+3 multi-stage, PS/2 via Next/DivMMC/Harlequin), debounce/auto-repeat/redefine patterns, 10 pitfalls |
 | [mouse.md](03_io/peripherals/mouse.md) | **Mouse Interfaces** — Kempston Mouse (8-bit absolute counters at `#FBDF`/`#FFDF`/`#FADF`, quadrature decode in hardware) vs AMX Mouse (1-bit relative polling at `#1F`/`#3F`/`#DF`, conflict with Kempston joystick), Kempston Mouse Turbo PS/2, K-MOUSE Turbo, Next PS/2 mouse, PS/2 protocol primer, 10 pitfalls |
 | [joystick.md](03_io/peripherals/joystick.md) | Joystick interfaces: Kempston #1F, Sinclair/Interface 2, Cursor/Protek/AGF, Fuller, Timex, clone built-ins, unified multi-standard reader |
+| [printers.md](03_io/peripherals/printers.md) | **Printers** — ZX Printer (1981, spark / electro-erosion, port `#FB` with `A2=0` decode, paper-start latch bit 7, next-pixel latch bit 0, +9V power removed on +2A/+3), Alphacom 32 thermal alternative, Centronics adapters (Kempston/DK'Tronics data `#0F` / status `#1F` / hardware-strobe on write), Soviet SM640 (IEEE 488/IEC 625) and SM646 (Centronics, GOST 19768-74 Cyrillic), Retro-Printer modern emulation, 10 pitfalls |
+| [zx_bus.md](03_io/peripherals/zx_bus.md) | **ZX Bus** — the 56-pin (28+28) expansion edge connector: full pinout, signal groups (address / data / control / interrupts / power), per-model differences (16K/48K vs 128K/+2 vs +2A/+3 — `+9V`/`/ROMCS` removal, `/ROM1OE`+`/ROM2OE` replacement), `/ROMCS` overlay trick, no `/RAMCS`, `M1`-triggered overlays, DMA via `/BUSRQ`/`/BUSACK`, peripheral stacking order, 12 pitfalls |
 
-*See [03_io/peripherals/README.md](03_io/peripherals/README.md) for the section index. Planned: lightgun, Z-Controller, MB02, ZX Bus, printers, video output.*
+*See [03_io/peripherals/README.md](03_io/peripherals/README.md) for the section index. Planned: lightgun, Z-Controller, MB02, video output.*
 
 ### 07 — Demoscene ✅ COMPLETE
 
