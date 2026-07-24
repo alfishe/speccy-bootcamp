@@ -1,0 +1,413 @@
+# Video Output — RF, Composite, RGB, SCART, and VGA Adapters
+
+## Overview
+
+The ZX Spectrum's video output is one of the more fragmented areas of the platform's hardware story. Across the Sinclair and Amstrad range — 16K, 48K, 128K "Toastrack", grey +2, black +2A, +3 — the video circuitry was rebuilt almost from scratch three times, the connector changed twice, and the available signal types ranged from "RF modulator only, hope your TV has a tuner" (16K/48K, 1982) all the way to "TTL RGB on a standard 8-pin DIN, plug straight into a Sony PVM" (128K onwards, 1986).
+
+This article covers the **physical video output stage** of every Spectrum model — what signals appear at which connector, what voltages they sit at, what they need to drive, and how to build or buy the cables and adapters that turn those signals into a picture on a modern display. It is the hardware-side complement to [ULA Architecture](../../02_hardware/original/ula_architecture.md), which describes how the ULA generates the digital RGB pixels internally; this article describes what happens to those pixels on their way to your TV.
+
+In scope: the LM1889 modulator stage of the 48K, the composite video modification, the TEA2000 PAL encoder of the 128K, the Amstrad gate array video stage of the +2A/+3, the three 8-pin DIN pinout variants (128K, +2, +2A/+3), SCART cable wiring (with the link-jumper and series-resistor details), the GBS-8200/8220 and OSSC paths to VGA/HDMI, and the Soviet clone composite convention. Out of scope: the ULA's video pipeline internals (see [ULA Architecture](../../02_hardware/original/ula_architecture.md)); per-model frame timing and T-state maps (see [ULA Timing](../../02_hardware/original/ula_timing.md) and [Clone Timing](../../02_hardware/clones/clone_timing.md)); programming-side display effects like floating bus and snow (see those dedicated articles).
+
+---
+
+## Why Video Output Matters
+
+For most of the 1980s, a Spectrum owner's video experience was dictated not by the ULA's pixel pipeline — which was already excellent for the price — but by the analog output stage that delivered those pixels to the TV. Two facts dominated:
+
+1. **The 16K and 48K were RF-only by design.** The ULA produced clean Y/U/V component analog signals internally, but Sinclair routed them through an LM1889 PAL modulator and then an RF modulator box whose output was a UHF signal on channel 35 or 36, intended to feed the aerial socket of a 1982-era television. The picture on the user's TV was the result of UHF modulation **plus** the TV's own IF demodulation chain. Image quality was, charitably, poor — soft, smeary, prone to dot crawl and colour fringing.
+
+2. **The 128K onwards shipped with RGB.** The "Toastrack" 128K (1986) introduced an 8-pin DIN monitor socket carrying TTL-level digital RGB plus composite sync and a composite video output. This was a substantial upgrade, and it meant that anyone with a compatible RGB monitor (the Commodore 1084, the Sony PVM series, any SCART-equipped European TV) could get a crisp, dot-crawl-free picture with zero modifications. The grey +2 (1987) carried this forward. The +2A and +3 (1987–1990) used a different pinout on the same 8-pin DIN, dropping composite video and vertical sync in favour of audio out and two `+12V` lines, but still provided clean RGB.
+
+The practical consequence is that **modern Spectrum ownership is a hardware-modding exercise for the 48K** and a **cable-buying exercise for the 128K/+2/+2A/+3**. Both paths land at the same place — a SCART cable into a CRT, or an upscaler into a modern HDMI/VGA display — but they get there very differently.
+
+---
+
+## Video Path Per Model Family
+
+The Spectrum has three distinct video-output architectures. Understanding which one your machine uses is the first step.
+
+### 16K / 48K (1982–1984) — LM1889 + RF modulator
+
+The 5C/6C ULA outputs **analog Y (luminance), U (B-Y colour difference), and V (R-Y colour difference)** signals on dedicated pins. These drive the **LM1889** PAL video encoder IC, which combines them into a PAL composite video signal. The LM1889 output is then fed into a separate **metal-can RF modulator** box (typically an UM1236-E36 or equivalent) that AM-modulates the composite video onto a UHF carrier at approximately **599.5 MHz (channel 35) or 575.25 MHz (channel 36)**. The modulator output appears on a standard RCA phono socket labelled "RF OUT" or on a flying coaxial lead.
+
+There is **no monitor socket**. The only way to get video out of an unmodified 16K or 48K is through the RF modulator into a TV's aerial socket. The picture is the worst of any Spectrum model.
+
+The composite video signal exists **inside the machine** — between the LM1889 and the RF modulator — but Sinclair did not bring it out to a connector. Tapping it requires either soldering a wire to the LM1889 output (the "composite mod", covered below) or replacing the LM1889 entirely with a modern composite or S-video output board.
+
+The PAL 4.43 MHz colour subcarrier is generated by a **separate 4.43361875 MHz crystal** (the same frequency used in all PAL-B/G equipment); the ULA's 14 MHz master crystal is divided down to provide the burst and color-lock timing. See [ULA Architecture](../../02_hardware/original/ula_architecture.md) for the clock tree.
+
+### 128K "Toastrack" (1986) — TEA2000 + 8-pin DIN RGB socket
+
+The 128K ULA outputs **digital RGB** (TTL-level, 0V/5V) instead of analog Y/U/V. These three colour lines, plus a "Bright" line (used by the monitor to indicate the BRIGHT attribute is set on the current pixel, doubling the palette from 8 to 15 colours — see [Color System](../../05_development/05_display_and_timing/color_system.md)), drive a **TEA2000** PAL colour encoder (IC36 on the 128K schematic). The TEA2000 produces:
+
+- A clean **PAL composite video** signal at 75 ohms, 1.2 V peak-to-peak
+- TTL-level **R, G, B, Bright, Composite Sync, Vertical Sync** outputs, all through 68-ohm series resistors
+
+All of these signals are brought out to an **8-pin DIN 45326 female socket** on the rear of the machine. There is also a separate **9-pin D-type** socket on some revisions carrying the same signals, but the 8-pin DIN is the standard one used by cables today. The RF modulator is still present on the 128K (Sinclair kept it for backward compatibility with non-SCART TVs) but is no longer the primary output.
+
+This is the first Spectrum model that can produce a high-quality picture on a modern display **without any internal modification** — all that is needed is the correct cable.
+
+### Grey +2 (1987) — TEA2000 variant + modified 8-pin DIN
+
+The grey +2 uses the same TEA2000-based video path as the 128K "Toastrack". The 8-pin DIN socket is the same physical connector but the pinout is slightly different and configurable via PCB **link jumpers LK1–LK8**. The default factory jumpering (LK1, LK4, LK7) provides composite video on pin 1, vertical sync on pin 5, and bright output on pin 3 — i.e. compatible with the 128K pinout. Alternative jumpers (LK2, LK3, LK8) substitute `+12V` on pins 1 and 5 and audio on pin 3, matching the +2A/+3 pinout.
+
+The series resistors on the R/G/B/CSYNC/VSYNC lines are **75 ohms on the +2** (vs 68 ohms on the 128K). This is a minor difference that does not affect SCART cable design in practice.
+
+### +2A / +2B / +3 / +3B (1987–1990) — Amstrad gate array, no TEA2000
+
+The +2A and +3 use the Amstrad **40077 gate array** (which absorbs the ULA, the paging logic, and the I/O decode into one QFP package — see [ULA Architecture](../../02_hardware/original/ula_architecture.md)). The video pipeline is integrated into this gate array. The TEA2000 is **gone**, and with it the composite video output on pin 1 of the monitor socket. The new pinout is:
+
+- Pin 1: `+12V` (through 1 kΩ resistor)
+- Pin 2: 0V (ground)
+- Pin 3: Audio Out (200 mV p-p)
+- Pin 4: Composite Sync (1.2 V)
+- Pin 5: `+12V` (through 1 kΩ resistor)
+- Pin 6: Green (5 V, through 150 Ω series R)
+- Pin 7: Red (5 V, through 150 Ω series R)
+- Pin 8: Blue (5 V, through 150 Ω series R)
+
+The colour outputs are now at 5 V with **150-ohm internal series resistors**, not TTL via 68 Ω. The composite video output is gone — only composite sync remains. There is no separate vertical sync line. The "Bright" signal is no longer output on a separate pin; instead, it is combined with the R/G/B lines internally via 150 Ω resistors and signal diodes.
+
+The +2A/+3 RGB output **requires external series resistors** (typically 330 Ω) on each colour line for SCART use. Without them, the voltages arriving at the SCART socket are too high and the bright/dim colour distinction is lost. The math (per the fruitcake.plus.com reference, derived from the Spectrum +3 service manual):
+
+```
+For each colour line:
+  V_out_bright = (75 × 5) / (R + 75 + 150)
+  With R = 330 Ω: V_bright = 375 / 555 ≈ 0.68 V  ✓ (matches SCART ~0.7 V spec)
+  V_out_normal (bright off) = (75 × 2.5) / (R + 75 + 150) ≈ 0.34 V ✓
+
+For composite sync (CSYNC):
+  V_CSYNC at SCART = (75 × 5) / (470 + 75) ≈ 0.65 V (with internal 470 Ω // 150 Ω divider)
+  In practice ≈ 0.48 V, suitable for direct connection to SCART pin 20.
+```
+
+Note that the +2A/+3 monitor socket does **not** provide signals suitable for driving the SCART BLANKING (pin 16, required to select RGB mode) or FUNCTION SWITCHING (pin 8, required to wake the TV from standby) lines. These must come from an external voltage regulator circuit built into the cable.
+
+---
+
+## The 48K Composite Video Modification
+
+Because the 16K and 48K were RF-only from the factory, almost every working 48K in existence today has either been composite-modded or has had its RF modulator replaced. The modification is one of the most common and best-documented Spectrum hardware hacks.
+
+### What the mod does
+
+The signal feeding the RF modulator **inside the machine** is a clean composite video signal, around 1 V p-p into a 75 Ω load. This signal exists on the output of the LM1889 PAL encoder. The composite mod simply taps this signal, brings it out to a phono/RCA socket (typically mounted on the back panel where the modulator used to be, or on a small PCB in its place), and either removes or disconnects the RF modulator entirely.
+
+The modulator itself is a metal can occupying the upper-right rear of the 48K board, fed by `+5V` and `+12V` rails and providing an RCA output socket. The standard procedure is:
+
+1. **Desolder or cut the RF modulator can** from the board, freeing up the mounting hole.
+2. **Tap the composite video signal** — the exact pad varies by board issue (Issue 1, 2, 3, 4, 6, etc.), but on most 48K boards the signal is taken from the junction of `R35` (1 kΩ) and `C44` (10 µF) on the LM1889 output, or directly from pin 6 of the LM1889.
+3. **Add a buffer transistor** if the LM1889 output cannot drive a 75 Ω SCART load directly. A common modern mod uses a **2N3904 NPN transistor** in emitter-follower configuration with a 100 Ω emitter resistor and a 75 Ω output resistor, providing the standard 75 Ω output impedance that SCART and most monitors expect.
+4. **Wire the buffered output to a phono/RCA socket** mounted in the modulator's old position, or in a new hole drilled in the rear panel.
+
+The original Sinclair 48K uses the LM1889; later Spanish Investrónica 48K boards and the ZX Spectrum+ use essentially the same circuit, sometimes with the LM1889 replaced by a TBA280 or equivalent PAL encoder. The modification technique is identical.
+
+### S-Video alternative
+
+For higher quality (and to enable luminance/chrominance separation that some modern upscalers and CRTs handle better), a few aftermarket boards (such as the Redhawk S-Video PCB) replace the LM1889 with a circuit that derives separate Y and C outputs at an S-video mini-DIN socket. The Y signal comes from the ULA's luminance output; the C signal is reconstructed from U and V using a 4.43 MHz subcarrier. The result is a picture without composite's characteristic dot crawl and colour smearing.
+
+### Composite mod pitfalls
+
+| Pitfall | Cause | Fix |
+|---------|-------|-----|
+| Black-and-white picture on some TVs | Composite level too low; some modern LCDs need closer to 1 V p-p | Use the buffered transistor mod, not direct LM1889 tap |
+| Wavy interference pattern | `+12V` rail noise coupling into video | Add a 100 µF decoupling capacitor on the buffer transistor's supply |
+| Dull/dark picture | Output impedance too high (e.g. 220 Ω series R) | Use 75 Ω series R into 75 Ω load |
+| Picture too "hot", washed out whites | Output without series R, LM1889 driving into 75 Ω | Add 75 Ω series R |
+| Sync jitter | Some LM1889 revisions have marginal sync | Use the post-LM1889 composite (after the coupling cap), not the raw Y/C |
+
+---
+
+## The 8-pin DIN RGB Monitor Socket
+
+The single most important connector in the Spectrum world is the **8-pin DIN 45326 female socket** introduced on the 128K "Toastrack" in 1986 and carried through to the +3 in 1990. The connector itself is identical across all four machines that use it (128K, grey +2, +2A, +3), but the **pinout is different on the +2A/+3** from the 128K/+2. This is the single most common source of "I bought a SCART cable and the picture is wrong" complaints.
+
+### Composite 8-pin DIN pinout — 128K "Toastrack"
+
+| Pin | Signal | Level | Notes |
+|-----|--------|-------|-------|
+| 1 | CVBS (composite video) | 1.2 V p-p @ 75 Ω | Output of TEA2000 encoder (IC36) |
+| 2 | GND | 0 V | Signal ground |
+| 3 | BOUT (Bright) | TTL | Active high when BRIGHT attribute is set |
+| 4 | CSYNC (composite sync) | TTL | H+V combined sync, 68 Ω series R |
+| 5 | VSYNC (vertical sync) | TTL | 50 Hz frame sync, 68 Ω series R |
+| 6 | G (green) | TTL | 68 Ω series R from ULA pin 20 |
+| 7 | R (red) | TTL | 68 Ω series R from ULA pin 19 |
+| 8 | B (blue) | TTL | 68 Ω series R from ULA pin 21 |
+
+### Composite 8-pin DIN pinout — grey +2 (default jumpers LK1/LK4/LK7)
+
+| Pin | Signal | Level | Notes |
+|-----|--------|-------|-------|
+| 1 | CVBS | 1.2 V p-p @ 75 Ω | Default via LK4 |
+| 2 | 0 V | 0 V | Ground |
+| 3 | BOUT | TTL | Default via LK7; alternative: Audio Out (200 mV p-p via LK8) |
+| 4 | CSYNC | TTL | 75 Ω series R |
+| 5 | VSYNC | TTL | Default via LK1; alternative: `+12V` (1 kΩ series R via LK3) |
+| 6 | G | TTL | 75 Ω series R |
+| 7 | R | TTL | 75 Ω series R |
+| 8 | B | TTL | 75 Ω series R |
+
+Re-jumpering a grey +2 to LK2/LK3/LK8 converts the socket to the +2A/+3 pinout, allowing a single cable to be used on both machines.
+
+### Composite 8-pin DIN pinout — +2A / +2B / +3 / +3B
+
+| Pin | Signal | Level | Notes |
+|-----|--------|-------|-------|
+| 1 | `+12V` | 12 V via 1 kΩ | From the +12V rail, current-limited |
+| 2 | 0 V | 0 V | Ground |
+| 3 | Audio Out | 200 mV p-p | From the sound mixer output |
+| 4 | CSYNC | 1.2 V | Composite sync only (no full composite video) |
+| 5 | `+12V` | 12 V via 1 kΩ | Second `+12V` line, intended for SCART pin 8 (function switching) |
+| 6 | G | 5 V | 150 Ω series R internally |
+| 7 | R | 5 V | 150 Ω series R internally |
+| 8 | B | 5 V | 150 Ω series R internally |
+
+**Note the major incompatibilities vs the 128K/+2 pinout:**
+
+- Pin 1 has changed from **composite video to `+12V`**. Plugging a 128K SCART cable into a +2A/+3 sends `+12V` into the SCART video input — at best gives no picture, at worst damages the TV's input stage.
+- Pin 3 has changed from **Bright to Audio Out**. The Bright signal is still present internally but is now mixed into the R/G/B lines via diodes; it no longer has a dedicated pin.
+- Pin 5 has changed from **VSYNC to `+12V`**.
+- The composite video output is **gone entirely** — only composite sync is available. This means a +2A/+3 cannot drive a composite-only monitor without internal modification.
+
+---
+
+## Composite Video vs Composite Sync
+
+These two terms are commonly confused. They are **different signals on different pins**, and getting them wrong is the second most common video-output mistake.
+
+- **Composite Video (CVBS)** — Color-Video-Blanking-Sync. The complete PAL video signal: picture information plus colour burst plus horizontal sync plus vertical sync, all on one wire. About 1 V p-p into 75 Ω. This is what a 128K or grey +2 outputs on pin 1 of the monitor socket. It is suitable for feeding directly into a TV's composite (RCA "A/V") input.
+
+- **Composite Sync (CSYNC)** — Just the synchronisation pulses, no picture or colour. About 1.2 V (TTL on 128K/+2; about 1.2 V on +2A/+3). This is what a +2A/+3 outputs on pin 4. It cannot drive a composite monitor on its own — it is intended to be paired with TTL RGB inputs on a Sony PVM, a Commodore 1084 in RGB mode, or the SCART sync input on a TV.
+
+The 128K and grey +2 provide **both** signals (CVBS on pin 1, CSYNC on pin 4). The +2A/+3 provides **only CSYNC**. The 48K, after composite modding, provides CVBS only on whatever RCA socket the mod added.
+
+For SCART use, the convention is to feed CSYNC (not CVBS) into SCART pin 20 (the video input pin) when using RGB mode. Many SCART cables for the 128K and +2 do exactly this — they take CSYNC from pin 4 of the DIN, not CVBS from pin 1, even though both are available. This avoids colour-crosstalk issues on some TVs that incorrectly decode the CVBS colour burst while in RGB mode.
+
+---
+
+## SCART Cable Wiring
+
+SCART (a.k.a. Euroconnector or Péritel) is a 21-pin analog A/V connector that was standard on European TVs from the late 1980s through the early 2010s. It carries bidirectional composite video, bidirectional stereo audio, RGB inputs, sync, and several control signals. For retro computing, the RGB path is what matters — it provides a virtually lossless, dot-crawl-free picture.
+
+### SCART pin 21 reference (RGB-relevant pins only)
+
+| Pin | Name | Direction | Notes |
+|-----|------|-----------|-------|
+| 7 | Blue IN | TV ← device | 0.7 V p-p, 75 Ω impedance |
+| 11 | Green IN | TV ← device | 0.7 V p-p, 75 Ω impedance |
+| 15 | Red IN | TV ← device | 0.7 V p-p, 75 Ω impedance |
+| 16 | RGB Blanking | TV ← device | 1–3 V = "use RGB inputs"; 0 V = "use composite" |
+| 20 | Composite Video IN | TV ← device | 1 V p-p, 75 Ω; carries sync for RGB mode |
+| 8 | Function Switching | TV ← device | 0–2 V = standby; 5–8 V = 16:9; 9.5–12 V = 4:3 |
+| 4 | Audio Ground | — | |
+| 5 | Blue Ground | — | |
+| 9 | Green Ground | — | |
+| 13 | Red Ground | — | |
+| 17 | Composite Ground | — | |
+| 18 | Blanking Ground | — | |
+| 21 | Shield / Common | — | The metal shroud of the connector |
+| 2 | Audio Right IN | TV ← device | 0.5 V p-p, ≥10 kΩ |
+| 6 | Audio Left IN | TV ← device | 0.5 V p-p, ≥10 kΩ |
+
+### SCART cable for 128K "Toastrack" and grey +2
+
+These two machines share essentially the same SCART cable. The 128K Bright pin needs an external mixing circuit (because the SCART TV has no separate Bright input — Bright is encoded as a higher voltage on each RGB line); the grey +2 does the mixing internally and needs no extra components.
+
+| DIN Pin | Signal | → SCART Pin | Notes |
+|---------|--------|-------------|-------|
+| 1 | CVBS | (not used; CSYNC preferred for sync) | Optional: tie to pin 20 if you want composite fallback |
+| 2 | GND | 4, 5, 9, 13, 17, 18, 21 | All SCART grounds tied together |
+| 3 | BOUT | (through diode + 100 Ω to each of 7, 11, 15) | External Bright mixing — **128K only**; not needed on +2 |
+| 4 | CSYNC | 20 (Composite Video IN) | Provides sync to TV in RGB mode |
+| 5 | VSYNC | (not used; CSYNC carries V sync too) | Optional for monitors that require separate V sync |
+| 6 | G | 11 (Green IN) | Through 100 Ω series R on 128K; direct on +2 |
+| 7 | R | 15 (Red IN) | Through 100 Ω series R on 128K; direct on +2 |
+| 8 | B | 7 (Blue IN) | Through 100 Ω series R on 128K; direct on +2 |
+| — | `+12V` from external regulator | 8 (Function Switching) | Tells the TV to wake up and switch to this input |
+| — | `+12V` from external regulator (via 180 Ω) | 16 (RGB Blanking) | Selects RGB mode on the TV |
+
+The 128K Bright mixing circuit is the trickiest part. The standard recipe (from the fruitcake.plus.com guide) is to feed BOUT through a 1N4148 signal diode (anode at BOUT) and a 100 Ω resistor to **each of** the R, G, and B lines. When BOUT is high (TTL 5 V), the diode conducts and adds approximately 0.7 V to the colour line, raising its peak from the 0.35 V "dim" level to about 0.7 V "bright" level — exactly what SCART expects.
+
+Because the 128K and +2 do not supply `+12V` on the monitor socket by default, the function-switching and RGB-blanking signals must come from an external regulator. The standard circuit is a 78L12 regulator fed from a 9–18 V wall-wart, or — more commonly today — a small DC-DC boost module wired into the SCART plug shell.
+
+### SCART cable for +2A and +3
+
+The +2A/+3 cable is simpler (no Bright mixing needed) but requires **330 Ω series resistors** on each RGB line to bring the 5 V / 150 Ω internal signal down to SCART's expected 0.7 V level.
+
+| DIN Pin | Signal | → SCART Pin | Notes |
+|---------|--------|-------------|-------|
+| 1 | `+12V` | 8 (Function Switching) | Direct, via 1 kΩ in the machine |
+| 2 | 0 V | 4, 5, 9, 13, 17, 18, 21 | All SCART grounds tied together |
+| 3 | Audio Out | 2, 6 (Audio R + L IN) | Mono signal, parallel to both pins |
+| 4 | CSYNC | 20 (Composite Video IN) | Direct, no series resistor needed (150 Ω internal divider) |
+| 5 | `+12V` | 16 (RGB Blanking) via 180 Ω | Selects RGB mode |
+| 6 | G | 11 (Green IN) via **330 Ω series R** | Brings 5 V signal down to ~0.7 V at SCART |
+| 7 | R | 15 (Red IN) via **330 Ω series R** | Same |
+| 8 | B | 7 (Blue IN) via **330 Ω series R** | Same |
+
+Note that this cable cannot share a connector with a 128K/+2 cable — putting `+12V` on pin 1 of a 128K/+2 monitor socket will dump `+12V` into the CVBS line of the SCART, which most TVs tolerate but some do not. Use a separate cable per machine, or modify the grey +2's jumpers (LK2, LK3, LK8) to bring it to the +2A/+3 pinout.
+
+---
+
+## VGA and HDMI Adapters
+
+The Spectrum's video output is, on every model, a **15 kHz horizontal sync** signal (PAL: 15.625 kHz line rate, 50 Hz frame rate). Standard VGA monitors expect **31 kHz or higher** horizontal sync, so a Spectrum cannot drive a VGA monitor directly even with a pin adapter. Some form of **scan doubling or line multiplication** is required.
+
+There are three common modern solutions, listed in order of increasing cost and quality.
+
+### GBS-8200 / GBS-8220 (RGB → VGA upscaler)
+
+The **GBS-8200** and its TV-out sibling the **GBS-8220** are mass-produced Chinese scan converters built around the TV5725 ASIC. They accept component video, S-video, or RGBHV on a 6-pin header, scan-double the signal to 31 kHz, and output standard VGA on a 15-pin HD-15 socket. They cost around £20–£30 and are the cheapest practical way to get a Spectrum onto a VGA monitor.
+
+For Spectrum use:
+
+- **128K "Toastrack" and grey +2**: Wire R, G, B from the 8-pin DIN (pins 7, 6, 8) into the GBS-8200's RGB inputs, CSYNC from pin 4 into the GBS-8200's HSYNC input. The GBS-8200 can tolerate TTL sync directly.
+- **+2A and +3**: Same wiring, but you must add the 330 Ω series resistors inline at the GBS-8200 side (or use a SCART passthrough adapter that includes them).
+- **48K (composite-modded)**: The composite signal feeds the GBS-8200's composite video input. Quality is limited by the underlying composite signal — you will get dot crawl and colour bleed.
+
+The GBS-8200's stock firmware produces a usable but slightly soft picture. The community-maintained **gbscontrol** firmware (an open-source replacement running on an ESP32 or STM32 attached to the GBS-8200's control header) significantly improves picture quality: it adds proper line multiplication, motion-adaptive deinterlacing, and framebuffer-based picture-positioning controls. A GBS-8200 with gbscontrol is widely considered the best value upscaler in retro computing.
+
+### OSSC (Open Source Scan Converter)
+
+The **OSSC** is a FPGA-based line multiplier designed by Markus Hiienkari. It does not have a framebuffer — it multiplies each scanline by 2×, 3×, 4×, or 5× on the fly, with sub-line latency. It accepts SCART, VGA, or component inputs and outputs HDMI. Cost is around £100–£150.
+
+For Spectrum use, the typical signal chain is:
+
+- **Spectrum 8-pin DIN** → **SCART cable** (as wired above) → **OSSC SCART input** → **HDMI output** → modern TV or monitor.
+
+The OSSC's line-multiplied output (typically 3× or 4× for 15 kHz sources) is accepted by most modern TVs and computer monitors. Some HDMI displays are picky about non-standard timings and may refuse to lock; the OSSC's compatibility database is community-maintained.
+
+For a 128K Spectrum, the OSSC produces an absolutely reference-quality picture — better than any CRT, since there is no analog convergence error and no phosphor decay lag. The 50 Hz frame rate is preserved exactly, which is critical for Spectrum software that uses raster timing tricks.
+
+### RGB-to-HDMI (Raspberry Pi-based)
+
+The **RGB-to-HDMI** project (David Banks, Darren Iles, IanB, and others) uses a small Raspberry Pi Zero (or Pi 2/3/4) with a custom "RGB adapter" hat to sample the Spectrum's RGB output at high speed and re-emit it as HDMI video. The hardware cost is around £30–£50.
+
+For Spectrum use, an 8-pin DIN to RGB adapter cable connects the Spectrum's video output to the RGB-to-HDMI board, and the Pi's HDMI output goes to a modern display. The firmware supports the Spectrum's exact video timing and provides configurable line multiplication, scanline simulation, and aspect-ratio correction.
+
+The RGB-to-HDMI is favoured by some Spectrum owners over the OSSC for two reasons: (1) it is significantly cheaper, and (2) its firmware has explicit Spectrum-specific support including the 128K's "shadow screen" banking.
+
+### ZX-VGA-JOY and similar Spectrum-specific boards
+
+The **ZX-VGA-JOY** (from the Czech MB03+ / 8BC ecosystem) is a small adapter board that plugs directly into a Spectrum's edge connector and provides a VGA output and a joystick port. Unlike the GBS-8200 and OSSC, it does **not** use the Spectrum's analog video output at all — it samples the digital pixel data from the video memory by snooping the bus, regenerates the picture in a small FPGA, and outputs it directly to VGA. The result is a perfectly clean picture with no analog artifacts whatsoever.
+
+The downside is that the ZX-VGA-JOY requires the Spectrum's video memory to follow the standard ULA layout — software using shadow screens, attribute tricks, or non-standard timing will not be displayed correctly. For gaming and standard applications it is excellent.
+
+---
+
+## Soviet Clone Video Outputs
+
+The major Soviet clones (Pentagon, Scorpion, Leningrad, Profi, Kay) were designed without access to the original LM1889 or TEA2000 chips. Their video output arrangements vary widely:
+
+| Clone | Output type | Connector | Notes |
+|-------|-------------|-----------|-------|
+| **Pentagon 128** | Composite PAL (custom TTL encoder) | RCA phono | Often a single transistor-based composite encoder; quality varies by revision. Some later revisions add an RGB header. |
+| **Scorpion ZS-256** | Composite PAL + TTL RGB header | RCA phono + 9-pin D-sub | The RGB header follows roughly the 128K pinout but is **not** a pin-compatible DIN — it is a 9-pin D-sub with Russian signal conventions. |
+| **Leningrad-1** | Composite PAL only | RCA phono | Single transistor encoder; very basic quality. |
+| **Profi 5103** | Composite PAL + TTL RGB header | RCA phono + 9-pin D-sub | RGB output at TTL levels. Often paired with a Soviet-era colour monitor. |
+| **Kay 1024** | Composite PAL + programmable CPLD-driven RGB | RCA phono + 15-pin HD-15 | The Kay's CPLD allows non-standard video modes including 512×256 hires; RGB pinout is custom. |
+| **ATM Turbo 2** | Composite PAL + TTL RGB header | RCA phono + 9-pin D-sub | Has a 7 MHz turbo mode with different video timing — see [Clone Timing](../../02_hardware/clones/clone_timing.md). |
+
+For the purposes of this article, the Soviet clones' video outputs are best treated as composite-PAL sources requiring a composite-to-VGA or composite-to-HDMI upscaler (such as the OSSC's composite input or a retro-focused upscaler like the RetroTINK). The RGB headers exist but their non-standard pinouts make cable construction a per-clone exercise.
+
+For detailed per-clone frame timing and how it affects software, see [Clone Timing](../../02_hardware/clones/clone_timing.md) and the per-clone video-frame articles in [05_development/05_display_and_timing/](../../05_development/05_display_and_timing/).
+
+---
+
+## Common Pitfalls
+
+| # | Pitfall | Why it happens | Fix |
+|---|---------|----------------|-----|
+| 1 | Black-and-white picture from a composite-modded 48K | Composite level too low for the target TV, OR the mod missed the chroma signal | Use the buffered transistor mod with proper 75 Ω output; verify the tap point is post-LM1889 not pre- |
+| 2 | `+12V` injected into a TV's composite input | A 128K SCART cable was plugged into a +2A/+3 | Use a cable matched to the machine; check the cable's pinout with a multimeter before plugging in |
+| 3 | Washed-out colours on +2A/+3 SCART | Missing 330 Ω series resistors on R/G/B lines | Add the resistors inside the SCART plug; values around 311 Ω calculated, 330 Ω is the nearest standard |
+| 4 | TV stays in standby when Spectrum is on | SCART pin 8 (Function Switching) not driven | Add the `+12V` to pin 8 from the external regulator circuit |
+| 5 | TV shows composite picture, not RGB | SCART pin 16 (RGB Blanking) not driven to 1–3 V | Add the `+12V` via 180 Ω to pin 16; verify the TV selects RGB mode |
+| 6 | Picture rolls or refuses to sync | CSYNC not connected, or wrong sync level | Wire DIN pin 4 (CSYNC) to SCART pin 20; do not confuse CSYNC with VSYNC |
+| 7 | Picture has a slight green/magenta tint | Bright mixing circuit wrong on 128K cable | Re-check the diode+resistor mixing network on pin 3 of the DIN; use 1N4148 diodes, not Schottky |
+| 8 | No audio from the SCART cable on +2A/+3 | Audio is on pin 3 of the DIN, not where you expected | Wire DIN pin 3 to SCART pins 2 AND 6 (mono, parallel to both) |
+| 9 | Sync jitter on a VGA monitor via GBS-8200 | GBS-8200 stock firmware struggles with non-standard sync | Flash gbscontrol firmware; or use OSSC instead |
+| 10 | Modern TV refuses to lock to OSSC output | TV's HDMI input rejects the line-multiplied timing | Try a different line multiplication factor (2× / 3× / 4×); consult the OSSC display compatibility wiki |
+| 11 | Picture is fine in 48K mode but scrambled in 128K mode | Software is using a non-standard display bank or raster effect that the OSSC's line multiplier can't track | Use a CRT, or accept that some demos simply need a CRT to look right |
+| 12 | "+2" cable bought online does not work on +2A | Vendor assumed +2 = +2A; they have different pinouts | Verify the cable's pinout matches the target machine before buying |
+
+---
+
+## When to Use What
+
+| You have… | You want to connect to… | Recommended solution |
+|-----------|-------------------------|----------------------|
+| 16K / 48K, unmodified | CRT TV with RF aerial input | Original RF cable, tune TV to channel 35 (rare today; only option without modding) |
+| 16K / 48K, unmodified | CRT TV with SCART | Composite mod first, then composite-to-SCART cable into pin 20 |
+| 16K / 48K, composite-modded | Modern LCD TV | OSSC's composite input, or a RetroTINK-2X/5X |
+| 16K / 48K, composite-modded | VGA monitor | GBS-8200 with gbscontrol firmware |
+| 16K / 48K, S-video modded | Modern LCD TV | OSSC with S-video input (best quality from a 48K) |
+| 128K "Toastrack" | CRT TV with SCART | Pre-built 128K RGB SCART cable (the one with the diode mixing network) |
+| 128K "Toastrack" | Sony PVM / Commodore 1084 | 8-pin DIN to 4xBNC cable (R, G, B, CSYNC) |
+| 128K "Toastrack" | Modern LCD TV / monitor | SCART cable → OSSC → HDMI |
+| Grey +2 | CRT TV with SCART | Pre-built "+2 RGB SCART" cable (no mixing circuit needed) |
+| Grey +2 | Modern LCD TV / monitor | SCART cable → OSSC → HDMI |
+| +2A / +3 | CRT TV with SCART | Pre-built "+2A/+3 SCART" cable with internal 330 Ω resistors |
+| +2A / +3 | Modern LCD TV / monitor | SCART cable → OSSC → HDMI, OR RGB-to-HDMI with +3 profile |
+| Any 128K onwards | VGA monitor only | GBS-8200 with gbscontrol |
+| Any 128K onwards | Reference-quality HDMI | RGB-to-HDMI board (cheaper) or OSSC (more flexible) |
+| Pentagon / Soviet clone | Modern TV | Composite-to-HDMI upscaler (RetroTINK recommended) |
+| Pentagon / Soviet clone | CRT TV | Composite video direct into RCA "A/V" input |
+
+---
+
+## Comparison Matrix
+
+| Property | 16K / 48K (RF) | 48K (composite mod) | 128K / +2 | +2A / +3 | Pentagon / clones |
+|----------|----------------|---------------------|-----------|----------|-------------------|
+| **Connector** | UHF RCA | RCA phono | 8-pin DIN 45326 + 9-pin D-sub | 8-pin DIN 45326 | RCA phono (+ 9-pin D-sub on some) |
+| **Composite video out** | No (RF only) | Yes (mod) | Yes (pin 1) | **No** (CSYNC only) | Yes |
+| **RGB out** | No | No | Yes (TTL) | Yes (5 V, 150 Ω) | Sometimes (TTL header) |
+| **Internal mod required?** | — | Yes (mandatory) | No | No | No |
+| **Cable complexity** | Coax only | Single co-ax | DIN→SCART with diode mixing on 128K; plain wires on +2 | DIN→SCART with 330 Ω series Rs and external `+12V` reg | Composite RCA → SCART pin 20 |
+| **Picture quality (1–10)** | 2 | 5 | 9 | 9 | 4–6 (varies) |
+| **Modern display compatibility** | None (no tuner) | Composite input or upscaler required | SCART or OSSC | SCART or OSSC | Composite input or upscaler |
+| **Frame timing accuracy** | Perfect (PAL TV locks directly) | Perfect | Perfect | Perfect | Pentagon timing is **not** PAL standard — see [Clone Timing](../../02_hardware/clones/clone_timing.md) |
+| **Cost of cable / adapter** | £5 (RF cable) | £0–£10 (DIY) + £15 (mod) | £15–£25 (SCART cable) | £15–£25 (SCART cable with resistors) | £5 (composite cable) |
+
+---
+
+## Modern Analogies
+
+- The 48K's RF-only output is the spiritual ancestor of the **HDMI-only laptop**: the signal exists in a more useful form inside the machine, but the manufacturer chose not to bring it out. The composite mod is the same kind of "open it up and add a better connector" fix that laptop owners now do for HDMI or Ethernet.
+- The 8-pin DIN monitor socket on the 128K is a 1980s precursor of **DisplayPort or USB-C alt modes**: a single small connector carrying multiple video signal types (RGB, composite, sync, audio) that the device on the other end selects between. The 128K is doing in 1986 what USB-C Alt Mode standardised in 2014.
+- The +2A/+3's removal of composite video is a classic **"we're cutting features to save cost"** decision analogous to Apple removing the headphone jack or Intel removing the BIOS legacy mode — defensible on the BOM, but a step backwards for users with existing hardware.
+- The OSSC and RGB-to-HDMI boards are the Spectrum equivalent of **modern GPU-based video restoration**: they take a noisy analog signal, run it through digital signal processing, and produce a sharper picture than the original hardware ever could.
+- The 330 Ω resistor requirement on +2A/+3 SCART cables is a hardware-level **level shifter** of exactly the kind that I²C/SPI engineers use today to bridge 3.3 V and 5 V logic — same problem, same solution, thirty years apart.
+
+---
+
+## Cross-References
+
+- [ULA Architecture](../../02_hardware/original/ula_architecture.md) — internals of the Ferranti ULA, including the Y/U/V output cells (48K) and RGB output cells (128K), the clock tree, and the LM1889/TEA2000 chips
+- [ULA Timing](../../02_hardware/original/ula_timing.md) — exact per-scanline T-state maps; critical for understanding why some demos need a CRT to look right
+- [Clone Timing](../../02_hardware/clones/clone_timing.md) — per-clone frame timings (Pentagon, Scorpion, Profi, ATM Turbo, Kay); explains why Pentagon software looks wrong on a real Spectrum's video timing
+- [Color System](../../05_development/05_display_and_timing/color_system.md) — the standard 256×192 ULA display, the 15-colour BRIGHT attribute palette, the FLASH attribute, ULAplus extensions
+- [ZX Bus](zx_bus.md) — the 56-pin edge connector; the +9V rail (removed on +2A/+3) powers some external video peripherals
+- [Printers](printers.md) — the ZX Printer also uses the +9V rail, removed on the +2A/+3
+- [mb02.md](mb02.md) — the MB-02/+ and MB03+ interface family; the MB03+ provides its own HDMI video output
+- [floating bus](../../05_development/05_display_and_timing/floating_bus.md) — what you read back from the video system when no actual peripheral drives the bus
+- [Snow effect](../../02_hardware/original/ula_timing.md) — a video artifact caused by DRAM refresh colliding with the video fetch (documented as a section within ULA Timing)
+
+---
+
+## Primary Sources
+
+- **ZX Spectrum 128K Service Manual** (Amstrad PLC, 1986) — the canonical reference for the 8-pin DIN monitor socket pinout, the TEA2000 encoder, and the RGB signal levels on the 128K "Toastrack"
+- **ZX Spectrum +2 Service Manual** (Amstrad PLC, 1987) — link-jumper table LK1–LK8, the variant SCART pinouts
+- **ZX Spectrum +2A/+3 Service Manual** (Amstrad PLC, 1987–1990) — the +2A/+3 8-pin DIN pinout, the 150 Ω series resistor values, and the calculation that leads to the 330 Ω external resistor recommendation
+- **Chris Smith, *The ZX Spectrum ULA: How to Design a Microcomputer*** (Eye on Books, 2010) — definitive reverse-engineering of the Ferranti ULA, including the analog Y/U/V output cells and the LM1889 interface
+- **fruitcake.plus.com SCART Cable Guide** (http://www.fruitcake.plus.com/Sinclair/Spectrum128/SCARTCable/) — the most thorough online reference for SCART cable wiring for every Spectrum model, including the link-jumper configurations and the calculated resistor values
+- **allpinouts.org — ZX Spectrum 128 RGB** (https://allpinouts.org/pinouts/connectors/computer_video/zx-spectrum-128-rgb/) — concise pinout table for the 8-pin DIN 45326 socket, with signal directions and notes on the alternative 9-pin D-type
+- **"RGB for ZX Spectrum 128, +2, +2A, +3"** (https://mts.speccy.cz/doc/128_rgb.pdf) — detailed PDF on RGB output, signal levels, and SCART cable construction for all four RGB-capable Spectrum models
+- **OSSC documentation** (https://www.videogameperfection.com/en-gb/products/open-source-scan-converter/) — OSSC line multiplication modes and display compatibility
+- **gbscontrol project** (https://github.com/ramapcsx2/gbscontrol) — open-source replacement firmware for the GBS-8200/8220 scan converters
+- **RGB-to-HDMI project** (https://github.com/hoglet67/RGBtoHDMI) — Raspberry Pi-based HDMI video output for retro computers, with explicit Spectrum support
+- **Redhawk S-Video PCB** (https://github.com/redhawk668/ZX-Spectrum-S-Video) — open hardware S-Video modification board for the 48K Spectrum
+- **Sinclair Wiki — ZX Spectrum 16K/48K article** — overview of the RF modulator and the LM1889 encoder stage on the original Sinclair boards

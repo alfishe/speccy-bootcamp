@@ -635,7 +635,7 @@ zx/
 | `zx_bus.md` | ZX Bus standard: expansion bus protocols, addressing, electrical specs | ✅ |
 | **Output** | | |
 | `printers.md` | ZX Printer (spark), RS-232 printers, SM640/SM646 (Soviet) | ✅ |
-| `video_output.md` | RF modulator, composite video mod, RGB output (128K/+2/+3), SCART wiring, VGA adapters |
+| `video_output.md` | RF modulator, composite video mod, RGB output (128K/+2/+3), SCART wiring, VGA adapters | ✅ |
 | **Sound Cards** | |
 | `sound_overview.md` | **Sound card ecosystem overview**: evolution from 1-bit beeper to multi-chip orchestration, decision guide for which card to target |
 | `ay_3_8912.md` | AY-3-8912 / YM2149F PSG: 3 channels, envelopes, noise, I/O port, register map, per-model differences |
