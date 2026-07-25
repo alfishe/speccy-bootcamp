@@ -378,6 +378,7 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 50. [Asset Tools](09_toolchain/asset_tools.md) — the asset pipeline: screen graphics, software/hardware sprites, fonts (8×8 + FZX), AY/beeper music, ZX0/ZX1/ZX7/MegaLZ compression, tile maps
 51. [Debugging](09_toolchain/debugging.md) — three-layer model (native / emulator / source-level), every major debugger, debug-metadata formats, comparison matrix, recommended workflows
 52. [Disassemblers](09_toolchain/disassemblers.md) — linear / smart static / trace-driven approaches, z80dasm, z88dk-dis, SkoolKit, IDA Pro, Ghidra, decision tree
+53. [Software Protection Techniques](08_reverse_engineering/protection_techniques.md) — tape loaders (Speedlock, Alkatraz), disk schemes, NMI/snapshot defenses (anti-debugging countermeasures table, hardware vs software debugger comparison), snapshot devices (Multiface, MAGIC button, Shadow Monitor), memory integrity, code obfuscation, bypass techniques
 
 **Bridge to advanced optimization:**
 

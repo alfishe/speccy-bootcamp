@@ -374,7 +374,7 @@ The **Multiface 128** and similar devices use NMI to activate — pressing the M
 
 ### NMI as an Attack Vector and Anti-Debugging Countermeasures
 
-Because NMI **cannot be masked by software**, it is a powerful tool for breaking into running programs — every hardware debugger, from the Multiface to the Soviet MAGIC button (see [beta_disk_interface.md §11.3](../03_io/storage/beta_disk_interface.md)), relies on this property. Copy-protected software developed several countermeasures to detect or resist NMI-based debugging:
+Because NMI **cannot be masked by software**, it is a powerful tool for breaking into running programs — every hardware debugger, from the Multiface to the Soviet MAGIC button (see [beta_disk_interface.md §11.3](../03_io/storage/beta_disk_interface.md)), relies on this property. Copy-protected software developed several countermeasures to detect or resist NMI-based debugging. For the comprehensive treatment including snapshot devices, bypass techniques, and code examples, see [protection_techniques.md → NMI / Snapshot Protection](../08_reverse_engineering/protection_techniques.md#3-nmi--snapshot-protection--defenses-against-hardware-debuggers).
 
 | Technique | How It Works | Limitation |
 |-----------|-------------|------------|

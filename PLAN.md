@@ -334,8 +334,8 @@ zx/
 │   └── 1bit_music_scene.md            # 📄 Stub
 │
 ├── 08_reverse_engineering/
+│   ├── protection_techniques.md ✅
 │   ├── methodology.md
-│   ├── game_protection.md
 │   ├── speedlock_alkatraz.md
 │   ├── game_reversing.md
 │   ├── code_crunching.md
@@ -958,8 +958,7 @@ All 11 articles are ✅ Complete (CC BY-SA 4.0). Cross-references verified. See 
 | File | Topic |
 |---|---|
 | `methodology.md` | ZX Spectrum RE workflow: disassembly, tracing, patching |
-| `game_protection.md` | Copy protection: Speedlock, Alkatraz, Bleepload, various tape loaders |
-| `speedlock_alkatraz.md` | Deep dive: Speedlock and Alkatraz — mechanisms and how they were defeated |
+| `protection_techniques.md` ✅ | Copy protection: tape loaders (Speedlock, Alkatraz), disk schemes, NMI/snapshot defenses, snapshot devices, memory integrity, code obfuscation, bypass techniques |
 | `game_reversing.md` | Game RE: asset extraction, map ripping, cheat codes, save game formats |
 | `code_crunching.md` | Compression: MegaLZ, HRUM, Z80 crunchers, unpacking, depacker analysis |
 | `tool_setup.md` | Tool setup: ZEsarUX debugger, Fuse, sjasmplus, binary diff tools |

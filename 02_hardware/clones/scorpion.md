@@ -656,7 +656,7 @@ When the user exits the monitor, the state is **restored exactly** — including
 
 ### NMI Protection Countermeasures — How the Shadow Monitor Defeats Anti-Debugging
 
-Copy-protected software on the ZX Spectrum employed several techniques to resist NMI-based debugging (see [z80_interrupts.md → NMI as an Attack Vector](../../01_cpu/z80_interrupts.md#nmi-as-an-attack-vector-and-anti-debugging-countermeasures) for the full catalogue). The Shadow Service Monitor's hardware-backed design overcomes most of them:
+Copy-protected software on the ZX Spectrum employed several techniques to resist NMI-based debugging (see [protection_techniques.md §3](../../08_reverse_engineering/protection_techniques.md#3-nmi--snapshot-protection--defenses-against-hardware-debuggers) for the comprehensive treatment, or [z80_interrupts.md → NMI as an Attack Vector](../../01_cpu/z80_interrupts.md#nmi-as-an-attack-vector-and-anti-debugging-countermeasures) for the CPU-level mechanics). The Shadow Service Monitor's hardware-backed design overcomes most of them:
 
 | Protection Technique | How Software Uses It | How Shadow Monitor Defeats It |
 |---------------------|---------------------|-------------------------------|

@@ -865,7 +865,7 @@ The Mr Gluk Reset Service (§10.6) repurposes the MAGIC button: pressing it duri
 
 ### 11.4 Common disk protection schemes
 
-The Soviet scene invented and refined dozens of floppy-disk protection schemes. Most exploit specific WD1793 behaviour that is difficult to replicate with a generic `*COPY`. See [05_reversing/custom_loaders_and_drm.md](../../08_reverse_engineering/README.md) for the full catalogue; the most common ones encountered on Beta Disk software:
+The Soviet scene invented and refined dozens of floppy-disk protection schemes. Most exploit specific WD1793 behaviour that is difficult to replicate with a generic `*COPY`. See [protection_techniques.md §2](../08_reverse_engineering/protection_techniques.md#2-disk-based-protection) for the full protection-and-bypass catalogue; the most common ones encountered on Beta Disk software:
 
 - **Weak-bit protection.** The original disk has a track where the magnetic flux is written at a level that is on the edge of the drive's read amplifier threshold. Each read produces a slightly different bit pattern. The protection check reads the track twice and compares; if they match (because a copier wrote deterministic bits), the software refuses to run. READ TRACK (Type III) is the command used to capture the raw bytes.
 - **Non-standard sector IDs.** Sectors are numbered, e.g., `0x01, 0x02, 0x80, 0x81, 0x82, ...` instead of `1, 2, 3, 4, ...`. TR-DOS's READ SECTOR will fail to find them; only a custom loader that issues READ SECTOR with the right sector number will succeed.

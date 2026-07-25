@@ -27,10 +27,48 @@ This knowledge base covers three parallel hardware streams that share the Z80 CP
 
 Every article must note which track(s) it applies to. When behavior differs between tracks, document each variant explicitly. Soviet clones are NOT second-class citizens — the ZX Spectrum ecosystem in the post-Soviet space was (and remains) larger than the original Western market.
 
-**Primary research sources by track:**
-- **Original**: World of Spectrum (spectrumcomputing.co.uk), Sinclair documentation, Chris Smith's "The ZX Spectrum ULA" book
-- **Soviet**: **zx-pk.ru** (the most concentrated knowledge base for Soviet clones — schematics, ROMs, modifications, discussions), nedoPC, TR-DOS documentation
-- **New Gen**: ZX Spectrum Next official docs (zxnext.io), TS-Conf documentation, SpeccyWiki
+**Primary research sources by track** — every research session MUST start here before exploratory web search:
+
+### Original Track (Sinclair / Amstrad era)
+
+| Source | URL | Coverage | Language |
+|--------|-----|----------|----------|
+| **World of Spectrum** | spectrumcomputing.co.uk | Software archive, hardware reference, magazine scans | English |
+| **Chris Smith — "The ZX Spectrum ULA"** | (book) | Definitive ULA hardware reference: timing, contention, video generation | English |
+| **Complete Spectrum ROM Disassembly** | (book, available on WoS) | Annotated 48K ROM source — every routine, every entry point | English |
+| **Sinclair ZX Specifications (Martin Korth)** | problemkaputt.de/zxdocs.htm | Hardware specs, port maps, timing diagrams | English |
+| **Spectrumpedia (Alessandro Grussu)** | alessandrogrussu.it/zx/ | Comprehensive historical and technical encyclopedia of all ZX models | English / Italian |
+
+### Soviet Track (Post-Soviet clones)
+
+| Source | URL | Coverage | Language |
+|--------|-----|----------|----------|
+| **zx-pk.ru** | zx-pk.ru | The most concentrated knowledge base — schematics, ROMs, modifications, forum discussions for every clone | Russian |
+| **ZXPress.ru** | zxpress.ru | Disk-magazine archive — scanned/extracted text from dozens of Soviet-era magazines (ZX-Review, Spectrophoby, Body, Futuris, Echo, Sinclair Classic). Primary source for clone history and developer interviews | Russian / English translations |
+| **SpeccyWiki (speccy.info)** | speccy.info | Russian-language wiki — extensive TR-DOS docs, clone specs, debugger documentation (STS, Stalker) | Russian |
+| **zxevo.ru** | zxevo.ru | ZX Evolution community — format specs (.TRD, .SCL, .UDI), FDC docs, clone tooling | Russian |
+| **nedoPC** | nedopc.com | NedoDOS, Sprinter, hardware projects | Russian / English |
+| **zx-art.ru** | zx-art.ru | Russian-language canonical archive of demos, music, graphics — de facto reference for scene releases | Russian |
+| **bbb.retroscene.org** | bbb.retroscene.org | Russian-curated demo archive | Russian |
+| **Speccy4Ever** | speccy4ever.speccy.org | Service manuals, hardware datasheets (IF1, Microdrive) | English |
+
+### New Gen Track (Modern hardware)
+
+| Source | URL | Coverage | Language |
+|--------|-----|----------|----------|
+| **ZX Spectrum Next official docs** | zxnext.io | Hardware specs, layer 2, sprites, copper, expansion bus | English |
+| **TS-Conf documentation** | (zxevo.ru wiki) | ZX Evolution / TS-Conf video and paging specs | Russian |
+| **GitHub repos** | (per project) | romychs/Scorpion256TPlus, various FPGA cores — schematics and VHDL/Verilog | English |
+
+### Cross-Track (demoscene, archive, emulation)
+
+| Source | URL | Coverage | Language |
+|--------|-----|----------|----------|
+| **zxdemo.org** | zxdemo.org | Gasman's long-running demo/music archive (powered by Demozoo) | English |
+| **zxart.ee** | zxart.ee | Estonian archive — demos, music, graphics, disk-magazine scans | English / Russian |
+| **Demozoo** | demozoo.org | Cross-platform party results and production database | English |
+| **Pouet.net** | pouet.net | Cross-platform demoscene archive | English |
+| **chibiakumas.com** | chibiakumas.com | Translated Russian hardware articles, scanned magazines | English |
 
 **Track separation rule:** Original-track review articles (e.g., `03_io/peripherals/`, `02_hardware/original/`) must NOT carry full Soviet-clone or New Gen sections. Give them a short **Track Applicability** note (one paragraph with links) and put clone/Next variants in dedicated articles under `02_hardware/clones/` and `02_hardware/newgen/` — e.g., `clone_joysticks.md`, `zx_next_joystick.md`.
 
@@ -44,7 +82,8 @@ Before writing or expanding any article, you **must**:
 2. **Scan the section's `README.md`** — know what sibling articles exist in the same folder. Your article should complement, not repeat, adjacent content.
 3. **Search for related content** — use grep or file listing to find existing mentions of your topic across the repository. If another article already covers a subtopic in depth, link to it rather than rewriting it.
 4. **Check for established patterns** — look at 2–3 exemplary articles in the repository to match style, depth, and structure.
-5. **Research the Soviet clone angle** — check zx-pk.ru and related sources for clone-specific behavior, modifications, and extensions. Most Soviet clones have timing differences, extra ports, and expanded memory that the original hardware never had.
+5. **Research the Soviet clone angle** — check zx-pk.ru and zxpress.ru for clone-specific behavior, modifications, and extensions. Most Soviet clones have timing differences, extra ports, and expanded memory that the original hardware never had.
+6. **Start from authoritative sources** — consult the [Authoritative Sources](#primary-research-sources-by-track) table above before doing exploratory web search. The ZX Spectrum ecosystem has decades of community-maintained documentation; these sources contain verified schematics, ROM disassemblies, and primary-source magazine articles. Use exploratory web search only to fill gaps not covered by these sources, and always cross-reference any findings against them.
 
 > [!IMPORTANT]
 > Every article must exist within the knowledge graph. Orphaned articles are unacceptable. Update the root README's Documentation Map when adding new articles.
@@ -388,13 +427,14 @@ If article is related completely to the software and has no relationship with FP
 
 Before writing or expanding an article:
 
-1. **Web research** — Search for real-world usage, developer forum discussions, and existing technical analyses.
-2. **zx-pk.ru research** — For Soviet clone topics, search zx-pk.ru forums. This is the most concentrated knowledge base for Pentagon, Scorpion, Kay, ATM Turbo, Profi, and dozens of other clones. Schematics, ROM listings, modification guides — it's all there.
-3. **Cross-reference hardware documentation** — Verify port decoding, timing, and register behavior against schematics and datasheets.
-4. **Study real software** — Reference well-known ZX Spectrum titles, demos, and applications that use the feature.
-5. **Check modern parallels** — Research whether the concept has modern equivalents.
-6. **Verify port decoding bitmasks** — Do NOT trust simplified bitmask tables without verification. Cross-reference with hardware schematics and FPGA core source code.
-7. **Scan this repository first** — Follow the Pre-Flight Knowledge Base Scan procedure above.
+1. **Scan this repository first** — Follow the Pre-Flight Knowledge Base Scan procedure above.
+2. **Consult authoritative sources** — Start from the [Authoritative Sources](#primary-research-sources-by-track) table. These contain verified schematics, ROM disassemblies, primary-source magazine articles, and decades of community-maintained documentation. Do NOT begin with generic web search.
+3. **zx-pk.ru + zxpress.ru** — For Soviet clone topics, search zx-pk.ru forums for schematics/mods/discussions and zxpress.ru for primary-source magazine articles (ZX-Review, Spectrophoby, etc.). These two sources cover nearly all clone hardware documentation.
+4. **Exploratory web search** — Use web search only to fill gaps not covered by the authoritative sources above. Always cross-reference findings against the authoritative sources.
+5. **Cross-reference hardware documentation** — Verify port decoding, timing, and register behavior against schematics and datasheets.
+6. **Study real software** — Reference well-known ZX Spectrum titles, demos, and applications that use the feature.
+7. **Check modern parallels** — Research whether the concept has modern equivalents.
+8. **Verify port decoding bitmasks** — Do NOT trust simplified bitmask tables without verification. Cross-reference with hardware schematics and FPGA core source code.
 
 ---
 
