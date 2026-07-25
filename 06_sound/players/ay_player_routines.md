@@ -463,8 +463,6 @@ resume_music:
 | **ROM-based production (cartridge, shadow ROM)** | **Arkos ROM player variant** | The RAM player variants use self-modifying code; the ROM variant uses a buffer. |
 | **Maximising compatibility with the existing PT3 archive (thousands of modules)** | **PT3 player (Bulba reference)** | The world's largest archive of ZX music is in PT3 format; using PT3 means any archive module works without conversion. |
 
-For a complete decision tree that also factors in the sound hardware and the music format, see [audio_decision_guide.md](audio_decision_guide.md).
-
 ---
 
 ## Modern Analogies
@@ -482,8 +480,7 @@ For a complete decision tree that also factors in the sound hardware and the mus
 - [PT3 Format](../trackers_and_formats/pt3_format.md) — the binary specification of the modules that PT3 players consume
 - [Arkos Tracker](../trackers_and_formats/arkos_tracker.md) — the editor that produces AKG/AKM/AKY modules
 - [Vortex Tracker II](../trackers_and_formats/vortex_tracker.md) — the editor that produces PT3 modules (the modern continuation of Pro Tracker 3)
-- [Player Comparison](player_comparison.md) — head-to-head benchmarks of PT3 vs AKG/AKM/AKY
-- [Audio Decision Guide](audio_decision_guide.md) — the higher-level decision tree covering hardware + format + player
+- [Player Comparison](player_comparison.md) — head-to-head benchmarks of PT3 vs AKG/AKM/AKY; includes Targhan's decision table for which player to use
 - [Interrupt Programming](../../05_development/04_interrupts/interrupt_programming.md) — IM1 and IM2 setup; ISR design patterns; timing
 - [Contention Model](../../05_development/03_memory_and_io/contention_model.md) — per-model memory contention patterns; why player code should live in uncontended RAM
 - [Bank Switching Patterns](../../05_development/03_memory_and_io/bank_switching_patterns.md) — `#7FFD` paging; cross-bank access; double buffering
@@ -507,4 +504,4 @@ For a complete decision tree that also factors in the sound hardware and the mus
 
 ---
 
-*Article 1 of 3 in the [Player Routines](README.md) sub-section. Companion articles: [Player Comparison](player_comparison.md) (head-to-head benchmarks) and [Audio Decision Guide](audio_decision_guide.md) (the full hardware + format + player decision tree).*
+*Article 1 of 2 in the [Player Routines](README.md) sub-section. Companion article: [Player Comparison](player_comparison.md) (head-to-head benchmarks of PT3 vs AKG/AKM/AKY, plus Targhan's decision table).*

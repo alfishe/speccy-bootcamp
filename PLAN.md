@@ -830,7 +830,6 @@ zx/
 | `saa1099_programming.md` | SAA1099 programming: register map, stereo panning, noise |
 | `ay_effects.md` | AY sound effects: noise bursts, frequency sweeps, SID-like tricks, DPCM |
 | `audio_pipeline_comparison.md` | Cross-track audio comparison: Original (beeper→AY) vs Soviet (AY+Covox+GS+TurboSound) vs New Gen (Next audio+DMA) |
-| `audio_decision_guide.md` | Decision guide: which sound hardware to target for your project |
 
 #### 05_development/08_dos_tape/ — DOS and Tape Interaction
 

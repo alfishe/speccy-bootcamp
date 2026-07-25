@@ -9,7 +9,7 @@ The ZX Spectrum AY music ecosystem has two dominant player families, each descen
 - **PT3** — produced by the Sound Tracker / Pro Tracker / Vortex Tracker II family (Soviet-origin, 1990s; VTII continues under Bulba's maintenance). The PT3 player is the de facto interchange player: the world's largest archive of ZX Spectrum music (thousands of modules at [bulba.untergrund.net](https://bulba.untergrund.net/) and the ZXArt archive) is in PT3 format.
 - **Arkos AKG / AKM / AKY** — produced by Arkos Tracker 2/3 (Julien Nevo / Targhan, France; 2003–present, open source MIT). Three distinct players, each optimised for a different use case: AKG for games, AKM for size-limited intros, AKY for fast demos with digidrums.
 
-This article benchmarks all four head-to-head on code size, CPU cost, RAM usage, feature coverage, and per-platform behaviour. For the architecture shared by all four (and the meaning of "per-frame work", "register-write idiom", "ISR integration"), see [ay_player_routines.md](ay_player_routines.md); this article focuses on the differences. For the higher-level decision tree that also factors in the target hardware, see [audio_decision_guide.md](audio_decision_guide.md).
+This article benchmarks all four head-to-head on code size, CPU cost, RAM usage, feature coverage, and per-platform behaviour. For the architecture shared by all four (and the meaning of "per-frame work", "register-write idiom", "ISR integration"), see [ay_player_routines.md](ay_player_routines.md); this article focuses on the differences.
 
 The headline: there is no single "best" player — each is optimised for a different point in the size / speed / feature / portability trade-space. The recommendation matrix at the end of this article maps typical use cases to the appropriate player.
 
@@ -236,7 +236,6 @@ Julien Nevo (Targhan), the Arkos Tracker author, publishes a simpler decision ta
 ## Cross-References
 
 - [AY Player Routines](ay_player_routines.md) — the architecture shared by all four players (ISR integration, register-write idiom, timing budget, memory placement); this article focuses on the differences
-- [Audio Decision Guide](audio_decision_guide.md) — the higher-level decision tree that includes hardware and format, not just the player
 - [PT3 Format](../trackers_and_formats/pt3_format.md) — the binary specification of PT3 modules
 - [Vortex Tracker II](../trackers_and_formats/vortex_tracker.md) — the modern tracker that produces PT3 modules
 - [Arkos Tracker](../trackers_and_formats/arkos_tracker.md) — the tracker that produces AKG/AKM/AKY modules
@@ -260,4 +259,4 @@ Julien Nevo (Targhan), the Arkos Tracker author, publishes a simpler decision ta
 
 ---
 
-*Article 2 of 3 in the [Player Routines](README.md) sub-section. Companion articles: [AY Player Routines](ay_player_routines.md) (the architecture shared by all four) and [Audio Decision Guide](audio_decision_guide.md) (the full hardware + format + player decision tree).*
+*Article 2 of 2 in the [Player Routines](README.md) sub-section. Companion article: [AY Player Routines](ay_player_routines.md) (the architecture shared by all four).*

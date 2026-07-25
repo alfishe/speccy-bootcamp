@@ -169,8 +169,7 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | Article | Description |
 |---------|------------|
 | [ay_player_routines.md](06_sound/players/ay_player_routines.md) | Player architecture: ISR integration, register writes, timing |
-| [player_comparison.md](06_sound/players/player_comparison.md) | PT3 vs Arkos (AKG/AKM/AKY): speed, size, features |
-| [audio_decision_guide.md](06_sound/players/audio_decision_guide.md) | Which hardware + format + player to target |
+| [player_comparison.md](06_sound/players/player_comparison.md) | PT3 vs Arkos (AKG/AKM/AKY): speed, size, features, decision table |
 
 *See [06_sound/README.md](06_sound/README.md) for the full sound section catalog.*
 
