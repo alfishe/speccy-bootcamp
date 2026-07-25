@@ -38,6 +38,7 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 |---------|------------|
 | [clone_timing.md](02_hardware/clones/clone_timing.md) | Clone video timing — Pentagon, Scorpion, Kay, ATM Turbo, FPGA implementations, detection techniques |
 | [clone_joysticks.md](02_hardware/clones/clone_joysticks.md) | Built-in Kempston on clone motherboards, Beta 128 coexistence, two-player conventions, single-standard software culture |
+| [atm_turbo.md](02_hardware/clones/atm_turbo.md) | ATM Turbo: CP/M mode, 7 MHz turbo, 4 video modes (320×200 16-color, 640×200, 80×25 text), IDE controller, flexible memory paging, 64-color RGBI palette |
 
 #### New Generation
 
