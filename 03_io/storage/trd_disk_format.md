@@ -627,7 +627,7 @@ This is used by:
 - **Custom-format disks**: disks that use double-density, non-standard sector sizes, or unusual geometries.
 - **Demoscene productions**: demos that need cycle-exact control over disk access for visual effects.
 
-For these disks, the TR-DOS catalog may be empty or may contain only the loader file. The rest of the disk is read via raw WD1793 commands from the loader code. See [05_reversing/](../../05_reversing/) for more on custom loaders.
+For these disks, the TR-DOS catalog may be empty or may contain only the loader file. The rest of the disk is read via raw WD1793 commands from the loader code. See [05_reversing/](../../08_reverse_engineering/README.md) for more on custom loaders.
 
 ---
 
@@ -648,7 +648,7 @@ For these disks, the TR-DOS catalog may be empty or may contain only the loader 
 ### 10.2 Adjacent topics
 
 - [04_operating_systems/](../../04_operating_systems/) — for the TR-DOS ROM itself, its command set, and its interaction with the BASIC ROM.
-- [05_reversing/](../../05_reversing/) — for protection schemes that exploit TR-DOS format quirks (deleted entries, custom boot sectors, non-standard sector layouts).
+- [05_reversing/](../../08_reverse_engineering/README.md) — for protection schemes that exploit TR-DOS format quirks (deleted entries, custom boot sectors, non-standard sector layouts).
 - [11_emulation/](../../11_emulation/) — for cycle-exact TR-DOS disk emulation in modern emulators.
 
 ### 10.3 External references

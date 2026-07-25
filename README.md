@@ -100,6 +100,12 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [contention_model.md](05_development/03_memory_and_io/contention_model.md) | Unified contention reference: per-model timing, Ferranti vs gate array patterns, I/O contention |
 | [bank_switching_patterns.md](05_development/03_memory_and_io/bank_switching_patterns.md) | Practical 128K+ paging: #7FFD, cross-bank access, double buffering, +2A/+3 modes |
 
+#### Interrupt Programming
+
+| Article | Description |
+|---------|------------|
+| [interrupt_programming.md](05_development/04_interrupts/interrupt_programming.md) | Practical guide: IM1/IM2 setup, ISR patterns, timing, cookbook, antipatterns |
+
 #### Display & Timing
 
 | Article | Description |
@@ -158,6 +164,14 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [pt3_format.md](06_sound/trackers_and_formats/pt3_format.md) | PT3 module format — byte-level binary specification (header, patterns, samples, ornaments, player operation) |
 | [psg_format.md](06_sound/trackers_and_formats/psg_format.md) | PSG register dump format — universal pre-rendered AY register stream |
 
+#### Player Routines
+
+| Article | Description |
+|---------|------------|
+| [ay_player_routines.md](06_sound/players/ay_player_routines.md) | Player architecture: ISR integration, register writes, timing |
+| [player_comparison.md](06_sound/players/player_comparison.md) | PT3 vs Arkos (AKG/AKM/AKY): speed, size, features |
+| [audio_decision_guide.md](06_sound/players/audio_decision_guide.md) | Which hardware + format + player to target |
+
 *See [06_sound/README.md](06_sound/README.md) for the full sound section catalog.*
 
 ### 09 — Toolchain
@@ -182,14 +196,24 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [boriel_zxbasic.md](09_toolchain/boriel_zxbasic.md) | **Boriel ZX BASIC** — the modern BASIC cross-compiler (`zxbc`) emitting native Z80 machine code. Three-stage pipeline (`zxbpp`/`zxbc`/`zxbasm`), 8-type static type system, `SUB`/`FUNCTION` with `ByVal`/`ByRef`/`FastCall`, structured control flow, first-class inline `ASM`, ROM-binding standard library, full CLI flag reference, all output formats (`.bin`/`.tap`/`.tzx`/`.sna`/`.z80`), worked game-loop example, comparison matrix vs z88dk C and pure assembly, decision tree |
 | [vscode_integration.md](09_toolchain/vscode_integration.md) | **VS Code Integration** — the canonical reference for VS Code as the ZX Spectrum IDE. Extension ecosystem (DeZog, Z80 Macro-Assembler, Z80 Assembly Meter, Hex Editor, Klive IDE, SpectNetIDE). DeZog deep dive — four backends (ZEsarUX, CSpect, MAME, internal simulator), reverse debugging via ZEsarUX history. Build tasks and problem matchers for SjASMPlus / z88dk / Boriel ZX BASIC. Complete worked `.vscode/` project setup. Stack comparison (DeZog+SjASMPlus+ZEsarUX vs Klive IDE vs SpectNetIDE), decision tree, best practices, pitfalls |
 
-### 03 — I/O — Peripherals (in progress)
+### 03 — I/O — Peripherals ✅ COMPLETE
 
 | Article | Description |
 |---------|-------------|
 | [interface1.md](03_io/peripherals/interface1.md) | **ZX Interface 1** (Sinclair, 1983) — triple-function expansion: Microdrive controller + RS-232 + ZX Net LAN. 8 KB shadow ROM paging via `M1` fetch at `#0008`, hook codes `#1B`–`#32`, ZX Microdrive sector format (254 × 543 bytes, bespoke non-CRC checksum), bit-bang RS-232, single-wire token bus for 64 Spectrums |
+| [interface2.md](03_io/peripherals/interface2.md) | **ZX Interface 2** (Sinclair, 1983) — twin-joystick + ROM-cartridge expansion. MT62001 joystick decode IC, 28-pin cartridge socket mirroring 27128 EPROM pinout, `/ROMCS` pull-up disables internal ROM at `#0000-#3FFF`, the 10 released cartridges, +2A/+3 incompatibility (two-diode fix), homebrew cartridge ecosystem |
+| [multiface.md](03_io/peripherals/multiface.md) | **Multiface (One / 128 / 3)** (Romantic Robot, 1986–1988) — hardware overlay peripheral: 8 KB ROM + 8 KB RAM paged in via NMI vector fetch at `#0066`, three model variants with distinct port maps (`#9F`/`#1F` for MF1, `#BF`/`#3F` for MF128, `#3F`/`#BF` for MF3), `+3` paging-port back doors (`#7F3F`/`#1F3F`), stealth mode, dump-file format (precursor to `.z80`), Genie disassembler and Lifeguard poke-finder ecosystem, cultural impact on cheat codes and snapshots |
+| [keyboard.md](03_io/peripherals/keyboard.md) | **Keyboard Reading** — software-side companion to `keyboard_matrix.md`. Half-row scan idiom, 40-key scan, ghosting and the QAOP/CS consensus, per-model differences (48K ULA, 128K AY port B, +2A/+3 multi-stage, PS/2 via Next/DivMMC/Harlequin), debounce/auto-repeat/redefine patterns, 10 pitfalls |
+| [mouse.md](03_io/peripherals/mouse.md) | **Mouse Interfaces** — Kempston Mouse (8-bit absolute counters at `#FBDF`/`#FFDF`/`#FADF`, quadrature decode in hardware) vs AMX Mouse (1-bit relative polling at `#1F`/`#3F`/`#DF`, conflict with Kempston joystick), Kempston Mouse Turbo PS/2, K-MOUSE Turbo, Next PS/2 mouse, PS/2 protocol primer, 10 pitfalls |
 | [joystick.md](03_io/peripherals/joystick.md) | Joystick interfaces: Kempston #1F, Sinclair/Interface 2, Cursor/Protek/AGF, Fuller, Timex, clone built-ins, unified multi-standard reader |
+| [printers.md](03_io/peripherals/printers.md) | **Printers** — ZX Printer (1981, spark / electro-erosion, port `#FB` with `A2=0` decode, paper-start latch bit 7, next-pixel latch bit 0, +9V power removed on +2A/+3), Alphacom 32 thermal alternative, Centronics adapters (Kempston/DK'Tronics data `#0F` / status `#1F` / hardware-strobe on write), Soviet SM640 (IEEE 488/IEC 625) and SM646 (Centronics, GOST 19768-74 Cyrillic), Retro-Printer modern emulation, 10 pitfalls |
+| [zx_bus.md](03_io/peripherals/zx_bus.md) | **ZX Bus** — the 56-pin (28+28) expansion edge connector: full pinout, signal groups (address / data / control / interrupts / power), per-model differences (16K/48K vs 128K/+2 vs +2A/+3 — `+9V`/`/ROMCS` removal, `/ROM1OE`+`/ROM2OE` replacement), `/ROMCS` overlay trick, no `/RAMCS`, `M1`-triggered overlays, DMA via `/BUSRQ`/`/BUSACK`, peripheral stacking order, 12 pitfalls |
+| [mb02.md](03_io/peripherals/mb02.md) | **MB-02 / MB-02+** — Czech all-in-one disk/DMA/memory/RTC/IDE expansion (8BC group, ~1996; ~90 units made): WD2797 FDC with HD floppies (1.4-1.8 MB), Z80-DMA (RFT U858D required due to BS-DOS init-order bug), 128K-512K SRAM, RTC-72421, full port map, BS-DOS, Hood's NMI menu, MB03+ Ultimate FPGA successor |
+| [video_output.md](03_io/peripherals/video_output.md) | **Video Output** — physical video output stage of every Spectrum model. 48K RF-only path (ULA Y/U/V → LM1889 → RF modulator on UHF ch.35/36) vs 128K/+2 TEA2000-based RGB+composite path vs +2A/+3 Amstrad 40077 gate-array path with RGB only; 8-pin DIN 45326 monitor socket pinouts for all three variants (128K TTL RGB vs +2 configurable via LK1-LK8 jumpers vs +2A/+3 with `+12V` on pins 1/5 and audio on 3); composite video vs composite sync distinction; SCART cable wiring tables (128K needs diode Bright mixing; +2 internal mixing; +2A/+3 requires 330 Ω series R for proper levels); 48K composite mod (LM1889 tap + 2N3904 buffer); S-Video alternative (Redhawk PCB); VGA/HDMI adapters (GBS-8200 with gbscontrol, OSSC, RGB-to-HDMI, ZX-VGA-JOY); Soviet clone composite outputs; 12 pitfalls |
+| [z_controller.md](03_io/peripherals/z_controller.md) | **Z-Controller** — Russian multi-I/O peripheral designed by Alexey Zhabin (KingOfEvil) in 2007. Combines PS/2 keyboard, PS/2 mouse (Kempston Mouse emulation), Nemo IDE-compatible CompactFlash/hard disk, and SPI-mode SD card on a single ZX Bus board. Two-chip architecture: Altera EPM7128 CPLD (port decode + IDE latch + mouse registers) + KR1878VE1 MCU (PS/2 scan codes). Not bootable from SD; software support is Russian-scene-specific (Wild Disk Copier v1.21+, iS-DOS); functionality carried forward into MB03+ Ultimate FPGA and ZX Spectrum Neo |
+| [lightgun.md](03_io/peripherals/lightgun.md) | **Magnum Light Phaser** — Amstrad's 1987 light gun, last first-party ZX Spectrum peripheral. Photo-diode + lens + trigger microswitch; CRT raster-beam detection. Three interface variants: +2/+2A/+3 AUX port (8-pin), 48K/128K Toastrack ZX Bus edge connector + MIC socket box, C64 user port + control port (uses VIC-II hardware light-pen input `$D013`/`$D014`). ZX Spectrum ULA has **no light-pen register** — detection is entirely software-driven (sensor pulse → ULA `/INT` → software T-state count → per-model calibration table for 48K/128K/+2/+2A/+3). ~15 known Spectrum titles (6 bundled, 9 separately-sold); rebranded variants: Trojan Phazer (white), Cheetah Defender, MARPES — all interchangeable; Stack Light Rifle is **incompatible** (emulates Kempston joystick). **CRT-only — does not work on LCD/plasma/OLED**; Sinden/GUN4IR are modern IR-LED-bar alternatives. 12 pitfalls |
 
-*See [03_io/peripherals/README.md](03_io/peripherals/README.md) for the section index. Planned: keyboard, mouse, lightgun, Interface 2, Multiface, Z-Controller, MB02, ZX Bus, printers, video output.*
+*See [03_io/peripherals/README.md](03_io/peripherals/README.md) for the section index. All 12 peripheral articles complete.*
 
 ### 07 — Demoscene ✅ COMPLETE
 

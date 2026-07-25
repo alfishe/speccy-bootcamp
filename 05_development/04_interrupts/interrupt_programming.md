@@ -635,7 +635,7 @@ raster_isr:
 ```
 
 > [!NOTE]
-> Timing loops using `DJNZ` are approximate and affected by contention. For precise raster bars, use `HALT` + exact T-state counting. See [race_the_beam.md](race_the_beam.md) (planned) for details.
+> Timing loops using `DJNZ` are approximate and affected by contention. For precise raster bars, use `HALT` + exact T-state counting. See [race_the_beam.md](../05_display_and_timing/raster_timing.md) (planned) for details.
 
 ### Music Player ISR
 

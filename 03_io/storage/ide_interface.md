@@ -2,11 +2,11 @@
 
 **Scope:** A hardware-level comparison of every significant **IDE (Integrated Drive Electronics)** interface that brought parallel-ATA hard disks and CompactFlash cards to the ZX Spectrum family and its clones — the **DivIDE**, **Nemo IDE**, **KAY IDE**, the **ATM Turbo / Z-Controller IDE**, and the **SMUC** ISA bridge.
 
-This article is the **hardware reference** for the IDE era: port maps, banking schemes, cable pinouts, and the register-level protocol the Z80 uses to talk to an IDE device. It does not cover the SD-card interfaces (those are in [sd_interface.md](sd_interface.md)), nor the DOS firmware in depth (that is in [divide_divmmc.md](divide_divmmc.md) and [esxdos.md](../04_operating_systems/esxdos.md)).
+This article is the **hardware reference** for the IDE era: port maps, banking schemes, cable pinouts, and the register-level protocol the Z80 uses to talk to an IDE device. It does not cover the SD-card interfaces (those are in [sd_interface.md](sd_interface.md)), nor the DOS firmware in depth (that is in [divide_divmmc.md](divide_divmmc.md) and [esxdos.md](../../04_operating_systems/esxdos.md)).
 
 **Audience:** Hardware-level emulator authors modelling the DivIDE or SMUC port blocks, demoscene coders writing direct-to-disk loaders that bypass ESXDOS, retro-hardware builders adapting CompactFlash to a clone, and anyone curious why the Spectrum speaks a 16-bit PC protocol through an 8-bit 1982 bus.
 
-**Prerequisites:** Familiarity with [I/O port decoding](../05_development/03_memory_and_io/io_port_decoding.md) and the general [memory-and-I/O model](../05_development/03_memory_and_io/memory_and_io_48k.md) of the Spectrum. The [overview article](hdd_overview.md) situates the IDE era in the wider storage story.
+**Prerequisites:** Familiarity with [I/O port decoding](../../05_development/03_memory_and_io/io_port_decoding.md) and the general [memory-and-I/O model](../../05_development/03_memory_and_io/memory_and_io_48k.md) of the Spectrum. The [overview article](hdd_overview.md) situates the IDE era in the wider storage story.
 
 **Depth:** Deep. Port maps, banking registers, the ATA command set, and worked read/write sequences. References to the OS articles where the filesystem layer takes over.
 
@@ -197,7 +197,7 @@ The KAY IDE matters mainly to owners of original KAY hardware and to emulator au
 
 The **ATM Turbo** (1991, and its successors the ATM Turbo 2+ and the Sprinter) include an on-board IDE controller. The same controller design is also the IDE half of the **Z-Controller** — a combined IDE + SD + RTC expansion for the ATM Turbo and Pentagon designed by the ATM team in the late 2000s.
 
-Unlike the DivIDE, the ATM IDE uses the **paired-port** scheme directly, mapping each IDE register to its own host port. The mapping is documented in the Black_Cat port table and reproduced here from [io_port_map.md](../10_references/io_port_map.md):
+Unlike the DivIDE, the ATM IDE uses the **paired-port** scheme directly, mapping each IDE register to its own host port. The mapping is documented in the Black_Cat port table and reproduced here from [io_port_map.md](../../10_references/io_port_map.md):
 
 | Host port | Read | Write | IDE register |
 |---|---|---|---|
@@ -218,7 +218,7 @@ The ATM IDE is driven by the ATM Turbo's system ROM and by the ATM's native DOS 
 
 The **SMUC** (Scorpion & MOA Universal Controller, 2007) is a different kind of interface entirely. Rather than presenting a custom IDE port block, it **bridges a real PC ISA bus** onto the Scorpion (and later the ZX Evolution), letting the Spectrum drive actual PC ISA expansion cards — including ISA IDE controllers, ISA network cards (NE2000), and ISA RTC chips.
 
-Because the SMUC exposes the PC's ISA IDE register layout directly, its IDE ports follow the PC convention. From [io_port_map.md](../10_references/io_port_map.md):
+Because the SMUC exposes the PC's ISA IDE register layout directly, its IDE ports follow the PC convention. From [io_port_map.md](../../10_references/io_port_map.md):
 
 | Host port | Function | Notes |
 |---|---|---|
@@ -373,13 +373,13 @@ The one scenario that still favours IDE is the **ZX Evolution** and **Scorpion**
 
 | Article | Relationship |
 |---|---|
-| [io_port_map.md](../10_references/io_port_map.md) | The master port table; the ATM IDE and SMUC port blocks are reproduced from here |
-| [esxdos.md](../04_operating_systems/esxdos.md) | The DOS that drives the DivIDE family; the firmware side of this hardware |
+| [io_port_map.md](../../10_references/io_port_map.md) | The master port table; the ATM IDE and SMUC port blocks are reproduced from here |
+| [esxdos.md](../../04_operating_systems/esxdos.md) | The DOS that drives the DivIDE family; the firmware side of this hardware |
 | [beta_disk_interface.md](beta_disk_interface.md) | The floppy interface whose `.TRD` images the DivIDE emulates |
 | [trd_disk_format.md](trd_disk_format.md) | The TR-DOS logical format, as seen through the DivIDE's virtual-floppy layer |
-| [evo_os.md](../04_operating_systems/evo_os.md) | The ZX Evolution's BIOS, which includes a SMUC-compatible IDE bridge |
-| [io_port_decoding.md](../05_development/03_memory_and_io/io_port_decoding.md) | The partial-decoding theory behind the `#E3`–`#E7` footprints |
+| [evo_os.md](../../04_operating_systems/evo_os.md) | The ZX Evolution's BIOS, which includes a SMUC-compatible IDE bridge |
+| [io_port_decoding.md](../../05_development/03_memory_and_io/io_port_decoding.md) | The partial-decoding theory behind the `#E3`–`#E7` footprints |
 
 ### 8.3 License
 
-This article is licensed under [CC BY-SA 4.0](../LICENSE). The port-map data in §5.4 and §5.5 is derived from **Black_Cat's ZX Ports Full Table** (BC Info Guide #4, 2008), preserved in the [tslabs/zx-evo repository](https://github.com/tslabs/zx-evo), and used here for documentation purposes.
+This article is licensed under [CC BY-SA 4.0](../../README.md). The port-map data in §5.4 and §5.5 is derived from **Black_Cat's ZX Ports Full Table** (BC Info Guide #4, 2008), preserved in the [tslabs/zx-evo repository](https://github.com/tslabs/zx-evo), and used here for documentation purposes.

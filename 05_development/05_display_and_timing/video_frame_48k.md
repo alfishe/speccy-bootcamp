@@ -259,6 +259,6 @@ ULA overhead:              ~18% stolen for video generation
 - **128K frame** (contention differences, shadow screen): [video_frame_128k.md](video_frame_128k.md)
 - **ULA timing deep dive** (contention patterns, early/late timing, **snow effect**): [ula_timing.md](../../02_hardware/original/ula_timing.md)
 - **Pentagon frame** (320 lines, no contention): [video_frame_pentagon.md](video_frame_pentagon.md)
-- **Race the beam** (raster sync techniques): [race_the_beam.md](../04_interrupts/race_the_beam.md)
+- **Race the beam** (raster sync techniques): [race_the_beam.md](raster_timing.md)
 - **Z80 interrupt system**: [z80_interrupts.md](../../01_cpu/z80_interrupts.md)
 - **Floating bus reference**: [floating_bus.md](floating_bus.md)

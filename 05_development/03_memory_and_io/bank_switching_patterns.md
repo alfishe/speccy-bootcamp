@@ -378,6 +378,6 @@ GetData:
 - **+2A/+3 memory and ports** (#1FFD, 4 paging modes): [memory_and_io_plus3.md](memory_and_io_plus3.md)
 - **Pentagon memory and ports** (EFF7, extended paging): [memory_and_io_pentagon.md](memory_and_io_pentagon.md)
 - **Contention model** (bank-based contention): [contention_model.md](contention_model.md)
-- **Double buffering** (shadow screen techniques): [double_buffering.md](../06_graphics/double_buffering.md)
+- **Double buffering** (shadow screen techniques): [double_buffering.md](../06_graphics/README.md)
 - **Clone timing** (Pentagon extended memory): [clone_timing.md](../../02_hardware/clones/clone_timing.md)
 - **Complete I/O port map** (all paging port registers, all models): [io_port_map.md](../../10_references/io_port_map.md)

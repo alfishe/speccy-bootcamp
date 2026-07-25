@@ -220,7 +220,7 @@ The **ZX Spectrum Next** (2017) integrates SD storage into the machine itself. I
 
 The Next's SD interface is the most sophisticated on the Spectrum. Unlike the DivMMC's bit-bang bridge, the Next includes a **hardware SPI engine**: the programmer writes a byte to an SPI data port and the hardware shifts it out (and reads in) at full clock speed, with no Z80 bit-bang loop. This raises the throughput ceiling to **200+ KB/s**, limited mainly by the card itself rather than the host.
 
-The two slots are independent: software can read from one while writing to the other, and the firmware can boot from the primary while the secondary is hot-swapped. See [nextzxos.md](../04_operating_systems/nextzxos.md) for the Next-specific SD API and the layer-2 / sprite / tilemap integration.
+The two slots are independent: software can read from one while writing to the other, and the firmware can boot from the primary while the secondary is hot-swapped. See [nextzxos.md](../../04_operating_systems/nextzxos.md) for the Next-specific SD API and the layer-2 / sprite / tilemap integration.
 
 ### 5.4 The Z-Controller (SD half)
 
@@ -285,11 +285,11 @@ An SD card in SPI mode draws **~1 mA idle and ~25 mA peak during reads**, with b
 
 | Article | Relationship |
 |---|---|
-| [esxdos.md](../04_operating_systems/esxdos.md) | The DOS that drives the DivMMC; the SD-SPI driver lives here |
-| [nextzxos.md](../04_operating_systems/nextzxos.md) | The Next's ESXDOS derivative; the dual-slot SD API |
-| [evo_os.md](../04_operating_systems/evo_os.md) | The ZX Evolution BIOS, which includes Z-Controller-compatible SD |
-| [io_port_decoding.md](../05_development/03_memory_and_io/io_port_decoding.md) | How I/O ports are decoded; the foundation for the port maps here |
+| [esxdos.md](../../04_operating_systems/esxdos.md) | The DOS that drives the DivMMC; the SD-SPI driver lives here |
+| [nextzxos.md](../../04_operating_systems/nextzxos.md) | The Next's ESXDOS derivative; the dual-slot SD API |
+| [evo_os.md](../../04_operating_systems/evo_os.md) | The ZX Evolution BIOS, which includes Z-Controller-compatible SD |
+| [io_port_decoding.md](../../05_development/03_memory_and_io/io_port_decoding.md) | How I/O ports are decoded; the foundation for the port maps here |
 
 ### 7.3 License
 
-This article is licensed under [CC BY-SA 4.0](../LICENSE). The SD-SPI command set and response formats described in §3 are derived from the public **SD Physical Layer Simplified Specification** published by the SD Association, used here for documentation purposes.
+This article is licensed under [CC BY-SA 4.0](../../README.md). The SD-SPI command set and response formats described in §3 are derived from the public **SD Physical Layer Simplified Specification** published by the SD Association, used here for documentation purposes.

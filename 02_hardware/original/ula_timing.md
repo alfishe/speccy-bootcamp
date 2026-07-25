@@ -240,6 +240,58 @@ During the paper area, the ULA fetches screen bytes from RAM continuously — tw
 
 The visible result is **snow**: random single-byte corruption of the bitmap or attribute stream, appearing as bright speckles along the raster.
 
+### Hardware Mechanism
+
+The ZX Spectrum 48K uses 4116 dynamic RAM with a **multiplexed address bus** — row and column addresses share the same pins. The DRAM access sequence is:
+
+1. **Row address** placed on bus (bits A6–A0)
+2. **/RAS (Row Address Strobe)** goes low — row address latched
+3. **Column address** placed on bus
+4. **/CAS (Column Address Strobe)** goes low — data read
+
+The ULA performs **paged mode access** — one row address serves both the pixel byte and its corresponding attribute byte (they share the same row in the DRAM's address space):
+
+![ULA Video Access Timing](assets/ula_video_access.svg)
+
+The critical flaw: **the ULA only checks `/MREQ`, not `/RFSH`**. During the Z80's M1 cycle, T-states 3 and 4 perform a DRAM refresh — the CPU asserts both `/MREQ` and `/RFSH`, with `IR` (I register as high byte, R register as low byte) on the address bus. The ULA sees `/MREQ` active and assumes it is a real memory access, but because it ignores `/RFSH`, it does not realize the address bus contains refresh data, not an intended memory address.
+
+If the refresh address (`I` in `#40`–`#7F`) falls within the screen RAM range, the ULA latches **the R register's value as the row address** instead of the correct video row. This corrupts `vaddr[6:0]` — the DRAM row — while `vaddr[14:7]` (column select and page) remains correct. The result is a read from the wrong row of screen memory, producing visible corruption.
+
+```mermaid
+sequenceDiagram
+    participant CPU as Z80 CPU
+    participant BUS as Address Bus
+    participant ULA as ULA
+    participant DRAM as Screen DRAM
+
+    Note over CPU,DRAM: Normal Video Fetch
+    ULA->>BUS: Video row address (VC bits)
+    ULA->>DRAM: /RAS↓
+    DRAM-->>ULA: Row latched
+
+    Note over CPU,DRAM: RFSH Collision (I=#40-#7F)
+    CPU->>BUS: IR (refresh address)
+    CPU->>BUS: /MREQ↓, /RFSH↓
+    ULA->>BUS: Video row address
+    Note over BUS: Bus conflict!
+    ULA->>DRAM: /RAS↓
+    DRAM-->>ULA: WRONG row latched (R register)
+    Note over DRAM: Snow appears!
+```
+
+### Timing Alignment
+
+Snow only appears when the RFSH cycle coincides with the ULA's RAS generation:
+
+![Snow Collision Timing](assets/snow_collision.svg)
+
+The Z80's RFSH occurs during T3–T4 of every M1 (opcode fetch) cycle. Whether this collides with RAS depends on:
+
+1. **Horizontal position (hc)** — RAS occurs at specific hc values within each character fetch
+2. **CPU/video clock phase relationship** — the CPU clock is derived from the ULA's master clock
+
+Demos like *snow48c0* synchronize interrupts so that M1/RFSH cycles consistently hit the same scanlines. By carefully timing the interrupt handler, snow appears only on the **top 3 scanlines of each character row** (vc[2:0] = 0, 1, 2) rather than scattered randomly. This controlled snow demonstrates the precise timing relationship between CPU and video fetch.
+
 ### When Snow Occurs
 
 | `I` register value | Points to | Snow? |
@@ -253,20 +305,64 @@ The visible result is **snow**: random single-byte corruption of the bitmap or a
 
 | Machine | Snow? | Notes |
 |---------|-------|-------|
-| ZX Spectrum 48K / 128K / +2 / +3 | **Yes** | Classic Sinclair ULA arbitration produces snow when `I >= #40` |
-| Pentagon 128K / 1024 | **No** | Different memory access scheme, no contention, no refresh/ULA conflict |
-| Scorpion ZS-256 | **No** | Same as Pentagon — discrete logic, no bus conflict |
-| Most Soviet/Eastern European clones | **No** | Many use discrete logic replacing the ULA and don't reproduce the bus arbitration quirk |
-| ZX Spectrum Next | **Not by default** | Contention is emulated in configurable modes; snow is not emulated by default |
-| Emulators (Fuse, ZEsarUX, CSpect) | **Optional** | Many do not model snow; those that do usually offer it as a toggle |
+| ZX Spectrum 48K | **Yes** | Ferranti ULA ignores `/RFSH` — classic snow bug |
+| ZX Spectrum 128K / +2 | **No** | ULA checks `/RFSH` — bug fixed in 128K ULA revision |
+| ZX Spectrum +2A / +3 | **No** | Amstrad gate array checks `/RFSH` |
+| Pentagon 128K / 1024 | **No** | Discrete logic, no ULA — no bus conflict |
+| Scorpion ZS-256 | **No** | Same as Pentagon — discrete logic |
+| Most Soviet/Eastern European clones | **No** | Discrete logic replacing ULA doesn't reproduce the bug |
+| ZX Spectrum Next | **Configurable** | Snow emulation is optional |
+| Emulators (Fuse, ZEsarUX, CSpect) | **Optional** | Many offer snow as a toggle; requires correct MREQ/RFSH timing |
+
+> [!NOTE]
+> The 128K ULA revision specifically added `/RFSH` checking to prevent snow. This is why snow is a **48K-only phenomenon** on original Sinclair hardware. Software expecting snow for visual effects (intentional or accidental) will behave differently on 128K machines.
 
 ### Practical Implications
 
 1. **Avoid snow**: Keep `I < #40` (the BASIC ROM convention). The ROM's interrupt vector table at `#3C00`–`#3FFF` ensures no snow during normal operation.
 
-2. **Snow as a bug source**: Programs tested only on Pentagon (no snow) may have latent bugs — setting `I` into `#4000`–`#7FFF` causes corruption on real Sinclair hardware.
+2. **Snow as a bug source**: Programs tested only on Pentagon (no snow) may have latent bugs — setting `I` into `#4000`–`#7FFF` causes corruption on real Sinclair 48K hardware.
 
 3. **Snow as a demo effect**: Some demos intentionally set `I` into the display file to produce free animated noise — the snow effect costs zero CPU time.
+
+4. **Emulation accuracy**: Correct snow emulation requires sampling `/MREQ` and `/RFSH` through transparent latches (on CPU clock low phase), not raw asynchronous signals. Many emulators get the presence of snow correct but the exact scanline positioning wrong.
+
+### FPGA/Emulation Implementation Notes
+
+Implementing accurate snow requires:
+
+1. **Latch MREQ and RFSH** on the falling edge of the CPU clock (transparent latch behavior)
+2. **Check the latched values** at the moment of RAS generation (hc[3:0] = 8 or C in standard ULA timing)
+3. **Corrupt vaddr[6:0]** (row address only) with addr[6:0] (the R register) when:
+   - ZX-48 mode (not 128K)
+   - Latched MREQ active
+   - Latched RFSH active  
+   - Address in contended range (`I` = `#40`–`#7F`)
+4. **Leave vaddr[14:7]** (page and column) unchanged — only the row address is corrupted
+
+```verilog
+// Reference logic based on MiSTer ZX-Spectrum core (PR #61)
+// 1. Latch CPU MREQ and RFSH signals on falling edge of CPU clock
+always @(negedge cpu_clk) begin
+    latched_mreq_n <= cpu_mreq_n;
+    latched_rfsh_n <= cpu_rfsh_n;
+end
+
+// 2. Evaluate snow condition: ZX-48 mode, contended RAM range (#4000-#7FFF), active refresh
+wire is_contended_range = (cpu_addr[15:14] == 2'b01);
+wire snow_active        = !is_128k & !latched_mreq_n & !latched_rfsh_n & is_contended_range;
+
+// 3. Corrupt lower 7 bits of RAM row address during video RAS phase with R register (cpu_addr[6:0])
+wire [6:0] vram_row_addr = (ras_phase & snow_active) ? cpu_addr[6:0] : ula_vaddr[6:0];
+wire [7:0] vram_col_addr = ula_vaddr[14:7]; // Column address remains uncorrupted
+```
+
+### Snow Effect References
+
+- **ZX Design Info, "The ZX Spectrum Dynamic Memory Control"** ([zxdesign.info/dynamicRam2.shtml](http://www.zxdesign.info/dynamicRam2.shtml)) — Detailed RAS/CAS timing analysis from hardware traces
+- **ZX Design Info, "Let it Snow..."** ([zxdesign.info/harlequinSnow.shtml](http://www.zxdesign.info/harlequinSnow.shtml)) — Harlequin clone snow effect implementation notes
+- **Sinclair Wiki, "ZX Spectrum ULA"** ([sinclair.wiki.zxnet.co.uk](https://sinclair.wiki.zxnet.co.uk/wiki/ZX_Spectrum_ULA)) — ULA behavior including RFSH handling
+- **Chris Smith, "The ZX Spectrum ULA: How to Design a Microcomputer"** — Definitive hardware reference with die photographs
 
 ---
 

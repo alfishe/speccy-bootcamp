@@ -189,7 +189,7 @@ OUT  (C),A
 
 The AY-3-8912 has a built-in **8-bit I/O port** (register 14). On the 128K, this port is wired to the **external keypad connector** on the rear of the machine. On the +2, it's unused. The 128K editor ROM reads the keypad through this port.
 
-For complete AY programming, see [ay_programming.md](../07_audio/ay_programming.md).
+For complete AY programming, see [ay_programming.md](../../06_sound/hardware/ay_3_8912.md).
 
 ---
 
@@ -347,5 +347,5 @@ For complete bank-switching patterns, see [bank_switching_patterns.md](bank_swit
 - **Screen layout** (pixel addressing): [screen_layout.md](screen_layout.md)
 - **Contention model** (bank-based contention): [contention_model.md](contention_model.md)
 - **128K ROM internals** (dual-ROM, RAM bridge): [rom_128k.md](../../04_operating_systems/rom_128k.md)
-- **AY programming** (register map, effects): [ay_programming.md](../07_audio/ay_programming.md)
+- **AY programming** (register map, effects): [ay_programming.md](../../06_sound/hardware/ay_3_8912.md)
 - **Complete I/O port map** (all ports, all models, decoding bitmasks): [io_port_map.md](../../10_references/io_port_map.md)

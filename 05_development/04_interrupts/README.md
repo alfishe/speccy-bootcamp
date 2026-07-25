@@ -1,4 +1,4 @@
-[← Home](../../README.md) · [Development](../README.md)
+[← Home](../../README.md) · [Development](../../README.md)
 
 # Development — Interrupt Programming
 
@@ -15,4 +15,4 @@ This directory covers ZX Spectrum interrupt programming from a practical standpo
 - `race_the_beam.md` — Raster-synchronized programming for multicolor effects
 - `nmi.md` — NMI handling: Multiface, NMI button, safe context
 
-The CPU-level interrupt architecture (IFF1/IFF2, bus cycles, acknowledge timing) is covered in [z80_interrupts.md](../../../01_cpu/z80_interrupts.md).
+The CPU-level interrupt architecture (IFF1/IFF2, bus cycles, acknowledge timing) is covered in [z80_interrupts.md](../../01_cpu/z80_interrupts.md).

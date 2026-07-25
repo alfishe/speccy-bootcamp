@@ -26,4 +26,4 @@ A player routine is the Z80 code that reads a music module and writes AY registe
 
 - [PT3 Format](../trackers_and_formats/pt3_format.md) — the data the PT3 player reads
 - [Player Comparison](player_comparison.md) — PT3 vs Arkos benchmark
-- [IM2 Programming](../../05_development/04_interrupts/im2_programming.md) — interrupt mode setup
+- [IM2 Programming](../../05_development/04_interrupts/interrupt_programming.md) — interrupt mode setup

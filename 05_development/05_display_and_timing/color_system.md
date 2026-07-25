@@ -178,7 +178,7 @@ There is no way to have three or more colors in a single 8×8 cell (without BRIG
 1. **Character-cell-aligned sprites**: Keep all sprites aligned to 8×8 boundaries so they never share a cell with a differently-colored element
 2. **Attribute-preserving drawing**: Read the existing attribute before drawing, modify only what you need
 3. **Ditherting**: Use alternating pixel patterns to simulate intermediate colors
-4. **Multicolor effects**: Change attributes mid-scanline using timing-precise code (see [multicolor_overview.md](../06_graphics/multicolor_overview.md))
+4. **Multicolor effects**: Change attributes mid-scanline using timing-precise code (see [multicolor_overview.md](../06_graphics/README.md))
 5. **ULAplus**: Hardware extension providing 64 colors and 8×1 attribute resolution on FPGA clones
 
 ---
@@ -375,7 +375,7 @@ The dual screen enables instant page-flipping: render into the off-screen buffer
 - **Screen layout** (pixel/attribute addressing): [screen_layout.md](../03_memory_and_io/screen_layout.md)
 - **48K memory map** (attribute file at #5800): [memory_and_io_48k.md](../03_memory_and_io/memory_and_io_48k.md)
 - **Border effects** (multicolor borders, raster bars): [border_effects.md](border_effects.md)
-- **Multicolor overview** (timing-based attribute changes): [multicolor_overview.md](../06_graphics/multicolor_overview.md)
+- **Multicolor overview** (timing-based attribute changes): [multicolor_overview.md](../06_graphics/README.md)
 - **I/O ports** (#FE border register): [memory_and_io_48k.md](../03_memory_and_io/memory_and_io_48k.md)
 - **Clone video modes** (GigaScreen, ATM hires, TS-Conf): [clone_video_modes.md](clone_video_modes.md)
 - **Clone timing** (per-model video timing): [clone_timing.md](../../02_hardware/clones/clone_timing.md)

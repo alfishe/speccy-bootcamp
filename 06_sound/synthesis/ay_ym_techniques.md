@@ -33,7 +33,7 @@ Before exploring synthesis techniques, you must understand the mathematical limi
 
 These prescalers dictate the absolute minimum and maximum frequencies each subsystem can generate:
 
-![AY Frequency Ranges](assets/ay_freq_ranges.svg)
+![AY Frequency Ranges](assets/ay_frequency_ranges.svg)
 
 1. **Tone Generator (12-bit register: 1–4095)**
    - **Max frequency:** `1.7734 MHz / 16 / 1 = 110,837 Hz` (Ultrasonic carrier used for sample playback)

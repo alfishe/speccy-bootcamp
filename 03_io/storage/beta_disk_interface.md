@@ -813,7 +813,7 @@ The TR-DOS ROM provides a high-level file-based API (`LOAD`, `SAVE`, `MERGE`, `C
 - **Custom disk formats.** Many games use non-standard sector layouts (sector numbers out of order, larger sectors, extra diagnostic sectors) that TR-DOS cannot read.
 - **Copy protection.** A loader that reads raw MFM (via the WD1793's READ TRACK command, Type III) can detect intentionally-written "weak bits" and disk-specific signatures that defeat naive `*COPY`.
 - **Memory footprint.** TR-DOS leaves ~3 KB of itself resident in RAM after a `LOAD`; a custom loader can use all of RAM once it has finished.
-- **CRUNCH.** Most loaders also decompress ("crunch") the loaded data in-place using one of several dozen Soviet or Western compression formats (see [exe_crunchers.md](../../03_loader_and_exec_format/exe_crunchers.md)).
+- **CRUNCH.** Most loaders also decompress ("crunch") the loaded data in-place using one of several dozen Soviet or Western compression formats (see [exe_crunchers.md](../snapshots/README.md)).
 
 This section covers the three pillars of the custom-loader world: the loaders themselves, the hardware **MAGIC button** that enables snapshotting, and the protection schemes that loaders commonly implement.
 
@@ -865,7 +865,7 @@ The Mr Gluk Reset Service (§10.6) repurposes the MAGIC button: pressing it duri
 
 ### 11.4 Common disk protection schemes
 
-The Soviet scene invented and refined dozens of floppy-disk protection schemes. Most exploit specific WD1793 behaviour that is difficult to replicate with a generic `*COPY`. See [05_reversing/custom_loaders_and_drm.md](../../05_reversing/custom_loaders_and_drm.md) for the full catalogue; the most common ones encountered on Beta Disk software:
+The Soviet scene invented and refined dozens of floppy-disk protection schemes. Most exploit specific WD1793 behaviour that is difficult to replicate with a generic `*COPY`. See [05_reversing/custom_loaders_and_drm.md](../../08_reverse_engineering/README.md) for the full catalogue; the most common ones encountered on Beta Disk software:
 
 - **Weak-bit protection.** The original disk has a track where the magnetic flux is written at a level that is on the edge of the drive's read amplifier threshold. Each read produces a slightly different bit pattern. The protection check reads the track twice and compares; if they match (because a copier wrote deterministic bits), the software refuses to run. READ TRACK (Type III) is the command used to capture the raw bytes.
 - **Non-standard sector IDs.** Sectors are numbered, e.g., `0x01, 0x02, 0x80, 0x81, 0x82, ...` instead of `1, 2, 3, 4, ...`. TR-DOS's READ SECTOR will fail to find them; only a custom loader that issues READ SECTOR with the right sector number will succeed.
@@ -875,7 +875,7 @@ The Soviet scene invented and refined dozens of floppy-disk protection schemes. 
 - **Spin-up timing checks.** The loader measures the time between successive index pulses and compares it to a reference. If the disk is being read on a drive with a different RPM (e.g., a 360 RPM "high-speed" drive instead of the standard 300 RPM), the check fails.
 - **Drive-select tricks.** A few loaders deliberately select drives C or D (which are usually empty) and use the WD1793's "no drive present" timeout as a cryptographic entropy source.
 
-For the defensive side — bypassing these protections to make a backup — see the [unpacking_and_decrunching.md](../../05_reversing/unpacking_and_decrunching.md) and [patching_techniques.md](../../05_reversing/patching_techniques.md) articles in the reversing section.
+For the defensive side — bypassing these protections to make a backup — see the [unpacking_and_decrunching.md](../../08_reverse_engineering/README.md) and [patching_techniques.md](../../08_reverse_engineering/README.md) articles in the reversing section.
 
 ### 11.5 Notable custom loaders
 
@@ -908,8 +908,8 @@ A non-exhaustive list of historically important Soviet custom loaders:
 
 ### 12.3 Reverse engineering and demoscene angles
 
-- For custom loaders, protection schemes, and disk-based DRM that run on a Beta Disk Interface: see §11 of this article for the overview, and [05_reversing/custom_loaders_and_drm.md](../../05_reversing/custom_loaders_and_drm.md) for the full catalogue.
-- For unpacking / decrunching custom loaders: see [05_reversing/unpacking_and_decrunching.md](../../05_reversing/unpacking_and_decrunching.md) and [05_reversing/patching_techniques.md](../../05_reversing/patching_techniques.md).
+- For custom loaders, protection schemes, and disk-based DRM that run on a Beta Disk Interface: see §11 of this article for the overview, and [05_reversing/custom_loaders_and_drm.md](../../08_reverse_engineering/README.md) for the full catalogue.
+- For unpacking / decrunching custom loaders: see [05_reversing/unpacking_and_decrunching.md](../../08_reverse_engineering/README.md) and [05_reversing/patching_techniques.md](../../08_reverse_engineering/README.md).
 - For cycle-exact Beta Disk Interface emulation in modern emulators: see [11_emulation/](../../11_emulation/).
 - For TR-DOS extensions and modern disk operating systems that build on the Beta Disk Interface (ESXDOS, FatFS, etc.): see [04_operating_systems/](../../04_operating_systems/). The TR-DOS version matrix is in §10 of this article.
 

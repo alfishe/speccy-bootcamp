@@ -631,7 +631,7 @@ This table is intentionally selective. The full historical record is preserved a
 
 - [06_sound/](../06_sound/README.md) — full coverage of AY/YM, beeper, TurboSound, Covox, General Sound, and more
 - [06_sound/players/ay_player_routines.md](../06_sound/players/ay_player_routines.md) — AY player formats (PT3, ASM, etc.) referenced in §6
-- [06_sound/trackers/](../06_sound/trackers/) — tracker tools, including Vortex Tracker II
+- [06_sound/trackers/](../06_sound/trackers_and_formats/README.md) — tracker tools, including Vortex Tracker II
 
 ### Related toolchain articles
 
