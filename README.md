@@ -99,6 +99,12 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [contention_model.md](05_development/03_memory_and_io/contention_model.md) | Unified contention reference: per-model timing, Ferranti vs gate array patterns, I/O contention |
 | [bank_switching_patterns.md](05_development/03_memory_and_io/bank_switching_patterns.md) | Practical 128K+ paging: #7FFD, cross-bank access, double buffering, +2A/+3 modes |
 
+#### Interrupt Programming
+
+| Article | Description |
+|---------|------------|
+| [interrupt_programming.md](05_development/04_interrupts/interrupt_programming.md) | Practical guide: IM1/IM2 setup, ISR patterns, timing, cookbook, antipatterns |
+
 #### Display & Timing
 
 | Article | Description |
@@ -156,6 +162,14 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [arkos_tracker.md](06_sound/trackers_and_formats/arkos_tracker.md) | Arkos Tracker 2/3 — modern cross-platform AY tracker (Targhan, 2003–present) |
 | [pt3_format.md](06_sound/trackers_and_formats/pt3_format.md) | PT3 module format — byte-level binary specification (header, patterns, samples, ornaments, player operation) |
 | [psg_format.md](06_sound/trackers_and_formats/psg_format.md) | PSG register dump format — universal pre-rendered AY register stream |
+
+#### Player Routines
+
+| Article | Description |
+|---------|------------|
+| [ay_player_routines.md](06_sound/players/ay_player_routines.md) | Player architecture: ISR integration, register writes, timing |
+| [player_comparison.md](06_sound/players/player_comparison.md) | PT3 vs Arkos (AKG/AKM/AKY): speed, size, features |
+| [audio_decision_guide.md](06_sound/players/audio_decision_guide.md) | Which hardware + format + player to target |
 
 *See [06_sound/README.md](06_sound/README.md) for the full sound section catalog.*
 

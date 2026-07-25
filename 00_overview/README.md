@@ -4,6 +4,6 @@
 
 > Knowledge about ZX Spectrum, clones, next-gen for software developers, demosceners, retro-enthusiasts.
 
-Licensed under [CC BY-SA 4.0](LICENSE).
+Licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
 
-This directory is a placeholder — content is coming. See [PLAN.md](PLAN.md) for the full article catalog.
+This directory is a placeholder — content is coming. See [Overview](README.md) for the full article catalog.

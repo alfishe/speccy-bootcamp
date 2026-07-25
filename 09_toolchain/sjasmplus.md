@@ -1396,7 +1396,7 @@ Or use a memory map / overlay architecture where each routine is at a different 
 - [z88dk](z88dk.md) — the C compiler toolchain. z88dk uses its own `z80asm` for assembly output; SjASMPlus is preferred for pure-assembly projects.
 - [disassemblers.md](disassemblers.md) — when working from binaries, the disassembler output is typically massaged into SjASMPlus-compatible source.
 - [Assembly Development](../05_development/02_assembly/README.md) — programming concepts SjASMPlus supports.
-- [ZX Spectrum Next](../02_hardware/newgen/zx_next.md) — the Z80N ISA reference.
+- [ZX Spectrum Next](../02_hardware/newgen/README.md) — the Z80N ISA reference.
 
 ---
 

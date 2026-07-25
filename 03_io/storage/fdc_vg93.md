@@ -1035,11 +1035,11 @@ See [divide_divmmc.md](divide_divmmc.md) and [ide_interface.md](ide_interface.md
 
 - [beta_disk_interface.md](beta_disk_interface.md) (also above) — the most common host for a WD1793 on the Spectrum.
 - For the +3's controller: see [plus3_floppy.md](plus3_floppy.md). The WD1772-PH is register-compatible with the WD1793 but uses a fixed step rate and a different motor-control scheme.
-- For the original WD1772 data sheet and the KR1818VG93 pinout: see the [14_references/](../../14_references/) directory.
+- For the original WD1772 data sheet and the KR1818VG93 pinout: see the [14_references/](../../10_references/README.md) directory.
 
 ### 10.3 Reverse engineering and demoscene angles
 
-- For protection schemes that exploit FDC quirks (wrong track number, custom address marks, side-select trick): see the [05_reversing/](../../05_reversing/) section, in particular articles on [custom_loaders_and_drm.md](../../05_reversing/custom_loaders_and_drm.md) and [unpacking_and_decrunching.md](../../05_reversing/unpacking_and_decrunching.md).
+- For protection schemes that exploit FDC quirks (wrong track number, custom address marks, side-select trick): see the [05_reversing/](../../08_reverse_engineering/README.md) section, in particular articles on [custom_loaders_and_drm.md](../../08_reverse_engineering/README.md) and [unpacking_and_decrunching.md](../../08_reverse_engineering/README.md).
 - For turbo loaders used in demos and games: see [tape_interface.md](tape_interface.md) (the tape equivalent). Disk-based turbo loaders use the techniques described in §9.3 above.
 - For cycle-exact emulation of the WD1793: see the [11_emulation/](../../11_emulation/) section.
 

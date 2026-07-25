@@ -5,7 +5,7 @@
 The Pentagon 128K is the most popular ZX Spectrum clone in Russia and the former Soviet Union. Its video timing is **fundamentally different** from the original 48K: it generates **320 scanlines per frame** (not 312), runs at **~48.83 Hz** (not ~50.08 Hz), and has **no memory contention at all**. Code that relies on 48K-specific timing will break on the Pentagon — and vice versa.
 
 > [!NOTE]
-> This article covers **only the Pentagon's video frame timing**. For the hardware design (discrete logic, binary counters), see [pentagon.md](../../02_hardware/clones/pentagon.md). For the general clone timing overview, see [clone_timing.md](../../02_hardware/clones/clone_timing.md). For 48K frame reference, see [video_frame_48k.md](video_frame_48k.md).
+> This article covers **only the Pentagon's video frame timing**. For the hardware design (discrete logic, binary counters), see [pentagon.md](../../02_hardware/clones/README.md). For the general clone timing overview, see [clone_timing.md](../../02_hardware/clones/clone_timing.md). For 48K frame reference, see [video_frame_48k.md](video_frame_48k.md).
 
 ---
 
@@ -307,9 +307,9 @@ isPentagon:
 ## Cross-References
 
 - **Clone timing overview** (all Soviet clones): [clone_timing.md](../../02_hardware/clones/clone_timing.md)
-- **Pentagon hardware** (design, discrete logic): [pentagon.md](../../02_hardware/clones/pentagon.md)
+- **Pentagon hardware** (design, discrete logic): [pentagon.md](../../02_hardware/clones/README.md)
 - **48K frame** (base reference): [video_frame_48k.md](video_frame_48k.md)
 - **128K frame** (contention differences): [video_frame_128k.md](video_frame_128k.md)
 - **Pentagon memory** (512K/1024K expansions): [memory_and_io_pentagon.md](../03_memory_and_io/memory_and_io_pentagon.md)
 - **Emulation implications** (48.83 Hz on modern displays): [cycle_exact_accuracy.md](../../11_emulation/software/cycle_exact_accuracy.md)
-- **Video frame comparison** (all models side-by-side): [video_frame_comparison.md](video_frame_comparison.md)
+- **Video frame comparison** (all models side-by-side): [video_frame_comparison.md](video_frame_overview.md)

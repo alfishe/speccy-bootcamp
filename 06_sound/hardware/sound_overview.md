@@ -210,8 +210,8 @@ The dedicated hardware articles (in the recommended reading order for a newcomer
 Related synthesis articles (not in this `hardware/` subdirectory):
 
 - **[Beeper Synthesis](../synthesis/beeper_synthesis.md)** — Engines for the 1-bit beeper.
-- **[AY Synthesis](../synthesis/ay_synthesis.md)** — Composing for the AY register set.
-- **[Sample / PCM Synthesis](../synthesis/sample_synthesis.md)** — Working with Covox, GS, and DMA.
+- **[AY Synthesis](../synthesis/ay_ym_synthesis.md)** — Composing for the AY register set.
+- **[Sample / PCM Synthesis](../synthesis/beeper_synthesis.md)** — Working with Covox, GS, and DMA.
 
 ### External Resources
 

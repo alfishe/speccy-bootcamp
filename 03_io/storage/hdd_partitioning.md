@@ -6,7 +6,7 @@ This is the **filesystem companion** to the hardware articles: [ide_interface.md
 
 **Audience:** Emulator authors implementing a FAT driver, ESXDOS application programmers who need to understand cluster sizes and LFN quirks, archival tool authors building conversion utilities, and curious users who want to know what lives inside their SD card.
 
-**Prerequisites:** The [overview article](hdd_overview.md) situates partitioning in the storage story; [esxdos.md](../04_operating_systems/esxdos.md) covers the DOS that reads these filesystems.
+**Prerequisites:** The [overview article](hdd_overview.md) situates partitioning in the storage story; [esxdos.md](../../04_operating_systems/esxdos.md) covers the DOS that reads these filesystems.
 
 **Depth:** Deep. Byte-level layout of the MBR, BPB, FAT, and directory entries; the FAT16/FAT32 differences; the LFN encoding; and the IS-DOS on-disk structure. References to the OS articles where the API layer takes over.
 
@@ -317,7 +317,7 @@ The differences from FAT are:
 - **A different allocation scheme.** IS-DOS does not use the FAT linked-list structure; it uses a per-file cluster bitmap. This is more compact than a FAT for small volumes but does not scale to gigabyte media.
 - **A jump-table API.** IS-DOS exposes its functions through a fixed jump table (like the Amiga's `exec` library), rather than the BDOS `CALL 5` convention of CP/M or the hook-code convention of TR-DOS.
 
-The full IS-DOS API, on-disk structure, and history are covered in [is_dos.md](../04_operating_systems/is_dos.md). For partitioning purposes, the key point is that an IS-DOS volume is **not interchangeable** with a FAT volume: a PC cannot read it, and ESXDOS cannot mount it. IS-DOS volumes exist only on period-correct Nemo IDE and KAY hardware and are now rare.
+The full IS-DOS API, on-disk structure, and history are covered in [is_dos.md](../../04_operating_systems/is_dos.md). For partitioning purposes, the key point is that an IS-DOS volume is **not interchangeable** with a FAT volume: a PC cannot read it, and ESXDOS cannot mount it. IS-DOS volumes exist only on period-correct Nemo IDE and KAY hardware and are now rare.
 
 ### 6.2 Why FAT won
 
@@ -368,11 +368,11 @@ ESXDOS does not require alignment, but a card formatted on a modern OS will be a
 
 | Article | Relationship |
 |---|---|
-| [esxdos.md](../04_operating_systems/esxdos.md) | The DOS that reads the FAT volumes this article describes |
-| [is_dos.md](../04_operating_systems/is_dos.md) | The Russian alternative filesystem covered in §6 |
-| [nextzxos.md](../04_operating_systems/nextzxos.md) | The Next's DOS, which uses the same FAT structure as ESXDOS |
+| [esxdos.md](../../04_operating_systems/esxdos.md) | The DOS that reads the FAT volumes this article describes |
+| [is_dos.md](../../04_operating_systems/is_dos.md) | The Russian alternative filesystem covered in §6 |
+| [nextzxos.md](../../04_operating_systems/nextzxos.md) | The Next's DOS, which uses the same FAT structure as ESXDOS |
 | [beta_disk_interface.md](beta_disk_interface.md) / [trd_disk_format.md](trd_disk_format.md) | The floppy-only predecessors that had no partition table |
 
 ### 8.3 License
 
-This article is licensed under [CC BY-SA 4.0](../LICENSE). The FAT specification referenced in §3 is published by Microsoft in the Extensible Firmware Initiative FAT File System Specification; the SD card physical layer referenced in §7.3 is published by the SD Association. Both are used here for documentation purposes.
+This article is licensed under [CC BY-SA 4.0](../../README.md). The FAT specification referenced in §3 is published by Microsoft in the Extensible Firmware Initiative FAT File System Specification; the SD card physical layer referenced in §7.3 is published by the SD Association. Both are used here for documentation purposes.

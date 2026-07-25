@@ -161,7 +161,7 @@ Beep:
     RET
 ```
 
-For advanced beeper techniques (multi-channel, PWM), see [beeper.md](../07_audio/beeper.md).
+For advanced beeper techniques (multi-channel, PWM), see [beeper.md](../../06_sound/synthesis/beeper_synthesis.md).
 
 ---
 

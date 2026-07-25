@@ -10,7 +10,7 @@ This directory covers original ZX Spectrum hardware models (16K, 48K, 128K, +2, 
 
 | # | Article | Description |
 |---|---------|------------|
-| 1 | [ula_timing.md](ula_timing.md) | ULA frame timing per model, memory contention, multicolor effects, early/late timing, performance budget |
+| 1 | [ula_timing.md](ula_timing.md) | ULA frame timing per model, memory contention, **snow effect** (RFSH/RAS collision), multicolor effects, early/late timing, performance budget |
 | 2 | [ula_architecture.md](ula_architecture.md) | Inside the Ferranti ULA: video pipeline, memory arbitration, #FE register, keyboard matrix, tape/sound cells, revisions, Amstrad gate arrays, clone and modern replacements |
 | 3 | [keyboard_matrix.md](keyboard_matrix.md) | The 8×5 keyboard matrix: membrane hardware, half-row scanning, ghosting mechanics, Interface 2/Sinclair/Cursor joystick mappings, game keyset conventions by genre and region, redefinable game input |
 

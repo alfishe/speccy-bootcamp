@@ -619,7 +619,7 @@ Modern emulators (FUSE, ZEsarUX, SpecEmu, etc.) implement approximately cycle-ex
 
 ### 10.3 Reverse engineering and demoscene angles
 
-- For +3 disk-based protection schemes: see [05_reversing/](../../05_reversing/).
+- For +3 disk-based protection schemes: see [05_reversing/](../../08_reverse_engineering/README.md).
 - For cycle-exact +3 floppy emulation: see [11_emulation/](../../11_emulation/).
 - +3-specific demoscene productions are rare; the dominant platform for Spectrum disk-based demos is the Beta Disk Interface / Pentagon / TR-DOS combination. However, the +3 is the platform of choice for some Spanish and British demoscene productions.
 

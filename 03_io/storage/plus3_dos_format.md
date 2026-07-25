@@ -341,7 +341,7 @@ When the +3's BASIC saves a file with `SAVE "name"`, `SAVE "name" LINE n`, or `S
 | 7 | 2 | **(reserved / unused)** | |
 | 9+ | N | **File data** | The actual file data |
 
-This is the same 9-byte header format used by the Spectrum tape system (see the TAP format documentation in [03_io/snapshots/tap_format.md](../snapshots/tap_format.md)) — the +3 reuses the tape header format for its disk files.
+This is the same 9-byte header format used by the Spectrum tape system (see the TAP format documentation in [03_io/snapshots/tap_format.md](../snapshots/README.md)) — the +3 reuses the tape header format for its disk files.
 
 When the +3's BASIC loads a file with `LOAD "name"` or `LOAD "name" CODE`, it reads the 9-byte header, determines the file type from byte 0, and dispatches accordingly.
 
@@ -551,7 +551,7 @@ The following conversions are commonly needed when working with +3 disks:
 
 ### 8.5 Reverse-engineering +3DOS disks
 
-For reverse-engineering +3 software distributed on +3DOS disks (see [05_reversing/methodology.md](../../05_reversing/methodology.md) for general methodology):
+For reverse-engineering +3 software distributed on +3DOS disks (see [05_reversing/methodology.md](../../08_reverse_engineering/README.md) for general methodology):
 
 1. **Extract the files** using `cpmcp` or an emulator.
 2. **Inspect the BASIC headers** of `.BAS` files to determine the autostart line and length.

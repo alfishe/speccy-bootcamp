@@ -2,7 +2,7 @@
 
 **Scope:** A **hardware and practical-setup** treatment of the **DivIDE** (Zeax, 2007) and the **DivMMC** (Zoxon, 2013) — the two expansion cards that together define modern real-hardware Spectrum mass storage. This article covers the physical boards, the firmware boot sequence, the TR-DOS virtual-floppy emulation layer, and how to prepare the storage card.
 
-It is the **hardware companion** to [esxdos.md](../04_operating_systems/esxdos.md), which covers the ESXDOS operating system — the DOS API, the dot-command interface, and the assembly calling conventions. The two articles are designed to be read together: this one answers "what is the box and how do I set it up?", the other answers "how do I program the DOS that runs on it?".
+It is the **hardware companion** to [esxdos.md](../../04_operating_systems/esxdos.md), which covers the ESXDOS operating system — the DOS API, the dot-command interface, and the assembly calling conventions. The two articles are designed to be read together: this one answers "what is the box and how do I set it up?", the other answers "how do I program the DOS that runs on it?".
 
 **Audience:** Retro-hardware buyers choosing between a DivIDE and a DivMMC, new Spectrum owners setting up their first SD card, emulator authors modelling the DivIDE boot sequence, and anyone curious what lives inside the small plastic case plugged into the back of a 2024 Spectrum.
 
@@ -22,7 +22,7 @@ The difference is purely at the storage-medium layer: the DivIDE speaks IDE/ATA 
 
 ### 1.2 Hardware here, software elsewhere
 
-The DivIDE and DivMMC are **hardware**; ESXDOS is the **software** that runs on them. This article covers the boards themselves, the boot sequence, the TR-DOS virtual-floppy emulation layer, and how to prepare the storage card. The ESXDOS dot-command syntax, the assembly API (`M_GETSETDRV`, `F_OPEN`, …), and the FAT internals are covered in the companion article [esxdos.md](../04_operating_systems/esxdos.md). In short: if you are holding a physical card and asking what to plug in and where files go, read on; if you are writing Z80 code that opens a file, switch to [esxdos.md](../04_operating_systems/esxdos.md).
+The DivIDE and DivMMC are **hardware**; ESXDOS is the **software** that runs on them. This article covers the boards themselves, the boot sequence, the TR-DOS virtual-floppy emulation layer, and how to prepare the storage card. The ESXDOS dot-command syntax, the assembly API (`M_GETSETDRV`, `F_OPEN`, …), and the FAT internals are covered in the companion article [esxdos.md](../../04_operating_systems/esxdos.md). In short: if you are holding a physical card and asking what to plug in and where files go, read on; if you are writing Z80 code that opens a file, switch to [esxdos.md](../../04_operating_systems/esxdos.md).
 
 ## §2. The DivIDE Hardware
 
@@ -74,11 +74,11 @@ The DivIDE remains relevant for users who already own one, who prefer CompactFla
 
 ### 3.3 The dual-medium future: the ZX Spectrum Next
 
-The **ZX Spectrum Next** (2017) absorbs the DivMMC concept into the machine itself, providing **two MicroSD slots** driven by NextZXOS (an ESXDOS derivative). The primary slot holds the machine's firmware and core files; the secondary slot holds user software. No expansion card is needed. See [nextzxos.md](../04_operating_systems/nextzxos.md) for the Next-specific extensions.
+The **ZX Spectrum Next** (2017) absorbs the DivMMC concept into the machine itself, providing **two MicroSD slots** driven by NextZXOS (an ESXDOS derivative). The primary slot holds the machine's firmware and core files; the secondary slot holds user software. No expansion card is needed. See [nextzxos.md](../../04_operating_systems/nextzxos.md) for the Next-specific extensions.
 
 ## §4. The Firmware Boot Sequence
 
-ESXDOS is unusual among Spectrum DOSes in that it does **not** take control at power-on. The Spectrum boots its own ROM normally, shows the `(C) 1982 Sinclair Research` message, and drops into BASIC as if the DivIDE/DivMMC were not there. ESXDOS only reveals itself when the user presses the **NMI button**. This "zero footprint when idle" property is one of ESXDOS's design goals ([esxdos.md §1.2](../04_operating_systems/esxdos.md)) and is central to understanding why the boot sequence works the way it does.
+ESXDOS is unusual among Spectrum DOSes in that it does **not** take control at power-on. The Spectrum boots its own ROM normally, shows the `(C) 1982 Sinclair Research` message, and drops into BASIC as if the DivIDE/DivMMC were not there. ESXDOS only reveals itself when the user presses the **NMI button**. This "zero footprint when idle" property is one of ESXDOS's design goals ([esxdos.md §1.2](../../04_operating_systems/esxdos.md)) and is central to understanding why the boot sequence works the way it does.
 
 ### 4.1 Power-on
 
@@ -104,7 +104,7 @@ This is the crucial trick: the DivIDE does not need the Spectrum ROM's cooperati
 
 After the NMI handler has run at least once, ESXDOS installs a small **hook** in RAM that allows subsequent machine-code programs to invoke ESXDOS API functions without pressing the NMI button. The mechanism is the **auto-map** flag: when a program executes an `RST 8` (or a `CALL` to a specific hook address, depending on firmware version), the paging logic briefly pages the DivIDE ROM back in, executes the requested function, and pages it back out.
 
-This is how dot commands and application programs call `M_GETSETDRV`, `F_OPEN`, `F_READ`, and the rest of the ESXDOS API. The programmer sees a normal subroutine call; the hardware handles the ROM paging transparently. The full API catalogue is in [esxdos.md §6](../04_operating_systems/esxdos.md).
+This is how dot commands and application programs call `M_GETSETDRV`, `F_OPEN`, `F_READ`, and the rest of the ESXDOS API. The programmer sees a normal subroutine call; the hardware handles the ROM paging transparently. The full API catalogue is in [esxdos.md §6](../../04_operating_systems/esxdos.md).
 
 ### 4.4 Why ESXDOS does not patch the BASIC ROM
 
@@ -116,7 +116,7 @@ The reason is robustness: a ROM patch must fight the Spectrum's existing ROM rou
 
 ### 5.1 The problem: a huge floppy-era software library
 
-By the time the DivIDE appeared in 2007, the Soviet and post-Soviet Spectrum scene had accumulated an enormous library of TR-DOS software — games, demos, utilities, disk magazines — all written to run on a Beta 128 floppy controller under TR-DOS. This software talks to the **TR-DOS hook codes** (the `#3D13`-family entry points documented in [trdos.md](../04_operating_systems/trdos.md)) and, through them, to the **WD1793 floppy controller** at ports `#1F`/`#3F`/`#5F`/`#7F`/`#FF`.
+By the time the DivIDE appeared in 2007, the Soviet and post-Soviet Spectrum scene had accumulated an enormous library of TR-DOS software — games, demos, utilities, disk magazines — all written to run on a Beta 128 floppy controller under TR-DOS. This software talks to the **TR-DOS hook codes** (the `#3D13`-family entry points documented in [trdos.md](../../04_operating_systems/trdos.md)) and, through them, to the **WD1793 floppy controller** at ports `#1F`/`#3F`/`#5F`/`#7F`/`#FF`.
 
 A DivIDE owner who wanted to run this software faced a problem: the DivIDE has no WD1793, no floppy drive, and speaks IDE/CF, not floppy. Porting every TR-DOS program to the new interface was infeasible. The solution was to **emulate the Beta 128 in firmware**.
 
@@ -178,7 +178,7 @@ A typical `/SYS` directory contains:
 | `WP` | Toggles write-protect on the current image |
 | `BASIC` | Returns to the BASIC prompt from a dot command |
 
-Hundreds of additional dot commands are available from the community (file managers, media players, network tools). They all live in `/SYS` or in subdirectories that the user adds to the search path. The dot-command loading mechanism is documented in [esxdos.md §4](../04_operating_systems/esxdos.md).
+Hundreds of additional dot commands are available from the community (file managers, media players, network tools). They all live in `/SYS` or in subdirectories that the user adds to the search path. The dot-command loading mechanism is documented in [esxdos.md §4](../../04_operating_systems/esxdos.md).
 
 ### 6.4 Where the rest of the files go
 
@@ -249,13 +249,13 @@ For emulator authors, the practical takeaway is that modelling the **DivIDE 57c 
 
 | Article | Relationship |
 |---|---|
-| [esxdos.md](../04_operating_systems/esxdos.md) | The OS companion to this hardware article — the DOS API, dot commands, assembly interface |
-| [nextzxos.md](../04_operating_systems/nextzxos.md) | The ZX Spectrum Next's ESXDOS derivative; the built-in SD slots |
-| [trdos.md](../04_operating_systems/trdos.md) | The TR-DOS whose hook codes the divman layer emulates |
+| [esxdos.md](../../04_operating_systems/esxdos.md) | The OS companion to this hardware article — the DOS API, dot commands, assembly interface |
+| [nextzxos.md](../../04_operating_systems/nextzxos.md) | The ZX Spectrum Next's ESXDOS derivative; the built-in SD slots |
+| [trdos.md](../../04_operating_systems/trdos.md) | The TR-DOS whose hook codes the divman layer emulates |
 | [trd_scl_formats.md](trd_scl_formats.md) | The `.TRD` image format that the virtual-floppy layer mounts |
 | [beta_disk_interface.md](beta_disk_interface.md) | The Beta 128 hardware that divman emulates |
 | [tap_format.md](tap_format.md) / [tzx_format.md](tzx_format.md) | The tape image formats the DivIDE's tape emulator mounts |
 
 ### 8.3 License
 
-This article is licensed under [CC BY-SA 4.0](../LICENSE). Cross-referenced articles retain their own licenses as stated in each file.
+This article is licensed under [CC BY-SA 4.0](../../README.md). Cross-referenced articles retain their own licenses as stated in each file.

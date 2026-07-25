@@ -97,7 +97,7 @@ A few observations on this table:
 
 **Two protocols, one bus.** Every interface in the table speaks one of two device protocols — IDE/ATA (the DivIDE, Nemo IDE, KAY IDE, Z-Controller's IDE half, SMUC's IDE cards) or SD-SPI (the DivMMC, ZXMMC, Next, Z-Controller's SD half). The [ide_interface.md](ide_interface.md) and [sd_interface.md](sd_interface.md) articles cover each protocol family respectively.
 
-**The DOS matters more than the hardware.** A naked IDE interface with no DOS is just a block device; what makes it useful is the filesystem layer. ESXDOS (FAT16/32), NextZXOS (FAT + Next extensions), and the older IS-DOS (hierarchical, MS-DOS-like) are the three DOSes that matter. The hardware articles therefore lean heavily on the OS articles: [esxdos.md](../04_operating_systems/esxdos.md), [nextzxos.md](../04_operating_systems/nextzxos.md), and [is_dos.md](../04_operating_systems/is_dos.md).
+**The DOS matters more than the hardware.** A naked IDE interface with no DOS is just a block device; what makes it useful is the filesystem layer. ESXDOS (FAT16/32), NextZXOS (FAT + Next extensions), and the older IS-DOS (hierarchical, MS-DOS-like) are the three DOSes that matter. The hardware articles therefore lean heavily on the OS articles: [esxdos.md](../../04_operating_systems/esxdos.md), [nextzxos.md](../../04_operating_systems/nextzxos.md), and [is_dos.md](../../04_operating_systems/is_dos.md).
 
 ### 3.1 Choosing an interface in 2024
 
@@ -127,7 +127,7 @@ A user who wanted to keep up needed somewhere to **store** this river of softwar
 
 Western interfaces standardised on FAT, but the Soviet scene produced its own filesystem: **IS-DOS** (Дымиров / Aleksey Dmyrov, 1993). IS-DOS is a hierarchical, MS-DOS-compatible filesystem with 32-byte directory entries, subdirectories, file attributes, and a jump-table API. It predates FAT-on-Spectrum by over a decade and shipped with its own GUI file manager.
 
-IS-DOS never achieved the ubiquity of FAT (it was tied to specific hardware and had a smaller software library), but it is historically important as the **first** attempt to give the Spectrum a PC-like filesystem. It is covered in [is_dos.md](../04_operating_systems/is_dos.md) and [hdd_partitioning.md](hdd_partitioning.md).
+IS-DOS never achieved the ubiquity of FAT (it was tied to specific hardware and had a smaller software library), but it is historically important as the **first** attempt to give the Spectrum a PC-like filesystem. It is covered in [is_dos.md](../../04_operating_systems/is_dos.md) and [hdd_partitioning.md](hdd_partitioning.md).
 
 ### 4.4 The convergence
 
@@ -164,12 +164,12 @@ For software distribution, the **FAT-formatted SD card** has completely replaced
 |---|---|
 | [disk_format_overview.md](disk_format_overview.md) | The floppy sub-section this article extends; the starting point for the whole storage story |
 | [trd_disk_format.md](trd_disk_format.md) | TR-DOS, the floppy format that hard disk originally supplemented and now emulates |
-| [esxdos.md](../04_operating_systems/esxdos.md) | The DOS that defined the IDE/SD era — FAT16/32, dot commands, the assembly API |
-| [nextzxos.md](../04_operating_systems/nextzxos.md) | The ZX Spectrum Next's ESXDOS derivative; dual SD, layer-2 / sprite / tilemap integration |
-| [is_dos.md](../04_operating_systems/is_dos.md) | The Russian hierarchical filesystem alternative; covered here as historical context |
-| [evo_os.md](../04_operating_systems/evo_os.md) | The ZX Evolution's BIOS/OS stack, which uses DivIDE-compatible ports for its IDE |
-| [io_port_decoding.md](../05_development/03_memory_and_io/io_port_decoding.md) | How I/O ports like `#E3`–`#E7` are decoded; the foundation for the port maps in this sub-section |
+| [esxdos.md](../../04_operating_systems/esxdos.md) | The DOS that defined the IDE/SD era — FAT16/32, dot commands, the assembly API |
+| [nextzxos.md](../../04_operating_systems/nextzxos.md) | The ZX Spectrum Next's ESXDOS derivative; dual SD, layer-2 / sprite / tilemap integration |
+| [is_dos.md](../../04_operating_systems/is_dos.md) | The Russian hierarchical filesystem alternative; covered here as historical context |
+| [evo_os.md](../../04_operating_systems/evo_os.md) | The ZX Evolution's BIOS/OS stack, which uses DivIDE-compatible ports for its IDE |
+| [io_port_decoding.md](../../05_development/03_memory_and_io/io_port_decoding.md) | How I/O ports like `#E3`–`#E7` are decoded; the foundation for the port maps in this sub-section |
 
 ### 6.3 License
 
-This article is licensed under [CC BY-SA 4.0](../LICENSE). Cross-referenced articles retain their own licenses as stated in each file.
+This article is licensed under [CC BY-SA 4.0](../../README.md). Cross-referenced articles retain their own licenses as stated in each file.

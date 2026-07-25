@@ -208,10 +208,10 @@ For archival, **gzip the `.IMG`**; for active emulator use, use a **sparse file*
 | Article | Relationship |
 |---|---|
 | [opus_discovery_format.md](opus_discovery_format.md) | The full `.MGT` floppy image format, covered in §5 of that article |
-| [esxdos.md](../04_operating_systems/esxdos.md) | The DOS that reads the FAT volume inside the image |
+| [esxdos.md](../../04_operating_systems/esxdos.md) | The DOS that reads the FAT volume inside the image |
 | [trd_scl_formats.md](trd_scl_formats.md) / [dsk_fdi_formats.md](dsk_fdi_formats.md) | The floppy image formats, for comparison |
 | [udi_format.md](udi_format.md) / [scp_format.md](scp_format.md) | The flux-level floppy image formats, which capture far more detail but only for floppies |
 
 ### 8.3 License
 
-This article is licensed under [CC BY-SA 4.0](../LICENSE). The Microsoft VHD format referenced in §6.1 is documented in the public Microsoft VHD Image Format Specification; the SD and FAT specifications referenced throughout are published by the SD Association and Microsoft respectively. All are used here for documentation purposes.
+This article is licensed under [CC BY-SA 4.0](../../README.md). The Microsoft VHD format referenced in §6.1 is documented in the public Microsoft VHD Image Format Specification; the SD and FAT specifications referenced throughout are published by the SD Association and Microsoft respectively. All are used here for documentation purposes.

@@ -1,4 +1,4 @@
-[← Home](../../README.md) · [I/O](../README.md) · [Snapshots](README.md)
+[← Home](../../README.md) · [I/O](../../README.md) · [Snapshots](README.md)
 
 # The .SNA Snapshot Format
 

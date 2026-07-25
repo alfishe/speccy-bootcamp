@@ -602,11 +602,11 @@ Several Spectrum emulators ship with **built-in development tools** that approac
 
 | Emulator | Dev Features | See |
 |---|---|---|
-| **ZEsarUX** | Full debugger, breakpoints, watchpoints, reverse debugging, Z80N support, disassembler | [Emulators section](#zesarux-zx-family-focus) above; planned [`zesarux.md`](../11_emulation/software/zesarux.md) deep dive |
-| **SpecEmu** | Cycle-exact emulation, debugger, accurate contention modeling — popular among demoscene developers | Planned [`specemu.md`](../11_emulation/software/specemu.md) deep dive |
-| **Unreal Speccy** | Popular Russian-origin emulator with built-in debugger; common in the post-Soviet demoscene | Planned [`unreal_speccy.md`](../11_emulation/software/unreal_speccy.md) deep dive |
-| **EightyOne** | Multi-machine emulator (ZX80, ZX81, ZX Spectrum, Jupiter Ace, Timex Sinclair) with debugging | Planned [`eightyone.md`](../11_emulation/software/eightyone.md) deep dive |
-| **zxsp** | Mac-native emulator with built-in debugger and disassembler | Planned [`zxsp.md`](../11_emulation/software/zxsp.md) deep dive |
+| **ZEsarUX** | Full debugger, breakpoints, watchpoints, reverse debugging, Z80N support, disassembler | [Emulators section](#zesarux-zx-family-focus) above; planned [`zesarux.md`](../11_emulation/software/README.md) deep dive |
+| **SpecEmu** | Cycle-exact emulation, debugger, accurate contention modeling — popular among demoscene developers | Planned [`specemu.md`](../11_emulation/software/README.md) deep dive |
+| **Unreal Speccy** | Popular Russian-origin emulator with built-in debugger; common in the post-Soviet demoscene | Planned [`unreal_speccy.md`](../11_emulation/software/README.md) deep dive |
+| **EightyOne** | Multi-machine emulator (ZX80, ZX81, ZX Spectrum, Jupiter Ace, Timex Sinclair) with debugging | Planned [`eightyone.md`](../11_emulation/software/README.md) deep dive |
+| **zxsp** | Mac-native emulator with built-in debugger and disassembler | Planned [`zxsp.md`](../11_emulation/software/README.md) deep dive |
 
 These are emulators first and development tools second — but for reverse engineering or casual debugging, their built-in tools may be sufficient without setting up a full IDE.
 
@@ -774,7 +774,7 @@ MAME is the right choice when the primary concern is Next-emulation accuracy and
 | **MAME** | Next fallback, accuracy | Win/Mac/Linux | ✅ | ✅ (most accurate) |
 
 > [!NOTE]
-> For deeper emulator comparison including cycle-exact accuracy analysis and FPGA implementations, see the planned [11_emulation/software/emulator_comparison.md](../11_emulation/software/emulator_comparison.md) article.
+> For deeper emulator comparison including cycle-exact accuracy analysis and FPGA implementations, see the planned [11_emulation/software/emulator_comparison.md](../11_emulation/software/README.md) article.
 
 ---
 
@@ -1172,7 +1172,7 @@ Descoped:
 
 Planned emulator deep-dives in `11_emulation/software/`:
 
-- [`fuse.md`](../11_emulation/software/fuse.md), [`zesarux.md`](../11_emulation/software/zesarux.md), [`cspect.md`](../11_emulation/software/cspect.md), [`emulator_comparison.md`](../11_emulation/software/emulator_comparison.md)
+- [`fuse.md`](../11_emulation/software/README.md), [`zesarux.md`](../11_emulation/software/README.md), [`cspect.md`](../11_emulation/software/README.md), [`emulator_comparison.md`](../11_emulation/software/README.md)
 
 ## References
 

@@ -567,4 +567,4 @@ Modern recreations of IF1 hardware exist for collectors — the "ZX-Uno" FPGA co
 
 ---
 
-*License: [CC BY-SA 4.0](LICENSE).*
+*License: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).*
