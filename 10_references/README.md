@@ -9,10 +9,10 @@ Quick-reference tables for ZX Spectrum development: opcode matrix, I/O port map,
 | Article | Description |
 |---------|-------------|
 | [io_port_map.md](io_port_map.md) | Complete I/O port reference: every port across all models with decoding bitmasks, per-model differences, Black_Cat table replication with annotations |
+| [z80_opcode_table.md](z80_opcode_table.md) | One-page Z80 opcode lookup: every documented instruction by group with byte count, T-states, and flag effects. Compresses [z80_instruction_set.md](../01_cpu/z80_instruction_set.md) into scan-able tables |
 
 ## Planned
 
-- `z80_opcode_table.md` — Complete Z80 opcode matrix with T-states and byte counts
 - `memory_maps.md` — Consolidated memory maps for all models
 - `character_set.md` — ZX Spectrum character set and ASCII mapping
 - `basic_token_table.md` — Sinclair BASIC token table
