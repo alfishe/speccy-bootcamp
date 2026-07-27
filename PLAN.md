@@ -317,21 +317,24 @@ zx/
 │       ├── arkos_tracker.md           # ✅ AT2/3 modern cross-platform AY tracker
 │       ├── pt3_format.md              # ✅ PT3 binary format spec (502 lines)
 │       └── psg_format.md              # ✅ PSG register dump spec (270 lines)
-│   ~~players/~~                       # ❌ Removed from plan (see 06_sound/README.md)
+│   └── players/                       # ✅ 2-article pair: architecture + comparison
+│       ├── README.md                  # ✅ Section index
+│       ├── ay_player_routines.md      # ✅ Z80 → AY register writes (507 lines)
+│       └── player_comparison.md       # ✅ PT3 vs AKG/AKM/AKY benchmarks (262 lines)
 │
-├── 07_demoscene/
+├── 07_demoscene/                      # ✅ SECTION COMPLETE (11 articles)
 │   ├── README.md                      # ✅ Section index
-│   ├── demoscene_history.md           # 📄 Stub
-│   ├── effects_catalog.md             # 📄 Stub
-│   ├── multicolor_techniques.md       # 📄 Stub
-│   ├── precalc_trigonometry.md        # 📄 Stub
-│   ├── compression_packing.md         # 📄 Stub
-│   ├── size_coding.md                 # 📄 Stub
-│   ├── demo_frameworks.md             # 📄 Stub
-│   ├── notable_demos.md               # 📄 Stub
-│   ├── soviet_demo_scene.md           # 📄 Stub
-│   ├── demoscene_platforms.md         # 📄 Stub
-│   └── 1bit_music_scene.md            # 📄 Stub
+│   ├── demoscene_history.md           # ✅ 671 lines
+│   ├── soviet_demo_scene.md           # ✅ 722 lines
+│   ├── demoscene_platforms.md         # ✅ 657 lines
+│   ├── effects_catalog.md             # ✅ 711 lines
+│   ├── multicolor_techniques.md       # ✅ 781 lines
+│   ├── precalc_trigonometry.md        # ✅ 783 lines
+│   ├── compression_packing.md         # ✅ 1054 lines
+│   ├── size_coding.md                 # ✅ 1044 lines
+│   ├── demo_frameworks.md             # ✅ 898 lines
+│   ├── notable_demos.md               # ✅ 599 lines
+│   └── 1bit_music_scene.md            # ✅ 538 lines
 │
 ├── 08_reverse_engineering/
 │   ├── protection_techniques.md ✅
@@ -507,61 +510,63 @@ zx/
 | `z80_interrupts.md` | ~UM0080 Ch.5: IM0/IM1/IM2, NMI, vector tables, interrupt latency, ZX Spectrum INT chain, per-model INT timing (48K/128K/Pentagon/Next) | ✅ |
 | `z80_vs_modern.md` | Cross-platform comparison: Z80 vs 6502 vs 6809 vs modern cores (RP2040, ESP32) | ✅ |
 
-### 02 — Hardware (subfoldered by stream)
+### 02 — Hardware (subfoldered by stream) 📝 PARTIAL
 
-#### 02_hardware/original/ — Sinclair/Amstrad
+#### 02_hardware/original/ — Sinclair/Amstrad 📝 4 of 12 done
 
-| File | Topic |
-|---|---|
-| `README.md` | Index + model comparison table (16K/48K/128/+2/+2A/+3) |
-| `zx_spectrum_16k_48k.md` | Ferranti ULA (5C/6C), 16K/48K RAM layout, ROM content, keyboard matrix, tape interface, EAR/MIC |
-| `zx_spectrum_128.md` | 128K toastrack: AY-3-8912, RS-232, keypad port, RAM paging (16K banks), ROM switching |
-| `zx_spectrum_plus2.md` | Amstrad +2 (grey): integrated keyboard, built-in tape, AY sound |
-| `zx_spectrum_plus2a_plus3.md` | +2A/+3: Amstrad gate array, +3 DOS, internal floppy, RAM banking differences |
-| `ula_architecture.md` | Ferranti ULA internals: video generation, memory arbitration, contention timing, CPU/ULA cycle interleaving |
-| `ula_contention.md` | Memory contention deep dive: when CPU is stalled, precise timing diagrams per model, impact on cycle-counted code |
+| File | Topic | Status |
+|---|---|---|
+| `README.md` | Index + model comparison table (16K/48K/128/+2/+2A/+3) | Planned |
+| `zx_spectrum_16k_48k.md` | Ferranti ULA (5C/6C), 16K/48K RAM layout, ROM content, keyboard matrix, tape interface, EAR/MIC | Planned |
+| `zx_spectrum_128.md` | 128K toastrack: AY-3-8912, RS-232, keypad port, RAM paging (16K banks), ROM switching | Planned |
+| `zx_spectrum_plus2.md` | Amstrad +2 (grey): integrated keyboard, built-in tape, AY sound | Planned |
+| `zx_spectrum_plus2a_plus3.md` | +2A/+3: Amstrad gate array, +3 DOS, internal floppy, RAM banking differences | Planned |
+| `ula_architecture.md` | Ferranti ULA internals: video generation, memory arbitration, contention timing, CPU/ULA cycle interleaving | ✅ |
+| `ula_contention.md` | Memory contention deep dive: when CPU is stalled, precise timing diagrams per model, impact on cycle-counted code | Planned |
 | `ula_timing.md` | ULA frame timing per model (48K/128K/+2A), memory contention (Ferranti 6-5-4-3-2-1-0-0, Amstrad gate array 1-0-7-6-5-4-3-2), contended I/O, multicolor effects, early/late timing drift, performance budget, screen update timing | ✅ |
-| `power_supply.md` | PSU design: 9V unregulated, internal regulation, edge connector power pins |
-| `rom_contents.md` | ROM dissection: channel system, editor, BASIC interpreter, character set |
-| `keyboard_matrix.md` | 8x5 matrix, key codes, keyboard reading routine, BEEP key detection |
-| `edge_connector.md` | Edge connector pinout, bus signals, expansion bus usage |
+| `power_supply.md` | PSU design: 9V unregulated, internal regulation, edge connector power pins | Planned |
+| `rom_contents.md` | ROM dissection: channel system, editor, BASIC interpreter, character set | Planned |
+| `keyboard_matrix.md` | 8x5 matrix, key codes, keyboard reading routine, BEEP key detection | ✅ |
+| `edge_connector.md` | Edge connector pinout, bus signals, expansion bus usage | Planned |
 
-#### 02_hardware/soviet/ — Soviet Clone Ecosystem
+#### 02_hardware/clones/ — Soviet Clone Ecosystem 📝 4 of 12 done
 
-| File | Topic |
-|---|---|
-| `README.md` | Index + clone ecosystem overview: why Spectrum became THE post-Soviet computer |
-| `pentagon.md` | Pentagon 48K/128K: most popular clone, Russian ROM, TR-DOS integration, design philosophy |
-| `pentagon_1024.md` | Pentagon 1024/1024SL: expanded memory, modifications |
-| `scorpion.md` | Scorpion ZS-256: GMX expansion, Turbo modes, Z-controller, expanded memory, ProfROM |
-| `kay.md` | Kay 1024: professional-oriented, 1024K RAM, multiple ROM banks, IDE interface |
-| `atm_turbo.md` | ATM Turbo: CP/M mode, turbo mode, extended graphics modes |
-| `profi.md` | Profi: Russian professional clone, ISA-like expansion, VGA output |
-| `byte.md` | Byte: Ukrainian clone, compact design |
-| `other_clones.md` | Dozens more: Hobbit, Leningrad (1/2), Mikrosha, Composite, Quorum (64/256), LEC (48/528), etc. |
+| File | Topic | Status |
+|---|---|---|
+| `README.md` | Index + clone ecosystem overview: why Spectrum became THE post-Soviet computer | Planned |
+| `pentagon.md` | Pentagon 48K/128K: most popular clone, Russian ROM, TR-DOS integration, design philosophy | Planned |
+| `pentagon_1024.md` | Pentagon 1024/1024SL: expanded memory, modifications | Planned |
+| `scorpion.md` | Scorpion ZS-256: GMX expansion, Turbo modes, Z-controller, expanded memory, ProfROM | ✅ |
+| `kay.md` | Kay 1024: professional-oriented, 1024K RAM, multiple ROM banks, IDE interface | Planned |
+| `atm_turbo.md` | ATM Turbo: CP/M mode, turbo mode, extended graphics modes | ✅ |
+| `profi.md` | Profi: Russian professional clone, ISA-like expansion, VGA output | Planned |
+| `byte.md` | Byte: Ukrainian clone, compact design | Planned |
+| `other_clones.md` | Dozens more: Hobbit, Leningrad (1/2), Mikrosha, Composite, Quorum (64/256), LEC (48/528), etc. | Planned |
 | `clone_timing.md` | Non-ULA clone video timing: Pentagon, Scorpion, Kay, ATM Turbo, FPGA implementations, clone detection techniques, demoscene multi-platform strategies | ✅ |
-| `ula_replacements.md` | ULA replacement chips: Soviet-made gate arrays (Т34ВГ1, etc.), CMOS implementations, timing differences |
-| `sizif_harlequin.md` | Modern recreations: Sizif-512, Harlequin, Speccy 2010 — faithful hardware clones with modern components (Karabas family covered in newgen/) |
+| `clone_joysticks.md` | Joystick conventions on Soviet clones (cursor types, Kempston variants) | ✅ |
+| `ula_replacements.md` | ULA replacement chips: Soviet-made gate arrays (Т34ВГ1, etc.), CMOS implementations, timing differences | Planned |
+| `sizif_harlequin.md` | Modern recreations: Sizif-512, Harlequin, Speccy 2010 — faithful hardware clones with modern components (Karabas family covered in newgen/) | Planned |
 
-#### 02_hardware/newgen/ — New Generation
+#### 02_hardware/newgen/ — New Generation 📝 1 of 15 done (plus 1 off-plan)
 
-| File | Topic |
-|---|---|
-| `README.md` | Index + New Gen ecosystem overview |
-| `zx_next.md` | ZX Spectrum Next: layer architecture, 28MHz accelerator, sprites, layer 2, tilemap, copper, DMA, SD, WiFi, RTC, ESP |
-| `zx_next_sprites.md` | Next sprite system: 128 sprites, patterns, rotation, priority, collision |
-| `zx_next_layer2.md` | Layer 2 (256-color) and 256x192x8bpp mode |
-| `zx_next_tilemap.md` | Tilemap engine, hardware scrolling, 40x32 tile grid |
-| `zx_next_copper.md` | Next copper: WAIT + MOVE instructions, synced to raster |
-| `zx_next_dma.md` | DMA controller (derived from Z80 DMA): memory copy, pattern fill, port I/O |
-| `sprinter.md` | Peters Plus Sprinter: 20MHz Z80, 1MB RAM, SVGA, IDE, PC-like architecture |
-| `zx_evo.md` | ZX Evolution: Z80-based with CPLD glue logic, PS/2 keyboard/mouse, IDE, SVGA — real hardware, not FPGA core recreation |
-| `ts_conf.md` | TS-Conf: FPGA ZX Spectrum config for ZX Evo — sprites, tiles, 512K VRAM, turbo modes |
-| `baseconf.md` | Baseconf: standard ZX Evo configuration, classic Spectrum compatibility |
-| `zx_uno.md` | ZX-Uno: FPGA-based, ULAplus, Turbo, AY, SPI, WiFi |
-| `karabas_pro.md` | Karabas Pro: modern Z80-based hardware with CPLD, compact design, Peridot-compatible |
-| `karabas_128.md` | Karabas 128: modern compact Spectrum-compatible, real Z80 + CPLD glue |
-| `peridot.md` | Peridot: expandable modern Spectrum platform, Karabas-compatible expansion bus |
+| File | Topic | Status |
+|---|---|---|
+| `README.md` | Index + New Gen ecosystem overview | Planned |
+| `zx_next.md` | ZX Spectrum Next: layer architecture, 28MHz accelerator, sprites, layer 2, tilemap, copper, DMA, SD, WiFi, RTC, ESP | Planned |
+| `zx_next_sprites.md` | Next sprite system: 128 sprites, patterns, rotation, priority, collision | Planned |
+| `zx_next_layer2.md` | Layer 2 (256-color) and 256x192x8bpp mode | Planned |
+| `zx_next_tilemap.md` | Tilemap engine, hardware scrolling, 40x32 tile grid | Planned |
+| `zx_next_copper.md` | Next copper: WAIT + MOVE instructions, synced to raster | Planned |
+| `zx_next_dma.md` | DMA controller (derived from Z80 DMA): memory copy, pattern fill, port I/O | Planned |
+| `zx_next_joystick.md` | Next joystick / input subsystem | ✅ (off-plan) |
+| `sprinter.md` | Peters Plus Sprinter: 20MHz Z80, 1MB RAM, SVGA, IDE, PC-like architecture | Planned |
+| `zx_evo.md` | ZX Evolution: Z80-based with CPLD glue logic, PS/2 keyboard/mouse, IDE, SVGA — real hardware, not FPGA core recreation | Planned |
+| `ts_conf.md` | TS-Conf: FPGA ZX Spectrum config for ZX Evo — sprites, tiles, 512K VRAM, turbo modes | Planned |
+| `baseconf.md` | Baseconf: standard ZX Evo configuration, classic Spectrum compatibility | Planned |
+| `zx_uno.md` | ZX-Uno: FPGA-based, ULAplus, Turbo, AY, SPI, WiFi | Planned |
+| `karabas_pro.md` | Karabas Pro: modern Z80-based hardware with CPLD, compact design, Peridot-compatible | Planned |
+| `karabas_128.md` | Karabas 128: modern compact Spectrum-compatible, real Z80 + CPLD glue | Planned |
+| `peridot.md` | Peridot: expandable modern Spectrum platform, Karabas-compatible expansion bus | Planned |
 
 ### 03 — I/O (subfoldered)
 
@@ -738,36 +743,36 @@ zx/
 | `nmi.md` | NMI handling: Multiface NMI, NMI button, what's safe in NMI context | Planned |
 
 
-#### 05_development/05_display_and_timing/ — Video Subsystem 📝 IN PROGRESS
+#### 05_development/05_display_and_timing/ — Video Subsystem 📝 IN PROGRESS (10 of 19 articles done)
 
 | File | Topic | Status |
 |---|---|---|
 | `README.md` | Index — video subsystem overview, why frame timing is the single most important thing to understand on Spectrum | |
 
 **Frame Generation — Per Model** | | |
-| `video_frame_overview.md` | Video frame generation overview: PAL timing fundamentals (50Hz, 312/313 scanlines, 224 T-states/line), what the ULA does each frame, screen + border + blanking regions | 📝 |
-| `video_frame_48k.md` | **48K ULA frame**: exact T-state map per scanline, pixel fetch pattern, contention windows (scanlines 64–255), INT position (scanline 248, T-state 0), floating bus behavior | 📝 |
-| `video_frame_128k.md` | **128K / +2 frame**: same ULA core but contention differs, shadow screen bank, INT timing differences | 📝 |
-| `video_frame_plus2a_plus3.md` | **+2A/+3 frame**: Amstrad gate array contention model, different timing from 48K/128K | 📝 |
-| `video_frame_pentagon.md` | **Pentagon frame**: THE most important Soviet clone timing — different scanline count, different INT position, different contention — code that works on 48K WILL break here | 📝 |
-| `video_frame_scorpion.md` | **Scorpion frame**: timing differences, turbo mode impact on video |
-| `video_frame_other_soviet.md` | Other Soviet clone frames: ATM Turbo (3.5MHz AND 7MHz modes — 69888 vs 99880 T-states!), Kay, Profi (different paper offset: 12580T), Byte, Quorum, Leningrad, LEC — each may have unique timing |
-| `video_frame_next.md` | **ZX Spectrum Next frame**: configurable timing modes, 48K/128K/Pentagon timing compatibility, Layer 2 timing, copper sync |
-| `video_frame_sprinter.md` | **Sprinter frame**: SVGA timing, completely different from ULA-based models |
-| `video_frame_zxevo.md` | **ZX Evolution frame**: TS-Conf vs Baseconf timing, VGA output timing |
-| `video_frame_comparison.md` | **Frame timing comparison matrix**: all models side-by-side — scanline count, T-states/line, INT position, contention start/end, total frame T-states, compatibility impact. **Source**: Unreal Speccy presets (Pentagon=71680T, Scorpion=69888T, Profi=69888T, ATM7MHz=99880T), ZXMAK2 model list (16+ clones), Fuse/ZEsarUX timing tables |
+| `video_frame_overview.md` | Video frame generation overview: PAL timing fundamentals (50Hz, 312/313 scanlines, 224 T-states/line), what the ULA does each frame, screen + border + blanking regions | ✅ |
+| `video_frame_48k.md` | **48K ULA frame**: exact T-state map per scanline, pixel fetch pattern, contention windows (scanlines 64–255), INT position (scanline 248, T-state 0), floating bus behavior | ✅ |
+| `video_frame_128k.md` | **128K / +2 frame**: same ULA core but contention differs, shadow screen bank, INT timing differences | ✅ |
+| `video_frame_plus2a_plus3.md` | **+2A/+3 frame**: Amstrad gate array contention model, different timing from 48K/128K | ✅ |
+| `video_frame_pentagon.md` | **Pentagon frame**: THE most important Soviet clone timing — different scanline count, different INT position, different contention — code that works on 48K WILL break here | ✅ |
+| `video_frame_scorpion.md` | **Scorpion frame**: timing differences, turbo mode impact on video | Planned |
+| `video_frame_other_soviet.md` | Other Soviet clone frames: ATM Turbo (3.5MHz AND 7MHz modes — 69888 vs 99880 T-states!), Kay, Profi (different paper offset: 12580T), Byte, Quorum, Leningrad, LEC — each may have unique timing | Planned |
+| `video_frame_next.md` | **ZX Spectrum Next frame**: configurable timing modes, 48K/128K/Pentagon timing compatibility, Layer 2 timing, copper sync | Planned |
+| `video_frame_sprinter.md` | **Sprinter frame**: SVGA timing, completely different from ULA-based models | Planned |
+| `video_frame_zxevo.md` | **ZX Evolution frame**: TS-Conf vs Baseconf timing, VGA output timing | Planned |
+| `video_frame_comparison.md` | **Frame timing comparison matrix**: all models side-by-side — scanline count, T-states/line, INT position, contention start/end, total frame T-states, compatibility impact. **Source**: Unreal Speccy presets (Pentagon=71680T, Scorpion=69888T, Profi=69888T, ATM7MHz=99880T), ZXMAK2 model list (16+ clones), Fuse/ZEsarUX timing tables | Planned |
 
 **Timing-Dependent Effects** | |
-| `raster_timing.md` | Precise raster position: calculating beam position from T-state count, HALT-based sync, per-model raster position tables | 📝 |
-| `contention_timing.md` | Contention timing deep dive: which T-states are stolen by ULA, per-model contention tables, impact on instruction timing during screen area |
-| `floating_bus.md` | Floating bus: what value appears when reading contended memory during ULA fetch, per-model behavior, use as raster sync trick, emulator differences | 📝 |
-| `border_effects.md` | Border color changes: multicolor borders, raster bars, timing requirements per model | 📝 |
-| `interlace_and_flicker.md` | 50Hz flicker, reduction approaches, double buffering on 128K |
+| `raster_timing.md` | Precise raster position: calculating beam position from T-state count, HALT-based sync, per-model raster position tables | ✅ |
+| `contention_timing.md` | Contention timing deep dive: which T-states are stolen by ULA, per-model contention tables, impact on instruction timing during screen area | Planned |
+| `floating_bus.md` | Floating bus: what value appears when reading contended memory during ULA fetch, per-model behavior, use as raster sync trick, emulator differences | ✅ |
+| `border_effects.md` | Border color changes: multicolor borders, raster bars, timing requirements per model | ✅ |
+| `interlace_and_flicker.md` | 50Hz flicker, reduction approaches, double buffering on 128K | Planned |
 
 **Color System** | |
-| `color_system.md` | Attribute-based color, ULA hardware palette, reference palettes (FUSE/Skoolkid/ZEsarUX), attribute clash, ULAplus 64-color, Timex HiColor/HiRes modes | 📝 |
-| `clone_video_modes.md` | Clone video modes beyond standard ULA: GigaScreen, ATM Turbo hires, Profi 512×256, Kay CPLD modes, TS-Conf | 📝 |
-| `crt_output.md` | RF/composite/RGB output, SCART wiring, modern VGA/HDMI adapters |
+| `color_system.md` | Attribute-based color, ULA hardware palette, reference palettes (FUSE/Skoolkid/ZEsarUX), attribute clash, ULAplus 64-color, Timex HiColor/HiRes modes | ✅ |
+| `clone_video_modes.md` | Clone video modes beyond standard ULA: GigaScreen, ATM Turbo hires, Profi 512×256, Kay CPLD modes, TS-Conf | ✅ |
+| `crt_output.md` | RF/composite/RGB output, SCART wiring, modern VGA/HDMI adapters | Planned |
 
 #### 05_development/06_graphics/ — Graphics Techniques
 
@@ -924,15 +929,15 @@ zx/
 | `pt3_format.md` | PT3 module format specification: header, position table, ornaments, samples, patterns, player operation, sub-versions | ✅ Done |
 | `psg_format.md` | PSG register dump format: frame structure, skip opcode, variants (`.YM`, `.VTX`), 20-byte playback routine | ✅ Done |
 
-#### ~~06_sound/players/~~ — Player Routines (REMOVED FROM PLAN)
+#### 06_sound/players/ — Player Routines ✅ COMPLETE (2-article pair)
 
-The planned `players/` subdirectory has been removed from the section plan. Relevant content is covered by:
+| File | Topic | Status |
+|---|---|---|
+| `README.md` | Section index | ✅ Done |
+| `ay_player_routines.md` | **Architecture**: Z80 → AY register writes, ISR integration (IM1/IM2), per-model frame budgets, PT3 + Arkos player structures, memory placement, integration patterns (507 lines) | ✅ Done |
+| `player_comparison.md` | **Comparison**: PT3 vs AKG/AKM/AKY head-to-head benchmarks (size, CPU, features), sound-quality differences, Targhan's decision table, 13-use-case recommendation matrix (262 lines) | ✅ Done |
 
-- [pt3_format.md](06_sound/trackers_and_formats/pt3_format.md) § Player Routine Operation (PT3 player architecture)
-- [arkos_tracker.md](06_sound/trackers_and_formats/arkos_tracker.md) (AKG/AKM/AKY player comparison)
-- [ay_ym_synthesis.md](06_sound/synthesis/ay_ym_synthesis.md) (ISR and embedding context)
-
-Stub files remain in `players/` but are not tracked.
+> Originally planned as a 3-article sub-section; the third article (`audio_decision_guide.md`) was deleted as redundant — its content was already covered by the architecture + comparison pair.
 
 ### 07 — Demoscene ✅ COMPLETE
 
@@ -1085,12 +1090,34 @@ All 11 articles are ✅ Complete (CC BY-SA 4.0). Cross-references verified. See 
 
 Articles are written in priority order. README.md is synthesized AFTER articles exist.
 
-- Tier 1: CPU core articles (z80_architecture, z80_timing, z80_interrupts) — ✅ **COMPLETE** (8 articles)
-- Tier 2: Memory maps + I/O ports (model-specific memory and port articles) — ✅ **COMPLETE** (9 articles + 4 SVG schematics + Verilog equivalents)
-- Tier 3: Display timing + screen layout (foundation for graphics) — 📝 **IN PROGRESS** (12 of 19)
-- Tier 4: Hardware per-stream articles — 2 articles exist (ula_timing, clone_timing)
-- Tier 5: Sound synthesis — 📝 **IN PROGRESS** (2 articles exist: ay_ym_synthesis comprehensive, multitrack_multichip outline)
-- Tier 6: Everything else
+**Section completion summary** (Nov 2025):
+
+| Section | Articles done | Status |
+|---|---|---|
+| 01 CPU | 10/10 | ✅ Complete |
+| 03_io/snapshots | 5/5 | ✅ Complete |
+| 03_io/storage | 22/22 | ✅ Complete (tape + floppy + HDD/SD) |
+| 03_io/peripherals | ~20/20 | ✅ Complete (input + expansion + output + sound cards) |
+| 04 OS | 16/16 | ✅ Complete |
+| 05_dev/03_memory_and_io | 9/9 | ✅ Complete |
+| 06 Sound (synthesis/hardware/trackers/players) | 33+2 | ✅ Complete |
+| 07 Demoscene | 11/11 | ✅ Complete |
+| 05_dev/05_display_and_timing | 10/19 | 📝 In progress |
+| 09 Toolchain | 11/~30 | 📝 Surveys done; per-tool stubs pending |
+| 02 Hardware (all 3 streams) | 9/~40 | 📝 Major gap |
+| 03_io/networking | 0/6 | 📝 Empty |
+| 08 Reverse Engineering | 1/9 | 📝 Major gap |
+| 10 References | 1/10 | 📝 Major gap |
+| 11 Emulation | 1/~20 | 📝 Major gap |
+| 05_dev/01_basic, 02_assembly, 06_graphics | 0/30+ | 📝 Empty |
+
+**Active writing tiers** (priority order):
+
+- **Tier A** (finish what's closest to done): `05_display_and_timing` — finish the last 9 articles (scorpion, other_soviet, next, comparison matrix, contention_timing, etc.)
+- **Tier B** (foundational gaps): `02_hardware/original/zx_spectrum_16k_48k.md` and `02_hardware/clones/pentagon.md` — these are the most-referenced hardware articles that don't exist yet
+- **Tier C** (section completion): `09_toolchain` per-tool articles (zeus, devpac, alasm_sts, etc.) and `08_reverse_engineering/methodology.md`
+- **Tier D** (reference tables): `10_references/z80_opcode_table.md`, `character_set.md`, `color_palette.md` — universally useful
+- **Tier E** (new ground): `03_io/networking/`, `11_emulation/`
 
 After articles exist: README.md (documentation map), TODO.md (gap analysis), section README.md indexes.
 
