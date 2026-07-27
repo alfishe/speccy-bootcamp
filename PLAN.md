@@ -743,7 +743,7 @@ zx/
 | `nmi.md` | NMI handling: Multiface NMI, NMI button, what's safe in NMI context | Planned |
 
 
-#### 05_development/05_display_and_timing/ — Video Subsystem 📝 IN PROGRESS (10 of 19 articles done)
+#### 05_development/05_display_and_timing/ — Video Subsystem ✅ COMPLETE (19 of 19 articles done)
 
 | File | Topic | Status |
 |---|---|---|
@@ -755,24 +755,24 @@ zx/
 | `video_frame_128k.md` | **128K / +2 frame**: same ULA core but contention differs, shadow screen bank, INT timing differences | ✅ |
 | `video_frame_plus2a_plus3.md` | **+2A/+3 frame**: Amstrad gate array contention model, different timing from 48K/128K | ✅ |
 | `video_frame_pentagon.md` | **Pentagon frame**: THE most important Soviet clone timing — different scanline count, different INT position, different contention — code that works on 48K WILL break here | ✅ |
-| `video_frame_scorpion.md` | **Scorpion frame**: timing differences, turbo mode impact on video | Planned |
-| `video_frame_other_soviet.md` | Other Soviet clone frames: ATM Turbo (3.5MHz AND 7MHz modes — 69888 vs 99880 T-states!), Kay, Profi (different paper offset: 12580T), Byte, Quorum, Leningrad, LEC — each may have unique timing | Planned |
-| `video_frame_next.md` | **ZX Spectrum Next frame**: configurable timing modes, 48K/128K/Pentagon timing compatibility, Layer 2 timing, copper sync | Planned |
-| `video_frame_sprinter.md` | **Sprinter frame**: SVGA timing, completely different from ULA-based models | Planned |
-| `video_frame_zxevo.md` | **ZX Evolution frame**: TS-Conf vs Baseconf timing, VGA output timing | Planned |
-| `video_frame_comparison.md` | **Frame timing comparison matrix**: all models side-by-side — scanline count, T-states/line, INT position, contention start/end, total frame T-states, compatibility impact. **Source**: Unreal Speccy presets (Pentagon=71680T, Scorpion=69888T, Profi=69888T, ATM7MHz=99880T), ZXMAK2 model list (16+ clones), Fuse/ZEsarUX timing tables | Planned |
+| `video_frame_scorpion.md` | **Scorpion frame**: 312 lines matching 48K macro timing, +9 T horizontal shift, revision-dependent contention, 7 MHz turbo | ✅ |
+| `video_frame_other_soviet.md` | Other Soviet clone frames: Kay 1024 (48K-clean), ATM Turbo (7 MHz anomaly: 99,880 T-states), Profi (paper offset T=12,580), Byte, Quorum, Leningrad, LEC | ✅ |
+| `video_frame_next.md` | **ZX Spectrum Next frame**: configurable timing modes (48K/128K/+2A/Pentagon), 4 CPU speeds (3.5/7/14/28 MHz), copper coprocessor | ✅ |
+| `video_frame_sprinter.md` | **Sprinter frame**: SVGA 70 Hz timing (not PAL 50 Hz), 20 MHz Z80, 5 video modes, music tempo 40% faster | ✅ |
+| `video_frame_zxevo.md` | **ZX Evolution frame**: real Z80 + Altera MAX CPLDs, Pentagon base, BaseConf vs TS-Conf configurations | ✅ |
+| `video_frame_comparison.md` | **Frame timing comparison matrix**: all models side-by-side — scanline count, T-states/line, INT position, contention, turbo, compatibility matrix, detection decision tree | ✅ |
 
 **Timing-Dependent Effects** | |
 | `raster_timing.md` | Precise raster position: calculating beam position from T-state count, HALT-based sync, per-model raster position tables | ✅ |
-| `contention_timing.md` | Contention timing deep dive: which T-states are stolen by ULA, per-model contention tables, impact on instruction timing during screen area | Planned |
+| `contention_timing.md` | Contention timing deep dive: per-T-state delay tables (Ferranti 6-5-4-3-2-1-0-0, Amstrad 1-0-7-6-5-4-3-2), per-instruction contended cost tables | ✅ |
 | `floating_bus.md` | Floating bus: what value appears when reading contended memory during ULA fetch, per-model behavior, use as raster sync trick, emulator differences | ✅ |
 | `border_effects.md` | Border color changes: multicolor borders, raster bars, timing requirements per model | ✅ |
-| `interlace_and_flicker.md` | 50Hz flicker, reduction approaches, double buffering on 128K | Planned |
+| `interlace_and_flicker.md` | Spectrum's non-interlaced output, 50 Hz perception threshold, attribute flicker, GigaScreen flicker math, CRT vs LCD behaviour | ✅ |
 
 **Color System** | |
 | `color_system.md` | Attribute-based color, ULA hardware palette, reference palettes (FUSE/Skoolkid/ZEsarUX), attribute clash, ULAplus 64-color, Timex HiColor/HiRes modes | ✅ |
 | `clone_video_modes.md` | Clone video modes beyond standard ULA: GigaScreen, ATM Turbo hires, Profi 512×256, Kay CPLD modes, TS-Conf | ✅ |
-| `crt_output.md` | RF/composite/RGB output, SCART wiring, modern VGA/HDMI adapters | Planned |
+| `crt_output.md` | Developer view of CRT/LCD output: pixel aspect ratio, overscan, composite artifacts, per-display-type behaviour | ✅ |
 
 #### 05_development/06_graphics/ — Graphics Techniques
 
@@ -1090,7 +1090,7 @@ All 11 articles are ✅ Complete (CC BY-SA 4.0). Cross-references verified. See 
 
 Articles are written in priority order. README.md is synthesized AFTER articles exist.
 
-**Section completion summary** (Nov 2025):
+**Section completion summary** (Jul 2026):
 
 | Section | Articles done | Status |
 |---|---|---|
@@ -1102,21 +1102,21 @@ Articles are written in priority order. README.md is synthesized AFTER articles 
 | 05_dev/03_memory_and_io | 9/9 | ✅ Complete |
 | 06 Sound (synthesis/hardware/trackers/players) | 33+2 | ✅ Complete |
 | 07 Demoscene | 11/11 | ✅ Complete |
-| 05_dev/05_display_and_timing | 10/19 | 📝 In progress |
+| 05_dev/05_display_and_timing | **19/19** | ✅ **Complete** (Tier A finished Jul 2026) |
+| 10 References | 3/10 | 📝 z80_opcode_table.md done; character_set.md, color_palette.md pending |
 | 09 Toolchain | 11/~30 | 📝 Surveys done; per-tool stubs pending |
 | 02 Hardware (all 3 streams) | 9/~40 | 📝 Major gap |
 | 03_io/networking | 0/6 | 📝 Empty |
 | 08 Reverse Engineering | 1/9 | 📝 Major gap |
-| 10 References | 1/10 | 📝 Major gap |
 | 11 Emulation | 1/~20 | 📝 Major gap |
 | 05_dev/01_basic, 02_assembly, 06_graphics | 0/30+ | 📝 Empty |
 
 **Active writing tiers** (priority order):
 
-- **Tier A** (finish what's closest to done): `05_display_and_timing` — finish the last 9 articles (scorpion, other_soviet, next, comparison matrix, contention_timing, etc.)
+- **Tier A** ✅ **DONE** (Jul 2026): `05_display_and_timing` — all 19 articles complete (48K, 128K, +2A/+3, Pentagon, Scorpion, other Soviet, Next, Sprinter, ZX Evolution, contention_timing, interlace_and_flicker, crt_output, video_frame_comparison)
+- **Tier D partial**: `10_references/z80_opcode_table.md` done; `character_set.md`, `color_palette.md` still pending
 - **Tier B** (foundational gaps): `02_hardware/original/zx_spectrum_16k_48k.md` and `02_hardware/clones/pentagon.md` — these are the most-referenced hardware articles that don't exist yet
 - **Tier C** (section completion): `09_toolchain` per-tool articles (zeus, devpac, alasm_sts, etc.) and `08_reverse_engineering/methodology.md`
-- **Tier D** (reference tables): `10_references/z80_opcode_table.md`, `character_set.md`, `color_palette.md` — universally useful
 - **Tier E** (new ground): `03_io/networking/`, `11_emulation/`
 
 After articles exist: README.md (documentation map), TODO.md (gap analysis), section README.md indexes.

@@ -120,6 +120,15 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [color_system.md](05_development/05_display_and_timing/color_system.md) | Attribute byte, 8-color palette, attribute clash, ULAplus 64-color, Timex HiColor/HiRes |
 | [border_effects.md](05_development/05_display_and_timing/border_effects.md) | Border color via #FE, raster bars, rainbow borders, per-model timing |
 | [clone_video_modes.md](05_development/05_display_and_timing/clone_video_modes.md) | Clone video modes: GigaScreen, ATM hires, Profi 512×256, Kay CPLD, TS-Conf |
+| [video_frame_scorpion.md](05_development/05_display_and_timing/video_frame_scorpion.md) | Scorpion ZS-256 frame: 312 lines matching 48K macro timing, +9 T horizontal shift, revision-dependent contention, 7 MHz turbo |
+| [video_frame_other_soviet.md](05_development/05_display_and_timing/video_frame_other_soviet.md) | Long-tail Soviet clones: Kay 1024 (48K-clean), ATM Turbo 7 MHz anomaly (99,880 T-states), Profi paper offset, Byte, Quorum, Leningrad, LEC |
+| [video_frame_next.md](05_development/05_display_and_timing/video_frame_next.md) | ZX Spectrum Next: configurable timing modes (48K/128K/+2A/Pentagon), 4 CPU speeds (3.5/7/14/28 MHz), copper coprocessor |
+| [video_frame_sprinter.md](05_development/05_display_and_timing/video_frame_sprinter.md) | Sprinter: SVGA 70 Hz frame (not PAL 50 Hz), 20 MHz Z80, 5 video modes, music tempo 40% faster |
+| [video_frame_zxevo.md](05_development/05_display_and_timing/video_frame_zxevo.md) | ZX Evolution (PentEvo): real Z80 + Altera MAX CPLDs, Pentagon-compatible base, BaseConf vs TS-Conf configurations |
+| [contention_timing.md](05_development/05_display_and_timing/contention_timing.md) | Per-T-state delay tables (Ferranti 6-5-4-3-2-1-0-0, Amstrad 1-0-7-6-5-4-3-2), per-instruction contended cost tables |
+| [interlace_and_flicker.md](05_development/05_display_and_timing/interlace_and_flicker.md) | Non-interlaced output, 50 Hz perception threshold, attribute flicker, GigaScreen flicker math, CRT vs LCD |
+| [crt_output.md](05_development/05_display_and_timing/crt_output.md) | Developer view of CRT/LCD output: pixel aspect ratio, overscan, composite artifacts, per-display-type behaviour |
+| [video_frame_comparison.md](05_development/05_display_and_timing/video_frame_comparison.md) | Synthesis: all models side-by-side — T-states/frame, contention, turbo, compatibility matrix, detection decision tree |
 
 ### 06 — Sound ✅ COMPLETE
 
