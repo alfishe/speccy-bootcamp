@@ -140,7 +140,7 @@ zx/
 │       ├── README.md
 │       ├── zx_net.md                      # ✅ Done (Jul 2026)
 │       ├── modems.md                      # ✅ Done (Jul 2026)
-│       ├── spectranet.md
+│       ├── spectranet.md                  # ✅ Done (Jul 2026)
 │       ├── zifi.md
 │       ├── esp_wifi.md
 │       └── zx_next_wifi.md
@@ -663,7 +663,7 @@ zx/
 | `README.md` | Index — networking from ZX Net to WiFi |
 | `zx_net.md` | ✅ **ZX Net** — Sinclair's 1983 classroom LAN for the Spectrum (with ZX Interface 1): up to 64 stations daisy-chained via ribbon cable, polling-based MAC, packet format (dest/src/len/ctrl/payload/checksum), 9600 bit/s signalling, ROM API (`*NET`, `*LOAD name N`, `*SAVE name N`), microdrive file system, software ecosystem, commercial failure vs Econet, modern emulation in Fuse/ZEsarUX |
 | `modems.md` | ✅ **Modems** — telephone-line connectivity for the ZX Spectrum (1982–2000s): acoustic couplers (300 bit/s V.21 FSK), direct-connect modems (Prestel 1200/75, V.23, V.22, V.22 bis, V.32, V.34), Spectrum serial interfaces (Interface 1 RS-232, Kempston SIO, +2A/+3, Beta 128), Prism VTX-5000, Russian modems (Analog 14400, Idustria, T-mail FidoNet mailer), Prestel/Micronet 800 videotex services, BBSes (BBStar, Commstar), Russian FidoNet, early Internet access, modern alternatives (Spectranet/ZiFi/ESP WiFi), FAQ, summary, references |
-| `spectranet.md` | Spectranet: full TCP/IP stack, Ethernet, HTTP, hardware design |
+| `spectranet.md` | ✅ **Spectranet** — modern (2007+) Ethernet + TCP/IP interface for the ZX Spectrum, designed by Andrew Owen: ENC28J60 Ethernet controller via SPI, on-board flash ROM with full TCP/IP stack (TCP/UDP/ICMP/DHCP/DNS/HTTP/FTP/telnet/IRC/NTP), hardware compatibility with all Sinclair/clones, ROM API (BASIC extensions + BSD socket API via `RST #08`), software ecosystem (telnet/FTP/HTTP/IRC clients, Spectrum HTTP server, multiplayer games), comparison with ZiFi, IPv4-only, FAQ, references |
 | `zifi.md` | ZiFi: WiFi module for ZX Spectrum, AT command interface |
 | `esp_wifi.md` | ESP-based WiFi: ESP8266/ESP32 modules for various Spectrum interfaces |
 | `zx_next_wifi.md` | ZX Spectrum Next WiFi: ESP module, TCP/IP stack |
