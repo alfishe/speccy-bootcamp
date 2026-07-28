@@ -529,12 +529,12 @@ zx/
 | `keyboard_matrix.md` | 8x5 matrix, key codes, keyboard reading routine, BEEP key detection | ✅ |
 | `edge_connector.md` | Edge connector pinout, bus signals, expansion bus usage | Planned |
 
-#### 02_hardware/clones/ — Soviet Clone Ecosystem 📝 4 of 12 done
+#### 02_hardware/clones/ — Soviet Clone Ecosystem 📝 5 of 12 done
 
 | File | Topic | Status |
 |---|---|---|
 | `README.md` | Index + clone ecosystem overview: why Spectrum became THE post-Soviet computer | Planned |
-| `pentagon.md` | Pentagon 48K/128K: most popular clone, Russian ROM, TR-DOS integration, design philosophy | Planned |
+| `pentagon.md` | Pentagon 48K/128K: most popular clone, Russian ROM, TR-DOS integration, design philosophy | ✅ |
 | `pentagon_1024.md` | Pentagon 1024/1024SL: expanded memory, modifications | Planned |
 | `scorpion.md` | Scorpion ZS-256: GMX expansion, Turbo modes, Z-controller, expanded memory, ProfROM | ✅ |
 | `kay.md` | Kay 1024: professional-oriented, 1024K RAM, multiple ROM banks, IDE interface | Planned |
