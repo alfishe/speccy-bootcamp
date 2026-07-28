@@ -49,13 +49,15 @@ line_t     = T_state % T_states_per_line
 | Model | T-states/line | Total lines | Paper start | Paper end |
 |-------|--------------|-------------|-------------|-----------|
 | 48K | 224 | 312 | Scanline 64 | Scanline 255 |
-| 128K/+2 | 228 | 311 | Scanline 64 | Scanline 255 |
-| +2A/+3 | 228 | 311 | Scanline 64 | Scanline 255 |
+| 128K/+2 | 228 | 311 | **Scanline 63** | **Scanline 254** |
+| +2A/+3 | 228 | 311 | **Scanline 63** | **Scanline 254** |
 | Pentagon | 224 | 320 | Scanline 48 | Scanline 239 |
 | Scorpion | 224 | 312 | Scanline 64 | Scanline 255 |
 
 > [!WARNING]
 > The Pentagon's paper area starts at **scanline 48** (not 64 as on Sinclair models). Code that hardcodes "paper starts at scanline 64" will have a 16-scanline offset error on the Pentagon and other clones with different border sizes.
+>
+> The 128K/+2 and +2A/+3 have **63 scanlines of top border** (not 64) because each scanline is 228 T-states (not 224). Paper starts at scanline 63 (T=14,364) and ends at scanline 254 (T=58,140). The 1-scanline offset vs the 48K is a common source of porting bugs. Source: [WoS 128K FAQ](https://worldofspectrum.org/faq/reference/128kreference.htm).
 
 For a complete per-clone comparison including Kay, ATM Turbo, ZX Evolution, and FPGA implementations, see the [Per-Clone Comparison](../../02_hardware/clones/clone_timing.md#per-clone-comparison) table in `clone_timing.md`.
 
@@ -245,7 +247,7 @@ RasterSync:
     ; Floating bus works with minor differences
     HALT
     ; ... floating bus raster lock
-    ; T-states/line = 228 (NOT 224!), paper starts line 64
+    ; T-states/line = 228 (NOT 224!), paper starts line 63 (NOT 64!)
     RET
 
 .syncPentagon:

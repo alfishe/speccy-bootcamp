@@ -2,7 +2,7 @@
 
 # 128K / +2 Video Frame — Contention Differences, Shadow Screen, and Timing Divergence
 
-The ZX Spectrum 128K (toastrack) and +2 (grey) use the **same Ferranti ULA core** as the 48K for video generation — the frame is still 312 scanlines at 69,888 T-states. But the **contention behavior is different** because the 128K has 8 RAM banks instead of one contiguous block, and the ULA's screen fetches affect different banks depending on the paging configuration.
+The ZX Spectrum 128K (toastrack) and +2 (grey) use the **same Ferranti ULA core** as the 48K for video generation — but the frame is **311 scanlines at 70,908 T-states** (vs the 48K's 312 scanlines at 69,888 T-states), and the **contention behavior is different** because the 128K has 8 RAM banks instead of one contiguous block, and the ULA's screen fetches affect different banks depending on the paging configuration.
 
 > [!NOTE]
 > This article covers **only the differences** from the 48K frame. For the complete frame structure (PAL timing, scanline layout, INT position), see [video_frame_48k.md](video_frame_48k.md). For 128K memory paging, see [memory_and_io_128k.md](../03_memory_and_io/memory_and_io_128k.md).
@@ -15,25 +15,26 @@ The ZX Spectrum 128K (toastrack) and +2 (grey) use the **same Ferranti ULA core*
 ┌────────────────────────────────────────────────────┐
 │  ZX Spectrum 128K / +2 Frame Timing                │
 ├────────────────────────────────────────────────────┤
-│  T-states per scanline:     224   (same as 48K)    │
-│  Total scanlines:           312   (same as 48K)    │
-│  Total T-states per frame:  69,888 (same as 48K)   │
-│  Frame rate:                ~50.08 Hz (same)       │
-│                                                    │
-│  Top border:       64 lines   (same as 48K)        │
-│  Paper area:      192 lines   (same as 48K)        │
-│  Bottom border:    56 lines   (same as 48K)        │
-│                                                    │
-│  INT position:    T=0, line 0 (same as 48K)        │
-│  INT duration:    32 T-states (same as 48K)        │
-│                                                    │
-│  Contention:      Different pattern from 48K       │
-│  Contended banks: 1, 3, 5, 7 (odd banks)           │
-│  Screen bank:     Bank 5 (or bank 7 if shadow)     │
+│  T-states per scanline:     228   (NOT 224 — differs from 48K)│
+│  Total scanlines:           311   (NOT 312 — differs from 48K)│
+│  Total T-states per frame:  70,908 (NOT 69,888 — differs)    │
+│  Frame rate:                ~50.02 Hz (slightly slower)       │
+│                                                                │
+│  Top border:       63 lines   (NOT 64 — 1 scanline less)      │
+│  Paper area:      192 lines   (same as 48K)                   │
+│  Bottom border:    56 lines   (same as 48K)                    │
+│                                                                │
+│  INT position:    T=0, line 0 (same as 48K)                   │
+│  INT duration:    32 T-states (same as 48K)                    │
+│                                                                │
+│  Contention:      Same 6-5-4-3-2-1-0-0 pattern as 48K         │
+│  Contention start: T=14,361   (NOT 14,335 — shifted by +26 T) │
+│  Contended banks: 1, 3, 5, 7 (odd banks)                      │
+│  Screen bank:     Bank 5 (or bank 7 if shadow)                │
 └────────────────────────────────────────────────────┘
 ```
 
-The **frame structure is identical** to the 48K — same scanline count, same T-state budget, same INT position. The differences are in **which memory is contended** and **how contention behaves**.
+The frame structure is **similar** to the 48K but **not identical** — scanlines are 228 T-states (not 224), there are 311 of them (not 312), and the top border is only 63 lines (not 64). The differences are subtle but matter for cycle-exact code: paper starts at scanline 63 (T=14,364) and contention starts at T=14,361, both shifted slightly later than the 48K's scanline 64 / T=14,336. The contention delay **pattern** itself (6,5,4,3,2,1,0,0 repeating) is identical to the 48K.
 
 ---
 
@@ -187,9 +188,14 @@ The floating bus behaves **differently on the 128K** compared to the 48K:
 ## Summary: 48K vs 128K Frame Differences
 
 | Feature | 48K | 128K/+2 |
-|---------|-----|---------|
-| Frame size | 69,888 T-states | 69,888 T-states (identical) |
-| Scanlines | 312 | 312 (identical) |
+|---------|-----|----------|
+| Frame size | 69,888 T-states | **70,908 T-states** (+1,020 T) |
+| Scanlines | 312 | **311** (one less) |
+| T-states per scanline | 224 | **228** (+4 T per line) |
+| Top border | 64 lines | **63 lines** (one less) |
+| Paper start | Scanline 64 (T=14,336) | **Scanline 63 (T=14,364)** |
+| Contention pattern start | T=14,335 | **T=14,361** (shifted +26 T) |
+| Frame rate | 50.08 Hz | 50.02 Hz (slightly slower) |
 | INT position | T=0, line 0 | T=0, line 0 (identical) |
 | Contended address range | `#4000`–`#7FFF` always | Banks 1, 3, 5, 7 (odd banks) |
 | Non-contended RAM | `#8000`–`#FFFF` | Banks 0, 2, 4, 6 |
@@ -199,15 +205,21 @@ The floating bus behaves **differently on the 128K** compared to the 48K:
 
 ### Porting 48K Code to 128K
 
-Most 48K code runs correctly on the 128K because the frame structure is identical. However:
+Most 48K code runs correctly on the 128K because the frame structure is **similar** — but not identical. Watch out for:
 
-1. **Contention**: If your code relied on `#8000`–`#FFFF` being uncontended, it still is — on the 128K, banks 2 and 0 are not contended. But if you page in an odd bank at `#C000`, code running there will be contended.
+1. **Frame timing**: The 128K has 311 scanlines at 228 T-states each (70,908 T/frame), vs the 48K's 312 at 224 T-states (69,888 T/frame). Cycle-exact code that hardcodes 69,888 or 224 will be off.
 
-2. **Timing-sensitive code**: Multicolor effects and raster sync may need adjustment for floating bus differences.
+2. **Contention start**: Contention begins at T=14,361 on 128K (vs T=14,335 on 48K) — shifted by +26 T-states. Code that synchronizes to paper start needs re-timing.
 
-3. **Memory layout**: The BASIC program area starts at a different address. Use `PROG` (`#5C53`) system variable to find it dynamically.
+3. **Top border is 63 lines**: One less scanline of free time before paper starts. ISRs that assumed 64 scanlines × 224 T-states = 14,336 T of setup time actually have 63 × 228 = 14,364 T (28 T more — usually fine, but worth verifying).
 
-4. **ROM differences**: When in 128K mode, ROM 0 is paged in, which has different routines from the 48K ROM. Switch to ROM 1 (48K) for compatibility: `LD A,%00010000; OUT (#7FFD),A`.
+4. **Memory**: If your code relied on `#8000`–`#FFFF` being uncontended, it still is — on the 128K, banks 2 and 0 are not contended. But if you page in an odd bank at `#C000`, code running there will be contended.
+
+5. **Timing-sensitive code**: Multicolor effects and raster sync may need adjustment for floating bus differences.
+
+6. **Memory layout**: The BASIC program area starts at a different address. Use `PROG` (`#5C53`) system variable to find it dynamically.
+
+7. **ROM differences**: When in 128K mode, ROM 0 is paged in, which has different routines from the 48K ROM. Switch to ROM 1 (48K) for compatibility: `LD A,%00010000; OUT (#7FFD),A`.
 
 ---
 

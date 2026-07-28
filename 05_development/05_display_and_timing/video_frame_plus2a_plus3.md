@@ -17,9 +17,9 @@ The ZX Spectrum +2A and +3 replace the Ferranti ULA with an **Amstrad gate array
 │  Total scanlines:        311                     │
 │  Frame rate:             ~50.02 Hz               │
 │                                                  │
-│  Top border:             64 lines   (14,592 T)   │
+│  Top border:             63 lines   (14,364 T)   │
 │  Paper area:             192 lines  (43,776 T)   │
-│  Bottom border:          55 lines   (12,540 T)   │
+│  Bottom border:          56 lines   (12,768 T)   │
 │  VBlank:                 included in border      │
 │                                                  │
 │  Contention:             Banks 4, 5, 6, 7        │
@@ -85,13 +85,13 @@ This means `OUT (#FE),A` (border color) runs at the same speed during paper and 
 ## Scanline Map
 
 | Scanline | T-state start | Region | Content | Contention |
-|----------|--------------|--------|---------|-----------|
+|----------|--------------|--------|---------|------------|
 | 0 | 0 | Top border | Border | None |
-| 1–63 | 228–14,364 | Top border | Border | None |
-| 64 | 14,592 | Paper start | First display line | **Active** |
-| 64–255 | 14,592–57,960 | Paper area | 192 display lines | **Active** |
-| 256 | 58,188 | Bottom border | Border | None |
-| 256–310 | 58,188–70,680 | Bottom border + VBlank | Border | None |
+| 1–62 | 228–14,363 | Top border | Border | None |
+| 63 | 14,364 | Paper start | First display line | **Active** |
+| 63–254 | 14,364–58,139 | Paper area | 192 display lines | **Active** |
+| 255 | 58,140 | Bottom border | Border | None |
+| 255–310 | 58,140–70,907 | Bottom border + VBlank | Border | None |
 | → 0 | 70,908 | Next frame | INT fires | — |
 
 ### Paper Area Timing

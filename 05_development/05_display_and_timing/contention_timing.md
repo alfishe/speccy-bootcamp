@@ -66,14 +66,17 @@ The pattern `1, 0, 7, 6, 5, 4, 3, 2` is shifted relative to Ferranti: the worst-
 
 Contention only occurs during the **paper area** — the 192 scanlines where the video circuit fetches pixel and attribute bytes. Outside the paper area, no contention.
 
-| Model | First contended scanline | Last contended scanline | Contended scanlines |
-|---|---|---|---|
-| 48K | 64 | 255 | 192 |
-| 128K / +2 | 64 | 255 | 192 |
-| +2A / +3 | 64 | 255 | 192 |
-| Pentagon | (no contention at any line) | — | 0 |
-| Scorpion (revision-dependent) | ~64 | ~255 | 0 or 192 |
-| ZX Evolution | (no contention at any line) | — | 0 |
+| Model | First contended scanline | Last contended scanline | Contended scanlines | Pattern starts at T | Repeats every |
+|---|---|---|---|---|---|
+| 48K | 64 | 255 | 192 | T=14,335 | 224 T (1 scanline) |
+| 128K / +2 | **63** | **254** | 192 | **T=14,361** | **228 T** (1 scanline) |
+| +2A / +3 | **63** | **254** | 192 | **T=14,361** | **228 T** (1 scanline) |
+| Pentagon | (no contention at any line) | — | 0 | — | — |
+| Scorpion (revision-dependent) | ~64 | ~255 | 0 or 192 | ~T=14,344 | 224 T |
+| ZX Evolution | (no contention at any line) | — | 0 | — | — |
+
+> [!IMPORTANT]
+> The 128K/+2 and +2A/+3 have **63 scanlines of top border** (not 64 like the 48K) because their scanlines are 228 T-states long (not 224). Paper therefore starts at scanline 63, and the contention pattern starts at T=14,361 (not T=14,335 as on the 48K). This 1-scanline offset is a common source of bugs when porting cycle-exact code from 48K to 128K. Sources: [WoS 128K FAQ](https://worldofspectrum.org/faq/reference/128kreference.htm), [Sinclair Wiki — Contended memory](https://sinclair.wiki.zxnet.co.uk/wiki/Contended_memory).
 
 ### Within Each Contended Scanline (48K)
 
@@ -83,7 +86,7 @@ A single scanline is 224 T-states. Of those, only 128 are within contention "act
 T-state offset within scanline (relative to scanline start):
 0─────────16─────────32─────────48─────────64──── ... ────128─────────224
 │ horizontal │  contended "active" region  │   free  │      │   free    │
-│ retrace    │  16 × 8-T contention slots   │  time   │      │           │
+│ retrace    │  16 × 8-T contention slots   │  time   │      │   free    │
                                                                         
 Contention pattern within "active" region:
   Slot 0 (T=16-23):  6,5,4,3,2,1,0,0
