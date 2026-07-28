@@ -409,7 +409,7 @@ zx/
     │   ├── fuse.md
     │   ├── zesarux.md
     │   ├── cspect.md
-    │   └── test_suites.md
+    │   └── test_suites.md                       # ✅ Done (Jul 2026)
     ├── fpga/
     │   ├── README.md
     │   ├── mist_mister_core.md
@@ -1055,7 +1055,7 @@ All 11 articles are ✅ Complete (CC BY-SA 4.0). Cross-references verified. See 
 | `fuse.md` | Fuse: reference emulator, architecture, debugger, RZX recording |
 | `zesarux.md` | ZEsarUX: advanced debugging, reverse debugging, FPGA simulation, Next support |
 | `cspect.md` | CSpect: ZX Spectrum Next emulator, development focus |
-| `test_suites.md` | Test suites: FUSE test suite, ZEXALL, Z80 exerciser, diagnostic ROMs, timing verification |
+| `test_suites.md` | ✅ **Test Suites** — test programs used to validate ZX Spectrum emulator accuracy. ZEXALL/ZEXDOC (Z80 instruction exerciser by Frank D. Cringle, 1997), the FUSE test suite (Z80 instructions, contended memory, INT timing, video timing, audio, peripherals — hosted on SourceForge), Pentagon Diag ROM (Russian clone validation). Timing-specific tests: Sensible tests (Andrew Owen), Float Spell multicolour demo, contended memory loop, INT timing tests. Peripheral tests: AY-3-8912 register/envelope/noise, Kempston joystick at `0x1F`, Interface 1/microdrive. Diagnostic ROMs (ZX Diag, Ramtest). How to use for emulator users (download, run, compare) and authors (CI pipeline, multi-hardware configs, real hardware comparison, publish results). Limitations of testing (unknown edge cases, hardware variability, test bugs, analogue behaviour). FAQ, summary, references |
 
 #### 11_emulation/fpga/ — FPGA Cores
 
@@ -1108,7 +1108,7 @@ Articles are written in priority order. README.md is synthesized AFTER articles 
 | 02 Hardware (all 3 streams) | 9/~40 | 📝 Major gap |
 | 03_io/networking | 6/6 | ✅ **COMPLETE** (Jul 2026) — zx_net, modems, spectranet, zifi, esp_wifi, zx_next_wifi all done |
 | 08 Reverse Engineering | 1/9 | 📝 Major gap |
-| 11 Emulation | 2/~20 | 📝 Tier E in progress (cycle_exact_accuracy + emulator_comparison done; 18 more across software/fpga/mcu pending) |
+| 11 Emulation | 3/~20 | 📝 Tier E in progress (cycle_exact_accuracy, emulator_comparison, test_suites done; 17 more across software/fpga/mcu pending) |
 | 05_dev/01_basic, 02_assembly, 06_graphics | 0/30+ | 📝 Empty |
 
 **Active writing tiers** (priority order):
