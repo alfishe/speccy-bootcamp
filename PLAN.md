@@ -138,7 +138,7 @@ zx/
 │   │   └── zx_spectrum_48k_audio_routing.md
 │   └── networking/
 │       ├── README.md
-│       ├── zx_net.md
+│       ├── zx_net.md                      # ✅ Done (Jul 2026)
 │       ├── modems.md
 │       ├── spectranet.md
 │       ├── zifi.md
@@ -661,7 +661,7 @@ zx/
 | File | Topic |
 |---|---|
 | `README.md` | Index — networking from ZX Net to WiFi |
-| `zx_net.md` | ZX Interface 1 ZX Net: up to 64 Spectrums, protocol, hardware |
+| `zx_net.md` | ✅ **ZX Net** — Sinclair's 1983 classroom LAN for the Spectrum (with ZX Interface 1): up to 64 stations daisy-chained via ribbon cable, polling-based MAC, packet format (dest/src/len/ctrl/payload/checksum), 9600 bit/s signalling, ROM API (`*NET`, `*LOAD name N`, `*SAVE name N`), microdrive file system, software ecosystem, commercial failure vs Econet, modern emulation in Fuse/ZEsarUX |
 | `modems.md` | Modems: acoustic coupler, RS-232 modems, telephone line interfaces |
 | `spectranet.md` | Spectranet: full TCP/IP stack, Ethernet, HTTP, hardware design |
 | `zifi.md` | ZiFi: WiFi module for ZX Spectrum, AT command interface |
