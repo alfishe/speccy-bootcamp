@@ -359,7 +359,7 @@ zx/
 │   ├── asset_tools.md ✅                 # Per-tool deep dive
 │   ├── disassemblers.md ✅               # Per-tool deep dive
 │   ├── assembler_overview.md            # Planned
-│   ├── zeus_assembler.md                # Planned
+│   ├── zeus_assembler.md                # ✅ Done (Jul 2026)
 │   ├── devpac_gens_mons.md              # Planned
 │   ├── alasm_sts.md                     # Planned
 │   ├── xas_assembler.md                 # Planned
@@ -983,7 +983,7 @@ All 11 articles are ✅ Complete (CC BY-SA 4.0). Cross-references verified. See 
 | `assembler_overview.md` | **Comprehensive assembler survey**: all known Z80 assemblers — native and cross-platform — with feature comparison matrix (macros, linking, output formats, ZX-specific features, Z80N support, active maintenance) |
 
 **ZX Spectrum Native Assemblers** (run on the Spectrum itself) | |
-| `zeus_assembler.md` | Zeus (Crystal Computing, 1983): Simon Brattel & Neil Mottershead — full macro assembler + monitor + disassembler, still actively developed for ZX Next (generates .NEX), most powerful native assembler |
+| `zeus_assembler.md` | ✅ **Zeus Assembler** — 40-year integrated Z80 dev environment (Nascom 2 → Spectrum 1983 → Zeus 4 Next): editor+assembler+monitor+disassembler in one program, version history, source language (labels/macros/conditionals), built-in monitor (RST #38 breakpoints), built-in disassembler, Zeus 4 modern era (Z80N, .nex, NextReg), comparison vs sjasmplus, FAQ, references |
 | `devpac_gens_mons.md` | HiSoft DevPac III (GENS/MONS): GENS assembler + MONS monitor — the classic 1980s workhorse, most widely used native assembler in the commercial era |
 | `alasm_sts.md` | ALASM (various versions 3.x–5.x) + STS debugger: Russian-native assembler, dominant in the Soviet clone scene, fast assembly, TR-DOS integration |
 | `xas_assembler.md` | XAS (v7.x–9.x): Russian-native macro assembler, alternative to ALASM, popular in the demo scene |
@@ -1115,8 +1115,8 @@ Articles are written in priority order. README.md is synthesized AFTER articles 
 
 - **Tier A** ✅ **DONE** (Jul 2026): `05_display_and_timing` — all 19 articles complete (48K, 128K, +2A/+3, Pentagon, Scorpion, other Soviet, Next, Sprinter, ZX Evolution, contention_timing, interlace_and_flicker, crt_output, video_frame_comparison)
 - **Tier D** ✅ **DONE** (Jul 2026): `10_references/character_set.md`, `10_references/color_palette.md`, `10_references/z80_opcode_table.md` all complete (3 of 10 planned reference articles; remaining 7 are deferred)
-- **Tier B** (foundational gaps, **IN PROGRESS**): `02_hardware/original/zx_spectrum_16k_48k.md` and `02_hardware/clones/pentagon.md` — these are the most-referenced hardware articles that don't exist yet
-- **Tier C** (section completion): `09_toolchain` per-tool articles (zeus, devpac, alasm_sts, etc.) and `08_reverse_engineering/methodology.md`
+- **Tier B** ✅ **DONE** (Jul 2026): `02_hardware/original/zx_spectrum_16k_48k.md` and `02_hardware/clones/pentagon.md` — both foundational hardware articles complete
+- **Tier C** (section completion, **IN PROGRESS**): `08_reverse_engineering/methodology.md` ✅ and `09_toolchain/zeus_assembler.md` ✅ done; `devpac_gens_mons.md`, `alasm_sts.md`, `xas_assembler.md` remaining
 - **Tier E** (new ground): `03_io/networking/`, `11_emulation/`
 
 After articles exist: README.md (documentation map), TODO.md (gap analysis), section README.md indexes.
