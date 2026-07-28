@@ -961,7 +961,7 @@ All 11 articles are ✅ Complete (CC BY-SA 4.0). Cross-references verified. See 
 
 | File | Topic |
 |---|---|
-| `methodology.md` | ZX Spectrum RE workflow: disassembly, tracing, patching |
+| `methodology.md` | ZX Spectrum RE workflow: disassembly, tracing, patching | ✅ |
 | `protection_techniques.md` ✅ | Copy protection: tape loaders (Speedlock, Alkatraz), disk schemes, NMI/snapshot defenses, snapshot devices, memory integrity, code obfuscation, bypass techniques |
 | `game_reversing.md` | Game RE: asset extraction, map ripping, cheat codes, save game formats |
 | `code_crunching.md` | Compression: MegaLZ, HRUM, Z80 crunchers, unpacking, depacker analysis |
