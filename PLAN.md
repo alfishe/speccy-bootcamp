@@ -512,12 +512,12 @@ zx/
 
 ### 02 — Hardware (subfoldered by stream) 📝 PARTIAL
 
-#### 02_hardware/original/ — Sinclair/Amstrad 📝 4 of 12 done
+#### 02_hardware/original/ — Sinclair/Amstrad 📝 5 of 12 done
 
 | File | Topic | Status |
 |---|---|---|
 | `README.md` | Index + model comparison table (16K/48K/128/+2/+2A/+3) | Planned |
-| `zx_spectrum_16k_48k.md` | Ferranti ULA (5C/6C), 16K/48K RAM layout, ROM content, keyboard matrix, tape interface, EAR/MIC | Planned |
+| `zx_spectrum_16k_48k.md` | Ferranti ULA (5C/6C), 16K/48K RAM layout, ROM content, keyboard matrix, tape interface, EAR/MIC | ✅ |
 | `zx_spectrum_128.md` | 128K toastrack: AY-3-8912, RS-232, keypad port, RAM paging (16K banks), ROM switching | Planned |
 | `zx_spectrum_plus2.md` | Amstrad +2 (grey): integrated keyboard, built-in tape, AY sound | Planned |
 | `zx_spectrum_plus2a_plus3.md` | +2A/+3: Amstrad gate array, +3 DOS, internal floppy, RAM banking differences | Planned |
