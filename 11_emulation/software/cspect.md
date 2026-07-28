@@ -25,7 +25,7 @@ CSpect's design priorities were set by this mission:
 - **Developer tooling** — debugger, breakpoints, memory views, and inspection tools aimed at game/demo authors
 - **Rapid iteration** — Mike Dailly releases CSpect updates frequently, often within days of bug reports
 
-The first CSpect releases (2017) implemented the core Next feature set: layer 2 framebuffer, hardware sprites (64 sprites, 256 per frame), tilemap (40×32 or 80×32), copper (the Next's programmable scanline coprocessor), and the Z80N CPU with its extended instructions (`LDPIR`, `SWAPNIB`, `MIRROR`, `PIXELDAT`, `NEXTREG` access via `LD A,NX` / `LD NX,A` patterns). Subsequent releases added the ESP-12 WiFi module emulation, hardware scrolling (radistan-style scrolling via `NEXTREG` registers), layer 2 shadow, lores and hires modes, and the extended palette (256 colours from a 24-bit RGB palette).
+The first CSpect releases (2017) implemented the core Next feature set: layer 2 framebuffer, hardware sprites (64 sprites, 256 per frame), tilemap (40×32 or 80×32), copper (the Next's programmable scanline coprocessor), and the Z80N CPU with its extended instructions (`LDPIR`, `SWAPNIB`, `MIRROR`, `PIXELDAT`, `NEXTREG` access via `LD A,NX` / `LD NX,A` patterns). Subsequent releases added the ESP-12 WiFi module emulation, hardware scrolling (radistan-style scrolling via `NEXTREG` registers), layer 2 shadow, lores and hires modes, and the extended palette (256 colors from a 24-bit RGB palette).
 
 ```mermaid
 timeline
@@ -45,7 +45,7 @@ timeline
 
 ### CSpect vs the Real Next
 
-CSpect's mission is to be the Next's software twin, but it is not identical to real hardware. The Next's FPGA implementation has timing quirks, undocumented behaviours, and signal-level interactions that software emulation cannot perfectly reproduce. CSpect's author maintains a list of known divergences — typically around copper timing, DMA behaviour, or edge cases in layer 2 / sprite priority resolution.
+CSpect's mission is to be the Next's software twin, but it is not identical to real hardware. The Next's FPGA implementation has timing quirks, undocumented behaviors, and signal-level interactions that software emulation cannot perfectly reproduce. CSpect's author maintains a list of known divergences — typically around copper timing, DMA behavior, or edge cases in layer 2 / sprite priority resolution.
 
 Next developers therefore use CSpect as a **first-pass test platform**, with final validation on real hardware. The Next community has developed a body of "CSpect-vs-real" notes documenting where the two diverge — these notes are part of every serious Next developer's reference library.
 ---
@@ -71,7 +71,7 @@ CSpect implements these instructions correctly per the official Z80N specificati
 
 ### Layer 2 Framebuffer
 
-The **layer 2** is the Next's 256×192×8bpp framebuffer — a fully byte-addressed 256-colour display surface (palette from 24-bit RGB). Layer 2 can be displayed above the standard ULA display (priority), blended with it, or stand alone. CSpect implements:
+The **layer 2** is the Next's 256×192×8bpp framebuffer — a fully byte-addressed 256-color display surface (palette from 24-bit RGB). Layer 2 can be displayed above the standard ULA display (priority), blended with it, or stand alone. CSpect implements:
 
 - The 16 KB pages of layer 2 RAM (paged via `NEXTREG #12`)
 - Layer 2 priority vs ULA (`NEXTREG #70` priority modes)
@@ -95,12 +95,12 @@ The Next's **tilemap** mode provides a hardware character-mapped display (no CPU
 
 - Tilemap pattern and attribute RAM (`NEXTREG #6C` / `#6E` base addresses)
 - Tilemap offset (for hardware scrolling) and clip window
-- 256-colour tile palette
+- 256-color tile palette
 - Tilemap vs ULA / layer 2 priority
 
 ### Copper
 
-The Next's **copper** is a programmable scanline coprocessor (named by analogy to the Amiga's copper, but architecturally distinct). The copper executes a list of `WAIT` and `MOVE` instructions, allowing per-scanline changes to `NEXTREG` registers — enabling raster effects, mid-frame palette swaps, and hardware-synchronised transitions. CSpect's copper implementation includes:
+The Next's **copper** is a programmable scanline coprocessor (named by analogy to the Amiga's copper, but architecturally distinct). The copper executes a list of `WAIT` and `MOVE` instructions, allowing per-scanline changes to `NEXTREG` registers — enabling raster effects, mid-frame palette swaps, and hardware-synchronized transitions. CSpect's copper implementation includes:
 
 - Copper instruction RAM (`NEXTREG #60` / `#62` base)
 - `WAIT line, hpos` — wait for specific scanline/horizontal position
@@ -149,7 +149,7 @@ CSpect includes a developer-grade **debugger** aimed at Next software authors. T
 | **Layer 2** | Live view of the layer 2 framebuffer (visible separately from the rendered display) |
 | **Sprites** | Sprite attribute table with pattern previews |
 | **Tilemap** | Tilemap pattern and attribute tables |
-| **Palette** | Current 256-entry palette as colour swatches |
+| **Palette** | Current 256-entry palette as color swatches |
 
 ### Breakpoints and Watchpoints
 
@@ -159,11 +159,11 @@ CSpect's debugger supports:
 - **Memory access breakpoints** — break when a memory address is read or written
 - **I/O port breakpoints** — break on `IN`/`OUT` to a specific port
 - **NEXTREG write breakpoints** — break when a specific Next register is written (useful for debugging layer 2 / copper / sprite interactions)
-- **Conditional breakpoints** — break only when a condition holds (`A = 0x42` or similar)
+- **Conditional breakpoints** — break only when a condition holds (`A = #42` or similar)
 
 ### NEXTREG Inspection
 
-The NEXTREG pane is CSpect's most distinctive Next-debugging feature. The Next exposes its hardware configuration through a 256-register configuration space (`NEXTREG #00`–`#FF`), and debugging layer 2 / copper / sprite behaviour often requires inspecting the current state of these registers. CSpect's NEXTREG pane shows:
+The NEXTREG pane is CSpect's most distinctive Next-debugging feature. The Next exposes its hardware configuration through a 256-register configuration space (`NEXTREG #00`–`#FF`), and debugging layer 2 / copper / sprite behavior often requires inspecting the current state of these registers. CSpect's NEXTREG pane shows:
 
 - The current value of every Next register
 - Recent changes (highlighted when a register was written in the last instruction)
@@ -183,11 +183,11 @@ A typical ZX Spectrum Next software project follows this workflow with CSpect:
 
 1. **Write code** in sjasmplus, Zeus, or z88dk (producing a `.nex` binary)
 2. **Run in CSpect** — drag-drop the `.nex` file onto CSpect or use the command line `cspect.exe -nex=myprogram.nex`
-3. **Test core behaviour** — verify the program runs correctly
+3. **Test core behavior** — verify the program runs correctly
 4. **Debug** — use CSpect's debugger to step through, inspect NEXTREG, view layer 2/sprite/tilemap state
 5. **Iterate** — fix bugs, recompile, re-test
 6. **Validate on real Next** — once CSpect testing passes, transfer to physical Next for final QA
-7. **Identify divergences** — if behaviour differs between CSpect and real hardware, document and adjust
+7. **Identify divergences** — if behavior differs between CSpect and real hardware, document and adjust
 
 ### NEX File Format
 
@@ -251,13 +251,13 @@ Officially no — CSpect is Windows-only. However, it runs well under **Wine** o
 Yes. CSpect's emulator is fundamentally a Spectrum emulator with Next extensions — it runs 48K, 128K, +2A, and +3 software. However, CSpect is not cycle-exact for original hardware timing, so software relying on sub-cycle ULA timing quirks may behave differently. Use Fuse or SpecEmu for cycle-exact original-hardware work.
 
 **Q: Does CSpect support the +3 floppy disk interface?**
-Partial support — CSpect can read `.dsk` images for +3 software compatibility, but +3-specific behaviours (the +3's `+3DOS` calls, the UPD765 FDC timing) are not perfectly emulated.
+Partial support — CSpect can read `.dsk` images for +3 software compatibility, but +3-specific behaviors (the +3's `+3DOS` calls, the UPD765 FDC timing) are not perfectly emulated.
 
 **Q: Can CSpect connect to the Internet via emulated ESP-12?**
 Limited. CSpect emulates the SPI interface and a subset of AT commands, but full WiFi connectivity is not emulated. For Next WiFi development, use real hardware or ZEsarUX.
 
 **Q: Is CSpect's copper cycle-accurate?**
-Mostly. CSpect's copper matches the documented behaviour, but timing-sensitive effects (e.g., copper programs that depend on cycle-exact interactions between copper, CPU, and video fetch) may diverge. The CSpect-vs-real notes maintained by the Next community document known divergences.
+Mostly. CSpect's copper matches the documented behavior, but timing-sensitive effects (e.g., copper programs that depend on cycle-exact interactions between copper, CPU, and video fetch) may diverge. The CSpect-vs-real notes maintained by the Next community document known divergences.
 
 **Q: What about the next-generation Next features (core 3)?**
 CSpect tracks Next firmware updates as they are released. Core 3 features (additional copper instructions, extended sprite attributes, etc.) are added in CSpect releases following their documentation by the Next team.
@@ -271,7 +271,7 @@ Via the CSpect thread on the **Sinclair ZX World** forums (the primary CSpect su
 
 CSpect is the **de facto reference emulator for the ZX Spectrum Next** — a focused, developer-grade software platform whose mission is to be the authoritative representation of the Next's hardware in software. While not cycle-exact for original-hardware timing (use Fuse or SpecEmu for that) and not as broad in coverage as ZEsarUX, CSpect's laser focus on the Next makes it indispensable for anyone developing or testing Next software.
 
-The combination of comprehensive Next hardware emulation, an excellent debugger with NEXTREG inspection and real-time layer 2/sprite/tilemap views, support for the `.nex` file format, and remote debugging makes CSpect the natural centre of the Next development workflow. Despite being closed-source and Windows-only, CSpect has earned its place as the first emulator Next developers reach for.
+The combination of comprehensive Next hardware emulation, an excellent debugger with NEXTREG inspection and real-time layer 2/sprite/tilemap views, support for the `.nex` file format, and remote debugging makes CSpect the natural center of the Next development workflow. Despite being closed-source and Windows-only, CSpect has earned its place as the first emulator Next developers reach for.
 
 ---
 
@@ -289,7 +289,7 @@ The combination of comprehensive Next hardware emulation, an excellent debugger 
 
 ### Cross-References
 - [Emulator Comparison](emulator_comparison.md) — CSpect vs other emulators at a glance
-- [Test Suites](test_suites.md) — test programs used to validate Next emulator behaviour
+- [Test Suites](test_suites.md) — test programs used to validate Next emulator behavior
 - [Fuse](fuse.md) — the cycle-accurate original-hardware workhorse
 - [ZEsarUX](zesarux.md) — the broad-coverage reverse engineering workstation (CSpect's main alternative for Next work)
 - [Cross-Platform Toolchain](../../09_toolchain/cross_platform_toolchain.md) — z88dk / sjasmplus targeting the Next

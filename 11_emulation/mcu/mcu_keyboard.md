@@ -4,7 +4,7 @@
 
 The Spectrum's keyboard is one of its most distinctive input peripherals — and one of its most disliked. The original **membrane keyboard** (on the 48K and 128K toastrack) has poor tactile feel, is prone to failure as the membrane traces degrade, and was designed for cost rather than ergonomics. The **+2** and **+3** versions improved things with a proper keyboard, but those rubber-keyed originals remain common.
 
-Replacing the keyboard with a modern input device — typically a **PS/2 keyboard** or **USB keyboard** — is one of the most popular upgrades. This requires a small MCU that translates the external keyboard's protocol into the Spectrum's **8×8 keyboard matrix** that the [ULA](mcu_ula.md) reads via port `0xFE`. The same MCU can also handle **joystick** input (Kempston, Sinclair, Fuller) and even **mouse** input (Kempston mouse), giving a single input adapter.
+Replacing the keyboard with a modern input device — typically a **PS/2 keyboard** or **USB keyboard** — is one of the most popular upgrades. This requires a small MCU that translates the external keyboard's protocol into the Spectrum's **8×8 keyboard matrix** that the [ULA](mcu_ula.md) reads via port `#FE`. The same MCU can also handle **joystick** input (Kempston, Sinclair, Fuller) and even **mouse** input (Kempston mouse), giving a single input adapter.
 
 This article covers the Spectrum keyboard matrix, the design of keyboard-controller MCUs, scan code translation, joystick and mouse emulation, and existing projects such as **ZXHIDKeyboard** and **ZXKey**. For background on the Spectrum's input hardware, see [the keyboard documentation](../../02_hardware/). For general MCU interfacing techniques, see [mcu_design_patterns.md](mcu_design_patterns.md).
 
@@ -14,18 +14,18 @@ This article covers the Spectrum keyboard matrix, the design of keyboard-control
 
 ### Physical Layout
 
-The Spectrum's keyboard is organised as an **8×8 matrix** — 8 row lines and 8 column lines, for up to 64 keys (the Spectrum uses 40 of these). Each key press shorts one row line to one column line.
+The Spectrum's keyboard is organized as an **8×8 matrix** — 8 row lines and 8 column lines, for up to 64 keys (the Spectrum uses 40 of these). Each key press shorts one row line to one column line.
 
 The matrix is scanned by the ULA:
 
-- **Row selection** — the CPU writes a value to the high byte (`A[8:15]`) of port `0xFE`. Each bit of the high byte selects one of the 8 row lines (bit 0 = row 0, bit 1 = row 1, etc.). Setting a bit **low** selects that row.
-- **Column read** — the CPU reads from port `0xFE`. The low 5 bits (`D[0:4]`) return the state of the 5 column lines used by the keyboard. A bit is **low** if the corresponding key is pressed in the selected row.
+- **Row selection** — the CPU writes a value to the high byte (`A[8:15]`) of port `#FE`. Each bit of the high byte selects one of the 8 row lines (bit 0 = row 0, bit 1 = row 1, etc.). Setting a bit **low** selects that row.
+- **Column read** — the CPU reads from port `#FE`. The low 5 bits (`D[0:4]`) return the state of the 5 column lines used by the keyboard. A bit is **low** if the corresponding key is pressed in the selected row.
 
 So to scan the entire keyboard, software reads 8 times — once for each row — each time setting a different bit low in the high address byte.
 
 ### Address Mapping
 
-The keyboard scan is done by reading from any I/O address of the form `0xFE` (low byte), with the high address byte selecting the row:
+The keyboard scan is done by reading from any I/O address of the form `#FE` (low byte), with the high address byte selecting the row:
 
 ```
 ; Z80 example: read row 0 (CAPS SHIFT through G)
@@ -37,14 +37,14 @@ Each row covers 5 keys (5 column lines are wired), giving a 40-key keyboard. The
 
 | Row (A[15:8] bit low) | Address | Keys (bits 0-4) |
 |---|---|---|
-| Bit 0 (row 0) | `0xFEFE` | CAPS, Z, X, C, V |
-| Bit 1 (row 1) | `0xFDFE` | A, S, D, F, G |
-| Bit 2 (row 2) | `0xFBFE` | Q, W, E, R, T |
-| Bit 3 (row 3) | `0xF7FE` | 1, 2, 3, 4, 5 |
-| Bit 4 (row 4) | `0xEFFE` | 0, 9, 8, 7, 6 |
-| Bit 5 (row 5) | `0xDFFE` | P, O, I, U, Y |
-| Bit 6 (row 6) | `0xBFFE` | ENTER, L, K, J, H |
-| Bit 7 (row 7) | `0x7FFE` | SPACE, SYM SHIFT, M, N, B |
+| Bit 0 (row 0) | `#FEFE` | CAPS, Z, X, C, V |
+| Bit 1 (row 1) | `#FDFE` | A, S, D, F, G |
+| Bit 2 (row 2) | `#FBFE` | Q, W, E, R, T |
+| Bit 3 (row 3) | `#F7FE` | 1, 2, 3, 4, 5 |
+| Bit 4 (row 4) | `#EFFE` | 0, 9, 8, 7, 6 |
+| Bit 5 (row 5) | `#DFFE` | P, O, I, U, Y |
+| Bit 6 (row 6) | `#BFFE` | ENTER, L, K, J, H |
+| Bit 7 (row 7) | `#7FFE` | SPACE, SYM SHIFT, M, N, B |
 
 The CAPS SHIFT and SYMBOL SHIFT keys appear in row 0 and row 7 respectively. Modifier keys (Shift, Symbol Shift) are read like any other key — they are not separate "modifier" inputs.
 
@@ -91,16 +91,16 @@ Modern keyboards offer:
 
 The same MCU that handles the keyboard can also handle joystick input. The Spectrum supports several joystick protocols (see [joystick documentation](../../03_io/)):
 
-- **Kempston joystick** — I/O port `0x1F`, bits 0-4 (right, left, down, up, fire)
+- **Kempston joystick** — I/O port `#1F`, bits 0-4 (right, left, down, up, fire)
 - **Sinclair 1 / Sinclair 2 joysticks** — keys 6-0 and 1-5 respectively, scanned via the keyboard matrix
-- **Fuller joystick** — I/O port `0x7F`
+- **Fuller joystick** — I/O port `#7F`
 - **Protek/AGF joystick** — another I/O port mapping
 
 A keyboard MCU can present a joystick interface to one of these ports, allowing a standard analog joystick (or a modern gamepad with USB) to control Spectrum games.
 
 ### Mouse Integration
 
-The **Kempston mouse** interface (port `0xFBDF` for X, `0xFFDF` for Y, buttons at `0xFADF`/`0xBFDF`) is supported by a small library of software (paint programs, GEOS, desktop interfaces). The same MCU that handles keyboard/joystick can also emulate the Kempston mouse, allowing a modern PS/2 or USB mouse to be used.
+The **Kempston mouse** interface (port `#FBDF` for X, `#FFDF` for Y, buttons at `#FADF`/`#BFDF`) is supported by a small library of software (paint programs, GEOS, desktop interfaces). The same MCU that handles keyboard/joystick can also emulate the Kempston mouse, allowing a modern PS/2 or USB mouse to be used.
 
 ---
 
@@ -162,13 +162,13 @@ This is invasive — it requires opening the Spectrum and disconnecting the memb
 
 ### Joystick Port
 
-Some keyboard adapters connect via the joystick port. The Kempston joystick port is bidirectional in a sense — software reads I/O port `0x1F` for joystick state. The MCU can present a Kempston joystick state that includes extra buttons (mapping keyboard keys to joystick buttons). This is non-invasive (plug into the joystick port) but is joystick-only — full keyboard emulation requires more.
+Some keyboard adapters connect via the joystick port. The Kempston joystick port is bidirectional in a sense — software reads I/O port `#1F` for joystick state. The MCU can present a Kempston joystick state that includes extra buttons (mapping keyboard keys to joystick buttons). This is non-invasive (plug into the joystick port) but is joystick-only — full keyboard emulation requires more.
 
 ### Expansion Port
 
-The Spectrum's expansion edge connector exposes the full CPU bus, including the keyboard scan I/O port. An MCU in the expansion port can intercept I/O reads to port `0xFE`, providing its own data in place of the ULA's keyboard scan. This is the most elegant approach — fully non-invasive, and gives full keyboard emulation.
+The Spectrum's expansion edge connector exposes the full CPU bus, including the keyboard scan I/O port. An MCU in the expansion port can intercept I/O reads to port `#FE`, providing its own data in place of the ULA's keyboard scan. This is the most elegant approach — fully non-invasive, and gives full keyboard emulation.
 
-This is how most commercial keyboard adapters work: they sit in the expansion port, intercept `IN A, (0xFE)` instructions, and substitute keyboard state from an attached PS/2 or USB keyboard.
+This is how most commercial keyboard adapters work: they sit in the expansion port, intercept `IN A, (#FE)` instructions, and substitute keyboard state from an attached PS/2 or USB keyboard.
 
 ---
 ## PS/2 Keyboard Input
@@ -182,7 +182,7 @@ The PS/2 protocol uses two signals:
 - **Clock** — generated by the keyboard, ~10-17 kHz (one byte every ~1 ms)
 - **Data** — serial data, 11 bits per byte (start bit, 8 data bits LSB first, parity, stop bit)
 
-The keyboard sends a **make code** when a key is pressed and a **break code** (`0xF0` followed by the make code) when a key is released. Each key has a unique scan code independent of position in the layout — e.g., the Q key (on a US layout) always sends scan code `0x1C` regardless of the layout sticker.
+The keyboard sends a **make code** when a key is pressed and a **break code** (`#F0` followed by the make code) when a key is released. Each key has a unique scan code independent of position in the layout — e.g., the Q key (on a US layout) always sends scan code `#1C` regardless of the layout sticker.
 
 The MCU receives these scan codes via an interrupt-driven GPIO (the clock line triggers an interrupt on each falling edge, and the data line is sampled).
 
@@ -333,7 +333,7 @@ A keyboard adapter MCU can also emulate joysticks. Several joystick protocols ex
 
 ### Kempston Joystick
 
-The **Kempston joystick** is the most widely supported protocol. It presents a single byte at I/O port `0x1F`:
+The **Kempston joystick** is the most widely supported protocol. It presents a single byte at I/O port `#1F`:
 
 | Bit | Meaning |
 |---|---|
@@ -344,7 +344,7 @@ The **Kempston joystick** is the most widely supported protocol. It presents a s
 | 4 | Fire (Button 1) |
 | 5-7 | Unused (typically 0) |
 
-An MCU emulating the Kempston joystick intercepts reads to port `0x1F` and returns the joystick state:
+An MCU emulating the Kempston joystick intercepts reads to port `#1F` and returns the joystick state:
 
 ```c
 uint8_t kempston_state = 0;
@@ -378,11 +378,11 @@ An MCU that handles keyboard input can trivially handle Sinclair joysticks — j
 
 ### Fuller Joystick
 
-The **Fuller joystick** uses I/O port `0x7F`, with bits 0-3 for direction and bit 6 for fire. Less commonly supported.
+The **Fuller joystick** uses I/O port `#7F`, with bits 0-3 for direction and bit 6 for fire. Less commonly supported.
 
 ### Protek/AGF Joystick
 
-The **Protek (also known as AGF)** joystick uses I/O port `0xDF`. Similar layout to Kempston but different port. Less commonly supported.
+The **Protek (also known as AGF)** joystick uses I/O port `#DF`. Similar layout to Kempston but different port. Less commonly supported.
 
 ### Gamepad Support
 
@@ -409,9 +409,9 @@ For Spectrum games that support only one fire button, multi-button gamepads must
 
 The **Kempston mouse** is an input device supported by a small library of software. It presents three registers at I/O ports:
 
-- **Port `0xFBDF`** — X position (read/write)
-- **Port `0xFFDF`** — Y position (read/write)
-- **Port `0xFADF`** / **`0xBFDF`** — buttons (read)
+- **Port `#FBDF`** — X position (read/write)
+- **Port `#FFDF`** — Y position (read/write)
+- **Port `#FADF`** / **`#BFDF`** — buttons (read)
 
 The X and Y positions are 8-bit counters that increment/decrement with mouse movement. The buttons register has:
 
@@ -470,7 +470,7 @@ Several open-source and commercial keyboard adapter projects exist:
 
 ### ZXHIDKeyboard
 
-**ZXHIDKeyboard** is an open-source project that connects a USB keyboard (and optionally mouse) to the Spectrum. Based on an RP2040 or STM32, it sits in the expansion port and intercepts port `0xFE` reads, providing keyboard state from the attached USB keyboard.
+**ZXHIDKeyboard** is an open-source project that connects a USB keyboard (and optionally mouse) to the Spectrum. Based on an RP2040 or STM32, it sits in the expansion port and intercepts port `#FE` reads, providing keyboard state from the attached USB keyboard.
 
 Features typically include:
 
@@ -531,7 +531,7 @@ For an RP2040 or STM32 adapter in the expansion port:
 1. **Build or buy an adapter** with the right edge connector
 2. **Plug it into the expansion port** — no internal modification
 3. **Connect a USB or PS/2 keyboard**
-4. **Power on** — the adapter intercepts port `0xFE` reads and substitutes the keyboard state
+4. **Power on** — the adapter intercepts port `#FE` reads and substitutes the keyboard state
 
 This is non-invasive and preserves the original Spectrum hardware.
 

@@ -40,7 +40,7 @@ ZEsarUX was created to fill gaps that other emulators didn't cover:
 
 - **Reverse engineering** — existing emulators had debuggers, but none had the depth of features that serious reverse engineering requires
 - **Clone coverage** — the Russian scene had UnrealSpeccy, but Western emulators (Fuse, Spectaculator) didn't cover Russian clones comprehensively
-- **Hardware research** — documenting the behaviour of obscure clones requires an emulator that can model them accurately
+- **Hardware research** — documenting the behavior of obscure clones requires an emulator that can model them accurately
 
 ZEsarUX has been particularly important for the **demoscene preservation** effort — many classic Russian demos use hardware tricks that only ZEsarUX models correctly, and ZEsarUX has been used to verify that these demos behave as intended.
 
@@ -180,7 +180,7 @@ ZEsarUX supports:
 - **Conditional breakpoints** — break only if a register or memory location matches a specific value
 - **Watchpoints** — monitor memory locations for changes without breaking
 
-The conditional breakpoint feature is particularly powerful — you can break when (say) `register A = 0x42 AND register HL = 0x4000`, which is invaluable for tracking down specific code paths.
+The conditional breakpoint feature is particularly powerful — you can break when (say) `register A = #42 AND register HL = #4000`, which is invaluable for tracking down specific code paths.
 
 ### Reverse Debugging
 
@@ -209,7 +209,7 @@ ZEsarUX allows the user to **edit assembly code while the emulator is running**.
 - The new instruction is assembled in place, modifying memory
 - Execution continues with the new code
 
-This is invaluable for **patching software** — fixing bugs, removing copy protection, modifying game behaviour — without having to exit, modify the source, reassemble, and reload.
+This is invaluable for **patching software** — fixing bugs, removing copy protection, modifying game behavior — without having to exit, modify the source, reassemble, and reload.
 
 ### Hardware Visualisations
 
@@ -228,7 +228,7 @@ These visualisations are particularly useful for understanding how the Spectrum'
 ZEsarUX supports **scripting** — automated sequences of debugger commands that can be replayed. This is useful for:
 
 - **Automated testing** — write a script that loads a piece of software, sets breakpoints, and reports results
-- **Batch analysis** — analyse many software titles automatically
+- **Batch analysis** — analyze many software titles automatically
 - **Reproducible debugging** — share a script that reproduces a specific debugging session
 
 ### Memory Search
@@ -260,7 +260,7 @@ The Next support makes ZEsarUX useful for cross-platform Next development, parti
 ZEsarUX is the standard tool for **reverse engineering commercial Spectrum software**:
 
 - Crackers and trainers use it to understand copy protection and modify games
-- Software preservationists use it to verify that archiving accurately captures original behaviour
+- Software preservationists use it to verify that archiving accurately captures original behavior
 - Researchers studying Spectrum game development use it to examine how classic software was written
 
 The combination of reverse debugging, real-time assembly editing, conditional breakpoints, and memory search makes ZEsarUX uniquely suited to this work.
@@ -270,7 +270,7 @@ The combination of reverse debugging, real-time assembly editing, conditional br
 Demoscene developers use ZEsarUX for **testing and debugging demos**:
 
 - Cycle-exact timing verification (especially for Russian clone demos)
-- Hardware trick validation (multicolour effects, raster interrupts)
+- Hardware trick validation (multicolor effects, raster interrupts)
 - Debugging crashes and glitches in complex effects
 
 For demos targeting obscure hardware (ATM Turbo, TSConf, BaseConf), ZEsarUX is often the only emulator that can run them at all.
@@ -280,8 +280,8 @@ For demos targeting obscure hardware (ATM Turbo, TSConf, BaseConf), ZEsarUX is o
 Researchers documenting the Spectrum's hardware use ZEsarUX to:
 
 - Study how specific clones differ from the Sinclair original
-- Verify timing diagrams against actual behaviour
-- Document undocumented peripheral behaviours
+- Verify timing diagrams against actual behavior
+- Document undocumented peripheral behaviors
 
 The hardware visualisations and broad clone coverage make ZEsarUX essential for this work.
 
@@ -312,7 +312,7 @@ A: In some cases, yes — particularly software targeting obscure Russian clones
 
 **Q: How does ZEsarUX's accuracy compare to Fuse?**
 
-A: Both are highly accurate for the hardware they cover. ZEsarUX tends to have more up-to-date modelling of newer clones, while Fuse is sometimes considered more battle-tested for original Sinclair hardware. In practice, both pass the standard test suites for the hardware they claim to support.
+A: Both are highly accurate for the hardware they cover. ZEsarUX tends to have more up-to-date modeling of newer clones, while Fuse is sometimes considered more battle-tested for original Sinclair hardware. In practice, both pass the standard test suites for the hardware they claim to support.
 
 **Q: Can I contribute to ZEsarUX?**
 
@@ -356,7 +356,7 @@ Combined with Fuse (general-purpose emulation), CSpect (Next reference), and Spe
 ### Reverse Engineering Resources
 
 - Various tutorials and write-ups that use ZEsarUX for specific analysis tasks
-- Demoscene productions that document ZEsarUX-specific behaviours
+- Demoscene productions that document ZEsarUX-specific behaviors
 
 ### Cross-References
 

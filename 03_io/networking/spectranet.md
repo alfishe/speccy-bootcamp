@@ -20,7 +20,7 @@ The problem was fundamental: the Spectrum had no networking hardware designed fo
 
 ### Development (2006–2007)
 
-**Andrew Owen** began developing the Spectranet in **2006**, inspired by the success of similar projects for other retro platforms (notably the **Contiki** TCP/IP stack ported to the Commodore 64). The goal was a modern Ethernet interface for the Spectrum, with a TCP/IP stack optimised for the Z80's limited resources.
+**Andrew Owen** began developing the Spectranet in **2006**, inspired by the success of similar projects for other retro platforms (notably the **Contiki** TCP/IP stack ported to the Commodore 64). The goal was a modern Ethernet interface for the Spectrum, with a TCP/IP stack optimized for the Z80's limited resources.
 
 Key design decisions:
 
@@ -66,9 +66,9 @@ timeline
 
 ### The ENC28J60 Ethernet Controller
 
-The Spectranet's hardware design centres on the **Microchip ENC28J60** Ethernet controller, a single-chip 10base-T IEEE 802.3-compliant controller with an SPI interface. The ENC28J60 handles:
+The Spectranet's hardware design centers on the **Microchip ENC28J60** Ethernet controller, a single-chip 10base-T IEEE 802.3-compliant controller with an SPI interface. The ENC28J60 handles:
 
-- **Physical layer (PHY)** — the analogue Ethernet signalling, collision detection, link integrity
+- **Physical layer (PHY)** — the analogue Ethernet signaling, collision detection, link integrity
 - **Media access control (MAC)** — Ethernet framing, source/destination MAC addressing, CRC generation/checking
 - **Buffer management** — internal 8 KB packet buffer for transmit and receive
 
@@ -80,7 +80,7 @@ The SPI clock rate on the Spectranet is roughly **4–8 MHz** depending on the h
 
 The Spectranet includes **32 KB of flash ROM** (typically an AT49F002 or similar), holding:
 
-- **Bootloader** — initialises the ENC28J60 and loads the firmware into the Spectrum's address space
+- **Bootloader** — initializes the ENC28J60 and loads the firmware into the Spectrum's address space
 - **TCP/IP stack** — the firmware implementation of TCP, UDP, ICMP, DHCP, DNS, and supporting protocols
 - **BASIC command interpreter hooks** — extends Sinclair BASIC with `*` network commands
 - **Socket API** — the machine-code-callable interface for C and assembly programs
@@ -125,7 +125,7 @@ The Spectranet's firmware, written in Z80 assembly, implements a substantial por
 | **HTTP** | Application | Web page retrieval (client and server) |
 | **FTP** | Application | File transfer |
 | **Telnet** | Application | Terminal remote login |
-| **NTP** | Application | Network time synchronisation |
+| **NTP** | Application | Network time synchronization |
 
 The Spectranet's TCP implementation handles the full TCP state machine: connection establishment (three-way handshake), data transfer with sliding window, acknowledgements, retransmission timeouts, and connection teardown. This is a substantial amount of code for a Z80 to manage, and the Spectranet firmware represents one of the most sophisticated TCP/IP stacks ever written for an 8-bit microcomputer.
 
@@ -157,7 +157,7 @@ The `*` commands are interpreted by the Spectranet ROM when present, allowing BA
 
 #### The Socket API (Assembly / C)
 
-For machine-code and C programs, the Spectranet exposes a **socket API** modelled on BSD sockets:
+For machine-code and C programs, the Spectranet exposes a **socket API** modeled on BSD sockets:
 
 | Function | Purpose |
 |---|---|
@@ -184,7 +184,7 @@ The most popular Spectranet application class is the **telnet client** — used 
 
 - **SpeccyTelnet** — Andrew Owen's reference telnet client
 - **SpecTel** — a more feature-rich telnet client with terminal emulation
-- **Various homebrew telnet clients** — community-contributed, often optimised for specific BBSes
+- **Various homebrew telnet clients** — community-contributed, often optimized for specific BBSes
 
 The [Telnet BBS Guide](https://tbbs.net) lists several dozen BBSes accessible via telnet, covering retro-computing, demoscene, and general-interest topics. A Spectrum with a Spectranet can telnet to any of them.
 
@@ -258,7 +258,7 @@ The original Spectranet firmware is **IPv4-only**. An IPv6 stack would be techni
 
 The **Spectranet** is the de facto modern networking interface for the ZX Spectrum. Released in 2007 by Andrew Owen, the Spectranet provides Ethernet connectivity and a ROM-resident TCP/IP stack supporting TCP, UDP, DHCP, DNS, HTTP, FTP, telnet, IRC, and NTP. The firmware is one of the most sophisticated TCP/IP implementations ever written for an 8-bit microcomputer.
 
-The Spectranet's hardware centres on the ENC28J60 single-chip Ethernet controller, communicating with the Spectrum via SPI. The firmware exposes both BASIC extensions (via the `*` command prefix) and a BSD-style socket API for C and assembly programs. A substantial software ecosystem has developed around the Spectranet, including telnet clients, FTP clients, HTTP clients/servers, IRC clients, and multiplayer games.
+The Spectranet's hardware centers on the ENC28J60 single-chip Ethernet controller, communicating with the Spectrum via SPI. The firmware exposes both BASIC extensions (via the `*` command prefix) and a BSD-style socket API for C and assembly programs. A substantial software ecosystem has developed around the Spectranet, including telnet clients, FTP clients, HTTP clients/servers, IRC clients, and multiplayer games.
 
 For modern retro-computing, the Spectranet is the choice for users who want maximum bandwidth and lowest latency. WiFi alternatives like [ZiFi](zifi.md) and [ESP WiFi](esp_wifi.md) offer cable-free convenience at lower bandwidth. The ZX Spectrum Next includes built-in WiFi that effectively replaces the Spectranet for Next users.
 
@@ -291,4 +291,4 @@ For modern retro-computing, the Spectranet is the choice for users who want maxi
 - [ZiFi](zifi.md) — WiFi alternative to Spectranet
 - [ESP WiFi](esp_wifi.md) — DIY ESP-based WiFi modules
 - [ZX Spectrum Next WiFi](zx_next_wifi.md) — the Next's built-in WiFi
-- [Cross-Platform Toolchain](../09_toolchain/cross_platform_toolchain.md) — z88dk's Spectranet C wrapper
+- [Cross-Platform Toolchain](../../09_toolchain/cross_platform_toolchain.md) — z88dk's Spectranet C wrapper

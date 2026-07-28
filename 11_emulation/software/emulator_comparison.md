@@ -2,7 +2,7 @@
 
 # Emulator Comparison — Choosing a ZX Spectrum Emulator
 
-The ZX Spectrum has been emulated in software since the early 1990s, with dozens of emulators having been written over the intervening three decades. Today, a handful of **actively-maintained, high-quality emulators** dominate the scene, each with its own strengths: some emphasise **accuracy** (cycle-exact timing, perfect compatibility with the original hardware), others **features** (beyond-Spectrum capabilities, modern development tools), and others **portability** (running on every desktop and mobile platform).
+The ZX Spectrum has been emulated in software since the early 1990s, with dozens of emulators having been written over the intervening three decades. Today, a handful of **actively-maintained, high-quality emulators** dominate the scene, each with its own strengths: some emphasize **accuracy** (cycle-exact timing, perfect compatibility with the original hardware), others **features** (beyond-Spectrum capabilities, modern development tools), and others **portability** (running on every desktop and mobile platform).
 
 This article provides a comprehensive comparison of ZX Spectrum emulators, helping you choose the right tool for your use case — whether that's casual retro gaming, software development for original hardware, demoscene production, preservation and archiving, or hardware research. Individual emulators have their own dedicated deep-dive articles: see [fuse.md](fuse.md), [zesarux.md](zesarux.md), and [cspect.md](cspect.md).
 
@@ -29,7 +29,7 @@ Modern Spectrum emulators can be grouped into several categories:
 
 **1. Cross-platform accuracy-focused emulators** — written to run on multiple operating systems with an emphasis on cycle-exact timing and faithful hardware reproduction. Examples: **Fuse**, **ZEsarUX**. These are the standard choice for serious Spectrum work.
 
-**2. Windows-focused emulators** — optimised for Windows, often with rich feature sets (debuggers, development tools, modern UI). Examples: **Spectaculator**, **UnrealSpeccy**, **CSpect**.
+**2. Windows-focused emulators** — optimized for Windows, often with rich feature sets (debuggers, development tools, modern UI). Examples: **Spectaculator**, **UnrealSpeccy**, **CSpect**.
 
 **3. Modern, Next-aware emulators** — emulators that include support for the ZX Spectrum Next and its enhanced capabilities (Z80N CPU, layer 2 graphics, etc.). Examples: **CSpect**, **ZEsarUX**, **UnoSCII**.
 
@@ -104,7 +104,7 @@ This article focuses primarily on the first three categories — the actively-ma
 
 - **Windows-only** — no native macOS or Linux builds (though it runs well under Wine)
 - **Closed source** — freeware but not open-source
-- **Narrower hardware focus** — optimised for Next and modern Spectrum-compatible machines; less coverage of original clones than ZEsarUX
+- **Narrower hardware focus** — optimized for Next and modern Spectrum-compatible machines; less coverage of original clones than ZEsarUX
 - **Limited original-hardware accuracy testing** — not the go-to for verifying 48K timings
 
 **Best for**: ZX Spectrum Next development, modern Spectrum-compatible software development, anyone working with the Next.
@@ -124,7 +124,7 @@ This article focuses primarily on the first three categories — the actively-ma
 **Weaknesses**:
 
 - **Windows-only**
-- **Commercial licence** — not free (though inexpensive)
+- **Commercial license** — not free (though inexpensive)
 - **No ZX Spectrum Next support**
 
 **Best for**: casual users wanting a polished experience on Windows, original-hardware purists.
@@ -233,7 +233,7 @@ For casual gaming — loading old Spectrum games and playing them — you want a
 
 **Recommendation: Fuse or ZEsarUX**
 
-For Spectrum software development — writing Z80 assembly or BASIC that will run on original hardware — accuracy is paramount. You need an emulator that catches timing bugs and correctly models contended memory, the ULA's video timing, and the AY-3-8912's audio behaviour. Fuse and ZEsarUX are the standards here; ZEsarUX has better debugging tools, Fuse has broader cross-platform availability.
+For Spectrum software development — writing Z80 assembly or BASIC that will run on original hardware — accuracy is paramount. You need an emulator that catches timing bugs and correctly models contended memory, the ULA's video timing, and the AY-3-8912's audio behavior. Fuse and ZEsarUX are the standards here; ZEsarUX has better debugging tools, Fuse has broader cross-platform availability.
 
 ### Use Case: ZX Spectrum Next Development
 
@@ -295,7 +295,7 @@ A: Many serious Spectrum enthusiasts have **at least two** installed — typical
 
 **Q: Are there any emulators that beat real hardware?**
 
-A: In terms of compatibility, modern Fuse, ZEsarUX, and CSpect pass virtually all known test suites and run essentially all original Spectrum software correctly. However, they cannot reproduce every subtle hardware behaviour (RF interference, CRT screen phosphor decay, joystick paddle drift, audio amplifier distortion). For some demoscene work that depends on these subtle effects, real hardware remains the ultimate test. See [cycle_exact_accuracy.md](cycle_exact_accuracy.md) for details.
+A: In terms of compatibility, modern Fuse, ZEsarUX, and CSpect pass virtually all known test suites and run essentially all original Spectrum software correctly. However, they cannot reproduce every subtle hardware behavior (RF interference, CRT screen phosphor decay, joystick paddle drift, audio amplifier distortion). For some demoscene work that depends on these subtle effects, real hardware remains the ultimate test. See [cycle_exact_accuracy.md](cycle_exact_accuracy.md) for details.
 
 **Q: Why are most Spectrum emulators free or cheap?**
 
@@ -311,7 +311,7 @@ A: Yes — the Spectrum has been emulated on the Amiga (early 1990s), the PC run
 
 **Q: Can emulators run software that real hardware can't?**
 
-A: Yes, in some cases — modern emulators can sometimes run "broken" software that crashes on real hardware due to subtle timing issues, because emulators may paper over the timing discrepancies. Conversely, some demos rely on hardware behaviour that emulators don't model (e.g., CPU register contents at reset). For software that targets real hardware, real hardware remains the gold standard.
+A: Yes, in some cases — modern emulators can sometimes run "broken" software that crashes on real hardware due to subtle timing issues, because emulators may paper over the timing discrepancies. Conversely, some demos rely on hardware behavior that emulators don't model (e.g., CPU register contents at reset). For software that targets real hardware, real hardware remains the gold standard.
 
 ---
 
@@ -319,7 +319,7 @@ A: Yes, in some cases — modern emulators can sometimes run "broken" software t
 
 The ZX Spectrum emulator scene is mature and diverse, with multiple high-quality options catering to different use cases. For most users, **one of the major four — Fuse, ZEsarUX, CSpect, or Spectaculator — will be the right choice**, depending on platform preferences and what kind of Spectrum work they're doing. Casual users should pick Fuse (cross-platform) or Spectaculator (Windows); serious developers should pick ZEsarUX or CSpect depending on whether they target original hardware or the Next.
 
-The modern emulator scene is the result of 30+ years of accumulated refinement, with each generation of emulators building on the discoveries of the previous one. The technical details of how these emulators achieve their accuracy — cycle-exact timing, contended memory modelling, audio clock management — are covered in [cycle_exact_accuracy.md](cycle_exact_accuracy.md). The test suites that validate emulator correctness are covered in [test_suites.md](test_suites.md). Individual emulators have their own dedicated deep-dive articles: [fuse.md](fuse.md), [zesarux.md](zesarux.md), [cspect.md](cspect.md).
+The modern emulator scene is the result of 30+ years of accumulated refinement, with each generation of emulators building on the discoveries of the previous one. The technical details of how these emulators achieve their accuracy — cycle-exact timing, contended memory modeling, audio clock management — are covered in [cycle_exact_accuracy.md](cycle_exact_accuracy.md). The test suites that validate emulator correctness are covered in [test_suites.md](test_suites.md). Individual emulators have their own dedicated deep-dive articles: [fuse.md](fuse.md), [zesarux.md](zesarux.md), [cspect.md](cspect.md).
 
 ---
 

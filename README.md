@@ -257,7 +257,7 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 
 **Section 03 — I/O (Snapshots / Storage / Peripherals / Networking)**
 
-*Snapshots & Replay sub-section: ✅ COMPLETE (4/4). Tape sub-section: ✅ COMPLETE (6/6). Floppy sub-section: ✅ COMPLETE (13/13). Hard Disk / SD sub-section: ✅ COMPLETE (6/6). Other I/O sub-sections (peripherals, networking) are in progress — see [PLAN.md](PLAN.md).*
+*Snapshots & Replay sub-section: ✅ COMPLETE (4/4). Tape sub-section: ✅ COMPLETE (6/6). Floppy sub-section: ✅ COMPLETE (13/13). Hard Disk / SD sub-section: ✅ COMPLETE (6/6). Peripherals sub-section: ✅ COMPLETE (1/1). Networking sub-section: ✅ COMPLETE (6/6).*
 
 **Snapshots & Replay** — machine-state capture formats ([sub-section README](03_io/snapshots/README.md))
 
@@ -309,12 +309,64 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [hdf_mgt_formats.md](03_io/storage/hdf_mgt_formats.md) | **Image formats** (.HDF / .IMG / .MGT / .VHD) — raw vs headered HDF, four-names-for-same-thing, loopback mounting, sparse/compression |
 | [joystick.md](03_io/peripherals/joystick.md) | Joystick interfaces: Kempston #1F, Sinclair/Interface 2, Cursor/Protek/AGF, Fuller, Timex, clone built-ins, unified multi-standard reader |
 
+**Networking** — ZX Net, modems, modern WiFi/Ethernet ([sub-section README](03_io/networking/README.md))
+
+| Article | Description |
+|---------|-------------|
+| [zx_net.md](03_io/networking/zx_net.md) | **ZX Net (1983)** — Sinclair's classroom LAN via Interface 1, 64-station daisy-chain, polling MAC, `*NET` / `*LOAD name N` ROM API, comparison with Econet |
+| [modems.md](03_io/networking/modems.md) | **Telephone modems** — acoustic couplers (V.21), direct-connect (V.23/V.22/V.32/V.34), Interface 1 RS-232, Prism VTX-5000, Prestel/Micronet 800, Russian FidoNet, BBS software |
+| [spectranet.md](03_io/networking/spectranet.md) | **Spectranet (2007+)** — Andrew Owen's Ethernet + TCP/IP interface, ENC28J60 SPI, BSD-style socket API via `RST #08`, software ecosystem (telnet/FTP/HTTP/IRC) |
+| [zifi.md](03_io/networking/zifi.md) | **ZiFi (2014)** — ESP8266 WiFi module + Hayes AT command set over UART, 3.3V/5V level shifting, ESP-01/ESP-12 modules, comparison with Spectranet |
+| [esp_wifi.md](03_io/networking/esp_wifi.md) | **ESP8266/ESP32 family** — broader WiFi solution landscape, boot modes, topologies (serial/SPI/parallel), firmware choices (AT/ESP-NOW/custom), cross-platform companion projects (WiC64, WiFi232) |
+| [zx_next_wifi.md](03_io/networking/zx_next_wifi.md) | **ZX Spectrum Next WiFi** — built-in ESP-12 on SPI (not UART), custom Next-team firmware, LwIP TCP/IP stack, NextBASIC `*WIFI` commands, up to 8 TCP/UDP connections with SSL/TLS |
+
+---
+
+### 11 — Emulation ✅ COMPLETE (20 articles)
+
+**Section 11 — Emulation** — software emulators, FPGA cores, MCU-based chip replacements
+
+**Software Emulators** — host-side Spectrum emulation ([sub-section README](11_emulation/software/README.md))
+
+| Article | Description |
+|---------|-------------|
+| [fuse.md](11_emulation/software/fuse.md) | **Fuse** — Free Unix Spectrum Emulator, the canonical cross-platform accurate emulator, GTK/Qt/SDL frontends, debuggers |
+| [zesarux.md](11_emulation/software/zesarux.md) | **ZEsarUX** — Second-cycle-exact emulator with TS-Conf, ZXEvolution, Pentagon support, comprehensive debugger, retro rendering options |
+| [cspect.md](11_emulation/software/cspect.md) | **CSpect** — Windows-based accurate emulator with NextReg/layer-2/sprite support, popular for ZX Spectrum Next development |
+| [emulator_comparison.md](11_emulation/software/emulator_comparison.md) | **Emulator comparison** — Fuse vs ZEsarUX vs CSpect vs UnrealSpeccy vs Spectaculator, accuracy, debugging, features matrix |
+| [cycle_exact_accuracy.md](11_emulation/software/cycle_exact_accuracy.md) | **Cycle-exact accuracy** — frame timing divergence, CRT vs LCD, host sync strategies, AY audio clocks, judder mitigation, worst-case Pentagon@60Hz conclusion |
+| [test_suites.md](11_emulation/software/test_suites.md) | **Test suites** — ZEXALL, FUSE test suite, Sensible Software tests, Yamagraph, application-specific test ROMs |
+
+**FPGA Cores** — synthesised hardware re-implementations ([sub-section README](11_emulation/fpga/README.md))
+
+| Article | Description |
+|---------|-------------|
+| [fpga_implementation.md](11_emulation/fpga/fpga_implementation.md) | **FPGA Spectrum implementations** — why FPGA differs from software emulation, gate-level reconstruction, vendor families, development workflow |
+| [fpga_timing_accuracy.md](11_emulation/fpga/fpga_timing_accuracy.md) | **Timing accuracy in FPGA cores** — sub-ns cycle-true reconstruction, ULA contention replication, video timing, audio clock matching |
+| [harlequin_sizif.md](11_emulation/fpga/harlequin_sizif.md) | **Harlequin & SIZIF** — Maxim Sichkov's gate-level ULA replacements for original Spectrum motherboards, repair-and-upgrade boards |
+| [zxevo.md](11_emulation/fpga/zxevo.md) | **ZX Evolution** — TS-Conf/Baseconf, ATM Turbo spiritual successor, Pentagon-compatible, configurable video modes, IDE/SD |
+| [zx_uno_core.md](11_emulation/fpga/zx_uno_core.md) | **ZX-Uno** — compact FPGA board, all-Spectrum-on-one-board, multi-core (Pentagon/Scorpion/48K/128K), WiFi and SD built-in |
+| [mist_mister_core.md](11_emulation/fpga/mist_mister_core.md) | **MiST & MiSTer cores** — Spectrum core on the MiSTer FPGA platform, alongside dozens of other retro computers, accurate and extensible |
+
+**MCU Chip Replacement** — replacing vintage silicon with microcontrollers ([sub-section README](11_emulation/mcu/README.md))
+
+| Article | Description |
+|---------|-------------|
+| [mcu_z80.md](11_emulation/mcu/mcu_z80.md) | **Z80 on MCU** — bit-banged and PIO-driven cycle-true Z80 emulation in firmware, libz80/z80ex cycle engines, drop-in chip replacement |
+| [mcu_ula.md](11_emulation/mcu/mcu_ula.md) | **ULA on MCU** — RP2040 PIO reconstruction of the Ferranti ULA, contention timing, video pipeline, floating bus behavior |
+| [mcu_fdc_vg93.md](11_emulation/mcu/mcu_fdc_vg93.md) | **WD1793/VG93 on MCU** — bit-banged floppy controller replacement, MFM decoding in firmware, SD-card image backing |
+| [mcu_psg_ay.md](11_emulation/mcu/mcu_psg_ay.md) | **AY-3-8910/YM2149 on MCU** — software PSG synthesis, RP2040 PWM/DMA audio, drop-in pin-compatible replacements |
+| [mcu_keyboard.md](11_emulation/mcu/mcu_keyboard.md) | **Keyboard on MCU** — PS/2 keyboard matrix scanning, scan-code translation, 8×5 Spectrum matrix emulation, debounce |
+| [mcu_video_adapter.md](11_emulation/mcu/mcu_video_adapter.md) | **Video adapter on MCU** — RGB/HDMI output from RP2040 PIO, scanline generation, multicolor effects, layer-2 style overlays |
+| [mcu_sd_interface.md](11_emulation/mcu/mcu_sd_interface.md) | **SD card interface on MCU** — SPI/SDIO from MCU, file-backed disk images, DivMMC/DivIDE emulation on a single MCU |
+| [n_go.md](11_emulation/mcu/n_go.md) | **N-Go — complete Spectrum on MCU** — synthesis article, RP2040 multicore architecture (Z80 core + ULA + PSG + SD), firmware structure |
+| [mcu_design_patterns.md](11_emulation/mcu/mcu_design_patterns.md) | **MCU design patterns** — bus interfacing (memory-mapped/port/IO/DMA), 74HCT vs 74HC level shifting, RP2040 PIO timing-critical I/O, GPIO drive, ring buffers, lock-free SPSC queues, common pitfalls |
+
 **Other sections**
 
 | Article | Description |
 |---------|-------------|
 | [io_port_map.md](10_references/io_port_map.md) | Complete I/O port reference: every port across all models, Black_Cat table with annotations, decoding bitmasks, per-model differences |
-| [cycle_exact_accuracy.md](11_emulation/software/cycle_exact_accuracy.md) | Frame timing divergence, CRT vs LCD, host sync strategies, AY audio clocks, judder mitigation techniques, emulator comparison, worst-case Pentagon@60Hz conclusion |
 
 ---
 

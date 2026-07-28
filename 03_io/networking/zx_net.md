@@ -6,7 +6,7 @@
 
 ZX Net was, by most accounts, a commercial failure. The Interface 1 itself sold modestly (~60,000 units through the Spectrum's commercial life), and classroom deployments of multi-Spectrum ZX Net networks were rare. But ZX Net is historically significant as **the first LAN product for a home computer**, predating Novell NetWare's broader PC adoption by several years and demonstrating that microcomputer networking was technically feasible at the consumer-peripheral price point.
 
-The Interface 1 also introduced **microdrives** (Sinclair's string-loop tape cartridge system) and the **RS-232 interface** — these are covered separately in [microdrives.md](../storage/microdrives.md) and the relevant peripheral documentation. This article covers **only the ZX Net networking** capability.
+The Interface 1 also introduced **microdrives** (Sinclair's string-loop tape cartridge system) and the **RS-232 interface** — these are covered in the broader storage documentation under [Storage Formats](../storage/README.md). This article covers **only the ZX Net networking** capability.
 
 ---
 
@@ -64,7 +64,7 @@ ZX Net used a **proprietary 9-pin D-sub connector** on the Interface 1 itself, b
 
 The cabling was simple and cheap but had limitations:
 
-- **Cable length** — Sinclair recommended no more than ~10 metres between adjacent stations, limiting total network span to perhaps 100 metres for a 10-station net
+- **Cable length** — Sinclair recommended no more than ~10 meters between adjacent stations, limiting total network span to perhaps 100 meters for a 10-station net
 - **No termination** — the bus relied on the Interface 1's input impedance rather than proper termination resistors, leading to signal reflections on longer runs
 - **Single-point failure** — unplugging a cable in the middle of the daisy chain disconnected everything downstream
 - **Electrical noise** — unshielded ribbon cable was susceptible to classroom-environment interference (fluorescent lights, CRT monitors)
@@ -79,9 +79,9 @@ Each Interface 1 was assigned a **network station number** in the range 1–64 b
 
 The station number was stored in Interface 1 RAM and persisted until power-off (it had to be re-entered on each cold boot). Station 0 was reserved for broadcast — packets addressed to station 0 were received by all stations.
 
-### Electrical Signalling
+### Electrical Signaling
 
-ZX Net used **single-wire serial signalling** at roughly **9600 bit/s** — comparable to the Spectrum's RS-232 baud rate. The protocol was asynchronous, byte-framed with start and stop bits. The Interface 1's ROM contained a simple device driver that bit-banged the network line using a Z80 timer loop.
+ZX Net used **single-wire serial signaling** at roughly **9600 bit/s** — comparable to the Spectrum's RS-232 baud rate. The protocol was asynchronous, byte-framed with start and stop bits. The Interface 1's ROM contained a simple device driver that bit-banged the network line using a Z80 timer loop.
 
 The 9600 bit/s rate sounds slow by modern standards, but in 1983 it was competitive with the alternatives (acoustic couplers ran at 300 bit/s; the BBC Micro's Econet ran at similar speeds). Transferring a 16 KB program between two Spectrums took roughly 15 seconds over ZX Net — versus several minutes for a tape load.
 
@@ -173,11 +173,11 @@ Each student could then load it:
 *LOAD "lesson1" N
 ```
 
-### File Naming and the Network Catalogue
+### File Naming and the Network Catalog
 
-ZX Net used the microdrive file naming convention — file names up to 10 characters, alphanumeric, no directories. The Interface 1 maintained a **per-cartridge file catalogue** that consumed the first few tracks of each microdrive. The catalogue had **no hierarchical structure** — just a flat list of (name, length, start-track) entries.
+ZX Net used the microdrive file naming convention — file names up to 10 characters, alphanumeric, no directories. The Interface 1 maintained a **per-cartridge file catalog** that consumed the first few tracks of each microdrive. The catalog had **no hierarchical structure** — just a flat list of (name, length, start-track) entries.
 
-When a station requested a file via `*LOAD name N`, the network protocol located the file by querying the network controller (station 1), which maintained the authoritative catalogue. This centralised the file system and made station 1's microdrive the de facto file server.
+When a station requested a file via `*LOAD name N`, the network protocol located the file by querying the network controller (station 1), which maintained the authoritative catalog. This centralised the file system and made station 1's microdrive the de facto file server.
 
 ---
 
@@ -199,7 +199,7 @@ Outside classrooms, ZX Net saw occasional hobbyist use for multiplayer experimen
 
 ### The Barley and Sinclair Research
 
-Several academic papers from 1983–1985 analysed ZX Net's design — notably **Ian Logan and Mike O'Hare's** disassembly of the Interface 1 ROM, which revealed the polling-based MAC and the packet format. These papers remain the primary technical reference for ZX Net today.
+Several academic papers from 1983–1985 analyzed ZX Net's design — notably **Ian Logan and Mike O'Hare's** disassembly of the Interface 1 ROM, which revealed the polling-based MAC and the packet format. These papers remain the primary technical reference for ZX Net today.
 
 ### Why ZX Net Failed Commercially
 
@@ -320,4 +320,4 @@ For modern exploration, **Fuse and ZEsarUX** provide complete ZX Net simulation.
 - [ZiFi](zifi.md) — modern WiFi module for the Spectrum
 - [ESP WiFi](esp_wifi.md) — ESP8266/ESP32-based WiFi modules
 - [ZX Spectrum Next WiFi](zx_next_wifi.md) — the Next's built-in WiFi capability
-- [Microdrives](../storage/microdrives.md) — the Interface 1's companion storage system
+- [Storage Formats](../storage/README.md) — Interface 1 microdrive and RS-232 documentation

@@ -8,7 +8,7 @@ These patterns are independent of any specific component. They concern three que
 
 1. **How does a 3.3V MCU talk to a 5V TTL bus safely?** — voltage level translation
 2. **How does a 133 MHz MCU keep up with nanosecond-level Z80 bus timing?** — timing-critical I/O
-3. **How do you organise firmware to handle video/audio/input/storage simultaneously without missing deadlines?** — software design patterns
+3. **How do you organize firmware to handle video/audio/input/storage simultaneously without missing deadlines?** — software design patterns
 
 This article covers bus interfacing techniques, level shifting (with the critical 74HCT vs 74HC threshold distinction), timing-critical I/O via PIO and DMA, GPIO drive strength and slew rate, common software patterns for real-time retro-computing firmware (state machines, ring buffers, double buffering, lock-free queues), pin multiplexing strategies, and power supply considerations. The patterns apply to any retro-computing MCU project — Spectrum, C64, Amiga, Atari ST, MSX, CPC, BBC Micro — not just the Spectrum.
 
@@ -24,11 +24,11 @@ The simplest interface — the MCU appears as a region of memory in the Spectrum
 
 In hardware terms, this means the MCU must:
 
-1. **Decode addresses** — watch the address bus, and only respond when the address falls within its assigned range (e.g., `0x0000-0x3FFF` for a ROM, or `0x1FFD`/`0x3FFD` for an I/O device)
+1. **Decode addresses** — watch the address bus, and only respond when the address falls within its assigned range (e.g., `#0000-#3FFF` for a ROM, or `#1FFD`/`#3FFD` for an I/O device)
 2. **Observe bus controls** — `MREQ_n` (memory request), `RD_n` (read), `WR_n` (write), `IORQ_n` (I/O request) — and respond accordingly
 3. **Drive the data bus** — during a read, the MCU must place the requested byte on `D[7:0]` within the bus timing window
 
-This is the standard interface for **memory expansions** (e.g., paged RAM at `0x0000-0x3FFF`), **DivMMC** (16 KB ROM paged into address space), and **interface ROMs**.
+This is the standard interface for **memory expansions** (e.g., paged RAM at `#0000-#3FFF`), **DivMMC** (16 KB ROM paged into address space), and **interface ROMs**.
 
 ### Port I/O
 
@@ -36,14 +36,14 @@ For smaller devices that don't need to occupy a memory region, **port I/O** uses
 
 The Spectrum uses port I/O for many peripherals:
 
-- Port `0xFE` — ULA (BORDER colour, beeper, EAR/MIC, keyboard matrix)
-- Port `0x1F` — Kempston joystick
-- Port `0xFFFD`/`0xBFFD` — AY-3-8912 PSG (128K)
-- Port `0x7FFD` — Memory banking (128K)
-- Port `0x1FFD` — +2A/+3 secondary banking
-- Ports `0x1F`/`0x3F`/`0x5F`/`0x7F` — Beta 128 FDC
+- Port `#FE` — ULA (BORDER color, beeper, EAR/MIC, keyboard matrix)
+- Port `#1F` — Kempston joystick
+- Port `#FFFD`/`#BFFD` — AY-3-8912 PSG (128K)
+- Port `#7FFD` — Memory banking (128K)
+- Port `#1FFD` — +2A/+3 secondary banking
+- Ports `#1F`/`#3F`/`#5F`/`#7F` — Beta 128 FDC
 
-The MCU monitors `IORQ_n` and the low byte of the address bus (`A[7:0]`), and responds with the matching peripheral behaviour. Since the Z80's I/O space is 256 ports (`A[7:0]`), partial decoding is common — the Kempston port at `0x1F` is sometimes decoded as just `A[5]=0`.
+The MCU monitors `IORQ_n` and the low byte of the address bus (`A[7:0]`), and responds with the matching peripheral behavior. Since the Z80's I/O space is 256 ports (`A[7:0]`), partial decoding is common — the Kempston port at `#1F` is sometimes decoded as just `A[5]=0`.
 
 ### DMA (Direct Memory Access)
 
@@ -182,7 +182,7 @@ A 133 MHz RP2040 has a clock period of **7.5 ns** — so one Z80 T-state spans ~
 For Z80 emulation on an MCU, two approaches to timing:
 
 - **Instruction-stepped** — emulate one Z80 instruction at a time, advancing the host clock by the instruction's cycle count. Simpler, but loses per-cycle timing fidelity (e.g., when the ULA checks for contention mid-instruction). Used by simple emulators like Lin Ke-Fong's `libz80`.
-- **Cycle-stepped** — emulate one Z80 T-state at a time, advancing the host clock by exactly 286 ns. More accurate, preserves per-cycle behaviour (contention, interrupt response, floating bus). Used by `z80ex` and serious emulators.
+- **Cycle-stepped** — emulate one Z80 T-state at a time, advancing the host clock by exactly 286 ns. More accurate, preserves per-cycle behavior (contention, interrupt response, floating bus). Used by `z80ex` and serious emulators.
 
 For a **bus slave** (responding to a real Z80), cycle-stepping isn't needed — the real Z80 generates the timing, and the MCU just responds. But for a **bus master** (MCU emulating the Z80 and driving the bus), cycle-stepping is essential for authentic timing.
 
@@ -410,7 +410,7 @@ int ring_pop(ring_t *r, uint8_t *byte) {
 }
 ```
 
-The power-of-2 size allows the `& (SIZE-1)` trick instead of `% SIZE`, which is faster. The `volatile` qualifiers ensure the compiler doesn't optimise away the reads.
+The power-of-2 size allows the `& (SIZE-1)` trick instead of `% SIZE`, which is faster. The `volatile` qualifiers ensure the compiler doesn't optimize away the reads.
 
 ### Lock-Free SPSC Queues
 
@@ -493,7 +493,7 @@ As a rule of thumb: if missing an event would cause a visible glitch (video tear
 
 When using multiple interrupts of different priorities, **priority inversion** can occur: a low-priority ISR holds a lock needed by a high-priority ISR, blocking it. On ARM Cortex-M, the **BASEPRI** register allows masking low-priority interrupts while allowing high-priority ones — use `critical_section` from the SDK which respects BASEPRI.
 
-The simplest defence: **avoid locks in ISRs**. ISRs should be short, fast, and lock-free — push to a ring buffer, set a flag, exit. All heavy processing happens in the main loop.
+The simplest defense: **avoid locks in ISRs**. ISRs should be short, fast, and lock-free — push to a ring buffer, set a flag, exit. All heavy processing happens in the main loop.
 
 
 ---
@@ -569,7 +569,7 @@ Add up the current consumption of all components:
 - **74HCT buffers** — ~5 mA each
 - **PS/2 keyboard** — ~100 mA (powered from host)
 - **HDMI/DVI output** — negligible (digital, low current)
-- **VGA output** — ~50 mA per colour channel at peak white (1V into 75Ω)
+- **VGA output** — ~50 mA per color channel at peak white (1V into 75Ω)
 
 Total: ~200-300 mA typical. The Spectrum's +5V rail can supply ~700 mA (issue 2) to ~1.5 A (issue 6+), so there's headroom.
 

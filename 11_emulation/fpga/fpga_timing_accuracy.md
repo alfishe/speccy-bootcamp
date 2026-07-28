@@ -2,9 +2,9 @@
 
 # Cycle-Exact Timing in Spectrum FPGA Cores
 
-The defining promise of an FPGA Spectrum recreation is **timing fidelity** — that software which depends on cycle-precise hardware behaviour will run identically on the FPGA as on a real Spectrum. This is what separates a faithful FPGA core from a software emulator: the latter can approximate the timing but cannot reproduce it exactly, because it runs on a host CPU that is many orders of magnitude faster than the original Z80 but is not synchronised to the Spectrum's pixel clock.
+The defining promise of an FPGA Spectrum recreation is **timing fidelity** — that software which depends on cycle-precise hardware behavior will run identically on the FPGA as on a real Spectrum. This is what separates a faithful FPGA core from a software emulator: the latter can approximate the timing but cannot reproduce it exactly, because it runs on a host CPU that is many orders of magnitude faster than the original Z80 but is not synchronized to the Spectrum's pixel clock.
 
-Achieving cycle-exact timing in an FPGA core is a substantial engineering challenge. The Spectrum's hardware has subtle, undocumented timing behaviours that software depends on — sometimes intentionally (demoscene effects), sometimes accidentally (copy protection, timing-sensitive loops). This article covers the timing requirements, the implementation techniques, common pitfalls, and verification methods used in modern Spectrum FPGA cores.
+Achieving cycle-exact timing in an FPGA core is a substantial engineering challenge. The Spectrum's hardware has subtle, undocumented timing behaviors that software depends on — sometimes intentionally (demoscene effects), sometimes accidentally (copy protection, timing-sensitive loops). This article covers the timing requirements, the implementation techniques, common pitfalls, and verification methods used in modern Spectrum FPGA cores.
 
 For the broader context of how FPGA cores are designed, see [fpga_implementation.md](fpga_implementation.md). For specific implementations and their timing fidelity, see [mist_mister_core.md](mist_mister_core.md), [zx_uno_core.md](zx_uno_core.md), [harlequin_sizif.md](harlequin_sizif.md), and [zxevo.md](zxevo.md).
 
@@ -14,17 +14,17 @@ For the broader context of how FPGA cores are designed, see [fpga_implementation
 
 ### The Spectrum's Timing Sensitivity
 
-The ZX Spectrum is a remarkably timing-sensitive machine. Because the ULA shares memory between the CPU and the video fetch circuitry, accessing contended memory (`0x4000`–`0x7FFF` in the 48K; specific pages in the 128K) causes the CPU to be held off for **specific numbers of cycles** depending on where the video beam is on the screen. This creates an indirect but precise relationship between CPU execution and video position.
+The ZX Spectrum is a remarkably timing-sensitive machine. Because the ULA shares memory between the CPU and the video fetch circuitry, accessing contended memory (`#4000`–`#7FFF` in the 48K; specific pages in the 128K) causes the CPU to be held off for **specific numbers of cycles** depending on where the video beam is on the screen. This creates an indirect but precise relationship between CPU execution and video position.
 
 Software can detect this relationship in several ways:
 
-- **Reading the floating bus** — port `0xFF` reads during specific cycles return the byte the ULA is fetching from video memory, revealing the current screen position
+- **Reading the floating bus** — port `#FF` reads during specific cycles return the byte the ULA is fetching from video memory, revealing the current screen position
 - **Timing instruction sequences** — by executing a known instruction sequence and checking how long it took, software can infer contention and thus video position
 - **Raster interrupts** — the INT signal is asserted at a known point in the frame, and software can use `HALT` + instruction counting to position itself relative to the video beam
 
 These techniques are used by:
 
-- **Demoscene effects** — multicolour (changing attributes mid-frame), raster bars, sync-scrollers effects, border colour cycling
+- **Demoscene effects** — multicolor (changing attributes mid-frame), raster bars, sync-scrollers effects, border color cycling
 - **Game copy protection** — timing checks that detect emulators (Latenite, Speedlock, Alkatraz)
 - **Loader routines** — tape loaders and custom disk loaders that rely on exact timing for data recovery
 - **Timing-based software** — some games use contention timing for animation pacing
@@ -33,12 +33,12 @@ These techniques are used by:
 
 The most demanding timing-dependent effects are in the demoscene:
 
-- **Multicolour** — changing attribute bytes during the horizontal border to produce a 2-pixel-wide colour effect (8 attributes per character line × 8 lines = 64 colours per character cell position per frame)
+- **Multicolor** — changing attribute bytes during the horizontal border to produce a 2-pixel-wide color effect (8 attributes per character line × 8 lines = 64 colors per character cell position per frame)
 - **Bobs** — software sprites drawn via attribute changes timed to specific scanlines
-- **Sync-scroller** — synchronising to a specific scanline and using timed memory writes to produce smooth horizontal scrolling
+- **Sync-scroller** — synchronizing to a specific scanline and using timed memory writes to produce smooth horizontal scrolling
 - **Copper bars** — changing the BORDER register at specific horizontal positions to produce coloured vertical bars
 
-These effects require **T-state-precise** timing — a 1-cycle error is visible as a misaligned pixel. A core that is off by even one T-state in its contention pattern will produce visible glitches in multicolour demos.
+These effects require **T-state-precise** timing — a 1-cycle error is visible as a misaligned pixel. A core that is off by even one T-state in its contention pattern will produce visible glitches in multicolor demos.
 
 ### Copy Protection
 
@@ -66,7 +66,7 @@ In a scanline-precise core, the implementation models the **gross** video timing
 
 Scanline-precise cores are **easier to implement** and work for the vast majority of software (95%+ of commercial games and most demos). They fail on:
 
-- Multicolour demos and other T-state-precise effects
+- Multicolor demos and other T-state-precise effects
 - Floating-bus-dependent software (some games detect screen position via floating bus)
 - Copy protection that checks contention patterns
 
@@ -76,8 +76,8 @@ Most early software emulators (and some FPGA cores for the ZX Spectrum Next, whi
 
 A T-state-precise core reproduces the Spectrum's timing **exactly** — every T-state of CPU execution is in the right relationship to the video beam. This requires:
 
-- **Exact contention pattern** — the precise pattern of WAIT assertions on each scanline, matching the original ULA's behaviour documented in Chris Smith's *The ZX Spectrum ULA: How to Design a Microcomputer*
-- **Exact floating bus behaviour** — port `0xFF` reads return the exact byte the ULA is fetching in each specific cycle, with the right latency
+- **Exact contention pattern** — the precise pattern of WAIT assertions on each scanline, matching the original ULA's behavior documented in Chris Smith's *The ZX Spectrum ULA: How to Design a Microcomputer*
+- **Exact floating bus behavior** — port `#FF` reads return the exact byte the ULA is fetching in each specific cycle, with the right latency
 - **Exact INT timing** — the INT signal is asserted at the exact cycle, and the CPU's response time matches
 - **Exact CPU cycle counts** — every Z80 instruction takes the documented number of T-states, including the undocumented cycle counts of `LD A,I`, `LD A,R`, `RLD`, `RRD`, `LDI`, `CPI`, etc.
 
@@ -116,7 +116,7 @@ To accomplish this without halting the CPU entirely, the ULA uses a clever asymm
 
 But the actual pattern is more nuanced: the WAIT signal is asserted based on a **specific timing schedule**, not uniformly. The pattern depends on:
 
-- Whether the access is to contended memory (`0x4000`–`0x7FFF` in 48K)
+- Whether the access is to contended memory (`#4000`–`#7FFF` in 48K)
 - The position within the current 4-T-state character cycle
 - The screen position (some scanlines have slightly different contention)
 
@@ -128,7 +128,7 @@ A typical FPGA contention implementation includes:
 
 1. **Video position counter** — tracks current scanline and pixel position
 2. **Contention window detector** — asserts an internal `in_contention` signal during the active display period (or specific sub-portions)
-3. **WAIT pattern generator** — a small state machine that drives `WAIT_n` according to the documented contention pattern, synchronised to the CPU's T-state counter
+3. **WAIT pattern generator** — a small state machine that drives `WAIT_n` according to the documented contention pattern, synchronized to the CPU's T-state counter
 4. **Address range check** — only assert WAIT when the CPU is actually accessing contended memory (`A[15] = 0` and `A[14] = 1` for the 48K; similar logic for 128K's contended pages)
 
 A simplified Verilog sketch:
@@ -148,12 +148,12 @@ The `contention_pattern_strobe` is the complex part — it's a small lookup or c
 
 ### Floating Bus
 
-The "floating bus" is one of the most distinctive Spectrum timing features. When the CPU reads from port `0xFF` (the keyboard/MIC port) during specific cycles, instead of reading the keyboard, it reads **whatever byte the ULA is currently fetching from video memory**. This happens because the ULA's video data is left on the shared bus during specific cycles.
+The "floating bus" is one of the most distinctive Spectrum timing features. When the CPU reads from port `#FF` (the keyboard/MIC port) during specific cycles, instead of reading the keyboard, it reads **whatever byte the ULA is currently fetching from video memory**. This happens because the ULA's video data is left on the shared bus during specific cycles.
 
-The floating bus's exact behaviour:
+The floating bus's exact behavior:
 
 - Returns valid video bytes only during specific cycles (when the ULA is performing a video fetch)
-- Returns `0xFF` (or random / last value) during other cycles
+- Returns `#FF` (or random / last value) during other cycles
 - The exact cycle offsets and the byte returned depend on the scanline position
 
 Reproducing this in FPGA requires routing the ULA's internal video fetch data onto the CPU data bus at the right cycles. The Harlequin and Sizif-512 cores implement this exactly; many software emulators approximate it (or omit it entirely, breaking some software).
@@ -166,7 +166,7 @@ The exact INT-to-CPU-response relationship matters for software that uses `HALT`
 
 ### Memory Banking Timing (128K)
 
-On the 128K / +2 / +3 Spectrums, the contended memory range changes depending on which RAM page is banked into `0x4000`–`0x7FFF`. Only certain pages are contended (page 5 in the original 128K layout), while others are uncontended. The FPGA core must track the current banking register and apply contention only to the appropriate pages.
+On the 128K / +2 / +3 Spectrums, the contended memory range changes depending on which RAM page is banked into `#4000`–`#7FFF`. Only certain pages are contended (page 5 in the original 128K layout), while others are uncontended. The FPGA core must track the current banking register and apply contention only to the appropriate pages.
 
 ---
 ## Common Pitfalls
@@ -187,7 +187,7 @@ Mitigation: use a PLL with low jitter specification, or derive the CPU clock dir
 
 ### Asynchronous Clock Domains
 
-If the FPGA core uses multiple clocks (e.g., a 28 MHz video clock divided down to 3.5 MHz, plus a separate 50 MHz clock for HDMI output), then signals crossing between clock domains need **synchronisation**. Improper synchronisation causes:
+If the FPGA core uses multiple clocks (e.g., a 28 MHz video clock divided down to 3.5 MHz, plus a separate 50 MHz clock for HDMI output), then signals crossing between clock domains need **synchronization**. Improper synchronization causes:
 
 - Metastability (signals in an indeterminate state for one or more cycles)
 - Glitches on critical signals (INT, WAIT_n)
@@ -215,16 +215,16 @@ On the 128K / +2 / +3 Spectrums, the memory banking is non-trivial. Errors in th
 
 Mitigation: exhaustive testing of all banking combinations, using both commercial software and dedicated banking test ROMs.
 
-### Undocumented Z80 Behaviour
+### Undocumented Z80 Behavior
 
-The Z80 has several undocumented but well-known instructions and behaviours:
+The Z80 has several undocumented but well-known instructions and behaviors:
 
 - **`SLL (HL)`** and variants — shift-left-logical with a 1 shifted in (different from `SLA`)
 - **`LD A,I` / `LD A,R` flags** — these instructions set the parity/overflow flag to the value of IFF2, which software can use to detect interrupts
 - **`LD A,B` after `LDI/CPI/INI`** — partially decoded flags
-- **`OUT (C),0`** — on NMOS Z80, writes 0; on CMOS Z80, writes 0xFF (this affects some software)
+- **`OUT (C),0`** — on NMOS Z80, writes 0; on CMOS Z80, writes #FF (this affects some software)
 
-The T80 core reproduces these correctly, but custom Z80 implementations may not. If a core uses a non-T80 Z80, it must verify these behaviours match a real NMOS Z80.
+The T80 core reproduces these correctly, but custom Z80 implementations may not. If a core uses a non-T80 Z80, it must verify these behaviors match a real NMOS Z80.
 
 ---
 
@@ -234,15 +234,15 @@ A core claimed to be cycle-exact must be **verified** against real hardware. Sev
 
 ### Test Programs
 
-Standard test programs that exercise specific timing behaviours:
+Standard test programs that exercise specific timing behaviors:
 
-- **FUSE test suite** — the emulator's reference test ROMs, covering Z80 instruction timing, contention patterns, INT timing, video timing. A core that passes FUSE tests matches real hardware on the tested behaviours.
-- **Sensible tests** (by Andrew Owen) — focused tests for floating bus behaviour and contention patterns
+- **FUSE test suite** — the emulator's reference test ROMs, covering Z80 instruction timing, contention patterns, INT timing, video timing. A core that passes FUSE tests matches real hardware on the tested behaviors.
+- **Sensible tests** (by Andrew Owen) — focused tests for floating bus behavior and contention patterns
 - **ZEXALL / ZEXDOC** — exhaustive Z80 instruction tests covering every opcode including undocumented ones
 - **Pentagon Diag ROM** — diagnostic ROM for Russian Pentagon clones, testing memory, video, sound, disk
-- **Float Spell** — a multicolour demo that produces visible errors if the contention pattern is off by even one T-state
+- **Float Spell** — a multicolor demo that produces visible errors if the contention pattern is off by even one T-state
 
-Running these in the core's simulation (via test bench) and on the actual FPGA hardware confirms cycle-exact behaviour.
+Running these in the core's simulation (via test bench) and on the actual FPGA hardware confirms cycle-exact behavior.
 
 ### Oscilloscope / Logic Analyser Comparison
 
@@ -260,7 +260,7 @@ Any difference between the real hardware and the FPGA reveals a timing bug.
 Running a large corpus of real Spectrum software and checking for visual/audio glitches:
 
 - **Commercial games** — especially those with copy protection (Speedlock, Alkatraz, Latenite)
-- **Demoscene productions** — multicolour demos (e.g., **BIFTRO**, **Refresh**, **_NUMBERS_**, **Eye of the Lizard**), raster effects, sync-scrollers demos
+- **Demoscene productions** — multicolor demos (e.g., **BIFTRO**, **Refresh**, **_NUMBERS_**, **Eye of the Lizard**), raster effects, sync-scrollers demos
 - **System software** — TR-DOS, 128K BASIC, etc.
 - **Peripheral-using software** — Beta 128 disk software, +3 DOS, AY music players
 
@@ -275,7 +275,7 @@ For video timing, the most sensitive test is to capture the exact pixel-by-pixel
 
 Different Spectrum implementations achieve different levels of timing accuracy:
 
-| Implementation | Approach | Cycle-Exact? | FUSE Tests | Demoscene Multicolour | Copy Protection |
+| Implementation | Approach | Cycle-Exact? | FUSE Tests | Demoscene Multicolor | Copy Protection |
 |---|---|---|---|---|---|
 | **Real Spectrum (48K/128K)** | Original hardware | ✅ Reference | ✅ | ✅ | ✅ |
 | **MiSTer Spectrum core** | T80 + cycle-exact ULA | ✅ | ✅ | ✅ | ✅ |
@@ -303,7 +303,7 @@ Key observations:
 
 **Q: My FPGA core passes all FUSE tests but some demos still glitch. Why?**
 
-A: The FUSE tests cover the *commonly tested* timing behaviours, but some demos probe edge cases that the tests don't exercise. Examples: very specific contention patterns on specific scanlines, floating bus behaviour during border area, or interactions between contention and `HALT`. The only complete verification is running a large corpus of real software and visual diffing.
+A: The FUSE tests cover the *commonly tested* timing behaviors, but some demos probe edge cases that the tests don't exercise. Examples: very specific contention patterns on specific scanlines, floating bus behavior during border area, or interactions between contention and `HALT`. The only complete verification is running a large corpus of real software and visual diffing.
 
 **Q: Do I need a real Spectrum for verification?**
 
@@ -331,7 +331,7 @@ A: Minimal at 3.5 MHz — any modern FPGA can run a Spectrum core at this speed 
 
 **Q: Why does my core work in simulation but glitch on hardware?**
 
-A: This is the classic sim-vs-hardware gap. Causes: PLL jitter, asynchronous signal crossings, timing violations not modelled in simulation, or RTL that synthesises differently than expected. Use static timing analysis (STA) to confirm the synthesised design meets timing at the target clock, and verify with on-hardware logic analyser (e.g., Altera SignalTap, Xilinx ChipScope).
+A: This is the classic sim-vs-hardware gap. Causes: PLL jitter, asynchronous signal crossings, timing violations not modeled in simulation, or RTL that synthesises differently than expected. Use static timing analysis (STA) to confirm the synthesised design meets timing at the target clock, and verify with on-hardware logic analyser (e.g., Altera SignalTap, Xilinx ChipScope).
 
 ---
 
@@ -340,7 +340,7 @@ A: This is the classic sim-vs-hardware gap. Causes: PLL jitter, asynchronous sig
 Cycle-exact timing is the defining quality metric for a Spectrum FPGA core. Achieving it requires:
 
 1. **T80 or equivalent cycle-accurate Z80** — including undocumented instructions and flags
-2. **ULA recreation** with the exact contention pattern, floating bus behaviour, INT timing, and video address generation documented in Chris Smith's *The ZX Spectrum ULA* book
+2. **ULA recreation** with the exact contention pattern, floating bus behavior, INT timing, and video address generation documented in Chris Smith's *The ZX Spectrum ULA* book
 3. **Careful handling of clock domains, PLL jitter, and bus arbitration** to avoid subtle race conditions
 4. **Comprehensive verification** via FUSE tests, Sensible tests, ZEXALL, software compatibility, and ideally oscilloscope comparison with real hardware
 
@@ -360,7 +360,7 @@ Modern high-quality cores — MiSTer, ZX-Uno, Harlequin, Sizif-512, ZX Evolution
 - **FUSE emulator test suite** — the standard test ROMs for Z80 and ULA timing verification
 - **Sensible tests** — Andrew Owen's floating bus / contention tests
 - **World of Spectrum forums** — discussions of timing edge cases and software compatibility
-- **The Demoscene timing tests** — Float Spell, BIFTRO, and other multicolour demos used as integration tests
+- **The Demoscene timing tests** — Float Spell, BIFTRO, and other multicolor demos used as integration tests
 
 ## Cross-references
 

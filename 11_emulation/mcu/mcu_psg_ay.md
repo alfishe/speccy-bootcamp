@@ -50,7 +50,7 @@ The host writes to these registers via a 2-step protocol:
 1. Write the register number to the **address latch** (via a specific I/O port)
 2. Write the data byte to the **data register** (via another I/O port)
 
-On the Spectrum 128K, the address port is `0xFFFD` and the data port is `0xBFFD`. Reads from `0xFFFD` return the currently-selected register's value.
+On the Spectrum 128K, the address port is `#FFFD` and the data port is `#BFFD`. Reads from `#FFFD` return the currently-selected register's value.
 
 ### Sound Generation
 
@@ -102,9 +102,9 @@ Original AY-3-8912 chips use a **logarithmic 4-bit DAC** per channel — giving 
 
 The original Spectrum combines the three PSG channels into a single mono output. Modern recreations often provide **stereo** output, separating the channels:
 
-- **ABC stereo** — A on left, B in centre, C on right (the most common convention)
-- **ACB stereo** — A on left, C in centre, B on right
-- **MONO** — all channels on both left and right (original behaviour)
+- **ABC stereo** — A on left, B in center, C on right (the most common convention)
+- **ACB stereo** — A on left, C in center, B on right
+- **MONO** — all channels on both left and right (original behavior)
 
 Stereo output is a significant enhancement for music software — many AY music files (`.ay`, `.ym` files) sound substantially better in stereo.
 
@@ -308,8 +308,8 @@ Many AY music files (`.ay`, `.ym` formats) include stereo metadata indicating wh
 
 Some Spectrum software, particularly demoscene productions, use **two PSGs** for 6-channel music:
 
-- The first PSG responds to ports `0xFFFD` / `0xBFFD`
-- The second PSG responds to ports `0x3FFD` / `0x5FFD` (or `0x7FFD` on some clones)
+- The first PSG responds to ports `#FFFD` / `#BFFD`
+- The second PSG responds to ports `#3FFD` / `#5FFD` (or `#7FFD` on some clones)
 
 An MCU can emulate multiple PSGs trivially — just allocate additional `ay_state_t` structures:
 

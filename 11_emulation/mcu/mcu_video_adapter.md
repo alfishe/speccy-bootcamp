@@ -6,7 +6,7 @@ The Spectrum's video output — **composite PAL** on the 48K toastrack, **RGB** 
 
 A **video adapter** based on an MCU takes the Spectrum's video output (or its video memory contents) and converts it to a modern format: **VGA**, **HDMI**, or **DVI**. The adapter may also perform **upscaling** (since the Spectrum's 256×192 resolution is tiny on a 1920×1080 display) and add visual enhancements like **scanlines** (to mimic the CRT look).
 
-This article covers the design of video adapters on RP2040 and other MCUs, including VGA output, HDMI via Pico DVI, scanline generation, and upscaling algorithms. For the Spectrum's original video output, see [the video documentation](../../08_graphics/). For background on MCU video generation, see [ULA on MCU](mcu_ula.md).
+This article covers the design of video adapters on RP2040 and other MCUs, including VGA output, HDMI via Pico DVI, scanline generation, and upscaling algorithms. For the Spectrum's original video output, see [Color System](../../05_development/05_display_and_timing/color_system.md) and [Screen Pixel Layout](../../05_development/03_memory_and_io/screen_layout.md). For background on MCU video generation, see [ULA on MCU](mcu_ula.md).
 
 ---
 
@@ -28,7 +28,7 @@ A video adapter solves these problems by:
 
 1. **Receiving the Spectrum's video** — either by intercepting the video signal directly, by reading video memory (when the adapter is integrated with an [MCU-based ULA replacement](mcu_ula.md)), or by emulating the video output from scratch (in a full software emulator)
 2. **Converting to a modern format** — VGA (analog RGB + TTL sync), HDMI/DVI (digital), or even DisplayPort
-3. **Upscaling** the 256×192 (or 512×192 with multicolour) image to a resolution the modern display can show natively
+3. **Upscaling** the 256×192 (or 512×192 with multicolor) image to a resolution the modern display can show natively
 4. **Adding optional CRT effects** — scanlines, phosphor mask, bloom, to recreate the original CRT look
 
 ---
@@ -53,13 +53,13 @@ This is the "authentic but low-quality" option — useful for original CRT telev
 
 VGA monitors accept a wide range of resolutions and refresh rates, making it ideal for retro computing. The Spectrum's 50 Hz refresh can be supported by most VGA monitors (though some only accept 60 Hz).
 
-The RP2040 can drive VGA output directly via its PIO — see the [PicoVGA](https://github.com/PandaHood/PicoVGA) and similar projects. A simple resistor DAC (3 resistors per colour, for 3-bit colour depth) provides the analog RGB signals, and the PIO generates HSYNC and VSYNC.
+The RP2040 can drive VGA output directly via its PIO — see the [PicoVGA](https://github.com/PandaHood/PicoVGA) and similar projects. A simple resistor DAC (3 resistors per color, for 3-bit color depth) provides the analog RGB signals, and the PIO generates HSYNC and VSYNC.
 
 ### HDMI/DVI
 
 **HDMI** and **DVI** (which share the same video signal format, just different connectors) are the modern standard. The signal is fully digital — the video frame is encoded as a stream of pixels with explicit sync signals in the data stream.
 
-Generating HDMI/DVI from an MCU is harder than VGA because of the high data rate (even at 640×480, the pixel clock is 25 MHz, requiring 250 Mbps per colour channel). Two approaches:
+Generating HDMI/DVI from an MCU is harder than VGA because of the high data rate (even at 640×480, the pixel clock is 25 MHz, requiring 250 Mbps per color channel). Two approaches:
 
 - **Bit-banged DVI** via the RP2040's PIO — demonstrated by the [Pico DVI](https://github.com/Wren6991/pico-dvi) project. The PIO shifts out DVI data at high speed, encoding TMDS via PIO state machines. This works for low resolutions (640×480, 800×600) but is at the edge of the RP2040's capabilities.
 - **External HDMI encoder** — an IC like the **ADV7513** or **TFP410** takes digital pixel data (parallel or serial) and produces the HDMI signal. This offloads the high-speed encoding from the MCU.
@@ -75,11 +75,11 @@ DisplayPort is rare in MCU projects — its encoding is more complex than HDMI, 
 
 A simple VGA output from RP2040 requires:
 
-- **3-bit colour per channel** (3 resistors per R/G/B = 9 resistors total) — for 512 colours (8×8×8)
+- **3-bit color per channel** (3 resistors per R/G/B = 9 resistors total) — for 512 colors (8×8×8)
 - **HSYNC** and **VSYNC** — driven directly from GPIO (5V TTL, no level shifting needed for VGA)
 - **VGA connector** — a standard 15-pin DSUB connector
 
-For higher colour depth, an external DAC like the **ADV7125** (3-channel 8-bit video DAC) provides 24-bit colour (16.7M colours).
+For higher color depth, an external DAC like the **ADV7125** (3-channel 8-bit video DAC) provides 24-bit color (16.7M colors).
 
 ### PIO Program for VGA
 
@@ -99,12 +99,12 @@ The [PicoVGA](https://github.com/PandaHood/PicoVGA) library by Miroslav Nemecek 
 - Defines standard VGA modes (320×240, 640×480, 800×600, etc.)
 - Provides a frame buffer in RP2040 RAM
 - Handles the PIO programming and DMA setup
-- Supports 8-bit palettised colour (256 colours) or 4-bit (16 colours)
+- Supports 8-bit palettised color (256 colors) or 4-bit (16 colors)
 - Includes primitives for drawing pixels, lines, rectangles, text
 
 Using PicoVGA, a video adapter is straightforward:
 
-1. Initialise the library with the desired VGA mode (e.g., 640×480 at 60 Hz)
+1. Initialize the library with the desired VGA mode (e.g., 640×480 at 60 Hz)
 2. In the main loop, read the Spectrum's video memory (or receive it via SPI/UART)
 3. Convert each Spectrum pixel to the palette
 4. Update the PicoVGA frame buffer
@@ -130,11 +130,11 @@ For 50 Hz operation (matching the Spectrum), a custom VGA mode is needed — e.g
 
 The [Pico DVI](https://github.com/Wren6991/pico-dvi) project by Luke Wren demonstrates that the RP2040 can generate DVI signals via its PIO. The approach:
 
-1. **Three TMDS channels** — DVI/HDMI uses three Transition Minimised Differential Signalling (TMDS) channels for R, G, B (plus a fourth for clock)
+1. **Three TMDS channels** — DVI/HDMI uses three Transition Minimized Differential Signaling (TMDS) channels for R, G, B (plus a fourth for clock)
 2. **PIO shifts out TMDS** — three PIO state machines, one per TMDS channel, shift out the 10-bit TMDS symbols at the pixel clock rate (typically 25 MHz for 640×480)
 3. **External circuit** — three pairs of GPIO pins (differential), with a simple resistor network to provide the 100-ohm differential impedance
 
-The Pico DVI library provides a frame buffer and handles the TMDS encoding (which is non-trivial — each 8-bit pixel value is mapped to a 10-bit TMDS symbol that minimises transitions).
+The Pico DVI library provides a frame buffer and handles the TMDS encoding (which is non-trivial — each 8-bit pixel value is mapped to a 10-bit TMDS symbol that minimizes transitions).
 
 ### Limitations
 
@@ -158,9 +158,9 @@ The ADV7513 is more expensive (~£10) than the RP2040 (~£1), but provides:
 ---
 ## Upscaling
 
-The Spectrum's video memory produces a 256×192 image (or 512×192 in multicolour effects). Modern displays want at least 640×480, and often 1280×720 or 1920×1080. The adapter must upscale the Spectrum's image.
+The Spectrum's video memory produces a 256×192 image (or 512×192 in multicolor effects). Modern displays want at least 640×480, and often 1280×720 or 1920×1080. The adapter must upscale the Spectrum's image.
 
-### Nearest Neighbour (Integer Scaling)
+### Nearest Neighbor (Integer Scaling)
 
 The simplest upscaling is **integer scaling** — each Spectrum pixel becomes a 2×2, 3×3, or 4×4 block in the output. For example, scaling 256×192 to 768×576 is a 3× scale (each pixel becomes a 3×3 block).
 
@@ -233,7 +233,7 @@ The strength of the scanline effect can be configured — 50% darkening is stron
 
 ### Phosphor Mask
 
-A more advanced CRT effect adds a **phosphor mask** — vertical stripes of colour subpixels, mimicking the shadow mask of a colour CRT. This is more computationally intensive and is rarely implemented in MCU video adapters (more common in software emulators).
+A more advanced CRT effect adds a **phosphor mask** — vertical stripes of color subpixels, mimicking the shadow mask of a color CRT. This is more computationally intensive and is rarely implemented in MCU video adapters (more common in software emulators).
 
 ### Bloom and Glow
 
@@ -302,7 +302,7 @@ These typically use a small FPGA or fast MCU to sample the video and re-emit it 
 |---|---|---|---|---|
 | Composite PAL (recreated) | ~£1 (RP2040 + resistors) | Medium | Low (blurry) | Original CRT TVs |
 | VGA (resistor DAC) | ~£1 (RP2040 + 9 resistors) | Easy | Good (sharp pixels) | VGA monitors, modern displays with VGA |
-| VGA (ADV7125 DAC) | ~£5 (RP2040 + ADV7125) | Medium | High (24-bit colour) | High-quality VGA |
+| VGA (ADV7125 DAC) | ~£5 (RP2040 + ADV7125) | Medium | High (24-bit color) | High-quality VGA |
 | HDMI (Pico DVI) | ~£2 (RP2040 + resistors) | Hard | High | Modern HDMI displays |
 | HDMI (ADV7513) | ~£12 (RP2040 + ADV7513) | Medium | High | Modern HDMI displays with audio |
 | RGB-to-HDMI (Pi Zero) | ~£15 (Pi Zero + addon) | Medium | Very high | Best quality conversion |
@@ -355,7 +355,7 @@ Many modern monitors (especially in the US) are designed for 60 Hz minimum and d
 
 ### How do I handle attribute clash?
 
-The Spectrum's attribute clash (where two colours in the same 8×8 attribute block conflict) is a fundamental property of the original hardware. The video adapter should preserve it — attempting to "fix" attribute clash would make the image non-authentic.
+The Spectrum's attribute clash (where two colors in the same 8×8 attribute block conflict) is a fundamental property of the original hardware. The video adapter should preserve it — attempting to "fix" attribute clash would make the image non-authentic.
 
 If the user wants to reduce attribute clash, they should use Spectrum software designed for hi-res modes (like the **Timex HiColor** mode or software-specific enhancements).
 

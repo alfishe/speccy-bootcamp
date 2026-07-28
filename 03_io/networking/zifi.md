@@ -16,7 +16,7 @@ ZiFi emerged in the early-to-mid 2010s as ESP8266 modules became absurdly cheap 
 
 The ZX Spectrum's networking history runs through several eras: the 1983 [ZX Net](zx_net.md) classroom LAN, the 1980s–1990s [modem](modems.md) era with Prestel/BBS/FidoNet, and the 2007+ [Spectranet](spectranet.md) bringing Ethernet and TCP/IP. Through the 2000s and early 2010s, the Spectranet remained the only practical Internet interface for original Spectrum hardware — but it required Ethernet cabling to a router, which was awkward for hobbyists using a Spectrum in the living room or at demoscene parties.
 
-The technical breakthrough that changed the calculus was the **Espressif ESP8266**, released in 2014. The ESP8266 was a remarkable chip: a 32-bit Tensilica core running at 80 MHz, with built-in WiFi (IEEE 802.11 b/g/n), TCP/IP stack in firmware, GPIO pins, and SPI/I²C/UART interfaces — all for around £2–£3 per module. It was originally marketed as a cheap WiFi adapter for microcontrollers, but the hobbyist community quickly realised it could be used in the other direction: as a WiFi bridge for *any* device with a UART, including 1980s 8-bit micros like the Spectrum.
+The technical breakthrough that changed the calculus was the **Espressif ESP8266**, released in 2014. The ESP8266 was a remarkable chip: a 32-bit Tensilica core running at 80 MHz, with built-in WiFi (IEEE 802.11 b/g/n), TCP/IP stack in firmware, GPIO pins, and SPI/I²C/UART interfaces — all for around £2–£3 per module. It was originally marketed as a cheap WiFi adapter for microcontrollers, but the hobbyist community quickly realized it could be used in the other direction: as a WiFi bridge for *any* device with a UART, including 1980s 8-bit micros like the Spectrum.
 
 ### ZiFi Development
 
@@ -85,7 +85,7 @@ The ESP8266 is packaged in many different **module** formats, of which the most 
 
 ### Spectrum-Side Connection
 
-The ESP8266 is a 3.3V device; the Spectrum's edge connector and serial ports operate at **TTL 5V levels** (the Sinclair RS-232 port uses 0V/5V signalling, not true ±12V RS-232). Directly connecting a 5V signal to the ESP8266's 3.3V inputs can damage it; conversely, the ESP8266's 3.3V output is technically within the Spectrum's 5V logic threshold and usually works, but level shifting is recommended.
+The ESP8266 is a 3.3V device; the Spectrum's edge connector and serial ports operate at **TTL 5V levels** (the Sinclair RS-232 port uses 0V/5V signaling, not true ±12V RS-232). Directly connecting a 5V signal to the ESP8266's 3.3V inputs can damage it; conversely, the ESP8266's 3.3V output is technically within the Spectrum's 5V logic threshold and usually works, but level shifting is recommended.
 
 The ZiFi hardware therefore consists of three elements:
 
@@ -200,7 +200,7 @@ Each line marked `>` is sent by the Spectrum; each line marked `<` is received f
 
 The Spectrum-side driver is typically written in Z80 assembly (or C, compiled with z88dk). It must:
 
-1. **Manage the serial port** — initialise the chosen serial interface (Interface 1 RS-232, Beta 128 serial, etc.) at the agreed baud rate
+1. **Manage the serial port** — initialize the chosen serial interface (Interface 1 RS-232, Beta 128 serial, etc.) at the agreed baud rate
 2. **Send AT commands** — assemble command strings with arguments, append `\r\n`, transmit
 3. **Parse responses** — wait for `OK`, `ERROR`, or `FAIL`; handle unsolicited `+IPD` notifications
 4. **Manage receive notifications** — interrupt-driven or polling, deliver received data to the application

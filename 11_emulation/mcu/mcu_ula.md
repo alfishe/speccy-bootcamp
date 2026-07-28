@@ -4,7 +4,7 @@
 
 The Spectrum's ULA (Uncommitted Logic Array) is the most complex and most failure-prone component of the original hardware. Original Ferranti ULAs in 48K Spectrums are now 40+ years old and frequently fail — and there are no direct replacements, since Ferranti's ULA business was sold to Plessey in the late 1980s and the tooling was scrapped. A modern recreation of the ULA using a microcontroller (MCU) is therefore one of the most valuable projects in retro-computing preservation.
 
-Replacing the ULA with an MCU requires emulating not just the video generation (the most visible function) but also the memory arbitration (contention), the I/O ports, the INT signal generation, and the various timing signals. This is substantially more complex than [Z80 emulation on MCU](mcu_z80.md) because the ULA's behaviour is tightly coupled to the video beam position and to the CPU's bus cycle.
+Replacing the ULA with an MCU requires emulating not just the video generation (the most visible function) but also the memory arbitration (contention), the I/O ports, the INT signal generation, and the various timing signals. This is substantially more complex than [Z80 emulation on MCU](mcu_z80.md) because the ULA's behavior is tightly coupled to the video beam position and to the CPU's bus cycle.
 
 This article covers the design of ULA-on-MCU implementations, including video generation via RP2040 PIO, contention state machines, floating bus emulation, and composite video output. For background on the ULA itself, see Chris Smith's *The ZX Spectrum ULA: How to Design a Microcomputer*. For FPGA-based ULA recreation (as used in the Harlequin), see [harlequin_sizif.md](../fpga/harlequin_sizif.md).
 
@@ -26,7 +26,7 @@ A failed ULA cannot be repaired — the chip must be replaced. Since original Fe
 
 ### ULA Knowledge
 
-Chris Smith's reverse-engineering work, documented in *The ZX Spectrum ULA: How to Design a Microcomputer* (2010), provides the definitive specification of the ULA's behaviour. With this knowledge, recreating the ULA in modern hardware is a tractable engineering problem.
+Chris Smith's reverse-engineering work, documented in *The ZX Spectrum ULA: How to Design a Microcomputer* (2010), provides the definitive specification of the ULA's behavior. With this knowledge, recreating the ULA in modern hardware is a tractable engineering problem.
 
 ### MCU Choice for ULA
 
@@ -51,9 +51,9 @@ The ULA generates the Spectrum's video signal. Specifically:
 
 - It maintains the **video address counter** that walks through display RAM, fetching pixel bytes and attribute bytes in the correct order
 - It shifts pixel bytes through the **pixel shift register**, producing one pixel per video clock cycle
-- It applies the **attribute byte** (INK, PAPER, BRIGHT, FLASH) to each pixel via the colour encoder
-- It generates the **composite video signal** — horizontal sync, vertical sync, blanking, colour burst, and pixel data — for output to a TV
-- It mixes in the **BORDER colour** (from port `0xFE`) for the screen border area
+- It applies the **attribute byte** (INK, PAPER, BRIGHT, FLASH) to each pixel via the color encoder
+- It generates the **composite video signal** — horizontal sync, vertical sync, blanking, color burst, and pixel data — for output to a TV
+- It mixes in the **BORDER color** (from port `#FE`) for the screen border area
 
 The video signal is generated at a fixed pixel clock (approximately 7 MHz on the 48K Spectrum, with the composite signal at PAL standard timing).
 
@@ -61,14 +61,14 @@ The video signal is generated at a fixed pixel clock (approximately 7 MHz on the
 
 The ULA shares RAM with the CPU. During the active display area, the ULA needs to fetch bytes from RAM for video generation. To prevent bus contention, the ULA asserts `WAIT_n` on the CPU during specific cycles, holding it off while the video fetcher has the bus.
 
-This produces the characteristic **contended memory** timing of the Spectrum — accesses to addresses `0x4000`–`0x7FFF` (the upper 16 KB of the 48K address space) are slowed down during the active display area, with a specific asymmetric pattern of WAIT assertions.
+This produces the characteristic **contended memory** timing of the Spectrum — accesses to addresses `#4000`–`#7FFF` (the upper 16 KB of the 48K address space) are slowed down during the active display area, with a specific asymmetric pattern of WAIT assertions.
 
 ### I/O Ports
 
 The ULA implements several I/O ports:
 
-- **Port `0xFE`** (the most important) — write: beeper, MIC output, EAR input, BORDER colour; read: keyboard matrix row (selected by `A[8:15]`), EAR input
-- **Port `0xFF`** (floating bus) — read: returns the byte the ULA is currently fetching from video memory; write: no effect
+- **Port `#FE`** (the most important) — write: beeper, MIC output, EAR input, BORDER color; read: keyboard matrix row (selected by `A[8:15]`), EAR input
+- **Port `#FF`** (floating bus) — read: returns the byte the ULA is currently fetching from video memory; write: no effect
 - **Memory bank switching** (on 128K / +2 / +3) — handled by additional logic
 
 ### INT Generation
@@ -81,7 +81,7 @@ The ULA generates the CPU clock by dividing down its master clock. In the 48K Sp
 
 ### Beeper
 
-The ULA includes a 1-bit DAC (essentially a flip-flop) for the beeper audio. Software toggles this via port `0xFE` bit 4 to produce square wave audio at any frequency the CPU can manage.
+The ULA includes a 1-bit DAC (essentially a flip-flop) for the beeper audio. Software toggles this via port `#FE` bit 4 to produce square wave audio at any frequency the CPU can manage.
 
 ---
 ## Video Generation on RP2040 PIO
@@ -107,7 +107,7 @@ Generating this on an MCU requires precise cycle timing. The RP2040's PIO is ide
 
 A typical PIO program for Spectrum composite video:
 
-1. **Initialise** — load the first scanline's pixel data into the PIO's ISR (input shift register)
+1. **Initialize** — load the first scanline's pixel data into the PIO's ISR (input shift register)
 2. **Pixel loop** — shift out 8 pixels per byte (with attribute applied), 32 bytes per scanline
 3. **HSYNC** — at end of scanline, drive the HSYNC pulse (4 µs low, then back porch, then front porch)
 4. **VSYNC** — at end of frame, drive the VSYNC pulses (a sequence of half-scanline sync pulses per PAL standard)
@@ -128,7 +128,7 @@ Generating a true PAL composite signal requires more than just pixels — the si
 
 - **Horizontal sync** — 4.7 µs low pulse at the end of each scanline
 - **Vertical sync** — a sequence of pulses at the end of each frame (PAL uses a complex sequence of equalisation pulses, sync pulses, and more equalisation pulses)
-- **Colour burst** — a 10-cycle 4.43 MHz reference signal after HSYNC, used by the TV's colour decoder (the Spectrum's signal is monochrome, but a colour burst is still included for compatibility)
+- **Color burst** — a 10-cycle 4.43 MHz reference signal after HSYNC, used by the TV's color decoder (the Spectrum's signal is monochrome, but a color burst is still included for compatibility)
 - **Blanking levels** — the signal is at the "black" level during blanking intervals
 
 Some RP2040 ULA implementations generate **true composite** by combining the pixel data with sync pulses via a resistor DAC. Others generate **VGA** instead — driving separate HSYNC/VSYNC/pixel signals at TTL levels, which is simpler and works with modern monitors.
@@ -139,7 +139,7 @@ VGA is simpler than composite PAL:
 
 - Separate HSYNC and VSYNC signals (TTL digital)
 - RGB pixel data (analog, via resistor DAC)
-- No colour burst, no blanking levels, no PAL encoding
+- No color burst, no blanking levels, no PAL encoding
 
 An RP2040 driving a VGA monitor at 50 Hz refresh, 256×192 resolution upscaled to ~640×480 or 720×576, is straightforward. The PIO generates HSYNC and VSYNC; the CPU (via DMA) feeds pixel data.
 
@@ -151,7 +151,7 @@ HDMI output from RP2040 requires an external HDMI encoder IC (e.g., the ADV7513)
 
 ## Contention Emulation
 
-The memory contention pattern is one of the ULA's most subtle behaviours. Software depends on the exact pattern of WAIT assertions, so it must be reproduced faithfully.
+The memory contention pattern is one of the ULA's most subtle behaviors. Software depends on the exact pattern of WAIT assertions, so it must be reproduced faithfully.
 
 ### The Contention State Machine
 
@@ -193,13 +193,13 @@ For cycle-stepped Z80 emulation (see [mcu_z80.md](mcu_z80.md)), the contention s
 
 ## Floating Bus Emulation
 
-The floating bus effect — port `0xFF` reads returning the byte the ULA is currently fetching — is implemented by routing the ULA's video fetch data onto the CPU data bus at the right cycles.
+The floating bus effect — port `#FF` reads returning the byte the ULA is currently fetching — is implemented by routing the ULA's video fetch data onto the CPU data bus at the right cycles.
 
 In an MCU-based implementation, this requires:
 
 - The ULA emulator to keep track of the current video fetch byte (the pixel or attribute byte currently being read from video memory)
-- When the CPU reads port `0xFF`, return this byte if the read is happening during a contention cycle (when the ULA would have the byte on the bus)
-- Otherwise return `0xFF` (the value the bus would have if nothing is driving it)
+- When the CPU reads port `#FF`, return this byte if the read is happening during a contention cycle (when the ULA would have the byte on the bus)
+- Otherwise return `#FF` (the value the bus would have if nothing is driving it)
 
 This is straightforward to implement but must be timed correctly — software probes the floating bus at specific cycles and expects specific values.
 
@@ -209,18 +209,18 @@ This is straightforward to implement but must be timed correctly — software pr
 
 The ULA's I/O ports are implemented as register reads/writes in the MCU:
 
-### Port 0xFE Write
+### Port #FE Write
 
 | Bit | Function |
 |---|---|
-| 0–2 | BORDER colour (0–7) |
+| 0–2 | BORDER color (0–7) |
 | 3 | EAR output (also enables MIC input) |
 | 4 | MIC output / beeper |
 | 5–7 | Unused |
 
-Writing to port `0xFE` updates the corresponding registers in the MCU, which affect video (BORDER colour) and audio (beeper) generation.
+Writing to port `#FE` updates the corresponding registers in the MCU, which affect video (BORDER color) and audio (beeper) generation.
 
-### Port 0xFE Read
+### Port #FE Read
 
 | Bit | Function |
 |---|---|
@@ -229,9 +229,9 @@ Writing to port `0xFE` updates the corresponding registers in the MCU, which aff
 | 6 | EAR input |
 | 7 | Unused |
 
-Reading port `0xFE` returns the keyboard state (managed by a separate [keyboard controller](mcu_keyboard.md)) and the EAR input bit.
+Reading port `#FE` returns the keyboard state (managed by a separate [keyboard controller](mcu_keyboard.md)) and the EAR input bit.
 
-### Port 0xFF (Floating Bus)
+### Port #FF (Floating Bus)
 
 Reads return the byte currently on the ULA's video fetch data path, as described above. Writes have no effect.
 
@@ -268,13 +268,13 @@ If the MCU is generating the CPU clock (as in some integrated designs), it divid
 
 ### Beeper
 
-The beeper is a 1-bit signal driven by port `0xFE` bit 4. The MCU toggles a GPIO pin in response to writes, and the resulting square wave is filtered and amplified for the speaker.
+The beeper is a 1-bit signal driven by port `#FE` bit 4. The MCU toggles a GPIO pin in response to writes, and the resulting square wave is filtered and amplified for the speaker.
 
 ### 128K / +2 / +3 Considerations
 
 For the later Spectrum models, the ULA replacement must also handle:
 
-- **Memory banking** — the 128K's paged RAM, controlled by port `0x7FFD`
+- **Memory banking** — the 128K's paged RAM, controlled by port `#7FFD`
 - **AY-3-8912 sound chip** — integrated into the ULA replacement or handled separately (see [mcu_psg_ay.md](mcu_psg_ay.md))
 - **Different contention scheme** — the 128K has different contended pages and patterns
 - **Different video timing** — the 128K has a longer top border and slightly different frame layout
@@ -353,7 +353,7 @@ For most hobbyist projects, the MCU approach is more accessible. For production-
 
 **Q: Can an RP2040 generate a real PAL composite video signal?**
 
-A: Yes. The PIO can generate the precise pixel clock and sync timing required. The composite signal is produced via a simple resistor DAC (3-bit or 4-bit is sufficient for the Spectrum's 8 colours + bright variants). Several open-source projects demonstrate this.
+A: Yes. The PIO can generate the precise pixel clock and sync timing required. The composite signal is produced via a simple resistor DAC (3-bit or 4-bit is sufficient for the Spectrum's 8 colors + bright variants). Several open-source projects demonstrate this.
 
 **Q: Does the MCU approach achieve cycle-exact contention?**
 
@@ -361,7 +361,7 @@ A: Yes, if the implementation is cycle-stepped. The contention state machine run
 
 **Q: How do I handle the floating bus?**
 
-A: Keep track of the byte currently on the ULA's video fetch path (the most recent pixel or attribute byte fetched). When the CPU reads port `0xFF` during a contention cycle, return that byte. Otherwise return `0xFF`. The timing of when to return the byte vs `0xFF` is documented in Chris Smith's book.
+A: Keep track of the byte currently on the ULA's video fetch path (the most recent pixel or attribute byte fetched). When the CPU reads port `#FF` during a contention cycle, return that byte. Otherwise return `#FF`. The timing of when to return the byte vs `#FF` is documented in Chris Smith's book.
 
 **Q: Can I integrate the ULA and Z80 on a single RP2040?**
 
@@ -369,7 +369,7 @@ A: Yes — this is what "Pico Spectrum" projects do. The RP2040 has enough CPU p
 
 **Q: Why use composite output instead of VGA/HDMI?**
 
-A: Composite output is authentic — it works with CRT TVs and produces the "Spectrum look" (slight blur, colour bleed, scanlines). VGA/HDMI is sharper but lacks the nostalgia factor. For authenticity, composite; for daily use, VGA/HDMI.
+A: Composite output is authentic — it works with CRT TVs and produces the "Spectrum look" (slight blur, color bleed, scanlines). VGA/HDMI is sharper but lacks the nostalgia factor. For authenticity, composite; for daily use, VGA/HDMI.
 
 **Q: Do I need a separate video memory buffer in the MCU?**
 
@@ -377,7 +377,7 @@ A: Not necessarily. The ULA emulator can read directly from the emulated Spectru
 
 **Q: How accurate does the contention pattern need to be?**
 
-A: For 95%+ of software, the gross pattern (uniform delay during active display) is sufficient. For demoscene productions (multicolour, sync-scroller) and copy-protected software, the exact per-cycle pattern is required. The latter requires careful study of Chris Smith's book.
+A: For 95%+ of software, the gross pattern (uniform delay during active display) is sufficient. For demoscene productions (multicolor, sync-scroller) and copy-protected software, the exact per-cycle pattern is required. The latter requires careful study of Chris Smith's book.
 
 **Q: Can I emulate the 128K's different contention on the same MCU?**
 
@@ -392,7 +392,7 @@ Replacing the ULA with an MCU is one of the most valuable projects in retro-comp
 1. **PIO-driven video generation** — for cycle-precise pixel and sync timing
 2. **Contention state machine** — for authentic memory access timing
 3. **Floating bus emulation** — for software that probes screen position
-4. **I/O port implementation** — port `0xFE` for beeper/BORDER/keyboard, port `0xFF` for floating bus
+4. **I/O port implementation** — port `#FE` for beeper/BORDER/keyboard, port `#FF` for floating bus
 5. **INT generation** — for the 50 Hz frame interrupt
 
 With these implemented, an MCU-based ULA can be indistinguishable from the original Ferranti chip for most software, and can additionally provide modern conveniences (debugging, alternate video outputs, integrated peripherals).
@@ -406,7 +406,7 @@ With these implemented, an MCU-based ULA can be indistinguishable from the origi
 - **Pico Spectrum projects on GitHub** — various open-source ULA-on-MCU implementations
 - **PicoVGA** — RP2040 VGA generation library
 - **Pico DVI** — RP2040 DVI/HDMI generation via PIO
-- **PAL composite video specification** — for sync and colour burst timing
+- **PAL composite video specification** — for sync and color burst timing
 - **Harlequin project** — FPGA ULA recreation for comparison (see [harlequin_sizif.md](../fpga/harlequin_sizif.md))
 - **Sensible tests by Andrew Owen** — for floating bus and contention verification
 

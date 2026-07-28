@@ -6,7 +6,7 @@ The previous articles in this MCU section covered replacing individual Spectrum 
 
 The term **N-Go** broadly refers to MCU-based Spectrum implementations where the entire machine (CPU, ULA, peripherals, mass storage, video, audio, input) is implemented in firmware on one or more microcontrollers. This is distinct from [FPGA recreations](../fpga/) (which implement the Spectrum in hardware description language) and from [software emulators](../software/) running on general-purpose PCs.
 
-This article covers the architecture of complete MCU-based Spectrums, the integration challenges, memory organisation, firmware structure, existing projects, and the trade-offs compared to FPGA recreations.
+This article covers the architecture of complete MCU-based Spectrums, the integration challenges, memory organization, firmware structure, existing projects, and the trade-offs compared to FPGA recreations.
 
 ---
 
@@ -52,7 +52,7 @@ The RP2040 runs at 133 MHz (overclockable to 250 MHz), giving a comfortable marg
 
 The ULA reads video memory at ~7 MHz pixel rate (or ~3.5 MHz byte rate). This memory access must be interleaved with the Z80's accesses and the video output circuit's reads. The MCU's RAM must be fast enough to handle this.
 
-The RP2040's SRAM is single-cycle access at 133 MHz, providing ample bandwidth. But organising the video memory access pattern (interleaved with Z80 access and contention emulation) requires careful design.
+The RP2040's SRAM is single-cycle access at 133 MHz, providing ample bandwidth. But organizing the video memory access pattern (interleaved with Z80 access and contention emulation) requires careful design.
 
 ### Real-Time Constraints
 
@@ -118,13 +118,13 @@ A typical Spectrum-on-MCU memory map (single RP2040, 48K Spectrum):
 
 | Address Range | Contents | Location |
 |---|---|---|
-| `0x0000`-`0x3FFF` | Spectrum ROM (16 KB) | RP2040 flash (via XIP) |
-| `0x4000`-`0xFFFF` | Spectrum RAM (48 KB) | RP2040 SRAM (or external PSRAM) |
+| `#0000`-`#3FFF` | Spectrum ROM (16 KB) | RP2040 flash (via XIP) |
+| `#4000`-`#FFFF` | Spectrum RAM (48 KB) | RP2040 SRAM (or external PSRAM) |
 | Frame buffer | VGA/DVI frame buffer | RP2040 SRAM |
 | Stack | MCU stack | RP2040 SRAM |
 | Heap | MCU heap (file system, etc.) | RP2040 SRAM |
 
-For a 128K Spectrum, the banking logic (port `0x7FFD`) must be emulated — the 128 KB of RAM is divided into 8 banks of 16 KB, with one bank paged into the `0xC000`-`0xFFFF` range at a time.
+For a 128K Spectrum, the banking logic (port `#7FFD`) must be emulated — the 128 KB of RAM is divided into 8 banks of 16 KB, with one bank paged into the `#C000`-`#FFFF` range at a time.
 
 ### ROM Storage
 
@@ -169,8 +169,8 @@ uint8_t read_mem(uint16_t addr) {
 
 The frame buffer holds the upscaled video output:
 
-- **VGA 640×480 at 8-bit colour** — 640 × 480 = 307,200 bytes (~300 KB). Too large for the RP2040's SRAM.
-- **VGA 320×240 at 8-bit colour** — 76,800 bytes (~75 KB). Fits in RP2040 SRAM.
+- **VGA 640×480 at 8-bit color** — 640 × 480 = 307,200 bytes (~300 KB). Too large for the RP2040's SRAM.
+- **VGA 320×240 at 8-bit color** — 76,800 bytes (~75 KB). Fits in RP2040 SRAM.
 - **Direct Spectrum resolution (256×192)** — 49,152 bytes (~48 KB) at 8-bit, or 6,912 bytes at 1-bit + attributes.
 
 For larger frame buffers, **external PSRAM** is needed. Some projects reduce the frame buffer by generating pixels on-the-fly from the Spectrum's video memory (no full frame buffer at all) — this is what the original ULA did.
@@ -254,7 +254,7 @@ int main() {
 
 ### Interrupts
 
-The vertical sync interrupt (the ULA's INT signal at 50 Hz) is emulated by a hardware timer on the MCU. When the timer fires, the Z80 emulator's INT input is asserted, and the emulator handles the interrupt (jumping to the ISR at address `0x0038`).
+The vertical sync interrupt (the ULA's INT signal at 50 Hz) is emulated by a hardware timer on the MCU. When the timer fires, the Z80 emulator's INT input is asserted, and the emulator handles the interrupt (jumping to the ISR at address `#0038`).
 
 ---
 ## Existing Projects
@@ -305,9 +305,9 @@ The [FPGA recreations](../fpga/) (Harlequin, Sizif-512, ZX-Uno, MiSTer) implemen
 | Timing accuracy | Good (cycle-stepped) but subject to interrupt latency | Excellent (hardware) |
 | Bus signals | Emulated in firmware | Native hardware pins |
 | Flexibility | Easy to add features (filters, effects) | Harder, requires HDL changes |
-| Community | Large (Arduino/RP2040 ecosystem) | Smaller but specialised |
+| Community | Large (Arduino/RP2040 ecosystem) | Smaller but specialized |
 
-MCU Spectrums are typically cheaper and easier to develop, while FPGA Spectrums have better timing accuracy and more authentic bus behaviour.
+MCU Spectrums are typically cheaper and easier to develop, while FPGA Spectrums have better timing accuracy and more authentic bus behavior.
 
 ---
 
@@ -319,7 +319,7 @@ A complete MCU Spectrum is much cheaper than original hardware (which is increas
 
 ### vs FPGA Recreations
 
-MCU Spectrums are cheaper and easier to develop. FPGA recreations have better timing accuracy and are closer to the original hardware in behaviour. For most users, an MCU Spectrum is sufficient; for demoscene-level accuracy, FPGA is preferred.
+MCU Spectrums are cheaper and easier to develop. FPGA recreations have better timing accuracy and are closer to the original hardware in behavior. For most users, an MCU Spectrum is sufficient; for demoscene-level accuracy, FPGA is preferred.
 
 ### vs Software Emulators on PC
 
@@ -354,7 +354,7 @@ This fits, but doesn't leave much room for enhancements. For more comfortable me
 
 ### How accurate is the timing?
 
-With cycle-stepped Z80 emulation and careful contention modelling, timing accuracy is very good — most software works correctly, including most demos. However, some edge cases (precise contention timing, undocumented Z80 flags) may differ from real hardware.
+With cycle-stepped Z80 emulation and careful contention modeling, timing accuracy is very good — most software works correctly, including most demos. However, some edge cases (precise contention timing, undocumented Z80 flags) may differ from real hardware.
 
 For demoscene-level accuracy, FPGA recreations (Harlequin, Sizif-512) are preferred.
 
@@ -408,7 +408,7 @@ The result is a complete Spectrum that costs under £10, fits in the palm of you
 - **z80ex** — cycle-accurate Z80 emulator
 - **Pico Spectrum projects on GitHub** — various open-source implementations
 - **SpecHMI project** — STM32-based complete Spectrum (Russian community)
-- **Chris Smith's *The ZX Spectrum ULA*** — for the ULA's behaviour
+- **Chris Smith's *The ZX Spectrum ULA*** — for the ULA's behavior
 - **FatFs by Elm-Chan** — FAT file system library
 - **PicoVGA** by Miroslav Nemecek — VGA output library
 - **Pico DVI** by Luke Wren — DVI output library

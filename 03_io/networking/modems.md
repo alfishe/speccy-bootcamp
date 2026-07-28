@@ -21,13 +21,13 @@ This article covers modem hardware, the protocols they used, the Spectrum interf
 
 The ZX Spectrum launched in 1982 into a world where **the public switched telephone network (PSTN) was the only widely-available wide-area network**. The Internet existed (as ARPANET and its successors) but was confined to academic and military sites. The World Wide Web did not exist. Connectivity for home computers meant **dial-up modems** over telephone lines.
 
-In the UK, telephone lines were owned and operated by **British Telecom (BT)**, which had been privatised from the Post Office in 1981. BT's pricing structure (per-minute charges for local calls, even more expensive for national calls) made modem use expensive and influenced the design of the UK's videotex and BBS ecosystem — connections were kept short, and protocols were designed to minimise connect time.
+In the UK, telephone lines were owned and operated by **British Telecom (BT)**, which had been privatised from the Post Office in 1981. BT's pricing structure (per-minute charges for local calls, even more expensive for national calls) made modem use expensive and influenced the design of the UK's videotex and BBS ecosystem — connections were kept short, and protocols were designed to minimize connect time.
 
 The Soviet Union had its own telephone network, with poor quality lines and limited availability of home telephone lines through the 1980s. Russian-scene modem use came later than in the West, but FidoNet adoption in the 1990s was substantial and culturally important.
 
 ### UK Modem Era (1982–1989)
 
-The first UK modem users connected Spectrums to **Prestel** — the Post Office's (later BT's) videotex service, launched in 1979. Prestel displayed pages of text/graphics on a TV set via a telephone-line modem, similar to the French Minitel system. Prestel pages covered news, weather, travel, banking, and special-interest content. Access required a modem compatible with the UK Prestel standard: **1200/75 asymmetric** (1200 bit/s downstream to the user, 75 bit/s upstream — a design optimised for the asymmetric browsing pattern of mostly-receive, occasionally-send-a-page-request).
+The first UK modem users connected Spectrums to **Prestel** — the Post Office's (later BT's) videotex service, launched in 1979. Prestel displayed pages of text/graphics on a TV set via a telephone-line modem, similar to the French Minitel system. Prestel pages covered news, weather, travel, banking, and special-interest content. Access required a modem compatible with the UK Prestel standard: **1200/75 asymmetric** (1200 bit/s downstream to the user, 75 bit/s upstream — a design optimized for the asymmetric browsing pattern of mostly-receive, occasionally-send-a-page-request).
 
 For general-purpose computer networking (BBSes, file transfer, micro-to-micro communication), **symmetric modems** were preferred:
 

@@ -2,7 +2,7 @@
 
 # MiST / MiSTer ZX Spectrum Core — FPGA Hardware Emulation
 
-The **MiST** and **MiSTer** projects are FPGA-based retro-computing platforms that host **hardware cores** — synthesised re-implementations of classic computers in programmable logic. The **ZX Spectrum core for MiST/MiSTer** recreates the Sinclair hardware at the gate level, offering a level of authenticity no software emulator can match: cycle-exact CPU timing, real video signal generation, and exact peripheral behaviour. For Spectrum enthusiasts who want a "real" Spectrum without vintage hardware unreliability, the MiSTer Spectrum core is the gold standard of modern hardware emulation.
+The **MiST** and **MiSTer** projects are FPGA-based retro-computing platforms that host **hardware cores** — synthesised re-implementations of classic computers in programmable logic. The **ZX Spectrum core for MiST/MiSTer** recreates the Sinclair hardware at the gate level, offering a level of authenticity no software emulator can match: cycle-exact CPU timing, real video signal generation, and exact peripheral behavior. For Spectrum enthusiasts who want a "real" Spectrum without vintage hardware unreliability, the MiSTer Spectrum core is the gold standard of modern hardware emulation.
 
 This article covers the MiSTer platform, the Spectrum core's history, its hardware coverage (Sinclair models, Russian/Spanish clones, peripherals), the core's architecture and configuration, and how it compares to both real hardware and software emulators like [Fuse](../software/fuse.md) and [ZEsarUX](../software/zesarux.md). Other FPGA options are covered in [zx_uno_core.md](zx_uno_core.md), [zxevo.md](zxevo.md), and [harlequin_sizif.md](harlequin_sizif.md).
 
@@ -51,11 +51,11 @@ timeline
 
 ### Why FPGA for Spectrum Emulation?
 
-Software emulators (Fuse, ZEsarUX, CSpect) approximate hardware behaviour by simulating individual chips in code. This works well for most use cases but has fundamental limitations:
+Software emulators (Fuse, ZEsarUX, CSpect) approximate hardware behavior by simulating individual chips in code. This works well for most use cases but has fundamental limitations:
 
 - **Cycle accuracy** — software must predict exact hardware cycle counts, which is hard to get right
 - **Sub-cycle interactions** — real hardware has timing overlaps, bus contention, and signal-level events that software emulation struggles to model
-- **Analogue behaviour** — video signal timing, audio DAC characteristics, and CRT display interactions are hard to model in pure software
+- **Analogue behavior** — video signal timing, audio DAC characteristics, and CRT display interactions are hard to model in pure software
 
 FPGA cores, by contrast, **reconstruct the hardware itself** in programmable logic. The CPU is implemented as actual flip-flops and combinational logic; the video generator runs in real time at the original clock; the AY-3-8912 sound chip is a hardware implementation. The result is **effectively real hardware** — without vintage silicon unreliability.
 
@@ -96,7 +96,7 @@ The core emulates a wide range of peripherals, typically with on-core (FPGA) imp
 - **Beta 128 disk interface** — for TR-DOS .trd / .scl disk images (Russian scene)
 - **+3 floppy disk interface** — for +3 .dsk images
 - **DivMMC / DivIDE** — SD-card-based mass storage via .img files
-- **Kempston joystick** — at port `0x1F`
+- **Kempston joystick** — at port `#1F`
 - **Sinclair joysticks** — Interface 2 style
 - **Interface 1** — microdrives, RS-232, ZX Net (partial)
 - **Currah µSpeech** — speech synthesis cartridge
@@ -132,9 +132,9 @@ The Spectrum's **ULA** (Uncommitted Logic Array) is the heart of the machine —
 
 - **Video timing** — exactly matching the original Spectrum's 64 µs line, 311 lines per frame, with the correct blank/sync periods
 - **Memory contention** — the CPU is held off (WAIT signal asserted) when the ULA is fetching display bytes, matching the original's contended-memory timing
-- **Border colour** — via the `BORDER` register at port `0xFE`
+- **Border color** — via the `BORDER` register at port `#FE`
 - **Attribute bytes** — the FLASH and BRIGHT bits, with proper blink timing (1 Hz for FLASH)
-- **Floating bus** — the famous "floating bus" effect, where reading port `0xFF` during specific cycles returns the byte being fetched by the ULA, used by some demos and games
+- **Floating bus** — the famous "floating bus" effect, where reading port `#FF` during specific cycles returns the byte being fetched by the ULA, used by some demos and games
 
 ### AY-3-8912 Sound Chip
 
@@ -184,7 +184,7 @@ Audio from the core is mixed and output via:
 
 The audio mix includes:
 
-- **Beeper** — the 1-bit speaker (port `0xFE`), with the original's PWM-like audio characteristics
+- **Beeper** — the 1-bit speaker (port `#FE`), with the original's PWM-like audio characteristics
 - **AY-3-8912** — 3-channel PSG sound (when the AY is enabled, on 128K/+2/+3 models or when an AY interface is configured)
 - **Currah µSpeech** — when the Currah cartridge is loaded
 
@@ -258,7 +258,7 @@ Software emulators are preferred when:
 ## FAQ
 
 **Q: How accurate is the MiSTer Spectrum core compared to real hardware?**
-Very accurate — typically indistinguishable for software that does not depend on sub-cycle analogue effects. The CPU is cycle-exact; the ULA's memory contention matches the original; the AY-3-8912 produces correct tones. Known divergences are typically in obscure edge cases (specific floating-bus cycles, exact PAL colour phase, etc.) that affect a handful of demos but no commercial software.
+Very accurate — typically indistinguishable for software that does not depend on sub-cycle analogue effects. The CPU is cycle-exact; the ULA's memory contention matches the original; the AY-3-8912 produces correct tones. Known divergences are typically in obscure edge cases (specific floating-bus cycles, exact PAL color phase, etc.) that affect a handful of demos but no commercial software.
 
 **Q: Can I load my old Spectrum tape collection?**
 Yes. The core loads `.tap` and `.tzx` files, with the original ROM-based loading routine. You can experience the famous loading bars and screeching audio — or use the "load instant" option if you prefer to skip the wait.
@@ -285,7 +285,7 @@ Yes. The Pentagon and Scorpion machine types include the Beta 128 disk interface
 
 ## Summary
 
-The MiSTer ZX Spectrum core is the **most authentic Spectrum experience available without owning real vintage hardware**. By synthesising the Spectrum's hardware in FPGA logic, the core achieves cycle-exact timing, real video signal generation, and exact peripheral behaviour — things that software emulators can only approximate.
+The MiSTer ZX Spectrum core is the **most authentic Spectrum experience available without owning real vintage hardware**. By synthesising the Spectrum's hardware in FPGA logic, the core achieves cycle-exact timing, real video signal generation, and exact peripheral behavior — things that software emulators can only approximate.
 
 For Spectrum enthusiasts who value authenticity and are willing to invest in a MiSTer setup, the core is the natural choice. It is also one of dozens of cores available on MiSTer, making a single device a universal retro-computing platform.
 

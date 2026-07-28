@@ -198,7 +198,7 @@ ESP-NOW is rarely used in practice because the Spectrum-side driver is more comp
 Some ZiFi-style projects replace the stock AT firmware with **custom firmware** that exposes a more efficient or more capable protocol. Examples:
 
 - **Paradise** (Spectrum Next WiFi) — uses custom firmware for high-throughput SPI-based communication
-- **WiC64** (Commodore 64) — custom firmware with a binary protocol optimised for the C64
+- **WiC64** (Commodore 64) — custom firmware with a binary protocol optimized for the C64
 - Various hobbyist projects that implement Spectrum-specific file transfer protocols over TCP
 
 Custom firmware is appropriate when:
@@ -276,7 +276,7 @@ A: ESP-01 and ESP-12 modules are available from any electronics supplier (Adafru
 
 1. Connect the USB-serial adapter to the ESP8266 (TX↔RX, RX↔TX, VCC↔3.3V, GND↔GND, plus GPIO0↔GND to enter bootloader mode)
 2. Plug into a USB port; verify the module responds to `AT`
-3. Run `esptool.py --port /dev/ttyUSB0 write_flash 0x0 AT_firmware.bin`
+3. Run `esptool.py --port /dev/ttyUSB0 write_flash #0 AT_firmware.bin`
 
 **Q: My Spectrum's metal case blocks the WiFi signal. What can I do?**
 

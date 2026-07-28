@@ -161,13 +161,13 @@ The Z80's bus timing is specified in the Zilog datasheet with nanosecond-level p
 
 ### Realising Timing on an MCU
 
-To realise these timings on an MCU running at, say, 133 MHz (RP2040), each Z80 T-state (285 ns at 3.5 MHz) corresponds to ~38 MCU clock cycles. That's tight but workable:
+To realize these timings on an MCU running at, say, 133 MHz (RP2040), each Z80 T-state (285 ns at 3.5 MHz) corresponds to ~38 MCU clock cycles. That's tight but workable:
 
 - The PIO state machines run at 1 instruction per clock cycle, so a PIO program can hold exact timing
 - The CPU cores have ~38 cycles per T-state to perform instruction emulation
 - DMA can move data between RAM and GPIO ports with cycle precision
 
-The challenge is **synchronisation**: the PIO drives the bus signals cycle-by-cycle, the CPU runs the Z80 emulator in parallel, and they communicate via interrupt/DMA. The CPU must produce the next bus cycle's data (e.g., the opcode to drive during the next M1) in time for the PIO to use it. If the CPU is too slow, the PIO stalls the bus (WAIT asserted) and timing accuracy degrades.
+The challenge is **synchronization**: the PIO drives the bus signals cycle-by-cycle, the CPU runs the Z80 emulator in parallel, and they communicate via interrupt/DMA. The CPU must produce the next bus cycle's data (e.g., the opcode to drive during the next M1) in time for the PIO to use it. If the CPU is too slow, the PIO stalls the bus (WAIT asserted) and timing accuracy degrades.
 
 ### Instruction-Stepped vs Cycle-Stepped
 
@@ -203,12 +203,12 @@ The Z80 has a rich instruction set, including undocumented but well-known instru
 
 ### Undocumented Instructions
 
-The Z80's instruction decoder leaves several "holes" that produce undefined opcodes. Some of these have well-known behaviour that software depends on:
+The Z80's instruction decoder leaves several "holes" that produce undefined opcodes. Some of these have well-known behavior that software depends on:
 
-- **`SLL r` / `SLL (HL)`** — shift left logical, bit 0 set to 1 (mnemonic also written as `SLI` or `SL1`); opcodes `0x30–0x37` for the documented register pattern
+- **`SLL r` / `SLL (HL)`** — shift left logical, bit 0 set to 1 (mnemonic also written as `SLI` or `SL1`); opcodes `#30–#37` for the documented register pattern
 - **`LD A,I` / `LD A,R` flags** — these copy I or R to A and update the parity/overflow flag to the value of IFF2 (the interrupt enable flip-flop), which software can use to detect interrupt state
-- **`LDI/CPI/INI/OUTI` flags** — the N flag is set to 1 (as if subtraction), H is set based on the operation, and P/V is set based on the byte counter (BC); the half-carry behaviour differs between documented and actual hardware
-- **`OUT (C),0`** — on NMOS Z80, this writes `0x00`; on CMOS Z80 (Z84C00), this writes `0xFF`. The Spectrum used NMOS Z80s, so the NMOS behaviour must be emulated
+- **`LDI/CPI/INI/OUTI` flags** — the N flag is set to 1 (as if subtraction), H is set based on the operation, and P/V is set based on the byte counter (BC); the half-carry behavior differs between documented and actual hardware
+- **`OUT (C),0`** — on NMOS Z80, this writes `#00`; on CMOS Z80 (Z84C00), this writes `#FF`. The Spectrum used NMOS Z80s, so the NMOS behavior must be emulated
 - **`BIT n,(HL)`** affects the undocumented `Y` and `X` flags (bits 5 and 3 of F) differently from `BIT n,r` — the value comes from the byte read, not the register
 
 ### Cycle Counts
@@ -216,7 +216,7 @@ The Z80's instruction decoder leaves several "holes" that produce undefined opco
 Every instruction has a documented cycle count, but there are subtle variations:
 
 - **`LD A,I` / `LD A,R`** — documented as 9 T-states, but the flag update has an additional latency
-- **`LDI/CPI/INI/OUTI`** — the half-carry and parity flags have undocumented behaviours that depend on internal Z80 state
+- **`LDI/CPI/INI/OUTI`** — the half-carry and parity flags have undocumented behaviors that depend on internal Z80 state
 - **Conditional jumps taken vs not taken** — different cycle counts
 - **Block instructions in their final iteration** — slightly different cycle count
 
@@ -305,7 +305,7 @@ A: If you want maximum software compatibility, yes. Several games and demos use 
 
 **Q: How do I handle the Z80's interrupt modes (IM 0, IM 1, IM 2)?**
 
-A: IM 0 expects an instruction byte on the data bus when INT_n is asserted; IM 1 ignores the bus and calls `0x0038`; IM 2 uses the I register as the high byte of a vector table address. The Spectrum uses IM 1 for the 50 Hz frame interrupt and IM 2 for some peripheral interrupts. The emulator must implement all three correctly.
+A: IM 0 expects an instruction byte on the data bus when INT_n is asserted; IM 1 ignores the bus and calls `#0038`; IM 2 uses the I register as the high byte of a vector table address. The Spectrum uses IM 1 for the 50 Hz frame interrupt and IM 2 for some peripheral interrupts. The emulator must implement all three correctly.
 
 **Q: Can I use a 3.3V MCU directly on a 5V Z80 bus?**
 
@@ -313,7 +313,7 @@ A: Direct connection often "works" but is not reliable. 5V TTL outputs can excee
 
 **Q: Why does my emulator pass ZEXALL but fail some demos?**
 
-A: ZEXALL verifies instruction correctness, not bus timing. A demo that depends on exact contention patterns or floating bus behaviour will reveal timing errors that ZEXALL doesn't catch. Run the FUSE test suite and Sensible tests as well.
+A: ZEXALL verifies instruction correctness, not bus timing. A demo that depends on exact contention patterns or floating bus behavior will reveal timing errors that ZEXALL doesn't catch. Run the FUSE test suite and Sensible tests as well.
 
 **Q: How fast does the MCU need to be?**
 
@@ -336,7 +336,7 @@ Replacing the Z80 with a modern MCU is a viable and increasingly popular approac
 1. **Careful pin allocation** — fitting 37 Z80 signals into 30 RP2040 GPIOs requires multiplexing or external latches
 2. **PIO-driven bus interface** — the PIO handles cycle-precise bus timing, freeing the CPU for instruction emulation
 3. **Cycle-stepped execution** — the CPU produces bus state cycle-by-cycle, not instruction-by-instruction
-4. **Correct undocumented behaviour** — `SLL`, `LD A,I/R` flags, `OUT (C),0`, etc.
+4. **Correct undocumented behavior** — `SLL`, `LD A,I/R` flags, `OUT (C),0`, etc.
 5. **Level shifting** — 74HCT family buffers between 3.3V MCU and 5V bus
 
 With these in place, an MCU-based Z80 can be indistinguishable from the original chip for most software, while providing debugging, tracing, and additional features impossible with a real Z80.

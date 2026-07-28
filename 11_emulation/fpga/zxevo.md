@@ -30,7 +30,7 @@ Vladimir Kladov (known online as **vslav**) initiated the ZX Evolution project a
 - **IDE interface** — for hard disks and CompactFlash cards
 - **SVGA output** — supporting multiple resolutions beyond the original Spectrum's 256×192
 
-This hybrid approach (real Z80 + CPLD + MCU) is distinct from pure-FPGA clones. It preserves the exact electrical and timing characteristics of a real Z80 (which matters for some software that depends on cycle-level Z80 behaviour) while replacing the discrete logic with a single programmable device.
+This hybrid approach (real Z80 + CPLD + MCU) is distinct from pure-FPGA clones. It preserves the exact electrical and timing characteristics of a real Z80 (which matters for some software that depends on cycle-level Z80 behavior) while replacing the discrete logic with a single programmable device.
 
 ### Release and Adoption (2010–present)
 
@@ -76,8 +76,8 @@ At the heart of the ZX Evolution is a **real Z80 CPU** — either an original Zi
 
 Using a real Z80 chip has advantages:
 
-- **Exact instruction timing** — the Z80's behaviour at the cycle level is guaranteed by the chip's design, not approximated by an HDL model
-- **Exact undocumented behaviour** — instructions like `SLL` and the flags behaviour of `LD A,I` / `LD A,R` are exactly as on real hardware, with no risk of HDL model error
+- **Exact instruction timing** — the Z80's behavior at the cycle level is guaranteed by the chip's design, not approximated by an HDL model
+- **Exact undocumented behavior** — instructions like `SLL` and the flags behavior of `LD A,I` / `LD A,R` are exactly as on real hardware, with no risk of HDL model error
 - **Real electrical characteristics** — the Z80's bus signals (M1, MREQ, IORQ, RD, WR, RFSH, BUSACK) have real timing relationships, which matters for some peripheral interactions
 
 The disadvantage is that a real Z80 chip requires a real PCB with real address/data bus routing — the ZX Evolution cannot be "loaded" with different cores the way MiSTer can. The ZX Evolution is a Spectrum clone; it cannot become an Amiga or C64.
@@ -121,8 +121,8 @@ The ZX Evolution's video generator (implemented in the CPLD) produces SVGA outpu
 
 - **Standard Spectrum 256×192** — at 50 Hz, 60 Hz, or 100 Hz (with scan doubling for flicker-free display)
 - **Extended 384×304 (Pentagon's 384×304 mode)** — a Russian-scene extension that uses the full video frame
-- **Multicolour modes** — varying the attribute bytes per line (similar to the original Spectrum's "attribute bytes per 8 lines" but with finer granularity)
-- **16-colour and 256-colour extended modes** — the ZX Evolution's video hardware supports richer colour than the standard Spectrum
+- **Multicolor modes** — varying the attribute bytes per line (similar to the original Spectrum's "attribute bytes per 8 lines" but with finer granularity)
+- **16-color and 256-color extended modes** — the ZX Evolution's video hardware supports richer color than the standard Spectrum
 
 Output is via a 15-pin SVGA connector, compatible with modern monitors. There is no RF or composite output — the ZX Evolution is designed for modern displays.
 
@@ -138,7 +138,7 @@ The ZX Evolution provides several storage options:
 
 ## BaseConf — The Firmware
 
-The ZX Evolution's firmware (the configuration that runs on the CPLD and defines the machine's behaviour) is called **BaseConf**. Designed by Vladimir Kladov, BaseConf implements the full Pentagon specification plus modern extensions.
+The ZX Evolution's firmware (the configuration that runs on the CPLD and defines the machine's behavior) is called **BaseConf**. Designed by Vladimir Kladov, BaseConf implements the full Pentagon specification plus modern extensions.
 
 ### Pentagon Compatibility
 
@@ -147,10 +147,10 @@ BaseConf's primary design goal is **exact Pentagon 128 compatibility**. Software
 - **Memory banking** — the Pentagon's specific banking scheme, which is similar but not identical to the Spectrum 128's
 - **Video timing** — the Pentagon's video frame timing (slightly different from the original Spectrum's, with a different number of lines per frame and different cycle counts)
 - **I/O port layout** — the specific port addresses used by the Pentagon for banking, video, and sound
-- **Beta 128 disk interface** — at the original port addresses, with the original VG93 (FD1793) floppy disk controller behaviour
+- **Beta 128 disk interface** — at the original port addresses, with the original VG93 (FD1793) floppy disk controller behavior
 - **AY-3-8912 sound** — at the Pentagon's port addresses and clock rate
 
-For Russian-scene software, this compatibility is essential. Demos, games, and system software written for the Pentagon expect specific machine behaviour; BaseConf delivers it.
+For Russian-scene software, this compatibility is essential. Demos, games, and system software written for the Pentagon expect specific machine behavior; BaseConf delivers it.
 
 ### Extensions Beyond Standard Pentagon
 
@@ -235,7 +235,7 @@ The ZX Evolution occupies a unique niche among modern Spectrum options:
 The ZX Evolution is the right choice when:
 
 - You want **exact Pentagon 128 compatibility** — for running the vast Russian TR-DOS software library
-- You want **real Z80 timing** — for software that depends on cycle-level Z80 behaviour
+- You want **real Z80 timing** — for software that depends on cycle-level Z80 behavior
 - You are a **Russian-scene enthusiast** who values the Pentagon software ecosystem
 - You want **modern conveniences** (PS/2 keyboard, IDE, SVGA) without losing the Pentagon character
 

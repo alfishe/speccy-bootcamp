@@ -50,7 +50,7 @@ The ESP-12 was connected to the Next's FPGA via **SPI**, not via the Z80's UART.
 
 The Next's WiFi software stack was developed in parallel with the hardware. Key components:
 
-- **ESP-12 firmware** — custom firmware written by the Next team, exposing a binary protocol optimised for SPI-based communication with the FPGA. This is not the stock Espressif AT firmware (though that could be flashed if desired)
+- **ESP-12 firmware** — custom firmware written by the Next team, exposing a binary protocol optimized for SPI-based communication with the FPGA. This is not the stock Espressif AT firmware (though that could be flashed if desired)
 - **NextOS WiFi driver** — a layer in the NextOS ROM that translates Z80-side calls into SPI transactions with the ESP-12
 - **NextBASIC extensions** — `*WIFI` commands exposing WiFi configuration, connection, and TCP/UDP operations to BASIC programs
 - **Esxdos WiFi integration** — file-system operations that can transparently fetch files over the network
@@ -133,7 +133,7 @@ The ESP-12 is powered by the Next's 3.3V rail, which is regulated from the Next'
 
 ### ESP-12 Firmware
 
-The Next's ESP-12 runs **custom firmware** developed by the Next team, not the stock Espressif AT firmware. This custom firmware exposes a binary SPI-based protocol optimised for the Next's needs:
+The Next's ESP-12 runs **custom firmware** developed by the Next team, not the stock Espressif AT firmware. This custom firmware exposes a binary SPI-based protocol optimized for the Next's needs:
 
 - **Binary framing** — fixed-size command/response packets rather than text AT commands
 - **SPI slave protocol** — the firmware acts as an SPI slave, reading commands from the FPGA and writing responses back

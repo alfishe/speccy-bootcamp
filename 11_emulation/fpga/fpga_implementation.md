@@ -2,7 +2,7 @@
 
 # Spectrum FPGA Implementation — How Cores Are Designed
 
-Implementing the ZX Spectrum in an FPGA is a substantial engineering project that requires deep understanding of the original hardware, fluency in hardware description languages (HDL), and rigorous testing against known-good reference behaviour. This article covers the practical process of designing a Spectrum FPGA core — from initial specification through HDL coding, simulation, synthesis, and timing verification.
+Implementing the ZX Spectrum in an FPGA is a substantial engineering project that requires deep understanding of the original hardware, fluency in hardware description languages (HDL), and rigorous testing against known-good reference behavior. This article covers the practical process of designing a Spectrum FPGA core — from initial specification through HDL coding, simulation, synthesis, and timing verification.
 
 Whether the goal is a [MiSTer](mist_mister_core.md) core, a [ZX-Uno](zx_uno_core.md), a [Harlequin](harlequin_sizif.md), or a new custom design, the same fundamental engineering process applies. This article focuses on the general methodology, with references to specific Spectrum FPGA implementations for concrete examples.
 
@@ -67,7 +67,7 @@ The specification phase typically takes days to weeks of research, often involvi
 
 ## Module Decomposition
 
-A Spectrum FPGA core is typically organised as a hierarchy of Verilog (or VHDL) modules:
+A Spectrum FPGA core is typically organized as a hierarchy of Verilog (or VHDL) modules:
 
 ```
 spectrum_top.v           # Top-level: instantiates all submodules
@@ -145,16 +145,16 @@ The ULA must generate these addresses correctly to match the original's video me
 
 Once a pixel byte is fetched from RAM, it is loaded into an 8-bit shift register that shifts out one pixel per video clock cycle. The attribute byte (INK, PAPER, BRIGHT, FLASH) is latched and applied to each shifted pixel via a multiplexer.
 
-### Colour Encoder
+### Color Encoder
 
-The colour encoder combines:
+The color encoder combines:
 
 - The current pixel bit (0 = PAPER, 1 = INK)
 - The attribute byte (INK, PAPER, BRIGHT)
 - The BORDER register (for non-display areas)
 - The FLASH state (a 1 Hz toggle that swaps INK and PAPER for cells with FLASH set)
 
-...and produces the final RGB output. The colour palette is a small lookup table mapping the 8 Spectrum colours (with bright variants) to RGB values.
+...and produces the final RGB output. The color palette is a small lookup table mapping the 8 Spectrum colors (with bright variants) to RGB values.
 
 ### Memory Arbitration
 
@@ -164,11 +164,11 @@ The ULA shares RAM with the CPU. During the active display area (when pixels are
 - During the **active display** area, the CPU is held off (WAIT asserted) during pixel and attribute fetch cycles
 - The pattern of WAIT assertions is **asymmetric** — different on different scanline positions
 
-Reproducing this exact pattern in the FPGA core is what gives authentic **contended memory** behaviour. The Harlequin's documentation (Smith's book) is the authoritative reference for this arbitration pattern.
+Reproducing this exact pattern in the FPGA core is what gives authentic **contended memory** behavior. The Harlequin's documentation (Smith's book) is the authoritative reference for this arbitration pattern.
 
 ### Floating Bus
 
-The "floating bus" effect occurs when the CPU reads from port `0xFF` during specific cycles — instead of reading the keyboard matrix, it reads the byte the ULA is currently fetching from video RAM. This is reproduced in FPGA cores by routing the ULA's video-fetch data onto the CPU data bus during those specific cycles.
+The "floating bus" effect occurs when the CPU reads from port `#FF` during specific cycles — instead of reading the keyboard matrix, it reads the byte the ULA is currently fetching from video RAM. This is reproduced in FPGA cores by routing the ULA's video-fetch data onto the CPU data bus during those specific cycles.
 ---
 
 ## Peripheral Modules
@@ -186,7 +186,7 @@ The AY-3-8912 implementation includes:
 - **DAC** — three 4-bit digital-to-analogue converters (one per channel)
 - **I/O ports** — the AY-3-8912 has two 8-bit I/O ports (port A on the 8912, ports A and B on the 8910); these are used on the Spectrum for the +2 serial port and the Kempston mouse
 
-The AY module responds to I/O writes at the Spectrum's standard AY port addresses (`0xFFFD` for register selection, `0xBFFD` for data write, `0xFFFD`/`0xFBFD` combinations for read).
+The AY module responds to I/O writes at the Spectrum's standard AY port addresses (`#FFFD` for register selection, `#BFFD` for data write, `#FFFD`/`#FBFD` combinations for read).
 
 ### Beta 128 Disk Interface
 
@@ -212,7 +212,7 @@ The keyboard module:
 
 - Scans an 8×8 matrix of key switches (the original Spectrum's keyboard layout)
 - For PS/2 keyboards (used in MiSTer, ZX-Uno, Sizif-512), translates PC scan codes to Spectrum matrix positions
-- Exposes the keyboard state at port `0xFE` (alongside the speaker, MIC, EAR, BORDER bits)
+- Exposes the keyboard state at port `#FE` (alongside the speaker, MIC, EAR, BORDER bits)
 
 ---
 
@@ -222,7 +222,7 @@ Before synthesis (which produces the FPGA bitstream), the core must be **simulat
 
 - Verify instruction timing
 - Check video signal generation
-- Test peripheral behaviour
+- Test peripheral behavior
 - Run automated test suites against the simulated core
 
 ### Verilog Simulation Tools
@@ -232,7 +232,7 @@ Common Verilog simulators:
 - **Icarus Verilog** — open-source, command-line, fast for small to medium designs
 - **Verilator** — open-source, converts Verilog to C++ for extremely fast simulation
 - **ModelSim / QuestaSim** — commercial, full-featured, widely used in industry
-- **GTKWave** — open-source waveform viewer for analysing simulation output
+- **GTKWave** — open-source waveform viewer for analyzing simulation output
 
 ### Test Bench
 
@@ -272,7 +272,7 @@ module spectrum_tb;
 endmodule
 ```
 
-The test bench loads a ROM image, lets the simulated Spectrum boot, and checks specific behaviours — for example, that the video sync signals occur at the right times, or that the CPU reads the expected bytes from ROM.
+The test bench loads a ROM image, lets the simulated Spectrum boot, and checks specific behaviors — for example, that the video sync signals occur at the right times, or that the CPU reads the expected bytes from ROM.
 
 ### Test Programs
 
@@ -340,7 +340,7 @@ The same test programs used in simulation (ZEXALL, FUSE test suite, Sensible tes
 
 ### Real-Hardware Comparison
 
-For cycle-exact cores, the implementer compares the FPGA core's behaviour against real Spectrum hardware:
+For cycle-exact cores, the implementer compares the FPGA core's behavior against real Spectrum hardware:
 
 - **Video signal timing** — using an oscilloscope or logic analyser, comparing HSYNC/VSYNC timing to a real Spectrum
 - **Memory access timing** — measuring WAIT signal assertions
@@ -351,7 +351,7 @@ For cycle-exact cores, the implementer compares the FPGA core's behaviour agains
 A broad range of Spectrum software is loaded and tested:
 
 - **Commercial games** — Manic Miner, Jet Set Willy, Chuckie Egg, Knight Lore, etc.
-- **Demoscene productions** — demos that push the hardware (contended memory effects, raster interrupts, multicolour modes)
+- **Demoscene productions** — demos that push the hardware (contended memory effects, raster interrupts, multicolor modes)
 - **System software** — BASIC, TR-DOS, +3DOS
 - **Peripherals-using software** — games that use AY music, Beta 128 disks, etc.
 
@@ -401,7 +401,7 @@ These projects are valuable resources for new implementers — they demonstrate 
 For an experienced HDL engineer with the right reference materials, a basic 48K Spectrum core takes 2–4 weeks of focused work. Adding peripherals, 128K support, cycle-exact timing, and broad software compatibility can extend this to several months. A complete MiSTer-quality core is a multi-year community project.
 
 **Q: Do I need to understand the original Spectrum hardware deeply?**
-Yes. The ULA's behaviour is documented in Chris Smith's book (essential reading), and the Z80's instruction timing is documented in the official Zilog data book. Without these references, achieving cycle-exact timing is essentially impossible.
+Yes. The ULA's behavior is documented in Chris Smith's book (essential reading), and the Z80's instruction timing is documented in the official Zilog data book. Without these references, achieving cycle-exact timing is essentially impossible.
 
 **Q: Can I write a Spectrum core in VHDL instead of Verilog?**
 Yes — VHDL and Verilog are both synthesizable HDLs. The choice is largely stylistic; most existing Spectrum cores use Verilog, but VHDL implementations exist. The T80 Z80 core is available in both languages.

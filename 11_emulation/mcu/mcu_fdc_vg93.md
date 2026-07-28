@@ -2,9 +2,9 @@
 
 # KR1818VG93 / WD1793 FDC on a Microcontroller
 
-The **Beta 128** disk interface and its associated floppy disk controller (FDC) — the Western Digital **WD1793** or its Russian equivalent **KR1818VG93** (often just called the **VG93**) — were the standard mass-storage interface for Russian Spectrum clones (Pentagon, Scorpion, ATM Turbo) and many Western upgrades. Original FDC chips are now 30+ years old and frequently failing, and floppy diskettes themselves are degrading rapidly. Replacing the FDC with a modern MCU that emulates its behaviour — while loading disk images from SD card instead of physical floppies — is one of the most practical retro-computing upgrades.
+The **Beta 128** disk interface and its associated floppy disk controller (FDC) — the Western Digital **WD1793** or its Russian equivalent **KR1818VG93** (often just called the **VG93**) — were the standard mass-storage interface for Russian Spectrum clones (Pentagon, Scorpion, ATM Turbo) and many Western upgrades. Original FDC chips are now 30+ years old and frequently failing, and floppy diskettes themselves are degrading rapidly. Replacing the FDC with a modern MCU that emulates its behavior — while loading disk images from SD card instead of physical floppies — is one of the most practical retro-computing upgrades.
 
-The **VG93Em-STM32** project is the canonical open-source implementation: an STM32 microcontroller programmed to behave exactly like a VG93/WD1793, presenting the same register interface to the host computer while internally serving "tracks" from SD-card-stored disk images. This article covers the FDC's behaviour, the replacement approach, and the implementation details.
+The **VG93Em-STM32** project is the canonical open-source implementation: an STM32 microcontroller programmed to behave exactly like a VG93/WD1793, presenting the same register interface to the host computer while internally serving "tracks" from SD-card-stored disk images. This article covers the FDC's behavior, the replacement approach, and the implementation details.
 
 For background on the Beta 128 interface and TR-DOS, see [the disk interface documentation](../../02_hardware/). For SD-card-based storage more generally, see [mcu_sd_interface.md](mcu_sd_interface.md).
 
@@ -21,7 +21,7 @@ The **Western Digital WD1793** (and its variants WD1791, WD1792, WD1795, WD1797)
 - **Sector reading** — locates a specific sector by ID and reads its data
 - **Sector writing** — locates a sector and writes new data
 - **CRC generation/checking** — ensures data integrity
-- **Index pulse detection** — synchronises to the physical disk rotation
+- **Index pulse detection** — synchronizes to the physical disk rotation
 
 The WD1793 presents a simple register interface to the host:
 
@@ -48,7 +48,7 @@ The **Beta 128** is a disk interface add-on for the Spectrum, designed in Russia
 - An **interface connector** for the floppy disk drive cable (34-pin IDC, standard PC floppy drive)
 - **Address decoding logic** — selecting the FDC's registers and the TR-DOS ROM based on I/O port addresses
 
-The Beta 128 occupies I/O ports `0x1F`, `0x3F`, `0x5F`, `0x7F` for the FDC's four registers, and `0xFF`/`0x7FFD` interactions for memory banking.
+The Beta 128 occupies I/O ports `#1F`, `#3F`, `#5F`, `#7F` for the FDC's four registers, and `#FF`/`#7FFD` interactions for memory banking.
 
 ### TR-DOS
 
@@ -307,13 +307,13 @@ Alternatively, the MCU module can be external, connected to the host via a cable
 
 ### Software Compatibility
 
-A well-implemented FDC replacement is transparent to the host software. TR-DOS, all games and demos that use TR-DOS, and all Beta 128 utilities should work unchanged. Copy protection that depends on specific FDC timing or behaviour may fail — for these, a real FDC with a Gotek may be preferable.
+A well-implemented FDC replacement is transparent to the host software. TR-DOS, all games and demos that use TR-DOS, and all Beta 128 utilities should work unchanged. Copy protection that depends on specific FDC timing or behavior may fail — for these, a real FDC with a Gotek may be preferable.
 
 ---
 
 ## Copy Protection Considerations
 
-Some Spectrum disk software includes copy protection that probes FDC behaviour in unusual ways:
+Some Spectrum disk software includes copy protection that probes FDC behavior in unusual ways:
 
 - **Non-standard sector sizes** — 128, 1024, or 2048 bytes per sector instead of the standard 256
 - **Non-standard sector IDs** — sector numbers outside the usual 1–16
@@ -375,7 +375,7 @@ With these elements in place, the original hardware continues to work with all i
 ## References
 
 - **Western Digital WD1793 datasheet** — register interface, command set, timing
-- **KR1818VG93 datasheet** (Russian) — pinout and behaviour
+- **KR1818VG93 datasheet** (Russian) — pinout and behavior
 - **VG93Em-STM32 project** — GitHub repository with schematics and firmware
 - **TR-DOS documentation** — file format, BASIC extension, command reference
 - **Beta 128 documentation** — interface specification, port addresses

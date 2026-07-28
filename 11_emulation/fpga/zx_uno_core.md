@@ -10,7 +10,7 @@ The ZX-Uno's design priorities are:
 - **Self-containment** — a working Spectrum in a small board, no PC or monitor required (output to a TV or monitor)
 - **Open source** — both hardware (schematics and PCB layout) and core (Verilog HDL) are publicly available
 - **Spanish scene heritage** — designed and initially produced by the Spanish-speaking Spectrum community (the Spanish Spectrum scene is among the most active in the world)
-- **ULAplus and extensions** — the ZX-Uno's core includes ULAplus (extended colour palette), hardware turbo modes, and several Spectrum-era peripherals, making it a "Spectrum++" rather than a strict re-implementation
+- **ULAplus and extensions** — the ZX-Uno's core includes ULAplus (extended color palette), hardware turbo modes, and several Spectrum-era peripherals, making it a "Spectrum++" rather than a strict re-implementation
 
 This article covers the ZX-Uno's history, hardware design, the FPGA core it runs, its feature set (including ULAplus), the software ecosystem, and how it compares to other FPGA Spectrum options. For other FPGA approaches, see [mist_mister_core.md](mist_mister_core.md), [zxevo.md](zxevo.md), and [harlequin_sizif.md](harlequin_sizif.md).
 
@@ -44,7 +44,7 @@ The ZX-Uno was first produced in **small batches in 2016** and was an immediate 
 
 In 2017, Villena released the ZX-Uno as fully open source:
 
-- **Hardware** (schematics, PCB Gerber files) under a permissive licence
+- **Hardware** (schematics, PCB Gerber files) under a permissive license
 - **FPGA core** (Verilog HDL) under the GNU GPL
 - **Bootloader and SD image format** documented publicly
 
@@ -98,7 +98,7 @@ Beyond the FPGA, the ZX-Uno PCB includes:
 - **512 KB SRAM** (Alliance Memory AS6C4008) — used as the Spectrum's RAM and paged memory
 - **MicroSD card slot** — connected to the FPGA via SPI for software loading and persistent storage
 - **PS/2 keyboard port** — through a small buffer to the FPGA
-- **VGA output** — 15-pin HDsub connector, 8-bit RGB (3 bits red, 3 bits green, 2 bits blue = 256 colours)
+- **VGA output** — 15-pin HDsub connector, 8-bit RGB (3 bits red, 3 bits green, 2 bits blue = 256 colors)
 - **3.5mm audio jack** — stereo audio from a simple DAC inside the FPGA
 - **Mini-USB power input** — 5V power supply
 - **Reset button** — hardware reset
@@ -121,7 +121,7 @@ The ZX-Uno runs a **Verilog HDL core** that implements the Spectrum and its exte
 
 The ZX-Uno can be configured at boot (via SD card settings) to emulate different Spectrum variants:
 
-- **Spectrum 48K** — original Sinclair 48K with full ULA behaviour
+- **Spectrum 48K** — original Sinclair 48K with full ULA behavior
 - **Spectrum 128K** — Spanish 128K launch model (Investronica)
 - **Spectrum +2** (grey) — Amstrad +2 with AY-3-8912
 - **Spectrum +2A/+3** — black +2A or +3 with banked ROM
@@ -140,35 +140,35 @@ For **turbo modes** (see below), the core can switch the Z80's clock to 7 MHz (2
 
 ## ULAplus — The Extended Palette
 
-The ZX-Uno's most celebrated feature is **ULAplus** — an extension to the standard Spectrum video architecture that provides a **256-colour palette** instead of the original 15-colour (8 colours + bright variants + black) attribute scheme.
+The ZX-Uno's most celebrated feature is **ULAplus** — an extension to the standard Spectrum video architecture that provides a **256-color palette** instead of the original 15-color (8 colors + bright variants + black) attribute scheme.
 
 ### Standard Spectrum Palette Limitations
 
 The original Spectrum's ULA produces video using **INK and PAPER attributes** per 8×8 pixel cell. Each cell has:
 
-- An INK colour (0–7, where 8–15 are "bright" variants)
-- A PAPER colour (0–7, with bright variants)
+- An INK color (0–7, where 8–15 are "bright" variants)
+- A PAPER color (0–7, with bright variants)
 - A FLASH bit (alternates INK and PAPER at 1 Hz)
 - A BRIGHT bit (selects bright vs dim palette)
 
-This gives 8 colours × 2 brightness levels = 15 colours + black, total 16 colour entries. The palette is **fixed in ROM** (well, in the ULA's colour-lookup table) — software cannot change the actual RGB values of the 16 colour entries.
+This gives 8 colors × 2 brightness levels = 15 colors + black, total 16 color entries. The palette is **fixed in ROM** (well, in the ULA's color-lookup table) — software cannot change the actual RGB values of the 16 color entries.
 
 ### ULAplus Design
 
 ULAplus, designed by **Andrew Owen** (the same engineer behind the [Spectranet](../../03_io/networking/spectranet.md)), extends this by:
 
-1. **Adding a palette register file** — 64 entries of 8-bit RGB (3 bits red, 3 bits green, 2 bits blue), addressable via I/O ports `0xBF` (palette index) and `0xFF` (palette value)
-2. **Mapping the 16 standard Spectrum colours** to the first 16 palette entries — software can rewrite these to any of 256 RGB values
-3. **Providing an extended mode** with **256 colours** — using two attribute bytes per cell instead of one, allowing each pixel to address any palette entry
+1. **Adding a palette register file** — 64 entries of 8-bit RGB (3 bits red, 3 bits green, 2 bits blue), addressable via I/O ports `#BF` (palette index) and `#FF` (palette value)
+2. **Mapping the 16 standard Spectrum colors** to the first 16 palette entries — software can rewrite these to any of 256 RGB values
+3. **Providing an extended mode** with **256 colors** — using two attribute bytes per cell instead of one, allowing each pixel to address any palette entry
 
-The ZX-Uno's ULA module implements ULAplus natively. Software that uses ULAplus (most modern Spectrum demos and some games) gets full 256-colour graphics; software that doesn't simply uses the standard 16-colour palette, with the palette registers pre-loaded to match the original Spectrum colours.
+The ZX-Uno's ULA module implements ULAplus natively. Software that uses ULAplus (most modern Spectrum demos and some games) gets full 256-color graphics; software that doesn't simply uses the standard 16-color palette, with the palette registers pre-loaded to match the original Spectrum colors.
 
 ### ULAplus in Practice
 
 ULAplus is widely supported in modern Spectrum software:
 
-- **Demos** — many post-2010 demos use ULAplus for richer colour (e.g., works by Kuśma, Gasman, various Russian scene productions)
-- **Graphics conversions** — photographs and 256-colour art can be displayed
+- **Demos** — many post-2010 demos use ULAplus for richer color (e.g., works by Kuśma, Gasman, various Russian scene productions)
+- **Graphics conversions** — photographs and 256-color art can be displayed
 - **Modern games** — some homebrew games take advantage of the extended palette
 - **Graphics tools** — ZX Paintbrush, BMP2Spectre, and other tools support ULAplus output
 
@@ -198,7 +198,7 @@ The ZX-Uno core emulates a comprehensive set of Spectrum peripherals:
 
 ### Sound
 
-- **Beeper** — the 1-bit speaker (port `0xFE`)
+- **Beeper** — the 1-bit speaker (port `#FE`)
 - **AY-3-8912** — full PSG sound (on 128K/+2/+3 models or when explicitly enabled for 48K)
 - **TurboSound** — dual AY-3-8912 chips (some Russian software uses this)
 - **SpecDrum** — 8-bit drum sample playback
@@ -214,7 +214,7 @@ The ZX-Uno core emulates a comprehensive set of Spectrum peripherals:
 
 ### Input
 
-- **Kempston joystick** — at port `0x1F`
+- **Kempston joystick** — at port `#1F`
 - **Sinclair joysticks** — Interface 2 style
 - **PS/2 keyboard** — full PC keyboard, with Spectrum keyword mappings
 - **PS/2 mouse** — Kempston mouse protocol
@@ -279,10 +279,10 @@ Yes. Core updates are released periodically and can be flashed via JTAG (using a
 No. The ZX-Uno's FPGA is too small to host the Next's feature set (layer 2 framebuffer, hardware sprites, tilemap, copper, Z80N). For Next hardware emulation, use [CSpect](../software/cspect.md) or the MiSTer Spectrum Next core.
 
 **Q: How do I write my own software for the ZX-Uno?**
-Use the standard Spectrum cross-development toolchain (sjasmplus, z88dk, Boriel ZX BASIC) and target the standard Spectrum model. For ULAplus support, write to I/O ports `0xBF` / `0xFF` to set palette entries. For turbo mode, your software can detect turbo-capable machines and adapt accordingly.
+Use the standard Spectrum cross-development toolchain (sjasmplus, z88dk, Boriel ZX BASIC) and target the standard Spectrum model. For ULAplus support, write to I/O ports `#BF` / `#FF` to set palette entries. For turbo mode, your software can detect turbo-capable machines and adapt accordingly.
 
 **Q: Is ULAplus software-compatible with old Spectrum games?**
-Yes. ULAplus is a superset of the standard Spectrum palette — old software runs unchanged, using the first 16 palette entries which are pre-loaded with the standard Spectrum colours. ULAplus only activates when software explicitly writes to the palette registers.
+Yes. ULAplus is a superset of the standard Spectrum palette — old software runs unchanged, using the first 16 palette entries which are pre-loaded with the standard Spectrum colors. ULAplus only activates when software explicitly writes to the palette registers.
 
 **Q: Can I use my old Spectrum keyboard with the ZX-Uno?**
 Not directly — the ZX-Uno uses a PS/2 keyboard port. With a hardware adapter (converting the Spectrum's matrix to PS/2 scan codes), it's possible; some community projects exist for this. Most users simply use a standard PS/2 or USB (via PS/2 adapter) keyboard.

@@ -4,7 +4,7 @@
 
 **Fuse** (Free Unix Spectrum Emulator) is the workhorse cross-platform ZX Spectrum emulator. Originally developed for Linux by **Philip Kendall** in **1999**, Fuse has since been ported to macOS, Windows, Android, and several other platforms. It is **open-source** (GPLv2+), actively maintained by a community of contributors, and forms the basis of several derivative projects including the browser-based **JSSpeccy** and various embedded ports.
 
-Fuse's longevity, accuracy, and permissive licensing have made it the **standard reference** for Spectrum emulation. Many other emulators use Fuse's `libspectrum` library for file format handling, and Fuse's hardware behaviour is widely documented as a reference for emulator authors. For cross-platform users wanting a reliable, accurate, free Spectrum emulator, Fuse is almost always the right choice.
+Fuse's longevity, accuracy, and permissive licensing have made it the **standard reference** for Spectrum emulation. Many other emulators use Fuse's `libspectrum` library for file format handling, and Fuse's hardware behavior is widely documented as a reference for emulator authors. For cross-platform users wanting a reliable, accurate, free Spectrum emulator, Fuse is almost always the right choice.
 
 This article covers Fuse's history, architecture, hardware coverage, debugging and development tools, derivative projects, and place in the Spectrum ecosystem. For comparison with other emulators, see [emulator_comparison.md](emulator_comparison.md). For technical discussion of accuracy, see [cycle_exact_accuracy.md](cycle_exact_accuracy.md).
 
@@ -30,7 +30,7 @@ Fuse development has been continuous since 1999, with releases roughly every 6�
 - **2000–2002** — added support for 128K, +2, +2A, +3, Russian clones (Pentagon, Scorpion), Interface 1, microdrives, +D, Opus disk interfaces
 - **2003–2005** — added the debugger, save states, RMX recording, substantially improved accuracy
 - **2006–2010** — ported to macOS (native Cocoa UI), Windows (Win32 UI), and Android; added more obscure clones (Brazilian Spectrum clones, Inves Spectrum+)
-- **2011–2015** — major accuracy improvements, contended memory modelling, peripheral timing refinements
+- **2011–2015** — major accuracy improvements, contended memory modeling, peripheral timing refinements
 - **2016–2020** — UI modernisation, bug fixes, performance improvements
 - **2021+** — continued maintenance, occasional feature additions
 
@@ -76,7 +76,7 @@ timeline
 Fuse is structured as a **modular emulator** with clean separation between components:
 
 - **Emulator core** — the Z80 CPU, ULA, memory banking, and timing logic
-- **`libspectrum`** — file format parsing, save state serialisation, low-level utility functions
+- **`libspectrum`** — file format parsing, save state serialization, low-level utility functions
 - **UI layer** — the user interface (GTK+, Cocoa, Win32, SDL, etc.)
 - **Audio output** — sound generation and host audio output
 - **Input handling** — keyboard, joystick, mouse
@@ -112,13 +112,13 @@ Fuse models the Spectrum's memory with cycle-accurate banking:
 - **Scorpion** — Russian 256K clone
 - **+3e** — extended +3 with extra RAM options
 
-Each model has its own memory map, banking register layout, and timing characteristics. Fuse's `machine.c` module defines each machine's behaviour.
+Each model has its own memory map, banking register layout, and timing characteristics. Fuse's `machine.c` module defines each machine's behavior.
 
 ### Audio and Timing
 
-Fuse's audio generation is sample-accurate, producing a stereo waveform at 44.1 kHz (configurable). The audio is generated in sync with the emulator's cycle-accurate timing, so audio glitches indicate timing bugs in the emulator (or the original software using undocumented audio behaviour).
+Fuse's audio generation is sample-accurate, producing a stereo waveform at 44.1 kHz (configurable). The audio is generated in sync with the emulator's cycle-accurate timing, so audio glitches indicate timing bugs in the emulator (or the original software using undocumented audio behavior).
 
-For video, Fuse can run at 50 Hz (PAL standard) or synchronise to the host display (typically 60 Hz). The frame rate conversion and audio resampling required for host synchronisation are covered in [cycle_exact_accuracy.md](cycle_exact_accuracy.md).
+For video, Fuse can run at 50 Hz (PAL standard) or synchronize to the host display (typically 60 Hz). The frame rate conversion and audio resampling required for host synchronization are covered in [cycle_exact_accuracy.md](cycle_exact_accuracy.md).
 
 ---
 
@@ -138,7 +138,7 @@ Fuse supports the complete range of Sinclair Spectrum models:
 | **ZX Spectrum +3** | 128K | 1987, integrated 3" disk drive |
 | **ZX Spectrum +3e** | 128K–576K | Extended +3 by Garry Lancaster |
 
-Each model has correct timing, memory map, ROM contents, and peripheral behaviour.
+Each model has correct timing, memory map, ROM contents, and peripheral behavior.
 
 ### Clones
 
@@ -160,7 +160,7 @@ Fuse's peripheral support is one of its strongest features:
 | **Interface 1** | ✅ Microdrives, RS-232, ZX Net |
 | **Microdrive** | ✅ Up to 8 cartridges, with proper timing |
 | **ZX Net** | ✅ Network between multiple Fuse instances |
-| **Kempston joystick** | ✅ At I/O port `0x1F` |
+| **Kempston joystick** | ✅ At I/O port `#1F` |
 | **Sinclair joysticks 1 & 2** | ✅ |
 | **Fuller joystick** | ✅ |
 | **Currah µSpeech** | ✅ Speech synthesiser |
@@ -277,7 +277,7 @@ The SDL variant of Fuse (SpeccySDL) is used as the basis for:
 
 ## Performance
 
-Fuse's performance is excellent on any modern computer — it can comfortably run at 50 Hz (or faster) on hardware from the last 15+ years. On low-end devices (Raspberry Pi Zero, single-board computers), Fuse runs at full speed with modest CPU usage. Fuse's optimisation strategy focuses on:
+Fuse's performance is excellent on any modern computer — it can comfortably run at 50 Hz (or faster) on hardware from the last 15+ years. On low-end devices (Raspberry Pi Zero, single-board computers), Fuse runs at full speed with modest CPU usage. Fuse's optimization strategy focuses on:
 
 - **Cycle-accurate interpretation** of the Z80 (no dynamic recompilation)
 - **Efficient event scheduling** — only peripherals that need cycle-accurate updates are called per cycle

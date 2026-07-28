@@ -124,9 +124,9 @@ SD cards power up in a "native" (SDIO) mode and must be switched to SPI mode:
 1. **Power up** — apply 3.3V, wait 1 ms for the card to power up
 2. **Clock at 100-400 kHz** — slow clock for initialisation
 3. **Send 80 dummy clocks** — with CS high and MOSI high, to wake the card
-4. **Send CMD0 (RESET) with CS low** — switches the card to SPI mode. The card responds with the R1 response byte `0x01` (idle state)
+4. **Send CMD0 (RESET) with CS low** — switches the card to SPI mode. The card responds with the R1 response byte `#01` (idle state)
 5. **Send CMD8 (SEND_IF_COND)** — checks the card's voltage range. SDHC/SDXC cards respond with the voltage window in R7 response
-6. **Send CMD55 + ACMD41 (SD_SEND_OP_COND)** repeatedly — initialises the card. Send ACMD41 with HCS bit (bit 30) set to indicate SDHC support. The card responds with `0x00` (ready) when initialisation completes
+6. **Send CMD55 + ACMD41 (SD_SEND_OP_COND)** repeatedly — initializes the card. Send ACMD41 with HCS bit (bit 30) set to indicate SDHC support. The card responds with `#00` (ready) when initialisation completes
 7. **Send CMD58 (READ_OCR)** — reads the Operating Conditions Register, which includes the CCS bit indicating if the card is SDHC (block-addressed) or SDSC (byte-addressed)
 8. **Switch to high-speed clock** — increase SPI clock to 12-25 MHz for normal operation
 
@@ -134,7 +134,7 @@ After initialisation, the card is ready for read/write operations.
 
 ### Read/Write Commands
 
-Once initialised, the card uses these commands:
+Once initialized, the card uses these commands:
 
 - **CMD17 (READ_SINGLE_BLOCK)** — reads one 512-byte block at a given address. The card responds with a start token, 512 bytes of data, and a 2-byte CRC
 - **CMD24 (WRITE_BLOCK)** — writes one 512-byte block. The host sends a start token, 512 bytes of data, and a 2-byte CRC. The card responds with a data response token
@@ -393,7 +393,7 @@ Most SD adapters support SDHC cards (up to 32 GB) with FAT32. SDXC cards (64 GB+
 
 In practice, 32 GB is more than enough — the entire Spectrum software archive is a few GB.
 
-### Why is my SD card not recognised?
+### Why is my SD card not recognized?
 
 Common causes:
 

@@ -2,7 +2,7 @@
 
 # Harlequin and Sizif — Modern FPGA Spectrums in Original Form Factor
 
-The **Harlequin** and **Sizif** (specifically the **Sizif-512**) are modern FPGA-based Spectrum clones designed to **fit inside an original Sinclair Spectrum case** and behave as drop-in replacements for the original 48K Spectrum hardware. Both projects recreate the Spectrum's hardware at the gate level using small FPGAs, providing modern reliability while preserving the exact form factor, connectors, and behaviour of the original Sinclair machine.
+The **Harlequin** and **Sizif** (specifically the **Sizif-512**) are modern FPGA-based Spectrum clones designed to **fit inside an original Sinclair Spectrum case** and behave as drop-in replacements for the original 48K Spectrum hardware. Both projects recreate the Spectrum's hardware at the gate level using small FPGAs, providing modern reliability while preserving the exact form factor, connectors, and behavior of the original Sinclair machine.
 
 Where [MiSTer](mist_mister_core.md) is a multi-platform retro host and [ZX-Uno](zx_uno_core.md) is a single-board "Spectrum++" with extended features, the Harlequin and Sizif aim at a different goal: **invisible modernisation of original hardware**. A user with a dead 48K Spectrum (failed ULA, corroded PCB, dead keyboard membrane) can remove the original PCB, drop in a Harlequin or Sizif board, and have a working Spectrum that uses the original case, keyboard, power supply, and TV output.
 
@@ -20,7 +20,7 @@ The Harlequin project began around **2012–2013** with the goal of producing a 
 
 - **Failing original ULAs** — the Ferranti-made ULA in the 48K Spectrum was a custom chip produced only for Sinclair; when units failed, there were no replacements
 - **Authenticity preservation** — Spectrum enthusiasts wanted to keep using original cases, keyboards, and power supplies, not switch to a different physical form factor
-- **ULA reverse-engineering completion** — Smith's book documented the ULA's behaviour in unprecedented detail; the Harlequin was the natural next step — implementing that understanding in hardware
+- **ULA reverse-engineering completion** — Smith's book documented the ULA's behavior in unprecedented detail; the Harlequin was the natural next step — implementing that understanding in hardware
 
 ### Harlequin Hardware Design
 
@@ -41,10 +41,10 @@ The Harlequin's defining achievement is its **faithful ULA recreation in FPGA**.
 
 - The **video address generator** — the counter that fetches pixels and attributes from RAM
 - The **shift register** — converting parallel pixel/attribute bytes into the serial video stream
-- The **colour encoder** — combining the shifted pixel data with the BORDER register to produce the final video output
+- The **color encoder** — combining the shifted pixel data with the BORDER register to produce the final video output
 - The **memory arbitration** — the logic that asserts the CPU's WAIT signal during video fetch cycles
 - The **timing generator** — the divide-by-N counter that produces the various clocks (CPU clock, video sync, etc.)
-- The **I/O ports** — the `0xFE` port (speaker, MIC, EAR, BORDER, keyboard) and the contended-memory decoding
+- The **I/O ports** — the `#FE` port (speaker, MIC, EAR, BORDER, keyboard) and the contended-memory decoding
 
 The Harlequin implements all of this in Verilog HDL, synthesised onto the Cyclone II FPGA. The result is a ULA that behaves **identically** to the original Ferranti ULA — same timing, same memory contention, same video signal. The Harlequin passes all the standard Spectrum timing tests (the FUSE test suite, Sensible tests, etc.) with the same results as a real 48K Spectrum.
 
@@ -112,7 +112,7 @@ The Sizif-512 supports:
 - **128K mode** — Spectrum 128 / +2 emulation with AY-3-8912 sound and banked RAM
 - **Pentagon 128 mode** — Russian clone compatibility
 - **Turbo mode** — 7 MHz or 14 MHz CPU speeds
-- **ULAplus** — extended colour palette (256 colours)
+- **ULAplus** — extended color palette (256 colors)
 - **DivMMC** — SD-card-based software loading (via the optional SD interface)
 - **PS/2 keyboard** — for users who want modern keyboard input
 - **Multiple ROMs** — selectable at boot
@@ -143,14 +143,14 @@ The Spectrum's ULA is the most critical — and most difficult to recreate — c
 
 ### Memory Arbitration
 
-The original Spectrum uses a single block of DRAM shared between the Z80 CPU and the ULA's video fetch logic. The ULA asserts the CPU's WAIT signal during specific cycles to prevent bus contention when the video fetcher needs RAM. The result is the famous **contended memory** timing — certain RAM addresses (specifically the upper 16 KB of the 48K address space, `0x4000`–`0x7FFF`) cause the CPU to be held off during pixel and attribute fetches.
+The original Spectrum uses a single block of DRAM shared between the Z80 CPU and the ULA's video fetch logic. The ULA asserts the CPU's WAIT signal during specific cycles to prevent bus contention when the video fetcher needs RAM. The result is the famous **contended memory** timing — certain RAM addresses (specifically the upper 16 KB of the 48K address space, `#4000`–`#7FFF`) cause the CPU to be held off during pixel and attribute fetches.
 
 The Harlequin and Sizif-512 recreate this contention **exactly**, including:
 
 - The specific cycles where WAIT is asserted (which depend on the scanline position)
 - The pattern of contention during the active display vs border
 - The interaction between contented and uncontented memory accesses
-- The "floating bus" effect (reading port `0xFF` during specific cycles returns the byte the ULA is currently fetching)
+- The "floating bus" effect (reading port `#FF` during specific cycles returns the byte the ULA is currently fetching)
 
 ### Video Signal Generation
 
@@ -159,22 +159,22 @@ The ULA generates the Spectrum's video signal — the composite PAL signal (or R
 - **Horizontal sync** — at the end of each scanline
 - **Vertical sync** — at the end of each frame
 - **Blanking periods** — horizontal and vertical blanking intervals
-- **Colour burst** — for the PAL colour decoder in the TV
+- **Color burst** — for the PAL color decoder in the TV
 - **Pixel data** — the actual screen content, shifted out at the pixel clock
 
-The Harlequin recreates this entire signal chain — sync timing, blanking, colour burst, and pixel data — producing a composite video signal that is **indistinguishable from a real 48K Spectrum**. When connected to a CRT TV, the picture looks identical to original hardware.
+The Harlequin recreates this entire signal chain — sync timing, blanking, color burst, and pixel data — producing a composite video signal that is **indistinguishable from a real 48K Spectrum**. When connected to a CRT TV, the picture looks identical to original hardware.
 
 ### Audio Generation
 
-The ULA also generates the **beeper audio** — the 1-bit PWM sound from port `0xFE`. The ULA's beeper implementation has specific timing characteristics (the beeper output is updated at specific points in the video frame, not continuously) that affect the sound of beeper-based music and games. The Harlequin and Sizif-512 preserve these timing characteristics, producing authentic beeper audio.
+The ULA also generates the **beeper audio** — the 1-bit PWM sound from port `#FE`. The ULA's beeper implementation has specific timing characteristics (the beeper output is updated at specific points in the video frame, not continuously) that affect the sound of beeper-based music and games. The Harlequin and Sizif-512 preserve these timing characteristics, producing authentic beeper audio.
 
 ### Why Software Tests Matter
 
-The Spectrum demoscene has developed a body of **timing-sensitive tests** — software that exercises specific ULA behaviours and verifies they match real hardware. The Harlequin and Sizif-512 pass these tests, demonstrating that their ULA recreation is faithful:
+The Spectrum demoscene has developed a body of **timing-sensitive tests** — software that exercises specific ULA behaviors and verifies they match real hardware. The Harlequin and Sizif-512 pass these tests, demonstrating that their ULA recreation is faithful:
 
 - **FUSE test suite** — instructions, contended memory, INT timing, video timing
 - **Sensible tests** — by Andrew Owen, exercising floating bus, contention patterns
-- **Float Spell** — multicolour demo that depends on exact video timing
+- **Float Spell** — multicolor demo that depends on exact video timing
 - **Pentagon Diag ROM** — diagnostic for Russian clones
 
 Passing these tests is the gold standard for ULA recreation. The Harlequin and Sizif-512 are among the few FPGA clones that achieve full marks.
@@ -234,7 +234,7 @@ Via JTAG (using an Altera USB-Blaster or compatible). The Harlequin and Sizif ha
 
 ## Summary
 
-The Harlequin and Sizif-512 represent a different approach to modern Spectrum hardware than the [MiSTer](mist_mister_core.md) or [ZX-Uno](zx_uno_core.md). Rather than building new standalone hardware, they aim to **invisibly modernise original Sinclair hardware** — fitting inside original Spectrum cases and behaving as drop-in replacements for the failed PCBs of 40-year-old machines.
+The Harlequin and Sizif-512 represent a different approach to modern Spectrum hardware than the [MiSTer](mist_mister_core.md) or [ZX-Uno](zx_uno_core.md). Rather than building new standalone hardware, they aim to **invisibly modernize original Sinclair hardware** — fitting inside original Spectrum cases and behaving as drop-in replacements for the failed PCBs of 40-year-old machines.
 
 Chris Smith's Harlequin is the original (2012–2013) and the most faithful ULA recreation, based on Smith's authoritative reverse-engineering work in *The ZX Spectrum ULA: How to Design a Microcomputer*. Victor Trucco's Sizif-512 (2018+) extends the concept with modern features (turbo mode, ULAplus, PS/2 keyboard, SD card) while preserving the drop-in form factor.
 
@@ -248,7 +248,7 @@ For Spectrum enthusiasts who own original hardware and want to keep it alive, th
 - **Chris Smith's book**: *The ZX Spectrum ULA: How to Design a Microcomputer* — the definitive technical reference on the ULA, basis for the Harlequin design
 - **Harlequin project pages**: Chris Smith's documentation of the Harlequin hardware and FPGA core
 - **Sizif-512 GitHub**: Victor Trucco's open-source project, including schematics and Verilog HDL
-- **Retroleum catalogue**: UK retro-computing retailer selling Harlequin boards
+- **Retroleum catalog**: UK retro-computing retailer selling Harlequin boards
 
 ### Community Resources
 - **World of Spectrum forums**: English-language discussion of Harlequin and Sizif
@@ -261,4 +261,4 @@ For Spectrum enthusiasts who own original hardware and want to keep it alive, th
 - [ZX Evolution](zxevo.md) — Russian hybrid approach (real Z80 + CPLD)
 - [FPGA Implementation](fpga_implementation.md) — how these ULA recreations are designed
 - [FPGA Timing Accuracy](fpga_timing_accuracy.md) — cycle-exact timing considerations
-- [ULA Video Timing](../../05_development/05_display_and_timing/ula_video_timing.md) — Spectrum ULA timing details
+- [ULA Timing](../../02_hardware/original/ula_timing.md) — Spectrum ULA timing details
