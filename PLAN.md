@@ -406,7 +406,7 @@ zx/
     │   ├── README.md
     │   ├── emulator_comparison.md              # ✅ Done (Jul 2026)
     │   ├── cycle_exact_accuracy.md
-    │   ├── fuse.md
+    │   ├── fuse.md                             # ✅ Done (Jul 2026)
     │   ├── zesarux.md
     │   ├── cspect.md
     │   └── test_suites.md                       # ✅ Done (Jul 2026)
@@ -1052,7 +1052,7 @@ All 11 articles are ✅ Complete (CC BY-SA 4.0). Cross-references verified. See 
 | `README.md` | Index — software emulation landscape |
 | `emulator_comparison.md` | ✅ **Emulator Comparison** — comprehensive comparison of ZX Spectrum emulators (Fuse, ZEsarUX, CSpect, Spectaculator, UnrealSpeccy, Klive, Speccy/fMSX, JSSpeccy). Categories: cross-platform accuracy-focused, Windows-focused, Next-aware, web-based, mobile, retro-platform, embedded. Detailed strengths/weaknesses for each major emulator. Comparison matrices: platform support, hardware coverage (16K/48K/128K/Pentagon/Scorpion/Next/TSConf), accuracy (cycle-exact, contended memory, audio timing), development tools (disassembler, memory viewer, breakpoints, sprite/tile viewer, RMX), licensing. Selection guide by use case (casual gaming, original hardware development, Next development, reverse engineering, demoscene production, hardware research, mobile, web, embedded). FAQ, references |
 | `cycle_exact_accuracy.md` | Cycle-exact requirements: frame timing divergence, CRT sync mechanism, host sync strategies (DRC, resampling), AY audio clocks, judder mitigation (5 techniques), emulator comparison (10 entries), worst-case conclusion | ✅ |
-| `fuse.md` | Fuse: reference emulator, architecture, debugger, RZX recording |
+| `fuse.md` | ✅ **Fuse** — deep dive on the Free Unix Spectrum Emulator by Philip Kendall (1999+, GPLv2+, SourceForge). Architecture: modular design (emulator core, `libspectrum` LGPL file format library used by other emulators, UI layer, audio, input). Hardware coverage: complete Sinclair models (16K/48K/128K/+2/+2A/+3/+3e), Russian clones (Pentagon/Scorpion), Brazilian/Spanish clones (Inves, TK90X, TK95), peripherals (Interface 1, microdrives, ZX Net, +D, Opus, Multiface, Beta 128, DivIDE/DivMMC, Currah µSpeech, SpecDrum). Debugger: register view, disassembly, memory view, breakpoints (execution/memory/IO), watchpoints, stepping. RMX recording for verified speedruns. Save states (.szx/.z80/.sna/.pzx). Tape/disk loading (TAP/TZX/PZX/WAV/CSW; DSK/IMG/TRD/SCL). Derivative projects: JSSpeccy (WebAssembly browser port), Fuse Android, SpeccySDL (embedded). Performance, FAQ (installation, Next support, accuracy, libspectrum licensing), references |
 | `zesarux.md` | ZEsarUX: advanced debugging, reverse debugging, FPGA simulation, Next support |
 | `cspect.md` | CSpect: ZX Spectrum Next emulator, development focus |
 | `test_suites.md` | ✅ **Test Suites** — test programs used to validate ZX Spectrum emulator accuracy. ZEXALL/ZEXDOC (Z80 instruction exerciser by Frank D. Cringle, 1997), the FUSE test suite (Z80 instructions, contended memory, INT timing, video timing, audio, peripherals — hosted on SourceForge), Pentagon Diag ROM (Russian clone validation). Timing-specific tests: Sensible tests (Andrew Owen), Float Spell multicolour demo, contended memory loop, INT timing tests. Peripheral tests: AY-3-8912 register/envelope/noise, Kempston joystick at `0x1F`, Interface 1/microdrive. Diagnostic ROMs (ZX Diag, Ramtest). How to use for emulator users (download, run, compare) and authors (CI pipeline, multi-hardware configs, real hardware comparison, publish results). Limitations of testing (unknown edge cases, hardware variability, test bugs, analogue behaviour). FAQ, summary, references |
@@ -1108,7 +1108,7 @@ Articles are written in priority order. README.md is synthesized AFTER articles 
 | 02 Hardware (all 3 streams) | 9/~40 | 📝 Major gap |
 | 03_io/networking | 6/6 | ✅ **COMPLETE** (Jul 2026) — zx_net, modems, spectranet, zifi, esp_wifi, zx_next_wifi all done |
 | 08 Reverse Engineering | 1/9 | 📝 Major gap |
-| 11 Emulation | 3/~20 | 📝 Tier E in progress (cycle_exact_accuracy, emulator_comparison, test_suites done; 17 more across software/fpga/mcu pending) |
+| 11 Emulation | 4/~20 | 📝 Tier E in progress (cycle_exact_accuracy, emulator_comparison, test_suites, fuse done; 16 more across software/fpga/mcu pending) |
 | 05_dev/01_basic, 02_assembly, 06_graphics | 0/30+ | 📝 Empty |
 
 **Active writing tiers** (priority order):
