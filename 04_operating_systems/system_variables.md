@@ -34,7 +34,7 @@ The ROM accesses all system variables through the IY register (`IY = #5C3A`, so 
 | `#5C0D` | IY-45 | `K_DATA` | 1 | 2nd byte of colour controls entered from keyboard |
 | `#5C0E` | IY-44 | `TVDATA` | 2 | Bytes of colour, AT and TAB controls going to TV |
 | `#5C10` | IY-42 | `STRMS` | 30 | Stream data: 15 streams × 2 bytes. Stream 0 = keyboard, 1 = screen, 2 = printer |
-| `#5C36` | IY-4 | `CHARS` | 2 | Address minus 256 of the character set. Default: `#153C` (stored as `#15D6`) |
+| `#5C36` | IY-4 | `CHARS` | 2 | Address minus 256 of the character set (96 chars × 8 bytes = 768 bytes). Default: `#3C00` (= `#3D00 − #0100`, pointing to ROM character set at `#3D00`–`#3FFF`). See [character_set.md](../10_references/character_set.md) for details. |
 | `#5C38` | IY-2 | `RASP` | 1 | Length of warning buzz |
 | `#5C39` | IY-1 | `PIP` | 1 | Length of keyboard click |
 | `#5C3A` | IY+0 | `ERR_NR` | 1 | One less than error report number. `#FF` = no error. `#00` = error 1 ("NEXT without FOR") |

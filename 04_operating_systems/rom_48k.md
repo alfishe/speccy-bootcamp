@@ -34,10 +34,11 @@ The ROM is not a monolithic blob — it has a clear internal structure. The tabl
 | `#0CB3`–`#1097` | Tape control | Motor control, tone generation for tape output |
 | `#1098`–`#15DE` | Calculator | Floating-point arithmetic engine — add, subtract, multiply, divide, trig, log, and ~40 stack operations |
 | `#15DF`–`#1A9B` | Tape LOAD/SAVE | High-level tape operations called from BASIC |
-| `#1A9C`–`#1D9B` | Character set | 96 characters × 8 bytes = 768 bytes of pixel patterns |
+| `#1A9C`–`#1D9B` | Expression evaluator tables | Operator precedence, function pointers |
 | `#1D9C`–`#24FB` | BASIC interpreter | Tokeniser, line parser, expression evaluator, statement executor |
 | `#24FC`–`#38FF` | BASIC runtime | Editor loop, LIST, channel/stream management, expression evaluation |
-| `#3900`–`#3FFF` | BASIC commands | PRINT, INPUT, PLOT, DRAW, CIRCLE, BEEP, and remaining command implementations |
+| `#3900`–`#3CFF` | BASIC commands | PRINT, INPUT, PLOT, DRAW, CIRCLE, BEEP, and remaining command implementations |
+| `#3D00`–`#3FFF` | Character set | 96 characters × 8 bytes = 768 bytes of pixel patterns (final 768 bytes of ROM) |
 
 > [!TIP]
 > This map is a guide, not a fence. Many routines call into other regions, and some address ranges contain utility functions used by multiple subsystems. For a detailed routine-by-routine breakdown, see *The Complete Spectrum ROM Disassembly* by Dr. Ian Logan and Dr. Frank O'Hara (Melbourne House, 1983).
@@ -682,7 +683,7 @@ For a detailed analysis of the editor's internal operation, see *Mastering Machi
 
 ## Character Set
 
-The ROM contains 96 characters at `#1A9C`–`#1D9B`, each stored as 8 bytes (one byte per pixel row, 8 pixels wide). The character codes and their ROM addresses:
+The ROM contains 96 printable characters at `#3D00`–`#3FFF` (the final 768 bytes of the 16K ROM), each stored as 8 bytes (one byte per pixel row, 8 pixels wide). The character codes and their ROM addresses:
 
 | Code range | Characters | Notes |
 |------------|-----------|-------|
@@ -692,9 +693,9 @@ The ROM contains 96 characters at `#1A9C`–`#1D9B`, each stored as 8 bytes (one
 | `#7F`–`#A4` | Token representations (inverse space, etc.) | Block graphics, inverse characters |
 | `#A5`–`#FF` | BASIC keywords (tokens) | `PRINT`, `IF`, `GOTO`, etc. |
 
-The character set pointer is stored at `CHARS` (`#5C36`), which by default points to `#19AD` (256 bytes before the actual font data — this offset simplifies address calculations). User-defined graphics (UDGs) start at `UDG` (`#5C7B`), defaulting to `#FF58`.
+The character set pointer is stored at `CHARS` (`#5C36`), which by default contains `#3C00` = `#3D00 − #0100` (the −256 offset simplifies address calculation in the print routine). User-defined graphics (UDGs) start at `UDG` (`#5C7B`), defaulting to `#FF58`.
 
-The font uses a classic 8×8 pixel cell with no descenders — lowercase letters like `g`, `p`, `q` sit on the baseline rather than extending below it, which keeps the implementation simple but makes text less readable than on machines with proper descender support.
+The font uses a classic 8×8 pixel cell with no descenders — lowercase letters like `g`, `p`, `q` sit on the baseline rather than extending below it, which keeps the implementation simple but makes text less readable than on machines with proper descender support. See [character_set.md](../10_references/character_set.md) for the full character code table, UDG mechanics, and custom font installation.
 
 ---
 

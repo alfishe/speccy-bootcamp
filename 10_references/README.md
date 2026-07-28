@@ -10,11 +10,11 @@ Quick-reference tables for ZX Spectrum development: opcode matrix, I/O port map,
 |---------|-------------|
 | [io_port_map.md](io_port_map.md) | Complete I/O port reference: every port across all models with decoding bitmasks, per-model differences, Black_Cat table replication with annotations |
 | [z80_opcode_table.md](z80_opcode_table.md) | One-page Z80 opcode lookup: every documented instruction by group with byte count, T-states, and flag effects. Compresses [z80_instruction_set.md](../01_cpu/z80_instruction_set.md) into scan-able tables |
+| [character_set.md](character_set.md) | ZX Spectrum character set: code ranges, ROM font layout at `#3D00`–`#3FFF`, UDG system, CHARS redirection for custom fonts, token encoding |
 
 ## Planned
 
 - `memory_maps.md` — Consolidated memory maps for all models
-- `character_set.md` — ZX Spectrum character set and ASCII mapping
 - `basic_token_table.md` — Sinclair BASIC token table
 - `rom_routines.md` — ROM routine addresses
 - `color_palette.md` — Color reference: 8 standard + ULAplus + Next 256-color
