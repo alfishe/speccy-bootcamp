@@ -362,7 +362,7 @@ zx/
 │   ├── zeus_assembler.md                # ✅ Done (Jul 2026)
 │   ├── devpac_gens_mons.md              # ✅ Done (Jul 2026)
 │   ├── alasm_sts.md                     # ✅ Done (Jul 2026)
-│   ├── xas_assembler.md                 # Planned
+│   ├── xas_assembler.md                 # ✅ Done (Jul 2026)
 │   ├── tasm_native.md                   # Planned
 │   ├── zxasm_native.md                  # Planned
 │   ├── pikasm.md                        # Planned
@@ -986,7 +986,7 @@ All 11 articles are ✅ Complete (CC BY-SA 4.0). Cross-references verified. See 
 | `zeus_assembler.md` | ✅ **Zeus Assembler** — 40-year integrated Z80 dev environment (Nascom 2 → Spectrum 1983 → Zeus 4 Next): editor+assembler+monitor+disassembler in one program, version history, source language (labels/macros/conditionals), built-in monitor (RST #38 breakpoints), built-in disassembler, Zeus 4 modern era (Z80N, .nex, NextReg), comparison vs sjasmplus, FAQ, references |
 | `devpac_gens_mons.md` | ✅ **HiSoft DevPac** — GENS, MONS, and the workhorse of the UK commercial Spectrum era (1983–1990): two-program design, version history, GENS source language (directives, two-pass, macros, conditionals), MONS monitor (commands, RST #38 breakpoints), GENS-MONS workflow, comparison vs Zeus, +3 DOS integration, why commercial studios standardised on DevPac, FAQ, legacy in modern sjasmplus conventions |
 | `alasm_sts.md` | ✅ **ALASM + STS** — dominant Soviet/post-Soviet native assembler (1992–2005): TR-DOS-native design, fast assembly on slow clone hardware, Cyrillic comment support, STS hardware-assisted debugger (full trace, reverse debugging), ALASM source language (MODULE/ENDMOD namespaces, parameterised macros, multi-file INCLUDE), ALASM+STS workflow, comparison vs XAS, Russian demoscene party circuit (CC, diHALT, CAFe), FAQ, legacy in modern Russian-scene archives |
-| `xas_assembler.md` | XAS (v7.x–9.x): Russian-native macro assembler, alternative to ALASM, popular in the demo scene |
+| `xas_assembler.md` | ✅ **XAS Assembler** — Russian scene's code-generation specialist (1993–2000s, versions 7.x–9.x): macros as central abstraction, multi-window IDE-like editor, three-layer macro system (substitution → variadic/conditional → algorithmic code generation via IRP/IRPC/REPT/string manipulation), scene adoption by Elite Group and Progress demoscene crews, comparison with ALASM, FAQ, legacy in modern sjasmplus macro/Lua capabilities |
 | `tasm_native.md` | TASM (native Spectrum version): early native assembler, simple macro support |
 | `zxasm_native.md` | ZXASM 3.0: native assembler with STS integration |
 | `pikasm.md` | PikAsm: native assembler, used alongside VAST in some professional workflows |
@@ -1116,7 +1116,7 @@ Articles are written in priority order. README.md is synthesized AFTER articles 
 - **Tier A** ✅ **DONE** (Jul 2026): `05_display_and_timing` — all 19 articles complete (48K, 128K, +2A/+3, Pentagon, Scorpion, other Soviet, Next, Sprinter, ZX Evolution, contention_timing, interlace_and_flicker, crt_output, video_frame_comparison)
 - **Tier D** ✅ **DONE** (Jul 2026): `10_references/character_set.md`, `10_references/color_palette.md`, `10_references/z80_opcode_table.md` all complete (3 of 10 planned reference articles; remaining 7 are deferred)
 - **Tier B** ✅ **DONE** (Jul 2026): `02_hardware/original/zx_spectrum_16k_48k.md` and `02_hardware/clones/pentagon.md` — both foundational hardware articles complete
-- **Tier C** (section completion, **IN PROGRESS**): `08_reverse_engineering/methodology.md` ✅, `09_toolchain/zeus_assembler.md` ✅, `09_toolchain/devpac_gens_mons.md` ✅, `09_toolchain/alasm_sts.md` ✅ done; `xas_assembler.md` remaining
+- **Tier C** ✅ **DONE** (Jul 2026): `08_reverse_engineering/methodology.md`, `09_toolchain/zeus_assembler.md`, `09_toolchain/devpac_gens_mons.md`, `09_toolchain/alasm_sts.md`, `09_toolchain/xas_assembler.md` — all 5 articles complete
 - **Tier E** (new ground): `03_io/networking/`, `11_emulation/`
 
 After articles exist: README.md (documentation map), TODO.md (gap analysis), section README.md indexes.
