@@ -78,9 +78,9 @@ Contention only occurs during the **paper area** — the 192 scanlines where the
 > [!IMPORTANT]
 > The 128K/+2 and +2A/+3 have **63 scanlines of top border** (not 64 like the 48K) because their scanlines are 228 T-states long (not 224). Paper therefore starts at scanline 63, and the contention pattern starts at T=14,361 (not T=14,335 as on the 48K). This 1-scanline offset is a common source of bugs when porting cycle-exact code from 48K to 128K. Sources: [WoS 128K FAQ](https://worldofspectrum.org/faq/reference/128kreference.htm), [Sinclair Wiki — Contended memory](https://sinclair.wiki.zxnet.co.uk/wiki/Contended_memory).
 
-### Within Each Contended Scanline (48K)
+### Within Each Contended Scanline (Ferranti ULA — 48K, 128K, +2)
 
-A single scanline is 224 T-states. Of those, only 128 are within contention "active" windows — the remaining 96 are free time:
+A single scanline is 224 T-states (48K) or 228 T-states (128K/+2). Of those, only 128 are within contention "active" windows — the remaining 96 (48K) or 100 (128K) are free time:
 
 ```
 T-state offset within scanline (relative to scanline start):
@@ -95,8 +95,89 @@ Contention pattern within "active" region:
   Slot 15 (T=136-143): 6,5,4,3,2,1,0,0
 ```
 
+#### First Paper Scanline — T-state by T-state (Ferranti)
+
+The pattern's first slot is aligned to the frame, not the scanline. On the 48K, contention begins at **T=14,335** (the last T-state of the last top-border scanline — the ULA is already prefetching the first paper byte) and continues 6,5,4,3,2,1,0,0 across every 8-T slot:
+
+| T-state | Delay | Pattern slot | Notes |
+|---|---|---|---|
+| 14,335 | **6** | Slot 0 begin | Last T-state of top border — ULA prefetch |
+| 14,336 | **5** | Slot 0 | First T-state of scanline 64 (paper line 0) |
+| 14,337 | **4** | Slot 0 | |
+| 14,338 | **3** | Slot 0 | |
+| 14,339 | **2** | Slot 0 | |
+| 14,340 | **1** | Slot 0 | |
+| 14,341 | 0 | Slot 0 | |
+| 14,342 | 0 | Slot 0 end | |
+| 14,343 | **6** | Slot 1 begin | |
+| 14,344 | **5** | Slot 1 | |
+| 14,345 | **4** | Slot 1 | |
+| 14,346 | **3** | Slot 1 | |
+| 14,347 | **2** | Slot 1 | |
+| 14,348 | **1** | Slot 1 | |
+| 14,349 | 0 | Slot 1 | |
+| 14,350 | 0 | Slot 1 end | |
+| ... | ... | ... | Pattern continues |
+| 14,462 | 0 | Slot 15 end | Last contended T-state of scanline 64 |
+| 14,463–14,558 | **0** | — | 96 T-states free (border/horizontal retrace) |
+| 14,559 | **6** | Slot 0 of scanline 65 | Pattern resumes — T offset = 224 from start |
+
+The pattern repeats every **224 T-states** on 48K (one scanline). Over the 192 paper scanlines, the pattern fires 192 × 16 = 3,072 slots in total. After scanline 255 (T=57,344), no further contention until the next frame's T=14,335.
+
 > [!NOTE]
 > The exact T-state offset of the *first* contention slot within the scanline depends on the model. On the 48K, contention starts at T-state 16 of each paper scanline (after horizontal retrace). The pattern above is simplified; for cycle-exact work, always verify with the reference timing table for your specific model.
+
+> [!IMPORTANT]
+> **The 14335 vs 14336 issue.** Different authoritative sources cite both T=14,335 and T=14,336 as the "start of contention" on the 48K. Both are correct from different viewpoints: T=14,335 is the T-state at which the **first delay can be observed** (slot 0 begins, delay 6 if CPU accesses contended memory at this instant); T=14,336 is the T-state at which **paper display begins** (scanline 64, first pixel output). The 1-T ambiguity is the foundation of the "early vs late timing" issue documented across 48K ULA revisions (5C/6C/7C/8C). Source: [Sinclair Wiki — Contended memory](https://sinclair.wiki.zxnet.co.uk/wiki/Contended_memory).
+
+### Within Each Contended Scanline (Amstrad Gate Array — +2A, +3, +2B, +3B)
+
+The Amstrad gate array (40084/40085) uses a **shifted and inverted** pattern: peak delay 7T (vs Ferranti's 6T) and the worst-case slot sits at offset 2 instead of offset 0:
+
+```
+T-state offset within scanline (relative to scanline start):
+0─────────16─────────32─────────48─────────64──── ... ────128─────────228
+│ horizontal │  contended "active" region  │   free  │      │   free    │
+│ retrace    │  16 × 8-T contention slots   │  time   │      │  (+4 T)   │
+                                                                        
+Contention pattern within "active" region (different from Ferranti!):
+  Slot 0 (T=16-23):  1,0,7,6,5,4,3,2
+  Slot 1 (T=24-31):  1,0,7,6,5,4,3,2
+  ... (16 slots total)
+  Slot 15 (T=136-143): 1,0,7,6,5,4,3,2
+```
+
+#### First Paper Scanline — T-state by T-state (Amstrad Gate Array)
+
+On the +2A/+3, contention begins at **T=14,361** (3 T-states before scanline 63 begins at T=14,364 — again, ULA prefetch) and follows the 1,0,7,6,5,4,3,2 pattern across every 8-T slot:
+
+| T-state | Delay | Pattern slot | Notes |
+|---|---|---|---|
+| 14,361 | **1** | Slot 0 begin | Still in scanline 62 (top border) — ULA prefetch |
+| 14,362 | 0 | Slot 0 | |
+| 14,363 | **7** | Slot 0 | Peak delay 7T at offset 2 within slot |
+| 14,364 | **6** | Slot 0 | First T-state of scanline 63 (paper line 0) |
+| 14,365 | **5** | Slot 0 | |
+| 14,366 | **4** | Slot 0 | |
+| 14,367 | **3** | Slot 0 | |
+| 14,368 | **2** | Slot 0 end | |
+| 14,369 | **1** | Slot 1 begin | |
+| 14,370 | 0 | Slot 1 | |
+| 14,371 | **7** | Slot 1 | Peak delay 7T at offset 2 within slot |
+| 14,372 | **6** | Slot 1 | |
+| 14,373 | **5** | Slot 1 | |
+| 14,374 | **4** | Slot 1 | |
+| 14,375 | **3** | Slot 1 | |
+| 14,376 | **2** | Slot 1 end | |
+| ... | ... | ... | Pattern continues |
+| 14,488 | 2 | Slot 15 end | Last contended T-state of scanline 63 |
+| 14,489–14,588 | **0** | — | 100 T-states free (border/horizontal retrace) |
+| 14,589 | **1** | Slot 0 of scanline 64 | Pattern resumes — T offset = 228 from start |
+
+The pattern repeats every **228 T-states** on +2A/+3 (one scanline). The peak delay of 7T is **one T-state worse** than Ferranti's 6T, and occurs at slot offset 2 instead of offset 0 — this means any cycle-exact timing loop tuned for the 48K's 6,5,4,3,2,1,0,0 cadence will be off by 1-2 T-states per slot on a +2A/+3.
+
+> [!IMPORTANT]
+> **MREQ gating — the most important +2A/+3 difference.** The Ferranti ULA applies contention **whenever the CPU is on the bus**, regardless of whether the access is memory or I/O. The Amstrad gate array applies contention **only when the Z80's `MREQ` line is active** (i.e., a real memory access). I/O port accesses (`IORQ` active, `MREQ` inactive) are **never contended** on +2A/+3. This is why `OUT (#FE),A` (border colour), `OUT (#7FFD),A` (128K paging), and `OUT (#BFFD),A` (AY chip) all run at full speed during the paper area on +2A/+3, but pay up to 6T of contention delay on 48K/128K/+2. Code that uses tight `OUT (#FE),A` loops for multicolor border effects will run **too fast** when ported from +2A/+3 to 48K unless padded with NOPs. Source: [Sinclair Wiki — Contended memory](https://sinclair.wiki.zxnet.co.uk/wiki/Contended_memory).
 
 ---
 
@@ -156,18 +237,20 @@ If `SP` points into `#4000`–`#7FFF` (which is rare but possible — e.g., stac
 
 ## I/O Port Contention
 
-On the Ferranti ULA, **I/O writes to ports with A0=0** (the ULA port and its aliases) also suffer contention. This is critical for `OUT (#FE),A` (border color) and `OUT (C),r` (AY chip writes).
+On the Ferranti ULA, **I/O writes to ports with A0=0** (the ULA port and its aliases) also suffer contention. This is critical for `OUT (#FE),A` (border color) and `OUT (C),r` (AY chip writes). The root cause is that the Ferranti ULA keys contention off the CPU bus generally — it cannot distinguish a memory access from an I/O access.
+
+The Amstrad gate array (+2A/+3/+2B/+3B) is more selective: it keys contention off the Z80's **`MREQ`** line, which is only active during memory accesses. I/O accesses activate **`IORQ`** instead, leaving `MREQ` inactive, so **I/O is never contended** on the gate array regardless of port address.
 
 | Port | A0 | Contended on Ferranti? | Contended on +2A/+3? |
 |---|---|---|---|
-| `#FE` (ULA) | 0 | **Yes** (6-5-4-3-2-1-0-0) | No |
-| `#7FFD` (128K paging) | 0 | **Yes** | No |
-| `#BFFD` / `#FFFD` (AY) | 0 | **Yes** | No |
+| `#FE` (ULA) | 0 | **Yes** (6-5-4-3-2-1-0-0) | No (`IORQ` active, `MREQ` inactive) |
+| `#7FFD` (128K paging) | 0 | **Yes** | No (same — `MREQ` gating) |
+| `#BFFD` / `#FFFD` (AY) | 0 | **Yes** | No (same) |
 | `#F4` / `#1F` (Kempston) | 1 | No | No |
 | `#FADF` (Fuller) | 1 | No | No |
 
 > [!IMPORTANT]
-> Code that does `OUT (#FE),A` to change the border colour during the paper area on a 48K or 128K will pay a contention delay of up to **6 extra T-states**. On the +2A/+3, the same instruction takes the same time regardless of beam position. This means **timing-tight border-effect code that works on +2A will run too fast on 48K** unless you pad with NOPs.
+> Code that does `OUT (#FE),A` to change the border colour during the paper area on a 48K or 128K will pay a contention delay of up to **6 extra T-states**. On the +2A/+3, the same instruction takes the same time regardless of beam position. This means **timing-tight border-effect code that works on +2A will run too fast on 48K** unless you pad with NOPs. See also the [MREQ gating](#within-each-contended-scanline-amstrad-gate-array--2a-3-2b-3b) note above for the underlying cause.
 
 ---
 

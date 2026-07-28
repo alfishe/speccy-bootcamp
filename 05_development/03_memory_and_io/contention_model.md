@@ -99,7 +99,7 @@ Uncontended:  #0000 - #3FFF   (ROM)
 Uncontended:  #8000 - #FFFF   (lower 32K RAM)
 ```
 
-The contention pattern is 6-5-4-3-2-1-0-0 during the 128T contention window per scanline.
+The contention pattern is 6-5-4-3-2-1-0-0 during the 128T contention window per scanline. **Pattern starts at T=14,335** (the last T-state of top border, with the ULA prefetching the first paper byte) and repeats every **224 T-states** (one scanline). The closely-related value T=14,336 is the first T-state of scanline 64 (paper display proper) — both values appear in the literature depending on whether one is describing the first delayable access or the first paper pixel. See [contention_timing.md](../05_display_and_timing/contention_timing.md#first-paper-scanline--t-state-by-t-state-ferranti) for the per-T-state delay progression table.
 
 ### 128K / +2 — Bank-Based Contention
 
@@ -110,21 +110,23 @@ DRAM set A (uncontended):  Banks 0, 2, 4, 6 (even banks)
 DRAM set B (contended):    Banks 1, 3, 5, 7 (odd banks)
 ```
 
-Bank 5 (always at `#4000`–`#7FFF`) is in set B, so the default screen is contended — same as 48K. But if you page bank 0 (set A) into `#C000`–`#FFFF`, code at `#C000` runs at full speed even during the paper area.
+- RAM at `#4000`–`#7FFF` is **always contended** because bank 5 (set B) is permanently mapped there as the default screen.
+- RAM at `#C000`–`#FFFF` is **conditionally contended** — contended if and only if an odd bank (1, 3, 5, or 7) is paged into that range via `#7FFD`. Page in bank 0, 2, 4, or 6 and code at `#C000` runs at full speed even during the paper area.
 
-The contention pattern is the same 6-5-4-3-2-1-0-0 as the 48K.
+The delay **pattern** is the same 6-5-4-3-2-1-0-0 as the 48K, but the **timing differs**: pattern starts at **T=14,361** (not T=14,335) and repeats every **228 T-states** (not 224) because the 128K/+2 scanline is 228T long. Source: [WoS 128K FAQ](https://worldofspectrum.org/faq/reference/128kreference.htm).
 
 ### +2A / +3 — Gate Array Contention
 
-The Amstrad gate array uses a completely different contention model:
+The Amstrad gate array (ASIC 40084 in the +2A/+3, 40085 in the +2B/+3B) uses a completely different contention model from the Ferranti ULA:
 
-- **Different contended banks**: 4, 5, 6, 7 (not 1, 3, 5, 7)
-- **Different delay pattern**: 1-0-7-6-5-4-3-2 (inverted and shifted)
-- **MREQ-only**: I/O port accesses are **not** contended. `OUT (#FE),A` takes the same time during paper as during border.
-- **No early/late timing**: The gate array does not exhibit the thermal drift of the Ferranti ULA.
+- **Different contended banks**: 4, 5, 6, 7 (not 1, 3, 5, 7 as on the 128K/+2). Banks 0–3 are never contended regardless of where they're paged.
+- **Different delay pattern**: 1-0-7-6-5-4-3-2 (shifted and inverted relative to Ferranti 6-5-4-3-2-1-0-0). Peak delay is **7T** (one worse than Ferranti's 6T) at slot offset 2.
+- **MREQ gating**: The gate array applies contention **only when the Z80's `MREQ` line is active** (i.e., a real memory access). I/O port accesses activate `IORQ` instead, leaving `MREQ` inactive, so I/O is **never contended** regardless of port address. This is the underlying reason `OUT (#FE),A`, `OUT (#7FFD),A`, and `OUT (#BFFD),A` all run at full speed during the paper area on +2A/+3.
+- **No early/late timing**: The gate array is a single stable ASIC and does not exhibit the thermal drift / ULA-revision variance of the Ferranti chips (5C/6C/7C/8C).
+- **Pattern starts at T=14,361** (not T=14,335 as on 48K), repeating every 228 T-states (not 224). For the full per-T-state delay progression table, see [contention_timing.md](../05_display_and_timing/contention_timing.md#first-paper-scanline--t-state-by-t-state-amstrad-gate-array).
 
 > [!WARNING]
-> Code that relies on the exact Ferranti contention pattern (6-5-4-3-2-1-0-0) for timing will break on the +2A/+3. The peak delay is 7T instead of 6T, and it occurs at a different T-state offset.
+> Code that relies on the exact Ferranti contention pattern (6-5-4-3-2-1-0-0) for timing will break on the +2A/+3. The peak delay is 7T instead of 6T, and it occurs at a different T-state offset (slot offset 2 vs slot offset 0).
 
 ### Pentagon — No Contention
 

@@ -73,12 +73,14 @@ This is a significant difference. On the 128K, bank 0 is uncontended. On the +2A
 
 ### I/O Contention
 
-| Model | I/O contention |
-|-------|---------------|
-| Ferranti ULA | **Yes** — any port with A0=0 is contended during paper |
-| Amstrad gate array | **No** — only MREQ (memory) is contended |
+| Model | I/O contention | Root cause |
+|-------|---------------|------------|
+| Ferranti ULA | **Yes** — any port with A0=0 is contended during paper | ULA cannot distinguish memory vs I/O bus cycles |
+| Amstrad gate array | **No** — only `MREQ` (memory) is contended | Gate array keys off `MREQ` line; I/O accesses activate `IORQ` instead |
 
-This means `OUT (#FE),A` (border color) runs at the same speed during paper and border on the +2A/+3. On the Ferranti ULA, it's delayed.
+This means `OUT (#FE),A` (border color), `OUT (#7FFD),A` (paging), and `OUT (#BFFD),A` (AY) all run at the **same speed during paper as during border** on +2A/+3. On the Ferranti ULA (48K/128K/+2), each of these pays up to 6T of contention delay per call during the paper area. This asymmetry is the most common cause of multicolor border effects running too fast when ported from +2A/+3 back to earlier machines — pad with NOPs to compensate.
+
+For the full per-T-state delay tables (both Ferranti and Amstrad), see [contention_timing.md](contention_timing.md).
 
 ---
 
