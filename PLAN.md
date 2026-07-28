@@ -141,7 +141,7 @@ zx/
 │       ├── zx_net.md                      # ✅ Done (Jul 2026)
 │       ├── modems.md                      # ✅ Done (Jul 2026)
 │       ├── spectranet.md                  # ✅ Done (Jul 2026)
-│       ├── zifi.md
+│       ├── zifi.md                        # ✅ Done (Jul 2026)
 │       ├── esp_wifi.md
 │       └── zx_next_wifi.md
 │
@@ -664,7 +664,7 @@ zx/
 | `zx_net.md` | ✅ **ZX Net** — Sinclair's 1983 classroom LAN for the Spectrum (with ZX Interface 1): up to 64 stations daisy-chained via ribbon cable, polling-based MAC, packet format (dest/src/len/ctrl/payload/checksum), 9600 bit/s signalling, ROM API (`*NET`, `*LOAD name N`, `*SAVE name N`), microdrive file system, software ecosystem, commercial failure vs Econet, modern emulation in Fuse/ZEsarUX |
 | `modems.md` | ✅ **Modems** — telephone-line connectivity for the ZX Spectrum (1982–2000s): acoustic couplers (300 bit/s V.21 FSK), direct-connect modems (Prestel 1200/75, V.23, V.22, V.22 bis, V.32, V.34), Spectrum serial interfaces (Interface 1 RS-232, Kempston SIO, +2A/+3, Beta 128), Prism VTX-5000, Russian modems (Analog 14400, Idustria, T-mail FidoNet mailer), Prestel/Micronet 800 videotex services, BBSes (BBStar, Commstar), Russian FidoNet, early Internet access, modern alternatives (Spectranet/ZiFi/ESP WiFi), FAQ, summary, references |
 | `spectranet.md` | ✅ **Spectranet** — modern (2007+) Ethernet + TCP/IP interface for the ZX Spectrum, designed by Andrew Owen: ENC28J60 Ethernet controller via SPI, on-board flash ROM with full TCP/IP stack (TCP/UDP/ICMP/DHCP/DNS/HTTP/FTP/telnet/IRC/NTP), hardware compatibility with all Sinclair/clones, ROM API (BASIC extensions + BSD socket API via `RST #08`), software ecosystem (telnet/FTP/HTTP/IRC clients, Spectrum HTTP server, multiplayer games), comparison with ZiFi, IPv4-only, FAQ, references |
-| `zifi.md` | ZiFi: WiFi module for ZX Spectrum, AT command interface |
+| `zifi.md` | ✅ **ZiFi** — WiFi networking interface for the ZX Spectrum built around the Espressif ESP8266 microcontroller (released 2014). The ESP8266 runs the TCP/IP stack in its own firmware, exposing WiFi and TCP/UDP operations via the Hayes AT command set over a UART. ZiFi hardware: ESP-01/ESP-12 modules, level shifting between 3.3V ESP8266 and 5V Spectrum, dedicated 3.3V regulator (ESP8266 peaks 80 mA). Serial interfaces: Interface 1 RS-232, +2A/+3 serial, Kempston SIO, Beta 128 serial. AT command reference (WiFi: `AT+CWMODE`/`AT+CWJAP`; TCP: `AT+CIPSTART`/`AT+CIPSEND`/`AT+CIPCLOSE`; `+IPD` notifications), typical session, throughput 2–8 KB/s, software ecosystem (telnet, FTP, HTTP, IRC, multiplayer), ZiFi vs Spectranet comparison (WiFi vs Ethernet, AT vs BSD sockets, £5–£10 vs ~£60), SSL/TLS support, FAQ, references |
 | `esp_wifi.md` | ESP-based WiFi: ESP8266/ESP32 modules for various Spectrum interfaces |
 | `zx_next_wifi.md` | ZX Spectrum Next WiFi: ESP module, TCP/IP stack |
 
@@ -1106,7 +1106,7 @@ Articles are written in priority order. README.md is synthesized AFTER articles 
 | 10 References | 5/10 | 📝 z80_opcode_table.md, character_set.md, color_palette.md done; 7 more pending |
 | 09 Toolchain | 11/~30 | 📝 Surveys done; per-tool stubs pending |
 | 02 Hardware (all 3 streams) | 9/~40 | 📝 Major gap |
-| 03_io/networking | 0/6 | 📝 Empty |
+| 03_io/networking | 4/6 | 📝 Tier E in progress (zx_net, modems, spectranet, zifi done; esp_wifi + zx_next_wifi pending) |
 | 08 Reverse Engineering | 1/9 | 📝 Major gap |
 | 11 Emulation | 1/~20 | 📝 Major gap |
 | 05_dev/01_basic, 02_assembly, 06_graphics | 0/30+ | 📝 Empty |
@@ -1117,7 +1117,7 @@ Articles are written in priority order. README.md is synthesized AFTER articles 
 - **Tier D** ✅ **DONE** (Jul 2026): `10_references/character_set.md`, `10_references/color_palette.md`, `10_references/z80_opcode_table.md` all complete (3 of 10 planned reference articles; remaining 7 are deferred)
 - **Tier B** ✅ **DONE** (Jul 2026): `02_hardware/original/zx_spectrum_16k_48k.md` and `02_hardware/clones/pentagon.md` — both foundational hardware articles complete
 - **Tier C** ✅ **DONE** (Jul 2026): `08_reverse_engineering/methodology.md`, `09_toolchain/zeus_assembler.md`, `09_toolchain/devpac_gens_mons.md`, `09_toolchain/alasm_sts.md`, `09_toolchain/xas_assembler.md` — all 5 articles complete
-- **Tier E** (new ground): `03_io/networking/`, `11_emulation/`
+- **Tier E** (in progress, Jul 2026): `03_io/networking/` (4/6 done — zx_net, modems, spectranet, zifi), then `11_emulation/`
 
 After articles exist: README.md (documentation map), TODO.md (gap analysis), section README.md indexes.
 
