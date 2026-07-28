@@ -6,10 +6,9 @@ This directory covers software emulators: Fuse, ZEsarUX, CSpect, Spectaculator, 
 
 ## Articles
 
-| Article | Topic |
-|---------|-------|
-| [cycle_exact_accuracy.md](cycle_exact_accuracy.md) | Frame timing divergence, CRT sync mechanism, host sync strategies (DRC, resampling), AY-3-8912 audio clocks, judder mitigation (5 techniques with compute costs), emulator comparison (10 entries), worst-case Pentagon@60Hz conclusion |
+| # | Article | Topic |
+|---|---------|-------|
+| 1 | [emulator_comparison.md](emulator_comparison.md) | Comprehensive comparison of ZX Spectrum emulators (Fuse, ZEsarUX, CSpect, Spectaculator, UnrealSpeccy, Klive, Speccy/fMSX, JSSpeccy). Categories: cross-platform accuracy-focused, Windows-focused, Next-aware, web-based, mobile, retro-platform, embedded. Detailed strengths/weaknesses for each major emulator. Comparison matrices: platform support, hardware coverage (16K/48K/128K/Pentagon/Scorpion/Next/TSConf), accuracy (cycle-exact, contended memory, audio timing), development tools (disassembler, memory viewer, breakpoints, sprite/tile viewer, RMX), licensing. Selection guide by use case (casual gaming, original hardware development, Next development, reverse engineering, demoscene production, hardware research, mobile, web, embedded). FAQ (best emulator, multiple installs, beating real hardware, free emulators, console bundles, cross-platform). References |
+| 2 | [cycle_exact_accuracy.md](cycle_exact_accuracy.md) | Frame timing divergence, CRT sync mechanism, host sync strategies (DRC, resampling), AY-3-8912 audio clocks, judder mitigation (5 techniques with compute costs), emulator comparison (10 entries), worst-case Pentagon@60Hz conclusion |
 
 See [PLAN.md](../../PLAN.md) for the full article catalog.
-
-Remaining articles in this directory are placeholders — content is coming.

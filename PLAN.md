@@ -404,7 +404,7 @@ zx/
 └── 11_emulation/
     ├── software/
     │   ├── README.md
-    │   ├── emulator_comparison.md
+    │   ├── emulator_comparison.md              # ✅ Done (Jul 2026)
     │   ├── cycle_exact_accuracy.md
     │   ├── fuse.md
     │   ├── zesarux.md
@@ -1050,7 +1050,7 @@ All 11 articles are ✅ Complete (CC BY-SA 4.0). Cross-references verified. See 
 | File | Topic |
 |---|---|
 | `README.md` | Index — software emulation landscape |
-| `emulator_comparison.md` | Comprehensive comparison: Fuse, ZEsarUX, Spectaculator, CSpect, EightyOne, Unreal Speccy, SpecEmu — accuracy vs features |
+| `emulator_comparison.md` | ✅ **Emulator Comparison** — comprehensive comparison of ZX Spectrum emulators (Fuse, ZEsarUX, CSpect, Spectaculator, UnrealSpeccy, Klive, Speccy/fMSX, JSSpeccy). Categories: cross-platform accuracy-focused, Windows-focused, Next-aware, web-based, mobile, retro-platform, embedded. Detailed strengths/weaknesses for each major emulator. Comparison matrices: platform support, hardware coverage (16K/48K/128K/Pentagon/Scorpion/Next/TSConf), accuracy (cycle-exact, contended memory, audio timing), development tools (disassembler, memory viewer, breakpoints, sprite/tile viewer, RMX), licensing. Selection guide by use case (casual gaming, original hardware development, Next development, reverse engineering, demoscene production, hardware research, mobile, web, embedded). FAQ, references |
 | `cycle_exact_accuracy.md` | Cycle-exact requirements: frame timing divergence, CRT sync mechanism, host sync strategies (DRC, resampling), AY audio clocks, judder mitigation (5 techniques), emulator comparison (10 entries), worst-case conclusion | ✅ |
 | `fuse.md` | Fuse: reference emulator, architecture, debugger, RZX recording |
 | `zesarux.md` | ZEsarUX: advanced debugging, reverse debugging, FPGA simulation, Next support |
@@ -1108,7 +1108,7 @@ Articles are written in priority order. README.md is synthesized AFTER articles 
 | 02 Hardware (all 3 streams) | 9/~40 | 📝 Major gap |
 | 03_io/networking | 6/6 | ✅ **COMPLETE** (Jul 2026) — zx_net, modems, spectranet, zifi, esp_wifi, zx_next_wifi all done |
 | 08 Reverse Engineering | 1/9 | 📝 Major gap |
-| 11 Emulation | 1/~20 | 📝 Major gap |
+| 11 Emulation | 2/~20 | 📝 Tier E in progress (cycle_exact_accuracy + emulator_comparison done; 18 more across software/fpga/mcu pending) |
 | 05_dev/01_basic, 02_assembly, 06_graphics | 0/30+ | 📝 Empty |
 
 **Active writing tiers** (priority order):
