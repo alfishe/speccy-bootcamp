@@ -1103,7 +1103,7 @@ Articles are written in priority order. README.md is synthesized AFTER articles 
 | 06 Sound (synthesis/hardware/trackers/players) | 33+2 | ✅ Complete |
 | 07 Demoscene | 11/11 | ✅ Complete |
 | 05_dev/05_display_and_timing | **19/19** | ✅ **Complete** (Tier A finished Jul 2026) |
-| 10 References | 3/10 | 📝 z80_opcode_table.md done; character_set.md, color_palette.md pending |
+| 10 References | 5/10 | 📝 z80_opcode_table.md, character_set.md, color_palette.md done; 7 more pending |
 | 09 Toolchain | 11/~30 | 📝 Surveys done; per-tool stubs pending |
 | 02 Hardware (all 3 streams) | 9/~40 | 📝 Major gap |
 | 03_io/networking | 0/6 | 📝 Empty |
@@ -1114,8 +1114,8 @@ Articles are written in priority order. README.md is synthesized AFTER articles 
 **Active writing tiers** (priority order):
 
 - **Tier A** ✅ **DONE** (Jul 2026): `05_display_and_timing` — all 19 articles complete (48K, 128K, +2A/+3, Pentagon, Scorpion, other Soviet, Next, Sprinter, ZX Evolution, contention_timing, interlace_and_flicker, crt_output, video_frame_comparison)
-- **Tier D partial**: `10_references/z80_opcode_table.md` done; `character_set.md`, `color_palette.md` still pending
-- **Tier B** (foundational gaps): `02_hardware/original/zx_spectrum_16k_48k.md` and `02_hardware/clones/pentagon.md` — these are the most-referenced hardware articles that don't exist yet
+- **Tier D** ✅ **DONE** (Jul 2026): `10_references/character_set.md`, `10_references/color_palette.md`, `10_references/z80_opcode_table.md` all complete (3 of 10 planned reference articles; remaining 7 are deferred)
+- **Tier B** (foundational gaps, **IN PROGRESS**): `02_hardware/original/zx_spectrum_16k_48k.md` and `02_hardware/clones/pentagon.md` — these are the most-referenced hardware articles that don't exist yet
 - **Tier C** (section completion): `09_toolchain` per-tool articles (zeus, devpac, alasm_sts, etc.) and `08_reverse_engineering/methodology.md`
 - **Tier E** (new ground): `03_io/networking/`, `11_emulation/`
 
