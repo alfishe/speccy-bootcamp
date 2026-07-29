@@ -362,11 +362,22 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [n_go.md](11_emulation/mcu/n_go.md) | **N-Go — complete Spectrum on MCU** — synthesis article, RP2040 multicore architecture (Z80 core + ULA + PSG + SD), firmware structure |
 | [mcu_design_patterns.md](11_emulation/mcu/mcu_design_patterns.md) | **MCU design patterns** — bus interfacing (memory-mapped/port/IO/DMA), 74HCT vs 74HC level shifting, RP2040 PIO timing-critical I/O, GPIO drive, ring buffers, lock-free SPSC queues, common pitfalls |
 
-**Other sections**
+### 10 — References ✅ COMPLETE (10 articles)
+
+**Section 10 — References** — lookup tables and pin/byte/timing references ([section README](10_references/README.md))
 
 | Article | Description |
 |---------|-------------|
+| [z80_opcode_table.md](10_references/z80_opcode_table.md) | One-page Z80 opcode lookup: every documented instruction by group with byte count, T-states, and flag effects |
 | [io_port_map.md](10_references/io_port_map.md) | Complete I/O port reference: every port across all models, Black_Cat table with annotations, decoding bitmasks, per-model differences |
+| [character_set.md](10_references/character_set.md) | ZX Spectrum character set: code ranges, ROM font layout, UDG system, CHARS redirection |
+| [color_palette.md](10_references/color_palette.md) | Standard 15-colour palette (FUSE/Skoolkid/ZEsarUX variants), ULAplus 64-colour, ZX Spectrum Next 256-colour |
+| [memory_maps.md](10_references/memory_maps.md) | Consolidated memory maps for every model (16K/48K, 128K/+2, +2A/+3, Pentagon, Scorpion, ATM Turbo, Next) — contended regions, banking registers, RAMTOP defaults, compatibility cheat sheet |
+| [basic_token_table.md](10_references/basic_token_table.md) | Sinclair BASIC token table: byte values and tokenisation rules for 48K/128K/+2/+2A/+3 ROMs — control codes, function tokens, UDGs, block graphics |
+| [error_codes.md](10_references/error_codes.md) | All BASIC/DOS error codes — 10 Sinclair BASIC, +3 DOS (12), TR-DOS (Russian), ESXDOS (POSIX-style), IS-DOS, NextZXOS — recovery patterns |
+| [timing_reference.md](10_references/timing_reference.md) | Cycle-exact timing tables — CPU clocks per model, video frame timings (48K/128K/Pentagon), contention delay tables, INT/NMI timing, common instruction T-state counts |
+| [pinouts.md](10_references/pinouts.md) | Pin-by-pin reference — 48K/128K/+2 expansion edge connector (A and B side), Z80 40-pin DIP, AY-3-8912 28-pin DIP, joystick ports, Kempston mouse, EAR/MIC jacks, power connectors |
+| [rom_routines.md](10_references/rom_routines.md) | ROM entry points — restart vectors, character output, keyboard, tape, math/calculator, 128K-specific routines, calling conventions with examples |
 
 ---
 

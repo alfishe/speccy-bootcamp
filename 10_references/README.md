@@ -1,8 +1,8 @@
-[← Plan](../PLAN.md) · [References](README.md)
+[← Home](../README.md) · [References](README.md)
 
-# References
+# References ✅ COMPLETE (10 articles)
 
-Quick-reference tables for ZX Spectrum development: opcode matrix, I/O port map, memory maps, character set, token tables, ROM routines, color palettes, error codes, timing, and pinouts.
+Quick-reference tables for ZX Spectrum development: opcode matrix, I/O port map, memory maps, character set, token tables, ROM routines, color palettes, error codes, timing, and pinouts. All ten planned articles are complete.
 
 ## Articles
 
@@ -12,14 +12,11 @@ Quick-reference tables for ZX Spectrum development: opcode matrix, I/O port map,
 | [z80_opcode_table.md](z80_opcode_table.md) | One-page Z80 opcode lookup: every documented instruction by group with byte count, T-states, and flag effects. Compresses [z80_instruction_set.md](../01_cpu/z80_instruction_set.md) into scan-able tables |
 | [character_set.md](character_set.md) | ZX Spectrum character set: code ranges, ROM font layout at `#3D00`–`#3FFF`, UDG system, CHARS redirection for custom fonts, token encoding |
 | [color_palette.md](color_palette.md) | Color reference: 15-colour standard palette (FUSE/Skoolkid/ZEsarUX variants), ULAplus 64-colour, ZX Spectrum Next 256-colour, Timex extended modes |
-
-## Planned
-
-- `memory_maps.md` — Consolidated memory maps for all models
-- `basic_token_table.md` — Sinclair BASIC token table
-- `rom_routines.md` — ROM routine addresses
-- `error_codes.md` — BASIC error codes
-- `timing_reference.md` — Consolidated timing tables
-- `pinouts.md` — Pinout reference for edge connector, AY, joystick ports
+| [memory_maps.md](memory_maps.md) | Consolidated memory maps for every model (16K/48K, 128K/+2, +2A/+3, Pentagon, Scorpion, ATM Turbo, Next) — contended regions, banking registers, RAMTOP defaults, cross-model compatibility cheat sheet |
+| [basic_token_table.md](basic_token_table.md) | Sinclair BASIC token table: byte values, mnemonics, and tokenisation rules for 48K/128K/+2/+2A/+3 ROMs — control codes, function tokens, UDGs, block graphics, detokenising and tokenising routines |
+| [error_codes.md](error_codes.md) | All BASIC/DOS error codes — 10 Sinclair BASIC codes, +3 DOS (12 codes), TR-DOS (Russian), ESXDOS (POSIX-style), IS-DOS, NextZXOS — system variables, recovery patterns, common scenarios |
+| [timing_reference.md](timing_reference.md) | Cycle-exact timing tables — CPU clocks per model, video frame timings (48K/128K/Pentagon), contention delay tables (late/early), INT/NMI timing, common instruction T-state counts, useful constants |
+| [pinouts.md](pinouts.md) | Pin-by-pin reference — 48K/128K/+2 expansion edge connector (A and B side), Z80 CPU 40-pin DIP, AY-3-8912 28-pin DIP, joystick ports (Kempston/Sinclair 1/2/Fuller), Kempston mouse, EAR/MIC jacks, power connectors |
+| [rom_routines.md](rom_routines.md) | ROM entry points — restart vectors (`RST #08–#38`), character output, keyboard, tape, math/calculator, 128K-specific routines, calling conventions with examples |
 
 See [PLAN.md](../PLAN.md) for the full article catalog.

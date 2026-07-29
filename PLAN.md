@@ -1103,21 +1103,38 @@ Articles are written in priority order. README.md is synthesized AFTER articles 
 | 06 Sound (synthesis/hardware/trackers/players) | 33+2 | ✅ Complete |
 | 07 Demoscene | 11/11 | ✅ Complete |
 | 05_dev/05_display_and_timing | **19/19** | ✅ **Complete** (Tier A finished Jul 2026) |
-| 10 References | 5/10 | 📝 z80_opcode_table.md, character_set.md, color_palette.md done; 7 more pending |
-| 09 Toolchain | 11/~30 | 📝 Surveys done; per-tool stubs pending |
-| 02 Hardware (all 3 streams) | 9/~40 | 📝 Major gap |
+| 11 Emulation | **20/20** | ✅ **COMPLETE** (Jul 2026) — 6 software + 6 FPGA + 9 MCU; AGENTS.md compliance pass committed `6f324b8` |
 | 03_io/networking | 6/6 | ✅ **COMPLETE** (Jul 2026) — zx_net, modems, spectranet, zifi, esp_wifi, zx_next_wifi all done |
-| 08 Reverse Engineering | 1/9 | 📝 Major gap |
-| 11 Emulation | 19/~20 | 📝 Tier E in progress (5 software + **6 fpga COMPLETE** + **9 mcu COMPLETE**; Tier E MCU section done) |
-| 05_dev/01_basic, 02_assembly, 06_graphics | 0/30+ | 📝 Empty |
+| 09 Toolchain | **14/~25** | 📝 Surveys + 4 native assemblers + 6 cross/dev tools done (zeus, devpac_gens_mons, alasm_sts, xas, sjasmplus, z88dk, sdcc, boriel_zxbasic, asset_tools, debugging, disassemblers, native_toolchain, cross_platform_toolchain, vscode_integration); ~11 more pending |
+| 08 Reverse Engineering | **2/9** | 📝 methodology + protection_techniques done; 7 more pending (speedlock_alkatraz, game_reversing, code_crunching, tool_setup, static_analysis, dynamic_analysis, snapshot_repair, decompilation) |
+| 10 References | **10/10** | ✅ **COMPLETE** (Jul 2026) — z80_opcode_table, io_port_map, character_set, color_palette, memory_maps, basic_token_table, error_codes, timing_reference, pinouts, rom_routines |
+| 02 Hardware (all 3 streams) | 11/~40 | 📝 Major gap — original 5/12 (missing zx_spectrum_128/+2/+2A+3, ula_contention, power_supply, rom_contents, edge_connector), clones 6/12, newgen 2/15 |
+| 05_dev/04_interrupts | 1/~7 | 📝 interrupt_programming done; 6 more pending (im1_programming, im2_programming, isr_patterns, interrupt_timing, race_the_beam, nmi, interrupt_antipatterns, interrupt_cookbook) |
+| 05_dev/01_basic | 0/9 | 📝 Empty (only README) |
+| 05_dev/02_assembly | 0/10 | 📝 Empty (only README) |
+| 05_dev/06_graphics | 0/~26 | 📝 Empty (only README) |
+| 05_dev/08_dos_tape | 0/11 | 📝 Empty (only README) |
+| 05_dev/09_gamedev | 0/9 | 📝 Empty (only README) |
+| 00 Overview | 0/4 | 📝 Empty (only README) — history, hardware_models, timeline, glossary |
 
 **Active writing tiers** (priority order):
 
-- **Tier A** ✅ **DONE** (Jul 2026): `05_display_and_timing` — all 19 articles complete (48K, 128K, +2A/+3, Pentagon, Scorpion, other Soviet, Next, Sprinter, ZX Evolution, contention_timing, interlace_and_flicker, crt_output, video_frame_comparison)
-- **Tier D** ✅ **DONE** (Jul 2026): `10_references/character_set.md`, `10_references/color_palette.md`, `10_references/z80_opcode_table.md` all complete (3 of 10 planned reference articles; remaining 7 are deferred)
-- **Tier B** ✅ **DONE** (Jul 2026): `02_hardware/original/zx_spectrum_16k_48k.md` and `02_hardware/clones/pentagon.md` — both foundational hardware articles complete
-- **Tier C** ✅ **DONE** (Jul 2026): `08_reverse_engineering/methodology.md`, `09_toolchain/zeus_assembler.md`, `09_toolchain/devpac_gens_mons.md`, `09_toolchain/alasm_sts.md`, `09_toolchain/xas_assembler.md` — all 5 articles complete
-- **Tier E** (in progress, Jul 2026): `03_io/networking/` ✅ **DONE** (6/6 — zx_net, modems, spectranet, zifi, esp_wifi, zx_next_wifi), now starting `11_emulation/` (5 software + 6 FPGA + 9 MCU articles = 20)
+- **Tier A** ✅ **DONE** (Jul 2026): `05_display_and_timing` — all 19 articles complete
+- **Tier B** ✅ **DONE** (Jul 2026): `02_hardware/original/zx_spectrum_16k_48k.md` and `02_hardware/clones/pentagon.md`
+- **Tier C** ✅ **DONE** (Jul 2026): `08_reverse_engineering/methodology.md`, `09_toolchain/zeus_assembler.md`, `09_toolchain/devpac_gens_mons.md`, `09_toolchain/alasm_sts.md`, `09_toolchain/xas_assembler.md`
+- **Tier D** ✅ **DONE** (Jul 2026): `10_references/character_set.md`, `10_references/color_palette.md`, `10_references/z80_opcode_table.md`, `10_references/io_port_map.md` (4 of 10 reference articles done)
+- **Tier E** ✅ **DONE** (Jul 2026): `03_io/networking/` (6/6) + `11_emulation/` (20/20 — 6 software + 6 FPGA + 9 MCU). AGENTS.md compliance pass landed in commit `6f324b8` (American English, `#FE` hex prose convention, broken xrefs fixed, README indexes updated)
+- **Tier F** (in progress, Jul 2026): user selected F4 (References) as primary, F6 (Toolchain) as second. **F4 ✅ DONE** (Jul 2026) — all 6 remaining reference articles written in small incremental chunks.
+
+**Tier F candidate bundles** (each scoped to ~6–12 articles, similar effort to Tier E):
+
+- **F1 — 02 Hardware Original (7 articles)**: `zx_spectrum_128.md`, `zx_spectrum_plus2.md`, `zx_spectrum_plus2a_plus3.md`, `ula_contention.md`, `power_supply.md`, `rom_contents.md`, `edge_connector.md`. Closes out the Original Sinclair/Amstrad hardware story from 16K/48K through +3. Self-contained, well-documented, prerequisites (zx_spectrum_16k_48k.md, ula_architecture.md, ula_timing.md) already done.
+- **F2 — 02 Hardware Clones (7 articles)**: `pentagon_1024.md`, `kay.md`, `profi.md`, `byte.md`, `other_clones.md`, `ula_replacements.md`, `sizif_harlequin.md`. Closes out the Soviet clone track. Pentagon + Scorpion + ATM Turbo already done.
+- **F3 — 02 Hardware New Gen (14 articles)**: the entire modern-hardware track. `zx_next.md` + 5 Next subsystem articles (sprites/layer2/tilemap/copper/dma), `sprinter.md`, `zx_evo.md`, `ts_conf.md`, `baseconf.md`, `zx_uno.md`, `karabas_pro.md`, `karabas_128.md`, `peridot.md`. Largest bundle — modern scene relevance.
+- **F4 — 10 References (6 articles)**: `memory_maps.md`, `basic_token_table.md`, `rom_routines.md`, `error_codes.md`, `timing_reference.md`, `pinouts.md`. Quick wins — lookup-table format, referenced everywhere. Closes out the References section.
+- **F5 — 08 Reverse Engineering (7 articles)**: `speedlock_alkatraz.md`, `game_reversing.md`, `code_crunching.md`, `tool_setup.md`, `static_analysis.md`, `dynamic_analysis.md`, `snapshot_repair.md` (optionally `decompilation.md`). Closes out the RE section.
+- **F6 — 09 Toolchain gap fill (~11 articles)**: remaining assemblers and tools — `tasm_native.md`, `zxasm_native.md`, `pikasm.md`, `laser_genius.md`, `avras.md`, `spectrum_basic_mcode.md`, `pasmo.md`, `z88dk_z80asm.md`, `vasm.md`, `wla_dx.md`, `zmac.md`, `zasm_kio.md`, `tniasm.md`, `rasm.md`, `sarcasm.md`, `zdevstudio.md`, `zxdstudio.md`, `zx_spin.md`. Per-tool short articles.
+- **F7 — Long-form learning series starters (3-5 articles per pick)**: `05_development/01_basic/basic_intro.md` + 8 more (Basic series), `05_development/02_assembly/assembly_intro.md` + 9 more (Assembly series), `05_development/06_graphics/screen_access.md` + 25 more (Graphics series). Each is a long arc — pick one subsection to seed.
 
 After articles exist: README.md (documentation map), TODO.md (gap analysis), section README.md indexes.
 
