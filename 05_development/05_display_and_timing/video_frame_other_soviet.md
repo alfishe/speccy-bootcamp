@@ -5,7 +5,7 @@
 Beyond the two dominant Soviet clones — [Pentagon](video_frame_pentagon.md) (320 lines, 48.83 Hz, no contention) and [Scorpion](video_frame_scorpion.md) (312 lines, 50.08 Hz, revision-dependent contention) — there is a long tail of less common clones with their own timing quirks. Most match the 48K at the macro level (312 lines, 224 T-states, 69,888 T-states/frame), but differ in horizontal phase, contention behaviour, and turbo modes.
 
 > [!NOTE]
-> This article covers the **video frame timing** of the long tail of Soviet clones. For hardware details on the ATM Turbo, see [atm_turbo.md](../../02_hardware/clones/atm_turbo.md). The big-picture comparison across all clones lives in [clone_timing.md](../../02_hardware/clones/clone_timing.md). (Dedicated hardware articles for Kay, Profi, Byte, and other minor clones were descoped — their timing is documented here and in clone_timing.md.)
+> This article covers the **video frame timing** of the long tail of Soviet clones. For hardware details (RAM, ROM, I/O ports, expansions), see [atm_turbo.md](../../02_hardware/clones/atm_turbo.md) and the planned [kay.md](../../02_hardware/clones/README.md), [profi.md](../../02_hardware/clones/README.md). The big-picture comparison across all clones lives in [clone_timing.md](../../02_hardware/clones/clone_timing.md).
 
 ---
 

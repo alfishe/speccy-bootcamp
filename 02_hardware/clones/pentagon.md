@@ -392,6 +392,6 @@ Yes. The Pentagon's video logic never leaves the data bus floating — the bus i
 - [Soviet Demo Scene](../../07_demoscene/soviet_demo_scene.md) — Pentagon-centric scene, FidoNet era
 - [PT3 Format](../../06_sound/trackers_and_formats/pt3_format.md) — Russian AY music format born on the Pentagon
 - [Tracker History](../../06_sound/trackers_and_formats/tracker_history.md) — Sound Tracker → Pro Tracker → Vortex Tracker lineage
-- [Pentagon 1024 memory & I/O](../../05_development/03_memory_and_io/memory_and_io_pentagon.md) — expanded-memory paging via `#EFF7` (512K/1024K)
+- [Pentagon 1024](pentagon_1024.md) — expanded-memory successor (planned)
 - [Scorpion ZS-256](scorpion.md) — the developer's clone with correct 48K timing
 - [ATM Turbo](atm_turbo.md) — Pentagon-timing-compatible with extended graphics modes
