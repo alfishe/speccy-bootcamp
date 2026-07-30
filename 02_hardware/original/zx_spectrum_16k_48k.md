@@ -471,7 +471,7 @@ The connector has two rows of 28 fingers each, conventionally labelled **A** (re
 | 21B | B | `+12V` | +12V rail (from internal regulator) |
 
 > [!NOTE]
-> This is a **summary** of the most-used pins. The complete pinout with all 56 signals is in [edge_connector.md](edge_connector.md) (planned) and in the Sinclair ZX Spectrum Service Manual.
+> This is a **summary** of the most-used pins. The complete pinout with all 56 signals is documented in the Sinclair ZX Spectrum Service Manual and mirrored in [pinouts.md](../../10_references/pinouts.md).
 
 ### What the Edge Connector Enabled
 

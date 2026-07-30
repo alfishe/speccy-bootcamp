@@ -41,10 +41,7 @@ zx/
 │   │   ├── ula_architecture.md
 │   │   ├── ula_contention.md
 │   │   ├── ula_timing.md
-│   │   ├── power_supply.md
-│   │   ├── rom_contents.md
 │   │   ├── keyboard_matrix.md
-│   │   └── edge_connector.md
 │   ├── clones/
 │   │   ├── README.md
 │   │   ├── pentagon.md
@@ -518,16 +515,16 @@ zx/
 |---|---|---|
 | `README.md` | Index + model comparison table (16K/48K/128/+2/+2A/+3) | Planned |
 | `zx_spectrum_16k_48k.md` | Ferranti ULA (5C/6C), 16K/48K RAM layout, ROM content, keyboard matrix, tape interface, EAR/MIC | ✅ |
-| `zx_spectrum_128.md` | 128K toastrack: AY-3-8912, RS-232, keypad port, RAM paging (16K banks), ROM switching | Planned |
-| `zx_spectrum_plus2.md` | Amstrad +2 (grey): integrated keyboard, built-in tape, AY sound | Planned |
-| `zx_spectrum_plus2a_plus3.md` | +2A/+3: Amstrad gate array, +3 DOS, internal floppy, RAM banking differences | Planned |
+| `zx_spectrum_128.md` | 128K toastrack: AY-3-8912, RS-232, keypad port, RAM paging (16K banks), ROM switching | ✅ |
+| `zx_spectrum_plus2.md` | Amstrad +2 (grey): integrated keyboard, built-in tape, AY sound | ✅ |
+| `zx_spectrum_plus2a_plus3.md` | +2A/+3: Amstrad gate array, +3 DOS, internal floppy, RAM banking differences | ✅ |
 | `ula_architecture.md` | Ferranti ULA internals: video generation, memory arbitration, contention timing, CPU/ULA cycle interleaving | ✅ |
-| `ula_contention.md` | Memory contention deep dive: when CPU is stalled, precise timing diagrams per model, impact on cycle-counted code | Planned |
+| `ula_contention.md` | Memory contention deep dive: when CPU is stalled, precise timing diagrams per model, impact on cycle-counted code | ✅ |
 | `ula_timing.md` | ULA frame timing per model (48K/128K/+2A), memory contention (Ferranti 6-5-4-3-2-1-0-0, Amstrad gate array 1-0-7-6-5-4-3-2), contended I/O, multicolor effects, early/late timing drift, performance budget, screen update timing | ✅ |
-| `power_supply.md` | PSU design: 9V unregulated, internal regulation, edge connector power pins | Planned |
-| `rom_contents.md` | ROM dissection: channel system, editor, BASIC interpreter, character set | Planned |
+| `rom_contents.md` | (descoped — duplicative of `04_operating_systems/rom_*.md` and `10_references/rom_routines.md`) | n/a |
 | `keyboard_matrix.md` | 8x5 matrix, key codes, keyboard reading routine, BEEP key detection | ✅ |
-| `edge_connector.md` | Edge connector pinout, bus signals, expansion bus usage | Planned |
+
+> `power_supply.md`, `edge_connector.md`, and `rom_contents.md` were originally planned but **descoped** — `power_supply.md` and `edge_connector.md` are pure hardware content with no software-development relevance, and `rom_contents.md` would be duplicative of the existing ROM coverage in [04_operating_systems/](../04_operating_systems/) (`rom_48k.md`, `rom_128k.md`, `rom_plus2.md`, `rom_versions.md`) and [10_references/rom_routines.md](../10_references/rom_routines.md).
 
 #### 02_hardware/clones/ — Soviet Clone Ecosystem 📝 5 of 12 done
 
@@ -1128,7 +1125,7 @@ Articles are written in priority order. README.md is synthesized AFTER articles 
 
 **Tier F candidate bundles** (each scoped to ~6–12 articles, similar effort to Tier E):
 
-- **F1 — 02 Hardware Original (7 articles)**: `zx_spectrum_128.md`, `zx_spectrum_plus2.md`, `zx_spectrum_plus2a_plus3.md`, `ula_contention.md`, `power_supply.md`, `rom_contents.md`, `edge_connector.md`. Closes out the Original Sinclair/Amstrad hardware story from 16K/48K through +3. Self-contained, well-documented, prerequisites (zx_spectrum_16k_48k.md, ula_architecture.md, ula_timing.md) already done.
+- **F1 — 02 Hardware Original (4 articles)**: `zx_spectrum_128.md`, `zx_spectrum_plus2.md`, `zx_spectrum_plus2a_plus3.md`, `ula_contention.md`. Closes out the Original Sinclair/Amstrad hardware story from 16K/48K through +3, focused on architecture/software-development-relevant content. `power_supply.md`, `edge_connector.md`, and `rom_contents.md` originally planned but descoped (pure hardware or duplicative of existing ROM coverage).
 - **F2 — 02 Hardware Clones (7 articles)**: `pentagon_1024.md`, `kay.md`, `profi.md`, `byte.md`, `other_clones.md`, `ula_replacements.md`, `sizif_harlequin.md`. Closes out the Soviet clone track. Pentagon + Scorpion + ATM Turbo already done.
 - **F3 — 02 Hardware New Gen (14 articles)**: the entire modern-hardware track. `zx_next.md` + 5 Next subsystem articles (sprites/layer2/tilemap/copper/dma), `sprinter.md`, `zx_evo.md`, `ts_conf.md`, `baseconf.md`, `zx_uno.md`, `karabas_pro.md`, `karabas_128.md`, `peridot.md`. Largest bundle — modern scene relevance.
 - **F4 — 10 References (6 articles)**: `memory_maps.md`, `basic_token_table.md`, `rom_routines.md`, `error_codes.md`, `timing_reference.md`, `pinouts.md`. Quick wins — lookup-table format, referenced everywhere. Closes out the References section.

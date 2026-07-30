@@ -373,7 +373,6 @@ The original Sinclair power supply uses a **3.5 mm barrel jack** (outer negative
 - [ay_3_8912.md](../06_sound/hardware/ay_3_8912.md) — AY sound chip programming
 - [joystick.md](../03_io/peripherals/joystick.md) — joystick programming patterns
 - [mouse.md](../03_io/peripherals/mouse.md) — Kempston mouse programming
-- [edge_connector.md](../02_hardware/original/edge_connector.md) — expansion connector deep dive (pending)
 - [keyboard_matrix.md](../02_hardware/original/keyboard_matrix.md) — keyboard matrix and connector
 
 ---
