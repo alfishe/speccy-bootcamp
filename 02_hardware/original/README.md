@@ -10,7 +10,7 @@ This directory covers original ZX Spectrum hardware models (16K, 48K, 128K, +2, 
 
 | # | Article | Description |
 |---|---------|------------|
-| 1 | [zx_spectrum_16k_48k.md](zx_spectrum_16k_48k.md) | The canonical Sinclair: history, system architecture, bill of materials (4116 lower RAM, 4532/4164 upper RAM, LM1889 modulator), memory map, ULA revisions, board issues, video/audio/tape/power/edge connector, 16K→48K upgrade path |
+| 1 | [zx_spectrum_16k_48k.md](zx_spectrum_16k_48k.md) | The canonical Sinclair: history, system architecture, bill of materials (4116 lower RAM, 4532/4164 upper RAM, LM1889 modulator), memory map, ULA revisions, board issues, video/audio/tape/edge connector, 16K→48K upgrade path |
 | 2 | [ula_timing.md](ula_timing.md) | ULA frame timing per model, memory contention, **snow effect** (RFSH/RAS collision), multicolor effects, early/late timing, performance budget |
 | 3 | [ula_architecture.md](ula_architecture.md) | Inside the Ferranti ULA: video pipeline, memory arbitration, #FE register, keyboard matrix, tape/sound cells, revisions, Amstrad gate arrays, clone and modern replacements |
 | 4 | [keyboard_matrix.md](keyboard_matrix.md) | The 8×5 keyboard matrix: membrane hardware, half-row scanning, ghosting mechanics, Interface 2/Sinclair/Cursor joystick mappings, game keyset conventions by genre and region, redefinable game input |

@@ -45,16 +45,10 @@ zx/
 │   ├── clones/
 │   │   ├── README.md
 │   │   ├── pentagon.md
-│   │   ├── pentagon_1024.md
 │   │   ├── scorpion.md
-│   │   ├── kay.md
 │   │   ├── atm_turbo.md
-│   │   ├── profi.md
-│   │   ├── byte.md
-│   │   ├── other_clones.md
 │   │   ├── clone_timing.md
-│   │   ├── ula_replacements.md
-│   │   └── sizif_harlequin.md
+│   │   └── ula_replacements.md
 │   └── newgen/
 │       ├── README.md
 │       ├── zx_next.md
@@ -64,13 +58,7 @@ zx/
 │       ├── zx_next_copper.md
 │       ├── zx_next_dma.md
 │       ├── sprinter.md
-│       ├── zx_evo.md
-│       ├── ts_conf.md
-│       ├── baseconf.md
-│       ├── zx_uno.md
-│       ├── karabas_pro.md
-│       ├── karabas_128.md
-│       └── peridot.md
+│       └── ts_conf.md
 │
 ├── 03_io/
 │   ├── snapshots/
@@ -526,25 +514,21 @@ zx/
 
 > `power_supply.md`, `edge_connector.md`, and `rom_contents.md` were originally planned but **descoped** — `power_supply.md` and `edge_connector.md` are pure hardware content with no software-development relevance, and `rom_contents.md` would be duplicative of the existing ROM coverage in [04_operating_systems/](../04_operating_systems/) (`rom_48k.md`, `rom_128k.md`, `rom_plus2.md`, `rom_versions.md`) and [10_references/rom_routines.md](../10_references/rom_routines.md).
 
-#### 02_hardware/clones/ — Soviet Clone Ecosystem 📝 5 of 12 done
+#### 02_hardware/clones/ — Soviet Clone Ecosystem 📝 5 of 6 done
 
 | File | Topic | Status |
 |---|---|---|
 | `README.md` | Index + clone ecosystem overview: why Spectrum became THE post-Soviet computer | Planned |
 | `pentagon.md` | Pentagon 48K/128K: most popular clone, Russian ROM, TR-DOS integration, design philosophy | ✅ |
-| `pentagon_1024.md` | Pentagon 1024/1024SL: expanded memory, modifications | Planned |
 | `scorpion.md` | Scorpion ZS-256: GMX expansion, Turbo modes, Z-controller, expanded memory, ProfROM | ✅ |
-| `kay.md` | Kay 1024: professional-oriented, 1024K RAM, multiple ROM banks, IDE interface | Planned |
 | `atm_turbo.md` | ATM Turbo: CP/M mode, turbo mode, extended graphics modes | ✅ |
-| `profi.md` | Profi: Russian professional clone, ISA-like expansion, VGA output | Planned |
-| `byte.md` | Byte: Ukrainian clone, compact design | Planned |
-| `other_clones.md` | Dozens more: Hobbit, Leningrad (1/2), Mikrosha, Composite, Quorum (64/256), LEC (48/528), etc. | Planned |
 | `clone_timing.md` | Non-ULA clone video timing: Pentagon, Scorpion, Kay, ATM Turbo, FPGA implementations, clone detection techniques, demoscene multi-platform strategies | ✅ |
 | `clone_joysticks.md` | Joystick conventions on Soviet clones (cursor types, Kempston variants) | ✅ |
 | `ula_replacements.md` | ULA replacement chips: Soviet-made gate arrays (Т34ВГ1, etc.), CMOS implementations, timing differences | Planned |
-| `sizif_harlequin.md` | Modern recreations: Sizif-512, Harlequin, Speccy 2010 — faithful hardware clones with modern components (Karabas family covered in newgen/) | Planned |
 
-#### 02_hardware/newgen/ — New Generation 📝 1 of 15 done (plus 1 off-plan)
+> **Descoped** (duplicative or pure hardware, no software-development relevance): `pentagon_1024.md` (extended paging covered in [memory_and_io_pentagon.md](../05_development/03_memory_and_io/memory_and_io_pentagon.md)), `kay.md` / `profi.md` / `byte.md` / `other_clones.md` (frame timing and quick comparisons already in [video_frame_other_soviet.md](../05_development/05_display_and_timing/video_frame_other_soviet.md) and [clone_timing.md](clone_timing.md)), `sizif_harlequin.md` (already covered in [11_emulation/fpga/harlequin_sizif.md](../11_emulation/fpga/harlequin_sizif.md)).
+
+#### 02_hardware/newgen/ — New Generation 📝 1 of 9 done (plus 1 off-plan)
 
 | File | Topic | Status |
 |---|---|---|
@@ -557,13 +541,9 @@ zx/
 | `zx_next_dma.md` | DMA controller (derived from Z80 DMA): memory copy, pattern fill, port I/O | Planned |
 | `zx_next_joystick.md` | Next joystick / input subsystem | ✅ (off-plan) |
 | `sprinter.md` | Peters Plus Sprinter: 20MHz Z80, 1MB RAM, SVGA, IDE, PC-like architecture | Planned |
-| `zx_evo.md` | ZX Evolution: Z80-based with CPLD glue logic, PS/2 keyboard/mouse, IDE, SVGA — real hardware, not FPGA core recreation | Planned |
 | `ts_conf.md` | TS-Conf: FPGA ZX Spectrum config for ZX Evo — sprites, tiles, 512K VRAM, turbo modes | Planned |
-| `baseconf.md` | Baseconf: standard ZX Evo configuration, classic Spectrum compatibility | Planned |
-| `zx_uno.md` | ZX-Uno: FPGA-based, ULAplus, Turbo, AY, SPI, WiFi | Planned |
-| `karabas_pro.md` | Karabas Pro: modern Z80-based hardware with CPLD, compact design, Peridot-compatible | Planned |
-| `karabas_128.md` | Karabas 128: modern compact Spectrum-compatible, real Z80 + CPLD glue | Planned |
-| `peridot.md` | Peridot: expandable modern Spectrum platform, Karabas-compatible expansion bus | Planned |
+
+> **Descoped** (duplicative or pure hardware, no software-development relevance): `zx_evo.md` and `baseconf.md` (ZX Evolution hardware and BaseConf firmware already covered in [11_emulation/fpga/zxevo.md](../11_emulation/fpga/zxevo.md)), `zx_uno.md` (already covered in [11_emulation/fpga/zx_uno_core.md](../11_emulation/fpga/zx_uno_core.md), including ULAplus programming), `karabas_pro.md` / `karabas_128.md` / `peridot.md` (pure hardware clones that run standard Spectrum software with no new programming APIs).
 
 ### 03 — I/O (subfoldered)
 

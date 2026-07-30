@@ -399,34 +399,6 @@ Commercial software quickly replaced the ROM loader with **custom turbo loaders*
 
 ---
 
-## Power Supply
-
-The 16K/48K Spectrum is powered by an **external mains adapter** that supplies **9V DC** (unregulated, nominal 1.4 A capacity). The internal power supply converts this into the rails required by the various ICs.
-
-### Internal Power Rails
-
-| Rail | Voltage | Used by | Source |
-|---|---|---|---|
-| `+9V` | 9V DC | ULA, LM1889, speaker driver transistor | External adapter (via 3.5mm jack or edge connector pin 10A/11A) |
-| `+5V` | 5V DC | Z80, ROM, ULA, 4164 upper RAM, TTL | 7805 linear regulator (TO-220, with heatsink) |
-| `+12V` | 12V DC | 4116 lower RAM `Vdd` | Simple regulator from `+9V` (Issue 2+) or transformer tap (Issue 1) |
-| `−5V` | −5V DC | 4116 lower RAM `Vbb` (substrate bias) | Zener diode derived (Issue 2+) or 7905 regulator (Issue 1) |
-
-The **7805** is the only significant heat source on a healthy board — it dissipates roughly `(9V − 5V) × 1A = 4W` as heat, hence the large aluminium heatsink clip on early-issue machines and the PCB copper-pour heatsink on later issues. The 7805 gets hot enough to cause first-burn if touched after extended operation.
-
-### The 4116 Triple-Rail Problem
-
-The `4116` lower RAM requires **all three rails** (+5V, +12V, −5V) to operate. The −5V substrate bias (`Vbb`) is the critical one — it must be present before `Vdd` (+12V) to avoid latch-up. The Spectrum has no proper power-sequencing circuit; in practice the rails come up roughly together because the −5V zener circuit has a short time constant, but a flaky external adapter or failing decoupling capacitor can break the sequence and damage the chips.
-
-A full failure mode discussion is in [The 4116 DRAM Problem](#the-4116-dram-problem) above. The repair standard of practice is to socket the 4116 bank and replace chips one at a time until the bad one is found, or to fit a modern SRAM-based 4116 replacement (single +5V rail).
-
-### External Adapter
-
-The original Sinclair power supply was a **mains adapter rated 9V DC, 1.4 A, 7.35 W** with a 3.5mm jack (centre-positive — the same polarity as a guitar effect pedal). Many Spectrums were destroyed by users plugging in adapters with the wrong polarity (centre-negative) or AC output rather than DC; a diode on the input provides some reverse-polarity protection but is not foolproof. Modern users should use a known-good 9V DC regulated supply rated at least 1.5 A.
-
-
----
-
 ## Edge Connector — The Expansion Bus
 
 The 16K/48K's only expansion interface is a **56-pin (28-pin × 2 sides) PCB edge connector** on the rear of the machine. The connector exposes the full Z80 bus plus the ULA-specific signals (`ROMCS`, `SND`, video Y/U/V, EAR/MIC), allowing external devices to act as bus masters, page their own ROM/RAM in and out, and tap into the video and audio signals.
