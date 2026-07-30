@@ -47,6 +47,7 @@ Two overview articles survey the entire toolchain landscape:
 | [laser_genius.md](laser_genius.md) | **Laser Genius** — Nick Hampshire's cartridge-based Z80 assembler for the ZX Spectrum Interface 2 (early 1980s). The instant-load cartridge format gave it a productivity advantage over tape-based assemblers for studios with Interface 2 hardware. Used internally at Ocean Software and a small number of partner studios. Closed distribution model limited its influence. Primary documentation scarce. |
 | [avras.md](avras.md) | **AVA / AVRA** — the least documented assemblers in the Spectrum ecosystem. Budget-tier tape-era tools (~1984) from small developers, displaced by Zeus and DevPac by 1986. Article is largely contextual reconstruction based on the typical feature set of the period. Distinguishes the Spectrum-era AVRA from the unrelated modern AVR microcontroller cross-assembler of the same name. |
 | [sarcasm.md](sarcasm.md) | **SARCASM** — obscure Z80 cross-assembler from the late 1990s/early 2000s. Appears in retro-computing software archives but has no canonical documentation. Probably a one-developer personal project that did not gain community traction. Article exists primarily as a known data point in the cross-assembler landscape. For any practical work, use SjASMPlus, Pasmo, or z88dk z80asm instead. |
+| [zdevstudio.md](zdevstudio.md) | **zDevStudio** — open source Z80 development environment (2011–mid-2010s) built around the bundled [Pasmo](pasmo.md) assembler. Cross-platform (Windows + Linux via Lazarus / Free Pascal, GPLv3). Bundled sprite editor, screen designer, internal disassembler (v0.8+), and external emulator launch. Single-install workflow made it a popular classroom choice in the 2010s. Not actively maintained as of 2025; for new projects use VS Code with extensions or Klive IDE. Disambiguates from the unrelated ZXDStudio (ZX Disk Studio) Russian disk image utility. |
 
 ### Planned Deep Dives
 
@@ -54,8 +55,9 @@ Beyond the articles above and the two overviews, this directory will host detail
 
 - **Native assemblers**: (none — all planned deep dives complete)
 - **Cross-platform assemblers**: (none — all planned deep dives complete)
-- **IDEs**: `zdevstudio.md`, `zxdstudio.md`
-- **Recently completed**: `pasmo.md`, `z88dk_z80asm.md`, `vasm.md`, `wla_dx.md`, `zmac.md`, `rasm.md`, `tniasm.md`, `tasm_cross.md`, `as_macro_assembler.md`, `zasm_kio.md`, `spectrum_basic_mcode.md`, `zx_spin.md`, `tasm_native.md`, `zxasm_native.md`, `pikasm.md`, `laser_genius.md`, `avras.md`, `sarcasm.md`
+- **IDEs**: (none — all planned deep dives complete)
+- **Recently completed**: `pasmo.md`, `z88dk_z80asm.md`, `vasm.md`, `wla_dx.md`, `zmac.md`, `rasm.md`, `tniasm.md`, `tasm_cross.md`, `as_macro_assembler.md`, `zasm_kio.md`, `spectrum_basic_mcode.md`, `zx_spin.md`, `tasm_native.md`, `zxasm_native.md`, `pikasm.md`, `laser_genius.md`, `avras.md`, `sarcasm.md`, `zdevstudio.md`
+- **Descoped**: `zxdstudio.md` — the name originally cataloged as a Spectrum IDE is actually the Russian disk image utility *ZX Disk Studio*, unrelated to Z80 development. The cross-reference list of [zdevstudio.md](zdevstudio.md) notes this disambiguation.
 - **Note**: `zezarux_debug.md` and `fuse_debug.md` are now covered by [debugging.md](debugging.md); `makefiles.md` and `testing.md` are descoped (build system setup and generic test automation are not Spectrum-specific; for the Makefile-driven asset pipeline see [asset_tools.md](asset_tools.md) § Worked Example, and for testing patterns see [debugging.md](debugging.md) § Recommended Workflows).
 
 ## Cross-References
