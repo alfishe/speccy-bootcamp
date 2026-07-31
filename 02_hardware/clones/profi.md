@@ -1,13 +1,51 @@
 [← Home](../../README.md) · [Clone Hardware](README.md)
 
-# Profi 5.03 / 5.04 / 1024 — The Ukrainian Professional Spectrum with VGA and ISA
+# Profi 5.03 / 5.04 / 1024 — The Russian Professional Spectrum with VGA and ISA
 
-The **Profi** (Профі, designed in Lviv, Ukraine, 1991) is the Soviet Spectrum's **workstation-class clone** — a machine built for professional users who needed PC-like expansion capabilities. Where the Pentagon was a minimalist hobbyist machine and the Kay was a polished professional computer, the Profi went further: it added an **ISA-compatible expansion bus**, **VGA video output**, and a **turbo mode** that could run at 5 MHz or 7 MHz.
+The **Profi** (Russian: **Профи**, meaning "Professional") is the Soviet Spectrum's **workstation-class clone** — a machine built for professional users who needed PC-like expansion capabilities. Designed and produced in **Moscow, Russia (then Russian SFSR)** beginning in **late spring 1991** by the firm **"Kramis" / "Profi" / "Condor"**, the Profi went further than any other Soviet Spectrum clone of its era: it added an **ISA-compatible expansion bus**, **VGA-compatible video output**, **CP/M support**, an **AY-3-8910/12 sound chip** (making it one of the first mass-produced Soviet clones to include this sound chip), a **turbo mode** that could run at 5 MHz or 7 MHz, and 256–512 KB of RAM expandable to 1 MB.
 
 The Profi's most distinctive characteristic — from a programmer's perspective — is its **paper offset quirk**: the visible screen area starts at T-state 12,580 instead of the standard 14,335. This 1,755-T-state shift means timing-sensitive code that assumes standard 48K paper timing will **race the beam** and corrupt the visible display. The Profi also uses a **different extended paging port** (`#DFFD`) from both the Pentagon (`#EFF7`) and the Kay (which also uses `#DFFD`, but with different semantics).
 
 > [!NOTE]
 > This article covers the **hardware platform**. For the Profi's frame timing and the paper-offset quirk, see [video_frame_other_soviet.md](../../05_development/05_display_and_timing/video_frame_other_soviet.md). For the broader clone timing landscape, see [clone_timing.md](clone_timing.md).
+
+---
+
+## History — The "Kramis" / "Profi" / "Condor" Story
+
+The Profi's commercial history reads like a detective story, reconstructed by Alone Coder in *ACNews #65* (2008) from Radio magazine ads, business registrations, and contemporary interviews.
+
+### The Kramis Joint Venture
+
+The Profi was produced by a firm operating under several related names — the most likely sequence is:
+
+- **JV "Kramis"** — a Russian-Spanish-Lebanese joint venture, named "Kramis". Kramis itself produced **wallpaper and woodwork**, not computers. The Profi project appears to have been a side venture within the joint venture.
+- **"Profi"** — an operating department within or subsidiary of JV Kramis that handled the computer business
+- **TOO "Condor"** (or "Condor (Kramis)") — the firm's registered name after formal incorporation, with a different Moscow location ("Library for youth #214") and phone number from the earlier Kramis listings
+
+The Profi computer was released in **late spring of 1991** (per the *Turbo2+* book by MicroART; no earlier ads have been found). It was possibly the **first mass-produced Soviet Spectrum clone to ship with the AY-3-8910/12 sound chip** as standard, alongside 256–512 KB of RAM, high-resolution graphics, and a turbo mode.
+
+### The Tadeusz Radjusz Connection
+
+The sole "Condor" with online traces is **TOO "Condor" headed by Tadeusz Radjusz** — a Polish publisher who entered the Soviet computer business around 1990. Radjusz's background is significant:
+
+- **First FidoNet user in Moscow** (around 1990) — the actual node and BBS were operated by his Russian wife Elena Radyush from their home near metro Krasnopresnenskaya, on a 386/25 PC with a 2400 baud modem
+- **Soviet-Polish "Computer" magazine** (1990–1991) — Radjusz collaborated on this magazine; Russian articles were transmitted to Poland by mailer, and the assembled issues were downloaded back. The BBS functioned as a supplementary computer magazine
+- **Beta 128 Disk Interface import** — there are rumors that Radjusz brought the Beta 128 Disk Interface into the USSR, though the first Russian clone of the Beta 128 was actually produced in early 1988 by Sergey Pacyuk and Vyacheslav Bogomyatov of NTK "Plus", Moscow
+
+Radjusz wrote an article about Betadisk for the Soviet-Polish Computer magazine. The Condor firm eventually shut down; the Moscow address and phone number (now occupied by a political organization) are no longer active.
+
+### The Profi as a Product
+
+The Profi was positioned as a **"serious" alternative to the IBM PC** — aimed at a minority professional customer, not the gaming market that dominated the tape-driven 48K clone scene. The Profi competed directly with ATM-COMPUTER's **ATM-Turbo** (released in 1991 by another Moscow-based firm). Where the Profi distinguished itself:
+
+- **AY-3-8910/12 sound chip** — among the first mass-produced Soviet clones to include this as standard
+- **CP/M operating system** — adapted for the Profi (alongside Byte and ATM-Turbo), allowing professional productivity applications
+- **Two-board design** — the Profi used a two-board architecture (vs the ATM-Turbo's single board) — the Profi had its own custom case
+- **High-resolution graphics** — supported a separate high-resolution mode for CP/M applications and word processing
+- **DAC and stereo sound** — an 8-bit Covox-style DAC was included in the printer port, supporting stereo sound at the cost of non-standard printer port addresses
+
+The Profi was sold alongside the "Nadezhda" (Hope) 128K machine — a budget offering from the same firm (Radio magazine, August 1994).
 
 ---
 
@@ -111,7 +149,7 @@ Port #DFFD (Profi multi-function register, write-only):
 | **Kay 1024** | `#DFFD` | Bits 0–2 | No | Yes (2006 NB: bits 4–5) |
 | **Profi 1024** | `#DFFD` | Bits 0–2 | Bit 3 | Bits 4–5 |
 
-All three use the same formula: `bank = (extended & 0x07) × 8 + (#7FFD & 0x07)`, giving 64 banks (1024 KB). But the extended port address and the non-banking bits differ — software targeting one clone will not work on the others without adjustment.
+All three use the same formula: `bank = (extended & #07) × 8 + (#7FFD & #07)`, giving 64 banks (1024 KB). But the extended port address and the non-banking bits differ — software targeting one clone will not work on the others without adjustment.
 
 ---
 
@@ -156,9 +194,12 @@ See [video_frame_other_soviet.md](../../05_development/05_display_and_timing/vid
 
 ## References
 
-- **Profi 5.03 schematic** (1991, Lviv) — original design documentation, distributed via ZX-Review magazine
+- **Profi 5.03 / 5.04 schematics** (1991, Moscow — JV Kramis / TOO Condor) — original design documentation, distributed via *Radio* magazine advertisements and *ZX-Review*
+- ***ACNews #65*** (2008, Alone Coder) — reconstruction of the Kramis/Profi/Condor commercial history from *Radio* magazine ads and business registrations
+- ***Turbo2+* book** (MicroART) — confirms Profi's release date as late spring 1991
 - **ZX-Review magazine** (1991–1995) — Profi construction articles, modification guides, and ISA bus programming tutorials
 - **zx-pk.ru forum** — *Профі* subforum contains hardware variants, VGA modification threads, and ISA card compatibility reports
+- **velesoft.speccy.cz** — Solitude Soft's Profi 5.03 technical reference, including `#DFFD` paging tests and CP/M adaptation notes
 - **SpeccyWiki (speccy.info)** — Profi 5.03/5.04 articles with schematic scans and PCB layouts
 - **Unreal Speccy emulator** — reference implementation of Profi `#DFFD` paging and paper-offset timing
 - **chibiakumas.com** — English translations of Profi hardware articles and ISA programming guides

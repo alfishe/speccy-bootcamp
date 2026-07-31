@@ -352,7 +352,7 @@ A microcontroller translates these PS/2 packets into the Kempston protocol by ma
 - [joystick.md](joystick.md) — Kempston joystick uses port `#1F`, conflicting with AMX Mouse
 - [03_io/snapshots/szx_format.md](../snapshots/szx_format.md) — `MOUS` block records mouse state in `.szx` snapshots
 - [03_io/snapshots/z80_format.md](../snapshots/z80_format.md) — Kempston Mouse state in `.z80` v3 snapshots
-- [02_hardware/newgen/zx_next_joystick.md](../../02_hardware/newgen/zx_next_joystick.md) — Next's PS/2 mouse implementation
+- [02_hardware/newgen/zx_next.md](../../02_hardware/newgen/zx_next.md#joystick-system) — Next's PS/2 mouse and joystick implementation
 - [09_toolchain/cross_platform_toolchain.md](../../09_toolchain/cross_platform_toolchain.md) — Real-mouse testing in cross-platform development
 - [05_development/04_interrupts/interrupt_programming.md](../../05_development/04_interrupts/interrupt_programming.md) — High-frequency ISR for AMX polling
 - [keyboard.md](keyboard.md) — PS/2 protocol details shared with keyboard adapters

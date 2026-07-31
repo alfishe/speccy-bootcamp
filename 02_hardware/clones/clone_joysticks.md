@@ -81,7 +81,7 @@ The single-standard ecosystem shows in the software:
         in      a, (#5F)        ; second stick? BAD on classic clones
 ```
 
-Only specific modern multi-interfaces and the ZX Spectrum Next (`#37`) provide a second Kempston-style port. On a classic Pentagon or Scorpion, `#5F` reads nothing meaningful — or something else's register. **Correct:** player 2 goes on the keyboard rows, or detect the Next explicitly ([ZX Next Joystick](../newgen/zx_next_joystick.md)).
+Only specific modern multi-interfaces and the ZX Spectrum Next (`#37`) provide a second Kempston-style port. On a classic Pentagon or Scorpion, `#5F` reads nothing meaningful — or something else's register. **Correct:** player 2 goes on the keyboard rows, or detect the Next explicitly ([ZX Next Joystick](../newgen/zx_next.md#joystick-system)).
 
 ### Pitfall 2 — Polling the Stick Inside TR-DOS Calls
 

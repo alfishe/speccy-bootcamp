@@ -2,7 +2,7 @@
 
 # TS-Conf — The ZX Evolution's Enhanced Video Firmware
 
-**TS-Conf** is an alternative **firmware configuration** for the ZX Evolution, designed by **Aleksandr Zhuravlev** (`tsl`). Where the default [BaseConf](baseconf.md) focuses on Pentagon 1024 compatibility, TS-Conf focuses on **enhanced video hardware**: hardware sprites, a tilemap engine, 512 KB of dedicated VRAM, per-scanline palettes, and a turbo mode. It is the **Russian-scene equivalent of the ZX Spectrum Next's enhanced video stack** — Layer 2, sprites, and tilemap — delivered as a firmware swap rather than new hardware.
+**TS-Conf** is an alternative **firmware configuration** for the ZX Evolution, designed by the **tslabs team** (Aleksandr Zhuravlev / `tsl`, hosted at [github.com/tslabs/zx-evo](https://github.com/tslabs/zx-evo)). Where the default [BaseConf](baseconf.md) focuses on Pentagon 1024 compatibility, TS-Conf focuses on **enhanced video hardware**: hardware sprites, a tilemap engine, 512 KB of dedicated VRAM, per-scanline palettes, a DMA controller, and a turbo mode. It is the **Russian-scene equivalent of the ZX Spectrum Next's enhanced video stack** — Layer 2, sprites, tilemap, copper, and DMA — delivered as a firmware swap rather than new hardware.
 
 For software developers, TS-Conf is the target for **new Russian Spectrum software** that wants modern graphics without leaving the ZX Evolution ecosystem. It is **not binary-compatible** with Pentagon software (it adds entirely new hardware features), but it coexists with BaseConf — the same physical ZX Evolution board can run either, switched by reflashing the CPLD bitstream.
 
@@ -26,11 +26,20 @@ TS-Conf is path 3. It is the answer to: *"What would the Russian Spectrum look l
 | Feature | BaseConf | TS-Conf |
 |---|---|---|
 | **Compatibility target** | Pentagon 1024 | New TS-Conf-specific software |
-| **Sprites** | None (software only) | **Hardware sprites** (32 per scanline) |
-| **Tilemap** | Standard Spectrum screen | **Hardware tilemap** (320×200 with 8×8 tiles) |
-| **VRAM** | Shares main RAM | **512 KB dedicated VRAM** |
-| **Per-scanline palettes** | No | **Yes** |
+| **Sprites** | None (software only) | **Hardware sprites — up to 85 per scanline** |
+| **Sprite sizes** | N/A | **8×8 up to 64×64 pixels** (selectable) |
+| **Sprite planes** | N/A | **Up to 3 sprite planes** (parallel rendering) |
+| **Tilemap** | Standard Spectrum screen | **Hardware tilemap with 2 tile planes**, 8×8 tiles |
+| **Pixel resolutions** | 256×192 | **256×192, 320×200, 320×240, 360×288**, up to **720×288 hi-res** |
+| **Color depth** | 8 colors (attribute) | **16 or 256 indexed colors per pixel** |
+| **Palette** | Hard-wired | **Programmable CRAM, RGB555, 256 entries** |
+| **Per-scanline palettes** | No | **Yes** — up to 16 sprite palettes + 4 tile palettes per line |
+| **VRAM** | Shares main RAM | **Dedicated graphics memory** (up to 4 MB addressing) |
+| **DMA** | No | **Full DMA controller** (DRAM-to-Device, Device-to-DRAM, DRAM-to-DRAM) |
+| **CPU cache** | No | **512 bytes zero-wait-state cache** (for 14 MHz mode) |
+| **Interrupt sources** | Frame only | **Frame + Line + DMA** (separate IM2 vectors) |
 | **Turbo mode** | 3.5 / 7 / 14 MHz | **3.5 / 7 / 14 MHz** (same) |
+| **Text mode** | No | **Yes** — loadable font + hardware vertical scroll |
 | **Existing software** | Runs unmodified | **Requires TS-Conf-aware code** |
 
 > [!IMPORTANT]
@@ -42,32 +51,74 @@ TS-Conf is path 3. It is the answer to: *"What would the Russian Spectrum look l
 
 ### Hardware Sprites
 
-TS-Conf's sprite engine is more limited than the Next's but provides the same essential capability:
+TS-Conf's sprite engine is **significantly more capable than commonly documented**. The official specification (from the tslabs/zx-evo repository) lists the maximum capacity:
 
 | Feature | TS-Conf | ZX Spectrum Next |
 |---|---|---|
-| **Sprite size** | 8×8 / 16×16 / 32×32 (selectable) | 16×16 (fixed) |
-| **Sprites per scanline** | **32** | 64 |
-| **Patterns** | 64 (typically) | 64 (4-bit) or 32 (8-bit) |
-| **Color depth** | 16 colors per sprite (palette-indexed) | 4-bit or 8-bit per sprite |
-| **Per-sprite features** | X/Y mirror, palette offset | Mirror, rotate 90°, palette offset, type |
+| **Sprite size** | **8×8 up to 64×64 pixels** (any power of 2 in between) | 16×16 (fixed) |
+| **Sprites per scanline** | **Up to 85** (not 32 as often cited) | 64 |
+| **Sprite planes** | **Up to 3 planes** rendered in parallel | 1 (with layer priority) |
+| **Patterns** | Stored in dedicated VRAM, bank-switched | 64 (4-bit) or 32 (8-bit) |
+| **Color depth** | **16 or 256 colors per pixel** (mode-dependent) | 4-bit or 8-bit per sprite |
+| **Palettes per scanline** | **Up to 16** sprite palettes | Limited by NextReg palette entries |
+| **Per-sprite features** | X/Y mirror, palette offset, per-plane priority | Mirror, rotate 90°, palette offset, type |
 | **Collision detection** | Yes | Yes |
 
 Sprites are stored in dedicated VRAM and fetched independently of main RAM — there is **zero additional CPU contention** from the sprite engine. The base frame timing does not change (still Pentagon's 71,680 T-states, 320 lines, 48.83 Hz, no contention).
 
-### Tilemap
+### Tilemap and Graphic Planes
 
-TS-Conf's tilemap engine is comparable to the Next's, with slightly different specifications:
+TS-Conf supports **up to 2 independent tile planes** (tile plane 0 and tile plane 1), each with its own tile patterns, scroll offset, and palette. This enables foreground/background separation without sprite usage.
 
 | Feature | TS-Conf | ZX Spectrum Next |
 |---|---|---|
-| **Grid size** | **40×25 tiles** (320×200 pixels) | 40×32 (320×256) or 80×32 (640×256) |
-| **Tile size** | 8×8 pixels (fixed) | 8×8 pixels (fixed) |
-| **Patterns** | 256 entries | 256 entries |
-| **Color depth** | 16 colors per pixel | 4-bit or 8-bit per pixel |
+| **Tile planes** | **2** (parallel rendering) | 1 |
+| **Tile size** | **8×8 pixels** (fixed) | 8×8 pixels (fixed) |
+| **Patterns** | 256 entries per plane | 256 entries |
+| **Color depth** | **16 or 256 colors per pixel** | 4-bit or 8-bit per pixel |
+| **Palettes per scanline** | **Up to 4 palettes per tile plane** | Limited by NextReg palette entries |
 | **Per-tile features** | Palette offset, mirror X/Y | Palette offset, mirror X/Y, priority bit |
+| **Hardware scrolling** | Yes — X and Y, per plane | Yes |
 
-The 40×25 grid (vs the Next's 40×32) reflects the Pentagon's 320-line frame, of which only ~200 lines are visible. The tilemap fits exactly within the visible area.
+### Multiple Pixel Resolutions
+
+Unlike BaseConf (which is locked to the standard 256×192), TS-Conf supports **four standard pixel resolutions** plus a hi-res mode, selectable via the `RRES[1:0]` bits of the `VConfig` register:
+
+| `RRES[1:0]` | Pixel area | Border layout | Typical use |
+|---|---|---|---|
+| `00` | **256×192** (standard ZX) | 48 + 48 line / 52 + 52 pixel borders | Compatibility mode |
+| `01` | **320×200** | 44 + 44 line / 20 + 20 pixel borders | Most TS-Conf games and demos |
+| `10` | **320×240** | 24 + 24 line / 20 + 20 pixel borders | Full-resolution arcade-style games |
+| `11` | **360×288** (full visible area) | 0 border | Demos with edge-to-edge graphics |
+| hi-res | **Up to 720×288** | N/A | Text-heavy applications, 80-column modes |
+
+### Four Graphic Modes
+
+The `VM[1:0]` bits of `VConfig` select one of four pixel-rendering modes within the active area:
+
+| `VM[1:0]` | Mode | Color depth |
+|---|---|---|
+| `00` | **ZX** (classic attribute mode) | 8 colors per 8×8 attribute cell |
+| `01` | **16c** (16 colors per pixel) | 16 indexed colors per pixel |
+| `10` | **256c** (256 colors per pixel) | 256 indexed colors per pixel |
+| `11` | **Text** (loadable font) | Per-character attribute, hardware vertical scroll |
+
+### Programmable CRAM — RGB555 Palette
+
+The Color RAM (**CRAM**) is a dedicated 256-entry palette table, with each entry holding a **15-bit RGB555 color** (5 bits red, 5 bits green, 5 bits blue). This gives 32,768 possible colors per palette entry, with 256 entries active simultaneously. The CRAM can be modified on the fly — including **per-scanline palette swaps** — by writing to the scanline-indexed palette table in VRAM.
+
+### DMA Controller
+
+TS-Conf includes a **full DMA controller** — a feature often missing from Western summaries. The DMA supports three transfer modes:
+
+- **DRAM-to-Device** — copy from main RAM to a peripheral port (e.g., streaming audio to a DAC)
+- **Device-to-DRAM** — capture from a peripheral into RAM (e.g., sampling, network packets)
+- **DRAM-to-DRAM** — fast block copies within main RAM (e.g., blitting graphics, double-buffer swaps)
+
+DMA transfers run independently of the CPU. When a transfer completes, the DMA controller raises an **interrupt** (vector `#FB` in IM2 mode), allowing the CPU to start the next transfer immediately. This is critical for streaming audio and for fast screen updates.
+
+> [!WARNING]
+> DMA transfers bypass the 512-byte CPU cache. After any DRAM-to-DRAM DMA that touches cached windows, the programmer must **invalidate the cache** by writing 512 bytes to any sequential address (e.g., `LDIR` 512 bytes from `#FE00` to `#FE00`). Failure to do so returns stale cached data on subsequent reads.
 
 ### Per-Scanline Palettes
 
@@ -75,11 +126,29 @@ TS-Conf's most distinctive feature is its **per-scanline palette** — every sca
 
 This is structurally simpler than the Next's copper (which requires programming a sequence of `WAIT` + `MOVE` instructions), but less flexible — you can change palettes per scanline, but you cannot change other registers (sprite positions, layer enables, scroll offsets).
 
-### 512 KB Dedicated VRAM
+### 4 MB RAM Addressing and Memory Mapping
 
-Sprites, tilemap, and palettes are stored in **512 KB of dedicated VRAM**, completely separate from main RAM. This is the same architectural pattern as the Next's sprite pattern memory — but on TS-Conf, the VRAM also holds the tilemap and palettes, making the 512 KB a unified graphics memory.
+TS-Conf can address up to **4096 KB (4 MB) of RAM** plus **512 KB of ROM**, far beyond BaseConf's 1024 KB. The 16-bit Z80 address space is divided into **four programmable 16 KB windows**, each with its own page register:
 
-The VRAM is accessed via a **bank-switching scheme**: a 16 KB window of VRAM is paged into the Z80 address space at `#0000–#3FFF` (or another configurable window), and the programmer writes/reads sequentially. This is similar to the Next's Layer 2 banking.
+| CPU window | Address range | Page register | Default page | R/W |
+|---|---|---|---|---|
+| 0 | `#0000`–`#3FFF` | `Page0` | `#00` (ROM or RAM) | W |
+| 1 | `#4000`–`#7FFF` | `Page1` | `#05` | W |
+| 2 | `#8000`–`#BFFF` | `Page2` | `#02` | R/W |
+| 3 | `#C000`–`#FFFF` | `Page3` | `#00` | R/W |
+
+The Pentagon-128 standard `#7FFD` port is supported for compatibility, with four paging modes (`LCK128[1:0]` bits of `MemConfig`):
+
+| `LCK128[1:0]` | Mode | Behavior |
+|---|---|---|
+| `00` | 512 KB | `Page3[4:0]` = `#7FFD[7:6]` + `#7FFD[2:0]` |
+| `01` | 128 KB | `Page3[2:0]` = `#7FFD[2:0]` (standard Pentagon-128) |
+| `10` | Auto | Long addressing (`out (c),a`) → 512 KB; short addressing (`out (#FD),a`) → 128 KB |
+| `11` | 1024 KB | `Page3[5:0]` = `#7FFD[5]` + `#7FFD[7:6]` + `#7FFD[2:0]` (Pentagon-1024 standard) |
+
+### Dedicated Graphics Memory
+
+Sprites, tilemap, palettes, and tile/sprite patterns are stored in dedicated graphics memory, accessed via a memory-mapped file mechanism (`FMAddr` register). This separates graphics data from main RAM — even though both ultimately live in the same 4 MB physical RAM chip, the TS-Conf hardware arbitrates access so that the video circuit never stalls the CPU. This is conceptually similar to the Next's dedicated Layer 2 and sprite memory.
 
 ---
 
@@ -212,15 +281,22 @@ The TS-Conf scene is concentrated in Russia and the Russian-speaking diaspora. D
 | **Hardware base** | ZX Evolution (real Z80 + CPLD) | Dedicated FPGA board |
 | **Compatibility target** | Pentagon + new TS-Conf software | 48K / 128K / Pentagon + new Next software |
 | **Mode switching** | **Firmware reflash** (requires reboot) | Runtime (NextReg write) |
-| **Sprites per scanline** | 32 | 64 |
-| **Tilemap** | 40×25 | 40×32 or 80×32 |
-| **Per-scanline palettes** | Yes (dedicated table) | Yes (via copper) |
+| **Sprites per scanline** | **Up to 85** | 64 |
+| **Sprite sizes** | **8×8 up to 64×64** | 16×16 (fixed) |
+| **Sprite planes** | **3** | 1 (with priority) |
+| **Tilemap planes** | **2** (parallel rendering) | 1 |
+| **Tilemap resolution** | Variable (256×192 up to 360×288, hi-res 720×288) | 40×32 (320×256) or 80×32 (640×256) |
+| **Per-scanline palettes** | Yes (dedicated CRAM table) | Yes (via copper) |
+| **Palette color depth** | **RGB555** (32,768 colors) | RGB888 (16M colors) |
 | **Copper** | No | Yes |
-| **DMA** | No (CPU-driven) | Yes |
+| **DMA** | **Yes** (DRAM-to-Device, Device-to-DRAM, DRAM-to-DRAM) | Yes |
+| **CPU cache** | **512 bytes** (for 14 MHz mode) | No |
+| **Interrupt sources** | Frame + Line + DMA (IM2 vectors) | Frame + line + UART + DMA |
+| **Text mode** | **Yes** (loadable font + vertical scroll) | Limited |
 | **Documentation language** | Primarily Russian | Primarily English |
 | **Software library** | Russian scene | Western scene |
 
-TS-Conf and the Next solve the same problem (modern graphics for the Spectrum) but with different trade-offs. TS-Conf is **simpler** (no copper to program, no DMA, just sprites + tilemap + palettes), while the Next is **more powerful** (copper enables any register change per scanline, DMA enables fast block copies, runtime mode switching preserves compatibility).
+TS-Conf and the Next solve the same problem (modern graphics for the Spectrum) but with different trade-offs. TS-Conf is **denser in sprite/tile capacity** (more sprites per line, more planes, larger sprites) and adds a CPU cache for 14 MHz mode, but lacks the Next's **copper coprocessor** (which can change any register on any scanline, not just palettes) and lacks runtime mode switching. The Next is more flexible overall; TS-Conf is more focused on raw 2D graphics throughput.
 
 ---
 
@@ -230,18 +306,21 @@ TS-Conf and the Next solve the same problem (modern graphics for the Spectrum) b
 - [BaseConf firmware](baseconf.md) — the default Pentagon-compatible firmware
 - [ZX Evolution FPGA internals](../../11_emulation/fpga/zxevo.md) — CPLD design, bitstream architecture
 - [ZX Spectrum Next](zx_next.md) — the Western equivalent
-- [Next sprites](zx_next_sprites.md) — comparable sprite engine (different specs)
-- [Next tilemap](zx_next_tilemap.md) — comparable tilemap engine
-- [Next copper](zx_next_copper.md) — the Next's per-scanline register mechanism (TS-Conf uses palette tables instead)
+- [Next sprites](zx_next.md#hardware-sprites) — comparable sprite engine (different specs)
+- [Next tilemap](zx_next.md#hardware-tilemap) — comparable tilemap engine
+- [Next copper](zx_next.md#the-copper-coprocessor) — the Next's per-scanline register mechanism (TS-Conf uses palette tables instead)
 - [Pentagon 128](../clones/pentagon.md) — TS-Conf's compatibility baseline
 
 ---
 
 ## References
 
-- **TS-Conf documentation** ([GitHub: ts-conv](https://github.com/ts-conv)) — official TS-Conf port and register reference
-- **Aleksandr Zhuravlev's TS-Conf pages** — design notes and programming tutorials
-- **NedoPC forum** — TS-Conf-specific threads, software releases
-- **zx-pk.ru forum** — *TS-Conf* subforum with driver documentation and example programs
+- **TS-Conf official documentation** ([GitHub: tslabs/zx-evo — `pentevo/docs/TSconf/tsconf_en.md`](https://github.com/tslabs/zx-evo/blob/master/pentevo/docs/TSconf/tsconf_en.md)) — authoritative port and register reference, maintained by the tslabs team
+- **Aleksandr Zhuravlev (`tsl`) TS-Conf pages** — design notes and programming tutorials (Russian)
+- **NedoPC forum** ([nedopc.org](http://nedopc.org/zxevo/)) — TS-Conf-specific threads, software releases, and BaseConf/TS-Conf bitstream downloads
+- **zx-pk.ru forum** — *TS-Conf* subforum with driver documentation and example programs (Russian)
 - **TS-Conf software archive** — games, demos, and utilities written specifically for TS-Conf
-- **Russian demoscene archives** — TS-Conf-targeted releases from CC Chaos Constructions, diHalt, etc.
+- **Russian demoscene archives** — TS-Conf-targeted releases from CC Chaos Constructions, diHalt,FUNTOP, etc.
+- **zxevo.ru wiki** — ZX Evolution community wiki with TS-Conf programming guides (Russian)
+- **ZEsarUX emulator** ([GitHub: chernandezba/zesarux](https://github.com/chernandezba/zesarux)) — has a TS-Conf machine mode for development testing without real hardware
+- **Unreal Speccy emulator** (also by SMT / Max L.) — alternate TS-Conf emulation target

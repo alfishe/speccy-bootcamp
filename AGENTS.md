@@ -70,7 +70,7 @@ Every article must note which track(s) it applies to. When behavior differs betw
 | **Pouet.net** | pouet.net | Cross-platform demoscene archive | English |
 | **chibiakumas.com** | chibiakumas.com | Translated Russian hardware articles, scanned magazines | English |
 
-**Track separation rule:** Original-track review articles (e.g., `03_io/peripherals/`, `02_hardware/original/`) must NOT carry full Soviet-clone or New Gen sections. Give them a short **Track Applicability** note (one paragraph with links) and put clone/Next variants in dedicated articles under `02_hardware/clones/` and `02_hardware/newgen/` — e.g., `clone_joysticks.md`, `zx_next_joystick.md`.
+**Track separation rule:** Original-track review articles (e.g., `03_io/peripherals/`, `02_hardware/original/`) must NOT carry full Soviet-clone or New Gen sections. Give them a short **Track Applicability** note (one paragraph with links) and put clone/Next variants in dedicated articles under `02_hardware/clones/` and `02_hardware/newgen/` — e.g., `clone_joysticks.md`, `zx_next.md`.
 
 ---
 

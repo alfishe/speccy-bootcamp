@@ -5,7 +5,7 @@
 The ZX Spectrum Next (2017–2020) is an FPGA-based modern recreation of the Spectrum that ships in a desktop case with new hardware features: Layer 2 256-colour graphics, hardware sprites, tilemap, DMA, and a **copper coprocessor** for raster-precise register writes. Its video timing is **configurable at runtime** — a single machine can run with 48K, 128K, +2A, or Pentagon timing depending on the mode select.
 
 > [!NOTE]
-> This article covers the **video frame timing** of the Next. For hardware architecture (FPGA, Z80N CPU, memory map), see [memory_and_io_next.md](../03_memory_and_io/memory_and_io_next.md). For the copper's instruction set, see [zx_next_copper.md](../../02_hardware/newgen/README.md). For DMA, sprites, and Layer 2, see the planned articles in [02_hardware/newgen/](../../02_hardware/newgen/).
+> This article covers the **video frame timing** of the Next. For hardware architecture (FPGA, Z80N CPU, memory map), see [memory_and_io_next.md](../03_memory_and_io/memory_and_io_next.md). For the copper's instruction set, see [zx_next.md#the-copper-coprocessor](../../02_hardware/newgen/zx_next.md#the-copper-coprocessor). For DMA, sprites, and Layer 2, see [zx_next.md](../../02_hardware/newgen/zx_next.md).
 
 ---
 
@@ -157,7 +157,7 @@ The Next's three enhanced graphics layers (Layer 2 256-colour, hardware sprites,
 All of this happens in parallel with the standard Spectrum screen fetch. The CPU sees no additional contention from these layers (beyond the base timing-mode contention).
 
 > [!NOTE]
-> For details on programming these layers, see the planned articles [zx_next_layer2.md](../../02_hardware/newgen/README.md), [zx_next_sprites.md](../../02_hardware/newgen/README.md), and [zx_next_tilemap.md](../../02_hardware/newgen/README.md) in the New Generation hardware section.
+> For details on programming these layers, see [Layer 2](../../02_hardware/newgen/zx_next.md#layer-2-framebuffer), [Sprites](../../02_hardware/newgen/zx_next.md#hardware-sprites), and [Tilemap](../../02_hardware/newgen/zx_next.md#hardware-tilemap) in the New Generation hardware section.
 
 ---
 
@@ -224,7 +224,7 @@ The Next's `#xx` horizontal-scroll and vertical-scroll registers can be updated 
 - **Vertical parallax** — different lines scroll at different rates
 - **Scanline-synchronised palette swaps** — copper writes to Layer 2 palette registers, producing per-line 256-colour gradients
 
-These effects require precise copper programming — see the planned [zx_next_copper.md](../../02_hardware/newgen/README.md) for the full copper programming reference.
+These effects require precise copper programming — see [zx_next.md#the-copper-coprocessor](../../02_hardware/newgen/zx_next.md#the-copper-coprocessor) for the full copper programming reference.
 
 ---
 

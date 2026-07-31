@@ -328,7 +328,7 @@ The ZX Printer edge connector on the back of the IF2 also loses the +9V line on 
 - [multiface.md](multiface.md) — Different overlay approach (NMI + RAM, not cartridge)
 - [02_hardware/original/keyboard_matrix.md](../../02_hardware/original/keyboard_matrix.md) — Why the IF2 joysticks map onto keys 1-5 and 6-0
 - [02_hardware/clones/clone_joysticks.md](../../02_hardware/clones/clone_joysticks.md) — Soviet clones standardized on Kempston, not Sinclair
-- [02_hardware/newgen/zx_next_joystick.md](../../02_hardware/newgen/zx_next_joystick.md) — Next's emulation of Sinclair 1/2 (with the "Sinclair numbering trap" warning)
+- [02_hardware/newgen/zx_next.md](../../02_hardware/newgen/zx_next.md#joystick-system) — Next's emulation of Sinclair 1/2 (with the "Sinclair numbering trap" warning)
 - [04_operating_systems/esxdos.md](../../04_operating_systems/esxdos.md) — `.if2` cartridge loading in ESXDOS
 - [09_toolchain/native_toolchain.md](../../09_toolchain/native_toolchain.md) — Laser Genius cartridge-based assembler (the only non-game cartridge ever shipped)
 - [10_references/io_port_map.md](../../10_references/io_port_map.md) — Sinclair joystick port table

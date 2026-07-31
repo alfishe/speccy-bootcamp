@@ -2,9 +2,23 @@
 
 # ZX-Uno — The Open-Source FPGA Spectrum
 
-The **ZX-Uno** is an open-source, community-designed FPGA-based ZX Spectrum, first released in 2015 by a Spanish-led team including **Antonio Villena**, **Zeledriver**, and others. It occupies a middle ground between the **ZX Spectrum Next** (a full commercial product with case and keyboard) and the **bare-board clones** (Harlequin, Sizif) — a small single-board computer with an FPGA at its heart, designed to be **built at home** from a kit or pre-assembled, running a free and open bitstream.
+The **ZX-Uno** is an open-source, community-designed FPGA-based ZX Spectrum, crowdfunded on **Verkami in March 2016** by the **AZXUNO non-profit association** — a five-person Spanish-led team. The project was born in **2012** on the Spanish retro-computing forum **zonadepruebas.com**, evolved through **four board revisions and approximately 40 hand-soldered prototypes** over three years, and shipped its first production boards in 2016. The latest public board revision is **v4.1**.
 
-Where the ZX Spectrum Next is a finished product aimed at the broader retro-computing market, the ZX-Uno is a **hacker-friendly platform** aimed at developers who want to **modify the FPGA core itself**. The bitstream is fully open source (Verilog), the schematic is open, and the firmware is field-updatable from SD card. The ZX-Uno has become the de facto **experimental platform** for the Spanish-speaking and wider retro Spectrum community — new features (ZXCortex, DIVMMC, layer 2 prototypes) are often tried on the ZX-Uno first.
+Where the ZX Spectrum Next is a finished commercial product aimed at the broader retro-computing market, the ZX-Uno is a **hacker-friendly platform** aimed at developers who want to **modify the FPGA core itself**. The bitstream is fully open source (Verilog), the schematic is open (Creative Commons Share-Alike), and the firmware is field-updatable from SD card. The ZX-Uno has become the de facto **experimental platform** for the Spanish-speaking and wider retro Spectrum community — new features (ZXCortex, DIVMMC, layer 2 prototypes) are often tried on the ZX-Uno first.
+
+### The AZXUNO Team
+
+The ZX-Uno was designed by five people, four based in Spain (Málaga, Zaragoza, Barcelona, Sevilla) and one in California, USA. To support the project legally, they constituted themselves as the **ZX-UNO Developer Association (AZXUNO)** — a Spanish non-profit association with fiscal identification:
+
+| Member | Handle | Role | Location |
+|---|---|---|---|
+| **Antonio José Villena Godoy** | `avillena` | **President of AZXUNO**; author and maintainer of the ZX-Uno BIOS; day job at **IMAGINA Artificial Intelligence, S.L.** | Málaga, Spain |
+| **Jordi Bayó** | `Hark0` | **Secretary**; graphic designer; corporate image and package design; keyboard stickers | Zaragoza, Spain |
+| **Samuel Baselga López** | `Quest` | **Core porter and framework author** — wrote the multi-core framework that allows storing up to **9 cores in the same FPGA** without a JTAG programmer; joined the team in **September 2015** | Barcelona, Spain |
+| **Miguel Angel Rodríguez Jódar** | `mcleod_ideafix` | **Treasurer**; full-time lecturer at the **Dept. of Architecture and Computing Technology, University of Seville**; author and maintainer of the **ZX Spectrum, SAM Coupé, and Jupiter ACE cores** | Sevilla, Spain |
+| **Don "Superfo"** | `Superfo` | **PCB designer** — design, layout, and routing for the **first three board versions** (v1, v2, v3) | California, USA |
+
+The crowdfunding campaign raised money to manufacture and distribute a limited run of **250 units** — explicitly positioned as "not a product for the masses, but rather for original machine lovers and microelectronic hobbyists."
 
 > [!NOTE]
 > This article covers the **hardware platform** — what the ZX-Uno is, its physical architecture, and its programming model. For the **FPGA internals** (the soft-core CPU, the ULA recreation, the memory arbitration), see [zx_uno_core.md](../../11_emulation/fpga/zx_uno_core.md) in the emulation section.
@@ -29,20 +43,37 @@ The ZX Spectrum Next (released 2017) addressed some of these needs commercially,
 
 | Component | Specification |
 |---|---|
-| **FPGA** | **Xilinx Spartan-6 XC6SLX9** (early revisions) or **XC6SLX16** (later revisions) — the same family as the ZX Spectrum Next KS1 |
-| **RAM** | **512 KB or 1 MB SRAM** (static, single +5V rail) |
-| **Flash** | **512 KB or 1 MB SPI flash** — holds the FPGA bitstream + multiple ROM images |
-| **SD card slot** | **MicroSD** (SPI-mode), FAT16/FAT32 filesystem |
-| **Video output** | **VGA** (RGB) — directly driven by the FPGA, no scan doubler needed |
+| **FPGA** | **Xilinx Spartan-6 XC6SLX9-2TQG144C** (TQFP-144 package) — same family as the ZX Spectrum Next KS1 |
+| **SRAM** | **512 KB AS7C34096A-10TIN** (static, single +5V rail, 10 ns access time) — used as the Spectrum's main RAM |
+| **Oscillator** | **50 MHz** master clock (divided down by the FPGA for Z80 and video timings) |
+| **SPI flash** | **4 MB (32 Mbit)** writable SPI flash — holds the FPGA bitstream + multiple ROM images + multiple machine cores |
+| **Video output** | **Composite via AD724 encoder** (with switchable **4.43 MHz PAL / 3.58 MHz NTSC** crystal) + **RGB/VGA via Molex 1.25 mm header** (cable available separately) |
 | **Audio output** | **3.5 mm stereo jack** — AY left, AY right, beeper mixed |
-| **Keyboard** | **PS/2 keyboard port** (no built-in keyboard) |
+| **Keyboard** | **PS/2 connector for keyboard and mouse** (no built-in keyboard) |
 | **Joystick** | **Sinclair / Kempston** via the expansion edge connector (adapter required) |
-| **Expansion** | **Standard Spectrum edge connector** — accepts original Spectrum peripherals |
+| **Expansion port** | **Standard Spectrum edge connector** — accepts original Spectrum peripherals |
+| **EAR input** | **Mono 3.5 mm jack** for tape loading (uses **Superfo's 1-transistor EAR circuit**) + alternative mobile-phone / MP3 input |
+| **SD/MMC** | **Full-size SD/MMC socket** (microSD also possible with adapter) |
+| **JTAG** | **Molex 1.25 mm JTAG header** — for hardware programming (rarely needed; the multi-core framework can reflash from SD) |
+| **Power** | **5 V DC via micro-USB connector** (also usable from a TV/monitor USB port) |
 | **WiFi** (optional) | **ESP-12 module** (Espressif ESP8266) — connected via SPI header |
-| **Form factor** | **Single-board**, ~10 cm × 6 cm PCB, bare-board (no case) |
-| **Power** | **5V DC** via mini-USB or barrel jack |
+| **Form factor** | **Single-board, 86 × 56 mm PCB** — compatible with **Raspberry Pi 1 cases** (some machining required); distributed bare-board (case available separately as a reward) |
 
-The ZX-Uno is **significantly smaller** than the ZX Spectrum Next — it is a bare PCB roughly the size of a Raspberry Pi, designed to be plugged into a TV or monitor via VGA and used with an external PS/2 keyboard.
+The ZX-Uno is **significantly smaller** than the ZX Spectrum Next — it is a bare PCB roughly the size of a Raspberry Pi, designed to be plugged into a TV or monitor via composite video and used with an external PS/2 keyboard. RGB-SCART and VGA cables are available separately for higher-quality video.
+
+### Boot Configuration Utility (PC-BIOS-like)
+
+Out of the box, the ZX-Uno ships with the ZX Spectrum core and **OpenSE** (Andrew Owen's open-source ROM) as the default boot ROM. The boot-time setup program (similar in appearance to a PC BIOS setup screen) lets the user configure:
+
+- **Memory testing, EAR signal level, keyboard testing**
+- **Silent Boot** (no ZX-Uno logo at boot)
+- **Spectrum keyboard implementation** (Issue 2 or Issue 3)
+- **Machine timings** (48K, 128K, etc.)
+- **Enable/disable contended memory**
+- **Enable/disable DivMMC** and DivMMC NMI trap
+- **Choose default ZX Spectrum ROM** to boot from, or choose **default core** for non-Spectrum machines
+- **ZX Spectrum ROM manager** — add, delete, update ROMs from SD
+- **Core manager** — add other machines' cores, up to **9 cores** total, without needing an external JTAG programmer
 
 ---
 
@@ -83,19 +114,22 @@ ULAplus is also implemented in several emulators (EightyOne, ZEsarUX) and is sup
 
 The ZX-Uno can run **multiple cores** — different bitstreams that implement different machines. Cores are loaded from the SD card at boot time, selectable via a configuration menu:
 
-| Core | What it implements |
-|---|---|
-| **Spectrum 48K** | Original Sinclair 48K — exact timing, contention, floating bus |
-| **Spectrum 128K / +2** | Sinclair 128K with `#7FFD` paging |
-| **Spectrum +2A / +3** | +2A/+3 with `#7FFD` + `#1FFD` paging |
-| **Pentagon 128** | Russian Pentagon 128 — different timing, no contention |
-| **Pentagon 1024** | Pentagon with extended paging |
-| **Scorpion ZS-256** | Scorpion with its specific timing and ports |
-| **Jupiter ACE** | (community port) The Jupiter ACE — a different 1980s machine |
-| **ColecoVision** | (community port) The ColecoVision console |
-| **TS-Conf** | (community port) The Russian enhanced video configuration |
+| Core | What it implements | Author |
+|---|---|---|
+| **Spectrum 48K** | Original Sinclair 48K — exact timing, contention, floating bus | Antonio Villena (`avillena`) |
+| **Spectrum 128K / +2** | Sinclair 128K with `#7FFD` paging | Antonio Villena (`avillena`) |
+| **Spectrum +2A / +3** | +2A/+3 with `#7FFD` + `#1FFD` paging | Antonio Villena (`avillena`) |
+| **Pentagon 128** | Russian Pentagon 128 — different timing, no contention | Antonio Villena (`avillena`) |
+| **Pentagon 1024** | Pentagon with extended paging | Antonio Villena (`avillena`) |
+| **Scorpion ZS-256** | Scorpion with its specific timing and ports | Antonio Villena (`avillena`) |
+| **Jupiter ACE** | The 1981 Forth-based machine (different CPU is still Z80-compatible) | Miguel Angel Rodríguez Jódar (`mcleod_ideafix`) |
+| **SAM Coupé** | The 1989 SAM Coupé — the Spectrum's spiritual successor by MGT | Miguel Angel Rodríguez Jódar (`mcleod_ideafix`) |
+| **ColecoVision** | The ColecoVision console (TI SN76489 sound, Z80-based) | Community port |
+| **TS-Conf** | The Russian enhanced video configuration from the ZX Evolution | Community port |
+| **MSX** | Several MSX variants (also TMS9918-based, Z80-based) | Community port |
+| **Galaksija** | The Yugoslavian 8-bit home computer by Voja Antonić | Community port |
 
-The ability to run **non-Spectrum cores** (Jupiter ACE, ColecoVision) is a unique strength of the ZX-Uno's FPGA approach — the same hardware can impersonate any machine that fits in its FPGA.
+The ability to run **non-Spectrum cores** (Jupiter ACE, SAM Coupé, ColecoVision, Galaksija) is a unique strength of the ZX-Uno's FPGA approach — the same hardware can impersonate any machine that fits in its FPGA. Up to **9 cores** can be stored simultaneously in the SPI flash, selectable at boot via the Core Manager without a JTAG programmer (thanks to Samuel Baselga's multi-core framework).
 
 ---
 
@@ -179,20 +213,26 @@ The WiFi capability is supported by community firmware (the "ZX-Uno WiFi Edition
 
 | Aspect | ZX-Uno | ZX Spectrum Next |
 |---|---|---|
-| **Year** | 2015 | 2017 |
-| **FPGA** | Xilinx Spartan-6 (XC6SLX9/16) | Xilinx Spartan-6 (KS1) or Artix-7 (KS2) |
-| **RAM** | 512 KB – 1 MB | 2 MB |
-| **Video** | VGA only | HDMI + VGA + composite |
-| **Audio** | Stereo AY + beeper | Dual AY + DMA-driven PCM + beeper |
-| **Keyboard** | PS/2 only (external) | Built-in + PS/2 |
-| **Case** | Bare board | Desktop case with keyboard |
-| **Open-source bitstream** | **Yes** (Verilog) | No (proprietary core) |
-| **Enhanced graphics** | ULAplus (256-color palette) | Layer 2 + sprites + tilemap + copper |
-| **Multi-machine** | Yes (multiple cores) | Yes (mode switching at runtime) |
-| **Non-Spectrum cores** | Yes (Jupiter ACE, ColecoVision, etc.) | No |
-| **Price** | ~$50–$80 (kit) | ~$250–$400 (assembled) |
+| **Year** | **2016** (Verkami campaign) | 2017 (Kickstarter campaign) |
+| **Origin** | **Spain** (AZXUNO non-profit) | UK (SpecNext Ltd, Rick Dickinson design) |
+| **FPGA** | **Xilinx Spartan-6 XC6SLX9-2TQG144C** | Xilinx Spartan-6 (KS1) or Artix-7 (KS2) |
+| **RAM** | **512 KB AS7C34096A** (single chip) | 2 MB |
+| **Flash** | **4 MB SPI** (bitstream + ROMs + cores) | 4 MB SPI |
+| **Video** | **Composite via AD724 (PAL/NTSC switchable) + RGB/VGA via Molex header** | HDMI + VGA + composite |
+| **Audio** | AY-3-8912 stereo + beeper (3.5 mm jack) | Dual AY + DMA-driven PCM + beeper |
+| **Keyboard** | PS/2 only (external, no built-in) | Built-in + PS/2 |
+| **Case** | **Bare board, 86 × 56 mm** (fits Raspberry Pi 1 case) | Desktop case with keyboard |
+| **Open-source bitstream** | **Yes** (Verilog, GPL) | No (proprietary core) |
+| **Open-source schematic** | **Yes** (Creative Commons Share-Alike) | Hardware specs published, but closed |
+| **Enhanced graphics** | **ULAplus** (256-color palette on 8×8 cells) | Layer 2 + sprites + tilemap + copper |
+| **Multi-machine** | **Up to 9 cores in same FPGA** (no JTAG needed) | Yes (mode switching at runtime) |
+| **Non-Spectrum cores** | **Yes** (Jupiter ACE, ColecoVision, SAM Coupé, MSX, etc.) | No |
+| **Crowdfunding** | **Verkami** (250 units, hobbyist-targeted) | **Kickstarter** (thousands of units, mass market) |
+| **Production volume** | ~250 units (limited run) | ~5,000+ units |
+| **WiFi** | Optional ESP-12 module | Optional ESP-12 module |
+| **Price (at launch)** | ~€50–€60 (bare board) | ~£175–£225 (assembled) |
 
-The ZX-Uno and the ZX Spectrum Next are **complementary** — the Next is the more powerful machine for game development, while the ZX-Uno is the more open platform for hardware experimentation. Many enthusiasts own both.
+The ZX-Uno and the ZX Spectrum Next are **complementary** — the Next is the more powerful machine for game development, while the ZX-Uno is the more open platform for hardware experimentation. Many enthusiasts own both. The ZX-Uno predates the Next by about a year and pioneered several ideas (open Verilog core, SD-card core swapping, ESP-12 WiFi) that influenced the Next's design.
 
 ---
 
@@ -210,10 +250,30 @@ The ZX-Uno and the ZX Spectrum Next are **complementary** — the Next is the mo
 
 ## References
 
-- **ZX-Uno project page** ([zxuno.speccy.org](http://zxuno.speccy.org/)) — official project page with schematics, bitstreams, and forums (primarily Spanish)
-- **ZX-Uno bitstream source** ([GitHub: zxdos](https://github.com/zxdos)) — Verilog source for the FPGA core
-- **ZX-Uno forum** ( speccy.santo) — primary community hub (Spanish-language)
-- **Antonio Villena's ZX-Uno pages** — design notes, hardware revisions, expansion modules
-- **ULAplus specification** (community-developed) — the palette extension's programmer reference
+### Project History and Official Sources
+
+- **Verkami crowdfunding campaign** ([verkami.com/zx-uno](https://verkami.com/projects/15202-zx-uno)) — the original March 2016 campaign page, with full project description, reward tiers, and donor list
+- **ZX-Uno project page** ([zxuno.speccy.org](http://zxuno.speccy.org/)) — official project page with schematics, bitstreams, manuals, and forum links (primarily Spanish)
+- **Antonio Villena's ZX-Uno pages** ([antoniovillena.es](https://antoniovillena.es/)) — design notes, hardware revisions, expansion modules by the project's President and BIOS author
+- **zonadepruebas.com retro-computing forum** — the Spanish-language forum where the ZX-Uno project was conceived in 2012 and developed over four years
+- **AZXUNO (Asociación de Desarrolladores de ZX-UNO)** — the Spanish non-profit association legally constituted to manage the project
+
+### Hardware and Bitstream
+
+- **ZX-Uno bitstream source** ([GitHub: zxdos](https://github.com/zxdos)) — Verilog source for the FPGA core (GPL-licensed)
+- **ZX-Uno schematic and PCB** (Creative Commons Share-Alike) — published alongside the bitstream for hardware hackers
+- **ZX-Uno Wiki** ([github.com/zxdos/zxuno/wiki](https://github.com/zxdos/zxuno/wiki)) — community-maintained documentation (English and Spanish)
+- **Multi-core framework by Samuel Baselga (Quest)** — the framework that allows loading up to 9 cores into the FPGA without a JTAG programmer
+
+### Software and Emulation
+
+- **ULAplus specification** ([GitHub: charliernew/ULAplus](https://github.com/charliernew/ULAplus)) — community-developed palette extension's programmer reference
 - **EightyOne emulator** ([SourceForge](http://www.aptuning.com/EightyOne-DS/)) — implements ULAplus and ZX-Uno extensions for development testing
-- **ZEsarUX emulator** ([GitHub: chernandezba](https://github.com/chernandezba/zesarux)) — another emulator with strong ZX-Uno support
+- **ZEsarUX emulator** ([GitHub: chernandezba/zesarux](https://github.com/chernandezba/zesarux)) — full-featured emulator with strong ZX-Uno support, including WiFi simulation
+- **esxDOS** ([github.com/zxdos/esxDOS](https://github.com/zxdos/esxDOS)) — the firmware used by the ZX-Uno's DivMMC implementation
+
+### Community
+
+- **Speccy.santo forum** — primary Spanish-language ZX-Uno community hub
+- **World of Spectrum forum threads** — English-language discussion of the ZX-Uno
+- **Retro Wiki ES** ([retrowiki.es](https://retrowiki.es/)) — broader Spanish retro-computing community

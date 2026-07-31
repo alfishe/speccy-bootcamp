@@ -45,7 +45,7 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 
 | Article | Description |
 |---------|------------|
-| [zx_next_joystick.md](02_hardware/newgen/zx_next_joystick.md) | ZX Next joystick: per-port modes (NextReg 0x05), dual Kempston #1F/#37, Mega Drive pads, Sinclair numbering trap |
+| [zx_next.md](02_hardware/newgen/zx_next.md) | ZX Spectrum Next complete hardware reference: layer stack, NextReg system, Layer 2 framebuffer, hardware sprites, tilemap, copper, DMA, joystick system, Z80N extensions |
 
 ### 04 — Operating Systems ✅ COMPLETE
 

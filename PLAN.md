@@ -58,19 +58,12 @@ zx/
 │   └── newgen/
 │       ├── README.md
 │       ├── zx_next.md
-│       ├── zx_next_sprites.md
-│       ├── zx_next_layer2.md
-│       ├── zx_next_tilemap.md
-│       ├── zx_next_copper.md
-│       ├── zx_next_dma.md
 │       ├── sprinter.md
 │       ├── zx_evo.md
 │       ├── ts_conf.md
 │       ├── baseconf.md
 │       ├── zx_uno.md
-│       ├── karabas_pro.md
-│       ├── karabas_128.md
-│       └── peridot.md
+│       └── karabas.md
 │
 ├── 03_io/
 │   ├── snapshots/
@@ -551,21 +544,13 @@ zx/
 | File | Topic | Status |
 |---|---|---|
 | `README.md` | Index + New Gen ecosystem overview | Planned |
-| `zx_next.md` | ZX Spectrum Next: layer architecture, 28MHz accelerator, sprites, layer 2, tilemap, copper, DMA, SD, WiFi, RTC, ESP | Planned |
-| `zx_next_sprites.md` | Next sprite system: 128 sprites, patterns, rotation, priority, collision | Planned |
-| `zx_next_layer2.md` | Layer 2 (256-color) and 256x192x8bpp mode | Planned |
-| `zx_next_tilemap.md` | Tilemap engine, hardware scrolling, 40x32 tile grid | Planned |
-| `zx_next_copper.md` | Next copper: WAIT + MOVE instructions, synced to raster | Planned |
-| `zx_next_dma.md` | DMA controller (derived from Z80 DMA): memory copy, pattern fill, port I/O | Planned |
-| `zx_next_joystick.md` | Next joystick / input subsystem | ✅ (off-plan) |
-| `sprinter.md` | Peters Plus Sprinter: 20MHz Z80, 1MB RAM, SVGA, IDE, PC-like architecture | Planned |
-| `zx_evo.md` | ZX Evolution: Z80-based with CPLD glue logic, PS/2 keyboard/mouse, IDE, SVGA — real hardware, not FPGA core recreation | Planned |
+| `zx_next.md` | ZX Spectrum Next complete hardware reference: layer architecture, 28MHz accelerator, Layer 2 framebuffer, sprites, tilemap, copper, DMA, joystick system, Z80N extensions, SD, WiFi, RTC, ESP | Planned |
+| `sprinter.md` | Peters Plus Sprinter: 21MHz Z84C15, 4MB RAM, Altera PLD-based video, IDE, ISA, PS/2 | Planned |
+| `zx_evo.md` | ZX Evolution: Z80-based with Altera FPGA + ATmega MCU, PS/2 keyboard/mouse, IDE, SVGA — real hardware, not FPGA core recreation | Planned |
 | `ts_conf.md` | TS-Conf: FPGA ZX Spectrum config for ZX Evo — sprites, tiles, 512K VRAM, turbo modes | Planned |
 | `baseconf.md` | Baseconf: standard ZX Evo configuration, classic Spectrum compatibility | Planned |
 | `zx_uno.md` | ZX-Uno: FPGA-based, ULAplus, Turbo, AY, SPI, WiFi | Planned |
-| `karabas_pro.md` | Karabas Pro: modern Z80-based hardware with CPLD, compact design, Peridot-compatible | Planned |
-| `karabas_128.md` | Karabas 128: modern compact Spectrum-compatible, real Z80 + CPLD glue | Planned |
-| `peridot.md` | Peridot: expandable modern Spectrum platform, Karabas-compatible expansion bus | Planned |
+| `karabas.md` | Karabas family (Karabas 128 / Karabas Pro / Peridot): open-source Z80 + Altera MAX II CPLD clones, three tiers (Sinclair 128K exact, Pentagon 128 + turbo/SD, expandable with WiFi/RTC/GPIO) | Planned |
 
 ### 03 — I/O (subfoldered)
 
@@ -1129,7 +1114,7 @@ Articles are written in priority order. README.md is synthesized AFTER articles 
 
 - **F1 — 02 Hardware Original (4 articles)**: `zx_spectrum_128.md`, `zx_spectrum_plus2.md`, `zx_spectrum_plus2a_plus3.md`, `ula_contention.md`. Closes out the Original Sinclair/Amstrad hardware story from 16K/48K through +3, focused on architecture/software-development-relevant content. `power_supply.md`, `edge_connector.md`, and `rom_contents.md` originally planned but descoped (pure hardware or duplicative of existing ROM coverage).
 - **F2 — 02 Hardware Clones (7 articles)**: `pentagon_1024.md`, `kay.md`, `profi.md`, `byte.md`, `other_clones.md`, `ula_replacements.md`, `sizif_harlequin.md`. Closes out the Soviet clone track. Pentagon + Scorpion + ATM Turbo already done.
-- **F3 — 02 Hardware New Gen (14 articles)**: the entire modern-hardware track. `zx_next.md` + 5 Next subsystem articles (sprites/layer2/tilemap/copper/dma), `sprinter.md`, `zx_evo.md`, `ts_conf.md`, `baseconf.md`, `zx_uno.md`, `karabas_pro.md`, `karabas_128.md`, `peridot.md`. Largest bundle — modern scene relevance.
+- **F3 — 02 Hardware New Gen (7 articles)**: the entire modern-hardware track. `zx_next.md` (merged with sprites/layer2/tilemap/copper/dma/joystick subsystem articles), `sprinter.md`, `zx_evo.md`, `ts_conf.md`, `baseconf.md`, `zx_uno.md`, `karabas.md` (merged with Karabas 128 + Peridot). Largest bundle — modern scene relevance.
 - **F4 — 10 References (6 articles)**: `memory_maps.md`, `basic_token_table.md`, `rom_routines.md`, `error_codes.md`, `timing_reference.md`, `pinouts.md`. Quick wins — lookup-table format, referenced everywhere. Closes out the References section.
 - **F5 — 08 Reverse Engineering (7 articles)**: `speedlock_alkatraz.md`, `game_reversing.md`, `code_crunching.md`, `tool_setup.md`, `static_analysis.md`, `dynamic_analysis.md`, `snapshot_repair.md` (optionally `decompilation.md`). Closes out the RE section.
 - **F6 — 09 Toolchain gap fill** ✅ **DONE** (Jul 2026): 19 per-tool deep dives delivered in 4 batches (batch 1: pasmo, z88dk_z80asm, vasm, wla_dx, zmac, rasm, tniasm; batch 2: tasm_cross, as_macro_assembler, zasm_kio, spectrum_basic_mcode, zx_spin; batch 3: tasm_native, zxasm_native, pikasm, laser_genius, avras, sarcasm; batch 4: zdevstudio). `zxdstudio.md` descoped (Russian ZX Disk Studio disk-image utility, not an IDE — documented in [09_toolchain/README.md](09_toolchain/README.md)).

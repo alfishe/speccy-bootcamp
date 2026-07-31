@@ -2,7 +2,10 @@
 
 # BaseConf — The ZX Evolution's Default Firmware
 
-**BaseConf** is the default **firmware configuration** for the ZX Evolution — the bitstream loaded into the board's Altera MAX CPLDs that defines what hardware the Z80 sees. Designed by **Vladimir "vslav" Kladov** as the ZX Evolution's launch configuration, BaseConf implements the full **Pentagon 1024** specification plus a set of well-documented extensions: turbo mode, IDE storage, PS/2 keyboard, SD card, RTC, and SVGA output.
+**BaseConf** is the default **firmware configuration** for the ZX Evolution — the bitstream loaded into the board's Altera EP1K50 FPGA and ATmega128 MCU that defines what hardware the Z80 sees. Designed by **Roman Chunin (`CHRV`)** (ATmega128 firmware) and **Vadim Akimov (`LVD`)** (EP1K50 FPGA bitstream) at **NedoPC** as the ZX Evolution's launch configuration, BaseConf implements the full **Pentagon 1024** specification plus a set of well-documented extensions: 3.5 / 7 / 14 MHz turbo, IDE storage, Beta 128 disk, SD(HC) card, PS/2 keyboard and mouse, RS-232, RTC, and RGB/VGA video output with a scan doubler.
+
+> [!NOTE]
+> **Hardware authors.** The ZX Evolution physical board was designed by three engineers at NedoPC: **Vadim Akimov (`LVD`)** and **Roman Chunin (`CHRV`)** (hardware) plus **Dmitry Dmitriev (`DDP`)** (who wrote the ATmega128 bootloader and the `TEST&SERVICE` diagnostic firmware). The EVO RESET SERVICE / EVO DOS / EVO PROF ROM images were written by **Vyacheslav Savenkov (`Savelij`)**. Today the board is sold and supported by **Vitaliy (`tetroid`)** in Novosibirsk — contact `tetroid@inbox.ru`, site `tetroid.nedopc.com`.
 
 For software developers, BaseConf is the **"known-good target"** for ZX Evolution software. If your program runs under BaseConf, it runs on the vast majority of ZX Evolution boards in the field. This article covers BaseConf as a programmer-visible configuration: what hardware it presents, how the memory map differs from a bare Pentagon 1024, what extra ports it exposes, and what compatibility pitfalls exist.
 
@@ -17,13 +20,14 @@ A BaseConf is a **complete hardware definition** — changing it changes everyth
 
 | Aspect | Defined by BaseConf |
 |---|---|
-| **CPU core** | T80 (Z80-compatible soft-core) running at the configured speed |
-| **Memory map** | Which RAM banks are mapped where, how paging works |
-| **Video modes** | Standard Spectrum, ATM Turbo, text mode — and their address layouts |
-| **Sound chips** | Which AY chips are present, at which addresses |
-| **I/O ports** | Which ports respond to which devices |
-| **Timing** | CPU clock speeds, video timing, interrupt frequency |
-| **Disk interfaces** | Beta 128 + IDE + SD + Gluk RTC support |
+| **CPU clock** | **Real Z80** at 3.5 MHz (default) / 7 MHz (turbo, no wait states) / 14 MHz (mega-turbo, with wait states) |
+| **Memory** | **4 MB RAM** (64 banks × 16 KB via Pentagon paging) + **512 KB ROM** (multiple ROM images selectable) |
+| **Video** | Standard Spectrum 256×192 + scan-doubled VGA output (RGB also available) |
+| **Sound** | **AY-3-8910** at `#FFFD`/`#BFFD`, beeper, Covox (PWM) |
+| **Disk interfaces** | Beta 128 FDC (**WDC1793 / KR1818VG93** compatible), IDE (1 channel, 2 devices), SD(HC) via ATmega SPI |
+| **Peripherals** | PS/2 keyboard, PS/2 mouse, RS-232 (with USB bridge on rev.C), RTC, tape I/O |
+| **I/O ports** | Pentagon `#7FFD` / `#DFFD` / `#EFF7` + Kay-compatible IDE ports `#A0`–`#B7` |
+| **Board** | MiniITX form factor (172 × 170 mm), 2 ZXBUS slots, ATX or +5/+12 V power |
 
 In short, BaseConf is the **hardware definition of the ZX Evolution as the Z80 sees it**. Changing the BaseConf changes what hardware the Z80 sees.
 
@@ -66,7 +70,7 @@ Provides access to banks beyond the first 8. The bit layout differs slightly fro
 | 6 | (varies by BaseConf version) |
 | 7 | Reserved |
 
-The full bank number is `(#DFFD & 0x07) × 8 + (#7FFD & 0x07)`, giving 64 banks = 1024 KB. This is identical to the Pentagon 1024 formula.
+The full bank number is `(#DFFD & #07) × 8 + (#7FFD & #07)`, giving 64 banks = 1024 KB. This is identical to the Pentagon 1024 formula.
 
 ### Port `#EFF7` — Pentagon 1024 Extended Paging
 
@@ -160,13 +164,43 @@ Switching profiles is a **reboot operation** — the user selects the new BaseCo
 
 Updating BaseConf is similar to updating the boot ROM:
 
-1. **Load a new bitstream** from the SD/CF card
-2. **Use the boot ROM's BaseConf update utility** to reflash the CPLD's configuration flash
-3. **Reboot** — the CPLD is reconfigured at the next power-on
+1. **Load a new bitstream** from the SD/CF card (`zxevo_fw.bin`)
+2. **Use the boot ROM's BaseConf update utility** (the ATmega128 bootloader) to reflash the FPGA configuration flash and the ATmega firmware
+3. **Reboot** — the FPGA and MCU are reconfigured at the next power-on
 
-Because BaseConf is the lowest layer of the system (it defines the hardware itself), a corrupt BaseConf is a more serious problem than a corrupt boot ROM. If BaseConf is corrupted, the CPLD will not be configured, and the board will be completely non-functional until the bitstream is rewritten via JTAG.
+The flashing procedure requires the **SOFT RESET (jumper J6) + HARD RESET (jumper J9)** sequence to enter the ATmega bootloader's recovery mode, which can write a new `zxevo_fw.bin` to the on-board flash from the SD card. See [zx_evo.md](zx_evo.md) for the full jumper procedure.
+
+Because BaseConf is the lowest layer of the system (it defines the hardware itself), a corrupt BaseConf is a more serious problem than a corrupt boot ROM. If BaseConf is corrupted, the FPGA will not be configured, and the board will be completely non-functional until the bitstream is rewritten via JTAG.
 
 The community therefore recommends **keeping a known-good BaseConf image on a separate SD card** for emergencies.
+
+## Alternative Firmware Configurations
+
+BaseConf is not the only firmware that runs on the ZX Evolution hardware. Several alternative configurations exist, each presenting a different machine personality to the Z80:
+
+| Firmware | Author | What it does |
+|---|---|---|
+| **BASECONF FE** | **CHRV + LVD** (NedoPC) | Default Pentagon-1024-compatible configuration (this article) |
+| **TS-Conf** ("ZXEVO TS") | **Aleksandr Zhuravlev (`tsl`)** | Enhanced video: sprites, tilemap, DMA, 4 MB addressing — see [ts_conf.md](ts_conf.md) |
+| **ScorpEvo** (v6.1+) | Community | Implements **Serge Zonov's Scorpion ZS-256 turbo+** — alternative Russian clone personality |
+| **EVO RESET SERVICE** | **Vyacheslav Savenkov (`Savelij`)** | Service ROM for recovery / low-level diagnostics |
+| **EVO DOS FE** / **EVO PROF** | Savelij | Disk-oriented and professional variants |
+| **TEST&SERVICE** | **Dmitry Dmitriev (`DDP`)** | Bootable test and diagnostic configuration (essential for newly-soldered boards) |
+| **BOOTLOADER** | DDP | The ATmega128 bootloader itself — only flashed via a hardware programmer |
+
+Switching configurations is a **reboot operation** — the user selects the new firmware in the boot menu, and the FPGA is reprogrammed on the next power cycle. This is fundamentally different from the ZX Spectrum Next's runtime mode switching.
+
+## Hardware Revisions
+
+The ZX Evolution has gone through three PCB revisions at NedoPC:
+
+| Revision | Status | Key changes |
+|---|---|---|
+| **A** | Not manufactured | First design — abandoned before production |
+| **B** | Production | PS/2 connector fixes, ICS501 OE fix, larger 78M05 pattern, AY-printer interface added, ferrite pattern enlarged, board size reduced, jumper changes, FDD key pin, ZXBUS pin-1 direction, WD1793 reset fix, board silkscreen text ("HDD Led", "PWR Led", "Slot1", "Slot2", etc.), VGA connector placement |
+| **C** (current) | Production | **MiniITX form factor (172 × 170 mm)**, removed on-board PAL coder (now external), added AY-printer interface, frequency multiplier control, audio-in (3 inputs total), **CPU Z80 in QFP package**, removed RGB connector (via VGA instead), **RS232-USB bridge** added, removed AT power connector, added PAL coder expansion connector |
+
+If you have a board without revision markings, the **QFP-packaged Z80** and **MiniITX dimensions** identify a rev. C board (the only currently-sold revision).
 
 ---
 
@@ -185,9 +219,11 @@ The community therefore recommends **keeping a known-good BaseConf image on a se
 
 ## References
 
-- **BaseConf source code** ([nedopc.org](http://nedopc.org/zxevo/)) — official BaseConf bitstream source
-- **ZX Evolution documentation** (Russian) — BaseConf port map and extension reference
-- **NedoPC forum** — BaseConf-specific threads, bug reports, feature requests
-- **zx-pk.ru forum** — *ZX Evolution* subforum with BaseConf programming guides
-- **TS-Conf documentation** — comparison reference for the enhanced firmware alternative
+- **NedoPC ZX Evolution page** ([nedopc.com/zxevo/zxevo_eng.php](http://nedopc.com/zxevo/zxevo_eng.php)) — official hardware documentation, schematics (rev B/C), bill of materials, user manual, soldering manual, and firmware downloads
+- **BaseConf source** (SVN at `svn.nedopc.com`) — official BaseConf bitstream source and build instructions
+- **TS-Conf official docs** ([github.com/tslabs/zx-evo](https://github.com/tslabs/zx-evo)) — alternative firmware (sprites, tilemap, DMA) — see [ts_conf.md](ts_conf.md)
+- **BruXy ZX Evolution review** ([bruxy.regnet.cz](https://bruxy.regnet.cz/web/8bit/EN/zx-evolution/)) — independent hands-on review with hardware photos, monitor compatibility tests, and software demonstrations
+- **Andrew Lazarev's ZX Evolution site** ([zx.andrew-lazarev.com/en/](https://zx.andrew-lazarev.com/en/)) — community-maintained programming guides and software archive
+- **zx-pk.ru forum** — *ZX Evolution* subforum with BaseConf programming guides, SD/IDE/RTC tutorials, and user-ported software (Russian)
 - **Pentagon 1024 specification** (1989, Russian) — the original hardware specification that BaseConf implements
+- **Tetroid (Novosibirsk) distribution** — `tetroid@inbox.ru`, `tetroid.nedopc.com` — current manufacturer and support contact

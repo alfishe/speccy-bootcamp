@@ -156,7 +156,7 @@ The complete port map lives in [10_references/io_port_map.md#multiface-ports](..
 - **Multiprint** — an earlier Romantic Robot peripheral that was a cut-down Multiface focused only on screen printing. Predates the Multiface 1.
 - **Multiface One stereo (unofficial)** — third-party mods that added an AY chip on the same PCB; rare
 - **DivIDE / DivMMC + Multiface emulation** — modern DivIDE-based interfaces include a software-emulated Multiface in their firmware. See [03_io/storage/divide_divmmc.md](../storage/divide_divmmc.md).
-- **ZX Spectrum Next** — has a Multiface emulator built into the FPGA core; controlled via NextReg `0x06` bit 3 and `0x08` bit 3. See [02_hardware/newgen/zx_next_joystick.md](../../02_hardware/newgen/zx_next_joystick.md#multiface-port-clash) for the port clash with the Covox DAC.
+- **ZX Spectrum Next** — has a Multiface emulator built into the FPGA core; controlled via NextReg `0x06` bit 3 and `0x08` bit 3. See [02_hardware/newgen/zx_next.md](../../02_hardware/newgen/zx_next.md#joystick-system) for the port clash with the Covox DAC.
 - **Russian clones** — Pentagon, Scorpion, Profi all include Multiface circuitry in their default I/O decode
 
 ---
@@ -393,7 +393,7 @@ For developers writing Spectrum software today:
 - [03_io/storage/divide_divmmc.md](../storage/divide_divmmc.md) — Modern DivIDE-based interfaces emulate the Multiface
 - [01_cpu/z80_interrupts.md](../../01_cpu/z80_interrupts.md) — NMI behavior and the `#0066` vector
 - [05_development/04_interrupts/interrupt_programming.md](../../05_development/04_interrupts/interrupt_programming.md) — Multiface's use of NMI vs INT
-- [02_hardware/newgen/zx_next_joystick.md](../../02_hardware/newgen/zx_next_joystick.md) — Next's built-in Multiface emulator and the `#1F` port clash
+- [02_hardware/newgen/zx_next.md](../../02_hardware/newgen/zx_next.md#joystick-system) — Next's built-in Multiface emulator and the `#1F` port clash
 - [09_toolchain/debugging.md](../../09_toolchain/debugging.md) — xFuse and ZEsarUX debuggers superseded Genie
 - [10_references/io_port_map.md#multiface-ports](../../10_references/io_port_map.md) — Canonical port table
 - [04_operating_systems/rom_48k.md](../../04_operating_systems/rom_48k.md) — Standard NMI handler at `#0066` that the MF replaces

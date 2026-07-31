@@ -203,7 +203,7 @@ The Next emulates the original 48K keyboard matrix in its FPGA, so old software 
 
 - A PS/2 keyboard plugged into the Next's PS/2 port produces the same `#FE` reads as the membrane keyboard
 - The Next also supports **scan-code-based input** for new software via NextReg `0x05` (PS/2 key code register) — but this is opt-in
-- For full coverage see [02_hardware/newgen/zx_next_joystick.md](../../02_hardware/newgen/zx_next_joystick.md)
+- For full coverage see [02_hardware/newgen/zx_next.md](../../02_hardware/newgen/zx_next.md#joystick-system)
 
 
 ---
@@ -324,7 +324,7 @@ For two-player games with one keyboard, the convention is **Player 1 = left half
 - [joystick.md](joystick.md) — Joystick interfaces piggyback on the matrix
 - [02_hardware/original/ula_architecture.md](../../02_hardware/original/ula_architecture.md) — Port `#FE` decode and column multiplexer
 - [02_hardware/original/README.md](../../02_hardware/original/README.md) — Per-model hardware overview (including +2A/+3 keyboard changes)
-- [02_hardware/newgen/zx_next_joystick.md](../../02_hardware/newgen/zx_next_joystick.md) — Next keyboard/joystick implementation
+- [02_hardware/newgen/zx_next.md](../../02_hardware/newgen/zx_next.md#joystick-system) — Next keyboard/joystick implementation
 - [05_development/03_memory_and_io/memory_and_io_48k.md](../../05_development/03_memory_and_io/memory_and_io_48k.md) — Port-level usage in context
 - [05_development/03_memory_and_io/contention_model.md](../../05_development/03_memory_and_io/contention_model.md) — Why `#FE` reads take variable time
 - [05_development/04_interrupts/interrupt_programming.md](../../05_development/04_interrupts/interrupt_programming.md) — Race between ROM KEY-SCAN and your ISR

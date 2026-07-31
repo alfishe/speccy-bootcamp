@@ -241,7 +241,7 @@ The ATM Turbo is a Russian clone with Turbo mode and a hard disk option. It uses
 
 ## ZX Spectrum Next Memory Map
 
-The ZX Spectrum Next (2017+, see [zx_next_joystick.md](../02_hardware/newgen/zx_next_joystick.md) for hardware overview — full `zx_next.md` pending) extends the architecture dramatically:
+The ZX Spectrum Next (2017+, see [zx_next.md](../02_hardware/newgen/zx_next.md) for hardware overview) extends the architecture dramatically:
 
 - **8 KB ROM banks** (vs 16 KB on 128K) — 256 ROM bank slots
 - **8 KB RAM pages** (vs 16 KB) — 16,384 RAM pages = 128 MB maximum (only 1–2 MB on shipping hardware)

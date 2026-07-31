@@ -49,7 +49,7 @@ The Kempston interface (Kempston Micro Electronics) is a minimal piece of logic:
 |---|---|---|---|---|---|---|---|---|
 | Meaning | 0 | 0 | 0 | **F**ire | **U**p | **D**own | **L**eft | **R**ight |
 
-Active **high** — the opposite polarity of everything on the keyboard matrix. Bits 5–7 read as 0 on classic interfaces; some modern multi-button variants use them for extra fire buttons (see [ZX Next Joystick](../../02_hardware/newgen/zx_next_joystick.md)).
+Active **high** — the opposite polarity of everything on the keyboard matrix. Bits 5–7 read as 0 on classic interfaces; some modern multi-button variants use them for extra fire buttons (see [ZX Next Joystick](../../02_hardware/newgen/zx_next.md#joystick-system)).
 
 > [!NOTE]
 > Some reference tables (including the Black_Cat port table that [I/O Port Map](../../10_references/io_port_map.md#kempston-joystick--1f) reproduces) print the bits in a different order, with fire on bit 0. The layout above is what emulators (Fuse, ZEsarUX, UnrealSpeccy) implement and what the surviving software base expects — treat it as canonical, and if in doubt, verify against a known game.
@@ -155,7 +155,7 @@ Active low. The later **TC2048 dropped this and went Kempston-compatible** inste
 This article covers the **original-track** aftermarket standards as they existed on Sinclair/Amstrad hardware. The other two tracks get their own articles:
 
 - **Soviet clones** moved Kempston onto the motherboard and settled the standards war in hardware — see [Clone Joysticks](../../02_hardware/clones/clone_joysticks.md).
-- **ZX Spectrum Next** implements every standard above per-port, plus Mega Drive pads — see [ZX Next Joystick](../../02_hardware/newgen/zx_next_joystick.md).
+- **ZX Spectrum Next** implements every standard above per-port, plus Mega Drive pads — see [ZX Next Joystick](../../02_hardware/newgen/zx_next.md#joystick-system).
 
 Modern multi-standard interfaces serve the original-hardware market where nothing is built in. A representative example (Lotharek's Kempston MAX 2) shows how complete the coverage has become — one device, mode switch: Kempston on `#1F` (second stick on `#5F`), Sinclair 1/2 on the keyboard rows, Fuller on `#7F` (second stick as Kempston on `#37`), and Cursor/Protek modes. On original 48K hardware such an interface is the practical way to cover every game ever written.
 

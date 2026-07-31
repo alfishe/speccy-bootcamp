@@ -140,7 +140,7 @@ Port #57 (W):    Sprite pattern upload port
 Port #15:        Sprite system enable/disable
 ```
 
-For complete sprite programming, see [zx_next_sprites.md](../../02_hardware/newgen/README.md).
+For complete sprite programming, see [zx_next.md#hardware-sprites](../../02_hardware/newgen/zx_next.md#hardware-sprites).
 
 ### Copper
 
@@ -149,7 +149,7 @@ Port #60 (W):    Copper data (write copper instruction)
 Port #61 (W):    Copper control (reset, run, stop)
 ```
 
-The copper is a simple programmable sequencer that can write to any I/O port synchronized to the raster position. See [zx_next_copper.md](../../02_hardware/newgen/README.md).
+The copper is a simple programmable sequencer that can write to any I/O port synchronized to the raster position. See [zx_next.md#the-copper-coprocessor](../../02_hardware/newgen/zx_next.md#the-copper-coprocessor).
 
 ### DMA
 
@@ -158,7 +158,7 @@ Port #6B (W):    DMA control register
 Port #6C–#6F:    DMA source/destination/length
 ```
 
-For DMA programming, see [zx_next_dma.md](../../02_hardware/newgen/README.md).
+For DMA programming, see [zx_next.md#dma-controller](../../02_hardware/newgen/zx_next.md#dma-controller).
 
 ### Storage
 
@@ -206,11 +206,11 @@ Port    Function                                     Next specific
 - **128K/+2 memory and ports** (baseline paging): [memory_and_io_128k.md](memory_and_io_128k.md)
 - **Pentagon memory and ports** (compatibility mode): [memory_and_io_pentagon.md](memory_and_io_pentagon.md)
 - **I/O port decoding** (partial decoding, masks): [io_port_decoding.md](io_port_decoding.md)
-- **ZX Spectrum Next hardware**: [zx_next.md](../../02_hardware/newgen/README.md)
-- **Next sprites**: [zx_next_sprites.md](../../02_hardware/newgen/README.md)
-- **Next Layer 2**: [zx_next_layer2.md](../../02_hardware/newgen/README.md)
-- **Next copper**: [zx_next_copper.md](../../02_hardware/newgen/README.md)
-- **Next DMA**: [zx_next_dma.md](../../02_hardware/newgen/README.md)
+- **ZX Spectrum Next hardware**: [zx_next.md](../../02_hardware/newgen/zx_next.md)
+- **Next sprites**: [zx_next.md#hardware-sprites](../../02_hardware/newgen/zx_next.md#hardware-sprites)
+- **Next Layer 2**: [zx_next.md#layer-2-framebuffer](../../02_hardware/newgen/zx_next.md#layer-2-framebuffer)
+- **Next copper**: [zx_next.md#the-copper-coprocessor](../../02_hardware/newgen/zx_next.md#the-copper-coprocessor)
+- **Next DMA**: [zx_next.md#dma-controller](../../02_hardware/newgen/zx_next.md#dma-controller)
 - **NextZXOS**: [nextzxos.md](../../04_operating_systems/nextzxos.md)
 - **Official Next documentation**: [zxnext.io](https://www.zxnext.io/)
 - **Complete I/O port map** (all ports, all models, decoding bitmasks): [io_port_map.md](../../10_references/io_port_map.md)
