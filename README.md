@@ -86,6 +86,15 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 
 ### 05 — Development
 
+#### Sinclair BASIC
+
+| Article | Description |
+|---------|------------|
+| [basic_intro.md](05_development/01_basic/basic_intro.md) | **Sinclair BASIC foundation**: tokens, syntax, variable types (numeric/string/array), 5-byte floating-point format, calculator stack, ROM parser, line-entry quirks (no ELSE, mandatory LET, single-line editor), GO TO vs GOTO, three ROM versions |
+| [basic_graphics.md](05_development/01_basic/basic_graphics.md) | **Graphics commands**: coordinate system (origin bottom-left), `PLOT`, `DRAW` (line + arc form), `CIRCLE`, `POINT`, `ATTR`, INK/PAPER/INVERSE/OVER modifiers, performance timings, worked Mandelbrot example |
+| [basic_sound.md](05_development/01_basic/basic_sound.md) | **`BEEP` command**: pitch in semitones from middle C, duration in seconds, frequency formula, DATA-driven melodies, sound effects (laser/explosion/warble/phone), 128K `PLAY` overview, performance and limitations |
+| [basic_peek_poke.md](05_development/01_basic/basic_peek_poke.md) | **BASIC-to-machine-code bridge**: `PEEK` (read byte), `POKE` (write byte), `USR` (call routine, return value in BC), calling conventions, parameter passing (POKE/system vars/STKEND/scratch), `LOAD "" CODE`/`SAVE ... CODE`, `RANDOMIZE USR` idiom, common pitfalls |
+
 #### Memory & I/O
 
 | Article | Description |

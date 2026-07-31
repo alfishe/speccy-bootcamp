@@ -1094,7 +1094,7 @@ Articles are written in priority order. README.md is synthesized AFTER articles 
 | 10 References | **10/10** | ✅ **COMPLETE** (Jul 2026) — z80_opcode_table, io_port_map, character_set, color_palette, memory_maps, basic_token_table, error_codes, timing_reference, pinouts, rom_routines |
 | 02 Hardware (all 3 streams) | 11/~40 | 📝 Major gap — original 5/12 (missing zx_spectrum_128/+2/+2A+3, ula_contention, power_supply, rom_contents, edge_connector), clones 6/12, newgen 2/15 |
 | 05_dev/04_interrupts | 1/~7 | 📝 interrupt_programming done; 6 more pending (im1_programming, im2_programming, isr_patterns, interrupt_timing, race_the_beam, nmi, interrupt_antipatterns, interrupt_cookbook) |
-| 05_dev/01_basic | 0/9 | 📝 Empty (only README) |
+| 05_dev/01_basic | 4/9 | 📝 F7 starter batch delivered: basic_intro, basic_graphics, basic_sound, basic_peek_poke (4 articles, 1858 lines). Remaining: basic_file_io, basic_128k, basic_advanced, basic_dialects_comparison |
 | 05_dev/02_assembly | 0/10 | 📝 Empty (only README) |
 | 05_dev/06_graphics | 0/~26 | 📝 Empty (only README) |
 | 05_dev/08_dos_tape | 0/11 | 📝 Empty (only README) |
@@ -1118,7 +1118,8 @@ Articles are written in priority order. README.md is synthesized AFTER articles 
 - **F4 — 10 References (6 articles)**: `memory_maps.md`, `basic_token_table.md`, `rom_routines.md`, `error_codes.md`, `timing_reference.md`, `pinouts.md`. Quick wins — lookup-table format, referenced everywhere. Closes out the References section.
 - **F5 — 08 Reverse Engineering (7 articles)**: `speedlock_alkatraz.md`, `game_reversing.md`, `code_crunching.md`, `tool_setup.md`, `static_analysis.md`, `dynamic_analysis.md`, `snapshot_repair.md` (optionally `decompilation.md`). Closes out the RE section.
 - **F6 — 09 Toolchain gap fill** ✅ **DONE** (Jul 2026): 19 per-tool deep dives delivered in 4 batches (batch 1: pasmo, z88dk_z80asm, vasm, wla_dx, zmac, rasm, tniasm; batch 2: tasm_cross, as_macro_assembler, zasm_kio, spectrum_basic_mcode, zx_spin; batch 3: tasm_native, zxasm_native, pikasm, laser_genius, avras, sarcasm; batch 4: zdevstudio). `zxdstudio.md` descoped (Russian ZX Disk Studio disk-image utility, not an IDE — documented in [09_toolchain/README.md](09_toolchain/README.md)).
-- **F7 — Long-form learning series starters (3-5 articles per pick)**: `05_development/01_basic/basic_intro.md` + 8 more (Basic series), `05_development/02_assembly/assembly_intro.md` + 9 more (Assembly series), `05_development/06_graphics/screen_access.md` + 25 more (Graphics series). Each is a long arc — pick one subsection to seed.
+- **Tier F7 — Long-form Sinclair BASIC series** ✅ **STARTER BATCH COMPLETE** (Jul 2026): 4 of 9 articles written — `basic_intro.md`, `basic_graphics.md`, `basic_sound.md`, `basic_peek_poke.md`. Closes out the language-foundation track (syntax, graphics, sound, BASIC-to-machine-code bridge). Remaining 5 articles (`basic_file_io`, `basic_advanced`, `basic_128k`, `basic_dialects_comparison`, plus an open slot) are reference-tier follow-ups.
+- **F7 (long-form, original scope)**: `05_development/02_assembly/assembly_intro.md` + 9 more (Assembly series), `05_development/06_graphics/screen_access.md` + 25 more (Graphics series). Each is a long arc — pick one subsection to seed.
 
 After articles exist: README.md (documentation map), TODO.md (gap analysis), section README.md indexes.
 
