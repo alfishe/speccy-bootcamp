@@ -93,6 +93,17 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [basic_48k.md](05_development/01_basic/basic_48k.md) | **Sinclair BASIC 48K — comprehensive reference**: what BASIC is (vs Microsoft BASIC), three ROM versions, memory layout, token system with abbreviations, variable types, 5-byte floating-point format, calculator stack (44 operations), parser pipeline, **graphics commands** (`PLOT`, `DRAW`, `CIRCLE`, `POINT`, `ATTR`), **sound** (`BEEP` with frequency formula), **machine-code bridge** (`PEEK`, `POKE`, `USR`), notable quirks (no ELSE, mandatory LET, single-line editor). Worked examples: Mandelbrot, Ode to Joy |
 | [basic_128k.md](05_development/01_basic/basic_128k.md) | **Sinclair BASIC 128K extensions**: new full-screen editor, boot menu, the **`PLAY` command** mini-language in depth (notes c-b/C-B, sharps/flats, octave O0–O8, volume V0–V15, envelope W0–W7, tempo, channel mode, repeats, three-voice harmony), direct AY-3-8912 register access via `OUT`/`IN`, +2A/+3 disk commands (`CAT`, `FORMAT`, `ERASE`), token table differences, memory paging, RAM disk |
 
+#### Assembly
+
+| Article | Description |
+|---------|------------|
+| [assembly_intro.md](05_development/02_assembly/assembly_intro.md) | **Getting started with Z80 assembly**: toolchain setup (SjASMPlus + Fuse + VSCode/DeZog), source file structure, 48K memory map, annotated Hello World walkthrough, building pipeline (.asm to .tap/.sna), output formats (SNA/TAP/TZX/TRD/NEX), first debugging session, when to use asm vs C vs BASIC |
+| [rom_calls.md](05_development/02_assembly/rom_calls.md) | **Calling the ROM from assembly**: entry-point landscape, save/restore state (IY = #5C3A, ERR_SP), cookbook for character output, keyboard, screen, BEEP, math via FP calculator, 128K routines (PLAY), AY-3-8912 direct access, ROM-call wrapper macros, when NOT to use ROM |
+| [stack_and_rst.md](05_development/02_assembly/stack_and_rst.md) | **Stack, RST vectors, calling conventions**: stack mechanics (T-state table), balanced stack rule, eight RST vectors, five calling conventions, shadow registers (EXX/EX AF,AF'), stack as temp storage, computed calls (JP (HL)), stack frames for locals, ERR_SP try/catch, recursion |
+| [assembly_patterns.md](05_development/02_assembly/assembly_patterns.md) | **Assembly design patterns**: state machines (Moore/Mealy), dispatch tables, table-driven code, function pointer tables (plugin architecture), coroutines via stack swapping, self-modifying code patterns, macro systems, modular file organization, 128K memory banking patterns |
+| [assembly_optimization.md](05_development/02_assembly/assembly_optimization.md) | **Performance optimization**: optimization workflow, T-state budgeting (69,888T/frame), hot-loop techniques (loop invariants, LDIR, DJNZ, unrolling), lookup tables (sine, multiply), fast multiply/divide algorithms, SMC in hot loops, contended vs uncontended memory, 10-recipe performance cookbook |
+| [c_interop.md](05_development/02_assembly/c_interop.md) | **Mixed C and assembly**: sccz80 vs zsdcc, calling conventions in depth (__FASTCALL__, __sdcccall), C-calls-asm + asm-calls-C, inline assembly, shared globals (PUBLIC/EXTERN), project structure (multi-file, Makefile), zcc build pipeline, performance patterns (which C ops are slow on Z80), z88dk newlib interop, complete worked project |
+
 #### Memory & I/O
 
 | Article | Description |
