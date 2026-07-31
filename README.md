@@ -90,10 +90,8 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 
 | Article | Description |
 |---------|------------|
-| [basic_intro.md](05_development/01_basic/basic_intro.md) | **Sinclair BASIC foundation**: tokens, syntax, variable types (numeric/string/array), 5-byte floating-point format, calculator stack, ROM parser, line-entry quirks (no ELSE, mandatory LET, single-line editor), GO TO vs GOTO, three ROM versions |
-| [basic_graphics.md](05_development/01_basic/basic_graphics.md) | **Graphics commands**: coordinate system (origin bottom-left), `PLOT`, `DRAW` (line + arc form), `CIRCLE`, `POINT`, `ATTR`, INK/PAPER/INVERSE/OVER modifiers, performance timings, worked Mandelbrot example |
-| [basic_sound.md](05_development/01_basic/basic_sound.md) | **`BEEP` command**: pitch in semitones from middle C, duration in seconds, frequency formula, DATA-driven melodies, sound effects (laser/explosion/warble/phone), 128K `PLAY` overview, performance and limitations |
-| [basic_peek_poke.md](05_development/01_basic/basic_peek_poke.md) | **BASIC-to-machine-code bridge**: `PEEK` (read byte), `POKE` (write byte), `USR` (call routine, return value in BC), calling conventions, parameter passing (POKE/system vars/STKEND/scratch), `LOAD "" CODE`/`SAVE ... CODE`, `RANDOMIZE USR` idiom, common pitfalls |
+| [basic_48k.md](05_development/01_basic/basic_48k.md) | **Sinclair BASIC 48K — comprehensive reference**: what BASIC is (vs Microsoft BASIC), three ROM versions, memory layout, token system with abbreviations, variable types, 5-byte floating-point format, calculator stack (44 operations), parser pipeline, **graphics commands** (`PLOT`, `DRAW`, `CIRCLE`, `POINT`, `ATTR`), **sound** (`BEEP` with frequency formula), **machine-code bridge** (`PEEK`, `POKE`, `USR`), notable quirks (no ELSE, mandatory LET, single-line editor). Worked examples: Mandelbrot, Ode to Joy |
+| [basic_128k.md](05_development/01_basic/basic_128k.md) | **Sinclair BASIC 128K extensions**: new full-screen editor, boot menu, the **`PLAY` command** mini-language in depth (notes c-b/C-B, sharps/flats, octave O0–O8, volume V0–V15, envelope W0–W7, tempo, channel mode, repeats, three-voice harmony), direct AY-3-8912 register access via `OUT`/`IN`, +2A/+3 disk commands (`CAT`, `FORMAT`, `ERASE`), token table differences, memory paging, RAM disk |
 
 #### Memory & I/O
 
