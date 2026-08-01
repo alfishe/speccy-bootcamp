@@ -148,6 +148,16 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [crt_output.md](05_development/05_display_and_timing/crt_output.md) | Developer view of CRT/LCD output: pixel aspect ratio, overscan, composite artifacts, per-display-type behaviour |
 | [video_frame_comparison.md](05_development/05_display_and_timing/video_frame_comparison.md) | Synthesis: all models side-by-side — T-states/frame, contention, turbo, compatibility matrix, detection decision tree |
 
+#### DOS & Tape
+
+| Article | Description |
+|---------|------------|
+| [tape_programming.md](05_development/08_dos_tape/tape_programming.md) | **Tape loading and saving from assembly**: ROM routines (SA-BYTES, LD-BLOCK, SAVE, LOAD), custom bit-banging loaders via port #FE, turbo loaders (3000+ baud), custom savers, border effects, error handling, decision matrix |
+| [trdos_programming.md](05_development/08_dos_tape/trdos_programming.md) | **TR-DOS programming**: ROM banking via port #FF, 9 standard hook codes dispatched at #3D13, file operations (LOAD/SAVE/ERASE/CAT), direct WD1793 sector I/O, catalog reader, demoscene double-buffered streaming from disk |
+| [dos_programming.md](05_development/08_dos_tape/dos_programming.md) | **Western DOS programming**: +3 DOS RSX calls, ESXDOS hook codes at #0084, NextZXOS extensions, dot command development (8 KB overlays at #2000), API comparison matrix, portable code strategy, runtime DOS detection |
+| [file_format_handling.md](05_development/08_dos_tape/file_format_handling.md) | **File format parsing**: magic-byte detection, .TAP/.TZX/.TRD/.SCL/.DSK/.SNA/.Z80/.SCR formats, directory traversal from disk images, .Z80 RLE decompression, common pitfalls (byte order, compression flags, sector IDs) |
+| [mass_storage_programming.md](05_development/08_dos_tape/mass_storage_programming.md) | **Direct mass storage access**: IDE/CompactFlash register-level access (ATA commands), SD card SPI bit-banging, read-only FAT16/32 reader (boot sector parsing, cluster chain following), performance comparison vs OS-mediated |
+
 ### 06 — Sound ✅ COMPLETE
 
 #### Synthesis Techniques

@@ -250,16 +250,11 @@ zx/
 │   ├── 07_audio/                     # MOVED to 06_sound/ — see below
 │   ├── 08_dos_tape/
 │   │   ├── README.md
-│   │   ├── tape_loading.md
-│   │   ├── tape_saving.md
+│   │   ├── tape_programming.md
 │   │   ├── trdos_programming.md
-│   │   ├── trdos_disk_operations.md
-│   │   ├── plus3dos_programming.md
-│   │   ├── esxdos_programming.md
-│   │   ├── nextzxos_programming.md
+│   │   ├── dos_programming.md
 │   │   ├── file_format_handling.md
-│   │   ├── ide_hdd_programming.md
-│   │   └── fat_filesystem.md
+│   │   └── mass_storage_programming.md
 │   ├── 09_gamedev/
 │   │   ├── README.md
 │   │   ├── game_loop.md
@@ -820,21 +815,16 @@ zx/
 | `ay_effects.md` | AY sound effects: noise bursts, frequency sweeps, SID-like tricks, DPCM |
 | `audio_pipeline_comparison.md` | Cross-track audio comparison: Original (beeper→AY) vs Soviet (AY+Covox+GS+TurboSound) vs New Gen (Next audio+DMA) |
 
-#### 05_development/08_dos_tape/ — DOS and Tape Interaction
+#### 05_development/08_dos_tape/ — DOS and Tape Programming ✅ COMPLETE
 
 | File | Topic |
 |---|---|
-| `README.md` | Index — file I/O from assembly: tape, TR-DOS, +3 DOS, ESXDOS, NextZXOS |
-| `tape_loading.md` | Tape loading from assembly: ROM LOAD, custom loaders, turbo loaders, tape format generation |
-| `tape_saving.md` | Tape saving: ROM SAVE, header construction, data block writing, baud rate control |
-| `trdos_programming.md` | TR-DOS programming: hook codes, file operations (OPEN/CLOSE/READ/WRITE), directory access, direct sector I/O |
-| `trdos_disk_operations.md` | TR-DOS disk operations: format, verify, catalog, file management from assembly |
-| `plus3dos_programming.md` | +3 DOS programming: file I/O via +3 DOS calls, Resident System Extensions |
-| `esxdos_programming.md` | ESXDOS .dot commands and API: file access on DivIDE/DivMMC, FAT filesystem |
-| `nextzxos_programming.md` | NextZXOS API: file operations, SD card access from NextBASIC and assembly |
-| `file_format_handling.md` | Common file formats in code: parsing TAP/TZX, loading SNA/Z80 snapshots, reading TRD images |
-| `ide_hdd_programming.md` | IDE/HDD programming from assembly: ATA register access, sector read/write on DivIDE/SMUC/Nemo IDE, LBA vs CHS |
-| `fat_filesystem.md` | FAT filesystem on Spectrum: reading FAT16/32 from assembly, directory traversal, ESXDOS file API |
+| `README.md` | Index — 5-article series: tape protocols, TR-DOS, Western DOSes, file formats, mass storage |
+| `tape_programming.md` | ROM tape routines (SA-BYTES, LD-BLOCK), custom bit-banging loaders, turbo loaders, custom savers, error handling |
+| `trdos_programming.md` | TR-DOS hook codes, file operations, catalog reader, WD1793 sector I/O, demoscene streaming |
+| `dos_programming.md` | +3 DOS RSX, ESXDOS hook codes, NextZXOS, dot commands, API comparison matrix, portable code |
+| `file_format_handling.md` | Parsing .TAP/.TZX/.TRD/.SCL/.DSK/.SNA/.Z80/.SCR: magic bytes, directory traversal, decompression |
+| `mass_storage_programming.md` | Direct IDE/CF ATA access, SD card SPI, read-only FAT16/32 reader, performance comparison |
 
 #### 05_development/09_gamedev/ — Game Development
 
@@ -1097,7 +1087,7 @@ Articles are written in priority order. README.md is synthesized AFTER articles 
 | 05_dev/01_basic | 2/2 | ✅ F7 COMPLETE — consolidated to 2 comprehensive articles: basic_48k.md (1019 lines, merges intro/graphics/sound/peek_poke) + basic_128k.md (496 lines, PLAY/AY-3-8912/+2A+3 DOS). User feedback: "one for 48K comprehensive, one addon for 128K" |
 | 05_dev/02_assembly | 6/6 | ✅ **F7 COMPLETE** — consolidated from 10 planned articles into **6 comprehensive articles** (5,762 lines total): assembly_intro.md (705), rom_calls.md (1056), stack_and_rst.md (808), assembly_patterns.md (1016), assembly_optimization.md (860), c_interop.md (1311). Merges: rom_calls_128k → rom_calls; c_with_z88dk + c_with_sdcc + mixed_c_asm → c_interop. User feedback: "Good article should have 500+ lines, combine thin ones" |
 | 05_dev/06_graphics | 0/~26 | 📝 Empty (only README) |
-| 05_dev/08_dos_tape | 0/11 | 📝 Empty (only README) |
+| 05_dev/08_dos_tape | 5/5 | ✅ **F8 COMPLETE** — consolidated from 11 planned into **5 comprehensive articles** (4,147 lines total): tape_programming.md (704), trdos_programming.md (817), dos_programming.md (700), file_format_handling.md (1107), mass_storage_programming.md (819). User feedback: "combine thin ones" applied consistently |
 | 05_dev/09_gamedev | 0/9 | 📝 Empty (only README) |
 | 00 Overview | 0/4 | 📝 Empty (only README) — history, hardware_models, timeline, glossary |
 
@@ -1121,6 +1111,7 @@ Articles are written in priority order. README.md is synthesized AFTER articles 
 - **Tier F7 — Sinclair BASIC series** ✅ **COMPLETE** (Jul 2026): Consolidated from 9 planned articles into **2 comprehensive articles**: `basic_48k.md` (1019 lines — merges intro/graphics/sound/peek_poke into a single reference covering tokens, variables, floating-point, calculator stack, parser, PLOT/DRAW/CIRCLE/POINT/ATTR, BEEP, PEEK/POKE/USR) and `basic_128k.md` (496 lines — full-screen editor, boot menu, PLAY mini-language in depth, AY-3-8912 register access from BASIC, +2A/+3 DOS commands, token table differences, RAM disk). User feedback: "don't need many articles about basic — one for 48K comprehensive, one addon for 128K".
 - **Tier F7 — Z80 Assembly series** ✅ **COMPLETE** (Jul 2026): Consolidated from 10 planned articles into **6 comprehensive articles** (5,762 lines total): `assembly_intro.md` (705 — first program, toolchain, memory map, Hello World, building, debugging), `rom_calls.md` (1056 — ROM entry points, save/restore state, cookbook for output/keyboard/screen/math/sound, 128K PLAY, AY-3-8912, macros, when NOT to use ROM), `stack_and_rst.md` (808 — stack mechanics, balanced stack rule, RST vectors, calling conventions, shadow registers, computed calls, ERR_SP try/catch, recursion), `assembly_patterns.md` (1016 — state machines, dispatch tables, table-driven code, function pointer tables, coroutines, SMC, macros, modular files, 128K banking), `assembly_optimization.md` (860 — optimization workflow, T-state budgeting, hot-loop techniques, lookup tables, fast multiply/divide, SMC, contention, 10-recipe cookbook), `c_interop.md` (1311 — sccz80 vs zsdcc, calling conventions in depth, C-calls-asm + asm-calls-C, inline assembly, shared globals, project structure, zcc pipeline, performance patterns, library interop, worked multi-file project). User feedback: "do extensive research, create outlines first, combine thin articles".
 - **F7 (long-form, remaining)**: `05_development/06_graphics/screen_access.md` + 25 more (Graphics series). Long arc — next subsection to seed.
+- **Tier F8 — DOS and Tape Programming series** ✅ **COMPLETE** (Jul 2026): Consolidated from 11 planned articles into **5 comprehensive articles** (4,147 lines total): `tape_programming.md` (704 — ROM SA-BYTES/LD-BLOCK/SAVE/LOAD, custom bit-banging loaders via port #FE, turbo loaders 3000+ baud, custom savers, border effects), `trdos_programming.md` (817 — TR-DOS ROM banking via port #FF, 9 hook codes at #3D13, file operations, catalog reader, WD1793 sector I/O, demoscene double-buffered streaming), `dos_programming.md` (700 — +3 DOS RSX, ESXDOS hook codes at #0084, NextZXOS, dot commands at #2000, API comparison matrix, portable code, runtime DOS detection), `file_format_handling.md` (1107 — magic-byte detection, .TAP/.TZX/.TRD/.SCL/.DSK/.SNA/.Z80/.SCR parsing, directory traversal, .Z80 RLE decompression), `mass_storage_programming.md` (819 — IDE/CF ATA register access, SD card SPI bit-banging, read-only FAT16/32 reader, performance vs OS-mediated). Cross-verified against 25 existing storage reference articles and 4 OS reference articles to avoid duplication.
 
 After articles exist: README.md (documentation map), TODO.md (gap analysis), section README.md indexes.
 
