@@ -322,16 +322,14 @@ zx/
 │   └── 1bit_music_scene.md            # ✅ 538 lines
 │
 ├── 08_reverse_engineering/
-│   ├── protection_techniques.md ✅
-│   ├── methodology.md
-│   ├── speedlock_alkatraz.md
-│   ├── game_reversing.md
-│   ├── code_crunching.md
-│   ├── tool_setup.md
-│   ├── static_analysis.md
-│   ├── dynamic_analysis.md
-│   ├── snapshot_repair.md
-│   └── decompilation.md
+│   ├── README.md ✅                    # Section index
+│   ├── methodology.md ✅               # RE workflow hub
+│   ├── protection_techniques.md ✅      # Protection catalog
+│   ├── analysis_techniques.md ✅       # Static/dynamic analysis
+│   ├── protection_cracking.md ✅       # Speedlock/Alkatraz cracking
+│   ├── game_reversing.md ✅            # Asset extraction, cheats
+│   ├── code_crunching.md ✅            # Packer survey, depacking
+│   └── snapshot_repair.md ✅           # SNA/Z80 repair
 │
 ├── 09_toolchain/
 │   ├── README.md                       # ✅ Section index
@@ -935,15 +933,13 @@ All 11 articles are ✅ Complete (CC BY-SA 4.0). Cross-references verified. See 
 
 | File | Topic |
 |---|---|
-| `methodology.md` | ZX Spectrum RE workflow: disassembly, tracing, patching | ✅ |
-| `protection_techniques.md` ✅ | Copy protection: tape loaders (Speedlock, Alkatraz), disk schemes, NMI/snapshot defenses, snapshot devices, memory integrity, code obfuscation, bypass techniques |
-| `game_reversing.md` | Game RE: asset extraction, map ripping, cheat codes, save game formats |
-| `code_crunching.md` | Compression: MegaLZ, HRUM, Z80 crunchers, unpacking, depacker analysis |
-| `tool_setup.md` | Tool setup: ZEsarUX debugger, Fuse, sjasmplus, binary diff tools |
-| `static_analysis.md` | Static analysis: identifying game engines, asset formats, code patterns |
-| `dynamic_analysis.md` | Dynamic analysis: breakpoints, watchpoints, trace logging |
-| `snapshot_repair.md` | Snapshot repair: fixing corrupted .SNA/.Z80, restoring tape data |
-| `decompilation.md` | Decompilation: Z80 → C reconstruction, tool-assisted approaches |
+| `methodology.md` ✅ | ZX Spectrum RE workflow: starting points, snapshot-driven analysis, standard workflow, heuristics, patching, tools, pitfalls, ethics |
+| `protection_techniques.md` ✅ | Copy protection catalog: tape loaders (Speedlock, Alkatraz), disk schemes, NMI/snapshot defenses, memory integrity, code obfuscation |
+| `analysis_techniques.md` ✅ | Static/dynamic analysis: SkoolKit disassembly, code/data separation, ZEsarUX/DeZog debugging, trace logging, reverse debugging, memory diffing |
+| `protection_cracking.md` ✅ | Protection cracking: Speedlock/Alkatraz decryption, timing bypass, disk protection defeat, NMI countermeasure defeat, clean snapshot technique |
+| `game_reversing.md` ✅ | Game RE: engine identification, sprite/map/music ripping, cheat codes, save game analysis, Z80-to-C reconstruction |
+| `code_crunching.md` ✅ | Compression RE: packer survey (MegaLZ, HRUM, Hrust, ZX0), format ID, LZSS fundamentals, depacker template |
+| `snapshot_repair.md` ✅ | Snapshot repair: corrupted .SNA/.Z80, header validation, PC/SP repair, format conversion, mid-load crash fixes |
 
 ### 09 — Toolchain
 
@@ -1080,7 +1076,7 @@ Articles are written in priority order. README.md is synthesized AFTER articles 
 | 11 Emulation | **20/20** | ✅ **COMPLETE** (Jul 2026) — 6 software + 6 FPGA + 9 MCU; AGENTS.md compliance pass committed `6f324b8` |
 | 03_io/networking | 6/6 | ✅ **COMPLETE** (Jul 2026) — zx_net, modems, spectranet, zifi, esp_wifi, zx_next_wifi all done |
 | 09 Toolchain | **27/27** | ✅ **Complete** (Jul 2026) — 8 surveys/overviews + 19 per-tool deep dives (native + cross-platform + IDEs). All planned articles done across F4 batches 1–4; `zxdstudio.md` descoped (actually ZX Disk Studio Russian disk utility, not an IDE). |
-| 08 Reverse Engineering | **2/9** | 📝 methodology + protection_techniques done; 7 more pending (speedlock_alkatraz, game_reversing, code_crunching, tool_setup, static_analysis, dynamic_analysis, snapshot_repair, decompilation) |
+| 08 Reverse Engineering | **7/7** | ✅ **F5 COMPLETE** — consolidated from 10 planned into **7 comprehensive articles** (3,256 lines total): methodology.md (528), protection_techniques.md (492) [both pre-existing], analysis_techniques.md (597), protection_cracking.md (367), game_reversing.md (384), code_crunching.md (432), snapshot_repair.md (456). Merges: static_analysis+dynamic_analysis+tool_setup → analysis_techniques; speedlock_alkatraz → protection_cracking; decompilation → game_reversing |
 | 10 References | **10/10** | ✅ **COMPLETE** (Jul 2026) — z80_opcode_table, io_port_map, character_set, color_palette, memory_maps, basic_token_table, error_codes, timing_reference, pinouts, rom_routines |
 | 02 Hardware (all 3 streams) | 26/~28 | ✅ **F1/F2/F3 Largely DONE** — original 8/8 (16K/48K, 128K, +2, +2A/+3, ULA architecture/timing/contention, keyboard), clones 11/11 (Pentagon, Scorpion, ATM Turbo, Kay, Profi, Byte, Sizif/Harlequin, + others), newgen 7/8 (Next, Sprinter, Evo, TS-Conf, BaseConf, ZX Uno, Karabas). Descoped: power_supply, edge_connector, rom_contents (pure hardware, duplicative) |
 | 05_dev/04_interrupts | 1/~7 | 📝 interrupt_programming done; 6 more pending (im1_programming, im2_programming, isr_patterns, interrupt_timing, race_the_beam, nmi, interrupt_antipatterns, interrupt_cookbook) |
@@ -1112,6 +1108,7 @@ Articles are written in priority order. README.md is synthesized AFTER articles 
 - **Tier F7 — Z80 Assembly series** ✅ **COMPLETE** (Jul 2026): Consolidated from 10 planned articles into **6 comprehensive articles** (5,762 lines total): `assembly_intro.md` (705 — first program, toolchain, memory map, Hello World, building, debugging), `rom_calls.md` (1056 — ROM entry points, save/restore state, cookbook for output/keyboard/screen/math/sound, 128K PLAY, AY-3-8912, macros, when NOT to use ROM), `stack_and_rst.md` (808 — stack mechanics, balanced stack rule, RST vectors, calling conventions, shadow registers, computed calls, ERR_SP try/catch, recursion), `assembly_patterns.md` (1016 — state machines, dispatch tables, table-driven code, function pointer tables, coroutines, SMC, macros, modular files, 128K banking), `assembly_optimization.md` (860 — optimization workflow, T-state budgeting, hot-loop techniques, lookup tables, fast multiply/divide, SMC, contention, 10-recipe cookbook), `c_interop.md` (1311 — sccz80 vs zsdcc, calling conventions in depth, C-calls-asm + asm-calls-C, inline assembly, shared globals, project structure, zcc pipeline, performance patterns, library interop, worked multi-file project). User feedback: "do extensive research, create outlines first, combine thin articles".
 - **F7 (long-form, remaining)**: `05_development/06_graphics/screen_access.md` + 25 more (Graphics series). Long arc — next subsection to seed.
 - **Tier F8 — DOS and Tape Programming series** ✅ **COMPLETE** (Jul 2026): Consolidated from 11 planned articles into **5 comprehensive articles** (4,147 lines total): `tape_programming.md` (704 — ROM SA-BYTES/LD-BLOCK/SAVE/LOAD, custom bit-banging loaders via port #FE, turbo loaders 3000+ baud, custom savers, border effects), `trdos_programming.md` (817 — TR-DOS ROM banking via port #FF, 9 hook codes at #3D13, file operations, catalog reader, WD1793 sector I/O, demoscene double-buffered streaming), `dos_programming.md` (700 — +3 DOS RSX, ESXDOS hook codes at #0084, NextZXOS, dot commands at #2000, API comparison matrix, portable code, runtime DOS detection), `file_format_handling.md` (1107 — magic-byte detection, .TAP/.TZX/.TRD/.SCL/.DSK/.SNA/.Z80/.SCR parsing, directory traversal, .Z80 RLE decompression), `mass_storage_programming.md` (819 — IDE/CF ATA register access, SD card SPI bit-banging, read-only FAT16/32 reader, performance vs OS-mediated). Cross-verified against 25 existing storage reference articles and 4 OS reference articles to avoid duplication.
+- **Tier F5 — Reverse Engineering series** ✅ **COMPLETE** (Jul 2026): Consolidated from 10 planned articles into **7 comprehensive articles** (3,256 lines total): 2 pre-existing (`methodology.md` 528 — RE workflow hub, `protection_techniques.md` 492 — protection catalog) + 5 new: `analysis_techniques.md` (597 — SkoolKit disassembly, code/data separation, ROM call labeling, ZEsarUX/DeZog debugging, trace logging, reverse debugging, memory diffing), `protection_cracking.md` (367 — Speedlock/Alkatraz decryption analysis, timing check bypass, disk protection defeat, NMI countermeasure defeat, clean snapshot technique), `game_reversing.md` (384 — engine identification, sprite/map/music ripping, cheat codes, save game analysis, Z80-to-C reconstruction), `code_crunching.md` (432 — packer survey MegaLZ/HRUM/Hrust/ZX0, format identification, LZSS fundamentals, generic depacker template, overlap depacking), `snapshot_repair.md` (456 — corrupted .SNA/.Z80 repair, PC/SP fix, .Z80 decompression error handling, format conversion with Python scripts). Consolidation merges: static_analysis+dynamic_analysis+tool_setup → analysis_techniques; speedlock_alkatraz → protection_cracking; decompilation → game_reversing.
 
 After articles exist: README.md (documentation map), TODO.md (gap analysis), section README.md indexes.
 

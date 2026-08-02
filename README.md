@@ -350,6 +350,20 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 
 ---
 
+### 08 — Reverse Engineering ✅ COMPLETE (7 articles)
+
+**Section 08 — Reverse Engineering** — RE methodology, protection cracking, game reversing, code compression analysis, snapshot repair ([section README](08_reverse_engineering/README.md))
+
+| Article | Description |
+|---------|------------|
+| [methodology.md](08_reverse_engineering/methodology.md) | **RE methodology hub**: starting points (tape/disk/snapshot formats), snapshot-driven analysis, standard workflow, heuristics, patching, tools, pitfalls, ethics |
+| [protection_techniques.md](08_reverse_engineering/protection_techniques.md) | **Protection catalog**: tape loaders (Speedlock, Alkatraz), disk schemes (weak bits, non-standard sectors), NMI/snapshot defenses, memory integrity, code obfuscation, bypass techniques |
+| [analysis_techniques.md](08_reverse_engineering/analysis_techniques.md) | **Static/dynamic analysis**: SkoolKit disassembly workflow, code/data separation, ROM call labeling, ZEsarUX/DeZog debugging, trace logging, reverse debugging, memory diffing |
+| [protection_cracking.md](08_reverse_engineering/protection_cracking.md) | **Protection cracking**: Speedlock/Alkatraz decryption analysis, timing check bypass, disk protection defeat, NMI countermeasure defeat, clean snapshot technique |
+| [game_reversing.md](08_reverse_engineering/game_reversing.md) | **Game reversing**: engine identification (Ultimate, Ocean, Graftgold, Hewson), sprite/map/music ripping, cheat code creation, save game analysis, Z80-to-C reconstruction |
+| [code_crunching.md](08_reverse_engineering/code_crunching.md) | **Code compression RE**: packer survey (MegaLZ, HRUM, Hrust, ZX0), format identification, LZSS fundamentals, generic depacker template, overlap depacking |
+| [snapshot_repair.md](08_reverse_engineering/snapshot_repair.md) | **Snapshot repair**: fixing corrupted .SNA/.Z80, header validation, PC/SP repair, decompression error handling, format conversion, fixing mid-load crashes |
+
 ### 11 — Emulation ✅ COMPLETE (20 articles)
 
 **Section 11 — Emulation** — software emulators, FPGA cores, MCU-based chip replacements

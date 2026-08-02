@@ -355,7 +355,7 @@ Related tricks:
 
 ### 6.3 Compression as Protection
 
-Many commercial games used compression (crunchers) not just for size reduction but as a form of protection. The compressed data is meaningless without the decompression code, and the decompression code itself is often the first thing the cracker must understand. For the full decompression techniques, see the planned [unpacking_and_decrunching.md](unpacking_and_decrunching.md).
+Many commercial games used compression (crunchers) not just for size reduction but as a form of protection. The compressed data is meaningless without the decompression code, and the decompression code itself is often the first thing the cracker must understand. For the full decompression techniques, see [code_crunching.md](code_crunching.md).
 
 Common ZX Spectrum crunchers used as de facto protection:
 
@@ -415,7 +415,7 @@ An alternative: patch the 2-byte `JR NZ, addr` opcode (`20 dd`) to `JR addr` (`1
 
 **How to find the check**: Use a debugger (STS, Shadow Monitor, emulator debugger) to trace execution until the protection check is reached. The check typically involves a comparison followed by a conditional jump. See [debugging.md](../09_toolchain/debugging.md) for the debugger toolchain.
 
-For the full patching methodology including unified patch tables, see the planned [patching_techniques.md](patching_techniques.md).
+For the full patching methodology including unified patch tables, see [analysis_techniques.md](analysis_techniques.md) and [protection_cracking.md](protection_cracking.md).
 
 ### 7.3 Custom Loader Replacement
 
