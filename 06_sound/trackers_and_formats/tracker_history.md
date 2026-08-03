@@ -164,13 +164,13 @@ Arkos Tracker 2 was a complete rewrite of AT1 in C++/JUCE, making it cross-platf
 - **Multi-PSG support** — direct editing of TurboSound (6-channel) and even triple-AY configurations.
 - **Unlimited channels** via multiple PSG instances.
 - **Modern UI** — piano roll alongside the traditional tracker grid, undo/redo, full MIDI support.
-- **Open source (MIT licence)** on [GitHub](https://github.com/ArkosTracker/arkestracker).
+- **Open source (MIT license)** on [GitHub](https://github.com/ArkosTracker/arkestracker).
 
 AT3 is the recommended tracker for new composers in 2025. It cannot import PT3 natively — composers migrating from the PT3 ecosystem must re-export via Vortex Tracker II tools or convert by hand.
 
 ### Vortex Tracker 3 (2024–present)
 
-**Author:** Ben Baker (RustyPixelsUK), based on the original VT II by S.V. Bulba, Ivan Pirog, and Dexus. **Source:** [GitHub](https://github.com/RustyPixelsUK/VortexTracker3) (MIT licence).
+**Author:** Ben Baker (RustyPixelsUK), based on the original VT II by S.V. Bulba, Ivan Pirog, and Dexus. **Source:** [GitHub](https://github.com/RustyPixelsUK/VortexTracker3) (MIT license).
 
 VT3 is a C#/OpenGL/OpenAL port of VT II, fixing long-standing UI limitations of the original Windows MDI interface. It uses the same PT3 module format and the same player routine, so existing modules load without conversion. VT3 development is actively coordinated with the ZX Spectrum Next community.
 
@@ -179,7 +179,7 @@ VT3 is a C#/OpenGL/OpenAL port of VT II, fixing long-standing UI limitations of 
 - **WUDSN Music Editor** — Java-based, multi-format.
 - Various browser-based AY experimenters — useful for quick prototyping but not for production module work.
 
-The practical landscape in 2025: **Arkos Tracker 3 for new composers**, **Vortex Tracker II/3 for the PT3 back-catalogue**, and the original on-Spectrum trackers for historical research only.
+The practical landscape in 2025: **Arkos Tracker 3 for new composers**, **Vortex Tracker II/3 for the PT3 back-catalog**, and the original on-Spectrum trackers for historical research only.
 
 ---
 
@@ -213,13 +213,13 @@ Two formats dominate today: **PT3** (the on-Spectrum legacy, kept alive by VTII/
 - [Arkos Tracker](arkos_tracker.md) — modern cross-platform alternative
 - [PT3 Format](pt3_format.md) — the format Pro Tracker 3 established
 - [PSG Format](psg_format.md) — register dump format (alternative to module formats)
-- [AY Music Formats](ay_music_formats.md) — comprehensive format catalogue
+- [AY Music Formats](ay_music_formats.md) — comprehensive format catalog
 - [Sound Hardware Ecosystem Overview](../hardware/sound_overview.md) — the hardware these trackers target
 - [AY-3-8912 PSG Silicon](../hardware/ay_3_8912.md) — the chip whose register map every tracker drives
 
 ## References
 
-- [zxtunes.com software list](https://zxtunes.com/software_list.php) — authoritative catalogue of 30 Spectrum-native editors (Russian)
+- [zxtunes.com software list](https://zxtunes.com/software_list.php) — authoritative catalog of 30 Spectrum-native editors (Russian)
 - [Bulba's Vortex Project](https://bulba.untergrund.net/) — Vortex Tracker II home, with the full import format list
 - [Arkos Tracker 3 on GitHub](https://github.com/ArkosTracker/arkestracker) — actively maintained source
 - [Vortex Tracker 3 on GitHub](https://github.com/RustyPixelsUK/VortexTracker3) — open-source VT II port

@@ -68,7 +68,7 @@ The ZX Evolution is most popular in Russia and other former Soviet countries, bu
 
 ## Hardware Architecture
 
-The ZX Evolution's hybrid architecture is its defining feature. Unlike a pure-FPGA clone (where the Z80, ULA, and peripherals are all synthesised in programmable logic), the ZX Evolution uses three different types of components:
+The ZX Evolution's hybrid architecture is its defining feature. Unlike a pure-FPGA clone (where the Z80, ULA, and peripherals are all synthesized in programmable logic), the ZX Evolution uses three different types of components:
 
 ### The Z80 CPU
 

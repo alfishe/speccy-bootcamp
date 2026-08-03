@@ -18,7 +18,7 @@ This article covers the Pentagon as a **system**: history, the design philosophy
 
 The ZX Spectrum reached the Soviet Union through two channels: **smuggled original hardware** (rare, expensive — a 48K Spectrum could cost a month's salary on the black market in 1987) and **published schematics** (the ZX81's and Spectrum's circuit diagrams appeared in Western electronics magazines that occasionally reached the USSR through diplomatic and academic channels). The Ferranti ULA, however, was **unobtainable**: it was a semi-custom chip that Ferranti would not sell to Soviet buyers, and Soviet semiconductor fabs of the era could not produce a die-compatible equivalent.
 
-The Soviet solution, pioneered by **Serge Zonov's Leningrad** (1987) and other early DIY clones, was to **reimplement the ULA's function from scratch using discrete TTL logic**. The Leningrad, in particular, was a brilliantly minimalist design — under 50 ICs — but it had significant compatibility problems: incorrect `#FF` floating-bus behaviour, improperly formed INT signal, missing black-level clamping, and no memory expansion beyond 48K. The Leningrad proved the approach was viable but revealed how much careful engineering the Ferranti ULA hid.
+The Soviet solution, pioneered by **Serge Zonov's Leningrad** (1987) and other early DIY clones, was to **reimplement the ULA's function from scratch using discrete TTL logic**. The Leningrad, in particular, was a brilliantly minimalist design — under 50 ICs — but it had significant compatibility problems: incorrect `#FF` floating-bus behavior, improperly formed INT signal, missing black-level clamping, and no memory expansion beyond 48K. The Leningrad proved the approach was viable but revealed how much careful engineering the Ferranti ULA hid.
 
 ### The Pentagon Project (1989)
 
@@ -210,7 +210,7 @@ This is byte-for-byte identical to the Sinclair 128K's `#7FFD` paging scheme. So
 
 ### Extended Memory Map (512K and 1024K)
 
-The Pentagon 128K's EFF7 extension (later standardised on the Pentagon 1024) adds an extra port for high bank bits:
+The Pentagon 128K's EFF7 extension (later standardized on the Pentagon 1024) adds an extra port for high bank bits:
 
 ```
 OUT (#EFF7), A   Pentagon extended memory control:
@@ -277,7 +277,7 @@ The "Pentagon" name covers a family of related machines, all sharing the same ba
 | **Pentagon 128K** | 1990 | 128 KB | Most common; `#7FFD` paging, Beta 128 FDC, Kempston built in |
 | **Pentagon 128K + EFF7** | 1992 | 512 KB | Extended memory via `#EFF7` port (32 banks of 16K) |
 | **Pentagon 1024 / 1024SL** | 1995 | 1024 KB | 64 banks of 16K; some added IDE and GS sound |
-| **Pentagon "Turbo"** | various | varies | 7 MHz turbo mode (rare, not standardised) |
+| **Pentagon "Turbo"** | various | varies | 7 MHz turbo mode (rare, not standardized) |
 
 The **Pentagon 1024SL** (Сергей Лемехов / Sergei Lemekhov) became the high-end standard in the late 1990s, adding IDE hard disk support and (optionally) a General Sound card. It is the standard target for "maximum Pentagon" software and is the model most often emulated by modern FPGA cores (Pentay, MiSTer, ZX-Uno).
 
@@ -364,7 +364,7 @@ Mostly no. Russian demoscene productions that target Pentagon timing run with wr
 Yes, in small numbers — Russian hobbyists continue to build Pentagon-family boards from kits, and several modern board designs (Pentagon 1024 SL v6, Pentagon 2.xxB) are produced in low volume. The Pentagon is also a standard mode on every major FPGA platform.
 
 **Why don't Russian demos use multicolor effects?**
-Some do, but the techniques are different. The Pentagon's zero-contention model makes some 48K multicolor tricks harder (no contention-delay race) and others easier (more CPU time per scanline). The result is a different family of multicolor effects optimised for Pentagon timing.
+Some do, but the techniques are different. The Pentagon's zero-contention model makes some 48K multicolor tricks harder (no contention-delay race) and others easier (more CPU time per scanline). The result is a different family of multicolor effects optimized for Pentagon timing.
 
 **Is the floating bus really unusable on the Pentagon?**
 Yes. The Pentagon's video logic never leaves the data bus floating — the bus is driven (or pulled up) at all times, so reads from `#FF` return `#FF`. Beam-position detection must use other techniques: HALT for frame sync, INT-based scanline counting, or specific port-read timing tricks.

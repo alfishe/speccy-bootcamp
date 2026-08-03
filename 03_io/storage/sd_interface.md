@@ -2,7 +2,7 @@
 
 **Scope:** A hardware-level comparison of every significant **SD card** interface that brought Secure Digital storage to the ZX Spectrum family and its clones — the **DivMMC**, **ZXMMC**, the **ZX Spectrum Next** internal slots, and the **Z-Controller** — together with the **SPI-mode SD protocol** that all of them must implement. The IDE/ATA parallel protocol and its host adapters are covered in the sibling article [ide_interface.md](ide_interface.md); both families share the same destination (a FAT volume of Spectrum software) but speak entirely different device protocols.
 
-**Audience:** Hardware-level emulator authors modelling the DivMMC's SPI engine, demoscene coders writing direct-to-card loaders, retro-hardware builders choosing between a DivMMC and a bare ZXMMC kit, and anyone curious how a 1982 computer reads a 32 GB MicroSD card in 2024.
+**Audience:** Hardware-level emulator authors modeling the DivMMC's SPI engine, demoscene coders writing direct-to-card loaders, retro-hardware builders choosing between a DivMMC and a bare ZXMMC kit, and anyone curious how a 1982 computer reads a 32 GB MicroSD card in 2024.
 
 **Prerequisites:** The [IDE interface article](ide_interface.md) covers the sibling protocol family; the [overview article](hdd_overview.md) situates SD in the storage story. The [DivIDE/DivMMC article](divide_divmmc.md) covers the firmware that runs on the dominant SD interface.
 
@@ -212,7 +212,7 @@ The **ZXMMC** (early 2010s, by a Polish designer) is an earlier, simpler SD inte
 
 Architecturally it is the minimal SD interface: a 9-pin SD socket, a small address decoder, and a discrete shift-register or flip-flop circuit that presents the four SPI lines as bits of an I/O port in the `#1B`/`#3B`/`#5B`/`#7B` family. There is no firmware ROM — the ZXMMC is a "dumb" SPI bridge that the host software must drive directly.
 
-Because it has no firmware and no standard DOS, the ZXMMC appeals mainly to hardware hackers who want to write their own SD driver from scratch. Its software library is small. For a new user, the DivMMC is universally the better choice; the ZXMMC matters mainly to emulator authors modelling specific clone configurations and to owners of original ZXMMC hardware.
+Because it has no firmware and no standard DOS, the ZXMMC appeals mainly to hardware hackers who want to write their own SD driver from scratch. Its software library is small. For a new user, the DivMMC is universally the better choice; the ZXMMC matters mainly to emulator authors modeling specific clone configurations and to owners of original ZXMMC hardware.
 
 ### 5.3 The ZX Spectrum Next SD slots
 
@@ -228,7 +228,7 @@ The **Z-Controller** (late 2000s, ATM team) is a combined **IDE + SD + RTC** exp
 
 The Z-Controller's significance is that it was the first interface to offer **both** IDE and SD on a single board, letting the user choose the medium per task. Its SD driver uses the same bit-bang approach as the DivMMC, through a port within the Z-Controller's footprint. The included RTC (real-time clock) provides file timestamps, which the DivMMC achieves through an optional on-board RTC instead.
 
-The Z-Controller is mainly relevant to owners of ATM Turbo hardware and to emulator authors modelling the ATM Turbo specifically. For everyone else, the DivMMC family covers the SD use case.
+The Z-Controller is mainly relevant to owners of ATM Turbo hardware and to emulator authors modeling the ATM Turbo specifically. For everyone else, the DivMMC family covers the SD use case.
 
 ## §6. Performance and Card Compatibility
 
@@ -263,7 +263,7 @@ Modern ESXDOS is compatible with virtually every SD, SDHC, and SDXC card on the 
 - **Counterfeit cards** (rebadged small chips sold as large cards) report a bogus capacity and corrupt data past their real size. Always buy from a reputable vendor and test with `h2testw` or `f3` before trusting a card with irreplaceable data.
 - **Very old SDSC cards** (under 1 GB) may not negotiate SPI mode correctly with modern firmware. They are also scarce in 2024. A new 4–32 GB MicroSD is the safe default.
 
-As a rule of thumb: a 4–32 GB MicroSD from a recognised brand (SanDisk, Kingston, Samsung), FAT32-formatted, works on every DivMMC and Next without issue.
+As a rule of thumb: a 4–32 GB MicroSD from a recognized brand (SanDisk, Kingston, Samsung), FAT32-formatted, works on every DivMMC and Next without issue.
 
 ### 6.4 Power consumption
 

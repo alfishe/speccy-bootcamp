@@ -16,7 +16,7 @@
 
 A TR-DOS disk has two layers:
 
-- **Physical layer**: the MFM-encoded magnetic flux transitions on the disk surface, organised into 80 cylinders × 2 sides × 10 sectors × 512 bytes (the standard TR-DOS 80-track format). This is what the WD1793's READ SECTOR and WRITE SECTOR commands see. See [mfm_encoding.md](mfm_encoding.md) and [fdc_vg93.md](fdc_vg93.md).
+- **Physical layer**: the MFM-encoded magnetic flux transitions on the disk surface, organized into 80 cylinders × 2 sides × 10 sectors × 512 bytes (the standard TR-DOS 80-track format). This is what the WD1793's READ SECTOR and WRITE SECTOR commands see. See [mfm_encoding.md](mfm_encoding.md) and [fdc_vg93.md](fdc_vg93.md).
 - **Logical layer**: the directory structure, file types, and bookkeeping that TR-DOS imposes on top of the raw sectors. This is what `LOAD "x"`, `SAVE "x"`, and `*CAT` operate on. **This article is about the logical layer.**
 
 The logical layer does not care about the physical layer beyond the (cylinder, side, sector) addressing. A TR-DOS disk written on an 80-track 3.5" drive is logically identical to one written on an 80-track 5.25" drive — the bytes in the directory are the same, the file contents are the same, the disk descriptor is the same.
@@ -237,7 +237,7 @@ The standard recovery procedure is to use a sector-editor (e.g., **DISCED** by A
 
 ### 5.1 The five file types
 
-TR-DOS recognises **five file types**, identified by a single ASCII letter stored in the directory entry:
+TR-DOS recognizes **five file types**, identified by a single ASCII letter stored in the directory entry:
 
 | Letter | Type code | Byte value | Description |
 |---|---|---|---|
@@ -456,7 +456,7 @@ The **disk format code** at offset `#FB` is the key field that identifies the di
 | `#1A` | 80 tracks × 2 sides × 16 sectors × 256 bytes (the old TR-DOS 5.0 format) |
 | `#1B` | 80 tracks × 1 side × 16 sectors × 256 bytes |
 
-The TR-DOS ROM reads this byte on first access to a disk and configures its sector-reading routines accordingly. If the byte is unrecognised (e.g., a non-TR-DOS disk inserted by mistake), TR-DOS reports a "Disk not recognised" error.
+The TR-DOS ROM reads this byte on first access to a disk and configures its sector-reading routines accordingly. If the byte is unrecognised (e.g., a non-TR-DOS disk inserted by mistake), TR-DOS reports a "Disk not recognized" error.
 
 ### 7.4 The free-sector pointer
 
@@ -637,7 +637,7 @@ For these disks, the TR-DOS catalog may be empty or may contain only the loader 
 
 - [beta_disk_interface.md](beta_disk_interface.md) — the hardware interface that TR-DOS uses to read and write this format. The port map, the address decoder, and the ROM-paging mechanism are all covered there.
 - [fdc_vg93.md](fdc_vg93.md) — the WD1793 / KR1818VG93 chip that physically reads and writes the sectors. The Type II READ SECTOR / WRITE SECTOR commands are how TR-DOS accesses individual sectors of a TR-DOS disk.
-- [mfm_encoding.md](mfm_encoding.md) — the signal layer recorded on the magnetic media. TR-DOS files are organised into 512-byte MFM sectors, which are organised into tracks, which are organised into cylinders.
+- [mfm_encoding.md](mfm_encoding.md) — the signal layer recorded on the magnetic media. TR-DOS files are organized into 512-byte MFM sectors, which are organized into tracks, which are organized into cylinders.
 - [disk_format_overview.md](disk_format_overview.md) — a comparison of TR-DOS with the other Spectrum disk formats (+3 DOS, CP/M, Opus). Useful for understanding the trade-offs between the formats.
 - [plus3_dos_format.md](plus3_dos_format.md) — the +3's logical disk format, which is the direct competitor to TR-DOS. The two are not compatible, but they share some CP/M-derived ideas.
 - [cpm_disk_format.md](cpm_disk_format.md) — the CP/M disk format, which heavily influenced TR-DOS's directory structure (CP/M-style filenames, contiguous extents).

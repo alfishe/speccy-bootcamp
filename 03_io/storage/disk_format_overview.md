@@ -48,7 +48,7 @@ The full details of the IBM 3740 / MFM physical layer are covered in [mfm_encodi
 
 ### 1.3 Three categories of formats
 
-This overview is organised around three categories:
+This overview is organized around three categories:
 
 | Category | Articles | What it describes |
 |---|---|---|

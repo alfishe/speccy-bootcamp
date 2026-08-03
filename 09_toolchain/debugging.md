@@ -87,7 +87,7 @@ Layer 1 has neither (the resident cannot observe without breaking). Layer 2 has 
 | **Skip instruction** | advance PC without executing (RAM only) | `SS+T` | ❌ | ❌ |
 | **Trace** | continuous step-into with optional screen refresh | `T` | ⚠️ | ❌ |
 | **Step back** | reverse-execute one instruction (requires history) | ❌ | ✅ | ✅ |
-| **Reverse continue** | run backwards until a breakpoint | ❌ | ✅ | ✅ |
+| **Reverse continue** | run backward until a breakpoint | ❌ | ✅ | ✅ |
 
 Step-over is the most useful single-step variant — it lets you skip library routines and well-tested subroutines. Step-back and reverse-continue are layer-2/3 features made possible by emulator CPU-history buffers (ZEsarUX CPU History, DeZog reverse-fifo); they are impossible on real Z80 hardware.
 
@@ -157,7 +157,7 @@ For modern development, native monitor-debuggers are primarily of historical int
 
 - **Real-hardware development** on original Spectrum, Pentagon, or Scorpion — where no host debugger is available
 - **Debugging timing-critical code** where emulator timing differs from real hardware
-- **Hardware/peripheral driver development** that depends on real bus behaviour
+- **Hardware/peripheral driver development** that depends on real bus behavior
 - **Historical study** of 1980s–1990s commercial software
 
 ---
@@ -174,7 +174,7 @@ ZEsarUX's debugger is the **deepest in any Spectrum-class emulator**:
 
 | Feature | Notes |
 |---|---|
-| **Reverse debugging** | Step backwards through execution history; `reverse continue`, `reverse step`, and configurable history depth. |
+| **Reverse debugging** | Step backward through execution history; `reverse continue`, `reverse step`, and configurable history depth. |
 | **CPU History** | Every instruction executed is recorded with full register state, allowing post-mortem analysis of any past moment. |
 | **Conditional breakpoints** | C-like expressions: `pc==0x9F40 && (a&0xF0)==0x10`. Break on memory read/write, port read/write, time, events. |
 | **Built-in assembler** | Edit and re-assemble code in-place at the cursor. |
@@ -209,7 +209,7 @@ Then connect DeZog to `localhost:10000`.
 
 #### Reverse debugging in ZEsarUX
 
-ZEsarUX's reverse-debugging feature is implemented via a circular buffer of CPU-state snapshots. When the user requests `reverse step`, the emulator restores the previous snapshot; `reverse continue` walks backwards until a breakpoint matches.
+ZEsarUX's reverse-debugging feature is implemented via a circular buffer of CPU-state snapshots. When the user requests `reverse step`, the emulator restores the previous snapshot; `reverse continue` walks backward until a breakpoint matches.
 
 This is invaluable for diagnosing **non-deterministic bugs** — interrupts firing at the wrong time, race conditions between main code and ISR, or memory corruption that becomes visible only long after the actual bug. Forward-only debuggers force you to restart the program from the beginning each time you miss the moment of interest; reverse debugging lets you rewind.
 
@@ -361,7 +361,7 @@ DeZog's feature list reads like a modern native debugger:
 | **Step over / into / out** | Standard VS Code F10 / F11 / Shift+F11 |
 | **Reverse step / reverse continue** | When backend supports it (ZEsarUX, internal sim) |
 | **Conditional breakpoints** | Expression language; e.g. `pc==0x9F40 && (a&0xF0)==0x10` |
-| **Code coverage visualization** | After a run, lines executed are coloured in the editor — invaluable for finding dead code and untested paths |
+| **Code coverage visualization** | After a run, lines executed are colored in the editor — invaluable for finding dead code and untested paths |
 | **State save/restore** | Snapshot the Z80 state to disk; restore later (time-travel debugging) |
 | **Watches** | VS Code's standard Watch panel; expressions resolve to labels or memory values |
 | **Memory viewer / editor** | Side panel; supports banked ('long') addresses |
@@ -444,7 +444,7 @@ The two are **not interchangeable**: `z88dk-gdb` is a small custom client built 
 
 ### `z88dk-gdb` + `z88dk-ticks`
 
-**`z88dk-ticks`** is a command-line Z80 emulator used to **measure cycle counts** of code fragments. It also embeds a debugger and disassembler. It is invaluable for hand-optimising inner loops where every T-state matters (Spectrum demos, AY music players, time-critical raster effects).
+**`z88dk-ticks`** is a command-line Z80 emulator used to **measure cycle counts** of code fragments. It also embeds a debugger and disassembler. It is invaluable for hand-optimizing inner loops where every T-state matters (Spectrum demos, AY music players, time-critical raster effects).
 
 Typical use:
 
@@ -833,7 +833,7 @@ Common traps to be aware of when using these debuggers:
 - **`zcc` array in `launch.json` blocking forever.** If the z88dk build fails silently (missing `+target`, typo in `-clib`), DeZog waits indefinitely for the binary. Check the DeZog output panel for compiler errors before assuming the debugger is hung.
 - **Mainline GDB built without `--target=z80-unknown-elf`.** The default `gdb` build on Linux has no Z80 backend and silently treats Z80 binaries as opaque blobs. Always check `info arch` after starting GDB — if Z80 is not in the list, rebuild.
 
-#### Debugging-behaviour pitfalls
+#### Debugging-behavior pitfalls
 
 - **Reverse debugging + interrupts.** Reverse-stepping across an interrupt can produce surprising results because the interrupt is "un-fired" in reverse, which may not match the program's actual past state. If you need to debug an ISR, prefer a forward breakpoint at the ISR entry over reverse-stepping into it.
 - **Memory watchpoints on contended memory.** The Spectrum's contended-memory timing differs from the debugger's notion of "memory access." A watchpoint on a contended address may fire at a different instruction than expected because of the contention delay. Use a register watchpoint or a wider code breakpoint if this is an issue.

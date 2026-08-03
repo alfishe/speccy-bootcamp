@@ -183,7 +183,7 @@ The AY-3-8912 implementation includes:
 - **Tone generators** — three 12-bit countdown timers, each producing a square wave at the period's frequency
 - **Noise generator** — a 5-bit LFSR (linear feedback shift register) producing pseudo-random noise
 - **Envelope generator** — a state machine producing 16 envelope shapes (attack, decay, sustain, release combinations)
-- **DAC** — three 4-bit digital-to-analogue converters (one per channel)
+- **DAC** — three 4-bit digital-to-analog converters (one per channel)
 - **I/O ports** — the AY-3-8912 has two 8-bit I/O ports (port A on the 8912, ports A and B on the 8910); these are used on the Spectrum for the +2 serial port and the Kempston mouse
 
 The AY module responds to I/O writes at the Spectrum's standard AY port addresses (`#FFFD` for register selection, `#BFFD` for data write, `#FFFD`/`#FBFD` combinations for read).
@@ -289,7 +289,7 @@ A test program is loaded into the simulated Spectrum's RAM (as if from tape), ex
 
 ## Synthesis and Implementation
 
-Once simulation passes, the core is **synthesised** — converted from Verilog to a bitstream that programs the FPGA:
+Once simulation passes, the core is **synthesized** — converted from Verilog to a bitstream that programs the FPGA:
 
 ### Toolchain
 
@@ -332,7 +332,7 @@ The timing report produced by Quartus/Vivado identifies paths that fail timing, 
 
 ## Hardware Verification
 
-Once the bitstream is loaded onto a physical FPGA, the implementer performs **hardware verification** — confirming that the synthesised core behaves correctly on real hardware:
+Once the bitstream is loaded onto a physical FPGA, the implementer performs **hardware verification** — confirming that the synthesized core behaves correctly on real hardware:
 
 ### Real-Time Test Programs
 
@@ -377,7 +377,7 @@ flowchart LR
     H -- Yes --> I[Release]
 ```
 
-Each iteration may take days to weeks, depending on the complexity of the change. Major releases typically involve months of work, with multiple cycles of simulate → synthesise → test → refine.
+Each iteration may take days to weeks, depending on the complexity of the change. Major releases typically involve months of work, with multiple cycles of simulate → synthesize → test → refine.
 
 ---
 

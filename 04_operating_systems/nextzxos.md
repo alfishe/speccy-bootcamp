@@ -2,7 +2,7 @@
 
 # NextZXOS — The ZX Spectrum Next Operating System
 
-The ZX Spectrum Next, released in 2017 after a successful Kickstarter campaign, needed an operating system that did something no Spectrum OS had done before: bridge 1982-era compatibility with 21st-century hardware features like 2 MB of RAM, a Layer 2 256-colour framebuffer, hardware sprites, a tilemap, a programmable copper unit, and a DMA controller. The result is **NextZXOS** — an ESXDOS derivative that has become the most powerful native Spectrum OS ever written.
+The ZX Spectrum Next, released in 2017 after a successful Kickstarter campaign, needed an operating system that did something no Spectrum OS had done before: bridge 1982-era compatibility with 21st-century hardware features like 2 MB of RAM, a Layer 2 256-color framebuffer, hardware sprites, a tilemap, a programmable copper unit, and a DMA controller. The result is **NextZXOS** — an ESXDOS derivative that has become the most powerful native Spectrum OS ever written.
 
 NextZXOS was authored primarily by **Garry Lancaster** with contributions from the wider Next team (Jim Bagley, Victor Trucco, Fabio Belavenuto, Henrique Oliviéri). It preserves the ESXDOS API almost intact, so existing ESXDOS software and dot commands run with minimal modification. On top of this base, NextZXOS adds NextBASIC integration (NextBASIC can call ESXDOS functions directly), an expanded dot-command system (no 8 KB limit), and hardware-acceleration hooks for Layer 2, sprites, and the copper.
 
@@ -29,19 +29,19 @@ This article covers NextZXOS as a system: the Next hardware it runs on, its memo
 
 ### 1.1 Origins
 
-The ZX Spectrum Next project began in 2016 as a collaboration between Rick Dickinson (Sinclair's industrial designer) and a team of veteran Spectrum developers. The hardware was ambitious: an FPGA-based Spectrum clone with 2 MB of RAM, hardware acceleration for graphics, an integrated ESP32 for WiFi, and full backwards compatibility with every model of original Spectrum hardware.
+The ZX Spectrum Next project began in 2016 as a collaboration between Rick Dickinson (Sinclair's industrial designer) and a team of veteran Spectrum developers. The hardware was ambitious: an FPGA-based Spectrum clone with 2 MB of RAM, hardware acceleration for graphics, an integrated ESP32 for WiFi, and full backward compatibility with every model of original Spectrum hardware.
 
 The OS choice was contentious. Three options were on the table:
 
 1. **Ship a plain ESXDOS port.** This would work, but would not expose any of the Next's new hardware. Users would have to write machine code to access Layer 2, sprites, etc.
-2. **Write an entirely new OS.** This would maximise the Next's potential but would break compatibility with the existing ESXDOS dot-command ecosystem.
+2. **Write an entirely new OS.** This would maximize the Next's potential but would break compatibility with the existing ESXDOS dot-command ecosystem.
 3. **Extend ESXDOS.** Keep the ESXDOS API stable, add Next-specific functions and a NextBASIC integration layer on top.
 
 The team chose option 3. Garry Lancaster, already the author of the popular "+3DOS" extension libraries for the original Spectrum, took on the task of adapting the ESXDOS source to the Next's hardware and adding the integration layer. The result — **NextZXOS** — was first released as version 1.0 in 2017 alongside the initial Next hardware shipments.
 
 ### 1.2 Relationship to ESXDOS
 
-NextZXOS is **API-compatible with ESXDOS**. The core function catalogue (F_OPEN, F_CLOSE, F_READ, F_WRITE, F_SEEK, F_OPENDIR, F_READDIR, etc.) is identical; the calling convention (`LD B,function; CALL #0084`) is the same; the error codes are the same. Code written for ESXDOS on a DivMMC runs on the Next with no changes (assuming it does not use the DivMMC's specific I/O ports directly).
+NextZXOS is **API-compatible with ESXDOS**. The core function catalog (F_OPEN, F_CLOSE, F_READ, F_WRITE, F_SEEK, F_OPENDIR, F_READDIR, etc.) is identical; the calling convention (`LD B,function; CALL #0084`) is the same; the error codes are the same. Code written for ESXDOS on a DivMMC runs on the Next with no changes (assuming it does not use the DivMMC's specific I/O ports directly).
 
 On top of the ESXDOS base, NextZXOS adds:
 
@@ -58,9 +58,9 @@ NextZXOS's stated design goals, in approximate priority order:
 
 1. **Zero surprises for ESXDOS users.** A DivMMC user picking up a Next should feel immediately at home.
 2. **Full Next hardware access from BASIC.** No machine code required for Layer 2 graphics, sprite plotting, copper programming, or DMA transfers.
-3. **Maximum backwards compatibility.** Original Spectrum software, both 48K and 128K, runs without modification.
+3. **Maximum backward compatibility.** Original Spectrum software, both 48K and 128K, runs without modification.
 4. **Extensibility.** New dot commands and NextBASIC extensions should be addable without firmware updates.
-5. **Open source.** All NextZXOS source code is on GitHub under a permissive licence.
+5. **Open source.** All NextZXOS source code is on GitHub under a permissive license.
 
 NextZXOS has met all five goals. The Next is the only Spectrum-compatible machine on which a BASIC programmer can write a smooth-scrolling hardware-sprite game without dropping to assembly.
 
@@ -88,7 +88,7 @@ NextZXOS exists to expose the Next's hardware. This section briefly summarises t
 
 ### 2.1 Memory: 2 MB RAM
 
-The Next's defining feature is **2 MB of RAM**, organised as 224 eight-kilobyte banks (`#00`–`#DF`) plus the original 16K/48K/128K memory models. The MMU (Memory Management Unit) maps any 8 KB bank into any of the eight 8 KB slots in the Z80's 64 KB address space.
+The Next's defining feature is **2 MB of RAM**, organized as 224 eight-kilobyte banks (`#00`–`#DF`) plus the original 16K/48K/128K memory models. The MMU (Memory Management Unit) maps any 8 KB bank into any of the eight 8 KB slots in the Z80's 64 KB address space.
 
 NextZXOS exposes this via:
 - NextBASIC `BANK` commands (`BANK 5 LAYER2`, `BANK 10 LOAD "filename"`).
@@ -99,13 +99,13 @@ The 2 MB is enough to hold a Layer 2 framebuffer (32 KB), a tilemap (32 KB), a s
 
 ### 2.2 Layer 2
 
-**Layer 2** is a 256-colour framebuffer displayed on top of the standard Spectrum display. It occupies 48 KB of RAM (one 8 KB bank per 1/6 of the screen — six banks total for a 320×256 pixel image at 8 bits per pixel). NextZXOS exposes it via:
+**Layer 2** is a 256-color framebuffer displayed on top of the standard Spectrum display. It occupies 48 KB of RAM (one 8 KB bank per 1/6 of the screen — six banks total for a 320×256 pixel image at 8 bits per pixel). NextZXOS exposes it via:
 
 - NextBASIC: `#L2 POKE x,y,colour`, `#L2 COPY`, `#L2 CLS`, etc.
 - Assembly: Direct memory writes to the Layer 2 banks, with the active bank selected via port `#123B`.
 - DMA: Hardware DMA can transfer pixel data into Layer 2 at up to 8 MB/s.
 
-Layer 2 is what makes the Next feel like a different machine: 256-colour graphics, software-rendered, with no attribute clash, no timing tricks, and no sacrifice of CPU time to the display.
+Layer 2 is what makes the Next feel like a different machine: 256-color graphics, software-rendered, with no attribute clash, no timing tricks, and no sacrifice of CPU time to the display.
 
 ### 2.3 Tilemap
 
@@ -119,7 +119,7 @@ The tilemap is the basis for most Next games. It allows smooth-scrolling arcade-
 
 ### 2.4 Hardware sprites
 
-The Next supports up to **64 hardware sprites**, each up to 16×16 pixels in 4-bit or 8-bit colour, with rotation, scaling, and per-sprite clipping. The sprite pattern table lives in dedicated RAM banks.
+The Next supports up to **64 hardware sprites**, each up to 16×16 pixels in 4-bit or 8-bit color, with rotation, scaling, and per-sprite clipping. The sprite pattern table lives in dedicated RAM banks.
 
 NextZXOS exposes sprites via:
 - NextBASIC: `#SPRITE DEFINE`, `#SPRITE MOVE`, `#SPRITE HIT` (collision detection).
@@ -303,7 +303,7 @@ This program would have taken several pages of assembly on an original Spectrum.
 
 ### 4.4 Calling ESXDOS functions directly
 
-For operations that NextBASIC does not have a built-in keyword for, NextZXOS exposes the full ESXDOS function catalogue via the `#FN` syntax:
+For operations that NextBASIC does not have a built-in keyword for, NextZXOS exposes the full ESXDOS function catalog via the `#FN` syntax:
 
 ```
 10 REM Call ESXDOS function #95 (F_OPEN) directly
@@ -523,7 +523,7 @@ NextZXOS's assembly API is **ESXDOS-compatible** plus Next-specific extensions. 
 
 ### 7.1 ESXDOS-compatible core
 
-The entire ESXDOS function catalogue (see [esxdos.md](esxdos.md) §6.2) is supported, with the same dispatch mechanism:
+The entire ESXDOS function catalog (see [esxdos.md](esxdos.md) §6.2) is supported, with the same dispatch mechanism:
 
 ```z80
 LD   B,function        ; ESXDOS function number
@@ -651,7 +651,7 @@ The copper program `rainbow.cop` is a series of `WAIT` and `WRITE` instructions 
 
 ### 8.2 The sprite-based game loop
 
-The canonical Next game loop uses the tilemap for the background, sprites for moving objects, and a single frame-synchronised main loop:
+The canonical Next game loop uses the tilemap for the background, sprites for moving objects, and a single frame-synchronized main loop:
 
 ```
 10 REM Setup tilemap and sprites
@@ -718,7 +718,7 @@ The NextZXOS ecosystem extends well beyond the Next itself:
 
 - **Next-compatible clones.** Several FPGA projects (SpecNext, MiSTer Spectrum Next core, etc.) run NextZXOS or a compatible OS.
 - **Cross-development tools.** z88dk, sjasmplus, and various modern IDEs target the Next directly. Code can be cross-compiled on a PC and dropped onto the Next's SD card.
-- **Community software.** Hundreds of Next-specific games, demos, and utilities have been released since 2017. The Next has its own demoscene (centred on the Outline and Nova parties).
+- **Community software.** Hundreds of Next-specific games, demos, and utilities have been released since 2017. The Next has its own demoscene (centered on the Outline and Nova parties).
 - **Documentation.** The Next has more English-language documentation than any other Spectrum platform. The official manual (`specnext.dev`) is comprehensive.
 
 ### 9.3 Where to get help

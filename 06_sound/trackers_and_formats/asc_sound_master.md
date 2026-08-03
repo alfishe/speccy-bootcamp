@@ -398,12 +398,12 @@ The result is that ASM became a **dead-end branch** in the tracker family tree �
 - [Pro Tracker](protracker.md) — the tracker that displaced ASM (1995–1997)
 - [Vortex Tracker II](vortex_tracker.md) — modern PC-based editor that imports `.ASC`
 - [PT3 Format](pt3_format.md) — the format that superseded `.ASC`
-- [AY Music Formats](ay_music_formats.md) — full format catalogue including `.ASC`
+- [AY Music Formats](ay_music_formats.md) — full format catalog including `.ASC`
 - [AY-3-8912 PSG Silicon](../hardware/ay_3_8912.md) — the chip whose envelope generator ASM uniquely exposed
 
 ## References
 
-- [zxtunes.com software list](https://zxtunes.com/software_list.php) — catalogue entry for Asc Sound Master
+- [zxtunes.com software list](https://zxtunes.com/software_list.php) — catalog entry for Asc Sound Master
 - [zxart.ee ASC archive](https://zxart.ee/) — searchable archive of `.ASC` / `.AS0` modules
 - [Bulba's Vortex Project](https://bulba.untergrund.net/) — VTII's ASC importer preserves the format
 - [zx-pk.ru](https://zx-pk.ru/) — Soviet clone scene forum; extensive historical ASM discussion in Russian

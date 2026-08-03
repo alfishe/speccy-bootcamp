@@ -69,7 +69,7 @@ These features are unfamiliar to assembly programmers used to monolithic tools l
 | 2000–2010 | z88dk 1.8–1.9 | Bug fixes; new CPU targets added |
 | 2010–2015 | z88dk 1.10–1.99 | `MODULE` / `ENDMOD` namespaces; improved macros |
 | 2015–2020 | z88dk 2.0+ | Modern maintenance; structured types, multiple CPUs, Z180, Z80N support for Spectrum Next |
-| 2020s | ongoing | Active development; synchronised with SDCC integration; new `--cpu` flags |
+| 2020s | ongoing | Active development; synchronized with SDCC integration; new `--cpu` flags |
 
 The z88dk project itself has a stable release series (`1.99` for years, then `2.0` in 2017, currently `2.2+` on the development branch). z80asm tracks z88dk releases.
 

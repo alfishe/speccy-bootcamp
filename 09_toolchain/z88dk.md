@@ -128,7 +128,7 @@ The single most important architectural decision when starting a z88dk project i
 | **Targets** | ~100 (broadest coverage; everything z88dk has ever supported) | ~20 (ZX Spectrum, ZX Next, MSX, Sega Master System, RC2014, HBios, scz180, yaz180, CP/M, + generic z80/z180 bare bones) |
 | **C standard** | Near-C90 (some C99 features) | C11 subset |
 | **Performance** | Adequate; long history of incremental improvements | **Hand-optimized assembly**; benchmark-leading performance (memcpy, printf, math) |
-| **Code size** | Larger (more code paths, more backwards compatibility) | Smaller; library auto-prunes unused functions at link time |
+| **Code size** | Larger (more code paths, more backward compatibility) | Smaller; library auto-prunes unused functions at link time |
 | **Math** | `genmath`, `math48`, `mbf32`, IEEE `math32` | `math48` (default), `math32` (IEEE) |
 | **Compiler mixing** | ✅ sccz80 + zsdcc objects in one binary | ❌ Pick one compiler per project |
 | **CRT0 customization** | Via `#pragma output` and `-startup=N` flags | Via target-specific `_DEVELOPMENT/srt0_*.asm` files |

@@ -8,12 +8,12 @@
 
 ## Articles
 
-The nine articles are best read in chronological order: history first for context, then the format catalogue, then the three foundational on-Spectrum editors in chronological order, then the PC-generation tools, then the binary format references.
+The nine articles are best read in chronological order: history first for context, then the format catalog, then the three foundational on-Spectrum editors in chronological order, then the PC-generation tools, then the binary format references.
 
 | # | Article | Description |
 |---|---|---|
 | 1 | [tracker_history.md](tracker_history.md) | The 30-year history of ZX music editors — beeper trackers, the Pro Tracker lineage, the VTII / Arkos split, modern cross-platform tools |
-| 2 | [ay_music_formats.md](ay_music_formats.md) | **Master catalogue**: every AY/YM music file format (`.PT3`, `.PSG`, `.YM`, `.AY`, `.AKG`, etc.) — modules, dumps, containers, modern embedded |
+| 2 | [ay_music_formats.md](ay_music_formats.md) | **Master catalog**: every AY/YM music file format (`.PT3`, `.PSG`, `.YM`, `.AY`, `.AKG`, etc.) — modules, dumps, containers, modern embedded |
 | 3 | [sound_tracker.md](sound_tracker.md) | **Sound Tracker 1.1** (Bzyk, 1990) — the first AY grid editor; established the pattern/sample/ornament paradigm |
 | 4 | [asc_sound_master.md](asc_sound_master.md) | **Asc Sound Master** (Sendetskiy, 1992) — Soviet alternative with envelope-mode-per-tick instrument model |
 | 5 | [protracker.md](protracker.md) | **Pro Tracker 1/2/3** (Golden Disk Corp., 1995–1997) — the format-defining lineage that produced `.PT3` |

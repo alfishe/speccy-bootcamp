@@ -627,7 +627,7 @@ The .TZX format supports a "compressed data" extension, but it is rarely used.
 
 ### 7.6 No custom block types
 
-The .TAP format recognises only two flag byte values: `#00` (header) and `#FF` (data). Blocks with other flag byte values (used by some custom loaders) are stored in the .TAP file but are interpreted as standard blocks (with unpredictable results when played back).
+The .TAP format recognizes only two flag byte values: `#00` (header) and `#FF` (data). Blocks with other flag byte values (used by some custom loaders) are stored in the .TAP file but are interpreted as standard blocks (with unpredictable results when played back).
 
 The .TZX format can represent arbitrary block types via its "custom info" and "glue" block types.
 

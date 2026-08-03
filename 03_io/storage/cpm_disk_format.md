@@ -16,15 +16,15 @@
 
 **CP/M** (Control Program for Microcomputers) was, from 1974 until about 1985, the dominant operating system for 8-bit microcomputers. Written by **Gary Kildall** at Digital Research Inc. (DRI), CP/M ran on the Intel 8080, the Zilog Z80, and compatible CPUs (the 8085, the NSC800, the Z180, etc.).
 
-CP/M was the OS of choice for business microcomputers throughout the late 1970s and early 1980s. Thousands of application programs — word processors (WordStar), spreadsheets (SuperCalc), databases (dBase II), assemblers, compilers (Microsoft BASIC, Microsoft FORTRAN, Microsoft COBOL) — were written for CP/M, and CP/M-compatible disk formats were standardised across hundreds of machines.
+CP/M was the OS of choice for business microcomputers throughout the late 1970s and early 1980s. Thousands of application programs — word processors (WordStar), spreadsheets (SuperCalc), databases (dBase II), assemblers, compilers (Microsoft BASIC, Microsoft FORTRAN, Microsoft COBOL) — were written for CP/M, and CP/M-compatible disk formats were standardized across hundreds of machines.
 
-When the IBM PC launched in 1981, it ran PC-DOS (a CP/M-like clone by Microsoft) rather than CP/M itself, primarily because DRI's pricing negotiations with IBM fell through. The PC's eventual domination of the market killed CP/M as a commercial platform by 1985, but CP/M remained in use on embedded systems, niche computers, and retrocomputing platforms for decades afterwards.
+When the IBM PC launched in 1981, it ran PC-DOS (a CP/M-like clone by Microsoft) rather than CP/M itself, primarily because DRI's pricing negotiations with IBM fell through. The PC's eventual domination of the market killed CP/M as a commercial platform by 1985, but CP/M remained in use on embedded systems, niche computers, and retrocomputing platforms for decades afterward.
 
 For the Spectrum family, CP/M matters because:
 
 - **It was the standard "business" OS** for 8-bit machines — anyone who wanted to run business software on a Spectrum needed CP/M.
 - **The Spectrum +3 was bundled with CP/M 2.2** as a boot option. The +3's +3DOS file format (see [plus3_dos_format.md](plus3_dos_format.md)) is a CP/M derivative, so understanding CP/M is essential for understanding +3DOS.
-- **Soviet Spectrum clones** (the ATM Turbo, the Sprinter, and others) had native CP/M support, often with customised file-system layouts.
+- **Soviet Spectrum clones** (the ATM Turbo, the Sprinter, and others) had native CP/M support, often with customized file-system layouts.
 - **The +3's CP/M disks are interchangeable** with CP/M disks from Amstrad CPC, Amstrad PCW, and many other 8-bit business machines.
 
 ### 1.2 CP/M 2.2 vs other CP/M versions
@@ -55,7 +55,7 @@ The Spectrum +3 is by far the most important of these — it was a major commerc
 
 ### 1.4 Scope
 
-This article covers the **on-disk format** of CP/M 2.2 disks as used on the Spectrum family. The related **+3DOS** format (a customised CP/M derivative) is covered in [plus3_dos_format.md](plus3_dos_format.md); the **TR-DOS** format (a non-CP/M alternative used by Soviet machines) is covered in [trd_disk_format.md](trd_disk_format.md); the **disk-image** file formats (`.DSK`, `.EDSK`, `.FDI`) used to store CP/M images on modern systems are covered in [dsk_fdi_formats.md](dsk_fdi_formats.md).
+This article covers the **on-disk format** of CP/M 2.2 disks as used on the Spectrum family. The related **+3DOS** format (a customized CP/M derivative) is covered in [plus3_dos_format.md](plus3_dos_format.md); the **TR-DOS** format (a non-CP/M alternative used by Soviet machines) is covered in [trd_disk_format.md](trd_disk_format.md); the **disk-image** file formats (`.DSK`, `.EDSK`, `.FDI`) used to store CP/M images on modern systems are covered in [dsk_fdi_formats.md](dsk_fdi_formats.md).
 
 ## §2. CP/M 2.2 Architecture
 
@@ -296,7 +296,7 @@ The +3's CP/M uses the following hardware:
 
 - **Z80 CPU** at 3.54689 MHz (the +3's standard clock). This is the same speed used by the +3's BASIC mode.
 - **Floppy controller:** the WD1772-PH (see [plus3_floppy.md §4](plus3_floppy.md)). The +3's CP/M BIOS translates 128-byte record requests into WD1772-PH sector reads.
-- **Memory banking:** the +3 has 128 KB of RAM organised into 4 banks of 32 KB. The CP/M BIOS uses banking to fit the BIOS, BDOS, and CCP into the upper half of the address space while leaving the lower half for the TPA.
+- **Memory banking:** the +3 has 128 KB of RAM organized into 4 banks of 32 KB. The CP/M BIOS uses banking to fit the BIOS, BDOS, and CCP into the upper half of the address space while leaving the lower half for the TPA.
 - **Console I/O:** keyboard input is via the standard Spectrum keyboard matrix; output is to the +3's display (in 32-column or 80-column mode, depending on the +3's video mode).
 - **Disk drives:** A: and B: are the +3's two internal 3.5" floppy drives (or the +3's single drive, on the +2A which has only one).
 
@@ -501,7 +501,7 @@ A minimal Python reader for the directory of a +3 / CP/M disk is essentially the
 
 ### 8.1 Related articles in this Knowledge base
 
-- [plus3_dos_format.md](plus3_dos_format.md) — the **+3DOS** logical disk format, a customised CP/M 2.2 derivative used by the Spectrum +3 in BASIC mode. This article and that one are companions: this one covers the CP/M "parent", that one covers the +3-specific child.
+- [plus3_dos_format.md](plus3_dos_format.md) — the **+3DOS** logical disk format, a customized CP/M 2.2 derivative used by the Spectrum +3 in BASIC mode. This article and that one are companions: this one covers the CP/M "parent", that one covers the +3-specific child.
 - [plus3_floppy.md](plus3_floppy.md) — the **physical** layer of the +3's floppy subsystem (the WD1772-PH controller, the port map, the cable pinout).
 - [mfm_encoding.md](mfm_encoding.md) — the MFM signal layer underlying all floppy-disk formats.
 - [trd_disk_format.md](trd_disk_format.md) — the **TR-DOS** logical disk format (a non-CP/M alternative used by the Beta Disk Interface and Soviet machines).

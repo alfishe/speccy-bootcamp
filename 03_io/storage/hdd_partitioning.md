@@ -2,7 +2,7 @@
 
 **Scope:** The **partition table** and **filesystem layers** that sit between the raw sectors of a Spectrum mass-storage device (CompactFlash, SD card, hard disk) and the files that ESXDOS, NextZXOS, and IS-DOS present to the user. This article covers the **Master Boot Record**, the **BIOS Parameter Block**, the **FAT16 and FAT32** filesystems, the **Long File Name** extension, and the Russian **IS-DOS** alternative.
 
-This is the **filesystem companion** to the hardware articles: [ide_interface.md](ide_interface.md) and [sd_interface.md](sd_interface.md) explain how a sector reaches the device; this article explains how those sectors are organised into directories and files. The image-format article [hdf_mgt_formats.md](hdf_mgt_formats.md) explains how a modern PC captures the whole structure.
+This is the **filesystem companion** to the hardware articles: [ide_interface.md](ide_interface.md) and [sd_interface.md](sd_interface.md) explain how a sector reaches the device; this article explains how those sectors are organized into directories and files. The image-format article [hdf_mgt_formats.md](hdf_mgt_formats.md) explains how a modern PC captures the whole structure.
 
 **Audience:** Emulator authors implementing a FAT driver, ESXDOS application programmers who need to understand cluster sizes and LFN quirks, archival tool authors building conversion utilities, and curious users who want to know what lives inside their SD card.
 
@@ -63,7 +63,7 @@ The **CHS fields** (cylinder/head/sector) are a legacy of pre-LBA hard disks and
 
 ### 2.3 Partition type codes
 
-The type byte at offset `0x04` tells the host what filesystem the partition contains. The codes ESXDOS recognises:
+The type byte at offset `0x04` tells the host what filesystem the partition contains. The codes ESXDOS recognizes:
 
 | Code | Filesystem |
 |---|---|
@@ -248,7 +248,7 @@ The cluster-chain-following logic is otherwise identical to FAT16; only the entr
 
 Plain FAT directory entries store only an 8.3 name (8 characters, dot, 3 characters), uppercased and space-padded. This is adequate for the floppy era but cramped for a modern software library where files have names like `Chuckie Egg (1983).z80`.
 
-**VFAT Long File Names** solve this by prepending one or more **LFN entries** before the 8.3 entry. Each LFN entry is a 32-byte structure with the special attribute byte `0x0F` (read-only + hidden + system + volume — a combination that never occurs naturally, so the DOS recognises it as an LFN marker). The LFN entry holds 13 UTF-16 characters of the long name; multiple LFN entries chain together to spell a name of any length up to 255 characters.
+**VFAT Long File Names** solve this by prepending one or more **LFN entries** before the 8.3 entry. Each LFN entry is a 32-byte structure with the special attribute byte `0x0F` (read-only + hidden + system + volume — a combination that never occurs naturally, so the DOS recognizes it as an LFN marker). The LFN entry holds 13 UTF-16 characters of the long name; multiple LFN entries chain together to spell a name of any length up to 255 characters.
 
 The LFN entry layout:
 
@@ -289,7 +289,7 @@ For Spectrum mass storage, the formatter's default cluster size is usually fine,
 | 32 | 16 KB | Tiny | ~8 KB | Default on 1–2 GB FAT16 |
 | 64 | 32 KB | Tiny | ~16 KB | Large FAT32 cards |
 
-For a 512 MB card full of small files, **4 KB clusters** (`SecPerClus = 8`) minimise slack. For an 8 GB card, **8 KB or 16 KB clusters** are the modern default and the slack is negligible given the card's size. The formatter's automatic choice is rarely wrong.
+For a 512 MB card full of small files, **4 KB clusters** (`SecPerClus = 8`) minimize slack. For an 8 GB card, **8 KB or 16 KB clusters** are the modern default and the slack is negligible given the card's size. The formatter's automatic choice is rarely wrong.
 
 ### 5.3 How the DOS allocates a new file
 
@@ -324,7 +324,7 @@ The full IS-DOS API, on-disk structure, and history are covered in [is_dos.md](.
 FAT displaced IS-DOS for three reasons:
 
 - **PC interchange.** A FAT volume is readable by every PC; an IS-DOS volume is not. The convenience of preparing a card on a modern computer outweighed any technical advantage IS-DOS might have had.
-- **Hardware convergence.** When the DivIDE (a Western design) became the standard interface, it shipped with ESXDOS (which speaks FAT), not IS-DOS. The hardware and the DOS standardised together.
+- **Hardware convergence.** When the DivIDE (a Western design) became the standard interface, it shipped with ESXDOS (which speaks FAT), not IS-DOS. The hardware and the DOS standardized together.
 - **Scale.** IS-DOS's allocation scheme does not scale to gigabyte media; FAT32 does. As SD cards grew, only FAT could follow.
 
 IS-DOS survives as a historical curiosity, documented for completeness but no longer in active use. Every modern Spectrum mass-storage volume is FAT.

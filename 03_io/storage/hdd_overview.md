@@ -1,6 +1,6 @@
 # Spectrum Hard Disk and SD Storage: An Overview
 
-**Scope:** A high-level introduction to **mass storage beyond the floppy disk** on the ZX Spectrum family and its clones — the **three generations** of storage technology (floppy, IDE hard disk, SD card), the **interface hardware** that brought each to the Spectrum, and the **file systems** (FAT16, FAT32, IS-DOS) that organised the data.
+**Scope:** A high-level introduction to **mass storage beyond the floppy disk** on the ZX Spectrum family and its clones — the **three generations** of storage technology (floppy, IDE hard disk, SD card), the **interface hardware** that brought each to the Spectrum, and the **file systems** (FAT16, FAT32, IS-DOS) that organized the data.
 
 This article is the **top-level index** into the hard-disk / SD documentation. It does not duplicate the byte-level port maps or filesystem layouts covered in the dedicated articles; instead it places every interface side-by-side so the reader can see at a glance what each does, when it appeared, and why it mattered.
 
@@ -105,7 +105,7 @@ For a new real-hardware Spectrum user, the decision is almost always the **DivMM
 
 For the ZX Spectrum Next, the built-in **dual MicroSD slots** need no expansion at all — the primary slot holds the machine's firmware and core files, the secondary slot holds user software.
 
-For emulator authors, modelling the **DivIDE/DivMMC port layout** (`#E3`–`#E7`) and ESXDOS is sufficient to run the vast majority of modern Spectrum software. Fuse, ZEsarUX, CSpect, and UnrealSpeccy all implement this.
+For emulator authors, modeling the **DivIDE/DivMMC port layout** (`#E3`–`#E7`) and ESXDOS is sufficient to run the vast majority of modern Spectrum software. Fuse, ZEsarUX, CSpect, and UnrealSpeccy all implement this.
 
 ## §4. Why HDD Mattered for the Soviet Scene
 
@@ -125,13 +125,13 @@ A user who wanted to keep up needed somewhere to **store** this river of softwar
 
 ### 4.3 IS-DOS: the Russian hierarchical filesystem
 
-Western interfaces standardised on FAT, but the Soviet scene produced its own filesystem: **IS-DOS** (Дымиров / Aleksey Dmyrov, 1993). IS-DOS is a hierarchical, MS-DOS-compatible filesystem with 32-byte directory entries, subdirectories, file attributes, and a jump-table API. It predates FAT-on-Spectrum by over a decade and shipped with its own GUI file manager.
+Western interfaces standardized on FAT, but the Soviet scene produced its own filesystem: **IS-DOS** (Дымиров / Aleksey Dmyrov, 1993). IS-DOS is a hierarchical, MS-DOS-compatible filesystem with 32-byte directory entries, subdirectories, file attributes, and a jump-table API. It predates FAT-on-Spectrum by over a decade and shipped with its own GUI file manager.
 
 IS-DOS never achieved the ubiquity of FAT (it was tied to specific hardware and had a smaller software library), but it is historically important as the **first** attempt to give the Spectrum a PC-like filesystem. It is covered in [is_dos.md](../../04_operating_systems/is_dos.md) and [hdd_partitioning.md](hdd_partitioning.md).
 
 ### 4.4 The convergence
 
-By 2010 the Soviet and Western stories had converged. The DivIDE (a Western design) was adopted enthusiastically by Russian users; ESXDOS (a Western DOS) became the standard on Pentagon and Scorpion machines; and the ZX Evolution (a Russian clone) shipped with DivIDE-compatible ports. The cultural split that characterised the floppy era — TR-DOS in the East, +3DOS/CP/M/MGT in the West — dissolved at the hard-disk layer, where a single FAT volume serves both worlds.
+By 2010 the Soviet and Western stories had converged. The DivIDE (a Western design) was adopted enthusiastically by Russian users; ESXDOS (a Western DOS) became the standard on Pentagon and Scorpion machines; and the ZX Evolution (a Russian clone) shipped with DivIDE-compatible ports. The cultural split that characterized the floppy era — TR-DOS in the East, +3DOS/CP/M/MGT in the West — dissolved at the hard-disk layer, where a single FAT volume serves both worlds.
 
 ## §5. The Modern Landscape (2024)
 

@@ -4,7 +4,7 @@
 
 When you write a byte to a floppy disk, the floppy controller does not write eight bits to the medium. It writes a **modulated signal**: a stream of magnetic transitions whose positions in time encode both the data bits *and* a clock signal that lets the controller recover the bit boundaries on readback. The scheme used for virtually all ZX Spectrum floppy formats (TR-DOS, +3 DOS, CP/M, DivIDE) is **Modified Frequency Modulation (MFM)**.
 
-MFM encoding sits at the very bottom of the floppy stack — below the [TR-DOS logical format](trd_disk_format.md), below the [floppy controller chip](fdc_vg93.md), and below the [disk image file formats](trd_scl_formats.md). Understanding MFM is essential for emulator authors (who must reproduce the FDC's bit-level behaviour), for preservationists (who need to know why flux-level formats like [.SCP](scp_format.md) exist), and for anyone reverse engineering non-standard or copy-protected disk formats.
+MFM encoding sits at the very bottom of the floppy stack — below the [TR-DOS logical format](trd_disk_format.md), below the [floppy controller chip](fdc_vg93.md), and below the [disk image file formats](trd_scl_formats.md). Understanding MFM is essential for emulator authors (who must reproduce the FDC's bit-level behavior), for preservationists (who need to know why flux-level formats like [.SCP](scp_format.md) exist), and for anyone reverse engineering non-standard or copy-protected disk formats.
 
 This article covers MFM from the ground up: the bit cell model, the encoding rules, sync marks and address marks, the phase-locked loop (PLL) data separator, write precompensation, and how MFM compares to its predecessors (FM) and successors (RLL, GCR). After reading this, the rest of the floppy stack — FDC registers, sector layouts, image formats — will fall into place.
 
@@ -49,7 +49,7 @@ MFM is also **not** specific to floppy disk. It was used on early hard disks (ST
 
 MFM matters because:
 
-- **It is what the FDC chip does**. The [WD1793 / KR1818VG93](fdc_vg93.md) takes a byte from the data bus and serialises it into an MFM bit stream on the write-data pin. Reading is the reverse: the raw read-data pin carries an MFM bit stream that the FDC's internal data separator decodes back into bytes. Understanding MFM is essential for understanding the FDC's behaviour.
+- **It is what the FDC chip does**. The [WD1793 / KR1818VG93](fdc_vg93.md) takes a byte from the data bus and serialises it into an MFM bit stream on the write-data pin. Reading is the reverse: the raw read-data pin carries an MFM bit stream that the FDC's internal data separator decodes back into bytes. Understanding MFM is essential for understanding the FDC's behavior.
 
 - **It explains the format parameters**. Why does a standard TR-DOS disk have 10 sectors of 512 bytes per track? Because at 250 kbit/s MFM with the standard sector overhead (sync marks, ID field, data field, gaps), a track holds exactly 10 sectors of 512 bytes in 6250 bytes of raw MFM data. Change the encoding (e.g., to RLL) and you would get more sectors per track.
 
@@ -90,7 +90,7 @@ The two windows are visually:
 |                  |                  |
 ```
 
-Each window is, in turn, divided into a narrower "valid transition" zone and two "invalid" guard zones at the edges. The PLL tries to keep its sampling clock aligned with the centre of each window, so that transitions in the middle of the window are reliably detected and transitions at the edges (which would indicate drift) are rejected.
+Each window is, in turn, divided into a narrower "valid transition" zone and two "invalid" guard zones at the edges. The PLL tries to keep its sampling clock aligned with the center of each window, so that transitions in the middle of the window are reliably detected and transitions at the edges (which would indicate drift) are rejected.
 
 ### 2.3 FM: clock and data bits in every cell
 
@@ -255,13 +255,13 @@ The decoder is essentially the reverse, but with a PLL to recover the bit clock 
 
 The MFM encoding scheme described so far has a fundamental problem: **byte synchronisation**. The PLL recovers the bit clock, so the FDC knows where each *bit cell* is. But it doesn't know where each *byte* starts. If it samples the bit stream and reads `10110101`, is that the first byte of a sector header, the middle of a data field, or some random bytes in a gap? The FDC has no way to tell.
 
-The solution is the **sync mark**: a deliberately malformed bit pattern that the FDC can recognise unambiguously, even mid-stream. Once the FDC sees a sync mark, it knows that the *next* byte boundary is the start of a meaningful field.
+The solution is the **sync mark**: a deliberately malformed bit pattern that the FDC can recognize unambiguously, even mid-stream. Once the FDC sees a sync mark, it knows that the *next* byte boundary is the start of a meaningful field.
 
 ### 4.1 The missing-clock-bit trick
 
-A sync mark works by violating MFM's encoding rules. Recall that in MFM, the spacing between transitions is 2 µs, 4 µs, 6 µs, or 8 µs — those are the only valid intervals. If the writer deliberately omits a transition that the rules require, the resulting signal has an "impossible" spacing that the FDC can recognise.
+A sync mark works by violating MFM's encoding rules. Recall that in MFM, the spacing between transitions is 2 µs, 4 µs, 6 µs, or 8 µs — those are the only valid intervals. If the writer deliberately omits a transition that the rules require, the resulting signal has an "impossible" spacing that the FDC can recognize.
 
-The most common sync mark is the **`A1` with missing clock**. The byte `0xA1` (10100001) encodes normally as a specific pattern of clock and data transitions. The sync-mark version of `A1` omits the **clock bit between cell 4 and cell 5** (the one that the MFM rule would insert because cells 4 and 5 are both zero). The resulting transition stream has a **gap longer than 8 µs** — a "hole" that violates MFM's run-length rule. The FDC's data separator detects this hole and recognises the sync.
+The most common sync mark is the **`A1` with missing clock**. The byte `0xA1` (10100001) encodes normally as a specific pattern of clock and data transitions. The sync-mark version of `A1` omits the **clock bit between cell 4 and cell 5** (the one that the MFM rule would insert because cells 4 and 5 are both zero). The resulting transition stream has a **gap longer than 8 µs** — a "hole" that violates MFM's run-length rule. The FDC's data separator detects this hole and recognizes the sync.
 
 ### 4.2 The `A1` sync byte
 
@@ -274,7 +274,7 @@ Sync sequence: A1* A1* A1* <next byte>
                 each A1 is the special "missing clock" version
 ```
 
-After the three sync `A1`s, the FDC is byte-synchronised and can read the next byte as the start of a field (typically an address mark — see §5).
+After the three sync `A1`s, the FDC is byte-synchronized and can read the next byte as the start of a field (typically an address mark — see §5).
 
 ### 4.3 The `C2` sync byte
 
@@ -416,7 +416,7 @@ Reading MFM is a two-stage process: first the **PLL** recovers the bit clock fro
 
 ### 6.1 The phase-locked loop (PLL)
 
-The PLL is an analog circuit (in older FDCs) or a digital algorithm (in modern implementations and emulators) that recovers the writer's bit clock from the read signal. Its job is to align the FDC's internal sample clock with the centres of the data and clock windows, so that transitions are sampled at the optimal time.
+The PLL is an analog circuit (in older FDCs) or a digital algorithm (in modern implementations and emulators) that recovers the writer's bit clock from the read signal. Its job is to align the FDC's internal sample clock with the centers of the data and clock windows, so that transitions are sampled at the optimal time.
 
 The PLL operates as follows:
 
@@ -426,7 +426,7 @@ The PLL operates as follows:
 
 3. **Voltage-controlled oscillator (VCO)**: generates the sample clock at a frequency controlled by the loop filter. The VCO runs at 500 kHz (twice the 250 kHz data rate), producing one clock pulse per window (clock or data).
 
-When locked, the PLL's sample clock is aligned with the centres of the data and clock windows, and the data separator can reliably distinguish "transition in this window" from "no transition in this window".
+When locked, the PLL's sample clock is aligned with the centers of the data and clock windows, and the data separator can reliably distinguish "transition in this window" from "no transition in this window".
 
 ### 6.2 The digital PLL (for emulators)
 
@@ -486,7 +486,7 @@ The data separator accumulates 8 data bits into a byte and passes the byte to th
 
 A key function of the data separator is **window discrimination**: deciding whether a transition falls in the clock window or the data window. This is straightforward when the PLL is perfectly locked, but tricky when the signal has noise or the PLL has drift.
 
-The standard approach is to use **dead zones** at the window boundaries. Transitions in the centre 50% of a window are definitely in that window; transitions in the outer 25% are uncertain and may be rejected as noise. This gives the data separator some immunity to PLL drift and signal noise.
+The standard approach is to use **dead zones** at the window boundaries. Transitions in the center 50% of a window are definitely in that window; transitions in the outer 25% are uncertain and may be rejected as noise. This gives the data separator some immunity to PLL drift and signal noise.
 
 ### 6.5 The raw read signal
 
@@ -523,14 +523,14 @@ When the FDC's `WRITE SECTOR` (or `WRITE TRACK` for formatting) command is execu
 
 1. The FDC asserts the **write gate** signal to the drive, which switches the head from read mode to write mode.
 2. The FDC sends bytes to its internal serialiser, which encodes each byte as MFM transitions (applying the rules of §3).
-3. The serialised MFM signal drives the **write data** pin, which the drive's write amplifier converts to write-current reversals in the head coil.
+3. The serialized MFM signal drives the **write data** pin, which the drive's write amplifier converts to write-current reversals in the head coil.
 4. When the field is complete, the FDC de-asserts the write gate, and the drive returns to read mode.
 
 During writing, the head's write current continuously reverses direction at the transition times, magnetising the disk coating in alternating directions. The magnetic domains on the track are thereby "imprinted" with the MFM pattern.
 
 ### 7.2 Write precompensation
 
-When a transition is written, the magnetic field on the disk doesn't instantly snap to the new polarity. There is a slight **peak shift**: the magnetic domain that records a transition "spreads" slightly, and neighbouring transitions can pull each other towards or away from their nominal positions. This effect becomes more pronounced at high transition densities (inner tracks of high-capacity disks).
+When a transition is written, the magnetic field on the disk doesn't instantly snap to the new polarity. There is a slight **peak shift**: the magnetic domain that records a transition "spreads" slightly, and neighbouring transitions can pull each other toward or away from their nominal positions. This effect becomes more pronounced at high transition densities (inner tracks of high-capacity disks).
 
 **Write precompensation** is the technique of writing transitions *slightly earlier or later* than their nominal positions, to compensate for the expected peak shift. The FDC's precompensation logic uses a small table (or formula) that maps the local pattern of bits to a time offset:
 
@@ -646,7 +646,7 @@ At the same physical transition density (transitions per inch of track):
 | 4/5 GCR  | ~1.25× |
 | 2,7 RLL  | ~1.5× |
 
-For floppy disks, MFM is the sweet spot: simple, reliable, and supported by all standard FDC chips. Higher-density encodings (GCR, RLL) would offer marginal capacity improvements at the cost of much more complex hardware and software, so the floppy industry standardised on MFM.
+For floppy disks, MFM is the sweet spot: simple, reliable, and supported by all standard FDC chips. Higher-density encodings (GCR, RLL) would offer marginal capacity improvements at the cost of much more complex hardware and software, so the floppy industry standardized on MFM.
 
 ---
 
@@ -656,7 +656,7 @@ This section puts it all together: a complete end-to-end walkthrough of what the
 
 ### 9.1 The physical track
 
-A track on a 3.5" double-density floppy is a **circular band** of magnetic domains, magnetised in alternating directions. The track is located at a specific radius (typically 0.5 mm to 1.5 mm from the centre of the disk's recording area), and is read/written by the head positioned at that radius.
+A track on a 3.5" double-density floppy is a **circular band** of magnetic domains, magnetised in alternating directions. The track is located at a specific radius (typically 0.5 mm to 1.5 mm from the center of the disk's recording area), and is read/written by the head positioned at that radius.
 
 The track has no physical "start" — it's a continuous circle. The **index hole** (a small physical hole in the disk jacket, detected by an optical sensor in the drive) provides a reference point: each time the index hole passes the sensor, the drive generates an **index pulse** that the FDC uses to know where the track starts.
 
@@ -682,9 +682,9 @@ The conversion from flux transitions to bytes is a multi-stage process:
 
 1. **Analog conditioning**: the head's raw signal is amplified, filtered, and differentiated to produce clean digital pulses (one per transition).
 
-2. **PLL lock**: the digital pulses drive the FDC's PLL, which recovers the bit clock (a 500 kHz square wave, with one rising edge per window centre).
+2. **PLL lock**: the digital pulses drive the FDC's PLL, which recovers the bit clock (a 500 kHz square wave, with one rising edge per window center).
 
-3. **Window discrimination**: the FDC samples the digital pulses at the window centres. A pulse in the clock window is a clock bit; a pulse in the data window is a data bit (a "1"). No pulse means a "0".
+3. **Window discrimination**: the FDC samples the digital pulses at the window centers. A pulse in the clock window is a clock bit; a pulse in the data window is a data bit (a "1"). No pulse means a "0".
 
 4. **Byte assembly**: the data bits are assembled MSB-first into bytes.
 
@@ -725,7 +725,7 @@ For most purposes, however, the logical sector view (as in .TRD) is sufficient, 
 
 MFM encoding is the foundation on which the rest of the floppy stack is built. To see how MFM is used in practice, follow the rest of the floppy series:
 
-- [fdc_vg93.md](fdc_vg93.md) — the WD1793 / KR1818VG93 floppy controller chip. This is the chip that produces and consumes the MFM signal. Its registers, commands, and behaviour are determined by the MFM layer described in this article.
+- [fdc_vg93.md](fdc_vg93.md) — the WD1793 / KR1818VG93 floppy controller chip. This is the chip that produces and consumes the MFM signal. Its registers, commands, and behavior are determined by the MFM layer described in this article.
 - [beta_disk_interface.md](beta_disk_interface.md) — the Beta Disk Interface, the most common Spectrum floppy controller, built around the WD1793. Shows how the FDC connects to the Spectrum's bus and how TR-DOS drives it.
 - [plus3_floppy.md](plus3_floppy.md) — the +2A/+3 internal floppy controller, built around the WD1772 (a single-chip integrated controller). Uses MFM at the same 250 kbit/s rate.
 - [trd_disk_format.md](trd_disk_format.md) — the TR-DOS logical disk format. Defines the directory structure, file types, and disk parameters that sit on top of the MFM-encoded sectors.
@@ -751,7 +751,7 @@ The tape subsystem uses a completely different encoding scheme, but the underlyi
 
 - **The WD1793 datasheet** — the canonical reference for the WD1793 / KR1818VG93 FDC. Includes detailed timing diagrams of the MFM signal.
 - **The IBM 3740 format specification** — the original definition of the MFM track layout (IAM, IDAM, DAM, gaps). All later formats (including TR-DOS and +3 DOS) are descended from this.
-- **The " FluxSync" website** — a community resource on flux-level floppy preservation, with detailed articles on MFM encoding and PLL behaviour.
+- **The " FluxSync" website** — a community resource on flux-level floppy preservation, with detailed articles on MFM encoding and PLL behavior.
 - **The SuperCard Pro documentation** — covers the .SCP flux format and includes tools for visualising MFM signals.
 
 ### 10.5 Where to go next

@@ -12,8 +12,8 @@
 
 The ZX Spectrum demoscene is one of the longest continuously active demoscenes on any platform. Its 40-year span (1986–present) is matched only by the C64 scene, and its Russian/Ukrainian wing was, from roughly 1995 to 2010, the *largest* 8-bit demoscene in the world by output volume. Several factors combine to make the ZX Spectrum demoscene uniquely important:
 
-- **Hardware that demands inventiveness.** The original 48K Spectrum has no hardware sprites, no hardware scrolling, no hardware blitter, no character ROM, no palette registers, no dedicated sound chip, no hardware double-buffering, and a contended-memory architecture that slows the CPU by ~17% during the visible display. Everything visual is built from `LD (HL),A` writes to the framebuffer. This forced the development of techniques — multicolor, gigascreen, software rasterbars, beeper-engine music — that have no direct analogue on the C64, Amiga, or Atari ST.
-- **Two parallel scenes.** Unlike the C64 (dominated by Western Europe and North America) or the Amiga (Western Europe), the Spectrum had two nearly independent demoscene traditions: the **Western scene** (UK, Poland, Czech/Slovakia, Scandinavia, the Netherlands) and the **Soviet/post-Soviet scene** (Russia, Ukraine, Belarus, Kazakhstan) which standardised on the Pentagon clone and developed its own aesthetic, techniques, group culture, and demo parties. The two scenes barely communicated until ~1997, then cross-pollinated heavily, then diverged again after ~2010 as the Western scene contracted.
+- **Hardware that demands inventiveness.** The original 48K Spectrum has no hardware sprites, no hardware scrolling, no hardware blitter, no character ROM, no palette registers, no dedicated sound chip, no hardware double-buffering, and a contended-memory architecture that slows the CPU by ~17% during the visible display. Everything visual is built from `LD (HL),A` writes to the framebuffer. This forced the development of techniques — multicolor, gigascreen, software rasterbars, beeper-engine music — that have no direct analog on the C64, Amiga, or Atari ST.
+- **Two parallel scenes.** Unlike the C64 (dominated by Western Europe and North America) or the Amiga (Western Europe), the Spectrum had two nearly independent demoscene traditions: the **Western scene** (UK, Poland, Czech/Slovakia, Scandinavia, the Netherlands) and the **Soviet/post-Soviet scene** (Russia, Ukraine, Belarus, Kazakhstan) which standardized on the Pentagon clone and developed its own aesthetic, techniques, group culture, and demo parties. The two scenes barely communicated until ~1997, then cross-pollinated heavily, then diverged again after ~2010 as the Western scene contracted.
 - **The Pentagon phenomenon.** The Pentagon 128 (1993) and its successors (Pentagon 1024, ATM Turbo, TS-Config) became the de facto standard hardware for the Russian scene, with a slightly different memory map, different timing, and different sound extensions (TurboSound, General Sound, NeoGS) than the original Sinclair hardware. This produced a parallel ecosystem of software that does not run on a real Sinclair Spectrum without adaptation.
 - **Continuous active development.** As of 2025, new demos are released every year at Forever (Slovakia), Chaos Constructions (St. Petersburg), DiHAlt (Ryazan), CAFe (Kiev), Syntax, and several smaller parties. The 2021 release of the ZX Spectrum Next and the maturity of MiSTer/Pentagon FPGA clones sparked a renaissance of high-end work.
 
@@ -94,7 +94,7 @@ The platform's first major **megademo** (multi-screen demo with separate section
 
 ### 3.4 The first standalone demos (1988–1989)
 
-The cracktros were still, by definition, attached to cracked games. The shift to "demo as standalone art form" happened gradually between 1988 and 1990, as groups realised they could release intros *without* an attached game and still attract an audience. The first widely-distributed standalone demos from this era are short, technically simple, and almost indistinguishable from cracktros — except that they have no cracked game accompanying them.
+The cracktros were still, by definition, attached to cracked games. The shift to "demo as standalone art form" happened gradually between 1988 and 1990, as groups realized they could release intros *without* an attached game and still attract an audience. The first widely-distributed standalone demos from this era are short, technically simple, and almost indistinguishable from cracktros — except that they have no cracked game accompanying them.
 
 A second key innovation of this period was the **music disk**: a program containing several AY-3-8910 chip-tunes with a menu interface. Music disks would become a major Spectrum demoscene format throughout the 1990s.
 
@@ -141,14 +141,14 @@ By 1994 the trackmo was the dominant demo format on the Spectrum. Megademos cont
 
 Poland had a uniquely large Spectrum installed base, in part because the Spectrum was the cheapest 8-bit machine available and in part because the Polish state computer, the Elwro 800 Junior, was Spectrum-compatible. By 1992 Polish groups were producing some of the most accomplished Spectrum work in the world.
 
-**Chevrons** (Poland) was among the most prolific early Polish groups. Their work emphasised clean code, smooth effects, and the kind of pixel-art-against-music aesthetic that would become the Polish scene's signature. Chevrons demos from 1993–1995 are still studied for their timing discipline.
+**Chevrons** (Poland) was among the most prolific early Polish groups. Their work emphasized clean code, smooth effects, and the kind of pixel-art-against-music aesthetic that would become the Polish scene's signature. Chevrons demos from 1993–1995 are still studied for their timing discipline.
 
 ### 4.3 Liquid (1993–1996)
 
 **Liquid**, another Polish group, took the technical state of the art forward sharply around 1994. Liquid's demos featured:
 
 - Smooth full-screen horizontal and vertical scrolling (a non-trivial achievement on a framebuffer-only architecture like the Spectrum's).
-- Tightly synchronised AY music.
+- Tightly synchronized AY music.
 - The first use of true multicolor (8×1 attribute resolution — see [multicolor_techniques.md](multicolor_techniques.md)) in a major demo.
 
 Liquid's work was widely circulated on diskette via the Polish demoscene network and reached Western European groups through disk-swapping.
@@ -175,15 +175,15 @@ Diskette culture had two effects on the scene:
 
 ### 4.6 The end of the golden age (1996)
 
-By 1996 the Spectrum demoscene's centre of gravity was shifting. The Western scene was contracting as members aged out, moved to PC demos, or stopped altogether. Simultaneously, the **Russian/Ukrainian scene** — which had been developing in parallel, with almost no contact with the West — was reaching critical mass behind the Iron Curtain's remains. By 1997, the Pentagon-based scene was larger than any Western national scene, and within five years it would dominate the platform entirely.
+By 1996 the Spectrum demoscene's center of gravity was shifting. The Western scene was contracting as members aged out, moved to PC demos, or stopped altogether. Simultaneously, the **Russian/Ukrainian scene** — which had been developing in parallel, with almost no contact with the West — was reaching critical mass behind the Iron Curtain's remains. By 1997, the Pentagon-based scene was larger than any Western national scene, and within five years it would dominate the platform entirely.
 
-The Western scene did not die: UK, Polish, Czech, Slovak, and Scandinavian groups continued producing work, and new groups formed throughout the 2000s. But the *centre of gravity* moved East, where it would stay for the next decade.
+The Western scene did not die: UK, Polish, Czech, Slovak, and Scandinavian groups continued producing work, and new groups formed throughout the 2000s. But the *center of gravity* moved East, where it would stay for the next decade.
 
 ---
 
 ## 5. Soviet Explosion (1993–2005)
 
-The Soviet and post-Soviet ZX Spectrum scene is the most distinctive national demoscene tradition on the platform. It emerged in almost complete isolation from the West, scaled to a size that dwarfed any Western national scene, and produced techniques and aesthetics that have no analogue on any other platform or in any other scene. A full deep dive is in [soviet_demo_scene.md](soviet_demo_scene.md); this section gives the historical narrative.
+The Soviet and post-Soviet ZX Spectrum scene is the most distinctive national demoscene tradition on the platform. It emerged in almost complete isolation from the West, scaled to a size that dwarfed any Western national scene, and produced techniques and aesthetics that have no analog on any other platform or in any other scene. A full deep dive is in [soviet_demo_scene.md](soviet_demo_scene.md); this section gives the historical narrative.
 
 ### 5.1 How the Spectrum reached the Soviet Union
 
@@ -225,7 +225,7 @@ Between 1998 and 2005 the Soviet Spectrum scene reached its peak output. Several
 - **The economic collapse of 1998** made the Pentagon (cheap, repairable, locally-built) the only home computer many families could afford. This expanded the scene's recruiting base.
 - **The maturation of FidoNet and early Internet access** enabled faster communication and software distribution.
 - **Demo parties** emerged: **ENLiGHT** (St. Petersburg, 1997–1999), **CAFe** (Kiev, 1998–present), **DiHAlt** (Ryazan, 1998–present), **Chaos Constructions** (St. Petersburg, 1999–present). These gave the scene regular deadlines and competitions.
-- **The Pro Tracker format (PT3)** standardised music distribution, allowing one musician's work to be played in any demo regardless of which group produced it.
+- **The Pro Tracker format (PT3)** standardized music distribution, allowing one musician's work to be played in any demo regardless of which group produced it.
 
 The volume of demos released in this period was extraordinary. At its peak around 2002, the Russian Spectrum scene released more demos per year than all Western national scenes combined.
 
@@ -233,8 +233,8 @@ The volume of demos released in this period was extraordinary. At its peak aroun
 
 The Soviet scene developed several techniques that either originated there or were refined there to a level not seen in the West:
 
-- **Gigascreen**: a flicker-based colour-mixing technique that produces new perceived colours by alternating two attributes per scanline or per frame. See [multicolor_techniques.md](multicolor_techniques.md).
-- **TS-Config / TSgURF**: a hardware standard for caching multicolor effects from disk, allowing full-screen 15-colour video at 25 fps on Pentagon hardware.
+- **Gigascreen**: a flicker-based color-mixing technique that produces new perceived colors by alternating two attributes per scanline or per frame. See [multicolor_techniques.md](multicolor_techniques.md).
+- **TS-Config / TSgURF**: a hardware standard for caching multicolor effects from disk, allowing full-screen 15-color video at 25 fps on Pentagon hardware.
 - **Pro Tracker 3 (PT3)**: the canonical AY tracker format, used by virtually every Russian Spectrum musician after 1997.
 - **The Soviet demo framework**: a standard skeleton for loading and sequencing parts that emerged around 1999–2000, codified by E-Mage and refined by later groups.
 - **Buzzer/beeper music on 48K**: although less popular in Russia than AY-based music, several musicians pushed 1-bit synthesis to extreme sophistication (see [1bit_music_scene.md](1bit_music_scene.md)).
@@ -289,7 +289,7 @@ The competition between Russian and Western groups at these compos pushed both s
 
 Beyond music, the period saw the exchange of code, tools, and technique. Notable transfers:
 
-- **Compression packers** (see [compression_packing.md](compression_packing.md)): the Soviet MegaLZ, HRUM, and HRUST formats travelled West; the Western ZX7 and later ZX0 formats travelled East. By 2010, both scenes were using the same mix of packers.
+- **Compression packers** (see [compression_packing.md](compression_packing.md)): the Soviet MegaLZ, HRUM, and HRUST formats traveled West; the Western ZX7 and later ZX0 formats traveled East. By 2010, both scenes were using the same mix of packers.
 - **Emulators**: the Russian **Unreal Speccy** (formerly Unreal Speccy) by SBL, and the Polish **ZXMAK2**, became the standard development emulators across both scenes, replacing earlier British/Dutch tools. By 2008, **ZEsarUX** (Spanish, by Cesar Hernandez) added extensive debugging features and became a third standard.
 - **Cross-assemblers**: **SjASM** (Dutch, by Sjoerd Mastijn) and later **SjASMPlus** (Polish, by Aprisobal) replaced native Russian assemblers (Alasm, Csjasm, Zeus) for serious demo work. **z88dk** (UK) provided a complete C toolchain for cross-platform development.
 - **Archive curation**: Gasman's *zxdemo.org* (UK) and VBI's *bbb.retroscene.org* (Russia) actively mirrored each other's content, creating a unified historical record.
@@ -386,7 +386,7 @@ Three categories of new hardware emerged:
 - **Harlequin** (UK, by Chris Smith, ~2012 onwards): a ULA replacement using discrete logic. Harlequin is functionally a 48K Spectrum but built from modern parts; it restored working "real hardware" to anyone with a Harlequin board.
 - **ZX Uno** (Spain, ~2016 onwards): an FPGA-based Spectrum clone with extensions, including 28 MHz accelerator, expanded memory, and onboard SD-card storage. The Uno became a popular modern hardware platform for serious hobbyists.
 - **MiSTer** (international, ~2018 onwards): an FPGA retro-computing platform based on the DE10-Nano. Its Spectrum core supports 48K, 128K, +2, +3, and Pentagon modes, with cycle-exact timing. The MiSTer effectively replaced real hardware for most serious enthusiasts by 2020.
-- **Recompiled ZX Spectrum Next** (international, by SpecNext Ltd, 2017 Kickstarter, shipped 2020): an FPGA-based Spectrum successor with a new Z80 variant (the **Z80N**), expanded memory, hardware sprites, layering, hardware scrolling, and Raspberry Pi co-processor. The Next is backwards-compatible with original Spectrum software but also supports a new generation of Next-specific software.
+- **Recompiled ZX Spectrum Next** (international, by SpecNext Ltd, 2017 Kickstarter, shipped 2020): an FPGA-based Spectrum successor with a new Z80 variant (the **Z80N**), expanded memory, hardware sprites, layering, hardware scrolling, and Raspberry Pi co-processor. The Next is backward-compatible with original Spectrum software but also supports a new generation of Next-specific software.
 
 These hardware platforms brought "real iron" back into the scene's vocabulary. By 2022, demos that demanded cycle-exact timing were being tested on MiSTer or Harlequin, not just emulators.
 
@@ -429,7 +429,7 @@ The Spectrum demoscene in 2025 is small but genuinely active. Key indicators:
 - **Demo output**: ~30-50 new demos per year, plus many more intros, music modules, and graphics works.
 - **Active groups**: 20+ groups still releasing, with membership spanning original 1990s sceners, 2000s newcomers, and a younger generation that discovered the platform via YouTube, emulation, and the ZX Spectrum Next.
 - **Modern toolchain**: SjASMPlus + z88dk + modern asset tools (see [09_toolchain/](../09_toolchain/)) are the standard development environment; native Pentagon development is rare but not extinct.
-- **High-end work**: modern demos routinely achieve effects (full-screen 15-colour at 25fps via TS-Config, full-frame multicolor at 50fps, real-time 3D, software PCM audio) that would have been considered impossible in the late 1990s. See [effects_catalog.md](effects_catalog.md) for current capabilities.
+- **High-end work**: modern demos routinely achieve effects (full-screen 15-color at 25fps via TS-Config, full-frame multicolor at 50fps, real-time 3D, software PCM audio) that would have been considered impossible in the late 1990s. See [effects_catalog.md](effects_catalog.md) for current capabilities.
 
 The scene is unlikely to ever match its late-1990s peak output, but it has stabilised as a permanent part of the demoscene landscape, with consistent new work, active mentoring of newcomers, and continued technical progress. The UNESCO recognition of demoscene in 2021 (see §10) cemented the cultural legitimacy of what was once a fringe cracking subculture.
 
@@ -441,9 +441,9 @@ Demo parties are the lifeblood of the demoscene. They provide deadlines, competi
 
 ### 9.1 Forever (Slovakia, 1998–present)
 
-**Forever** is the longest-running Spectrum-focused demoparty, held annually in Trenčín, Slovakia since 2000 (with precursor events in 1998 and 1999). It is the closest thing the Spectrum scene has to a "world championship", with attendance from most active groups. Forever is multi-platform but Spectrum-focused; the ZX Spectrum is the centre of gravity.
+**Forever** is the longest-running Spectrum-focused demoparty, held annually in Trenčín, Slovakia since 2000 (with precursor events in 1998 and 1999). It is the closest thing the Spectrum scene has to a "world championship", with attendance from most active groups. Forever is multi-platform but Spectrum-focused; the ZX Spectrum is the center of gravity.
 
-Forever is organised by the ZeroTeam group and runs every spring. Its compos include demo, intro (with multiple size categories: 32B, 64B, 128B, 256B, 512B, 1K, 4K), graphics, music (AY, beeper), and wild. Forever's party website preserves all entries and results going back to 2000 — one of the most complete records of any party.
+Forever is organized by the ZeroTeam group and runs every spring. Its compos include demo, intro (with multiple size categories: 32B, 64B, 128B, 256B, 512B, 1K, 4K), graphics, music (AY, beeper), and wild. Forever's party website preserves all entries and results going back to 2000 — one of the most complete records of any party.
 
 ### 9.2 Chaos Constructions / CC (St. Petersburg, 1999–present)
 
@@ -453,7 +453,7 @@ CC is historically important as the venue where the Soviet and Western scenes fi
 
 ### 9.3 CAFe (Kiev, 1998–present)
 
-**CAFe** is a major Ukrainian Spectrum-focused demoparty, held in Kyiv since 1998. It is notable for being one of the few parties that remained strictly Spectrum-focused throughout its history. CAFe is organised by Ukrainian groups (Flash Inc members have been involved historically) and runs in the summer.
+**CAFe** is a major Ukrainian Spectrum-focused demoparty, held in Kyiv since 1998. It is notable for being one of the few parties that remained strictly Spectrum-focused throughout its history. CAFe is organized by Ukrainian groups (Flash Inc members have been involved historically) and runs in the summer.
 
 CAFe has historically been the largest Ukrainian Spectrum event and remains a key fixture of the calendar.
 
@@ -503,7 +503,7 @@ The Spectrum demoscene has had impact disproportionate to the platform's commerc
 
 - **Hardware constraints bred transferable techniques.** The Spectrum's lack of hardware sprites, scrolling, and character ROM forced the development of software-rendered effects that, once discovered, could be ported to other platforms with similar architectures.
 - **The Russian scene scaled.** With several hundred thousand Spectrums in the Soviet bloc, the Russian scene had enough members to sustain a self-referencing technical culture that produced new techniques continuously.
-- **The AY format spread.** The AY-3-8910 was used in many other platforms (MSX, Amstrad CPC, Apple II Mockingboard, Mattel Aquarius, some arcade boards). Music techniques developed on Spectrum AY travelled to all of these.
+- **The AY format spread.** The AY-3-8910 was used in many other platforms (MSX, Amstrad CPC, Apple II Mockingboard, Mattel Aquarius, some arcade boards). Music techniques developed on Spectrum AY traveled to all of these.
 - **The scene documented itself.** Disk magazines, README files, source code releases, and (later) website archives meant that Spectrum demoscene techniques were better-preserved than many contemporary platforms.
 
 ### 10.1 Influence on other 8-bit scenes
@@ -531,14 +531,14 @@ Several modern computing threads have roots in the Spectrum demoscene or its mem
 
 In **December 2021**, the **Demoscene** was officially inscribed on the German UNESCO Commission's list of **Intangible Cultural Heritage** — the first digital cultural practice to receive this recognition. The Netherlands and Finland followed in 2022 and 2023 respectively.
 
-The UNESCO inscription explicitly recognises:
+The UNESCO inscription explicitly recognizes:
 
 - The demoscene as a community of practice spanning multiple decades.
 - Its techniques of creative expression under technical constraints.
 - Its role as a launching pad for digital creativity careers.
 - Its international, cross-border, multilingual character.
 
-For the Spectrum scene, the UNESCO recognition was a long-delayed acknowledgement of legitimacy. Through the 1990s and 2000s, the scene had been dismissed by mainstream tech media as software piracy (the cracktro lineage was hard to overcome), as obsolete (real-hardware advocates versus modern PC developers), and as a waste of talent. The UNESCO inscription ended that conversation. Demoscene is now formally recognised as cultural heritage on a par with traditional crafts, music, and theatre.
+For the Spectrum scene, the UNESCO recognition was a long-delayed acknowledgement of legitimacy. Through the 1990s and 2000s, the scene had been dismissed by mainstream tech media as software piracy (the cracktro lineage was hard to overcome), as obsolete (real-hardware advocates versus modern PC developers), and as a waste of talent. The UNESCO inscription ended that conversation. Demoscene is now formally recognized as cultural heritage on a par with traditional crafts, music, and theater.
 
 The inscription has had practical effects: grant funding for demoscene preservation projects, academic conference papers on demoscene history, museum acquisitions of demoscene work, and increased media attention for active parties. The Spectrum demoscene, as one of the longest-running scenes on any platform, is a primary beneficiary of this recognition.
 
@@ -620,10 +620,10 @@ This table is intentionally selective. The full historical record is preserved a
 - [Demoscene Platforms](demoscene_platforms.md) — cross-platform comparison: Spectrum vs C64 vs Amiga vs Atari ST, what each could do that others could not
 - [Notable Demos](notable_demos.md) — technical analysis of landmark demos referenced throughout this article
 - [Multicolor Techniques](multicolor_techniques.md) — the technique that defined Soviet-style demo work; mentioned repeatedly in §§4–5
-- [Effects Catalog](effects_catalog.md) — full catalogue of Spectrum demo effects and their evolution
+- [Effects Catalog](effects_catalog.md) — full catalog of Spectrum demo effects and their evolution
 - [Compression and Packing](compression_packing.md) — packer ecosystem; the section on asymmetry (§2) explains why ZX compression is structurally different from mainstream compression
 - [1-bit Music Scene](1bit_music_scene.md) — beeper-engine music history; complements the AY story told here
-- [Demo Frameworks](demo_frameworks.md) — the skeletons that organise parts within a trackmo
+- [Demo Frameworks](demo_frameworks.md) — the skeletons that organize parts within a trackmo
 - [Size Coding](size_coding.md) — 1K/4K intro scene; mentioned in §11 timeline
 - [Pre-calculated Trigonometry](precalc_trigonometry.md) — table-driven effect techniques that underlie most visual effects
 

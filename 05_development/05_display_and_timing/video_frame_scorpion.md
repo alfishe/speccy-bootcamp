@@ -86,7 +86,7 @@ Scorpion frame layout (312 scanlines = 69,888 T-states):
 
 ## Contention — Revision Dependent
 
-Unlike the Pentagon (zero contention, by design) and the 48K (strict 6-5-4-3-2-1-0-0 contention, by ULA design), the Scorpion's contention behaviour **depends on the motherboard revision**:
+Unlike the Pentagon (zero contention, by design) and the 48K (strict 6-5-4-3-2-1-0-0 contention, by ULA design), the Scorpion's contention behavior **depends on the motherboard revision**:
 
 | Revision | Year | Glue logic | Contention |
 |---|---|---|---|
@@ -210,11 +210,11 @@ DetectScorpion:
 
 1. **Pixel-precise multicolor**: effects appear shifted 9 T-states (about 1 pixel) left of their 48K position. Realign by inserting a 9 T-state `NOP` slide before the timed loop.
 
-2. **Contention-dependent timing loops**: behaviour depends on revision. If you relied on contention delay to slow down a loop, it may run too fast on early Scorpions.
+2. **Contention-dependent timing loops**: behavior depends on revision. If you relied on contention delay to slow down a loop, it may run too fast on early Scorpions.
 
 3. **I/O port conflicts**: the Scorpion maps additional ports (`#1FFD`, Beta 128 registers) that may collide with hardware you assumed was 48K-only.
 
-4. **ROM routine behaviour**: Scorpion's custom ROM (or ProfROM upgrade) replaces some entry points — code that calls specific 48K ROM addresses may behave differently.
+4. **ROM routine behavior**: Scorpion's custom ROM (or ProfROM upgrade) replaces some entry points — code that calls specific 48K ROM addresses may behave differently.
 
 ### What Gets Better
 

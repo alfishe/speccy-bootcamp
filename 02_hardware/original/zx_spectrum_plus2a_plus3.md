@@ -94,7 +94,7 @@ The +2A/+3's contention model uses different contended banks than the 128K/+2:
 - **128K/+2**: banks 1, 3, 5, 7 are contended (the odd-numbered banks)
 - **+2A/+3**: banks 4, 5, 6, 7 are contended (the high banks)
 
-The reason for the change is in the ASIC's memory-decoder redesign: the Amstrad ASIC organises the 128 KB of RAM as **two 64 KB blocks** (banks 0–3 and banks 4–7), with the high block sharing DRAM with the video circuitry. On the Sinclair gate array, the contended banks were interleaved with the screen banks for electrical reasons; on the Amstrad ASIC, the contended banks are grouped together for simpler decoding.
+The reason for the change is in the ASIC's memory-decoder redesign: the Amstrad ASIC organizes the 128 KB of RAM as **two 64 KB blocks** (banks 0–3 and banks 4–7), with the high block sharing DRAM with the video circuitry. On the Sinclair gate array, the contended banks were interleaved with the screen banks for electrical reasons; on the Amstrad ASIC, the contended banks are grouped together for simpler decoding.
 
 ### Contention Timing Comparison
 
@@ -149,7 +149,7 @@ The +2A/+3 has **two distinct paging modes**, switched via bit 1 of `#1FFD`:
 
 #### Normal 128K Mode (bit 1 = 0)
 
-This is the default mode at power-on. The +2A/+3 behaves like a 128K/+2: `#7FFD` controls bank selection, ROM select (between two banks), and shadow screen. This mode exists for **backwards compatibility** with software that does not know about the `#1FFD` register.
+This is the default mode at power-on. The +2A/+3 behaves like a 128K/+2: `#7FFD` controls bank selection, ROM select (between two banks), and shadow screen. This mode exists for **backward compatibility** with software that does not know about the `#1FFD` register.
 
 In this mode, the 64 KB ROM is treated as **two 32 KB halves**: ROM page 0 (banks 0+1 of the physical ROM) is selected by `#7FFD` bit 4 = 0, ROM page 1 (banks 2+3 of the physical ROM) is selected by `#7FFD` bit 4 = 1. The exact 16 KB bank within each half is selected by `#1FFD` bit 2.
 
@@ -221,7 +221,7 @@ For more on the +3's floppy subsystem and the +3 DOS, see [plus3_floppy.md](../.
 
 ## ROM Contents
 
-The +2A/+3 contains a **64 KB mask ROM** organised as four switchable 16 KB banks. Only one bank is visible at `#0000–#3FFF` at any time. The bank selection logic combines `#7FFD` bit 4 (ROM page) and `#1FFD` bit 2 (bank within page):
+The +2A/+3 contains a **64 KB mask ROM** organized as four switchable 16 KB banks. Only one bank is visible at `#0000–#3FFF` at any time. The bank selection logic combines `#7FFD` bit 4 (ROM page) and `#1FFD` bit 2 (bank within page):
 
 | `#7FFD` bit 4 | `#1FFD` bit 2 | **Active ROM bank** | Contents |
 |---|---|---|---|

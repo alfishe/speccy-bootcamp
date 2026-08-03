@@ -1179,7 +1179,7 @@ fuse hello.sna
 |---|---|---|---|---|---|---|---|
 | **Baseline Z80** (+ undocumented: SLL, LD A,F, …) | ✅ (default) | ✅ | ✅ (`-mz80`)<sup>1</sup> | ✅ | ✅ | ✅ | ✅ |
 | **ZX Spectrum Next Z80N** (LDIX, MUL, MIRROR A, SWAPNIB, PIXELDN, SETAE, JP (C), NEXTREG, LDWS, LDDX, LDIRX) | ✅ (`--zxnext` or `DEVICE ZXSPECTRUMNEXT`) | ❌ | ✅ (`-mz80n`) | ❌ | ❌ | ✅ | ❌ |
-| **MSX R800** (MULUB, MULUW, hardware multiply) | ✅ (default — Z80 mode recognises R800 opcodes) | ❌ | ✅ (`-mr800`) | ❌ | ❌ | ❌ | ❌ |
+| **MSX R800** (MULUB, MULUW, hardware multiply) | ✅ (default — Z80 mode recognizes R800 opcodes) | ❌ | ✅ (`-mr800`) | ❌ | ❌ | ❌ | ❌ |
 | **HD64180 / Z180** (MLT, additional on-chip peripherals) | ❌ | ❌ | ✅ (`-mz180`) | ❌ | ✅ | ❌ | ✅ (`--z180` CLI flag or `.z180` in-source directive) |
 | **Rabbit 2000 / 3000 / 4000 / 5000 / 6000** (RCM family — alternative memory model + IO instructions) | ❌ | ❌ | ✅ (`-mr2ka`, `-mr3k`, `-mr4k`, `-mr5k`, `-mr6k`) | ❌ | ✅ (RCM2/3/4k) | ❌ | ❌ |
 | **Zilog eZ80** (24-bit addressing, ADL mode, extended register set) | ❌ | ❌ | ✅ (`-mez80`, `-mez80_z80`) | ❌ | ❌ | ✅ | ❌ |
@@ -1225,7 +1225,7 @@ Note that **CPU-coverage breadth is the one axis on which z88dk-z80asm beats SjA
 
 Every cell in the **CPU and Extended-ISA Coverage** table above is verifiable against an authoritative source. The list below documents those sources; see also the main [References](#references) section at the end of the article.
 
-- **SjASMPlus column** — the [SjASMPlus documentation](https://z00m128.github.io/sjasmplus/documentation.html) explicitly lists the `--zxnext[=cspect]`, `--i8080`, and `--lr35902` CLI flags and states that R800's `MULUB`/`MULUW` are recognised in default Z80 mode. The same docs list HD64180, Rabbit, eZ80, 8085, and KC160 as **absent** from the supported CPU list.
+- **SjASMPlus column** — the [SjASMPlus documentation](https://z00m128.github.io/sjasmplus/documentation.html) explicitly lists the `--zxnext[=cspect]`, `--i8080`, and `--lr35902` CLI flags and states that R800's `MULUB`/`MULUW` are recognized in default Z80 mode. The same docs list HD64180, Rabbit, eZ80, 8085, and KC160 as **absent** from the supported CPU list.
 - **RASM column** — the [RASM README on EdouardBERGE/rasm](https://github.com/EdouardBERGE/rasm) and the [user manual](http://rasm.wikidot.com/english-index:home) describe RASM as a Z80 assembler with no Z80N, R800, Z180, Rabbit, eZ80, 8085, or KC160 mode. SjASMPlus's own [features list](https://github.com/z00m128/sjasmplus) classifies RASM as a "Z80/Z80N" assembler, but the RASM documentation does not confirm Z80N support — the cell is marked ❌ conservatively.
 - **z88dk-z80asm column** — the `-m` CPU list (`8080, 8080_strict, 8085, 8085_strict, ez80, ez80_strict, ez80_z80, ez80_z80_strict, gbz80, gbz80_strict, kc160, kc160_strict, kc160_z80, kc160_z80_strict, r2ka, r2ka_strict, r3k, r3k_strict, r4k, r4k_strict, r5k, r5k_strict, r6k, r6k_strict, r800, r800_strict, z180, z180_strict, z80, z80_strict, z80n, z80n_strict`) is printed by z88dk-z80asm itself on invalid input, and is documented in [`src/z80asm/t/cpu.t`](https://github.com/z88dk/z88dk/blob/master/src/z80asm/t/cpu.t) and [`src/z80asm/t/help.txt`](https://github.com/z88dk/z88dk/blob/master/src/z80asm/t/help.txt) in the z88dk repository. The Rabbit `r2ka` through `r6k` modes correspond to Rabbit 2000, 3000, 4000, 5000, and 6000 respectively.
 - **Pasmo column** — the [Pasmo homepage](https://pasmo.speccy.org/) documents Pasmo as a strict Z80 (and Z80 undocumented) assembler with no extended-ISA modes.

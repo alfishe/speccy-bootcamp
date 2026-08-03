@@ -109,11 +109,11 @@ The New Gen track emerged from the modern retro-computing movement and combines 
 
 ### New Gen key characteristics
 
-- **CPU**: Z80-compatible CPU (some use real Z80 chips, others use FPGA-synthesised Z80 cores). The Next uses a custom **Z80N** core with new instructions including `MUL D,E`, `PIXELADD`, `SWAPNIB`, and barrel-shift operations.
+- **CPU**: Z80-compatible CPU (some use real Z80 chips, others use FPGA-synthesized Z80 cores). The Next uses a custom **Z80N** core with new instructions including `MUL D,E`, `PIXELADD`, `SWAPNIB`, and barrel-shift operations.
 - **Frame timing**: Typically **configurable** — most can emulate 48K, 128K, +2A, and Pentagon timing via configuration switches.
 - **Memory**: 512 KB to 2 MB is common, with extended paging schemes (e.g., the Next's MMU slots). The Next has 2 MB with 8 KB slot granularity.
 - **Video**: Original Spectrum video + extensions. The Next's Layer 2 (256-color framebuffer), hardware sprites (64 per scanline, 16×16), tilemap (320×256), and copper (raster coprocessor) substantially extend the architecture. See [next_graphics.md](../05_development/06_graphics/next_graphics.md).
-- **Sound**: AY-3-8912 (synthesised) standard; Next supports 3× AY ("TurboSound") plus DMA-based sample playback.
+- **Sound**: AY-3-8912 (synthesized) standard; Next supports 3× AY ("TurboSound") plus DMA-based sample playback.
 
 For the per-model technical deep dives, see the [02_hardware/newgen/](../02_hardware/newgen/README.md) section.
 

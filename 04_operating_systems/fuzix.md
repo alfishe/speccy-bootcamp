@@ -127,7 +127,7 @@ FUZIX is, in 2024, the most capable Spectrum operating system ever written — b
 ---
 ## §2. Architecture
 
-FUZIX is a Unix V7-flavoured kernel. Anyone who has read the classic Lion's Commentary on Unix 6th Edition will recognise the basic shape: a process table, an inode table, a buffer cache, a syscall dispatcher, and a set of kernel-side functions that implement the syscall semantics. What makes FUZIX unusual is that all of this fits into 24 KB of compiled Z80 code.
+FUZIX is a Unix V7-flavoured kernel. Anyone who has read the classic Lion's Commentary on Unix 6th Edition will recognize the basic shape: a process table, an inode table, a buffer cache, a syscall dispatcher, and a set of kernel-side functions that implement the syscall semantics. What makes FUZIX unusual is that all of this fits into 24 KB of compiled Z80 code.
 
 ### 2.1 The kernel/user split
 
@@ -642,7 +642,7 @@ To run FUZIX on a real Spectrum, you need:
 3. **A keyboard** and **a video output** (TV or monitor) — the standard Spectrum setup.
 4. **Optionally: a serial interface** (for TCP/IP over SLIP, or for terminal access from a modern PC).
 
-A real-hardware FUZIX setup typically looks like: a Spectrum 128K (the "toastrack" model is favoured for its compact form), a DivMMC Clone board plugged into the rear port, a 32 GB microSD card (FUZIX partition is small but the rest can hold FAT-formatted asset files), and a TV output. Total cost in 2024: roughly £80–£120 depending on the Spectrum model.
+A real-hardware FUZIX setup typically looks like: a Spectrum 128K (the "toastrack" model is favored for its compact form), a DivMMC Clone board plugged into the rear port, a 32 GB microSD card (FUZIX partition is small but the rest can hold FAT-formatted asset files), and a TV output. Total cost in 2024: roughly £80–£120 depending on the Spectrum model.
 
 ### 6.3 Boot flow
 
@@ -692,7 +692,7 @@ FUZIX presents the user with a **terminal interface** — text on a video screen
 
 - Renders text in the Spectrum's 32-column or 64-column text mode.
 - Reads keys from the Spectrum keyboard matrix.
-- Supports a subset of ANSI escape codes (cursor movement, colour, clearing regions).
+- Supports a subset of ANSI escape codes (cursor movement, color, clearing regions).
 - Implements the standard Unix terminal ioctls (TCGETS, TCSETS, raw mode, etc.).
 
 The 32-column mode is the default (large, readable text). 64-column mode is selectable for users who want to see more on screen at once (using the 8×8 font with attribute clash).
@@ -776,7 +776,7 @@ The shell is small (~10 KB binary) but remarkably complete. Most non-trivial she
 
 ### 7.3 Core utilities
 
-FUZIX ships with a subset of the GNU Coreutils / BusyBox set. The catalogue on a typical installation:
+FUZIX ships with a subset of the GNU Coreutils / BusyBox set. The catalog on a typical installation:
 
 **File operations:** `ls`, `cp`, `mv`, `rm`, `ln`, `mkdir`, `rmdir`, `cd`, `pwd`, `touch`, `chmod`, `chown`, `find`.
 
@@ -919,7 +919,7 @@ $ ./linecount /etc/passwd
 17
 ```
 
-This program is portable to any Unix without modification. Compile it with `gcc linecount.c -o linecount` on Linux and it produces the same binary behaviour.
+This program is portable to any Unix without modification. Compile it with `gcc linecount.c -o linecount` on Linux and it produces the same binary behavior.
 
 ### 8.4 Cross-compilation
 
@@ -1070,4 +1070,4 @@ Among 8-bit Z80 Unix-like systems, FUZIX is the most capable, most actively deve
 
 ## License
 
-This document is licensed under **Creative Commons Attribution-ShareAlike 4.0 International** (CC BY-SA 4.0). You are free to share and adapt this material, provided you give appropriate credit, indicate changes, and distribute derivative works under the same licence.
+This document is licensed under **Creative Commons Attribution-ShareAlike 4.0 International** (CC BY-SA 4.0). You are free to share and adapt this material, provided you give appropriate credit, indicate changes, and distribute derivative works under the same license.

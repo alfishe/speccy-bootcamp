@@ -4,7 +4,7 @@
 
 ZX Spectrum reverse engineering (RE) is the practice of taking a commercial program — usually a tape image (`.TAP`/`.TZX`), disk image (`.TRD`/`.DSK`), or snapshot (`.SNA`/`.Z80`) — and reconstructing from it the source code, asset formats, game logic, or protection scheme that the original developer wrote. The Spectrum is an unusually good RE target for three reasons: the platform is simple enough that one person can hold the entire hardware model in their head; the tools (emulator debuggers, Z80 disassemblers, snapshot manipulators) are mature and free; and the historical software library is large, well-preserved, and culturally important — every major title has been disassembled, documented, or rebuilt by the community at least once.
 
-This article is the **methodology hub** for ZX Spectrum RE work. It covers the workflow — how to take an opaque binary blob and turn it into readable, annotated, modifiable code — and the specific tools and techniques that work for this platform. It is the **practical companion** to [protection_techniques.md](protection_techniques.md) (which catalogues what protections exist) and to the toolchain articles (which catalogue the assemblers, monitors, and disassemblers themselves).
+This article is the **methodology hub** for ZX Spectrum RE work. It covers the workflow — how to take an opaque binary blob and turn it into readable, annotated, modifiable code — and the specific tools and techniques that work for this platform. It is the **practical companion** to [protection_techniques.md](protection_techniques.md) (which catalogs what protections exist) and to the toolchain articles (which catalog the assemblers, monitors, and disassemblers themselves).
 
 > [!NOTE]
 > This article focuses on **how to do RE on the Spectrum**: the workflow, the heuristics, the pitfalls. For **what** the protections are, see [protection_techniques.md](protection_techniques.md). For the **tools themselves** (sjasmplus, DeZog, ZEsarUX, etc.), see [cross_platform_toolchain.md](../09_toolchain/cross_platform_toolchain.md) and [debugging.md](../09_toolchain/debugging.md).
@@ -71,7 +71,7 @@ flowchart TB
     MODIFY --> PUBLISH
 ```
 
-The key insight is that this is **iterative**. You don't disassemble once and be done; you disassemble, recognise a routine, name it, recognise another, name it, and slowly the listing turns from a wall of opcodes into a readable program. The first pass is typically 80% unknown; by the fifth pass, you should have most routines named and the overall flow clear.
+The key insight is that this is **iterative**. You don't disassemble once and be done; you disassemble, recognize a routine, name it, recognize another, name it, and slowly the listing turns from a wall of opcodes into a readable program. The first pass is typically 80% unknown; by the fifth pass, you should have most routines named and the overall flow clear.
 
 ### Tool Choices for Each Stage
 
@@ -149,7 +149,7 @@ L01A3:  CALL #0E9B           ; CL-ALL — close all streams
         RST  #10             ; PRINT-A — print character
 ```
 
-This single technique — recognising and labelling ROM calls — can cut the apparent complexity of a disassembly by 50% on the first pass, because commercial Spectrum code uses ROM routines heavily for I/O, printing, tape, and floating-point math.
+This single technique — recognizing and labeling ROM calls — can cut the apparent complexity of a disassembly by 50% on the first pass, because commercial Spectrum code uses ROM routines heavily for I/O, printing, tape, and floating-point math.
 
 ### 3.4 String and Asset Detection
 
@@ -177,7 +177,7 @@ SkoolKit generates a cross-reference listing automatically; z80dasm emits symbol
 
 ## 4. Dynamic Analysis — Running the Code Under a Debugger
 
-Dynamic analysis is what you do once the code is runnable. The goal is to observe the program's behaviour at the instruction level: where the PC goes, what memory it touches, what the registers contain at key moments. For ZX Spectrum RE, this is done with an emulator's **machine-code monitor** or with a modern **IDE-integrated debugger** like DeZog.
+Dynamic analysis is what you do once the code is runnable. The goal is to observe the program's behavior at the instruction level: where the PC goes, what memory it touches, what the registers contain at key moments. For ZX Spectrum RE, this is done with an emulator's **machine-code monitor** or with a modern **IDE-integrated debugger** like DeZog.
 
 ### 4.1 The Emulator Monitor
 
@@ -210,7 +210,7 @@ For most RE work, the workflow is:
 - **Watch expressions** (e.g., `HL`, `(HL)`, `(#5C3C)`)
 - **Conditional breakpoints** (e.g., break at `L01A3` only when `A == 0x42`)
 - **Memory view** with hex/ASCII, watchpoints
-- **Reverse debugging** (with ZEsarUX) — step *backwards* through execution
+- **Reverse debugging** (with ZEsarUX) — step *backward* through execution
 - **Label auto-import** from sjasmplus `.sym` files
 
 DeZog's killer feature is the **sjasmplus integration**. If you have the original source (or a re-assembly from a SkoolKit output), DeZog shows your source code with the current PC highlighted — a normal IDE-style debugging experience. See [debugging.md](../09_toolchain/debugging.md) for setup.
@@ -236,10 +236,10 @@ This is brute-force but effective. It works even on self-modifying code, encrypt
 
 ### 4.4 Reverse Debugging
 
-ZEsarUX supports **reverse execution** — the ability to step backwards through previously-executed code. Combined with DeZog, this means you can:
+ZEsarUX supports **reverse execution** — the ability to step backward through previously-executed code. Combined with DeZog, this means you can:
 
 - Hit a breakpoint at a crash
-- Step *backwards* to find the routine that loaded the bad value
+- Step *backward* to find the routine that loaded the bad value
 - Set a breakpoint at that routine's start, run forward, and watch the bug develop
 
 This is invaluable for sporadic, hard-to-reproduce bugs. The cost is RAM (the entire execution history is kept in memory) and speed (reverse-stepping is slow), but for hard problems there is no substitute.
@@ -460,7 +460,7 @@ Some software actively resists debugging. Techniques include:
 - **`RST #38` trap** — fill all unused memory with `#FF` (RST #38 / `RST 7`) so any unintended jump lands in a known handler
 - **Self-modifying loops** that detect single-step timing (each step takes microseconds; a debugger adds milliseconds)
 
-For a complete catalogue of anti-debugging tricks and counter-techniques, see [protection_techniques.md §3 and §6](protection_techniques.md).
+For a complete catalog of anti-debugging tricks and counter-techniques, see [protection_techniques.md §3 and §6](protection_techniques.md).
 
 ### 8.5 ROM Version Differences
 
@@ -494,7 +494,7 @@ ZX Spectrum reverse engineering has a **mature, well-established ethical traditi
 
 ### 9.1 Recommended Practices
 
-- **Publish your .skool file** to GitHub with an open-source licence (CC-BY-SA is common)
+- **Publish your .skool file** to GitHub with an open-source license (CC-BY-SA is common)
 - **Credit the original developers** prominently in your disassembly's title page
 - **Cross-link to existing disassemblies** of related software (e.g., if you do Jet Set Willy, link to the Manic Miner disassembly for engine comparison)
 - **Document your methodology** — what tools you used, what heuristics worked, what surprised you
@@ -514,8 +514,8 @@ ZX Spectrum reverse engineering has a **mature, well-established ethical traditi
 
 ### Cross-References
 
-- [Protection Techniques](protection_techniques.md) — the catalogue of what protections exist
-- [ROM 48K](../04_operating_systems/rom_48k.md) — ROM entry points to recognise in disassembly
+- [Protection Techniques](protection_techniques.md) — the catalog of what protections exist
+- [ROM 48K](../04_operating_systems/rom_48k.md) — ROM entry points to recognize in disassembly
 - [Character Set](../10_references/character_set.md) — token table for identifying BASIC strings
 - [System Variables](../04_operating_systems/system_variables.md) — `#5C00`–`#5CB5` (frequently read/written)
 - [Contention Model](../05_development/03_memory_and_io/contention_model.md) — timing-sensitive code pitfalls

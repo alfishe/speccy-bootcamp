@@ -71,8 +71,8 @@ The WD1793 matters because:
 
 - **It is universal**. Every Spectrum floppy system uses the WD1793 (or a close relative). Understanding this chip is the key to understanding every floppy-related Spectrum program.
 - **It defines the programming model**. The TR-DOS ROM, the +3 DOS ROM, the Beta Disk Interface BIOS, all Soviet disk loaders, and all disk-based demos and games use the WD1793's register interface. There is no abstraction layer between your code and the FDC.
-- **It is essential for emulator authors**. A WD1793 emulator must reproduce all the chip's behaviour, including its quirks and undocumented features. Many Spectrum disk programs depend on specific FDC timing or specific quirks, and an inaccurate FDC emulator will fail to run them.
-- **It is the basis of copy protection**. Most Spectrum disk protection schemes rely on exploiting specific WD1793 behaviour (such as the "side-select trick" or the "read track" command's raw data capture).
+- **It is essential for emulator authors**. A WD1793 emulator must reproduce all the chip's behavior, including its quirks and undocumented features. Many Spectrum disk programs depend on specific FDC timing or specific quirks, and an inaccurate FDC emulator will fail to run them.
+- **It is the basis of copy protection**. Most Spectrum disk protection schemes rely on exploiting specific WD1793 behavior (such as the "side-select trick" or the "read track" command's raw data capture).
 
 ### 1.4 What the WD1793 is *not*
 
@@ -142,7 +142,7 @@ The WD1793 connects to the floppy drive via these signals:
 
 | Pin | Signal | Direction | Purpose |
 |-----|--------|-----------|---------|
-| 9 | DIR | output | Direction for the next STEP pulse. 0 = inward (towards higher tracks), 1 = outward (towards track 0). |
+| 9 | DIR | output | Direction for the next STEP pulse. 0 = inward (toward higher tracks), 1 = outward (toward track 0). |
 | 10 | STEP | output | Step pulse. One pulse moves the head one track in the direction set by DIR. |
 | 13 | /TRK00 | input | Track 0 sensor. Asserted by the drive when the head is at track 0. |
 | 14 | /IP | input | Index pulse. Asserted by the drive once per revolution (when the index hole passes the sensor). |
@@ -261,7 +261,7 @@ The **Data register** is the host's window into the FDC's data path. It is used 
 2. **Sector bytes for READ SECTOR / WRITE SECTOR**: During the execution phase of a Type II command, the FDC transfers one byte per sector-data byte through the Data register. On READ SECTOR, each `IN A,(#3F)` returns the next byte; on WRITE SECTOR, each `OUT (#3F),A` provides the next byte.
 3. **Format fields for WRITE TRACK**: During a WRITE TRACK command (used to format a track), the host streams a sequence of bytes through the Data register that defines the track's physical layout — gaps, sync marks, ID fields, data fields. See §4.4.
 
-Each byte transferred through the Data register is synchronised to the FDC's internal processing. The host must read or write the next byte within a fixed time window (typically 27 µs at 250 kbit/s for MFM, less for higher data rates); otherwise a **lost data** error is flagged in the Status register. The host knows when the next byte is ready by polling the **DRQ** (Data Request) status bit or by sampling the DRQ pin (which some interfaces expose via a separate status port).
+Each byte transferred through the Data register is synchronized to the FDC's internal processing. The host must read or write the next byte within a fixed time window (typically 27 µs at 250 kbit/s for MFM, less for higher data rates); otherwise a **lost data** error is flagged in the Status register. The host knows when the next byte is ready by polling the **DRQ** (Data Request) status bit or by sampling the DRQ pin (which some interfaces expose via a separate status port).
 
 ---
 
@@ -323,7 +323,7 @@ Most Spectrum software uses 6 ms (00) or 12 ms (01). The 6 ms rate is safe for a
 **RESTORE** (`#00`, `#08`, `#10`, `#18`, etc.) moves the head to **track 0**. It is typically the first command issued after a reset.
 
 Mechanism:
-1. The FDC sets DIR = outward (towards track 0).
+1. The FDC sets DIR = outward (toward track 0).
 2. It pulses STEP until /TRK00 is asserted by the drive.
 3. The Track register is set to 0.
 
@@ -400,7 +400,7 @@ The flags most relevant to driver authors:
 
 - **m** (bit 4): **Multi-record**. If 1, the FDC reads/writes multiple consecutive sectors in a single command. After each sector, the Sector register is incremented and the FDC continues to the next sector. If 0, only the sector in the Sector register is transferred.
 - **C** (bit 2): **Side compare enable**. If 0, the FDC does not compare the side byte in the sector ID field at all — any side value matches. If 1, the FDC compares the sector ID's side byte against the **S** bit (bit 3) and only matches sectors where they are equal.
-- **S** (bit 3): **Side compare value**. When C=1, sectors with side byte = S are matched. S also drives the SSO (Side Select Output) pin directly during Type II/III commands; this is independent of the C bit's compare behaviour.
+- **S** (bit 3): **Side compare value**. When C=1, sectors with side byte = S are matched. S also drives the SSO (Side Select Output) pin directly during Type II/III commands; this is independent of the C bit's compare behavior.
 - **a0** (bit 1, WRITE SECTOR only): Selects the Data Address Mark. 0 = `#FB` (normal), 1 = `#F8` (deleted). READ SECTOR reads either mark and reports it via RECORD TYPE (Status bit 5).
 
 The **E** bit (bit 2 of Type III commands, or bit 2 with different meaning on Type II commands that include head load) adds a 15 ms head-settling delay when stepping is needed. This is rarely needed in practice because Type I commands typically load the head first.
@@ -523,7 +523,7 @@ READ ADDRESS is useful for:
 
 **READ TRACK** reads the **entire raw contents of one track revolution** — every byte from index pulse to index pulse, including gaps, sync marks, address marks, ID fields, data fields, and CRCs. This is the lowest-level read the FDC supports.
 
-The host reads the bytes through the Data register, just like READ SECTOR, but instead of a single sector it receives the entire track (~6250 bytes for a standard MFM track). The FDC synchronises to the index pulse and starts reading at that point.
+The host reads the bytes through the Data register, just like READ SECTOR, but instead of a single sector it receives the entire track (~6250 bytes for a standard MFM track). The FDC synchronizes to the index pulse and starts reading at that point.
 
 READ TRACK has important caveats:
 - **Sync marks are not preserved**. The `A1*` patterns with missing clock bits cannot be represented in the byte stream — the FDC substitutes normal `#A1` bytes. So the raw track image is not bit-exact.
@@ -692,7 +692,7 @@ There are two distinct signals the host can poll:
 
 The WD1793 exposes DRQ on a separate pin from the host bus. Some interfaces (e.g., Beta Disk Interface) make DRQ visible as bit 6 of a separate "system" port (port `#FF`). Other interfaces only expose DRQ through the Status register (bit 1 during Type II/III execution). The exact wiring is interface-specific.
 
-Servicing DRQ fast enough is **the** critical performance problem on the WD1793. At 250 kbit/s MFM, the byte window is only 32 µs. In Z80 cycles at 3.5 MHz, that's about 114 T-states — tight enough that polling loops must be hand-optimised, and any memory contention (on the 48K Spectrum, contended memory accesses during the loading delay the loop) can cause lost data.
+Servicing DRQ fast enough is **the** critical performance problem on the WD1793. At 250 kbit/s MFM, the byte window is only 32 µs. In Z80 cycles at 3.5 MHz, that's about 114 T-states — tight enough that polling loops must be hand-optimized, and any memory contention (on the 48K Spectrum, contended memory accesses during the loading delay the loop) can cause lost data.
 
 ### 5.6 INTRQ handling: polling vs interrupts
 
@@ -759,7 +759,7 @@ The key bits for error handling are:
 - Bit 6 (WRITE PROTECT on writes): the disk is write-protected; no data was written.
 - Bit 2 (LOST DATA): the host failed to keep up with the FDC's data rate. The transfer continued with the lost byte replaced by `#00` on writes, or skipped on reads.
 
-**INTRQ reset behaviour**: INTRQ is asserted at command completion and stays asserted until the host reads the Status register **or** writes a new command byte to the Command register. This is true for all command types.
+**INTRQ reset behavior**: INTRQ is asserted at command completion and stays asserted until the host reads the Status register **or** writes a new command byte to the Command register. This is true for all command types.
 
 ### 6.3 Status bits during Type III commands
 
@@ -793,7 +793,7 @@ When no command is executing, the Status register reflects the Type I bit layout
 | 1 | INDEX | Inverted `/IP` (pulses once per revolution). |
 | 0 | BUSY | Always 0 in idle. |
 
-Note that bits 4, 3, 5 (SEEK ERROR, CRC ERROR, HEAD LOADED) are **sticky** in some implementations — once set, they remain until the next Status-register read clears them. The WD1793 datasheet specifies this reset-on-read behaviour for SEEK ERROR and CRC ERROR; HEAD LOADED follows the live HLD AND HLT state. Emulator authors should verify the exact reset behaviour against the specific FDC variant they are modelling.
+Note that bits 4, 3, 5 (SEEK ERROR, CRC ERROR, HEAD LOADED) are **sticky** in some implementations — once set, they remain until the next Status-register read clears them. The WD1793 datasheet specifies this reset-on-read behavior for SEEK ERROR and CRC ERROR; HEAD LOADED follows the live HLD AND HLT state. Emulator authors should verify the exact reset behavior against the specific FDC variant they are modeling.
 
 ### 6.5 Common status-reading patterns
 
@@ -849,9 +849,9 @@ On contended memory (e.g., the 48K Spectrum's lower 16 KB), each memory access i
 
 ## §7. The KR1818VG93 Soviet Clone
 
-Every Soviet and Russian Spectrum clone with a floppy interface uses the **KR1818VG93** (Russian: **КР1818ВГ93**), a Soviet-produced clone of the WD1793. The clone is pin-compatible with the WD1793-02 (the second revision of the WD1793) and functionally identical for all documented features. The KR1818VG93 was produced at the **Angstrem** plant (Zelenograd, near Moscow) starting in the late 1980s, as part of the Soviet programme to clone Western integrated circuits.
+Every Soviet and Russian Spectrum clone with a floppy interface uses the **KR1818VG93** (Russian: **КР1818ВГ93**), a Soviet-produced clone of the WD1793. The clone is pin-compatible with the WD1793-02 (the second revision of the WD1793) and functionally identical for all documented features. The KR1818VG93 was produced at the **Angstrem** plant (Zelenograd, near Moscow) starting in the late 1980s, as part of the Soviet program to clone Western integrated circuits.
 
-### 7.1 The cloning programme
+### 7.1 The cloning program
 
 The Soviet Union's microelectronics industry operated on a "copy first, improve later" principle. When a Western chip became important for Soviet industry (military, industrial, consumer), it was reverse-engineered and produced domestically under a Soviet part number. The KR1818VG93 was part of the **KR1818** series, a family of clones of Western Digital's floppy controller line:
 
@@ -871,11 +871,11 @@ The KR1818VG93 is a 40-pin DIP, identical in pinout to the WD1793. There are a f
 - **Marking**: Soviet chips use Cyrillic markings (КР1818ВГ93) and a date code in the format "WW YY" (week and year). The plant logo (Angstrem's stylised "A") is also present.
 - **Operating temperature range**: KR1818VG93 is rated for the military-grade temperature range (−40°C to +85°C), reflecting its origins in Soviet military-industrial production. The WD1793 consumer part is rated 0°C to +70°C.
 
-These physical differences do not affect the chip's behaviour in a Spectrum clone. The KR1818VG93 is a drop-in replacement for the WD1793 in any Spectrum floppy interface.
+These physical differences do not affect the chip's behavior in a Spectrum clone. The KR1818VG93 is a drop-in replacement for the WD1793 in any Spectrum floppy interface.
 
 ### 7.3 Functional differences
 
-The KR1818VG93 was reverse-engineered from the WD1793-02 die mask, so its behaviour matches the WD1793-02 for all documented features. The differences observed on real hardware are in undocumented behaviour and analog characteristics, not in the documented command set:
+The KR1818VG93 was reverse-engineered from the WD1793-02 die mask, so its behavior matches the WD1793-02 for all documented features. The differences observed on real hardware are in undocumented behavior and analog characteristics, not in the documented command set:
 
 - **Step rate accuracy**: The KR1818VG93's step rate generator is less precise than the WD1793's. The 6 ms setting is typically 6.0 ms on the WD1793 but can be 6.2–6.5 ms on the KR1818VG93. This is rarely a problem because most drives tolerate ±10% step rate variation.
 - **PLL lock time**: The internal PLL on the KR1818VG93 takes slightly longer to lock to the MFM bit clock than the WD1793's PLL. On marginal disks (with weak signals or off-speed motors), the KR1818VG93 may produce more read errors.
@@ -895,11 +895,11 @@ For modern hardware projects (Karabas, Peridot, etc.) that use Soviet-style inte
 
 ## §8. Undocumented Features and Quirks
 
-The WD1793 has a number of undocumented behaviours that real software (especially copy protection schemes) relies on. These quirks are not in the official datasheet but have been reverse-engineered from chip behaviour and are essential for emulator authors to reproduce.
+The WD1793 has a number of undocumented behaviors that real software (especially copy protection schemes) relies on. These quirks are not in the official datasheet but have been reverse-engineered from chip behavior and are essential for emulator authors to reproduce.
 
 ### 8.1 The "side-select" trick
 
-The WD1793's **s** bit (bit 3 of Type II commands) is documented as selecting the disk side (0 or 1). However, the actual behaviour is more nuanced: the FDC compares the **side byte** in the sector's ID field against the **s** bit, and only matches the sector if they are equal.
+The WD1793's **s** bit (bit 3 of Type II commands) is documented as selecting the disk side (0 or 1). However, the actual behavior is more nuanced: the FDC compares the **side byte** in the sector's ID field against the **s** bit, and only matches the sector if they are equal.
 
 This means a disk can be formatted with **sectors that claim to be on side 1 even though they are physically on side 0**. The FDC will only read those sectors when the host issues a READ SECTOR with `s=1`. A normal read with `s=0` will skip them.
 
@@ -950,9 +950,9 @@ Type III commands also assert DRQ, but the timing differs from Type II. During W
 
 During READ TRACK, DRQ is similarly continuous, but the FDC will silently skip bytes if the host doesn't read fast enough (no LOST DATA error is flagged for Type III reads on some variants — the FDC just keeps streaming).
 
-### 8.7 The /MR (Master Reset) pin behaviour
+### 8.7 The /MR (Master Reset) pin behavior
 
-The /MR pin (pin 3, also called /MR or "Master Reset" on some variants) is documented as a hardware reset. But the actual behaviour depends on the variant:
+The /MR pin (pin 3, also called /MR or "Master Reset" on some variants) is documented as a hardware reset. But the actual behavior depends on the variant:
 
 - **WD1793 original**: /MR resets the FDC's internal logic but does NOT clear the Track, Sector, or Data registers.
 - **WD1793-02**: /MR clears all registers and restores the chip to a known state.
@@ -988,7 +988,7 @@ The downside: HD floppies are physically different from DD floppies (different m
 
 The WD1793's internal PLL is adequate for standard MFM at 250 kbit/s but limits performance at higher densities. Some clone manufacturers (notably Scorpion with the Scorpion ZS 256 Turbo) replaced the WD1793's internal PLL with an external, higher-performance PLL connected to a WD1791 (which has no internal PLL).
 
-The external PLL can lock to weaker signals and tolerate more motor speed variation, allowing reliable reads of marginal disks. The downside is complexity: the external PLL is several extra chips, and the WD1791 has slightly different register behaviour than the WD1793 (the side-select bit is in a different place, for example).
+The external PLL can lock to weaker signals and tolerate more motor speed variation, allowing reliable reads of marginal disks. The downside is complexity: the external PLL is several extra chips, and the WD1791 has slightly different register behavior than the WD1793 (the side-select bit is in a different place, for example).
 
 ### 9.3 Software turbo loaders
 

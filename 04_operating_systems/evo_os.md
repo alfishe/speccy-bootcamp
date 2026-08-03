@@ -137,7 +137,7 @@ The video output supports several modes, depending on the BaseConf:
 
 - **Standard Spectrum modes** — 256×192 with attributes, in all variants (standard, multicolour, GIGASCREEN, etc.).
 - **ATM Turbo modes** — 320×200 and 640×200 text and graphics modes.
-- **TS-Conf extended modes** — 16-colour and 256-colour modes with hardware tiles and sprites (in TS-Conf configurations).
+- **TS-Conf extended modes** — 16-color and 256-color modes with hardware tiles and sprites (in TS-Conf configurations).
 - **Text modes** — 80×25 and 64×28 character modes for CP/M, IS-DOS, and NedoDOS Commander use.
 
 The video output is **VGA** (in addition to composite and RGB). This makes the ZX Evolution directly usable with modern monitors — a significant practical advantage over the older Russian clones, which typically only output composite video.
@@ -274,7 +274,7 @@ In short, the BaseConf is the **hardware definition** of the ZX Evolution as the
 
 The default BaseConf implements the **Pentagon 1024** standard. The Pentagon 1024 is the most widely-supported Russian Spectrum configuration — most Russian software is tested against it. Key features of the Pentagon 1024 BaseConf:
 
-- **Memory**: 1024 KB, organised as 64 banks of 16 KB, paged via port `#7FFD` (and the extension port `#DFFD`).
+- **Memory**: 1024 KB, organized as 64 banks of 16 KB, paged via port `#7FFD` (and the extension port `#DFFD`).
 - **Video**: standard Spectrum 256×192 mode, with additional multicolour and text modes via port `#FF` and the ATM Turbo ports.
 - **Sound**: standard AY-3-8910 at address `#FFFD`/`#BFFD`.
 - **I/O**: standard Spectrum layout plus Pentagon-specific ports (Beta 128 disk interface at `#1F`/`#3F`/`#5F`/`#7F`).
@@ -329,10 +329,10 @@ Beyond the Pentagon, ATM, and original-Sinclair BaseConfs, there are extended co
 
 **TS-Conf** is the most important alternative configuration. Designed by the NedoPC team and contributors, TS-Conf is an extended Spectrum configuration that includes:
 
-- **16-colour and 256-colour graphics modes** — far beyond the standard Spectrum's attribute-based colour.
+- **16-color and 256-color graphics modes** — far beyond the standard Spectrum's attribute-based color.
 - **Hardware tiles** — a tile-based background layer, similar to console graphics (NES, SMS, etc.).
 - **Hardware sprites** — up to 96 independent sprites with per-pixel transparency.
-- **Multiple graphics layers** — a Layer 2-style full-colour overlay on top of the Spectrum display.
+- **Multiple graphics layers** — a Layer 2-style full-color overlay on top of the Spectrum display.
 - **Extended memory** — a flat memory model with up to 4 MB addressable.
 - **DMA** — a hardware DMA controller for fast memory-to-memory and memory-to-video copies.
 - **Copper** — a programmable video sequencer (similar to the Amiga copper).
@@ -368,7 +368,7 @@ Beyond TS-Conf, the community has produced:
 
 - **GMX configurations** — for the GMX memory extension (a daughter-board providing additional RAM and features).
 - **NeoGS configurations** — for the NeoGS sound card extension (with multiple AY chips, sample playback, MIDI).
-- **Custom configurations** — enthusiasts have written BaseConfs for experimental hardware features (e.g., 1024-colour video modes, hardware 3D acceleration).
+- **Custom configurations** — enthusiasts have written BaseConfs for experimental hardware features (e.g., 1024-color video modes, hardware 3D acceleration).
 
 This openness — the ability for anyone with FPGA expertise to add features to the platform — is one of the ZX Evolution's great strengths.
 
@@ -494,7 +494,7 @@ The OS layer is what runs after the boot ROM has finished — the DOS (NedoDOS o
 The primary OS component is the **DOS ROM** — a 16 KB or 32 KB image that provides file I/O and disk management. On the ZX Evolution, this is typically:
 
 - **NedoDOS** — the modern Russian DOS, designed for the ZX Evolution. Provides FAT16/32 with long filenames, SD/CF/IDE support, and a clean assembly API. (See [nedo_dos.md](nedo_dos.md).)
-- **TR-DOS** — the classic Russian DOS, provided for backwards compatibility. Used to run classic Soviet-era software.
+- **TR-DOS** — the classic Russian DOS, provided for backward compatibility. Used to run classic Soviet-era software.
 - **ESXDOS** — occasionally used, though primarily a Western DOS for DivIDE/DivMMC hardware.
 - **IS-DOS** — the older Russian hierarchical DOS, rarely used but supported. (See [is_dos.md](is_dos.md).)
 
@@ -681,7 +681,7 @@ For now (2024), the platform is healthy, and the community is active. New users 
 ### 10.1 Within the Operating Systems section
 
 - **[nedo_dos.md](nedo_dos.md)** — The primary DOS for the ZX Evolution. This article and nedo_dos.md are designed to be read together: this article covers the hardware/firmware layer, nedo_dos.md covers the DOS layer.
-- **[trdos.md](trdos.md)** — The classic Russian DOS. The ZX Evolution supports TR-DOS for backwards compatibility.
+- **[trdos.md](trdos.md)** — The classic Russian DOS. The ZX Evolution supports TR-DOS for backward compatibility.
 - **[is_dos.md](is_dos.md)** — An older Russian hierarchical DOS, occasionally used on the ZX Evolution.
 - **[nextzxos.md](nextzxos.md)** — The Western equivalent: the OS for the ZX Spectrum Next. Useful for comparison.
 - **[esxdos.md](esxdos.md)** — A modern Western DOS, conceptually similar to NedoDOS but for different hardware.
@@ -704,4 +704,4 @@ For now (2024), the platform is healthy, and the community is active. New users 
 
 ## License
 
-This document is licensed under **Creative Commons Attribution-ShareAlike 4.0 International** (CC BY-SA 4.0). You are free to share and adapt this material, provided you give appropriate credit, indicate changes, and distribute derivative works under the same licence.
+This document is licensed under **Creative Commons Attribution-ShareAlike 4.0 International** (CC BY-SA 4.0). You are free to share and adapt this material, provided you give appropriate credit, indicate changes, and distribute derivative works under the same license.

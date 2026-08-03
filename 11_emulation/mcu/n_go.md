@@ -363,7 +363,7 @@ For demoscene-level accuracy, FPGA recreations (Harlequin, Sizif-512) are prefer
 Yes — this is one of the main advantages of MCU Spectrums:
 
 - **Save states** — snapshot the entire Spectrum state at any point
-- **Rewind** — step backwards through execution
+- **Rewind** — step backward through execution
 - **Turbo mode** — run the Z80 at 2×, 4×, or 8× speed for fast loading
 - **Cheat codes** — POKE memory at startup
 - **Stereo sound** — separate PSG channels for stereo output
@@ -397,7 +397,7 @@ Building a complete Spectrum on a microcontroller is a substantial project that 
 
 The **RP2040** is the optimal MCU for single-chip implementations, thanks to its dual cores, PIO blocks, and low cost. Multi-MCU architectures (RP2040 + ESP32) offer additional flexibility, especially for network connectivity.
 
-The result is a complete Spectrum that costs under £10, fits in the palm of your hand, and runs the entire Spectrum software library — a powerful modern realisation of the 1982 design.
+The result is a complete Spectrum that costs under £10, fits in the palm of your hand, and runs the entire Spectrum software library — a powerful modern realization of the 1982 design.
 
 ---
 

@@ -37,7 +37,7 @@ What makes the 1-bit scene remarkable is that sceners and game musicians refused
 - **Sample playback**: short PCM recordings of speech or sound effects.
 - **Effects**: vibrato, tremolo, portamento, slide.
 
-None of this was intended by the hardware's designers. All of it is the result of careful cycle-exact programming that exploits the **integration behaviour** of the speaker cone, the amplifier, and the ear itself.
+None of this was intended by the hardware's designers. All of it is the result of careful cycle-exact programming that exploits the **integration behavior** of the speaker cone, the amplifier, and the ear itself.
 
 ### 1.1 The Allure of the Impossible
 
@@ -63,11 +63,11 @@ The Spectrum's beeper is controlled by a single I/O port:
 
 - **Port address**: `#FE` (i.e., any address with `A0 = 0` and `A1..A7 = 1`, but conventionally `#FE`).
 - **Output bit 4**: the speaker (1 = cone pushed out, 0 = cone pulled back).
-- **Output bits 0–2**: the border colour (the same port sets the border).
+- **Output bits 0–2**: the border color (the same port sets the border).
 - **Output bit 3**: the MIC/EAR cassette output (early models).
 - **Output bits 5–7**: unused.
 
-To toggle the speaker, code writes to `#FE` with bit 4 alternating between 0 and 1. The border colour comes along for the ride — every music routine that toggles the speaker also changes the border, which is why classic 1-bit music on the Spectrum has the characteristic **"music also paints the border"** side effect.
+To toggle the speaker, code writes to `#FE` with bit 4 alternating between 0 and 1. The border color comes along for the ride — every music routine that toggles the speaker also changes the border, which is why classic 1-bit music on the Spectrum has the characteristic **"music also paints the border"** side effect.
 
 ### 2.2 The ROM `BEEP` Driver
 
@@ -181,7 +181,7 @@ Every 1-bit engine makes trade-offs along three axes:
 | **Frequency range vs jitter** | Faster inner loops allow higher notes but produce more timing jitter, causing detuning and noise. |
 | **Voice richness vs frequency range** | PWM, vibrato, and per-voice envelopes add code in the inner loop, slowing it down. |
 
-The "ideal" engine therefore depends on the music: a chiptune-style piece with 5 short voices needs a different engine than a melodic piece with 2 rich voices. This is why the 1-bit scene has dozens of engines, each optimised for a different point on the trade-off surface. See §4 for the engine lineage.
+The "ideal" engine therefore depends on the music: a chiptune-style piece with 5 short voices needs a different engine than a melodic piece with 2 rich voices. This is why the 1-bit scene has dozens of engines, each optimized for a different point on the trade-off surface. See §4 for the engine lineage.
 
 ---
 
@@ -251,9 +251,9 @@ Octode music sounds very different from Follin-style 3-voice music: it is busier
 
 In parallel with utz's work, several other modern engine authors contributed:
 
-- **Huby** (Patrik "Rak" Rak, ~2010) — a 2-voice engine optimised for **maximum frequency range**, sacrificing channel count for clean high notes. Used for melodic music where Follin-style clarity is the goal.
+- **Huby** (Patrik "Rak" Rak, ~2010) — a 2-voice engine optimized for **maximum frequency range**, sacrificing channel count for clean high notes. Used for melodic music where Follin-style clarity is the goal.
 - **ZX Polyphony** (irrlicht project, 2009–2012) — an experimental engine attempting **real polyphonic synthesis** with per-voice timbre.
-- **Shiru's beeper engines** (Shiru, ~2010) — a family of small engines optimised for size-coding intros, sometimes only 100–200 bytes of player code. Used in many modern 1K/256B intros (see [size_coding.md](size_coding.md) §9).
+- **Shiru's beeper engines** (Shiru, ~2010) — a family of small engines optimized for size-coding intros, sometimes only 100–200 bytes of player code. Used in many modern 1K/256B intros (see [size_coding.md](size_coding.md) §9).
 
 These engines cover different points on the trade-off surface (§3.6), so a modern musician chooses the engine that best fits the piece.
 
@@ -263,7 +263,7 @@ The most recent wave of beeper engines, developed by **utz**, **irrlicht project
 
 - **Pusher** — a high-channel-count engine using per-voice "push-pull" (driving the speaker both up and down on each cycle, instead of just up).
 - **Squeeker** — a compact engine with squeaky, high-treble timbre.
-- **Sq1** — a single-voice engine with very rich timbre, optimised for solo melodic pieces.
+- **Sq1** — a single-voice engine with very rich timbre, optimized for solo melodic pieces.
 - **Phaser1** — a phase-modulation engine that produces evolving, phasing textures.
 - **Savage** — a modern 5+ channel engine with per-voice envelopes.
 
@@ -329,7 +329,7 @@ Daglish's best-known Spectrum soundtracks include *The Last Ninja* (1987, vs the
 The size-coding 1-bit tradition (composers writing for 256B and 1K intros) is anonymous or pseudonymous by custom: most size-coded intros credit the musician only by handle. Notable figures include:
 
 - **Shiru** — Russian composer and engine author, contributed many 1-bit pieces for size-coded intros.
-- **Mr. BEEP** — Belgian composer and engine author, specialises in pieces that maximise musical interest per byte of music data.
+- **Mr. BEEP** — Belgian composer and engine author, specialises in pieces that maximize musical interest per byte of music data.
 - **Rotter** — Polish composer, several notable 1-bit pieces in the late 2000s.
 
 These composers often write music that is **as much a technical achievement as a musical one**: a melodic 1-bit piece in 200 bytes of music data is as much a size-coding feat as a 256-byte intro is.
@@ -342,7 +342,7 @@ utz is also a **technical writer**: the [1-Bit Forum](http://randomflux.tv/1bit)
 
 ### 5.7 irrlicht project
 
-**irrlicht project** (real name not consistently public; the handle is the German word for "will-o'-the-wisp") is the other central modern 1-bit figure. irrlicht is responsible for ZX Polyphony, Phaser1, and several experimental engines, as well as a substantial body of compositions in those engines. irrlicht's music tends toward **atmospheric, evolving textures** rather than the high-density arpeggios favoured by utz.
+**irrlicht project** (real name not consistently public; the handle is the German word for "will-o'-the-wisp") is the other central modern 1-bit figure. irrlicht is responsible for ZX Polyphony, Phaser1, and several experimental engines, as well as a substantial body of compositions in those engines. irrlicht's music tends toward **atmospheric, evolving textures** rather than the high-density arpeggios favored by utz.
 
 ### 5.8 Other Modern Composers
 
@@ -397,7 +397,7 @@ In the modern revival (§7), the beeper has reappeared in **new Spectrum-targete
 
 ## 7. The 1-Bit Forum and the Modern Community
 
-The modern revival of 1-bit music is organised around a single web forum: the **1-Bit Forum** at [randomflux.tv/1bit](http://randomflux.tv/1bit). The forum was founded in the late 2000s (most cited year: 2008, alongside utz's QChan release) and has been the central meeting place for the international 1-bit community since.
+The modern revival of 1-bit music is organized around a single web forum: the **1-Bit Forum** at [randomflux.tv/1bit](http://randomflux.tv/1bit). The forum was founded in the late 2000s (most cited year: 2008, alongside utz's QChan release) and has been the central meeting place for the international 1-bit community since.
 
 ### 7.1 What the Forum Does
 

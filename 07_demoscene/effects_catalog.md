@@ -55,10 +55,10 @@ True 3D is the most expensive category because every vertex must be transformed 
 | Strategy | Examples | Notes |
 |---|---|---|
 | **Static attributes** | Twisters (mostly), starfields, simple 3D wireframe | Colours set once at start, only pixel data updates |
-| **Per-frame attribute writes (no multicolor)** | Plasma (some), copper bars | Whole cells change colour between frames but not within a frame |
-| **8×2 multicolor** | Zoomers, simple plasma, basic twisters | Cell colour changes every 2 scanlines |
-| **8×1 multicolor** | Tunnel, high-end plasma, raycasting | Cell colour changes every scanline |
-| **8×1 gigascreen** | Static art, disk-streamed "video" | Alternates two 8×1 frames for ~100 perceived colours |
+| **Per-frame attribute writes (no multicolor)** | Plasma (some), copper bars | Whole cells change color between frames but not within a frame |
+| **8×2 multicolor** | Zoomers, simple plasma, basic twisters | Cell color changes every 2 scanlines |
+| **8×1 multicolor** | Tunnel, high-end plasma, raycasting | Cell color changes every scanline |
+| **8×1 gigascreen** | Static art, disk-streamed "video" | Alternates two 8×1 frames for ~100 perceived colors |
 
 Higher-resolution attribute strategies cost more CPU time but produce visibly better images. The progression from "static attributes" to "8×1 gigascreen" roughly tracks the historical development of Spectrum demoscene art (see [demoscene_history.md](demoscene_history.md)).
 
@@ -74,7 +74,7 @@ Cost categories at 50 Hz on a stock 128K Pentagon:
 | **Expensive** | 50,000–69,000 | 71%–98% | Tunnel, raycasting, 3D filled polygons |
 | **Frame-bound** | 69,000+ | 100%+ (needs 25 Hz or precompute) | Full-screen 8×1 multicolor plasma, complex voxel landscape |
 
-The cost is dominated by **memory writes** (pixel or attribute bytes) and **multiplication** (8×8 → 16-bit via the shift-and-add loop of [precalc_trigonometry.md](precalc_trigonometry.md) §5.3). Effects that minimise both — raster bars, scroll text — are cheap; effects that maximise both — full-screen multicolor with per-pixel perspective texturing — are frame-bound.
+The cost is dominated by **memory writes** (pixel or attribute bytes) and **multiplication** (8×8 → 16-bit via the shift-and-add loop of [precalc_trigonometry.md](precalc_trigonometry.md) §5.3). Effects that minimize both — raster bars, scroll text — are cheap; effects that maximize both — full-screen multicolor with per-pixel perspective texturing — are frame-bound.
 
 ### 2.4 By memory footprint
 
@@ -92,11 +92,11 @@ Memory footprint determines which effects fit in 48K, which need 128K, and which
 
 ## 3. Plasma
 
-**Plasma** is the canonical "first demoscene effect": every scener implements a plasma at some point, and almost every demo has at least one plasma part. It produces smoothly morphing colour fields that look like clouds, waves, or interference patterns. On the Spectrum, plasma is almost always implemented as a **per-cell attribute animation**, optionally enhanced with 8×1 or 8×2 multicolor for higher detail.
+**Plasma** is the canonical "first demoscene effect": every scener implements a plasma at some point, and almost every demo has at least one plasma part. It produces smoothly morphing color fields that look like clouds, waves, or interference patterns. On the Spectrum, plasma is almost always implemented as a **per-cell attribute animation**, optionally enhanced with 8×1 or 8×2 multicolor for higher detail.
 
 ### 3.1 What it looks like
 
-A plasma displays smoothly-varying colours across the screen, with the colour pattern morphing over time. The colour of each cell is a function `f(x, y, t)` of the cell's position `(x, y)` and the time parameter `t`. The function is designed to produce **smooth, organic-looking** variations rather than sharp edges.
+A plasma displays smoothly-varying colors across the screen, with the color pattern morphing over time. The color of each cell is a function `f(x, y, t)` of the cell's position `(x, y)` and the time parameter `t`. The function is designed to produce **smooth, organic-looking** variations rather than sharp edges.
 
 ### 3.2 The basic algorithm
 
@@ -109,7 +109,7 @@ f(x, y, t) = sin(x / a + t)        // horizontal wave
            + sin(sqrt(x² + y²) / d + t * 2.0)   // radial
 ```
 
-The output `f` is mapped to an attribute byte via a **colour lookup table** (`LUT`). The LUT is chosen by the artist to produce a pleasing palette cycle — typically a smooth ramp through several colours.
+The output `f` is mapped to an attribute byte via a **color lookup table** (`LUT`). The LUT is chosen by the artist to produce a pleasing palette cycle — typically a smooth ramp through several colors.
 
 ### 3.3 The Spectrum implementation
 
@@ -131,8 +131,8 @@ For higher detail, the plasma can be evaluated at 8×2 or 8×1 resolution. This 
 
 ### 3.6 Variants
 
-- **Interference plasma**: f is the sum of two radial sines whose centres drift over time, producing characteristic two-centre interference patterns.
-- **Distance plasma**: f depends only on `sqrt(x² + y²)` from a moving centre, producing expanding/contracting rings.
+- **Interference plasma**: f is the sum of two radial sines whose centers drift over time, producing characteristic two-center interference patterns.
+- **Distance plasma**: f depends only on `sqrt(x² + y²)` from a moving center, producing expanding/contracting rings.
 - **Mandeltunnel-adjacent plasma**: f is computed from a precomputed distance-to-Mandelbrot-boundary table, producing fractal-adjacent patterns.
 - **Pixel-level plasma**: rare and very expensive; plasma computed per pixel rather than per cell. Uses a precomputed full-screen 6 KB LUT.
 
@@ -140,9 +140,9 @@ For higher detail, the plasma can be evaluated at 8×2 or 8×1 resolution. This 
 
 | Variant | Per-frame cost | Resolution | Notes |
 |---|---|---|---|
-| 8×8 attribute plasma | ~30,000 T | 32×24 colour cells | The "default" plasma; runs on any Spectrum |
-| 8×2 multicolor plasma | ~80,000 T | 32×96 colour cells | Needs Pentagon or 25 Hz frame rate |
-| 8×1 multicolor plasma | ~150,000 T | 32×192 colour cells | 25 Hz, Pentagon-class hardware |
+| 8×8 attribute plasma | ~30,000 T | 32×24 color cells | The "default" plasma; runs on any Spectrum |
+| 8×2 multicolor plasma | ~80,000 T | 32×96 color cells | Needs Pentagon or 25 Hz frame rate |
+| 8×1 multicolor plasma | ~150,000 T | 32×192 color cells | 25 Hz, Pentagon-class hardware |
 | Pixel-level plasma | ~250,000 T | 256×192 | 12.5 Hz, requires precomputed LUT |
 
 ### 3.8 History
@@ -157,7 +157,7 @@ A **zoomer** continuously scales an image up or down; a **rotaazer** (rotazer, r
 
 ### 4.1 What it looks like
 
-A zoomer appears as the camera "flying into" or "pulling back from" the image; a rotaazer spins the image around its centre. The image is usually a multicolor still, so the effect is one of the most common ways to display a scener's pixel art in motion.
+A zoomer appears as the camera "flying into" or "pulling back from" the image; a rotaazer spins the image around its center. The image is usually a multicolor still, so the effect is one of the most common ways to display a scener's pixel art in motion.
 
 ### 4.2 The algorithm
 
@@ -175,7 +175,7 @@ Zoom + rotate:
     sy = cy + (-dx * sin(theta) + dy * cos(theta)) / zoom
 ```
 
-Here `(ox, oy)` is the output coordinate, `(sx, sy)` is the source coordinate, `(cx, cy)` is the centre of transformation, `zoom` is the scale factor, and `theta` is the rotation angle. The source coordinate is then looked up in the original image to get the output pixel.
+Here `(ox, oy)` is the output coordinate, `(sx, sy)` is the source coordinate, `(cx, cy)` is the center of transformation, `zoom` is the scale factor, and `theta` is the rotation angle. The source coordinate is then looked up in the original image to get the output pixel.
 
 ### 4.3 The Spectrum implementation
 
@@ -205,11 +205,11 @@ Pixel-level (true per-pixel) zooming is much rarer because the per-pixel cost is
 
 ## 5. Starfields
 
-A **starfield** displays a moving field of point sources ("stars"), giving the impression of flying through space. Starfields are typically 2D (stars scroll sideways or fly outward from a centre point) or 3D (stars have depth and project to the screen as the camera moves).
+A **starfield** displays a moving field of point sources ("stars"), giving the impression of flying through space. Starfields are typically 2D (stars scroll sideways or fly outward from a center point) or 3D (stars have depth and project to the screen as the camera moves).
 
 ### 5.1 What it looks like
 
-A 2D starfield has stars moving in a single direction (typically left-to-right or outward from centre). A 3D starfield has stars with varying depths; closer stars appear to move faster (parallax), and stars ahead of the camera appear to fly outward from the vanishing point.
+A 2D starfield has stars moving in a single direction (typically left-to-right or outward from center). A 3D starfield has stars with varying depths; closer stars appear to move faster (parallax), and stars ahead of the camera appear to fly outward from the vanishing point.
 
 ### 5.2 2D starfield
 
@@ -236,7 +236,7 @@ Per-frame cost: ~100 stars × ~200 T per star (clear old, compute new x/y/z, pro
 
 - **Hyperspace**: stars leave brief trails behind them as they fly outward, simulating faster-than-light travel. Adds ~30 T per star for the trail plot.
 - **Streak starfield**: stars are drawn as short lines (one end at the previous position, other end at the new position) instead of single pixels. Adds ~50 T per star for the line draw.
-- **Tunnel starfield**: stars fly outward from a single centre point rather than from a vanishing point at infinity. Visually similar to a tunnel effect (§8) but cheaper.
+- **Tunnel starfield**: stars fly outward from a single center point rather than from a vanishing point at infinity. Visually similar to a tunnel effect (§8) but cheaper.
 
 ### 5.5 Cost summary
 
@@ -255,15 +255,15 @@ Starfields are one of the oldest demoscene effects, predating the Spectrum itsel
 
 ## 6. Raster Bars and Copper Bars
 
-**Raster bars** are horizontal stripes of colour drawn synchronously with the CRT beam, traditionally in the **border area** (which has no attribute RAM and can only be coloured by writing to port `#FE` mid-scanline). On the Amiga, the equivalent effect (using the Copper co-processor) is called **copper bars**; the term has been borrowed by the Spectrum scene even though no co-processor is involved.
+**Raster bars** are horizontal stripes of color drawn synchronously with the CRT beam, traditionally in the **border area** (which has no attribute RAM and can only be colored by writing to port `#FE` mid-scanline). On the Amiga, the equivalent effect (using the Copper co-processor) is called **copper bars**; the term has been borrowed by the Spectrum scene even though no co-processor is involved.
 
 ### 6.1 What it looks like
 
-A raster-bar effect fills the screen (and usually the border) with smoothly-coloured horizontal stripes — typically gradients from one colour to another and back, animated to scroll vertically or "wave" across the screen. The classic look is multiple coloured bars scrolling past each other, producing an effect similar to a lava lamp or aurora.
+A raster-bar effect fills the screen (and usually the border) with smoothly-colored horizontal stripes — typically gradients from one color to another and back, animated to scroll vertically or "wave" across the screen. The classic look is multiple colored bars scrolling past each other, producing an effect similar to a lava lamp or aurora.
 
-### 6.2 The border-colour register
+### 6.2 The border-color register
 
-The Spectrum's only way to colour the border is port `#FE` (the same port that controls the speaker and the Mic/Ear edge). Bits 0–2 of the value written set the border colour (8 colours; no `BRIGHT` bit). To produce per-scanline border colour changes, the code must write a new value to `#FE` on every scanline.
+The Spectrum's only way to color the border is port `#FE` (the same port that controls the speaker and the Mic/Ear edge). Bits 0–2 of the value written set the border color (8 colors; no `BRIGHT` bit). To produce per-scanline border color changes, the code must write a new value to `#FE` on every scanline.
 
 ```z80
 ; Raster-bar scanline loop (simplified)
@@ -276,10 +276,10 @@ The Spectrum's only way to colour the border is port `#FE` (the same port that c
 
 ### 6.3 Spectrum raster bars in the paper area
 
-Beyond the border, raster-bar effects often colour the paper area too. There are two approaches:
+Beyond the border, raster-bar effects often color the paper area too. There are two approaches:
 
-- **Attribute-only raster bars**: write one attribute byte per scanline to a fixed column (e.g. cell (0, current_scanline)), with the rest of the screen black. The visible effect is a vertical stripe of changing colours.
-- **Full-screen attribute bars**: write attribute bytes for a whole row of cells at a specific scanline, colouring that row's cells with the same colour as the border. This requires multicolor-style timing discipline (see [multicolor_techniques.md](multicolor_techniques.md) §3–§4).
+- **Attribute-only raster bars**: write one attribute byte per scanline to a fixed column (e.g. cell (0, current_scanline)), with the rest of the screen black. The visible effect is a vertical stripe of changing colors.
+- **Full-screen attribute bars**: write attribute bytes for a whole row of cells at a specific scanline, coloring that row's cells with the same color as the border. This requires multicolor-style timing discipline (see [multicolor_techniques.md](multicolor_techniques.md) §3–§4).
 
 ### 6.4 Cost
 
@@ -292,14 +292,14 @@ The hard part is not the cost but the **timing precision** — every `OUT (#FE),
 
 ### 6.5 Variants
 
-- **Moving copper bars**: the colour gradient is shifted up or down each frame, producing the illusion of motion.
+- **Moving copper bars**: the color gradient is shifted up or down each frame, producing the illusion of motion.
 - **Waving bars**: the gradient's phase varies sinusoidally across columns, producing bars that undulate horizontally.
-- **Attr-attr bars**: bars drawn by alternating attributes (gigascreen) instead of solid colours, doubling perceived colour depth.
-- **Combined bars + image**: a static image (logo, greeting) is drawn in the centre of the screen with raster bars surrounding it.
+- **Attr-attr bars**: bars drawn by alternating attributes (gigascreen) instead of solid colors, doubling perceived color depth.
+- **Combined bars + image**: a static image (logo, greeting) is drawn in the center of the screen with raster bars surrounding it.
 
 ### 6.6 History
 
-Raster bars are another ancient demoscene effect, originating on the C64 (which has a hardware raster interrupt). On the Spectrum, they were a staple of the 1987–1992 cracktro/demoscene era and remain a nostalgic favourite. They are commonly the *first* effect a new Spectrum scener implements because the basic version is achievable in under 100 lines of code.
+Raster bars are another ancient demoscene effect, originating on the C64 (which has a hardware raster interrupt). On the Spectrum, they were a staple of the 1987–1992 cracktro/demoscene era and remain a nostalgic favorite. They are commonly the *first* effect a new Spectrum scener implements because the basic version is achievable in under 100 lines of code.
 
 ---
 
@@ -309,7 +309,7 @@ A **twister** is an effect that displays a rotating bar or column with a 3D-rota
 
 ### 7.1 What it looks like
 
-A twister is a vertical or horizontal "bar" that appears to rotate. The bar's width at each scanline is determined by a sine wave, and the bar's colour/texture shifts as it rotates. Multiple parallel bars may rotate in synchronisation, producing a striped column.
+A twister is a vertical or horizontal "bar" that appears to rotate. The bar's width at each scanline is determined by a sine wave, and the bar's color/texture shifts as it rotates. Multiple parallel bars may rotate in synchronisation, producing a striped column.
 
 ### 7.2 The algorithm
 
@@ -319,7 +319,7 @@ The twister does not actually rotate anything in 3D. Instead, for each scanline,
 width(y, t) = max_width * |sin(y * frequency + t * speed)|
 ```
 
-The bar is drawn at horizontal positions `[cx - width/2, cx + width/2]` where `cx` is the bar's centre. As `width` varies down the screen, the bar appears to twist.
+The bar is drawn at horizontal positions `[cx - width/2, cx + width/2]` where `cx` is the bar's center. As `width` varies down the screen, the bar appears to twist.
 
 To enhance the 3D illusion, the bar is often split into a **front half** and **back half**, with the back half dimmer (or with `BRIGHT=0`) to simulate depth. When `width` is near zero, only a thin line shows; when `width` is maximal, the full bar fills its slot.
 
@@ -329,8 +329,8 @@ On the Spectrum, a twister is typically drawn as **attribute cells** rather than
 
 1. Computes `width(y, t)` from a sine lookup.
 2. Determines which cells fall within `[cx - width/2, cx + width/2]`.
-3. Writes attribute bytes for those cells (front colour for front half, back colour for back half).
-4. Writes background colour for cells outside the bar.
+3. Writes attribute bytes for those cells (front color for front half, back color for back half).
+4. Writes background color for cells outside the bar.
 
 Per-scanline cost: ~100 T. Per frame (192 scanlines): ~20,000 T-states. **Cheap.**
 
@@ -365,11 +365,11 @@ A **tunnel** is a 2.5D effect that simulates flying through a textured tube or c
 
 ### 8.1 What it looks like
 
-The screen fills with a rectangular texture pattern that has been **polar-warped** so that the centre of the screen corresponds to "infinitely far ahead" and the edges correspond to "the walls right next to me". As the texture shifts, the viewer appears to fly forward through the tunnel. Different tunnel effects use different textures (circuit-board patterns, brick walls, organic shapes) and different camera motions (straightforward forward motion, swaying, rotating).
+The screen fills with a rectangular texture pattern that has been **polar-warped** so that the center of the screen corresponds to "infinitely far ahead" and the edges correspond to "the walls right next to me". As the texture shifts, the viewer appears to fly forward through the tunnel. Different tunnel effects use different textures (circuit-board patterns, brick walls, organic shapes) and different camera motions (straightforward forward motion, swaying, rotating).
 
 ### 8.2 The algorithm
 
-For each pixel (or cell) on the screen, the tunnel is rendered by computing its **polar coordinates** relative to the screen centre:
+For each pixel (or cell) on the screen, the tunnel is rendered by computing its **polar coordinates** relative to the screen center:
 
 ```
 dx = screen_x - centre_x
@@ -416,7 +416,7 @@ The texture is typically an attribute-cell pattern (32×24 attribute bytes), and
 ### 8.5 Variants
 
 - **Tunnel + rotation**: the angle offset is animated, making the tunnel appear to spin around its forward axis.
-- **Tunnel + swaying camera**: the centre point `(centre_x, centre_y)` moves sinusoidally over time, making the tunnel sway.
+- **Tunnel + swaying camera**: the center point `(centre_x, centre_y)` moves sinusoidally over time, making the tunnel sway.
 - **Two-layer tunnel**: two textures are interleaved (one in the foreground, one in the background) using distance thresholds.
 - **Reflections**: a second, mirrored tunnel is composited on top of the first, simulating a wet floor or mirror.
 - **Pixel-level tunnel (rare)**: full per-pixel rendering with a 6144-byte texture. Visually stunning but very expensive.
@@ -506,7 +506,7 @@ True **3D rendering** — transforming vertices through a rotation matrix, proje
 
 ### 10.1 What it looks like
 
-3D wireframe shows a rotating geometric object (cube, pyramid, icosahedron, more complex shapes) drawn as connected lines. 3D filled polygons show the same object but with each face filled with a solid colour (or an attribute cell pattern), producing a "solid" appearance. High-end filled-polygon work uses **gouraud shading** — interpolating brightness across each face to simulate a light source.
+3D wireframe shows a rotating geometric object (cube, pyramid, icosahedron, more complex shapes) drawn as connected lines. 3D filled polygons show the same object but with each face filled with a solid color (or an attribute cell pattern), producing a "solid" appearance. High-end filled-polygon work uses **gouraud shading** — interpolating brightness across each face to simulate a light source.
 
 ### 10.2 The pipeline
 
@@ -539,7 +539,7 @@ Wireframe runs at 50 Hz for simple objects and 25 Hz for complex ones. Filled-po
 For filled rendering, you must hide the back-facing polygons. Two common approaches:
 
 - **Back-face culling**: compute the normal of each face; if it points away from the camera, skip the face. Costs ~50 T per face but eliminates ~50% of the rendering work on average.
-- **Painter's algorithm**: sort faces by depth (Z-coordinate of their centre) and draw them back-to-front, so nearer faces overwrite farther ones. Costs ~30 T per face for the sort, plus the cost of drawing occluded faces (wasted work).
+- **Painter's algorithm**: sort faces by depth (Z-coordinate of their center) and draw them back-to-front, so nearer faces overwrite farther ones. Costs ~30 T per face for the sort, plus the cost of drawing occluded faces (wasted work).
 
 Most engines use both: back-face culling first, then painter's algorithm on the remaining faces.
 
@@ -554,7 +554,7 @@ Gouraud shading adds ~50% to the per-face cost. It is the visual standard for hi
 Texture mapping (UV-mapping a texture onto a face) is **extremely rare** on the Spectrum because the per-pixel cost is enormous (~50 T per pixel for perspective-correct texturing). The handful of textured 3D demos on the Spectrum use either:
 
 - **Affine texture mapping** (no perspective correction): cheap but visually distorted.
-- **Per-cell attribute texturing**: the texture is sampled at the centre of each attribute cell, giving 32×24 resolution. Cheap and acceptable for distant objects.
+- **Per-cell attribute texturing**: the texture is sampled at the center of each attribute cell, giving 32×24 resolution. Cheap and acceptable for distant objects.
 - **Multicolor texture mapping**: per-scanline attribute sampling, giving 32×192 resolution. Expensive but visually impressive; rare.
 
 ### 10.7 Variants
@@ -572,7 +572,7 @@ Texture mapping (UV-mapping a texture onto a face) is **extremely rare** on the 
 
 ## 11. Other Effects — Particles, Fire, Wobblers, Vector Scroll, Demoscene Texts
 
-This section catalogues the remaining common effects that don't fit into the larger categories above. They are typically **cheap** and used as transitions, atmospherics, or filler between more ambitious parts.
+This section catalogs the remaining common effects that don't fit into the larger categories above. They are typically **cheap** and used as transitions, atmospherics, or filler between more ambitious parts.
 
 ### 11.1 Particle systems
 
@@ -593,7 +593,7 @@ Fire is a specific particle-like effect using a **diffusion-and-decay** algorith
 
 1. The bottom row of the screen is set to "maximum heat" (white attribute).
 2. Each frame, every cell's heat is updated as the average of the cells immediately below it, with a small random decay.
-3. The heat value is mapped to a colour via a LUT (black → red → yellow → white).
+3. The heat value is mapped to a color via a LUT (black → red → yellow → white).
 
 Per-cell cost: ~30 T. Per frame: 768 cells × 30 T = ~23,000 T-states. **Cheap.** The result is a flickering flame rising up the screen. Variants include "fire + image" (where the heat source is a static image rather than a bottom row) and "cold fire" (a downward-burning variant).
 
@@ -689,12 +689,12 @@ When designing a demo:
 
 ## 13. Cross-References
 
-- [multicolor_techniques.md](multicolor_techniques.md) — the raster-timing foundation that most effects rely on for 8×1/8×2 colour detail.
+- [multicolor_techniques.md](multicolor_techniques.md) — the raster-timing foundation that most effects rely on for 8×1/8×2 color detail.
 - [precalc_trigonometry.md](precalc_trigonometry.md) — the sine, multiplication, and reciprocal tables that plasma, tunnel, zoomer, and 3D effects all depend on.
 - [compression_packing.md](compression_packing.md) — ZX0, ZX1, ZX2, LZSA; used to compress pre-rendered effect frames for TS-Config disk streaming.
 - [demo_frameworks.md](demo_frameworks.md) — how effects are sequenced into a multi-part demo, with fades between them.
 - [soviet_demo_scene.md](soviet_demo_scene.md) §5 — the cultural context for Soviet refinement of multicolor-based effects (plasma, tunnel, gigascreen video).
-- [demoscene_platforms.md](demoscene_platforms.md) §3 — why the C64's hardware sprites and per-pixel colour RAM make some of these effects trivial on that platform (and others impossible).
+- [demoscene_platforms.md](demoscene_platforms.md) §3 — why the C64's hardware sprites and per-pixel color RAM make some of these effects trivial on that platform (and others impossible).
 - [notable_demos.md](notable_demos.md) — specific demos that pushed each effect to new heights; cited per-effect in §3.8, §4.7, §5.6, §6.6, §7.7, §8.7, §9.7, §10.8.
 - [../02_hardware/original/ula_timing.md](../02_hardware/original/ula_timing.md) — the ULA's frame timing; the foundation for all "50 Hz at 69,888 T-states" claims in this article.
 - [../02_hardware/original/ula_architecture.md](../02_hardware/original/ula_architecture.md) — why the ULA's video generation behaves as it does.
@@ -708,4 +708,4 @@ When designing a demo:
 
 ## License
 
-This article is licensed under [Creative Commons Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/) (CC BY-SA 4.0). You are free to share and adapt this material, provided you give appropriate credit and distribute any derivative works under the same licence.
+This article is licensed under [Creative Commons Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/) (CC BY-SA 4.0). You are free to share and adapt this material, provided you give appropriate credit and distribute any derivative works under the same license.

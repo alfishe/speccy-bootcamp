@@ -177,7 +177,7 @@ On the +2A/+3, contention begins at **T=14,361** (3 T-states before scanline 63 
 The pattern repeats every **228 T-states** on +2A/+3 (one scanline). The peak delay of 7T is **one T-state worse** than Ferranti's 6T, and occurs at slot offset 2 instead of offset 0 — this means any cycle-exact timing loop tuned for the 48K's 6,5,4,3,2,1,0,0 cadence will be off by 1-2 T-states per slot on a +2A/+3.
 
 > [!IMPORTANT]
-> **MREQ gating — the most important +2A/+3 difference.** The Ferranti ULA applies contention **whenever the CPU is on the bus**, regardless of whether the access is memory or I/O. The Amstrad gate array applies contention **only when the Z80's `MREQ` line is active** (i.e., a real memory access). I/O port accesses (`IORQ` active, `MREQ` inactive) are **never contended** on +2A/+3. This is why `OUT (#FE),A` (border colour), `OUT (#7FFD),A` (128K paging), and `OUT (#BFFD),A` (AY chip) all run at full speed during the paper area on +2A/+3, but pay up to 6T of contention delay on 48K/128K/+2. Code that uses tight `OUT (#FE),A` loops for multicolor border effects will run **too fast** when ported from +2A/+3 to 48K unless padded with NOPs. Source: [Sinclair Wiki — Contended memory](https://sinclair.wiki.zxnet.co.uk/wiki/Contended_memory).
+> **MREQ gating — the most important +2A/+3 difference.** The Ferranti ULA applies contention **whenever the CPU is on the bus**, regardless of whether the access is memory or I/O. The Amstrad gate array applies contention **only when the Z80's `MREQ` line is active** (i.e., a real memory access). I/O port accesses (`IORQ` active, `MREQ` inactive) are **never contended** on +2A/+3. This is why `OUT (#FE),A` (border color), `OUT (#7FFD),A` (128K paging), and `OUT (#BFFD),A` (AY chip) all run at full speed during the paper area on +2A/+3, but pay up to 6T of contention delay on 48K/128K/+2. Code that uses tight `OUT (#FE),A` loops for multicolor border effects will run **too fast** when ported from +2A/+3 to 48K unless padded with NOPs. Source: [Sinclair Wiki — Contended memory](https://sinclair.wiki.zxnet.co.uk/wiki/Contended_memory).
 
 ---
 
@@ -250,7 +250,7 @@ The Amstrad gate array (+2A/+3/+2B/+3B) is more selective: it keys contention of
 | `#FADF` (Fuller) | 1 | No | No |
 
 > [!IMPORTANT]
-> Code that does `OUT (#FE),A` to change the border colour during the paper area on a 48K or 128K will pay a contention delay of up to **6 extra T-states**. On the +2A/+3, the same instruction takes the same time regardless of beam position. This means **timing-tight border-effect code that works on +2A will run too fast on 48K** unless you pad with NOPs. See also the [MREQ gating](#within-each-contended-scanline-amstrad-gate-array--2a-3-2b-3b) note above for the underlying cause.
+> Code that does `OUT (#FE),A` to change the border color during the paper area on a 48K or 128K will pay a contention delay of up to **6 extra T-states**. On the +2A/+3, the same instruction takes the same time regardless of beam position. This means **timing-tight border-effect code that works on +2A will run too fast on 48K** unless you pad with NOPs. See also the [MREQ gating](#within-each-contended-scanline-amstrad-gate-array--2a-3-2b-3b) note above for the underlying cause.
 
 ---
 

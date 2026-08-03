@@ -232,7 +232,7 @@ A: Almost all — but with **hardware-specific variations**. A real 48K issue 2 
 
 **Q: What's the hardest behavior to test?**
 
-A: **Audio timing**. The AY-3-8912 produces continuous analog output, and verifying that an emulator's audio exactly matches a real chip's output requires capturing audio from real hardware and comparing sample-by-sample. Test programs exist that produce specific audio patterns, but full verification is labour-intensive.
+A: **Audio timing**. The AY-3-8912 produces continuous analog output, and verifying that an emulator's audio exactly matches a real chip's output requires capturing audio from real hardware and comparing sample-by-sample. Test programs exist that produce specific audio patterns, but full verification is labor-intensive.
 
 **Q: Why does my emulator fail the contended memory test only on specific cycles?**
 
@@ -251,7 +251,7 @@ The standard test suite stack includes:
 - **Pentagon Diag ROM** for Russian clone emulation
 - Various timing-specific tests for contended memory, interrupts, and video
 
-Modern emulators like **Fuse**, **ZEsarUX**, and **CSpect** all run these suites as part of their development process, and passing them is the baseline for being considered a serious emulator. The remaining gaps — undocumented clone quirks, audio waveform precision, analogue hardware behavior — are gradually being closed by ongoing community research.
+Modern emulators like **Fuse**, **ZEsarUX**, and **CSpect** all run these suites as part of their development process, and passing them is the baseline for being considered a serious emulator. The remaining gaps — undocumented clone quirks, audio waveform precision, analog hardware behavior — are gradually being closed by ongoing community research.
 
 For users, the test suites provide a way to evaluate emulator claims. An emulator that says it "supports the Pentagon" should pass the Pentagon Diag ROM; an emulator that claims "100% compatibility with original software" should pass ZEXALL and the FUSE suite. If it doesn't, the claims are overstated.
 

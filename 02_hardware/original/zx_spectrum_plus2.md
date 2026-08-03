@@ -24,7 +24,7 @@ In April 1986, **Clive Sinclair sold the Sinclair Research computer business to 
 - All existing inventory, tooling, and PCB designs
 - The rights to the unreleased "Darwin II" project (which eventually became the +3)
 
-Amstrad's motivation was straightforward: the Spectrum had an enormous installed base (over 3 million units in the UK alone by 1986), an enormous software library (over 6,000 commercial titles), and enormous brand recognition — but Sinclair Research was losing money and unable to capitalise on these assets. Amstrad, led by **Alan Sugar** (later Lord Sugar), saw an opportunity to monetise the Spectrum brand by aggressive cost-reduction and packaging improvements.
+Amstrad's motivation was straightforward: the Spectrum had an enormous installed base (over 3 million units in the UK alone by 1986), an enormous software library (over 6,000 commercial titles), and enormous brand recognition — but Sinclair Research was losing money and unable to capitalize on these assets. Amstrad, led by **Alan Sugar** (later Lord Sugar), saw an opportunity to monetize the Spectrum brand by aggressive cost-reduction and packaging improvements.
 
 ### Design Goals for the +2
 
@@ -158,7 +158,7 @@ The +2 case is a **two-tone grey slab** measuring approximately 410 mm × 220 mm
 
 The +2's rear panel has the following connectors (left to right):
 
-1. **Power input** — 9V DC, 2.1 mm barrel jack (centre-positive)
+1. **Power input** — 9V DC, 2.1 mm barrel jack (center-positive)
 2. **TV RF output** — UHF PAL, channel 36
 3. **RGB video output** — 8-pin DIN (different pinout from the 128K's RGB)
 4. **Monochrome video output** — phono (RCA) jack

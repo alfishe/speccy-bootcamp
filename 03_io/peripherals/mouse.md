@@ -55,7 +55,7 @@ Each sensor produces ~50-200 pulses per inch of mouse motion. The interface's jo
 - Kempston Mouse: a dedicated quadrature decoder chip (HP-QED or similar) counts the pulses into an 8-bit up/down counter. Software just reads the counter.
 - AMX Mouse: the Z80 PIO's input pins receive the raw A/B signals. Software must poll frequently enough to track the direction itself.
 
-If software polls too slowly on the AMX, it misses pulses — the mouse appears to "stick" or "jump backwards". The Kempston has no such issue because the counting happens in hardware.
+If software polls too slowly on the AMX, it misses pulses — the mouse appears to "stick" or "jump backward". The Kempston has no such issue because the counting happens in hardware.
 
 ---
 

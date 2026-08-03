@@ -46,7 +46,7 @@ The Harlequin's defining achievement is its **faithful ULA recreation in FPGA**.
 - The **timing generator** — the divide-by-N counter that produces the various clocks (CPU clock, video sync, etc.)
 - The **I/O ports** — the `#FE` port (speaker, MIC, EAR, BORDER, keyboard) and the contended-memory decoding
 
-The Harlequin implements all of this in Verilog HDL, synthesised onto the Cyclone II FPGA. The result is a ULA that behaves **identically** to the original Ferranti ULA — same timing, same memory contention, same video signal. The Harlequin passes all the standard Spectrum timing tests (the FUSE test suite, Sensible tests, etc.) with the same results as a real 48K Spectrum.
+The Harlequin implements all of this in Verilog HDL, synthesized onto the Cyclone II FPGA. The result is a ULA that behaves **identically** to the original Ferranti ULA — same timing, same memory contention, same video signal. The Harlequin passes all the standard Spectrum timing tests (the FUSE test suite, Sensible tests, etc.) with the same results as a real 48K Spectrum.
 
 ```mermaid
 timeline

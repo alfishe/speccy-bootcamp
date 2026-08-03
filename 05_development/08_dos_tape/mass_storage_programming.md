@@ -782,7 +782,7 @@ Direct hardware access means you handle all errors. A missing retry loop means a
 
 ### 2. Byte Order in LBA Addressing
 
-IDE LBA registers are written separately, so byte order is straightforward. But SD card commands send the 32-bit argument **big-endian** (most significant byte first). Getting this backwards silently reads the wrong sector.
+IDE LBA registers are written separately, so byte order is straightforward. But SD card commands send the 32-bit argument **big-endian** (most significant byte first). Getting this backward silently reads the wrong sector.
 
 ### 3. FAT16 vs. FAT32 Differences
 

@@ -4,7 +4,7 @@
 
 The **ZX Spectrum 16K** (launched 23 April 1982, £125) and its **48K** sibling (£175, or £70 for the upgrade kit) are not just the original Sinclair Spectrums — they are the **reference implementation** against which every later model, clone, emulator, and FPGA core is measured. When demoscene coders say "Spectrum timing" they mean the 48K's 69,888-T-state, 312-line, 50.08 Hz frame; when Russian engineers say "Spectrum" they mean a TTL reimplementation of this exact machine's video controller; when the *Fuse* emulator reports "100% accurate" it means it matches this exact Ferranti ULA.
 
-The design is famous for its **economy**. A 48K Spectrum motherboard carries barely a dozen large ICs — a Z80A, one or two ROMs, eight `4116` DRAMs for the lower 16 KB, eight `4532`/`4164` DRAMs for the upper 32 KB, a Ferranti ULA, an LM1889 colour modulator, a 7805 regulator, a handful of TTL glue, and the keyboard. There is no sound chip, no video chip, no I/O chip, no memory controller in the modern sense: the ULA does **all four jobs**. The cost was a machine with no sprites, no hardware scroll, no per-cell 8×1 colour, and a CPU that is repeatedly stalled by the video logic — but the price was £125 and the rest is history.
+The design is famous for its **economy**. A 48K Spectrum motherboard carries barely a dozen large ICs — a Z80A, one or two ROMs, eight `4116` DRAMs for the lower 16 KB, eight `4532`/`4164` DRAMs for the upper 32 KB, a Ferranti ULA, an LM1889 color modulator, a 7805 regulator, a handful of TTL glue, and the keyboard. There is no sound chip, no video chip, no I/O chip, no memory controller in the modern sense: the ULA does **all four jobs**. The cost was a machine with no sprites, no hardware scroll, no per-cell 8×1 color, and a CPU that is repeatedly stalled by the video logic — but the price was £125 and the rest is history.
 
 This article covers the 16K/48K as a **system**: history, board issues, bill of materials, memory map, video and audio signal chain, tape interface, expansion bus, and the differences between the 16K and 48K variants. For the **internal architecture of the ULA** itself, see [ULA Architecture](ula_architecture.md); for **frame timing and contention**, see [ULA Timing](ula_timing.md); for the **keyboard matrix**, see [keyboard_matrix.md](keyboard_matrix.md). The programmer-facing view of memory and ports is in [48K Memory & I/O](../../05_development/03_memory_and_io/memory_and_io_48k.md).
 
@@ -14,7 +14,7 @@ This article covers the 16K/48K as a **system**: history, board issues, bill of 
 
 ### The ZX Spectrum Project (1981–1982)
 
-After the success of the ZX81, Sinclair Research began work on its successor in mid-1981. The design goals were set by Clive Sinclair's commercial philosophy: **the cheapest possible colour home computer**. Where the Commodore 64 (launched August 1982, £299 at introduction) was designed around two large custom chips (VIC-II video, SID audio) with sprite support, hardware collision, scroll, and a three-voice synthesiser, the Spectrum was designed around the question *"what is the minimum hardware that can produce colour graphics and run real software?"* The answer was: one Z80A, one ROM, one Ferranti ULA, some DRAM, and almost nothing else.
+After the success of the ZX81, Sinclair Research began work on its successor in mid-1981. The design goals were set by Clive Sinclair's commercial philosophy: **the cheapest possible color home computer**. Where the Commodore 64 (launched August 1982, £299 at introduction) was designed around two large custom chips (VIC-II video, SID audio) with sprite support, hardware collision, scroll, and a three-voice synthesiser, the Spectrum was designed around the question *"what is the minimum hardware that can produce color graphics and run real software?"* The answer was: one Z80A, one ROM, one Ferranti ULA, some DRAM, and almost nothing else.
 
 The Spectrum was designed by a small team at Sinclair Research:
 
@@ -65,7 +65,7 @@ timeline
 
 ## System Architecture
 
-The 16K/48K Spectrum is organised around a single bus and a small number of bus masters. The Z80 is the only programmable processor; the ULA is the only other device that can drive the lower 16 KB of DRAM (during video fetch). Everything else — keyboard, tape, beeper, border — is reached through one I/O port (`#FE`).
+The 16K/48K Spectrum is organized around a single bus and a small number of bus masters. The Z80 is the only programmable processor; the ULA is the only other device that can drive the lower 16 KB of DRAM (during video fetch). Everything else — keyboard, tape, beeper, border — is reached through one I/O port (`#FE`).
 
 ```mermaid
 flowchart TB
@@ -131,13 +131,13 @@ The 48K Spectrum's IC inventory is famously small. A complete Issue 4A–6A 48K 
 | **Zilog Z80A** (or Z0840004PSC / NEC μPD780C-1 / SGS Z8400AB1) | 1 | CPU | 8 MHz-rated part run at 3.5 MHz |
 | **Ferranti ULA `6C001E-7`** (Issue 4A+) | 1 | Video, DRAM ctrl, I/O, sound | Earlier issues use `5C102E`, `5C112E`, `6C001E-5/-6` — see [ULA revisions](#ula-revisions-and-board-issues) |
 | **ROM** | 1 | 16 KB BASIC OS | Issue 1–2 used a mask ROM (`23632`, 2364-equivalent 8 KB × 2 or 16 KB × 1); Issue 3+ used a `27C256` (32 KB EPROM with half unused) or a mask part |
-| **4116 DRAM** (`4116`, `MCM4116`, `TMS4116`, `MB8116E`) | 8 | Lower 16 KB | 16 Kbit × 1, organised as **16 KB × 8 bits**. **Three supply rails: +5V, +12V, −5V.** The −5V rail is the infamous failure point of the 4116 |
+| **4116 DRAM** (`4116`, `MCM4116`, `TMS4116`, `MB8116E`) | 8 | Lower 16 KB | 16 Kbit × 1, organized as **16 KB × 8 bits**. **Three supply rails: +5V, +12V, −5V.** The −5V rail is the infamous failure point of the 4116 |
 | **4532 or 4164 DRAM** | 8 | Upper 32 KB (48K only) | 32 Kbit × 1 (`4532`, a partial-spec `4164`) or 64 Kbit × 1 (`4164`, half unused). **Single +5V rail** — far more reliable than the 4116 |
-| **LM1889** (National Semiconductor) | 1 | Video modulator / colour encoder | Combines Y (luminance) + U/V (colour difference) into PAL RF on UHF channel 36 (591.5 MHz). Driven by ULA's analog peripheral cells |
+| **LM1889** (National Semiconductor) | 1 | Video modulator / color encoder | Combines Y (luminance) + U/V (color difference) into PAL RF on UHF channel 36 (591.5 MHz). Driven by ULA's analog peripheral cells |
 | **7805** regulator | 1 | +5V linear regulator | TO-220 package; dissipates ~2W; gets hot |
-| **7905** regulator (Issue 1 only) | 1 | −5V regulator | Removed from Issue 2+ in favour of a simpler zener-derived −5V |
+| **7905** regulator (Issue 1 only) | 1 | −5V regulator | Removed from Issue 2+ in favor of a simpler zener-derived −5V |
 | **74LS00, 74LS02, 74LS04, 74LS08, 74LS32, 74LS157, 74LS158** | a handful | Address multiplexing, ROMCS generation, wait logic | Glue logic |
-| **BC184 / BC214 / ZTX313 transistors** | several | Video output amp, speaker driver, EAR signal conditioning | Issue 2+ has TR6 ("spider mod") for floating-bus behaviour |
+| **BC184 / BC214 / ZTX313 transistors** | several | Video output amp, speaker driver, EAR signal conditioning | Issue 2+ has TR6 ("spider mod") for floating-bus behavior |
 
 ### The 4116 DRAM Problem
 
@@ -147,7 +147,7 @@ The 8 × `4116` chips that form the lower 16 KB are the single most common hardw
 2. **`Vbb` (−5V) bias requirement** — the substrate bias must be present before `Vdd` (+12V); otherwise the chip enters latch-up. The Spectrum has no proper power-sequencing circuit; in practice the rails come up roughly together, but a flaky 7805/7905 or a failing decoupling capacitor can break the sequence.
 3. **Heat** — the 4116 dissipates more power than later single-rail DRAMs, and runs noticeably warm even when healthy.
 
-**Diagnostic symptom of failing 4116 RAM:** RAM-cleared but with garbage pixels in the lower 16 KB, or a Spectrum that boots to random coloured squares and crashes immediately. The standard repair is socket-and-replace — fit a turned-pin socket and swap chips one at a time until the bad one is found. A modern repair often replaces all eight with new-old-stock `4116` parts or fits a replacement SRAM adaptor that emulates the 4116 on a single +5V rail.
+**Diagnostic symptom of failing 4116 RAM:** RAM-cleared but with garbage pixels in the lower 16 KB, or a Spectrum that boots to random colored squares and crashes immediately. The standard repair is socket-and-replace — fit a turned-pin socket and swap chips one at a time until the bad one is found. A modern repair often replaces all eight with new-old-stock `4116` parts or fits a replacement SRAM adaptor that emulates the 4116 on a single +5V rail.
 
 > [!CAUTION]
 > **Never power up a 48K Spectrum with the lower 16 KB RAM socket empty or partial** — the missing −5V load on the floating rail can damage the regulator and surrounding decoupling capacitors. Always populate all 8 sockets or fit a known-good working bank.
@@ -248,7 +248,7 @@ On the 16K Spectrum the upper bank is **physically absent** — no DRAM chips an
 
 ## ULA — Summary and Cross-References
 
-The Ferranti ULA dominates the machine's behaviour so completely that it has its own deep-dive article. This section gives the high-level summary; for everything else, follow the cross-references.
+The Ferranti ULA dominates the machine's behavior so completely that it has its own deep-dive article. This section gives the high-level summary; for everything else, follow the cross-references.
 
 The ULA's jobs on the 16K/48K:
 
@@ -261,7 +261,7 @@ The ULA's jobs on the 16K/48K:
 | **Memory arbitration** | Stalls the CPU during video fetch of `#4000`–`#7FFF` |
 | **Interrupt generation** | Pulls `/INT` low for 32 T-states at the start of each frame (T-state 0 by convention) |
 | **Keyboard scanning** | Reads 5 column inputs; row select comes from CPU address bus A8–A15 |
-| **`#FE` I/O register** | Border colour, beeper, MIC output (writes); keyboard + EAR input (reads) |
+| **`#FE` I/O register** | Border color, beeper, MIC output (writes); keyboard + EAR input (reads) |
 | **Tape I/O** | EAR analog comparator (input), MIC driver (output) — all done in ULA peripheral cells |
 
 ### ULA Revisions and Board Issues
@@ -295,7 +295,7 @@ Most working 48K Spectrums encountered today are **Issue 4A through 6A** with a 
 
 ## Video Signal Chain
 
-The Spectrum produces a PAL composite-colour video signal. The signal path has three stages, two of which live in the ULA:
+The Spectrum produces a PAL composite-color video signal. The signal path has three stages, two of which live in the ULA:
 
 ```mermaid
 flowchart LR
@@ -310,24 +310,24 @@ flowchart LR
 
 ### The 14 MHz Master Crystal
 
-The ULA's video counters are driven by a **14 MHz master crystal** (14.000 MHz on 48K issues). This is **not** the PAL colour subcarrier (4.43361875 MHz) — that comes from a **separate 11.7337 MHz crystal** on the LM1889 modulator daughterboard, divided down internally. The 14 MHz / 4.43 MHz mismatch is the reason the Spectrum's colour is "almost but not quite" subcarrier-locked, and explains the slight colour fringeing visible on real hardware.
+The ULA's video counters are driven by a **14 MHz master crystal** (14.000 MHz on 48K issues). This is **not** the PAL color subcarrier (4.43361875 MHz) — that comes from a **separate 11.7337 MHz crystal** on the LM1889 modulator daughterboard, divided down internally. The 14 MHz / 4.43 MHz mismatch is the reason the Spectrum's color is "almost but not quite" subcarrier-locked, and explains the slight color fringeing visible on real hardware.
 
-A small trimmer capacitor (TC1) on the 48K board lets the user fine-tune the 14 MHz crystal. Adjusting this with a plastic screwdriver to fix a black-and-white picture (caused by colour subcarrier drift) is a classic rite of passage for 48K hardware repair.
+A small trimmer capacitor (TC1) on the 48K board lets the user fine-tune the 14 MHz crystal. Adjusting this with a plastic screwdriver to fix a black-and-white picture (caused by color subcarrier drift) is a classic rite of passage for 48K hardware repair.
 
 ### The LM1889 Modulator
 
 The **LM1889** is a National Semiconductor RF video modulator IC that takes the ULA's Y/U/V analog outputs and combines them into a PAL RF signal on **UHF channel 36 (591.5 MHz)**. It also drives the composite video output available on the edge connector (and on the 3.5mm AV jack of Issue 2+ machines retrofitted with the modification).
 
 The LM1889 daughterboard is a separate small PCB mounted vertically on the main board. It contains:
-- The 11.7337 MHz crystal for PAL colour subcarrier generation
+- The 11.7337 MHz crystal for PAL color subcarrier generation
 - The LM1889 IC itself
-- A handful of passive components for colour burst and sync shaping
+- A handful of passive components for color burst and sync shaping
 
 The modulator's RF output connects to the TV via a coaxial cable with a Belling-Lee (IEC 169-2) connector — the standard European TV aerial plug of the era.
 
 ### Why Real Hardware Looks Different from Emulators
 
-The 14 MHz crystal's tolerance, the LM1889's analog colour encoding, the modulator's frequency response, and the CRT's phosphor decay all contribute to a video output that is **subtly different from any emulator**. Emulator palettes (see [color_palette.md](../../10_references/color_palette.md)) approximate real hardware; the FUSE, Skoolkid, and ZEsarUX palettes represent different attempts to capture the analog look on modern displays.
+The 14 MHz crystal's tolerance, the LM1889's analog color encoding, the modulator's frequency response, and the CRT's phosphor decay all contribute to a video output that is **subtly different from any emulator**. Emulator palettes (see [color_palette.md](../../10_references/color_palette.md)) approximate real hardware; the FUSE, Skoolkid, and ZEsarUX palettes represent different attempts to capture the analog look on modern displays.
 
 ---
 
@@ -348,7 +348,7 @@ There is no oscillator, no envelope generator, no volume control. Sound exists o
 The internal "speaker" is actually a **50mm piezoelectric buzzer**, not a moving-coil speaker. It produces tinny, harsh sound with very little low-frequency response — but it is direct-coupled to the ULA's bit 4 output, so timing is bit-exact. The same signal appears on edge connector pin 28B (`SND`), allowing external amplifiers (and the later AY-3-8912 sound chip on the 128K) to be driven.
 
 > [!TIP]
-> **Beeper mixing tip:** any write to port `#FE` that sets bit 4 also writes bits 0–2 (border colour) and bit 3 (MIC). Sound loops must merge the current border colour into every write to avoid border strobing — see [Pitfall 3 in ULA Architecture](ula_architecture.md#pitfall-3--the-border-clobbering-beep).
+> **Beeper mixing tip:** any write to port `#FE` that sets bit 4 also writes bits 0–2 (border color) and bit 3 (MIC). Sound loops must merge the current border color into every write to avoid border strobing — see [Pitfall 3 in ULA Architecture](ula_architecture.md#pitfall-3--the-border-clobbering-beep).
 
 
 ---
@@ -405,7 +405,7 @@ The 16K/48K's only expansion interface is a **56-pin (28-pin × 2 sides) PCB edg
 
 ### Pinout
 
-The connector has two rows of 28 fingers each, conventionally labelled **A** (rear, component side) and **B** (front, solder side). Key pins:
+The connector has two rows of 28 fingers each, conventionally labeled **A** (rear, component side) and **B** (front, solder side). Key pins:
 
 | Pin | Side | Signal | Function |
 |---|---|---|---|
@@ -470,7 +470,7 @@ The edge connector also exposed the **Y/U/V analog video signals**, allowing thi
 
 The 16K Spectrum was designed from the outset to be **upgradeable to 48K** by the user. The upgrade kit, sold by Sinclair for £60, contained:
 
-- **8 × `4532` DRAM chips** (32 Kbit × 1 = 32 Kbit each, organised as 4 KB × 8 bits across the bank)
+- **8 × `4532` DRAM chips** (32 Kbit × 1 = 32 Kbit each, organized as 4 KB × 8 bits across the bank)
 - **2 × `74LS157` multiplexer ICs** (or `74LS158` on some kits) — to multiplex the upper RAM's 15-bit address onto the 7 address pins of the DRAMs
 - **A small PCB or wire jumpers** for the address-decode logic
 - **A screwdriver and instructions**
@@ -486,7 +486,7 @@ The install procedure:
 
 After installation, the ROM's cold-start RAM-size detection (`P_RAMT` probe) finds `#FFFF` instead of `#7FFF` and the machine boots as a 48K Spectrum. No ROM change is required — the ROM auto-detects the RAM size on every cold start.
 
-Many users botched the upgrade with bent DRAM pins, broken membrane connectors, or misoriented multiplexers, producing a half-working machine that booted but crashed at `#8000` accesses. Sinclair service centres did a brisk trade in repairing botched upgrades. Modern practice is to fit turned-pin sockets rather than soldering DRAMs directly, so individual chips can be replaced.
+Many users botched the upgrade with bent DRAM pins, broken membrane connectors, or misoriented multiplexers, producing a half-working machine that booted but crashed at `#8000` accesses. Sinclair service centers did a brisk trade in repairing botched upgrades. Modern practice is to fit turned-pin sockets rather than soldering DRAMs directly, so individual chips can be replaced.
 
 
 ---
@@ -522,7 +522,7 @@ The 16K/48K keyboard is the famous **40-key rubber-membrane Chiclet-style keyboa
 Notable hardware points relevant to this article:
 
 - The keyboard is a **passive 8 × 5 matrix of membrane switches**. The ULA owns only the 5 column inputs (`KB0`–`KB4`); the 8 row selects come directly from CPU address lines A8–A15 through diodes on the membrane.
-- The rubber domes are formed from a single moulded sheet; the key labels are printed on the rubber surface, which wears with use ("worn smooth" keys are a defining trait of well-used Spectrums).
+- The rubber domes are formed from a single molded sheet; the key labels are printed on the rubber surface, which wears with use ("worn smooth" keys are a defining trait of well-used Spectrums).
 - There is **no keyboard controller** and no auto-repeat hardware; the ROM scans the matrix in software during the IM1 interrupt and implements auto-repeat via a counter in the `REPDEL`/`REPPER` system variables.
 - **The keyword system** (pressing `J` in extended mode produces `LOAD`) is implemented entirely in ROM: the same physical key sends a different code based on the current editor mode. This is why a Spectrum keyboard needs only 40 keys where a modern keyboard needs 80+.
 
@@ -530,7 +530,7 @@ Notable hardware points relevant to this article:
 
 ## FAQ
 
-**Why does my 48K Spectrum show coloured squares and crash on power-up?**
+**Why does my 48K Spectrum show colored squares and crash on power-up?**
 Almost always a failed `4116` DRAM in the lower 16 KB. The `-5V` substrate bias rail or one of the chip's internal storage cells has failed. Swap chips one at a time with a known-good part to identify the bad one. See [The 4116 DRAM Problem](#the-4116-dram-problem).
 
 **Can I write code that detects whether it's running on a 16K or 48K Spectrum?**
@@ -542,8 +542,8 @@ Because the lower 16 KB is **contended** — the ULA's video fetch can steal bus
 **Can I disable the internal ROM to run my own firmware at `#0000`–`#3FFF`?**
 Yes, but only with external hardware — pull the `ROMCS` pin (edge connector 25A) low. The 16K/48K has no software mechanism for ROM banking; that came with the 128K. See [ROM and the ULA `ROMCS` Signal](#rom-and-the-ula-romcs-signal).
 
-**Why does my 48K's video have visible colour fringeing on edges?**
-The 14 MHz master crystal is not phase-locked to the PAL subcarrier crystal (4.43 MHz) on the LM1889 modulator. Slight tolerance drift between the two crystals produces colour fringeing on sharp luminance transitions. Adjusting TC1 (the trimmer capacitor on the 14 MHz crystal) can minimise this.
+**Why does my 48K's video have visible color fringeing on edges?**
+The 14 MHz master crystal is not phase-locked to the PAL subcarrier crystal (4.43 MHz) on the LM1889 modulator. Slight tolerance drift between the two crystals produces color fringeing on sharp luminance transitions. Adjusting TC1 (the trimmer capacitor on the 14 MHz crystal) can minimize this.
 
 **What's the difference between Issue 2 and Issue 3 boards?**
 Issue 3 added the TR6 "spider" transistor (originally a factory retrofit on Issue 2 for the `5C112E` ULA) and changed minor analog circuitry. Issue 3 also fixed the `/RAS` timing problem of the `6C001E-5` ULA. See [PCB Issue Numbers](#pcb-issue-numbers) above.
@@ -572,7 +572,7 @@ As a collector's item, yes. For practical use, no — almost all interesting Spe
 - [Floating Bus](../../05_development/05_display_and_timing/floating_bus.md) — the arbiter's data-bus side effect
 - [Border Effects](../../05_development/05_display_and_timing/border_effects.md) — racing the beam on the border latch
 - [Color System](../../05_development/05_display_and_timing/color_system.md) — attribute byte, attribute clash, BRIGHT/FLASH
-- [Color Palette](../../10_references/color_palette.md) — reference hex values for the standard 15-colour palette
+- [Color Palette](../../10_references/color_palette.md) — reference hex values for the standard 15-color palette
 - [Character Set](../../10_references/character_set.md) — code ranges, ROM font layout, UDG, tokens
 - [48K ROM](../../04_operating_systems/rom_48k.md) — ROM map and cold-start sequence
 - [System Variables](../../04_operating_systems/system_variables.md) — `CHARS`, `P_RAMT`, `FRAMES`, and the rest

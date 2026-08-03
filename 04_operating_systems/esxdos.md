@@ -464,7 +464,7 @@ For modern use, ESXDOS wins on every axis except nostalgia and authenticity. A S
 
 ## §6. The Assembly API
 
-ESXDOS exposes its file I/O services to machine-code programs through a small, well-defined API. This section documents the dispatch mechanism, the function catalogue, and the calling conventions.
+ESXDOS exposes its file I/O services to machine-code programs through a small, well-defined API. This section documents the dispatch mechanism, the function catalog, and the calling conventions.
 
 ### 6.1 Dispatch mechanism
 
@@ -484,7 +484,7 @@ EI
 
 If the function succeeds, ESXDOS returns with the **carry flag set**. On error, the carry flag is reset and the A register holds the error code (see §6.6).
 
-### 6.2 The function catalogue
+### 6.2 The function catalog
 
 The core ESXDOS function set, stable since version 0.7:
 
@@ -524,7 +524,7 @@ The core ESXDOS function set, stable since version 0.7:
 | `#A7` | F_FCD | Change current directory |
 | `#A8` | F_FGETCWD | Get current directory path |
 
-This is a much richer API than TR-DOS's nine hook codes. The function names follow a Unix/POSIX flavour: `F_OPEN`/`F_CLOSE`/`F_READ`/`F_WRITE` are obvious analogues of POSIX `open`/`close`/`read`/`write`, and `F_FMKDIR`/`F_FRMDIR` mirror `mkdir`/`rmdir`.
+This is a much richer API than TR-DOS's nine hook codes. The function names follow a Unix/POSIX flavor: `F_OPEN`/`F_CLOSE`/`F_READ`/`F_WRITE` are obvious analogs of POSIX `open`/`close`/`read`/`write`, and `F_FMKDIR`/`F_FRMDIR` mirror `mkdir`/`rmdir`.
 
 ### 6.3 File handles
 

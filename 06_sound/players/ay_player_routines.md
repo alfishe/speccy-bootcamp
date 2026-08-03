@@ -87,13 +87,13 @@ This is **8 T-states per OUT** plus the B-toggling overhead (`LD B,n` is 7 T-sta
 
 Most players **do not blindly write all 14 registers every frame**. They keep a shadow copy of the last-written values in RAM and only write registers whose values have changed since the previous frame. This can cut the per-frame register-write cost in half for typical music (notes change every row, but the envelope shape register changes rarely, and the noise period even less so).
 
-The trade-off is that the shadow copy itself costs RAM (14 bytes) and CPU time (compare against shadow before each potential write). For the smallest player (Arkos AKM in a 1K intro), the skip-unchanged optimisation is sometimes omitted in favour of unconditional writes.
+The trade-off is that the shadow copy itself costs RAM (14 bytes) and CPU time (compare against shadow before each potential write). For the smallest player (Arkos AKM in a 1K intro), the skip-unchanged optimisation is sometimes omitted in favor of unconditional writes.
 
 ---
 
 ## ISR Integration
 
-The player must be called **once per video frame**, synchronised to the Spectrum's vertical-blank interrupt. The standard 50 Hz PAL frame is:
+The player must be called **once per video frame**, synchronized to the Spectrum's vertical-blank interrupt. The standard 50 Hz PAL frame is:
 
 | Model | Frame T-states | Effective rate | Notes |
 |-------|----------------|----------------|-------|
@@ -270,7 +270,7 @@ The PT3 format evolved through versions 3.0–3.7, with minor changes to the hea
 
 ## Arkos AKG / AKM / AKY Player Structure
 
-The Arkos Tracker family provides three distinct players, each optimised for a different use case. All three share a common module format (the `.aks` source compiled to a binary song blob) but differ in code size, CPU cost, and feature set.
+The Arkos Tracker family provides three distinct players, each optimized for a different use case. All three share a common module format (the `.aks` source compiled to a binary song blob) but differ in code size, CPU cost, and feature set.
 
 ### AKG — "Arkos Tracker Game" (general purpose)
 
@@ -285,9 +285,9 @@ The balanced player, recommended for most game soundtracks. AKG supports the ful
 | Multi-PSG support | Yes (2 or 3 PSGs, scales linearly) |
 | RAM vs ROM | Both variants provided (RAM uses self-modifying code, slightly faster) |
 
-### AKM — "Arkos Tracker Minimal" (size-optimised)
+### AKM — "Arkos Tracker Minimal" (size-optimized)
 
-The memory-optimised player, intended for size-limited productions (1K, 4K, 8K intros). AKM sacrifices some effect coverage and uses aggressive code reuse to achieve a much smaller footprint.
+The memory-optimized player, intended for size-limited productions (1K, 4K, 8K intros). AKM sacrifices some effect coverage and uses aggressive code reuse to achieve a much smaller footprint.
 
 | Property | Typical value |
 |----------|---------------|
@@ -367,7 +367,7 @@ main_loop:
         JR   main_loop
 ```
 
-The `HALT` synchronises the main loop to VSync. The ISR fires during the `HALT` (specifically, the Z80 wakes up from `HALT` in response to the interrupt), so the music player runs first, then the game logic. This is the standard pattern for games with music.
+The `HALT` synchronizes the main loop to VSync. The ISR fires during the `HALT` (specifically, the Z80 wakes up from `HALT` in response to the interrupt), so the music player runs first, then the game logic. This is the standard pattern for games with music.
 
 ### The "music during demo" pattern
 

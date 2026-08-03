@@ -19,7 +19,7 @@ This article covers the Next's WiFi hardware, the SPI-based protocol between FPG
 
 ### The ZX Spectrum Next Project (2012–2017)
 
-The ZX Spectrum Next was conceived in **2012** by the **SpecNext Ltd** team, a group led by Jim Bagley, Victor Trucco, and others. Their goal was to create a modern Spectrum-compatible machine — not an emulator, not a clone, but a true evolution of the original Sinclair hardware, built around an FPGA and adding substantial new capabilities while remaining backwards-compatible with original Spectrum software.
+The ZX Spectrum Next was conceived in **2012** by the **SpecNext Ltd** team, a group led by Jim Bagley, Victor Trucco, and others. Their goal was to create a modern Spectrum-compatible machine — not an emulator, not a clone, but a true evolution of the original Sinclair hardware, built around an FPGA and adding substantial new capabilities while remaining backward-compatible with original Spectrum software.
 
 The Next was **crowdfunded on Kickstarter** in **October 2016**, raising over £500,000 from more than 3,000 backers. The first production units shipped in **2017–2018**, with the larger "TBBlue" board (with full expansion connector) following later. The Next includes:
 

@@ -4,7 +4,7 @@
 
 **ZEsarUX** (ZX Spectrum Emulator Revised And Universal eXtension) is a cross-platform ZX Spectrum emulator developed by **Cesar Hernandez Nuñez** (known online as **chernandezba**). Started in **2013**, ZEsarUX has become the emulator of choice for **reverse engineering**, **broad hardware coverage**, and **advanced debugging**. Where **Fuse** (see [fuse.md](fuse.md)) is the workhorse for general use, ZEsarUX is the specialist's tool — capable of emulating obscure clones that no other emulator handles, with debugging features that go far beyond what other emulators offer.
 
-ZEsarUX is open-source (GPLv3) and runs on Linux, macOS, and Windows. It supports not only the standard Sinclair models (16K/48K/128K/+2/+2A/+3) but also a vast range of clones (Pentagon, Scorpion, Inves, TK90X, TK95, ATM Turbo, Chrome, BaseConf, TSConf) and the **ZX Spectrum Next**. Its debugger offers features found in no other Spectrum emulator — including **reverse debugging** (stepping backwards through execution), **real-time assembly editing**, and **hardware-specific visualisations**.
+ZEsarUX is open-source (GPLv3) and runs on Linux, macOS, and Windows. It supports not only the standard Sinclair models (16K/48K/128K/+2/+2A/+3) but also a vast range of clones (Pentagon, Scorpion, Inves, TK90X, TK95, ATM Turbo, Chrome, BaseConf, TSConf) and the **ZX Spectrum Next**. Its debugger offers features found in no other Spectrum emulator — including **reverse debugging** (stepping backward through execution), **real-time assembly editing**, and **hardware-specific visualisations**.
 
 This article covers ZEsarUX's history, architecture, the breadth of its hardware coverage, its distinctive debugging tools, and its place in the Spectrum ecosystem. For comparison with other emulators, see [emulator_comparison.md](emulator_comparison.md).
 
@@ -184,18 +184,18 @@ The conditional breakpoint feature is particularly powerful — you can break wh
 
 ### Reverse Debugging
 
-ZEsarUX's **reverse debugging** is its most innovative feature. When enabled, the emulator records execution history as the program runs, allowing the user to **step backwards** through execution — undoing instructions, restoring register values, etc.
+ZEsarUX's **reverse debugging** is its most innovative feature. When enabled, the emulator records execution history as the program runs, allowing the user to **step backward** through execution — undoing instructions, restoring register values, etc.
 
 How it works:
 
 1. The emulator maintains a circular buffer of recent state snapshots
 2. When the user requests a reverse step, the emulator restores the previous state
-3. The user can step backwards, inspect state at any point, then resume forward execution
+3. The user can step backward, inspect state at any point, then resume forward execution
 
 Reverse debugging is invaluable for:
 
 - **Understanding crash causes** — step back from a crash to find the root cause
-- **Tracking data flow** — see how a value was set, by working backwards
+- **Tracking data flow** — see how a value was set, by working backward
 - **Understanding protection schemes** — examine how copy protection code arrived at a particular state
 
 Most other emulators don't offer reverse debugging; ZEsarUX is the standard tool for this in the Spectrum world.

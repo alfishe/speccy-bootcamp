@@ -33,7 +33,7 @@ The .RZX format was created in 2001 by the **RZX Working Group**, an informal co
 
 The problem the RZX Archive was solving: how do you prove that you actually completed a game? Anyone can claim to have reached the end screen, but a screenshot is trivially fakeable. The RZX Archive's solution was to require an **input recording** — a file that, when replayed against the game's snapshot, deterministically reproduces the entire playthrough. The recording can be inspected, validated, and verified by the community.
 
-The .RZX format was designed to be that recording file. It was based on earlier "demo" formats used by various emulators (notably X128's `.dem` format and Spectrum+ALF's `.piolet` format), but standardised into a single open format supported by every major emulator.
+The .RZX format was designed to be that recording file. It was based on earlier "demo" formats used by various emulators (notably X128's `.dem` format and Spectrum+ALF's `.piolet` format), but standardized into a single open format supported by every major emulator.
 
 ### 1.2 Scope
 
@@ -178,7 +178,7 @@ The .RZX input format is unusual in that it records **what the program read**, n
 
 - **Hardware independence**: The format does not need to model the Spectrum's keyboard matrix or any specific joystick interface. It just records "the program did `IN A, (#FE)` and got `0xDF`".
 - **Compression efficiency**: If the program polls the same port with the same input multiple times in a row, the recording can use a single frame entry with `count > 1`.
-- **Robustness**: The format captures the actual machine behaviour, not the user's intention. This means the recording will replay correctly even on an emulator with slightly different input handling.
+- **Robustness**: The format captures the actual machine behavior, not the user's intention. This means the recording will replay correctly even on an emulator with slightly different input handling.
 
 The downside is that the format is tied to the emulator's IN-port handling — if the emulator's keyboard/joystick handling changes, old recordings may not replay correctly. This is why .RZX recordings are tied to a specific emulator version (recorded in the creator block).
 
@@ -365,7 +365,7 @@ void rzx_capture_in(uint16_t port, uint8_t value) {
 
 The example above includes the most important optimisation: **run-length compression of identical frames**. If the program polls the same port with the same value for 50 frames in a row (typical of a "press any key" prompt), the recorder produces a single frame entry with `count = 50` instead of 50 separate entries. This typically reduces the recording size by an order of magnitude.
 
-Some emulators take this further by **coalescing non-adjacent but identical frames** (e.g., frames 100–149 and 150–199 with identical input). However, this is non-standard and risks subtly altering replay semantics if the program's behaviour depends on the exact frame count.
+Some emulators take this further by **coalescing non-adjacent but identical frames** (e.g., frames 100–149 and 150–199 with identical input). However, this is non-standard and risks subtly altering replay semantics if the program's behavior depends on the exact frame count.
 
 ### 6.3 Capturing the initial snapshot
 
@@ -486,8 +486,8 @@ uint8_t rzx_replay_in(uint16_t port) {
 
 Replay is only correct if the emulator's execution is **deterministic** — that is, given the same snapshot and the same inputs, the emulator produces exactly the same machine state at every point. This requires:
 
-- **Cycle-accurate Z80 emulation**: every instruction must take the same number of T-states as on real hardware. Contended memory timing (the "slow RAM" delay when accessing the upper 16K of the 48K Spectrum) must be modelled correctly.
-- **Deterministic peripheral behaviour**: the AY chip, the beeper, the floating bus, and the keyboard matrix must all produce the same output for the same inputs.
+- **Cycle-accurate Z80 emulation**: every instruction must take the same number of T-states as on real hardware. Contended memory timing (the "slow RAM" delay when accessing the upper 16K of the 48K Spectrum) must be modeled correctly.
+- **Deterministic peripheral behavior**: the AY chip, the beeper, the floating bus, and the keyboard matrix must all produce the same output for the same inputs.
 - **No real-time dependencies**: the emulator must not sample the host's clock, host's keyboard, or host's random number generator during replay. All randomness in the emulated machine must come from the snapshot or the input.
 
 If determinism is violated (e.g., the emulator reads the host's clock during replay), the replay will diverge from the original recording. The first sign of divergence is usually an unexpected IN port read — the player's `rzx_replay_in()` will hit the "unexpected IN port" branch.

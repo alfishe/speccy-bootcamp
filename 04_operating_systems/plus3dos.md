@@ -19,7 +19,7 @@ This article covers +3 DOS as a system: the +3 hardware it sits on, its memory m
 3. **Memory layout** — the four paging modes, where DOS lives
 4. **The BASIC command set** — the DOS-specific keywords added to +3 BASIC
 5. **The file system** — CP/M-style user numbers, directories, allocation
-6. **The RSX assembly API** — Resident System Extensions, function catalogue
+6. **The RSX assembly API** — Resident System Extensions, function catalog
 7. **CP/M compatibility** — booting CP/M 2.2 from a +3
 8. **Quirks, traps, and modern status** — what survives today
 9. **Cross-references** — where to go next
@@ -51,7 +51,7 @@ From the perspective of anyone using a +2A or +3 in the late 1980s, +3 DOS was s
 
 Three reasons:
 
-1. **The +3 itself was a commercial disappointment.** Sales were modest, the price was high, and the disk format was non-standard. By 1990, Amstrad had discontinued the +3 in favour of the +2A (a +3 with the disk drive removed and the price halved).
+1. **The +3 itself was a commercial disappointment.** Sales were modest, the price was high, and the disk format was non-standard. By 1990, Amstrad had discontinued the +3 in favor of the +2A (a +3 with the disk drive removed and the price halved).
 
 2. **The 3-inch disk format was orphaned.** Hitachi's 3-inch floppy — distinct from the 3.5-inch floppy that won the market — was used only by Amstrad, some MSX machines, and a few obscure home computers. By 1990, blank 3-inch disks were expensive and hard to find.
 
@@ -169,7 +169,7 @@ The +3 uses a port at `#1FFD` to select between four **paging modes**. Combined 
 The +3's extra ROM — containing the +3 DOS code and the +3's enhanced editor — is banked into the `#0000`–`#3FFF` slot via a separate mechanism. There are effectively **four ROM pages**:
 
 - ROM 0: the 128K editor ROM (modified for +3 hardware).
-- ROM 1: the original 48K BASIC ROM (for backwards compatibility).
+- ROM 1: the original 48K BASIC ROM (for backward compatibility).
 - ROM 2: the +3's DOS and disk routines.
 - ROM 3: the 48K BASIC ROM with patches for +2A/+3 hardware differences.
 
@@ -187,7 +187,7 @@ The DOS workspace lives in **RAM bank 0** (in the +3's RAM disk mode, mode 2). T
 
 ### 3.3 Backwards compatibility
 
-Despite its complexity, the +3's memory model is designed to be backwards-compatible with the 128K and 48K:
+Despite its complexity, the +3's memory model is designed to be backward-compatible with the 128K and 48K:
 
 - A program that uses only 128K-compatible `#7FFD` paging will work on the +3 unchanged, as long as it doesn't try to write to `#1FFD`.
 - A program that uses only the 48K memory layout (no paging at all) will work on the +3 unchanged.
@@ -542,7 +542,7 @@ The reason is partly the 3-inch drive's slower spin rate (300 RPM vs. 360 RPM on
 
 In practice this means a 32 KB game loads from +3 disk in about 1.5 seconds — about three times what a Pentagon/TR-DOS setup would take. Not unusable, but noticeably slower.
 
-### 8.3 The RAM disk reset behaviour
+### 8.3 The RAM disk reset behavior
 
 The RAM disk (the +3's 64 KB of "extra" RAM, banks 0–3 in mode 2) is cleared on every reset. A program that stores data on the RAM disk and then triggers a `RANDOMIZE USR 0` (reset) will lose all of it. The cure is to use the RAM disk only for transient data, never for state the user cares about.
 

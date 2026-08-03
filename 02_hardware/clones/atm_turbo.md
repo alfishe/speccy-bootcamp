@@ -1352,4 +1352,4 @@ Several implementation concerns for hardware reproduction:
 - **ZX Evolution user manual** — [nedopc.com/zxevo](http://nedopc.com/zxevo/zxevo_user_manual_revc_eng.pdf) — FPGA-based ATM Turbo 2+ successor
 - **List of ZX Spectrum clones** — [en.wikipedia.org](https://en.wikipedia.org/wiki/List_of_ZX_Spectrum_clones)
 - **Demoozoo ATM Turbo tag** — [demozoo.org](https://demozoo.org/productions/tagged/atm-turbo/) — Software catalog
-- **Alone Coder software list** — [alonecoder.nedopc.com](http://alonecoder.nedopc.com/atmsoft.txt) — ~300 ATM Turbo titles catalogued
+- **Alone Coder software list** — [alonecoder.nedopc.com](http://alonecoder.nedopc.com/atmsoft.txt) — ~300 ATM Turbo titles cataloged

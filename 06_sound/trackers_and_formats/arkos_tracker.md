@@ -10,7 +10,7 @@
 
 Arkos Tracker is the alternative lineage to the Pro Tracker / Vortex Tracker II family. Where VTII preserves and consolidates the 1990s Soviet-clone format ecosystem, Arkos started fresh in 2003 with a format designed for **embedded use in games** — small player routines, fast execution, native sound-effect support, and multi-platform export. The current version (AT3, actively developed 2020–present) is a C++/JUCE application running on Windows, macOS, and Linux.
 
-The key trade-off versus VTII: Arkos cannot import or export PT3. A composer with an existing PT3 catalogue must either stay in VTII or convert modules manually. The payoff for new music is a more capable editor and a family of player routines (AKG, AKM, AKY, MOD) optimized for different use cases — game soundtracks, size-limited demos, multi-PSG music, even sample playback.
+The key trade-off versus VTII: Arkos cannot import or export PT3. A composer with an existing PT3 catalog must either stay in VTII or convert modules manually. The payoff for new music is a more capable editor and a family of player routines (AKG, AKM, AKY, MOD) optimized for different use cases — game soundtracks, size-limited demos, multi-PSG music, even sample playback.
 
 ### Naming Convention
 
@@ -42,7 +42,7 @@ A complete rewrite in C++ using the [JUCE](https://juce.com/) framework, making 
 
 ### Arkos Tracker 3 (2020–present, C++/JUCE, open source)
 
-The current version, actively developed on [GitHub](https://github.com/ArkosTracker/arkestracker) under the MIT licence. Major additions over AT2:
+The current version, actively developed on [GitHub](https://github.com/ArkosTracker/arkestracker) under the MIT license. Major additions over AT2:
 
 - **Multi-PSG composition** — songs can target 1, 2, 3, or more PSG chips simultaneously, with each PSG's clock independently configurable. This is true 6/9/12-channel editing, not the two-parallel-modules approach of VTII.
 - **Sample (digidrum) support** — digidrum samples can be embedded in the song and triggered via the AKY player.
@@ -137,7 +137,7 @@ Arkos and VTII serve overlapping but distinct needs. The choice is rarely "which
 | **TurboSound editing** | Two parallel modules | Single unified song |
 | **Multi-PSG (>2)** | ❌ Max 2 PSGs | ✅ Unlimited |
 | **Cross-platform** | ❌ Windows only (VT3 port exists separately) | ✅ Windows/macOS/Linux |
-| **Open source** | ❌ (VTII proper; VT3 is open) | ✅ MIT licence |
+| **Open source** | ❌ (VTII proper; VT3 is open) | ✅ MIT license |
 | **Digidrum / sample support** | ❌ PSG only | ✅ AKY + MOD |
 | **Sound effects support** | Limited | ✅ SE player |
 | **Piano roll** | ❌ | ✅ |
@@ -147,7 +147,7 @@ Arkos and VTII serve overlapping but distinct needs. The choice is rarely "which
 ### When to Use Which
 
 **Use VTII when:**
-- You have an existing PT3 catalogue to maintain.
+- You have an existing PT3 catalog to maintain.
 - You need to import 1990s tracker formats (STC, STP, ASC, SQT, etc.).
 - You are working with Soviet-clone-scene musicians who use PT3.
 - You only need 3 or 6 (TurboSound) channels.
@@ -194,7 +194,7 @@ AT3 cannot read or write PT3. Composers migrating from VTII must either stay in 
 
 - [Tracker History](tracker_history.md) — the full lineage, including AT's place in it
 - [Vortex Tracker II](vortex_tracker.md) — the alternative ecosystem (PT3 lineage)
-- [AY Music Formats](ay_music_formats.md) — comprehensive format catalogue
+- [AY Music Formats](ay_music_formats.md) — comprehensive format catalog
 - [Player Comparison](../players/player_comparison.md) — Arkos players vs PT3 player benchmarks
 - [AY Player Routines](../players/ay_player_routines.md) — embedding Arkos players in a game
 - [TurboSound](../hardware/turbosound.md) — the multi-PSG hardware AT3 targets

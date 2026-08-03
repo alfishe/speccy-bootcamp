@@ -149,7 +149,7 @@ In every case: save `BANK_M`, modify the relevant bits, write to `BANK_M` and `#
 | `#5B00` | `SWAP` | 16 | Main ROM swap — save regs, toggle ROM, call target, restore |
 | `#5B10` | `STOO` | 17 | Stripped-down entry (caller handles DI and register save) |
 | `#5B21` | `YOUNGER` | 9 | Unconditionally page in ROM 0 (the "younger" ROM) |
-| `#5B2A` | `REGNUOY` | 16 | Page in ROM 0 and return to caller (YOUNGER backwards) |
+| `#5B2A` | `REGNUOY` | 16 | Page in ROM 0 and return to caller (YOUNGER backward) |
 | `#5B3A` | `ONERR` | 24 | Intercept ROM 1 errors and route to ROM 0 display |
 
 **Supporting variables** (data in RAM):
@@ -218,7 +218,7 @@ Pages in ROM 0 unconditionally: reads `BANK_M`, clears bit 4 (ROM 0 = "younger/n
 
 #### REGNUOY (#5B2A) — ROM 0 Return Trampoline
 
-"YOUNGER" spelled backwards. Combines two actions in one sequence:
+"YOUNGER" spelled backward. Combines two actions in one sequence:
 
 1. Perform the same bit-clearing as YOUNGER (switch to ROM 0)
 2. `JP` through `RETADDR` to resume the original ROM 0 caller
@@ -749,7 +749,7 @@ The RAM disk is only available when the machine is in 128K mode (ROM 0 active). 
 
 ### RAM Disk Data Structures
 
-The RAM disk stores its data in **banks 4 and 6**, which are paged into the `#C000`–`#FFFF` address range as needed. Data is organised as a simple file system:
+The RAM disk stores its data in **banks 4 and 6**, which are paged into the `#C000`–`#FFFF` address range as needed. Data is organized as a simple file system:
 
 #### Catalog Structure
 
@@ -835,7 +835,7 @@ The full-screen editor occupies the entire 24-line display and is implemented en
 2. If a match is found, the matched characters are replaced with the corresponding single-byte token
 3. If no match is found, the character is kept as a literal
 
-This means `P`, `R`, `I`, `N`, `T` typed individually is recognised as the token for `PRINT` (`#F5`) when ENTER is pressed. The process is transparent — the program listing shows keywords expanded back to their full text.
+This means `P`, `R`, `I`, `N`, `T` typed individually is recognized as the token for `PRINT` (`#F5`) when ENTER is pressed. The process is transparent — the program listing shows keywords expanded back to their full text.
 
 **RENUM implementation:** The `RENUM` command (built into ROM 0, not available on 48K) renumbers the BASIC program:
 1. First pass: scan all lines and build a mapping of old line numbers to new line numbers

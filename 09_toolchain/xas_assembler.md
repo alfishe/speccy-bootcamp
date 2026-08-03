@@ -2,9 +2,9 @@
 
 # XAS Assembler — The Russian Scene's Code-Generation Specialist
 
-**XAS** is the second of the two major Russian-native Z80 assemblers, alongside [ALASM](alasm_sts.md). Developed across the 1990s in versions 7.x through 9.x, XAS served the same audience as ALASM — Russian Spectrum clone owners developing for the TR-DOS disk ecosystem centred on the [Pentagon](../02_hardware/clones/pentagon.md) and Scorpion hardware. Where ALASM was the **generalist** assembler that dominated mainstream Russian development, XAS was the **specialist** assembler favoured by demoscene crews focused on code generation — particularly **Elite Group** and **Progress**, two of the most technically ambitious Russian demo crews of the 1990s.
+**XAS** is the second of the two major Russian-native Z80 assemblers, alongside [ALASM](alasm_sts.md). Developed across the 1990s in versions 7.x through 9.x, XAS served the same audience as ALASM — Russian Spectrum clone owners developing for the TR-DOS disk ecosystem centered on the [Pentagon](../02_hardware/clones/pentagon.md) and Scorpion hardware. Where ALASM was the **generalist** assembler that dominated mainstream Russian development, XAS was the **specialist** assembler favored by demoscene crews focused on code generation — particularly **Elite Group** and **Progress**, two of the most technically ambitious Russian demo crews of the 1990s.
 
-XAS's distinguishing feature was its **elaborate macro system**, optimised for generating repetitive code patterns common in demoscene work — sprite data tables, scroll routines, music player stubs, and the procedural content generation that Russian demos increasingly relied on. Where ALASM treated macros as a useful feature, XAS treated macros as the central design axis. For demoscene developers pushing the limits of what 64 KB of Z80 code could express, XAS's macro capabilities were decisive.
+XAS's distinguishing feature was its **elaborate macro system**, optimized for generating repetitive code patterns common in demoscene work — sprite data tables, scroll routines, music player stubs, and the procedural content generation that Russian demos increasingly relied on. Where ALASM treated macros as a useful feature, XAS treated macros as the central design axis. For demoscene developers pushing the limits of what 64 KB of Z80 code could express, XAS's macro capabilities were decisive.
 
 This article is the **deep-dive reference** for XAS as a tool: its history, macro-centric design philosophy, source language, the elaborate macro system that set it apart, its workflow, its place in the Russian scene, and its legacy. For the broader native-toolchain survey, see [native_toolchain.md](native_toolchain.md). For XAS's primary competitor, see [alasm_sts.md](alasm_sts.md).
 
@@ -16,7 +16,7 @@ This article is the **deep-dive reference** for XAS as a tool: its history, macr
 
 XAS emerged from the Russian Spectrum scene in the early 1990s, slightly after ALASM (1992). The authorship is less clearly documented than ALASM's — XAS was developed by various Russian community members, with the version-numbering tradition starting at 7.x rather than 1.x for reasons that are now unclear (possibly picking up numbering from a precursor tool, possibly a authorship/branding choice to distinguish from ALASM's lower version numbers).
 
-By 1993–1994, XAS was established as the alternative to ALASM in the Russian scene. Both tools targeted the same TR-DOS / Pentagon / Scorpion ecosystem, both were Russian-language, both produced compatible binary output. The difference was in design priorities: ALASM prioritised reliability and generality; XAS prioritised macro power and code generation.
+By 1993–1994, XAS was established as the alternative to ALASM in the Russian scene. Both tools targeted the same TR-DOS / Pentagon / Scorpion ecosystem, both were Russian-language, both produced compatible binary output. The difference was in design priorities: ALASM prioritized reliability and generality; XAS prioritized macro power and code generation.
 
 ### Version History
 
@@ -327,7 +327,7 @@ For most XAS macros, a direct sjasmplus translation exists. For algorithmic code
 
 ### Why didn't XAS get adopted outside Russia?
 
-XAS had no Western distribution. It was a Russian-language tool, documented only in Russian, optimised for Russian clone hardware, and circulating only within the Russian scene. Western developers in the 1990s had no knowledge of it, and by the time Western retro-dev communities discovered Russian Spectrum tools in the 2000s, cross-platform assemblers (sjasmplus, pasmo) had become the standard.
+XAS had no Western distribution. It was a Russian-language tool, documented only in Russian, optimized for Russian clone hardware, and circulating only within the Russian scene. Western developers in the 1990s had no knowledge of it, and by the time Western retro-dev communities discovered Russian Spectrum tools in the 2000s, cross-platform assemblers (sjasmplus, pasmo) had become the standard.
 
 ### Did XAS support the ZX Spectrum Next?
 
@@ -341,7 +341,7 @@ The exact reason is unclear from available documentation. Two plausible explanat
 
 ## Summary
 
-XAS was the **code-generation specialist** of the Russian-native Z80 assembler ecosystem. Where ALASM was the generalist workhorse that dominated mainstream Russian development, XAS was the specialist tool favoured by the most technically ambitious demoscene crews — Elite Group, Progress, and others pushing the limits of what 64 KB of Z80 could express.
+XAS was the **code-generation specialist** of the Russian-native Z80 assembler ecosystem. Where ALASM was the generalist workhorse that dominated mainstream Russian development, XAS was the specialist tool favored by the most technically ambitious demoscene crews — Elite Group, Progress, and others pushing the limits of what 64 KB of Z80 could express.
 
 XAS's distinctive feature was its **elaborate macro system**, with variadic parameters, conditional expansion, string manipulation, and algorithmic code generation. Combined with its multi-window IDE-like editor, XAS anticipated modern IDE conventions by years. The trade-offs — slower assembly, steeper learning curve, narrower applicability — made XAS a poor fit for general game development but an excellent fit for ambitious demoscene work.
 

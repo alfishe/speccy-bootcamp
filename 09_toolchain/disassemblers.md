@@ -464,7 +464,7 @@ trace.py --cmio --tstates --start 0x8000 --stop 0x8050 game.z80
 ### What makes SkoolKit special
 
 - It is the **only** Z80 disassembly toolkit that targets long-form, narrative disassembly. Other tools produce assembly files; SkoolKit produces a website with hyperlinks, memory maps, audio captures, and prose.
-- The built-in simulator is cycle-exact for the 48K and 128K Spectrum (including memory and I/O contention), so timing-critical code can be analysed without running on real hardware.
+- The built-in simulator is cycle-exact for the 48K and 128K Spectrum (including memory and I/O contention), so timing-critical code can be analyzed without running on real hardware.
 - The `.skool` format is intentionally line-oriented and diff-friendly — every change is reviewable in a version-control diff.
 - A large corpus of published disassemblies uses SkoolKit, so the format is well-understood by the Spectrum community.
 

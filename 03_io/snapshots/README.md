@@ -32,4 +32,4 @@ The split reflects how these formats are used. A .SNA or .Z80 file is the typica
 
 - **[../storage/](../storage/README.md)** — tape, floppy disk, hard disk, and SD card formats. These are the *media* formats that snapshots sidestep: instead of representing a tape or disk that the Spectrum must load through its tape/floppy subsystem, a snapshot captures the result *after* loading.
 - **[../peripherals/](../peripherals/README.md)** — input devices (joysticks, etc.) whose state .RZX recordings capture as IN port reads.
-- **[../../08_reverse_engineering/](../../08_reverse_engineering/)** — snapshot files are commonly analysed during reverse engineering; the planned `snapshot_repair.md` article covers fixing corrupted .SNA/.Z80 files.
+- **[../../08_reverse_engineering/](../../08_reverse_engineering/)** — snapshot files are commonly analyzed during reverse engineering; the planned `snapshot_repair.md` article covers fixing corrupted .SNA/.Z80 files.

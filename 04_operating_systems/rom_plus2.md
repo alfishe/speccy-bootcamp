@@ -6,7 +6,7 @@ The original Sinclair 48K ROM was 16 KB. The 128K ROM was 32 KB. The **+2A / +3 
 
 This ROM is the most complex piece of system software ever shipped in a Sinclair-branded Spectrum. It introduces a new paging port (`#1FFD`), four paging modes, a CP/M compatibility layer, and a substantially different memory model from any prior Spectrum. Understanding it is essential for anyone working with +2A or +3 hardware, writing emulator code, or trying to make 48K software run on a +3.
 
-This article covers the +2A / +3 ROM at the technical level: its physical layout, its paging mechanism, the four paging modes, what each of the four ROM pages does, the bugs and quirks, and how it differs from the 128K ROM that preceded it. For the catalogue of ROM versions and identification, see [rom_versions.md](rom_versions.md). For the +3 DOS disk operating system (one of the four pages), see [plus3dos.md](plus3dos.md).
+This article covers the +2A / +3 ROM at the technical level: its physical layout, its paging mechanism, the four paging modes, what each of the four ROM pages does, the bugs and quirks, and how it differs from the 128K ROM that preceded it. For the catalog of ROM versions and identification, see [rom_versions.md](rom_versions.md). For the +3 DOS disk operating system (one of the four pages), see [plus3dos.md](plus3dos.md).
 
 ---
 
@@ -106,7 +106,7 @@ Amstrad immediately moved to consolidate the product line. The +2 (April 1987) w
 
 Amstrad's design goals for the +2A / +3 ROM, in approximate priority:
 
-1. **Full backwards compatibility.** Software that ran on the 48K or 128K Spectrums must run unchanged on the +2A / +3. This meant keeping the original 48K BASIC ROM available (Page 1) and the 128K editor available (Page 0).
+1. **Full backward compatibility.** Software that ran on the 48K or 128K Spectrums must run unchanged on the +2A / +3. This meant keeping the original 48K BASIC ROM available (Page 1) and the 128K editor available (Page 0).
 2. **Built-in disk support.** The +3's floppy drive had to be accessible from BASIC without additional software. This required extending BASIC with disk keywords (`CAT`, `LOAD "a:..."`, etc.) and including a disk operating system ROM (+3 DOS, Page 2).
 3. **CP/M compatibility.** Amstrad had a long history with CP/M (the CPC and PCW both ran it). The +3 should be able to boot CP/M 2.2 to give access to the business software library.
 4. **RAM disk support.** To keep cassette-era software usable, the +2A / +3 should support a RAM disk mode where banked RAM acts as a virtual disk.
@@ -143,7 +143,7 @@ A 128K Spectrum program that does not use disk I/O will run identically on a +2A
 
 A reasonable question: why didn't Amstrad just ship the +3 with the 128K ROM and put +3 DOS on an external cartridge (like the original Interface 1 with the microdrive ROM)?
 
-The answer is partly historical (Amstrad's design philosophy favoured integrated solutions) and partly technical:
+The answer is partly historical (Amstrad's design philosophy favored integrated solutions) and partly technical:
 
 - **Cartridge ROMs** were available on the Spectrum's rear expansion port, but they required careful timing with the banked 128K ROM and could conflict with each other.
 - **An integrated +3 DOS** is faster (always available, no bank switching to invoke) and simpler for users (no external hardware required).
@@ -232,7 +232,7 @@ Page 1 is the **original Sinclair 48K BASIC ROM**, byte-for-byte identical (or n
 - The user selects "48 BASIC" from the boot menu.
 - Software explicitly switches to 48K mode via port `#7FFD`.
 
-Page 1's role is **backwards compatibility**. Software that was written for the 48K Spectrum and that hardcodes ROM routines (e.g., `CALL #0D4B` for the keyboard scanner) will work on the +2A / +3 because Page 1 has the original 48K ROM at the expected addresses.
+Page 1's role is **backward compatibility**. Software that was written for the 48K Spectrum and that hardcodes ROM routines (e.g., `CALL #0D4B` for the keyboard scanner) will work on the +2A / +3 because Page 1 has the original 48K ROM at the expected addresses.
 
 Page 1 is *almost* byte-identical to the original Sinclair 48K ROM. A small number of patches were applied to make it work correctly in the banked environment (e.g., the keyboard scanner must be aware that the top 16 KB of RAM can be different banks). But the vast majority of the ROM is unchanged.
 
@@ -258,7 +258,7 @@ Page 2 is itself a substantial piece of software — roughly 16 KB of dense code
 
 Page 3 is a **modified version of the 48K BASIC ROM** (Page 1) with patches to enable disk-aware keywords. The differences from Page 1:
 
-- The `LOAD` and `SAVE` keyword handlers are extended to recognise the `a:` and `m:` drive prefixes.
+- The `LOAD` and `SAVE` keyword handlers are extended to recognize the `a:` and `m:` drive prefixes.
 - The `CAT`, `FORMAT`, `ERASE`, `MOVE`, `COPY` keywords (which exist as tokens in the original 48K ROM but do nothing) are connected to +3 DOS routines.
 - A few internal routines are patched to call into +3 DOS when disk operations are requested.
 
@@ -366,7 +366,7 @@ Port `#1FFD` bits 0–1 select one of four paging modes. Each mode presents a di
 
 ### 6.1 Mode 0: 128K compatibility mode
 
-`#1FFD` bits 0–1 = `00` — **Mode 0** is the default mode and the most backwards-compatible. The memory layout in this mode is:
+`#1FFD` bits 0–1 = `00` — **Mode 0** is the default mode and the most backward-compatible. The memory layout in this mode is:
 
 | Address range | Content |
 |---|---|
@@ -425,7 +425,7 @@ Like Mode 1, Mode 2 cannot run BASIC (the ROM is not visible). The difference is
 
 ### 6.4 Mode 3: Plus 3 mode
 
-`#1FFD` bits 0–1 = `11` — **Mode 3** is similar to Mode 0 (the 128K compatibility mode), with subtle differences in how the ROM pages are selected. It is rarely used directly by software; it exists primarily for compatibility with software that expects a specific paging behaviour.
+`#1FFD` bits 0–1 = `11` — **Mode 3** is similar to Mode 0 (the 128K compatibility mode), with subtle differences in how the ROM pages are selected. It is rarely used directly by software; it exists primarily for compatibility with software that expects a specific paging behavior.
 
 ### 6.5 Comparison of the four modes
 
@@ -436,7 +436,7 @@ Like Mode 1, Mode 2 cannot run BASIC (the ROM is not visible). The difference is
 | 2 | 10 | All RAM, banks 4-7 | RAM disk; some special software |
 | 3 | 11 | Similar to Mode 0 with different ROM paging | Compatibility |
 
-Mode 0 is by far the most common. Most +2A / +3 software runs in Mode 0. Modes 1 and 2 are used by specialised software (CP/M, RAM-disk-intensive programs).
+Mode 0 is by far the most common. Most +2A / +3 software runs in Mode 0. Modes 1 and 2 are used by specialized software (CP/M, RAM-disk-intensive programs).
 
 ### 6.6 Mode switching
 
@@ -503,7 +503,7 @@ Page 2 (+3 DOS) is itself a substantial 16 KB operating system. See [plus3dos.md
 
 Page 3 (patched 48K BASIC with disk extensions) is mostly identical to Page 1, with patches at specific locations. The patches:
 
-- Modify the `LOAD` keyword handler to recognise the `a:`, `b:`, `m:`, `n:` drive prefixes.
+- Modify the `LOAD` keyword handler to recognize the `a:`, `b:`, `m:`, `n:` drive prefixes.
 - Modify the `SAVE` keyword handler similarly.
 - Connect the `CAT`, `FORMAT`, `ERASE`, `MOVE`, `COPY` keywords (which exist as tokens in Page 1 but do nothing) to the corresponding +3 DOS routines in Page 2.
 - Add a small amount of glue code that performs the page switch to Page 2 when a disk operation is invoked.
@@ -515,7 +515,7 @@ The total size of the patches is a few hundred bytes. The bulk of Page 3 is iden
 The four pages are not independent — they call into each other. The typical flow for a disk operation:
 
 1. User types `LOAD "a:myfile"` in the BASIC editor (Page 0).
-2. Page 0's `LOAD` handler recognises the `a:` prefix and calls into Page 3's patched `LOAD` handler.
+2. Page 0's `LOAD` handler recognizes the `a:` prefix and calls into Page 3's patched `LOAD` handler.
 3. Page 3's patched `LOAD` handler calls into Page 2's +3 DOS file routines.
 4. Page 2's file routines read the disk and return the loaded data to Page 3.
 5. Page 3 returns to Page 0, which continues the BASIC program.
@@ -538,7 +538,7 @@ This is the cleanest way to make a Spectrum run CP/M: hide the ROM entirely and 
 ---
 ## §8. Compatibility and Quirks
 
-The +2A / +3 ROM is designed to be backwards-compatible with software written for the 48K and 128K Spectrums. In practice, most software works, but there are gotchas.
+The +2A / +3 ROM is designed to be backward-compatible with software written for the 48K and 128K Spectrums. In practice, most software works, but there are gotchas.
 
 ### 8.1 48K compatibility
 
@@ -626,7 +626,7 @@ The fix is to always follow the documented mode-switching protocol: disable inte
 
 ### 9.5 The Spanish +3 ROM
 
-The Spanish +3 ROM has the same bugs as the UK +3 ROM, plus a few Spanish-specific issues (e.g., the Ñ character sometimes displays incorrectly in certain fonts). These are minor and rarely affect software behaviour.
+The Spanish +3 ROM has the same bugs as the UK +3 ROM, plus a few Spanish-specific issues (e.g., the Ñ character sometimes displays incorrectly in certain fonts). These are minor and rarely affect software behavior.
 
 ### 9.6 Compatibility with +2 (grey) software
 
@@ -638,17 +638,17 @@ Software written for the +2 (grey) — which has the 128K ROM, not the +2A / +3 
 
 ### 9.7 The `+3` keyword issue
 
-The +2A / +3 ROM adds a few new tokens (`FORMAT`, `MOVE`, etc.) that did not exist as active keywords in the 48K or 128K ROMs. Software that uses these tokens for other purposes (e.g., as UDG characters) may have unexpected behaviour on the +2A / +3.
+The +2A / +3 ROM adds a few new tokens (`FORMAT`, `MOVE`, etc.) that did not exist as active keywords in the 48K or 128K ROMs. Software that uses these tokens for other purposes (e.g., as UDG characters) may have unexpected behavior on the +2A / +3.
 
 ### 9.8 The +3E ROM fixes
 
-The community-developed +3E ROM (see [rom_versions.md](rom_versions.md) §7.4) fixes many of these bugs. It is the recommended ROM for serious +3 users in 2024. The +3E is a drop-in replacement for the original +3 ROM and preserves backwards compatibility while fixing bugs and adding new features (notably IDE hard disk support).
+The community-developed +3E ROM (see [rom_versions.md](rom_versions.md) §7.4) fixes many of these bugs. It is the recommended ROM for serious +3 users in 2024. The +3E is a drop-in replacement for the original +3 ROM and preserves backward compatibility while fixing bugs and adding new features (notably IDE hard disk support).
 
 ---
 
 ## §10. Cross-References
 
-- **[rom_versions.md](rom_versions.md)** — The catalogue of all Spectrum ROM versions, including the +2A / +3. This article covers the technical internals; the catalogue article covers identification and history.
+- **[rom_versions.md](rom_versions.md)** — The catalog of all Spectrum ROM versions, including the +2A / +3. This article covers the technical internals; the catalog article covers identification and history.
 - **[plus3dos.md](plus3dos.md)** — The +3 DOS disk operating system, which is Page 2 of the +2A / +3 ROM. Detailed coverage of the disk file system, FDC driver, and RSX mechanism.
 - **[cpm.md](cpm.md)** — CP/M 2.2 on the Spectrum, which runs on the +2A / +3 in Mode 1 (all-RAM mode). Covers the CP/M boot process, BIOS, and software library.
 - **[basic_dialects.md](basic_dialects.md)** — The dialect of BASIC implemented by the +2A / +3 ROM. Includes the disk-aware keywords (`CAT`, `LOAD "a:..."`, etc.).
@@ -662,4 +662,4 @@ The community-developed +3E ROM (see [rom_versions.md](rom_versions.md) §7.4) f
 
 ## License
 
-This document is licensed under **Creative Commons Attribution-ShareAlike 4.0 International** (CC BY-SA 4.0). You are free to share and adapt this material, provided you give appropriate credit, indicate changes, and distribute derivative works under the same licence.
+This document is licensed under **Creative Commons Attribution-ShareAlike 4.0 International** (CC BY-SA 4.0). You are free to share and adapt this material, provided you give appropriate credit, indicate changes, and distribute derivative works under the same license.

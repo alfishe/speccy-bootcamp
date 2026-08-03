@@ -37,7 +37,7 @@ The name **IS-DOS** is variously explained as:
 - **Information System DOS** — a backronym suggested by later users.
 - **Intelligent System DOS** — another backronym.
 
-The most likely origin is the first: IS-DOS was the disk operating system shipped with Iskra-brand Spectrums, and the name was later generalised to refer to the OS itself regardless of hardware.
+The most likely origin is the first: IS-DOS was the disk operating system shipped with Iskra-brand Spectrums, and the name was later generalized to refer to the OS itself regardless of hardware.
 
 ### 1.2 Scope
 
@@ -86,7 +86,7 @@ IS-DOS is **not** a practical alternative to TR-DOS for running classic Soviet s
 
 By 1990, TR-DOS was the established standard for Spectrum disks in the Soviet Union. But TR-DOS had several limitations that frustrated power users:
 
-- **Flat filesystem**. Every file on a disk lived in a single directory. With 128 file slots per disk, organising a substantial software collection meant manually tracking which files were where.
+- **Flat filesystem**. Every file on a disk lived in a single directory. With 128 file slots per disk, organizing a substantial software collection meant manually tracking which files were where.
 - **No subdirectories**. You could not have `/GAMES/ACTION/` separate from `/GAMES/STRATEGY/`. Everything was in one big pile.
 - **Filename limits**. 8 characters for the name, 1 character for the extension — much shorter than the MS-DOS standard of 8+3. Russian developers wanting to share files with the MS-DOS world had to abbreviate filenames.
 - **No file attributes**. There was no way to mark a file as read-only, hidden, or system. Accidental overwrites were common.
@@ -123,7 +123,7 @@ Despite being technically superior to TR-DOS, IS-DOS did not replace it. The rea
 1. **Network effects.** TR-DOS had a massive software library. Users had TR-DOS disks; software was distributed on TR-DOS disks. Switching to IS-DOS meant abandoning this library.
 2. **Compatibility.** TR-DOS software did not run on IS-DOS. Conversion utilities existed but were imperfect.
 3. **Hardware fragmentation.** IS-DOS was originally Iskra-specific. Running it on a Pentagon required patches, and on a Scorpion required different patches. TR-DOS worked the same everywhere.
-4. **Late arrival.** By the time IS-DOS was widely available (1993+), the Russian Spectrum scene had largely standardised on TR-DOS.
+4. **Late arrival.** By the time IS-DOS was widely available (1993+), the Russian Spectrum scene had largely standardized on TR-DOS.
 5. **The shift to PCs.** By the mid-1990s, the Russian market was shifting from Spectrums to inexpensive PC clones (running MS-DOS, then Windows). The "serious computing" market that IS-DOS targeted was moving away from the Spectrum entirely.
 
 The result: IS-DOS gained a small user base among power users but never approached TR-DOS's market share.
@@ -631,4 +631,4 @@ Despite its current obscurity, IS-DOS is worth understanding for several reasons
 
 ## License
 
-This document is licensed under **Creative Commons Attribution-ShareAlike 4.0 International** (CC BY-SA 4.0). You are free to share and adapt this material, provided you give appropriate credit, indicate changes, and distribute derivative works under the same licence.
+This document is licensed under **Creative Commons Attribution-ShareAlike 4.0 International** (CC BY-SA 4.0). You are free to share and adapt this material, provided you give appropriate credit, indicate changes, and distribute derivative works under the same license.

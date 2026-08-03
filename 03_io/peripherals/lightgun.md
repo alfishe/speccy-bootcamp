@@ -32,7 +32,7 @@ What the Magnum did **not** do was start a thriving UK light-gun-game ecosystem.
 
 ### Physical construction
 
-The Magnum is a black plastic pistol, approximately 25 cm long, modelled (per Amstrad's marketing copy) on "Clint Eastwood's .44 Magnum" — the visual reference is to Dirty Harry. The grip is a 90-degree moulded handle sized for a teenage-or-adult hand. The barrel has two sighting posts (a front blade and a rear notch) for aiming, though the actual aiming point is determined by the photo-sensor in the muzzle, not by the sights.
+The Magnum is a black plastic pistol, approximately 25 cm long, modeled (per Amstrad's marketing copy) on "Clint Eastwood's .44 Magnum" — the visual reference is to Dirty Harry. The grip is a 90-degree molded handle sized for a teenage-or-adult hand. The barrel has two sighting posts (a front blade and a rear notch) for aiming, though the actual aiming point is determined by the photo-sensor in the muzzle, not by the sights.
 
 The gun's internals are minimal:
 
@@ -193,7 +193,7 @@ There are three known ways to use a Magnum (or any CRT light gun) in the modern 
 
 1. **Use a CRT TV.** This is the obvious answer and the one most Magnum owners use. A working CRT with a SCART or composite input gives the authentic Magnum experience. CRT availability is decreasing but they are still obtainable.
 
-2. **Use a CRT-emulating display.** A few modern displays (notably the Sony BVM and PVM professional CRTs, and the now-discontinued Sony FW-900 computer monitor) have sufficiently CRT-like behaviour to work with some light guns. These are expensive and rare.
+2. **Use a CRT-emulating display.** A few modern displays (notably the Sony BVM and PVM professional CRTs, and the now-discontinued Sony FW-900 computer monitor) have sufficiently CRT-like behavior to work with some light guns. These are expensive and rare.
 
 3. **Use a modern "light gun" replacement.** Several companies make modern light guns that work on LCDs by using two IR LEDs mounted on the display edges and a camera in the gun to triangulate position. Examples include the **GUN4IR** and the **Sinden Lightgun**. These are not Magnum-compatible out of the box — they emulate modern consoles (PS2, Wii) — but enthusiasts have built adapter boards that convert their output to the Magnum's trigger-and-sensor protocol.
 

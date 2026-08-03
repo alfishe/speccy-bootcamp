@@ -2,7 +2,7 @@
 
 # Demo Frameworks — Effect Sequencing and Music Sync
 
-> **Scope**: This article covers the **runtime architecture of a ZX Spectrum demo** — the code that decides which effect runs when, how transitions between effects are handled, how music is kept in sync with visuals, and how memory is managed across a multi-part production. It is the practical companion to [effects_catalog.md](effects_catalog.md) (which catalogues the effects themselves), [compression_packing.md](compression_packing.md) (which provides the depackers frameworks call), [multicolor_techniques.md](multicolor_techniques.md) (whose engines a framework must schedule around the ISR), and [notable_demos.md](notable_demos.md) (which catalogues the demos built on these frameworks).
+> **Scope**: This article covers the **runtime architecture of a ZX Spectrum demo** — the code that decides which effect runs when, how transitions between effects are handled, how music is kept in sync with visuals, and how memory is managed across a multi-part production. It is the practical companion to [effects_catalog.md](effects_catalog.md) (which catalogs the effects themselves), [compression_packing.md](compression_packing.md) (which provides the depackers frameworks call), [multicolor_techniques.md](multicolor_techniques.md) (whose engines a framework must schedule around the ISR), and [notable_demos.md](notable_demos.md) (which catalogs the demos built on these frameworks).
 >
 > The article is descriptive rather than tutorial: it explains what a framework is responsible for, what design choices exist, and what trade-offs each choice implies. Working source code for specific frameworks is out of scope; refer to the source releases of the demos cited in [notable_demos.md](notable_demos.md).
 
@@ -75,7 +75,7 @@ Almost every ZX Spectrum demo follows the same **linear timeline**:
 [intro screen] → [part 1] → [part 2] → ... → [part N] → [credits] → [greet screen]
 ```
 
-There are rare exceptions — interactive demos, branched demos, "choose-your-own" demos — but these are curiosities. The linear timeline dominates because it matches the linear nature of music: a 3-minute PT3 module plays from start to finish, and the visuals must synchronise to it.
+There are rare exceptions — interactive demos, branched demos, "choose-your-own" demos — but these are curiosities. The linear timeline dominates because it matches the linear nature of music: a 3-minute PT3 module plays from start to finish, and the visuals must synchronize to it.
 
 ### 2.1 The Intro Screen
 
@@ -658,7 +658,7 @@ Crossfades are rare on the Spectrum due to the cost; they are more common on the
 
 A compromise between hard cut and fade:
 
-1. Clear the screen to a single colour (typically black) — 1 frame.
+1. Clear the screen to a single color (typically black) — 1 frame.
 2. While the screen is blank, perform the swap (1–2 frames).
 3. Reveal the new effect — 1 frame.
 
@@ -689,7 +689,7 @@ The choice is driven by demo style, memory budget, and party expectations. The F
 ---
 ## 8. Notable Frameworks
 
-Rather than enumerate specific framework names — most Spectrum frameworks are private to their group and never receive an official name or public release — this section describes the **framework traditions** by region and era. Specific demos built on each tradition are catalogued in [notable_demos.md](notable_demos.md).
+Rather than enumerate specific framework names — most Spectrum frameworks are private to their group and never receive an official name or public release — this section describes the **framework traditions** by region and era. Specific demos built on each tradition are cataloged in [notable_demos.md](notable_demos.md).
 
 ### 8.1 The First Generation (1991–1996)
 
@@ -738,7 +738,7 @@ The Western European scene (UK, Germany, Finland, Poland) developed a parallel f
 - **Less standardisation**: each group wrote its own framework from scratch, often for a single demo. There was no equivalent of the Soviet "de facto standard".
 - **More variety in sequencing**: Western frameworks experimented with script-driven interpreters (§3.3) earlier than the Soviet scene.
 - **More emphasis on 48K demos**: Western sceners targeted the 48K well into the 2000s, when the Soviet scene had largely moved to the Pentagon 128K.
-- **Less reliance on PT3**: Western groups used a wider variety of players (Wham Music Editor, Music Studio, MSM, etc.), so framework sync logic was less standardised.
+- **Less reliance on PT3**: Western groups used a wider variety of players (Wham Music Editor, Music Studio, MSM, etc.), so framework sync logic was less standardized.
 
 Western frameworks tended to be **smaller** (48K target) and **more bespoke** than Soviet ones. The lack of standardisation made cross-group collaboration rare but also encouraged experimentation.
 
@@ -748,7 +748,7 @@ The post-2010 scene has seen renewed framework development driven by:
 
 - **Cross-platform targets**: a modern framework may need to run on 48K, 128K, Pentagon, TS-Config, DivMMC, and ZX Spectrum Next, with feature detection at startup.
 - **Open-source culture**: Github has made it possible to publish frameworks, accept patches, and build on others' work — something the Soviet scene never had.
-- **The Next's hardware**: Layer 2 (256-colour framebuffer), tilemap, hardware sprites, and the copper unit require new framework abstractions.
+- **The Next's hardware**: Layer 2 (256-color framebuffer), tilemap, hardware sprites, and the copper unit require new framework abstractions.
 
 Several open-source frameworks have appeared since 2015, providing reusable effect sequencing, music sync, and hardware abstraction. These frameworks tend to be **much larger** than the Soviet 2 KB standard — 4–8 KB is typical, with extensive feature sets.
 
@@ -785,12 +785,12 @@ The **ZX Spectrum Next** (released 2020, designed 2017) is a modern reimplementa
 
 The Next is binary-compatible with the 48K and 128K Spectrum but adds:
 
-- **Layer 2**: a 256-colour framebuffer at 320×256 resolution, occupying a 16 KB bank that can be paged into `#0000`–`#3FFF` for writing. This eliminates the 8×8 attribute constraint (see [multicolor_techniques.md](multicolor_techniques.md) §10.3) and allows full-colour effects at 50 Hz with no raster synchronisation.
+- **Layer 2**: a 256-color framebuffer at 320×256 resolution, occupying a 16 KB bank that can be paged into `#0000`–`#3FFF` for writing. This eliminates the 8×8 attribute constraint (see [multicolor_techniques.md](multicolor_techniques.md) §10.3) and allows full-color effects at 50 Hz with no raster synchronisation.
 - **Tilemap**: a hardware tile-based display mode (40×32 tiles of 8×8 pixels, with per-tile attributes and a 256-entry palette). Useful for scrolling backgrounds and HUDs without per-pixel CPU cost.
 - **Hardware sprites**: up to 256 sprites (16×16 pixels each), 64 visible per scanline, with per-sprite attributes (palette, mirror, rotation). This is the Spectrum's first hardware sprite engine.
 - **Copper unit**: a programmable raster co-processor similar to the Amiga's copper. The copper can change hardware registers at specific scanlines without CPU intervention — enabling "raster bars" and palette swaps for free.
 - **Faster CPU**: 28 MHz Z80 (vs. 3.5 MHz on the original). Demos that target the Next's 28 MHz mode can run ~8× more code per frame.
-- **More memory**: 2 MB RAM (vs. 128 KB), paged in 16 KB banks. The banked memory model is generalised to many more banks.
+- **More memory**: 2 MB RAM (vs. 128 KB), paged in 16 KB banks. The banked memory model is generalized to many more banks.
 - **Extended AY**: two AY chips (6 channels total), plus 8-channel DMA-driven PCM playback.
 - **Hardware acceleration**: hardware line draw, hardware fill, hardware blit.
 
@@ -849,7 +849,7 @@ Beyond the Next, several other modern Spectrum-compatible platforms affect frame
 - **TS-Config**: disk-streaming of multicolor frames (see [multicolor_techniques.md](multicolor_techniques.md) §7.4). Frameworks targeting TS-Config are built around the disk DMA and have a distinctive "video player" architecture.
 - **DivMMC, DivIDE**: IDE/SD storage. Replaces TR-DOS floppy with faster I/O, allowing streaming without split ISR tricks.
 - **ZX Evo (Pentagon 1024)**: 1 MB RAM, faster CPU, more banks. Frameworks targeting it have generous memory but must support the Pentagon's banking quirks.
-- **ZX Spectrum 48K/+2 with ULAplus**: 64-colour palette extension. Allows nicer colour palettes without raster sync.
+- **ZX Spectrum 48K/+2 with ULAplus**: 64-color palette extension. Allows nicer color palettes without raster sync.
 
 Each platform has its own framework conventions; the cross-platform framework that targets all of them is the holy grail of modern Spectrum development.
 

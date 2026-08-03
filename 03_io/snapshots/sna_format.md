@@ -124,7 +124,7 @@ This trick means that a .SNA file is **self-restoring**: loading it does not req
 The byte at offset 26 (the 27th byte) encodes:
 
 - **Bits 0–1**: The Z80 interrupt mode (0, 1, or 2). Mode 0 is rarely used; mode 1 is the standard Spectrum interrupt mode; mode 2 is used by some games for vector interrupts.
-- **Bit 2**: If set, the screen is currently showing the "border colour" effect. (Some emulators interpret this; most ignore it.)
+- **Bit 2**: If set, the screen is currently showing the "border color" effect. (Some emulators interpret this; most ignore it.)
 - **Bits 3–7**: Reserved. Should be 0.
 
 In practice, most .SNA files have this byte set to `0x01` (interrupt mode 1, no border effect) — which is what the standard Spectrum uses.
@@ -274,7 +274,7 @@ The .SNA format does **not** preserve:
 - **The +3 FDC state**: Floppy controller registers, motor state, etc.
 - **The Beta 128 disk controller state**: FDC registers, disk position, motor state.
 - **The Kempston joystick / mouse port state**: Not preserved.
-- **The Z80 internal state beyond the registers**: MEMPTR (the undocumented W/Z register), Q (the undocumented flag used by some instructions), the internal ALU latches. These are lost — important for some demos and copy-protection schemes that rely on undocumented Z80 behaviour.
+- **The Z80 internal state beyond the registers**: MEMPTR (the undocumented W/Z register), Q (the undocumented flag used by some instructions), the internal ALU latches. These are lost — important for some demos and copy-protection schemes that rely on undocumented Z80 behavior.
 - **The interrupt pending state**: Whether an interrupt is "queued" (e.g., from the INT line being held low during the last instruction).
 
 ### 4.3 Practical consequences of missing state
@@ -444,7 +444,7 @@ A few quirks to be aware of:
 
 - **Older emulators may not save the 128K variant correctly**. Some early emulators (late 1990s) saved 128K snapshots as 48K snapshots, losing the additional banks. If you find an old .SNA file from this era, it may be a 48K snapshot even though the source was a 128K machine.
 - **The TR-DOS flag is interpreted differently** by some emulators. The standard is `0x00` / `0xFF`, but a few emulators use `0x00` / non-zero. Test against multiple emulators if you rely on this flag.
-- **The interrupt mode byte's bits 2–7** are sometimes used by emulators to store extra state (e.g., the border colour from `OUT (#FE),...`). This is non-standard; ignore these bits when loading.
+- **The interrupt mode byte's bits 2–7** are sometimes used by emulators to store extra state (e.g., the border color from `OUT (#FE),...`). This is non-standard; ignore these bits when loading.
 
 ---
 
@@ -460,7 +460,7 @@ The 48K format's reliance on PC being on the stack is fragile:
 - If the snapshot was taken with SP pointing to an invalid address (e.g., `#0000`), the loader may crash.
 - If the snapshot was taken immediately after a `PUSH` of something other than PC, the loader will retrieve the wrong value.
 
-The 128K format's explicit PC field avoids these issues, but the 48K format is stuck with the trick for backwards compatibility.
+The 128K format's explicit PC field avoids these issues, but the 48K format is stuck with the trick for backward compatibility.
 
 ### 7.2 No AY state means audio glitches
 
@@ -545,4 +545,4 @@ For new snapshots, .Z80 or .SZX is recommended. But the .SNA format is not going
 
 ## License
 
-This document is licensed under **Creative Commons Attribution-ShareAlike 4.0 International** (CC BY-SA 4.0). You are free to share and adapt this material, provided you give appropriate credit, indicate changes, and distribute derivative works under the same licence.
+This document is licensed under **Creative Commons Attribution-ShareAlike 4.0 International** (CC BY-SA 4.0). You are free to share and adapt this material, provided you give appropriate credit, indicate changes, and distribute derivative works under the same license.

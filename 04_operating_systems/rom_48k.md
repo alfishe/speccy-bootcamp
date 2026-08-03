@@ -4,7 +4,7 @@
 
 The 16,384 bytes at `#0000`–`#3FFF` contain the ZX Spectrum's entire operating system. There is no separate DOS, no device driver layer, no kernel. The ROM *is* the BASIC interpreter, the line editor, the cassette tape handler, the floating-point calculator, and the I/O subsystem — all in 16K. Every Sinclair Spectrum ever made boots into this code.
 
-The ROM was designed by Richard Altwasser (hardware) and Steve Vickers (software) at Sinclair Research in 1982. It is a direct descendant of the ZX81 ROM (by the same author), sharing much of its architecture — the channel/stream I/O model, the calculator stack, and the line-entry editor — but substantially expanded to support colour, sound, high-resolution graphics, and a more usable keyboard.
+The ROM was designed by Richard Altwasser (hardware) and Steve Vickers (software) at Sinclair Research in 1982. It is a direct descendant of the ZX81 ROM (by the same author), sharing much of its architecture — the channel/stream I/O model, the calculator stack, and the line-entry editor — but substantially expanded to support color, sound, high-resolution graphics, and a more usable keyboard.
 
 This article covers the 48K ROM as a system: its memory layout, the major subsystems, entry points useful to machine code programmers, and the design decisions that shaped it. For the per-variable workspace reference, see [system_variables.md](system_variables.md). For the 128K ROM extensions, see [rom_128k.md](rom_128k.md).
 
@@ -675,7 +675,7 @@ The edit buffer is part of the workspace managed by the ROM. It sits between `E_
 
 ### Limitations
 
-The single-line editor is the most criticised aspect of the Spectrum. Users cannot see the full program while editing, cursor movement is limited to the edit line, and there is no block operations. The 128K ROM addresses most of these issues with its full-screen editor (see [rom_128k.md](rom_128k.md)).
+The single-line editor is the most criticized aspect of the Spectrum. Users cannot see the full program while editing, cursor movement is limited to the edit line, and there is no block operations. The 128K ROM addresses most of these issues with its full-screen editor (see [rom_128k.md](rom_128k.md)).
 
 For a detailed analysis of the editor's internal operation, see *Mastering Machine Code on Your ZX Spectrum* by Toni Baker (Sunshine Books, 1983).
 
@@ -832,11 +832,11 @@ The print items loop handles each item in the `PRINT` statement:
 
 Numeric expressions are converted from the 5-byte FP format to ASCII via `PRINT_FP` (`#2DE3`). String expressions are printed character by character via `PR_STRING` (`#203C`). After all items are processed, a trailing newline is printed unless the last item ended with `;` or `,`.
 
-The current print position is tracked by `S_POSN` (`#5C88`, column and line). The `PRINT` handler also updates `ATTR_T` and `MASK_T` for colour handling.
+The current print position is tracked by `S_POSN` (`#5C88`, column and line). The `PRINT` handler also updates `ATTR_T` and `MASK_T` for color handling.
 
 ### INPUT (`#2089`)
 
-`INPUT` combines printing (for prompts) with the editor (for user input). Its behaviour depends on the syntax:
+`INPUT` combines printing (for prompts) with the editor (for user input). Its behavior depends on the syntax:
 
 - `INPUT a` — prompt with `?`, wait for a number, assign to variable `a`
 - `INPUT a$` — prompt with `?`, wait for a string, assign to variable `a$`
@@ -850,7 +850,7 @@ Internally, `INPUT` opens the keyboard channel (`CHAN-OPEN` with A=0), prints an
 The three graphics commands share a common coordinate system: (0,0) is the **bottom-left** pixel, (255,175) is the top-right. Coordinates are 8-bit — the pixel grid is 256×176 but only the central 256×192 is displayed.
 
 **PLOT** (`#22DC`):
-1. Parse optional colour items (INK, PAPER, etc. that precede the coordinates)
+1. Parse optional color items (INK, PAPER, etc. that precede the coordinates)
 2. Parse two numeric expressions: x-coordinate, y-coordinate
 3. Convert to pixel address via `PIXEL_ADD` (`#22AA`) — returns HL = byte address, A = bit mask
 4. Set the pixel in the screen buffer
@@ -858,14 +858,14 @@ The three graphics commands share a common coordinate system: (0,0) is the **bot
 6. Update the attribute byte at the corresponding attribute address
 
 **DRAW** (`#2382`):
-1. Parse optional colour items, then two numeric expressions (dx, dy — *relative* offsets)
+1. Parse optional color items, then two numeric expressions (dx, dy — *relative* offsets)
 2. If a third parameter is present, it's a curve (arc) — otherwise it's a straight line
 3. For a straight line: uses Bresenham's algorithm (`DRAW_LINE` at `#24B7`) to draw from current `COORDS` to `COORDS + (dx, dy)`
 4. For a curve: computes the curve as a series of short line segments using the `STACKER` algorithm
 5. Updates `COORDS` at each pixel step
 
 **CIRCLE** (`#2320`):
-1. Parse optional colour items, then x, y (centre), and r (radius)
+1. Parse optional color items, then x, y (center), and r (radius)
 2. Computes 8 points around the circumference and connects them with `DRAW` arcs
 3. Uses the calculator heavily for the trigonometric calculations
 
@@ -914,7 +914,7 @@ The tape format uses two types of blocks:
 - **Header block** (17 bytes): type (PROGRAM/ARRAY/CODE), filename (10 chars), data length, and two parameters
 - **Data block**: the actual bytes
 
-Each block is preceded by a **pilot tone** (5 seconds for the first header, 2 seconds for subsequent blocks). The pilot allows the receiver to synchronise its timing. Data is encoded as a series of pulses: a `0` bit is one short pulse (~855 T-states), a `1` bit is two half-length pulses (~1710 T-states total).
+Each block is preceded by a **pilot tone** (5 seconds for the first header, 2 seconds for subsequent blocks). The pilot allows the receiver to synchronize its timing. Data is encoded as a series of pulses: a `0` bit is one short pulse (~855 T-states), a `1` bit is two half-length pulses (~1710 T-states total).
 
 For the byte-level tape format details, see [tape_format.md](../03_io/storage/tape_format.md).
 

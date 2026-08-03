@@ -1,6 +1,6 @@
 # +3DOS Logical Disk Format
 
-**Scope:** The **+3DOS** logical disk format used by the Sinclair ZX Spectrum +3 and +2A (the "Plus" range). +3DOS is the file system that the +3's built-in DOS uses to organise files on floppy disks — it defines the on-disk directory, the file allocation table (in the form of CP/M-style block pointers), the file type bytes, and the conventions for naming and addressing files. This article covers the **logical** layer; the **physical** layer (sector IDs, MFM encoding, the WD1772-PH controller) is covered in [plus3_floppy.md](plus3_floppy.md), and the MFM signal layer is covered in [mfm_encoding.md](mfm_encoding.md).
+**Scope:** The **+3DOS** logical disk format used by the Sinclair ZX Spectrum +3 and +2A (the "Plus" range). +3DOS is the file system that the +3's built-in DOS uses to organize files on floppy disks — it defines the on-disk directory, the file allocation table (in the form of CP/M-style block pointers), the file type bytes, and the conventions for naming and addressing files. This article covers the **logical** layer; the **physical** layer (sector IDs, MFM encoding, the WD1772-PH controller) is covered in [plus3_floppy.md](plus3_floppy.md), and the MFM signal layer is covered in [mfm_encoding.md](mfm_encoding.md).
 
 **Audience:** Emulator authors who need to read or write +3 disk images (.DSK / .EDSK files of +3 disks), archival tool authors, and Spectrum +3 software preservationists. The article assumes you already understand the difference between the physical sector layer (covered in [plus3_floppy.md](plus3_floppy.md)) and the file-system layer that sits on top of it.
 
@@ -115,7 +115,7 @@ The result is that the +3's logical sector ordering looks like:
 - Sectors 0–719: side 0, cylinder 0 (sectors 1–9), side 0 cylinder 1 (sectors 1–9), ..., side 0 cylinder 79 (sectors 1–9).
 - Sectors 720–1439: side 1, cylinder **79** (sectors 1–9), side 1 cylinder **78** (sectors 1–9), ..., side 1 cylinder **0** (sectors 1–9).
 
-This is sometimes called the **"backwards second side"** layout, and it is identical to the layout used by the Amstrad CPC and PCW. (The PCW CF2 disks that inspired +3DOS used the same trick.)
+This is sometimes called the **"backward second side"** layout, and it is identical to the layout used by the Amstrad CPC and PCW. (The PCW CF2 disks that inspired +3DOS used the same trick.)
 
 **Practical consequence for emulator authors:** When a +3 disk is stored in a .DSK or .EDSK file (see [dsk_fdi_formats.md](dsk_fdi_formats.md)), the sectors are stored in their physical (cylinder, side) order: cylinder 0 side 0, cylinder 0 side 1, cylinder 1 side 0, cylinder 1 side 1, and so on. The +3's "reverse side" trick is implemented at the **logical-to-physical** translation layer in the +3's BIOS, not at the disk-image layer. So a .DSK image of a +3 disk looks just like a .DSK image of a CPC disk — the difference is only visible when you actually try to read a +3DOS file system from it.
 
@@ -249,7 +249,7 @@ Examples:
 | `BOOT` | `BOOT    ` (4 + 4 spaces) | `   ` (3 spaces) |
 | `README.TXT` | `README  ` (6 + 2 spaces) | `TXT` |
 
-The `*CAT` (catalogue) command on the +3 displays filenames as `BASE.EXT` (inserting a period between the base name and the extension), or just `BASE` if the extension is all spaces.
+The `*CAT` (catalog) command on the +3 displays filenames as `BASE.EXT` (inserting a period between the base name and the extension), or just `BASE` if the extension is all spaces.
 
 ### 4.4 Allocation pointers (the DM/AL field)
 
@@ -300,7 +300,7 @@ To read the full file, the emulator reads entries 0, 1, and 2 in order of (EX, S
 
 ### 4.6 Empty and deleted entries
 
-A directory entry with **byte 0 = `0xE5`** is treated as **empty** (no file). When a file is deleted, the +3's DOS simply writes `0xE5` to byte 0 of every extent of that file; the block pointers and the actual file data remain on disk until overwritten. This is the same as CP/M 2.2's behaviour, and the same recovery technique (writing back the first character of the filename) works for undeletion.
+A directory entry with **byte 0 = `0xE5`** is treated as **empty** (no file). When a file is deleted, the +3's DOS simply writes `0xE5` to byte 0 of every extent of that file; the block pointers and the actual file data remain on disk until overwritten. This is the same as CP/M 2.2's behavior, and the same recovery technique (writing back the first character of the filename) works for undeletion.
 ## §5. File Types and Extensions
 
 ### 5.1 The +3DOS file-type byte
@@ -565,7 +565,7 @@ For reverse-engineering +3 software distributed on +3DOS disks (see [05_reversin
 - [plus3_floppy.md](plus3_floppy.md) — the **physical** layer of the +3's floppy subsystem (the WD1772-PH controller, the port map, the cable pinout). This article and that one are companions: this one covers the file system, that one covers the hardware.
 - [mfm_encoding.md](mfm_encoding.md) — the MFM signal layer (sectors, address marks, data marks) that underlies all floppy-disk formats on the Spectrum.
 - [trd_disk_format.md](trd_disk_format.md) — the **TR-DOS** logical disk format (a parallel format used by the Beta Disk Interface and Soviet Spectrum clones). This article and that one are the two main Spectrum disk formats.
-- [cpm_disk_format.md](cpm_disk_format.md) — the **CP/M 2.2** disk format on the Spectrum (used by +3 CP/M mode, ATM Turbo, Sprinter). +3DOS is essentially a customised CP/M, so this article is the natural companion.
+- [cpm_disk_format.md](cpm_disk_format.md) — the **CP/M 2.2** disk format on the Spectrum (used by +3 CP/M mode, ATM Turbo, Sprinter). +3DOS is essentially a customized CP/M, so this article is the natural companion.
 - [opus_discovery_format.md](opus_discovery_format.md) — the Opus Discovery disk format (a Western alternative to TR-DOS and +3DOS).
 - [disk_format_overview.md](disk_format_overview.md) — a high-level comparison of all Spectrum disk formats.
 - [dsk_fdi_formats.md](dsk_fdi_formats.md) — the disk-image file formats (`.DSK`, `.EDSK`, `.FDI`) used to store +3DOS images on modern systems.

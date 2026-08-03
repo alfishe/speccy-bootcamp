@@ -72,7 +72,7 @@ In each **8-T-state window**, the ULA fetches **2 bytes**: one pixel byte and on
 
 ### Where the 6-5-4-3-2-1-0-0 Pattern Comes From
 
-The `/WAIT` pattern is the ULA's defence against the CPU disrupting its paged-mode read sequence. If the CPU initiates a memory access **while `/RAS` is being driven by the ULA**, the ULA must:
+The `/WAIT` pattern is the ULA's defense against the CPU disrupting its paged-mode read sequence. If the CPU initiates a memory access **while `/RAS` is being driven by the ULA**, the ULA must:
 
 1. Finish its current DRAM access (can't abort mid-RAS without corrupting video)
 2. Yield the address bus to the CPU
@@ -116,11 +116,11 @@ This was a **simplification** in the ULA's design: rather than separately decode
 
 ## The 128K / +2 Contention Model — Bank-Based
 
-The 128K introduces **128 KB of bank-switched RAM**, organised as **8 banks of 16 KB**. The decision about which banks should be contended was a clean-slate design question — and Sinclair's engineers chose to contend banks **1, 3, 5, 7** (the odd-numbered banks).
+The 128K introduces **128 KB of bank-switched RAM**, organized as **8 banks of 16 KB**. The decision about which banks should be contended was a clean-slate design question — and Sinclair's engineers chose to contend banks **1, 3, 5, 7** (the odd-numbered banks).
 
 ### Why Banks 1, 3, 5, 7?
 
-The 128K's 128 KB of DRAM is physically organised as **two 64 KB blocks**:
+The 128K's 128 KB of DRAM is physically organized as **two 64 KB blocks**:
 
 - **Block A** ("uncontended") = banks **0, 2, 4, 6** — uses one set of DRAM chips
 - **Block B** ("contended") = banks **1, 3, 5, 7** — uses a different set of DRAM chips, shared with the ULA's video circuitry
@@ -151,7 +151,7 @@ The +2A and +3 replace the Sinclair 8K5/7K0 gate array with a pair of Amstrad-de
 
 ### Why Banks 4, 5, 6, 7?
 
-The +2A/+3 organises its 128 KB of DRAM as **two 64 KB blocks**, but **different from the 128K/+2's split**:
+The +2A/+3 organizes its 128 KB of DRAM as **two 64 KB blocks**, but **different from the 128K/+2's split**:
 
 - **Low block** ("uncontended") = banks **0, 1, 2, 3** — own DRAM chip set
 - **High block** ("contended") = banks **4, 5, 6, 7** — own DRAM chip set, shared with the video circuitry
@@ -240,7 +240,7 @@ A cycle-exact emulator or FPGA core must implement:
 
 1. **Per-T-state delay lookup** — not per-instruction. An instruction that spans multiple T-states may be contended on some accesses and not others. The contention check must happen on **every memory-accessing T-state**, with the delay depending on the T-state's position in the scanline.
 
-2. **Per-model contended-range check** — the same address can be contended on one model and uncontended on another. The bank-number-to-physical-DRAM mapping must be modelled correctly (especially for the 128K/+2's odd-bank scheme and the +2A/+3's high-bank scheme).
+2. **Per-model contended-range check** — the same address can be contended on one model and uncontended on another. The bank-number-to-physical-DRAM mapping must be modeled correctly (especially for the 128K/+2's odd-bank scheme and the +2A/+3's high-bank scheme).
 
 3. **MREQ vs IORQ distinction on +2A/+3** — emulators that don't track the bus cycle type will incorrectly apply contention to `OUT` instructions on the +2A/+3.
 
@@ -255,9 +255,9 @@ A cycle-exact emulator or FPGA core must implement:
 - **Applying the Ferranti pattern to the +2A/+3** — produces subtly wrong timing for cycle-exact demos. Fixed in modern Fuse, ZEsarUX, and CSpect, but still present in some older emulators.
 - **Treating I/O as contended on +2A/+3** — results in `OUT (#FE), A` taking too long, breaking multicolor effects that depend on cycle counting.
 - **Missing the 100 T-state gap** — minor effect, but visible in cycle-exact demos that run during the first contended scanline.
-- **Not modelling early/late timing** — demoscene productions may pass on emulator but fail on cold real hardware.
+- **Not modeling early/late timing** — demoscene productions may pass on emulator but fail on cold real hardware.
 
-For an in-depth treatment of accurate contention modelling, see [fpga_timing_accuracy.md](../../11_emulation/fpga/fpga_timing_accuracy.md) and [mcu_ula.md](../../11_emulation/mcu/mcu_ula.md).
+For an in-depth treatment of accurate contention modeling, see [fpga_timing_accuracy.md](../../11_emulation/fpga/fpga_timing_accuracy.md) and [mcu_ula.md](../../11_emulation/mcu/mcu_ula.md).
 
 ---
 
@@ -303,7 +303,7 @@ For a canonical detection routine, see the World of Spectrum FAQ's "How to detec
 - [memory_and_io_128k.md](../../05_development/03_memory_and_io/memory_and_io_128k.md) — 128K/+2 memory map and I/O ports
 - [memory_and_io_plus3.md](../../05_development/03_memory_and_io/memory_and_io_plus3.md) — +2A/+3 memory map and I/O ports
 - [video_frame_comparison.md](../../05_development/05_display_and_timing/video_frame_comparison.md) — frame timing comparison across all models
-- [fpga_timing_accuracy.md](../../11_emulation/fpga/fpga_timing_accuracy.md) — accurate contention modelling in FPGA cores
+- [fpga_timing_accuracy.md](../../11_emulation/fpga/fpga_timing_accuracy.md) — accurate contention modeling in FPGA cores
 - [mcu_ula.md](../../11_emulation/mcu/mcu_ula.md) — microcontroller-based ULA replacement timing notes
 
 ---

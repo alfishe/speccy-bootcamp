@@ -22,7 +22,7 @@ The Russian ZX Spectrum clone scene of the late 1990s and early 2000s had reache
 The Z-Controller was the **integrated solution**. A single board plugged into the ZX Bus slot gave the user:
 
 - A **modern mass-storage option** (SD card, multi-GB capacity, FAT filesystem)
-- An **upgrade path from Nemo IDE** (full backwards compatibility with existing IDE drivers, but on the same board as the SD card)
+- An **upgrade path from Nemo IDE** (full backward compatibility with existing IDE drivers, but on the same board as the SD card)
 - **Proper keyboard and mouse input** without needing a separate adapter
 
 For Russian clone owners, this was the closest thing to a "modern peripheral deck" — a single board that brought the Spectrum into the 2000s. It never achieved the international popularity of the DivMMC (which is the SD card interface most Western Spectrum owners know today), but within the Russian-speaking scene it became a standard option, and its design was carried forward into the MB03+ Ultimate and the ZX Spectrum Neo.
@@ -247,8 +247,8 @@ For a modern Russian-clone owner who wants a single board covering all four func
 |---|---------|----------------|-----|
 | 1 | Z-Controller bought online doesn't fit a Sinclair 48K | The board was assembled with a Pentagon port-decode CPLD build, which clashes with the Sinclair 48K's `/IORQULA` contention scheme | Re-flash the EPM7128 CPLD with the Sinclair-targeted build (JTAG connector on board); alternatively buy a DivMMC for Sinclair use |
 | 2 | SD card works in one Russian clone but not another | Pentagon, Scorpion, Profi, and Kay each have different port-decoding conventions for the SD card address | Use the CPLD build matched to your host machine |
-| 3 | SDHC card (4–32 GB) not recognised | The original Wild Disk Copier v1.21 driver supports only standard-capacity SD (up to 2 GB) | Use a more recent patched driver, or use a 2 GB or smaller SD card |
-| 4 | SDXC card (>32 GB) not recognised | SDXC uses exFAT by default; the Z-Controller's drivers predate exFAT | Reformat the card as FAT32 using a PC tool (will partition up to 32 GB); remainder of card is wasted |
+| 3 | SDHC card (4–32 GB) not recognized | The original Wild Disk Copier v1.21 driver supports only standard-capacity SD (up to 2 GB) | Use a more recent patched driver, or use a 2 GB or smaller SD card |
+| 4 | SDXC card (>32 GB) not recognized | SDXC uses exFAT by default; the Z-Controller's drivers predate exFAT | Reformat the card as FAT32 using a PC tool (will partition up to 32 GB); remainder of card is wasted |
 | 5 | PS/2 mouse works in some software but not others | Software has to explicitly support the Kempston Mouse; some software checks only the Kempston Joystick port | Use software that supports the Kempston Mouse (most Russian software from 1990s onward does); see [mouse.md](mouse.md) for the compatibility table |
 | 6 | PS/2 mouse buttons are swapped | The Z-Controller emulates Kempston Mouse convention: bit 0 = left, bit 1 = right. Some software expects the opposite. | Configure the software's mouse button order; or use the K-Mouse Turbo configuration utility if your board supports it |
 | 7 | PS/2 keyboard gives wrong keystrokes | The KR1878VE1 firmware maps PS/2 scan codes to a Russian clone matrix layout (usually Pentagon), not the original Sinclair 40-key layout | Use a CPLD/MCU firmware build matched to your target machine's matrix; or stick with software that supports the PS/2 scan codes directly |

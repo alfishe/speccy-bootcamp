@@ -2,7 +2,7 @@
 
 # Other Soviet Clone Video Frames — Kay, ATM Turbo, Profi, Byte, Quorum, Leningrad, LEC
 
-Beyond the two dominant Soviet clones — [Pentagon](video_frame_pentagon.md) (320 lines, 48.83 Hz, no contention) and [Scorpion](video_frame_scorpion.md) (312 lines, 50.08 Hz, revision-dependent contention) — there is a long tail of less common clones with their own timing quirks. Most match the 48K at the macro level (312 lines, 224 T-states, 69,888 T-states/frame), but differ in horizontal phase, contention behaviour, and turbo modes.
+Beyond the two dominant Soviet clones — [Pentagon](video_frame_pentagon.md) (320 lines, 48.83 Hz, no contention) and [Scorpion](video_frame_scorpion.md) (312 lines, 50.08 Hz, revision-dependent contention) — there is a long tail of less common clones with their own timing quirks. Most match the 48K at the macro level (312 lines, 224 T-states, 69,888 T-states/frame), but differ in horizontal phase, contention behavior, and turbo modes.
 
 > [!NOTE]
 > This article covers the **video frame timing** of the long tail of Soviet clones. For hardware details (RAM, ROM, I/O ports, expansions), see [atm_turbo.md](../../02_hardware/clones/atm_turbo.md) and the planned [kay.md](../../02_hardware/clones/README.md), [profi.md](../../02_hardware/clones/README.md). The big-picture comparison across all clones lives in [clone_timing.md](../../02_hardware/clones/clone_timing.md).
@@ -50,8 +50,8 @@ The Kay is **the cleanest Soviet clone to target** if you want 48K-compatible ti
 The 2006 revision's CPLD adds three video modes that **don't change base timing** but affect how the video circuit reads RAM:
 
 - **Multicolor mode** — per-scanline attribute changes via a shadow attribute buffer in alternate RAM bank; no CPU contention because the video circuit reads from a separate buffer
-- **GigaScreen** — alternates two attribute sets on even/odd frames to simulate 8×1 colour resolution via PAL chroma bleed; works on stock CRTs but produces visible flicker
-- **512×192 pixel mode** — double horizontal resolution in 2 colours, useful for static title screens
+- **GigaScreen** — alternates two attribute sets on even/odd frames to simulate 8×1 color resolution via PAL chroma bleed; works on stock CRTs but produces visible flicker
+- **512×192 pixel mode** — double horizontal resolution in 2 colors, useful for static title screens
 
 These modes are Kay-specific and not portable. See [clone_video_modes.md](clone_video_modes.md) for the cross-clone survey.
 
@@ -242,4 +242,4 @@ The canonical decision tree is in [clone_timing.md § Clone Detection](../../02_
 - **ZXMAK2 emulator** ([github.com/zxmak/zxmak2](https://github.com/zxmak/zxmak2)) — 16+ clone models with separate contention profiles. Source code documents per-revision Scorpion contention and the ATM Turbo speedup anomaly.
 - **zx-pk.ru forum threads** — Russian-language real-hardware measurements and clone-specific discussions. Notable threads: "Timing measurements on Profi 5.03", "ATM Turbo 7MHz real speed", "Kay 2006 GigaScreen details".
 - **SpeccyWiki (speccy.info)** — Russian-language clone encyclopaedia with per-clone hardware specifications.
-- **spectrum-computing.co.uk hardware catalogue** — clone hardware profiles with original documentation links.
+- **spectrum-computing.co.uk hardware catalog** — clone hardware profiles with original documentation links.

@@ -224,7 +224,7 @@ A TurboSound module played on a single-AY machine will play only one of the two 
 - [Tracker History](tracker_history.md) — the full lineage, including PT3's place in it
 - [Arkos Tracker](arkos_tracker.md) — modern alternative, different format family
 - [PT3 Format](pt3_format.md) — the binary format specification
-- [AY Music Formats](ay_music_formats.md) — all ZX music formats catalogued
+- [AY Music Formats](ay_music_formats.md) — all ZX music formats cataloged
 - [TurboSound](../hardware/turbosound.md) — the hardware TS-module editing produces
 - [AY-3-8912 PSG Silicon](../hardware/ay_3_8912.md) — the chip the player routine drives
 - [AY Player Routines](../players/ay_player_routines.md) — embedding PT3 in a game

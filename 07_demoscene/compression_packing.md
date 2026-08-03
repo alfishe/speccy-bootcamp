@@ -19,7 +19,7 @@ The platform's constraints make compression both more necessary and more difficu
 - **No native mass storage** — tape loading at 1500 bit/s makes every byte cost ~6 ms of load time; TR-DOS diskettes hold 640 KB but only with strict format constraints.
 - **Tight per-frame budget** — 6976 T-states per scanline × 312 scanlines × 50 Hz ≈ 7 MHz effective, of which ~50 % is lost to contention during the visible display. Anything that decompresses during the frame must do so in cycle-counted code.
 
-These constraints produced a unique ecosystem of packers, with multiple parallel lineages: Soviet screen-optimised formats (1991–), Western general-purpose LZSS (late 1990s–), the modern optimal-parser wave (2013–), and byte-aligned speed-optimised formats (2018–). Each generation has working production packers in active use today.
+These constraints produced a unique ecosystem of packers, with multiple parallel lineages: Soviet screen-optimized formats (1991–), Western general-purpose LZSS (late 1990s–), the modern optimal-parser wave (2013–), and byte-aligned speed-optimized formats (2018–). Each generation has working production packers in active use today.
 
 ### Article Roadmap
 
@@ -34,7 +34,7 @@ These constraints produced a unique ecosystem of packers, with multiple parallel
 - §10 Format internals — `ZX0`, `ZX7`, `MegaLZ`, `LZSA2`, `HRUM` byte-level format reference.
 - §11 The RCS preprocessor — turning the nonlinear screen into linear order so any packer wins.
 - §12 Streaming depack — decompressing during loading and during effects.
-- §13 In-place and backwards depack — overlapping source and destination safely.
+- §13 In-place and backward depack — overlapping source and destination safely.
 - §14 When NOT to compress.
 - §15 Decision tree — picking the right packer.
 - §16 Worked example — compressing a screen with `RCS` + `ZX0` and integrating the depacker.
@@ -59,13 +59,13 @@ All ZX packers split the workload unequally between two machines:
 | **Packing** (compress) | Modern PC, GB of RAM, GHz CPU | None — can use any algorithm, run for minutes, search exhaustively |
 | **Depacking** (decompress) | Z80, 16–128 KB RAM, 3.5 MHz | Three simultaneous hard limits (§2.4) |
 
-This asymmetry has a counterintuitive consequence: **the format is more constrained than the algorithm**. Modern general-purpose compression libraries (zstd, brotli, LZMA) achieve their best ratio by using sophisticated modelling that requires megabytes of decoder-side state. None of that state is affordable on Z80. So ZX formats are designed *first* as Z80 programs — tight inner loops with state in 3 register pairs — and *only then* as compression algorithms. The compression strategy is whatever the format allows.
+This asymmetry has a counterintuitive consequence: **the format is more constrained than the algorithm**. Modern general-purpose compression libraries (zstd, brotli, LZMA) achieve their best ratio by using sophisticated modeling that requires megabytes of decoder-side state. None of that state is affordable on Z80. So ZX formats are designed *first* as Z80 programs — tight inner loops with state in 3 register pairs — and *only then* as compression algorithms. The compression strategy is whatever the format allows.
 
 This is why an apparently primitive format like `ZX0` (Elias-gamma-coded LZ77 with a 68-byte depacker) is, in practice, within 1–2 percentage points of `Exomizer` (the best-in-class LZ77 format for Z80) and only ~10 percentage points behind zstd level 19. The gap is not algorithmic; it is the price of running on Z80.
 
 ### 2.2 What "big-machine" algorithms do — and why Z80 cannot
 
-The table below catalogues the major families of lossless compression and why each is unusable as a *ZX depacker*. Note that many of these techniques can still be used during the *packing* phase on PC (e.g. optimal-parsing search); what fails is the depacker side.
+The table below catalogs the major families of lossless compression and why each is unusable as a *ZX depacker*. Note that many of these techniques can still be used during the *packing* phase on PC (e.g. optimal-parsing search); what fails is the depacker side.
 
 | Family | Example | PC implementation | Why the depacker fails on Z80 |
 |---|---|---|---|
@@ -75,14 +75,14 @@ The table below catalogues the major families of lossless compression and why ea
 | **PPM** (Prediction by Partial Matching) | `PPMd`, `7-Zip` | Context tables, statistical model per context, arithmetic-coded symbols | Context tables are 64 KB–1 MB; model state must persist across symbols. The Z80 depacker cannot store the model, never mind compute it. |
 | **BWT** (Burrows-Wheeler) | `bzip2` | Suffix-array sort + MTF + Huffman | Decoder requires the inverse-BWT table (size = block size) and multiple passes over it. For a 48 KB block, that is the entire ZX RAM again. |
 | **ANS / rANS / tANS** | `zstd` (FSE), `brotli`, `lzfse` | State-machine entropy coder; needs a 256-entry decode table | Smaller than Huffman trees but still 256–512 bytes of static table for a byte alphabet. No ZX depacker uses ANS natively; the closest approach is `Pletter 0.5`'s 7-variant selection (§2.5). |
-| **zstd / LZMA / brotli** | modern web stack | Multi-MB dictionary + ANS + context modelling | Dictionary alone is 8–192 MB. The depacker is 50–500 KB of compiled code with megabyte working set. Impossible to port. |
+| **zstd / LZMA / brotli** | modern web stack | Multi-MB dictionary + ANS + context modeling | Dictionary alone is 8–192 MB. The depacker is 50–500 KB of compiled code with megabyte working set. Impossible to port. |
 | **LZ77 with optimal parsing + bit-stream entropy** | `Pucrunch`, `MegaLZ` | Optimal parser on PC; Elias-gamma-coded bitstream on Z80 | **This is what ZX packers actually use.** It is the highest-ratio technique whose depacker fits in ~100 bytes. |
 | **LZ77 byte-aligned, no entropy** | `LZ4`, `LZSA1` | Simple greedy or optimal parser on PC; byte-aligned token format | **The fastest ZX depackers.** Format is so simple that the depacker hot path is 4 instructions per byte. |
 
 Two consequences fall out of this table:
 
 1. **There is no entropy back-end in any ZX format.** No Huffman tree, no arithmetic coder, no ANS. The "entropy coding" stage of ZX compression is at most an Elias-gamma prefix code — a stateless, tableless variable-length integer encoding that the depacker reads bit by bit.
-2. **There is no context modelling.** No PPM, no BWT, no per-symbol probability adaptation. Every byte is encoded in the same way regardless of what came before, modulo the LZ77 match-length and offset history (which `ApLib`, `LZSA2`, and `Exomizer` exploit minimally via "rep-match" codes).
+2. **There is no context modeling.** No PPM, no BWT, no per-symbol probability adaptation. Every byte is encoded in the same way regardless of what came before, modulo the LZ77 match-length and offset history (which `ApLib`, `LZSA2`, and `Exomizer` exploit minimally via "rep-match" codes).
 
 This is not a limitation of the algorithm designers; it is the *defining characteristic* of the ZX compression ecosystem. As Pasi Ojala wrote in the `pucrunch` documentation: *"A system with a 1-MHz 3-register 8-bit processor and 64 kilobytes of memory certainly imposes a great challenge, and thus also a great sense of achievement for good results."* The same constraints apply to ZX Spectrum with twice the clock and three register pairs.
 
@@ -130,7 +130,7 @@ ZX depackers must satisfy all three of the following simultaneously. **Any techn
 
 | # | Constraint | Hard limit | Consequence |
 |---|---|---|---|
-| **1** | **Depacker code size** | On a 256-byte intro, a 75-byte depacker is 29 % of the budget. On a 1K intro, a 75-byte depacker is 7 %. On a 48K demo, the depacker is negligible but every copy of it (one per packed block) still costs. | ZX depackers are routinely size-optimised to the last byte. `ZX0` has a 68-byte "turbo" variant and a 49-byte "mega" variant that uses self-modifying code and undocumented instructions. |
+| **1** | **Depacker code size** | On a 256-byte intro, a 75-byte depacker is 29 % of the budget. On a 1K intro, a 75-byte depacker is 7 %. On a 48K demo, the depacker is negligible but every copy of it (one per packed block) still costs. | ZX depackers are routinely size-optimized to the last byte. `ZX0` has a 68-byte "turbo" variant and a 49-byte "mega" variant that uses self-modifying code and undocumented instructions. |
 | **2** | **Depacker RAM usage** | On a 48K Spectrum, total RAM is 48 KB minus 16 KB ROM minus 7 KB screen = ~25 KB usable. Of that, ~7 KB is in uncontended memory (fast); ~16 KB is contended (slow). Depacker state competes with the running program for this RAM. | Modern ZX depackers use **0 bytes** of additional RAM beyond the source and destination buffers. All state fits in 3 register pairs + the alternate set. This is why no ZX format uses a 256-entry Huffman table or a multi-KB ANS table. |
 | **3** | **Depacker speed** | 69888 T-states per frame at 50 Hz. Of these, ~30000 are lost to ULA memory contention during the visible display, leaving ~40000 usable. At 200 T/byte, that is 200 bytes per frame. At 30 T/byte, it is 1300 bytes per frame. | A streaming depacker (§12) that needs to feed an effect every frame at 50 Hz must hit its per-byte target. Bit-stream formats cap out around 100 bytes/frame; byte-aligned formats can sustain 1000+ bytes/frame. |
 
@@ -149,7 +149,7 @@ Of those 953 bytes, the packed payload may expand to ~3–5 KB on depack. The de
 
 ### 2.5 How each generation adapted to the constraints
 
-The four generations catalogued in §3 are four *different* answers to the same three constraints. Each generation traded a different thing:
+The four generations cataloged in §3 are four *different* answers to the same three constraints. Each generation traded a different thing:
 
 | Generation | What it traded away | What it gained | Depacker cost |
 |---|---|---|---|
@@ -160,7 +160,7 @@ The four generations catalogued in §3 are four *different* answers to the same 
 
 Notice that **Generation 3 still uses Elias gamma coding**, a universal prefix code from 1975. There is no entropy back-end — no Huffman, no arithmetic, no ANS. The format is simply LZ77 with Elias-gamma-coded lengths and offsets, and an optimal parser running on PC picks the matches. This is the closest a ZX format can get to a general-purpose compression algorithm while staying within the depacker budget.
 
-`Pletter 0.5` is an interesting hybrid: it pre-generates seven different Elias-gamma variants, runs the optimal parser against each, and embeds a 3-bit selector at the start of the stream so the depacker knows which variant to use. This is the closest any ZX packer comes to "context modelling" — but even here the modelling is done at *packing* time, not at depack time. The depacker just executes the selected variant.
+`Pletter 0.5` is an interesting hybrid: it pre-generates seven different Elias-gamma variants, runs the optimal parser against each, and embeds a 3-bit selector at the start of the stream so the depacker knows which variant to use. This is the closest any ZX packer comes to "context modeling" — but even here the modeling is done at *packing* time, not at depack time. The depacker just executes the selected variant.
 
 `LZSA2` is the other interesting hybrid: it is technically a Generation 4 packer (byte-aligned, no entropy), but it uses nibble-encoded offsets and short-form matches that approximate the density of an Elias-gamma bitstream without paying the per-bit cost. It is the format that most explicitly embodies the asymmetry: optimal parser on PC, byte-aligned state machine on Z80.
 
@@ -169,19 +169,19 @@ Notice that **Generation 3 still uses Elias gamma coding**, a universal prefix c
 Introspec's 2017 and 2021 benchmarks (§8) show a Pareto frontier that has not been broken in 25 years of packer development. Reading the table:
 
 - **Best possible at ~150 T/byte:** `ApLib` at 49 % ratio. `Exomizer` achieves 48 % at ~3× slower.
-- **Best possible at ~50 T/byte:** `LZSA2` (speed-optimised depacker) at ~51 % ratio.
+- **Best possible at ~50 T/byte:** `LZSA2` (speed-optimized depacker) at ~51 % ratio.
 - **Best possible at ~33 T/byte:** `LZ4` / `LZSA1` at ~58 % ratio.
 
-The gap between the fastest and slowest is *9 ratio points for a 5× speed difference*. No packer in any generation has ever broken this curve. The reason is structural: every ZX packer is fundamentally LZSS plus a universal prefix code. There is no entropy coding back-end (no Huffman, no arithmetic, no ANS), and there is no context modelling (no PPM, no BWT). These omissions are *forced* by the depacker constraints in §2.4 — and they cap achievable ratio at the LZSS+universal-code ceiling.
+The gap between the fastest and slowest is *9 ratio points for a 5× speed difference*. No packer in any generation has ever broken this curve. The reason is structural: every ZX packer is fundamentally LZSS plus a universal prefix code. There is no entropy coding back-end (no Huffman, no arithmetic, no ANS), and there is no context modeling (no PPM, no BWT). These omissions are *forced* by the depacker constraints in §2.4 — and they cap achievable ratio at the LZSS+universal-code ceiling.
 
-A useful comparison. On the same Introspec corpus, zstd level 19 achieves ~32 % ratio. The best ZX packer (`Exomizer`) achieves 48 %. The 16-point gap is exactly the cost of "no entropy coding, no context modelling, no large dictionary". That gap cannot close without a Z80 successor (the Z80N in the Spectrum Next does not help; it adds `MUL D,E` and `SWAPNIB` but no caches, no parallel issue, and the same memory bottleneck).
+A useful comparison. On the same Introspec corpus, zstd level 19 achieves ~32 % ratio. The best ZX packer (`Exomizer`) achieves 48 %. The 16-point gap is exactly the cost of "no entropy coding, no context modeling, no large dictionary". That gap cannot close without a Z80 successor (the Z80N in the Spectrum Next does not help; it adds `MUL D,E` and `SWAPNIB` but no caches, no parallel issue, and the same memory bottleneck).
 
 ### 2.7 Modern cross-pollination: what mainstream compression borrowed from 8-bit
 
-The ZX packer ecosystem has had a measurable, if rarely acknowledged, influence on mainstream compression. The through-line is **byte-aligned formats with no entropy back-end** — exactly the design forced by the Z80 constraints, generalised to multi-GHz CPUs:
+The ZX packer ecosystem has had a measurable, if rarely acknowledged, influence on mainstream compression. The through-line is **byte-aligned formats with no entropy back-end** — exactly the design forced by the Z80 constraints, generalized to multi-GHz CPUs:
 
-- **`LZ4`** (Yann Collet, 2011). The official format specification states: *"LZ4 is an LZ77-type compressor with a fixed byte-oriented encoding format. There is no entropy encoder back-end nor framing layer. This design is assumed to favor simplicity and speed."* This is precisely the 8-bit design constraint generalised. `LZ4`'s depacker runs at multi-GB/s on x86, but its format was deliberately shaped to *be simple* — which is also what makes it useful on Z80.
-- **`LZSA`** (Emmanuel Marty, 2019). Explicitly developed for retro platforms. The `LZSA1`/`LZSA2` formats were tuned against Introspec's 8-bit benchmarks, and the format was generalised upward to non-8-bit use cases (compression in modern embedded systems, retro-game asset pipelines). Marty has acknowledged in forum posts that the ZX Spectrum community was the primary testbed.
+- **`LZ4`** (Yann Collet, 2011). The official format specification states: *"LZ4 is an LZ77-type compressor with a fixed byte-oriented encoding format. There is no entropy encoder back-end nor framing layer. This design is assumed to favor simplicity and speed."* This is precisely the 8-bit design constraint generalized. `LZ4`'s depacker runs at multi-GB/s on x86, but its format was deliberately shaped to *be simple* — which is also what makes it useful on Z80.
+- **`LZSA`** (Emmanuel Marty, 2019). Explicitly developed for retro platforms. The `LZSA1`/`LZSA2` formats were tuned against Introspec's 8-bit benchmarks, and the format was generalized upward to non-8-bit use cases (compression in modern embedded systems, retro-game asset pipelines). Marty has acknowledged in forum posts that the ZX Spectrum community was the primary testbed.
 - **Finite State Entropy (FSE)** (Yann Collet, 2015). FSE is a tANS implementation used in `zstd`. Its selling point is *"Huffman speed at arithmetic coding ratios"* — exactly the trade-off 8-bit packers had to make 30 years earlier. FSE's state-machine decoder is conceptually similar to `Pletter 0.5`'s variant-table approach: a small finite state per symbol, no tree walk.
 - **`zstd` "--ultra" modes** (Facebook, 2018+). The highest-ratio modes of zstd use a context model that *would* be useful on ZX if it fit — but its minimum working set is 8 MB. The ZX community has explicitly noted this and ignored it.
 - **Asymmetric Numeral Systems** (Jarek Duda, 2013–2014). ANS as a theoretical framework unifies Huffman and arithmetic coding. While no ZX packer uses ANS natively, the ANS framework clarifies *why* Elias gamma coding is so effective on Z80: it is the simplest possible ANS coder with a uniform symbol distribution, requiring no probability table.
@@ -234,9 +234,9 @@ The 2017 benchmark (§8) showed `Exomizer`, `ApLib`, and `Pletter 0.5` as the mo
 
 > **Primary source**: "Sofтинка — обзор экранных упаковщиков для ZX Spectrum", Info-Guide #5 (April 2004), preserved at [zxpress.ru](https://zxpress.ru/ru/ezines/info-guide/05/obzor-ekrannyh-upakovshikov-dlya-zx-spectrum-asclzpak-msp1-6-lazy-pack-i-asc-screen-crusher-tehniki).
 
-The Soviet demo and game scene standardised on diskette distribution via TR-DOS, where each screen typically loaded as a separate file. The 6912-byte `.scr` format is unusually compressible — adjacent bytes in linear memory are *not* spatially adjacent on the display, so a naive LZ packer misses obvious redundancy. The Soviet packers all addressed this with some variant of **broken-column traversal**: instead of treating the screen as a flat 6912-byte array, they treat it as three 2048-byte thirds plus a 768-byte attribute area, and traverse each third column-by-column within the byte that makes up a character cell.
+The Soviet demo and game scene standardized on diskette distribution via TR-DOS, where each screen typically loaded as a separate file. The 6912-byte `.scr` format is unusually compressible — adjacent bytes in linear memory are *not* spatially adjacent on the display, so a naive LZ packer misses obvious redundancy. The Soviet packers all addressed this with some variant of **broken-column traversal**: instead of treating the screen as a flat 6912-byte array, they treat it as three 2048-byte thirds plus a 768-byte attribute area, and traverse each third column-by-column within the byte that makes up a character cell.
 
-This traversal order means a long run of identical bytes (e.g., a horizontal stripe of one colour) becomes a contiguous run in the *virtual* address space, even though it is scattered across the *real* screen address space. The packer then runs LZSS over the virtual stream, and the depacker reconstructs the real address via a per-byte calculation.
+This traversal order means a long run of identical bytes (e.g., a horizontal stripe of one color) becomes a contiguous run in the *virtual* address space, even though it is scattered across the *real* screen address space. The packer then runs LZSS over the virtual stream, and the depacker reconstructs the real address via a per-byte calculation.
 
 ### 4.1 `ASCLZPAK` (1991) — the progenitor
 
@@ -286,7 +286,7 @@ Length encoding uses variable-length codes that look like an early precursor of 
 
 Offset encoding is also variable-length, separately for the high and low bytes, with codes 1–7 bits for the high byte (window of 32 cells) and a raw 8-bit low byte.
 
-**Quirks**: the depacker uses the SP register as a data pointer into the bytestream (via `DEC SP : POP AF`), so the system stack pointer must be saved in IY before depack and restored afterwards. Interrupts must be disabled.
+**Quirks**: the depacker uses the SP register as a data pointer into the bytestream (via `DEC SP : POP AF`), so the system stack pointer must be saved in IY before depack and restored afterward. Interrupts must be disabled.
 
 ### 4.3 `Lazy Pack 2.0`
 
@@ -298,7 +298,7 @@ A late entry (1997/1998), built on ideas from `LC 5.2` (Laser Compact). The form
 
 ### 4.4 `Laser Compact` (LC 4.0 / LC 5.2)
 
-Authored by **Marslord**, `Laser Compact` is widely regarded as the Soviet screen packer that produced the smallest `.scr` files for many years. The 4.0 version shipped first; 5.2 was the final and best-tuned release. Both versions are tightly optimised for the broken-column screen traversal, with byte-aligned codes in the hot path (rare for Soviet packers, which usually preferred bit-packing).
+Authored by **Marslord**, `Laser Compact` is widely regarded as the Soviet screen packer that produced the smallest `.scr` files for many years. The 4.0 version shipped first; 5.2 was the final and best-tuned release. Both versions are tightly optimized for the broken-column screen traversal, with byte-aligned codes in the hot path (rare for Soviet packers, which usually preferred bit-packing).
 
 The depacker is short enough to fit comfortably under 200 bytes and is non-relocatable by default but easy to relocatable-ise. The format is documented in the late-1990s disk magazine **Spectrofon** and is the format most Soviet demo frameworks shipped as their default screen packer. Many later packers (Lazy Pack 2.0 included) credit `LC 5.2` as their reference.
 
@@ -312,7 +312,7 @@ A simpler sibling of `ASCLZPAK` from the same scene. Drops some of the more exot
 
 All five Generation-1 packers share two unusual properties:
 
-1. **Format-specific**: they only compress screens. They exploit the 6912-byte layout in ways that do not generalise to code or sprite data.
+1. **Format-specific**: they only compress screens. They exploit the 6912-byte layout in ways that do not generalize to code or sprite data.
 2. **Native development**: the packer itself runs on the Spectrum, often from a TR-DOS disk menu. There is typically no PC port. This is awkward for modern cross-development (§14).
 
 The **broken-column traversal** idea survives today, but in a different form: Einar Saukas's **RCS** preprocessor (see §11) reorders screen bytes into linear order on the PC, then any modern packer (`ZX0`, `LZSA2`, etc.) achieves the same ratio benefit. RCS made Generation 1 packers obsolete in principle, but they remain historically important and several Soviet-era demos still ship data in `LC 5.2` or `MSP 1.6` format.
@@ -323,7 +323,7 @@ The **broken-column traversal** idea survives today, but in a different form: Ei
 
 > **Primary source**: Introspec, "Сжатие данных для современного кодинга под Z80", HYPE (September 2017), [hype.retroscene.org/blog/dev/740.html](https://hype.retroscene.org/blog/dev/740.html).
 
-Generation 2 covers a diverse group of packers that emerged as demo coders on both sides of the former Iron Curtain started running their packers on PC and treating compression as a general-purpose data transformation rather than a screen-specific trick. All packers in this generation are LZSS-family with various additions: dynamic code tables (`HRUST 1`), reused offsets (`ApLib`), or longer-context modelling (`Exomizer`).
+Generation 2 covers a diverse group of packers that emerged as demo coders on both sides of the former Iron Curtain started running their packers on PC and treating compression as a general-purpose data transformation rather than a screen-specific trick. All packers in this generation are LZSS-family with various additions: dynamic code tables (`HRUST 1`), reused offsets (`ApLib`), or longer-context modeling (`Exomizer`).
 
 ### 5.1 `MegaLZ` (fyrex, optimal parser by lvd, 2005)
 
@@ -401,7 +401,7 @@ Four Z80 depackers are widely used, all written by the Spanish SMS/Spectrum scen
 
 ### 5.6 `Exomizer` (Magnus Lind)
 
-The undisputed ratio champion for ZX data. The format is undocumented (only the C source is published), but is known to be a sophisticated LZSS variant with longer-context modelling. The packer may or may not be optimal (Introspec has been unable to confirm).
+The undisputed ratio champion for ZX data. The format is undocumented (only the C source is published), but is known to be a sophisticated LZSS variant with longer-context modeling. The packer may or may not be optimal (Introspec has been unable to confirm).
 
 Standard usage packs raw data without the built-in wrapper:
 
@@ -420,17 +420,17 @@ Two Z80 depackers (same authors as `ApLib` Z80 depackers):
 | Depacker | Size | Buffer | Speed |
 |---|---|---|---|
 | `deexo.asm` (standard) | 169 bytes | 156 bytes | ~287 T/byte |
-| `deexo_plus.asm` (optimised) | 174 bytes | 156 bytes | ~248 T/byte |
+| `deexo_plus.asm` (optimized) | 174 bytes | 156 bytes | ~248 T/byte |
 
 **Critical limitation**: Exomizer requires a **156-byte static buffer** for working state. This makes it the only major packer that cannot run without extra memory allocation. The buffer is small but must be allocated somewhere stable.
 
-**Backwards depack**: Exomizer's official distribution includes `deexo_b.asm` and `deexo_simple_b.asm` for backwards depack — useful when depacking large data into the top of memory where in-place overlap would otherwise be impossible.
+**Backwards depack**: Exomizer's official distribution includes `deexo_b.asm` and `deexo_simple_b.asm` for backward depack — useful when depacking large data into the top of memory where in-place overlap would otherwise be impossible.
 
 **Modern status**: still the ratio champion. Use when you need maximum compression and can afford slow depack.
 
 ### 5.7 `Pucrunch` (Andreas Franzén, C64 origin)
 
-An old, sophisticated packer originally written for the Commodore 64. Uses **lazy matching** during compression, which makes the packer an *optimising* (but not necessarily *optimal*) parser. The Z80 port is maintained by Aprisobal (author of `sjasmplus`).
+An old, sophisticated packer originally written for the Commodore 64. Uses **lazy matching** during compression, which makes the packer an *optimizing* (but not necessarily *optimal*) parser. The Z80 port is maintained by Aprisobal (author of `sjasmplus`).
 
 Standard usage strips the C64 wrapper:
 
@@ -454,7 +454,7 @@ A simple bit-packed LZSS that served as the design template for `ZX7`. Originall
 
 > **Primary sources**: [Einar Saukas's ZX0 repository](https://github.com/einar-saukas/ZX0) (format and depackers); [Introspec's 2021 MegaLZ update](https://hype.retroscene.org/blog/933.html) (modern corpus and recommendations).
 
-Generation 3 is defined by two converging trends: (a) PC-side optimal parsing became universal, and (b) depackers were aggressively size-optimised. The result is a family of packers that dominate the Pareto frontier across most use cases.
+Generation 3 is defined by two converging trends: (a) PC-side optimal parsing became universal, and (b) depackers were aggressively size-optimized. The result is a family of packers that dominate the Pareto frontier across most use cases.
 
 ### 6.1 `ZX7` (Einar Saukas, 2013)
 
@@ -559,10 +559,10 @@ Key features:
 
 Z80 depackers (Introspec + uniabis):
 
-- Size-optimised: 67+ bytes
-- Speed-optimised: ~50 T-states/byte
+- Size-optimized: 67+ bytes
+- Speed-optimized: ~50 T-states/byte
 
-**Pareto position**: `LZSA2` is to the speed-optimised depacker world what `ZX0` is to the size-optimised world. Both are near the frontier. `LZSA2` decompresses about 30 % faster than `MegaLZ`'s fast depacker but loses ~2 % ratio on small files.
+**Pareto position**: `LZSA2` is to the speed-optimized depacker world what `ZX0` is to the size-optimized world. Both are near the frontier. `LZSA2` decompresses about 30 % faster than `MegaLZ`'s fast depacker but loses ~2 % ratio on small files.
 
 **Notable users**: "The Hollow" (Darklite & Offense, Solskogen 2019 wild winner), "Gabba" (Stardust, CAFe 2019 #2), "Marsmare: Alienation" (Yandex Retro Games Battle 2020 winner).
 
@@ -603,7 +603,7 @@ At ~34 T-states/byte, `LZ4` decompresses **faster than `1.5 × LDIR`** — meani
 - **Shorter length encoding**, exploiting the 64 KB block size.
 - **Minimum match size: 3 bytes** (vs `LZ4`'s 4), driven by the optimiser.
 
-Z80 size-optimised depacker: **67 bytes**, decompression at ~90 % the speed of `LZ4` (i.e. roughly 10 % slower) but with significantly better ratio.
+Z80 size-optimized depacker: **67 bytes**, decompression at ~90 % the speed of `LZ4` (i.e. roughly 10 % slower) but with significantly better ratio.
 
 **Position on the Pareto frontier**: `LZSA1` strictly dominates `LZ4` for ZX use. The 2019 Introspec/Marty benchmark shows:
 
@@ -694,12 +694,12 @@ This table aggregates every Z80 depacker mentioned in the article, sorted by spe
 | `LZ4` | `unlz4_spke.asm` (Introspec) | 104 | 0 | ~33 | no | Optional `IX` use for speed |
 | `LZ4` | `unlz4_drapich.asm` | 251 | 0 | ~33.8 | no | Strict header validation |
 | `LZ4` | `unlz4_stephenw32768.asm` | 72 | 0 | ~34.4 | no | Raw data only (no header) |
-| `LZSA2` | speed-optimised (Introspec/uniabis) | ~150 | 0 | ~50 | no | Byte-aligned, nibble-encoded |
+| `LZSA2` | speed-optimized (Introspec/uniabis) | ~150 | 0 | ~50 | no | Byte-aligned, nibble-encoded |
 | `MegaLZ` | `unmegalz_fast.asm` v3 (Introspec) | 229 | 0 | ~63 | no | Mixed bit-byte |
 | `Pletter 0.5` | `unpletter5.asm` | 170 | 0 | ~75 | no | Uses all registers |
-| `LZSA1` | size-optimised (Introspec/uniabis) | 67 | 0 | ~80 | no | Byte-aligned |
+| `LZSA1` | size-optimized (Introspec/uniabis) | 67 | 0 | ~80 | no | Byte-aligned |
 | `ZX7` | `dzx7_mega.asm` | 244 | 0 | ~73 | no | Optimal-parser format |
-| `ZX7` | `dzx7_lom_v1.asm` (Introspec) | 214 | 0 | ~69 | no | Hot-path optimised |
+| `ZX7` | `dzx7_lom_v1.asm` (Introspec) | 214 | 0 | ~69 | no | Hot-path optimized |
 | `MegaLZ` | `unmegalz_small.asm` v3 (Introspec) | 88 | 0 | ~98 | yes | Compact variant |
 | `HRUM` | `unhrum_std.asm` | 104 | 0 | ~97 | yes (+1 byte) | Uses `HL'` |
 | `ApLib` | `aplib247b.asm` | 247+2 | 0 | ~100 | no | Uses `AF'`, `IY` |
@@ -880,7 +880,7 @@ This layout means that two bytes adjacent in linear memory (`0x4000` and `0x4001
 rcs(screen)[i] = screen[permute(i)]   ; for i in 0..6911
 ```
 
-After RCS, a horizontal run of one colour that was scattered across the screen becomes a contiguous byte run in the RCS'd buffer. Any LZ packer then achieves dramatically better ratio on the result.
+After RCS, a horizontal run of one color that was scattered across the screen becomes a contiguous byte run in the RCS'd buffer. Any LZ packer then achieves dramatically better ratio on the result.
 
 ### 11.2 The inverse — un-RCS
 
@@ -980,9 +980,9 @@ The danger case is the opposite: if the depacker writes to higher addresses than
 
 ### 13.2 Backwards depack
 
-The clean solution for "depack into the top of memory" is to depack **backwards**. Pack the file backwards on the PC, then depack from the last byte to the first, with source and destination pointers both decrementing. The depacker reads from addresses below its write pointer — safe.
+The clean solution for "depack into the top of memory" is to depack **backward**. Pack the file backward on the PC, then depack from the last byte to the first, with source and destination pointers both decrementing. The depacker reads from addresses below its write pointer — safe.
 
-`ZX0` provides backwards depackers (`dzx0b_standard.asm`, etc.). `Exomizer` ships `deexo_b.asm`. Other packers may or may not have backwards variants; for those that do not, the workaround is to compress with a large enough leading "delta" (margin) that source and destination never collide.
+`ZX0` provides backward depackers (`dzx0b_standard.asm`, etc.). `Exomizer` ships `deexo_b.asm`. Other packers may or may not have backward variants; for those that do not, the workaround is to compress with a large enough leading "delta" (margin) that source and destination never collide.
 
 ### 13.3 The delta margin
 
@@ -1202,7 +1202,7 @@ Without RCS, `logo.scr.zx0` would typically be ~1800–3000 B — RCS saves 15�
 - **`BZ2` / Byte Killer 2**: a newer packer from the Russian scene, not yet widely benchmarked.
 - **`Powerful Code Decreaser` (PCD)**: a Soviet RGB-image-specific packer for multicolor images.
 - **`Real Information Packer` (RIP)**: a high-ratio Soviet packer with a successor `mRIP`; rarely used in modern work.
-- **`MS Pack 01.96`**: Soviet text-specialised packer.
+- **`MS Pack 01.96`**: Soviet text-specialized packer.
 - **`DAN` / `DAN3`**: experimental packers discussed on AtariAge but not in mainstream ZX use.
 - **`epcompress`**: appears in Introspec's 2021 benchmark with strong results; format details not yet documented.
 

@@ -4,7 +4,7 @@
 
 The ZX Spectrum is unusual among 1980s home computers: its video output is **non-interlaced**. Where broadcast PAL alternates two 312½-line fields at 25 Hz each to build a 625-line frame at 50 Hz, the Spectrum outputs the **same 312-line field 50 times per second**. This single design choice shapes everything about how Spectrum graphics flicker (or don't), how monitors react, and why modern LCD displays require special handling.
 
-This article covers the perception physics and the practical coding implications. For the underlying frame timing, see [video_frame_overview.md](video_frame_overview.md). For GigaScreen as a video mode (alternating two attribute sets), see [clone_video_modes.md](clone_video_modes.md). For colour clash and the 8×8 attribute cell, see [color_system.md](color_system.md).
+This article covers the perception physics and the practical coding implications. For the underlying frame timing, see [video_frame_overview.md](video_frame_overview.md). For GigaScreen as a video mode (alternating two attribute sets), see [clone_video_modes.md](clone_video_modes.md). For color clash and the 8×8 attribute cell, see [color_system.md](color_system.md).
 
 ---
 
@@ -64,7 +64,7 @@ This is why the Spectrum's 50 Hz refresh has historically been described as "acc
 
 ### Phosphor Persistence
 
-The P22 phosphor used in most European colour CRTs has a decay time of approximately 5–15 ms to 10% brightness. At a 20 ms frame period (50 Hz), this means each scanline is still glowing at **~30–50% of its peak brightness** when the next refresh arrives — the eye perceives a continuous image.
+The P22 phosphor used in most European color CRTs has a decay time of approximately 5–15 ms to 10% brightness. At a 20 ms frame period (50 Hz), this means each scanline is still glowing at **~30–50% of its peak brightness** when the next refresh arrives — the eye perceives a continuous image.
 
 ```
 CRT phosphor decay (typical P22 green channel):
@@ -84,7 +84,7 @@ This is why **CRT displays hide flicker that LCDs reveal**: the CRT's phosphor d
 
 ## Attribute Flicker — The 8×8 Trap
 
-The Spectrum's standard attribute cell is **8×8 pixels** with two colours (ink + paper). When software modifies the attribute byte for a cell mid-frame, the entire cell changes colour for the rest of the frame.
+The Spectrum's standard attribute cell is **8×8 pixels** with two colors (ink + paper). When software modifies the attribute byte for a cell mid-frame, the entire cell changes color for the rest of the frame.
 
 ```
 Frame N:    attribute byte = INK=7 (white) on PAPER=0 (black)
@@ -114,7 +114,7 @@ The ROM's standard cursor blink is **once every 32 frames (~0.64 seconds)** — 
 
 ## GigaScreen Flicker — The Math
 
-GigaScreen ([clone_video_modes.md](clone_video_modes.md)) alternates two attribute sets on even and odd frames to simulate 8×1 colour resolution via temporal mixing. Each attribute set is displayed at 25 Hz — half the standard refresh rate.
+GigaScreen ([clone_video_modes.md](clone_video_modes.md)) alternates two attribute sets on even and odd frames to simulate 8×1 color resolution via temporal mixing. Each attribute set is displayed at 25 Hz — half the standard refresh rate.
 
 The flicker visibility depends entirely on the **contrast between the two attribute sets**:
 
@@ -147,13 +147,13 @@ Attribute B:  INK=1 (blue)    on PAPER=0 (black)
 | Red ↔ Yellow | Medium | Borderline |
 | Blue ↔ Magenta | Low | Safe |
 
-**Rule of thumb**: choose two colours with similar perceived brightness (luminance) on a monochrome display. Colours close on a Y of YUV axis flicker less.
+**Rule of thumb**: choose two colors with similar perceived brightness (luminance) on a monochrome display. Colours close on a Y of YUV axis flicker less.
 
 ---
 
 ## Multicolor 8×1 — Flicker from Mistimed Effects
 
-Multicolor effects change the attribute byte **mid-frame** to produce 8×1 colour resolution (vs the standard 8×8). When the timing is correct, the effect is stable. When timing drifts by even one T-state, the attribute change happens one scanline too early or too late — and the result is visible flicker.
+Multicolor effects change the attribute byte **mid-frame** to produce 8×1 color resolution (vs the standard 8×8). When the timing is correct, the effect is stable. When timing drifts by even one T-state, the attribute change happens one scanline too early or too late — and the result is visible flicker.
 
 ```
 Correct timing (every frame):
@@ -179,7 +179,7 @@ This is why multicolor effects are extremely sensitive to T-state positioning. C
 
 ## Modern LCD Display Compatibility
 
-When the Spectrum's video output is fed to a modern LCD (via SCART, composite-to-HDMI upscaler, or emulation on an LCD panel), the display behaviour changes:
+When the Spectrum's video output is fed to a modern LCD (via SCART, composite-to-HDMI upscaler, or emulation on an LCD panel), the display behavior changes:
 
 ### Sample-and-Hold vs CRT Phosphor
 
@@ -255,7 +255,7 @@ If you're writing software that targets both CRT and LCD displays:
 ## Cross-References
 
 - [Video frame overview](video_frame_overview.md) — PAL fundamentals, frame structure
-- [Color system](color_system.md) — the 8×8 attribute cell, colour clash, palette
+- [Color system](color_system.md) — the 8×8 attribute cell, color clash, palette
 - [Clone video modes](clone_video_modes.md) — GigaScreen, multicolor, hires modes
 - [Contention timing](contention_timing.md) — why mistimed multicolor effects flicker
 - [CRT output](crt_output.md) — video output hardware (RF, composite, RGB, SCART, VGA)
@@ -273,4 +273,4 @@ If you're writing software that targets both CRT and LCD displays:
 - **OSSC documentation** ([github.com/marqs85/ossc](https://github.com/marqs85/ossc)) — documents the frame-rate mismatch issues between 50.08 Hz Spectrum output and 60 Hz LCD displays.
 - **RetroGFX CRT Shader documentation** — software emulation of phosphor decay for modern displays.
 - **ZX Spectrum +2 / +3 Service Manual** — Amstrad documentation of the gate array's slightly non-standard sync timing.
-- **zx-pk.ru GigaScreen threads** — real-hardware reports of which GigaScreen colour pairs flicker most visibly on Soviet CRT TVs.
+- **zx-pk.ru GigaScreen threads** — real-hardware reports of which GigaScreen color pairs flicker most visibly on Soviet CRT TVs.

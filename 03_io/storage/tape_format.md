@@ -303,7 +303,7 @@ For commercial software, **Code blocks** are by far the most common. Almost ever
 
 ### 4.6 Non-standard block types
 
-Some custom loaders use non-standard block types (e.g., 4, 5, or values above 3). These are not part of the standard format and will be rejected by the ROM's `LOAD` command. However, the .TZX file format (see [tzx_format.md](tzx_format.md)) preserves the original block type byte, so emulators can recognise and document these non-standard blocks even if they don't interpret them.
+Some custom loaders use non-standard block types (e.g., 4, 5, or values above 3). These are not part of the standard format and will be rejected by the ROM's `LOAD` command. However, the .TZX file format (see [tzx_format.md](tzx_format.md)) preserves the original block type byte, so emulators can recognize and document these non-standard blocks even if they don't interpret them.
 
 For example, the Speedlock turbo loader uses a custom block type to identify its custom-encoded data blocks. The block type is preserved in the .TZX file, even though the ROM would reject it.
 
@@ -441,7 +441,7 @@ This pattern required more careful programming (the loader had to manage the ban
 
 ### 6.5 Gaps between blocks
 
-The gap between blocks is not strictly standardised. The ROM produces a gap of about 1 second when saving, but commercial tape duplication equipment might produce shorter or longer gaps. As long as the gap is at least ~0.5 seconds (enough for the loader to reset and start looking for the next pilot tone), the loader will work.
+The gap between blocks is not strictly standardized. The ROM produces a gap of about 1 second when saving, but commercial tape duplication equipment might produce shorter or longer gaps. As long as the gap is at least ~0.5 seconds (enough for the loader to reset and start looking for the next pilot tone), the loader will work.
 
 Some turbo loaders use very short gaps (~0.1 seconds) to speed up loading. This requires the loader to be very fast at resetting after each block, but it can shave seconds off the total load time.
 
@@ -570,7 +570,7 @@ The ROM does not directly support header-only loads, but a custom loader can eas
 
 After loading a multi-block file, the ROM displays a message like "Start tape, then press any key" or "Stop the tape" to prompt the user. This is handled by the BASIC interpreter (not the tape format itself), but it affects how multi-block files are structured on tape: there must be a gap between blocks long enough for the user to respond.
 
-For automated loading (e.g., from an emulator or a modern tape interface), this prompt is often skipped or auto-confirmed. The .TAP and .TZX file formats do not encode the prompt — it is purely a runtime behaviour.
+For automated loading (e.g., from an emulator or a modern tape interface), this prompt is often skipped or auto-confirmed. The .TAP and .TZX file formats do not encode the prompt — it is purely a runtime behavior.
 
 ### 8.8 Custom checksums
 

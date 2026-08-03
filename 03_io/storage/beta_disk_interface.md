@@ -4,7 +4,7 @@
 
 **Audience:** Emulator authors, hardware reverse-engineers, modern Spectrum-clone designers, and demoscene coders who need to know exactly how the original 1985 Beta Disk Interface exposed the WD1793 to the Z80 — what ports to hit, in what order, with what side effects.
 
-**Prerequisites:** A working knowledge of the Z80 CPU and a basic familiarity with floppy drive signals (step / dir / motor / index). It is strongly recommended to read [fdc_vg93.md](fdc_vg93.md) first or in parallel, because most of the Beta Disk Interface's host-visible behaviour is a thin wrapper around the FDC's register file.
+**Prerequisites:** A working knowledge of the Z80 CPU and a basic familiarity with floppy drive signals (step / dir / motor / index). It is strongly recommended to read [fdc_vg93.md](fdc_vg93.md) first or in parallel, because most of the Beta Disk Interface's host-visible behavior is a thin wrapper around the FDC's register file.
 
 **Depth:** Deep. Pin-level and byte-level detail, including the exact port addresses, the address decoder that produces them, the WAIT-state logic used to slow down the Z80's I/O cycles, and the Soviet clones that introduced subtle incompatibilities.
 
@@ -74,7 +74,7 @@ The lock-in was total. An often-quoted observation from the era: by 1992, "every
 
 ### 1.6 Modern hardware inheritance
 
-Modern Spectrum-clone and FPGA hardware still implements the Beta Disk port map for backward compatibility with the TR-DOS software catalogue:
+Modern Spectrum-clone and FPGA hardware still implements the Beta Disk port map for backward compatibility with the TR-DOS software catalog:
 
 - **ZX Evolution** (Pentagon-based FPGA redesign) — full Beta 128 compatibility.
 - **ZX Spectrum Next** — Beta 128 port map implemented in the FPGA, in addition to the newer DivMMC/SD storage.
@@ -163,7 +163,7 @@ The Beta Disk Interface occupies five ports in the Z80's I/O address space:
 | `#7F` | Data register | Data register | Selects WD1793 register 3 (A0=1, A1=1). |
 | `#FF` | (system variable read, see §3.4) | Control latch | Drive select, motor, side, ROM-page control. |
 
-Note the pattern: bits 5 and 6 of the port number are `01` (this is what the address decoder recognises as "the Beta Disk Interface range"); bits 0, 1, and 2 select which WD1793 register to access (`00` = status/command, `01` = track, `10` = sector, `11` = data); bits 3, 4, and 7 are **don't-care** in the original hardware. This is why the Beta Disk Interface aliases across `#1F`, `#3F`, `#5F`, `#7F`, `#9F`, `#BF`, `#DF`, `#FF` — only bits 5 and 6 are actually decoded as 01 for the FDC.
+Note the pattern: bits 5 and 6 of the port number are `01` (this is what the address decoder recognizes as "the Beta Disk Interface range"); bits 0, 1, and 2 select which WD1793 register to access (`00` = status/command, `01` = track, `10` = sector, `11` = data); bits 3, 4, and 7 are **don't-care** in the original hardware. This is why the Beta Disk Interface aliases across `#1F`, `#3F`, `#5F`, `#7F`, `#9F`, `#BF`, `#DF`, `#FF` — only bits 5 and 6 are actually decoded as 01 for the FDC.
 
 Modern emulators and FPGA clones should decode bits 5 and 6 only (treating the FDC ports as a "select /CS low if bits 5,6 = 01"), and the control latch as a separate decode ("select /CS low if A0=1 and A1=1 and bits 5,6 = 11" — i.e. ports `#FF`, `#DF`, `#BF`, `#9F` all alias to the latch). Pentagon and Scorpion hardware does exactly this.
 
@@ -221,7 +221,7 @@ For side 1, set bit 4 (`+ #10`). For a hardware FDC reset, clear bit 2 (`& #FB`,
 
 A common misconception (and the source of much misinformation in Western documentation) is that the Beta Disk Interface relies on the WD1793's `s` bit (bit 3 of the Type II command byte) for side selection. This is **not** how the Beta Disk hardware is wired. On the Beta Disk Interface, bit 4 of port `#FF` is routed directly to the drive's side-select line on the Shugart connector — the FDC's side-compare logic is used only for verifying the sector ID field, not for physically switching heads. Software that needs to read side 1 must write `bit 4 = 1` to port `#FF` *before* issuing the read command, not just rely on the command byte.
 
-This is also why the Soviet clones kept the same bit assignment: every existing piece of TR-DOS software depends on this layout, and changing it would have broken the entire disk-software catalogue.
+This is also why the Soviet clones kept the same bit assignment: every existing piece of TR-DOS software depends on this layout, and changing it would have broken the entire disk-software catalog.
 
 #### 3.3.2 Density select (bit 5)
 
@@ -233,7 +233,7 @@ Software that wants to remain compatible with the entire Soviet software library
 
 Bit 2 of port `#FF` is routed to the WD1793's `/MR` (Master Reset) input. Writing `0` to this bit holds the FDC in reset; writing `1` releases it. TR-DOS performs a reset sequence at startup: it writes a byte with `bit 2 = 0`, waits briefly, then writes the normal-operating byte with `bit 2 = 1`. This guarantees a known initial state regardless of what the FDC was doing before.
 
-The reset behaviour of the WD1793 itself differs between the original WD1793 and the WD1793-02 / KR1818VG93 — see [fdc_vg93.md §8.7](fdc_vg93.md) for details.
+The reset behavior of the WD1793 itself differs between the original WD1793 and the WD1793-02 / KR1818VG93 — see [fdc_vg93.md §8.7](fdc_vg93.md) for details.
 
 #### 3.3.4 Note on bits 6 and 7
 
@@ -373,7 +373,7 @@ Section §3.3 specifies the port `#FF` bit layout; this section walks through wh
 
 ### 5.1 Drive selection (bits 0–1, binary-encoded)
 
-The Beta Disk Interface supports up to four floppy drives, labelled **A**, **B**, **C**, **D**. Drive selection uses **bits 0 and 1 of port `#FF` as a 2-bit binary field** (not one-hot). A 2-to-4 decoder inside the cartridge translates the binary value into one of four active-low `/DS0`–`/DS3` lines on the Shugart cable:
+The Beta Disk Interface supports up to four floppy drives, labeled **A**, **B**, **C**, **D**. Drive selection uses **bits 0 and 1 of port `#FF` as a 2-bit binary field** (not one-hot). A 2-to-4 decoder inside the cartridge translates the binary value into one of four active-low `/DS0`–`/DS3` lines on the Shugart cable:
 
 | Bit 1 | Bit 0 | Decoder output asserted | Drive |
 |---|---|---|---|
@@ -517,7 +517,7 @@ The WD1793's step rate must match the drive's track-to-track step time. TR-DOS u
 
 ### 6.5 Cable length and signal integrity
 
-The Shugart bus is rated for a maximum cable length of about 1 metre (≈3 feet). The Beta Disk Interface itself is at the end of the Spectrum's expansion bus, which adds another ~30 cm of bus length before the cable even starts. Long cables (more than 1.5 metres total) cause signal reflections and timing problems — particularly on the high-impedance `/RDATE` line, where reflections can produce phantom data transitions that the WD1793's PLL will misinterpret.
+The Shugart bus is rated for a maximum cable length of about 1 meter (≈3 feet). The Beta Disk Interface itself is at the end of the Spectrum's expansion bus, which adds another ~30 cm of bus length before the cable even starts. Long cables (more than 1.5 meters total) cause signal reflections and timing problems — particularly on the high-impedance `/RDATE` line, where reflections can produce phantom data transitions that the WD1793's PLL will misinterpret.
 
 In practice, Soviet Beta Disk Interface clones used short cables (typically 30–50 cm) and a single drive per cable, with no signal-integrity problems. Multi-drive setups with long cables often required termination resistors at both ends of the cable to absorb reflections.
 
@@ -586,7 +586,7 @@ A few Western companies produced Beta Disk Interface variants:
 - **Opus Discovery** — a different interface entirely, using its own FDC (WD1770) and disk format. Not Beta Disk-compatible; see [opus_discovery_format.md](opus_discovery_format.md).
 - **Rotronics Wafadrive** — not Beta Disk-compatible; uses its own tape-loop storage.
 
-For software that needs to detect which interface is present: as documented in §3.4, reading port `#FF` returns `DRQ` on bit 6 and `INTRQ` on bit 7 on every Beta Disk revision and every Soviet clone. The low 6 bits of the readback are not connected to the latch (the latch itself is write-only; the read mux is a separate circuit). Detecting a Pentagon vs. a Scorpion vs. an original Beta Disk requires probing the machine's other system ports (memory-banking port, video-page port, etc.) — the FDC behaviour itself is identical.
+For software that needs to detect which interface is present: as documented in §3.4, reading port `#FF` returns `DRQ` on bit 6 and `INTRQ` on bit 7 on every Beta Disk revision and every Soviet clone. The low 6 bits of the readback are not connected to the latch (the latch itself is write-only; the read mux is a separate circuit). Detecting a Pentagon vs. a Scorpion vs. an original Beta Disk requires probing the machine's other system ports (memory-banking port, video-page port, etc.) — the FDC behavior itself is identical.
 
 ### 7.6 Emulator assumptions
 
@@ -603,10 +603,10 @@ The WD1793 was a popular chip and was second-sourced by several manufacturers un
 | **Western Digital** | WD1793, WD1793-02 | The original. 40-pin DIP, requires +5 V and +12 V supplies, external 1 MHz / 2 MHz clock on the `CLK` input. The -02 revision fixed bugs in the original WD1793 and is the part cloned by the Soviets. |
 | **Fujitsu** | **MB8877, MB8877A** | Second-source of the **WD1793** (FM + MFM, internal data separator). Pin- and register-compatible. The major hardware difference from the WD1793 is that the MB8877 requires **only a +5 V supply** (the WD1793's +12 V pin is no-connect on the Fujitsu part). The MB8877A is a later revision with marginally tighter PLL timing. Modern Spectrum repair hobbyists routinely substitute MB8877 / MB8877A for an original WD1793 (or KR1818VG93) by leaving the +12 V pin unconnected; this is the cheapest commonly-available FDC chip on the surplus market today. |
 | **SGS-Thomson** (later STMicroelectronics) | TS9206 | A late (mid-1990s) European second-source. Electrically similar to the MB8877. Rarely encountered in Spectrum hardware. |
-| **Soviet — Angstrem (Zelenograd)** | **KR1818VG93** (КР1818ВГ93) | The standard Soviet clone of the WD1793-02. Produced from the late 1980s onward. Pin- and register-compatible. Some revisions include minor bug-for-bug reproductions of WD1793-02 quirks, while others have quirks of their own (notably in `/MR` behaviour and step-rate timing — see [fdc_vg93.md §7 and §8](fdc_vg93.md) for the full comparison). Used in virtually every Soviet-made Beta Disk clone. |
+| **Soviet — Angstrem (Zelenograd)** | **KR1818VG93** (КР1818ВГ93) | The standard Soviet clone of the WD1793-02. Produced from the late 1980s onward. Pin- and register-compatible. Some revisions include minor bug-for-bug reproductions of WD1793-02 quirks, while others have quirks of their own (notably in `/MR` behavior and step-rate timing — see [fdc_vg93.md §7 and §8](fdc_vg93.md) for the full comparison). Used in virtually every Soviet-made Beta Disk clone. |
 | **Modern — Western Digital Center** | **WDC1793** | A modern reissue (sometimes packaged as PLCC rather than DIP) sold by some Western Digital licensees in the 2000s. Used on the ZX Evolution's floppy module. Functional equivalent of WD1793-02. |
 
-**Why second-sources mattered for the ex-USSR scene.** The Soviet Union's microelectronics programme operated on a strict "second-source everything strategic" principle, and the WD1793 was classified as strategically important because it was used in military and industrial computers (the Corvette educational machine, the Elektronika 85 workstation, several industrial process-control PCs). By the time the Beta 128 circuit was reverse-engineered in 1988, the KR1818VG93 was already in mass production at Angstrem and freely available on the grey market. Without a domestic FDC source, the Soviet Beta Disk clone ecosystem could not have happened; with it, the entire Soviet disk-based software market emerged within two years.
+**Why second-sources mattered for the ex-USSR scene.** The Soviet Union's microelectronics program operated on a strict "second-source everything strategic" principle, and the WD1793 was classified as strategically important because it was used in military and industrial computers (the Corvette educational machine, the Elektronika 85 workstation, several industrial process-control PCs). By the time the Beta 128 circuit was reverse-engineered in 1988, the KR1818VG93 was already in mass production at Angstrem and freely available on the grey market. Without a domestic FDC source, the Soviet Beta Disk clone ecosystem could not have happened; with it, the entire Soviet disk-based software market emerged within two years.
 
 For the chip-level electrical and programming details of the WD1793 itself — pinout, register file, command set, status bits, undocumented quirks, and the KR1818VG93's specific differences from the WD1793-02 — see the companion article [fdc_vg93.md](fdc_vg93.md). This article covers only the Beta Disk Interface cartridge and its host-visible ports.
 
@@ -618,7 +618,7 @@ For the chip-level electrical and programming details of the WD1793 itself — p
 
 The most common hardware failure on a real Beta Disk Interface is **oxidation of the Spectrum's edge-connector contacts**. The contacts are gold-flashed copper, and over 30+ years the gold flash wears off and the copper underneath corrodes. Symptoms include intermittent disk errors, the TR-DOS ROM not paging in reliably, and the Spectrum crashing when the cartridge is plugged in.
 
-The fix is mechanical: clean the edge-connector contacts on both the Spectrum and the Beta Disk Interface with isopropyl alcohol and a soft cloth, or use a specialised contact cleaner. Inserting and removing the cartridge several times can also break through the oxide layer.
+The fix is mechanical: clean the edge-connector contacts on both the Spectrum and the Beta Disk Interface with isopropyl alcohol and a soft cloth, or use a specialized contact cleaner. Inserting and removing the cartridge several times can also break through the oxide layer.
 
 ### 8.2 Drive belt failure (5.25" drives)
 
@@ -638,7 +638,7 @@ TR-DOS does not have a built-in head-alignment utility. The closest thing is `*C
 
 Magnetic media degrade over time. The most common failure mode is **magnetic domain decay**: the recorded bits gradually lose their magnetic orientation, and after 20–30 years the disk becomes unreadable. There is no fix for this — once the data is gone, it is gone. The only mitigation is to copy data off old disks onto newer media (or into disk image files like .TRD or .SCL) before they degrade.
 
-A second failure mode is **mould growth on the disk surface**, particularly common for disks stored in damp conditions. Mould physically damages the oxide layer and contaminates the drive head. Cleaning mould-contaminated disks is a delicate process involving isopropyl alcohol and Q-tips, and the drive head must also be cleaned afterwards.
+A second failure mode is **mold growth on the disk surface**, particularly common for disks stored in damp conditions. Mould physically damages the oxide layer and contaminates the drive head. Cleaning mold-contaminated disks is a delicate process involving isopropyl alcohol and Q-tips, and the drive head must also be cleaned afterward.
 
 ### 8.5 Software incompatibilities
 
@@ -722,7 +722,7 @@ The 5.0 / 5.01 / 5.02 family is identifiable by its **drive-testing code**: on c
 
 ### 10.2 TR-DOS 5.03 — the canonical version (1986)
 
-TR-DOS 5.03 is the version that conquered the ex-USSR. Its ROM image was burned into virtually every Soviet Beta Disk clone, and the entire Soviet disk-software catalogue targets it. The features that distinguish it from 5.01 / 5.02:
+TR-DOS 5.03 is the version that conquered the ex-USSR. Its ROM image was burned into virtually every Soviet Beta Disk clone, and the entire Soviet disk-software catalog targets it. The features that distinguish it from 5.01 / 5.02:
 
 - **No drive testing on boot.** Cold-start time drops from ~10 seconds (5.01, with 4 empty drive bays) to ~0.5 seconds. This alone was enough to make 5.03 the standard.
 - **Faster sector reads.** The polling loops in the read/write routines are tighter, saving ~10% on bulk data transfer.
@@ -736,7 +736,7 @@ TR-DOS 5.03 is the version that conquered the ex-USSR. Its ROM image was burned 
 
 A late Western release by Technology Research. Functionally very similar to 5.03 (Pomortzev's book notes "5.03 is very different; 5.04 at addresses more is similar to 5.03"). 5.04 fixes a few minor bugs in 5.03's `*COPY` and adds a `/V` (verify) switch to `SAVE`. Most Soviet clones did **not** adopt 5.04 — they had already standardized on 5.03 — but a handful of late Russian PCBs ship with 5.04 in ROM.
 
-Some Soviet community-produced "TR-DOS 5.04" ROMs are actually 5.03 with patches back-ported from the Western 5.04 source. These are typically labelled "5.04 (unpacked)" or "5.04 patched".
+Some Soviet community-produced "TR-DOS 5.04" ROMs are actually 5.03 with patches back-ported from the Western 5.04 source. These are typically labeled "5.04 (unpacked)" or "5.04 patched".
 
 ### 10.4 TR-DOS 6.x (ATM Turbo fork, 1991+)
 
@@ -881,7 +881,7 @@ For the defensive side — bypassing these protections to make a backup — see 
 
 A non-exhaustive list of historically important Soviet custom loaders:
 
-- **TR-DOS 5.03 boot sector** — the standard TR-DOS loader itself. Reads the disk catalogue, finds the file marked `BOOT`, and loads it into RAM.
+- **TR-DOS 5.03 boot sector** — the standard TR-DOS loader itself. Reads the disk catalog, finds the file marked `BOOT`, and loads it into RAM.
 - **Alasm loader** — a small custom loader used by many assembled-in-RAM demos. Reads raw tracks into a designated buffer with no error checking, for maximum speed.
 - **Best Shot / Magic Copy** — snapshot copiers built around the MAGIC button (§11.3). Take a memory snapshot at a keypress, save it to disk as a runnable `.SNA`.
 - **LD0 / LOADERS BY LAS / SHR** — the various one-file and multi-file game loaders used by Soviet disk magazines and cracker groups. Most have a small protected header that contains the decryption key and the disk geometry.

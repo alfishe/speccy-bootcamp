@@ -2,7 +2,7 @@
 
 # The Tape Interface (EAR/MIC Hardware)
 
-When Sinclair Research designed the ZX Spectrum in 1982, the decision to use a **standard audio cassette recorder** as the primary storage medium was both a cost-saving measure and a masterstroke of pragmatism. Disk drives cost hundreds of pounds; a cassette recorder cost £20 and was already in most homes. The trade-off was speed: loading a typical game from tape took 3–5 minutes, compared to seconds from disk. But for a generation of home computer users, the tape loader became an iconic part of the experience — the coloured loading stripes, the screeching audio, the tense wait for the game to appear.
+When Sinclair Research designed the ZX Spectrum in 1982, the decision to use a **standard audio cassette recorder** as the primary storage medium was both a cost-saving measure and a masterstroke of pragmatism. Disk drives cost hundreds of pounds; a cassette recorder cost £20 and was already in most homes. The trade-off was speed: loading a typical game from tape took 3–5 minutes, compared to seconds from disk. But for a generation of home computer users, the tape loader became an iconic part of the experience — the colored loading stripes, the screeching audio, the tense wait for the game to appear.
 
 The Spectrum's tape interface is built around just two signals: **EAR** (input from tape) and **MIC** (output to tape). Both are 1-bit signals — they carry only "high" or "low" — and they are handled almost entirely by the **ULA** (Uncommitted Logic Array), the Spectrum's custom gate array. The Z80 CPU reads the EAR bit via port `#FE` and writes the MIC bit via the same port. There is no dedicated tape controller, no FIFO, no DMA: every byte loaded from tape is the result of the Z80 bit-banging under software control.
 
@@ -27,7 +27,7 @@ The "tape interface" on the Spectrum consists of:
 - **Two signals**: EAR (input from tape) and MIC (output to tape).
 - **Two connectors**: a 3.5mm EAR jack (input) and a 3.5mm MIC jack (output), both on the side of the machine.
 - **The ULA**: the custom chip that handles the analog front-end (Schmitt trigger on EAR input, direct drive on MIC output).
-- **Port `#FE`**: the Z80 I/O port through which the CPU reads the EAR bit and writes the MIC bit (along with the border colour, the beeper, and the keyboard).
+- **Port `#FE`**: the Z80 I/O port through which the CPU reads the EAR bit and writes the MIC bit (along with the border color, the beeper, and the keyboard).
 
 There is **no tape controller chip**. The Z80 CPU does everything in software: detecting edges on the EAR input, measuring the time between edges to determine whether a bit is a 0 or 1, assembling bits into bytes, and verifying checksums. This is called **bit-banging**, and it is the fundamental design principle of the Spectrum's tape interface.
 
@@ -90,7 +90,7 @@ LD   C, A            ; C now holds either 0x00 (low) or 0x40 (high)
 
 The MIC output goes to the **MIC jack** on the side of the Spectrum. A standard cassette recorder's microphone input connects to this jack. The signal is a square wave at audio frequencies, with a peak-to-peak voltage of around 0.5V (the ULA drives it through a resistor divider to bring it down to microphone-level).
 
-The MIC signal is controlled by **bit 3 of port `#FE`** (the same port used for EAR input, the beeper, and the border colour). Writing a 1 to bit 3 drives the MIC line high; writing a 0 drives it low. By toggling bit 3 at a known rate, the CPU can produce a square wave of any desired frequency.
+The MIC signal is controlled by **bit 3 of port `#FE`** (the same port used for EAR input, the beeper, and the border color). Writing a 1 to bit 3 drives the MIC line high; writing a 0 drives it low. By toggling bit 3 at a known rate, the CPU can produce a square wave of any desired frequency.
 
 ```z80
 ; Toggle the MIC bit (and the beeper, and the border) to produce a pulse
@@ -105,15 +105,15 @@ When the Z80 writes to port `#FE`, it controls four things simultaneously:
 
 | Bit | Function |
 |---|---|
-| 0–2 | **Border colour** (0=black, 1=blue, ..., 7=white) |
+| 0–2 | **Border color** (0=black, 1=blue, ..., 7=white) |
 | 3 | **MIC output** (also feeds the beeper circuit) |
 | 4 | **EAR output** (also feeds the beeper circuit; on most models this is wired to beeper only, not to the MIC jack) |
 
-Actually, let me be precise. The canonical Spectrum 48K behaviour is:
+Actually, let me be precise. The canonical Spectrum 48K behavior is:
 
 | Bit | Function |
 |---|---|
-| 0–2 | Border colour (bits 0–2) |
+| 0–2 | Border color (bits 0–2) |
 | 3 | MIC bit (drives the MIC jack and contributes to the beeper) |
 | 4 | EAR bit (drives the internal beeper; on Issue 2 and earlier Spectrums this also drove the EAR output to the EAR jack, but on Issue 3 and later the EAR jack is input-only) |
 
@@ -143,7 +143,7 @@ The Spectrum uses two 3.5mm mono jacks for tape:
 
 A standard mono patch cable (3.5mm TS plug to 3.5mm TS plug) is used for both. Some setups use a Y-cable or a splitter to feed multiple Spectrums from one recorder (common in classrooms and at computer club meetings).
 
-The polarity of the EAR input does not matter for digital use — the Schmitt trigger will accept either polarity. However, some copy-protected tapes rely on specific polarity behaviour, and using the wrong polarity cable can cause loading failures on those tapes.
+The polarity of the EAR input does not matter for digital use — the Schmitt trigger will accept either polarity. However, some copy-protected tapes rely on specific polarity behavior, and using the wrong polarity cable can cause loading failures on those tapes.
 
 ---
 
@@ -201,9 +201,9 @@ The high-level flow of `SA-BYTES`:
 
 ### 3.4 The pilot tone and the loading stripes
 
-The pilot tone serves a critical purpose: it tells the loader that data is coming, and it lets the loader synchronise to the tape speed. Before the pilot tone, the EAR input may be in any state (noise, silence, or the tail of the previous block). The pilot tone is a clear, distinctive signal that the loader can lock onto.
+The pilot tone serves a critical purpose: it tells the loader that data is coming, and it lets the loader synchronize to the tape speed. Before the pilot tone, the EAR input may be in any state (noise, silence, or the tail of the previous block). The pilot tone is a clear, distinctive signal that the loader can lock onto.
 
-While the pilot tone is playing, the ROM loader also **toggles the border colour** rapidly between black and white (or cyan and blue on some variants). This produces the famous **loading stripes** — the coloured border pattern that signals "loading in progress" to the user. The colour changes are a side effect of the loader's bit-toggling, not a separate feature.
+While the pilot tone is playing, the ROM loader also **toggles the border color** rapidly between black and white (or cyan and blue on some variants). This produces the famous **loading stripes** — the colored border pattern that signals "loading in progress" to the user. The color changes are a side effect of the loader's bit-toggling, not a separate feature.
 
 ### 3.5 Why the ROM is slow
 
@@ -216,13 +216,13 @@ The ROM load/save routines are deliberately conservative. They use:
 
 These choices make the ROM routines very reliable — they work with almost any tape recorder, almost any tape, and almost any audio level. But they make loading slow: a 48K snapshot takes about 4–5 minutes to load via the ROM routine.
 
-Commercial software, which prioritised user experience over compatibility with the worst tape recorders, used **turbo loaders** — custom load routines that used shorter pilots, faster baud rates, and tighter timing. See §6.
+Commercial software, which prioritized user experience over compatibility with the worst tape recorders, used **turbo loaders** — custom load routines that used shorter pilots, faster baud rates, and tighter timing. See §6.
 
 ---
 
 ## §4. Pilot Tone and Sync Pulses
 
-Every standard Spectrum tape block begins with a **pilot tone** followed by two **sync pulses**. Together, these allow the loader to detect the start of a block and synchronise to the tape's timing.
+Every standard Spectrum tape block begins with a **pilot tone** followed by two **sync pulses**. Together, these allow the loader to detect the start of a block and synchronize to the tape's timing.
 
 ### 4.1 The pilot tone
 
@@ -246,7 +246,7 @@ After the pilot tone, the loader expects **two sync pulses** of different length
 | First sync pulse | 667 | ~190 µs |
 | Second sync pulse | 735 | ~210 µs |
 
-The first sync pulse is shorter than a pilot pulse (667 vs 2168 T-states), signalling "the pilot tone is over". The second sync pulse is slightly longer than the first (735 vs 667 T-states), providing an additional timing reference. After the second sync pulse, the data begins.
+The first sync pulse is shorter than a pilot pulse (667 vs 2168 T-states), signaling "the pilot tone is over". The second sync pulse is slightly longer than the first (735 vs 667 T-states), providing an additional timing reference. After the second sync pulse, the data begins.
 
 The asymmetric sync pulses are a deliberate design choice: they are unambiguous. A pilot pulse is always ~2168 T-states; a sync pulse is always ~667 then ~735 T-states. The loader can distinguish them by timing alone, without needing any other marker.
 
@@ -415,7 +415,7 @@ The most famous of these is **Speedlock** (by Michael A. Woodroffe), which was l
 
 Turbo loaders achieve higher speed through several techniques:
 
-1. **Shorter pilot tone**: Instead of the ROM's 5-second pilot, turbo loaders use a 1–2 second pilot. The loader is more tightly synchronised, so it doesn't need as much time to lock on.
+1. **Shorter pilot tone**: Instead of the ROM's 5-second pilot, turbo loaders use a 1–2 second pilot. The loader is more tightly synchronized, so it doesn't need as much time to lock on.
 
 2. **Faster baud rate**: The most aggressive technique. Instead of 1500 baud, turbo loaders use 2000–4000 baud. This means shorter pulses: a turbo "0" bit might be 600 T-states instead of 855, and a turbo "1" might be 1200 instead of 1710. The 2:1 ratio is preserved for unambiguous decoding.
 
@@ -625,7 +625,7 @@ The original Sinclair Spectrums went through several "issues" (hardware revision
 - **Issue 2** (1982–1983): The EAR jack is bidirectional — it can be used for both input (from a recorder) and output (to drive an earphone). The keyboard layout has some minor differences.
 - **Issue 3** (1983–1984): The EAR jack is input-only. The internal circuitry is simplified. This is the most common issue among surviving Spectrums.
 
-For most software, the difference is invisible. But some copy-protected tapes (which relied on specific EAR jack behaviour) only work on one issue or the other. Emulators typically model the Issue 3 behaviour, which is the more common.
+For most software, the difference is invisible. But some copy-protected tapes (which relied on specific EAR jack behavior) only work on one issue or the other. Emulators typically model the Issue 3 behavior, which is the more common.
 
 ### 8.6 The floating bus
 
@@ -637,7 +637,7 @@ The floating bus is famously emulator-unfriendly: different emulators model it d
 
 The later Spectrum models (128K, +2, +2A, +3) made several changes to the tape interface:
 
-- **128K and +2 (grey)**: Same EAR/MIC jacks as the 48K, same port `#FE` behaviour. The tape interface is fully backward-compatible.
+- **128K and +2 (grey)**: Same EAR/MIC jacks as the 48K, same port `#FE` behavior. The tape interface is fully backward-compatible.
 - **+2A and +3**: The MIC jack is **removed**. Tape output is via a custom connector. The EAR jack is still present. The +3's internal floppy drive uses port `#1FFD` for selection, not port `#FE`.
 - **Russian clones (Pentagon, Scorpion, etc.)**: Typically use a single DIN connector for tape, with the same signal conventions as the original Spectrum.
 
@@ -693,7 +693,7 @@ The BBC Micro also supported floppy disk via the same controller, and most BBC M
 
 ### 9.5 MSX (Microsoft, 1983)
 
-The MSX standard specified a cassette interface similar to the Spectrum's: 1-bit, CPU-controlled. The encoding used the Kansas City standard (1200 baud for 0, 2400 baud for 1), which was slower than the Spectrum's ROM routine but more standardised across manufacturers.
+The MSX standard specified a cassette interface similar to the Spectrum's: 1-bit, CPU-controlled. The encoding used the Kansas City standard (1200 baud for 0, 2400 baud for 1), which was slower than the Spectrum's ROM routine but more standardized across manufacturers.
 
 Most MSX software was distributed on cartridge or floppy disk; tape was a secondary medium.
 

@@ -7,11 +7,11 @@
 The ZX Spectrum AY music ecosystem has two dominant player families, each descended from a different tracker lineage:
 
 - **PT3** — produced by the Sound Tracker / Pro Tracker / Vortex Tracker II family (Soviet-origin, 1990s; VTII continues under Bulba's maintenance). The PT3 player is the de facto interchange player: the world's largest archive of ZX Spectrum music (thousands of modules at [bulba.untergrund.net](https://bulba.untergrund.net/) and the ZXArt archive) is in PT3 format.
-- **Arkos AKG / AKM / AKY** — produced by Arkos Tracker 2/3 (Julien Nevo / Targhan, France; 2003–present, open source MIT). Three distinct players, each optimised for a different use case: AKG for games, AKM for size-limited intros, AKY for fast demos with digidrums.
+- **Arkos AKG / AKM / AKY** — produced by Arkos Tracker 2/3 (Julien Nevo / Targhan, France; 2003–present, open source MIT). Three distinct players, each optimized for a different use case: AKG for games, AKM for size-limited intros, AKY for fast demos with digidrums.
 
-This article benchmarks all four head-to-head on code size, CPU cost, RAM usage, feature coverage, and per-platform behaviour. For the architecture shared by all four (and the meaning of "per-frame work", "register-write idiom", "ISR integration"), see [ay_player_routines.md](ay_player_routines.md); this article focuses on the differences.
+This article benchmarks all four head-to-head on code size, CPU cost, RAM usage, feature coverage, and per-platform behavior. For the architecture shared by all four (and the meaning of "per-frame work", "register-write idiom", "ISR integration"), see [ay_player_routines.md](ay_player_routines.md); this article focuses on the differences.
 
-The headline: there is no single "best" player — each is optimised for a different point in the size / speed / feature / portability trade-space. The recommendation matrix at the end of this article maps typical use cases to the appropriate player.
+The headline: there is no single "best" player — each is optimized for a different point in the size / speed / feature / portability trade-space. The recommendation matrix at the end of this article maps typical use cases to the appropriate player.
 
 ---
 
@@ -46,7 +46,7 @@ The headline: there is no single "best" player — each is optimised for a diffe
 |--------|-----------|-----------|-------|
 | PT3 | ~400–600 bytes | n/a | Compact because the format is small and the player evolved with size as a goal. Some optional features (e.g. the second-pass envelope handler) can be omitted for a smaller build. |
 | AKG | ~1,000–1,500 bytes | ~1,050–1,600 bytes | The largest of the four. The size comes from supporting the full Arkos effect set, multi-PSG, and RAM/ROM variants. |
-| AKM | ~400–600 bytes (ROM-only) | ~400–600 bytes | Aggressively size-optimised via code reuse and reduced feature coverage. The only ROM-only variant — there is no separate RAM player because the size optimisations don't rely on self-modifying code. |
+| AKM | ~400–600 bytes (ROM-only) | ~400–600 bytes | Aggressively size-optimized via code reuse and reduced feature coverage. The only ROM-only variant — there is no separate RAM player because the size optimisations don't rely on self-modifying code. |
 | AKY | ~600–900 bytes | ~650–950 bytes | Mid-size. Larger than PT3 and AKM because of the digidrum and sample-effect support, but smaller than AKG because of the pre-encoded format (less runtime note lookup). |
 
 The code-size picture is **inverted versus what you might expect**: PT3 (the oldest, supposedly "legacy") is actually smaller than AKG (the modern alternative). The reason is that PT3 was designed for the Soviet clone era, when every byte counted; AKG was designed in the 2000s for game use, where 500 extra bytes of player code is irrelevant. AKM exists to bring Arkos Tracker's modern editing experience to size-limited productions.
@@ -102,11 +102,11 @@ All four fit comfortably in 128 bytes of dedicated state RAM. The differences ar
 
 The pattern: AKY has the **broadest feature set** (digidrums, samples, multi-PSG, per-PSG clock). AKG covers everything except samples. AKM drops some portamento/vibrato nuance to save code. PT3 has the classic 1990s feature set but no native digidrum or multi-PSG.
 
-### Per-platform behaviour
+### Per-platform behavior
 
 A subtle but important difference is **how each player handles cross-platform playback** — the same module on different PSG clocks (Spectrum 128K 1.7734 MHz vs Pentagon 1.75 MHz vs Fuller Box 1.63819 MHz).
 
-| Player | Cross-platform behaviour |
+| Player | Cross-platform behavior |
 |--------|--------------------------|
 | PT3 | Module contains its own frequency table; pitch is correct on the platform where the module was composed, off by ~1–8% on others. |
 | AKG | Note-based; theoretically portable. Pitch effects (portamento, vibrato) are period-based and may sound different. |
@@ -144,7 +144,7 @@ Key observations from this benchmark:
 
 A natural question: **does the player affect the sound, beyond the format-level features?** The answer is yes, in three ways:
 
-### 1. Envelope retrigger behaviour
+### 1. Envelope retrigger behavior
 
 The AY's hardware envelope generator has a quirk: writing to register 13 (envelope shape) **retriggers** the envelope from the beginning. Different players handle this differently:
 

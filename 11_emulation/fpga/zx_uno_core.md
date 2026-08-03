@@ -88,7 +88,7 @@ The ZX-Uno's heart is the **Intel/Altera Cyclone IV EP4CE6E22C8N** FPGA. Key spe
 
 6,272 logic elements is enough for a Spectrum core with substantial peripherals — the basic Spectrum (ULA + Z80 + RAM + ROM + I/O) consumes about 2,000–2,500 LEs, leaving room for AY, Beta 128, DivMMC, ULAplus, and other features.
 
-The FPGA is configured at boot from the external EPCQ16 serial flash chip, which holds the bitstream (the synthesised Verilog core). Updates to the core are written to the EPCQ16 via a JTAG interface (or, in newer firmware versions, via SD card with a special bootloader).
+The FPGA is configured at boot from the external EPCQ16 serial flash chip, which holds the bitstream (the synthesized Verilog core). Updates to the core are written to the EPCQ16 via a JTAG interface (or, in newer firmware versions, via SD card with a special bootloader).
 
 ### On-Board Hardware
 

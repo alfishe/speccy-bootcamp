@@ -272,12 +272,12 @@ The 35-year gap is enormous in features, but the **fundamental editing paradigm*
 - [Asc Sound Master](asc_sound_master.md) — contemporary alternative (1992)
 - [Vortex Tracker II](vortex_tracker.md) — modern PC-based editor that imports `.STC`
 - [PT3 Format](pt3_format.md) — ST 1.1's module-format grandson
-- [AY Music Formats](ay_music_formats.md) — full format catalogue including `.STC`
+- [AY Music Formats](ay_music_formats.md) — full format catalog including `.STC`
 - [AY-3-8912 PSG Silicon](../hardware/ay_3_8912.md) — the chip ST 1.1 was the first to address tracker-style
 
 ## References
 
-- [zxtunes.com software list](https://zxtunes.com/software_list.php) — catalogue entry for Sound Tracker 1.1
+- [zxtunes.com software list](https://zxtunes.com/software_list.php) — catalog entry for Sound Tracker 1.1
 - [zxart.ee STC archive](https://zxart.ee/) — searchable archive of surviving `.STC` modules
 - [Bulba's Vortex Project](https://bulba.untergrund.net/) — VTII's STC importer preserves the format
 - [Wikipedia: Tracker music](https://en.wikipedia.org/wiki/Tracker_music) — broader context on the tracker paradigm Ultimate Soundtracker established

@@ -281,12 +281,12 @@ PT's scope was specifically the **AY/YM module ecosystem**, and within that scop
 - [Vortex Tracker II](vortex_tracker.md) — the PC-based successor that inherited PT3 (2000+)
 - [Arkos Tracker](arkos_tracker.md) — the modern alternative format family (`.AKG`, not PT-derived)
 - [PT3 Format](pt3_format.md) — the byte-level specification of PT3 (the format PT3.x established)
-- [AY Music Formats](ay_music_formats.md) — full format catalogue including `.PT1` / `.PT2` / `.PT3`
+- [AY Music Formats](ay_music_formats.md) — full format catalog including `.PT1` / `.PT2` / `.PT3`
 - [AY-3-8912 PSG Silicon](../hardware/ay_3_8912.md) — the chip whose register map PT3 drives
 
 ## References
 
-- [zxtunes.com software list](https://zxtunes.com/software_list.php) — catalogue entries for Pro Tracker 1.x, 2.x, 3.x
+- [zxtunes.com software list](https://zxtunes.com/software_list.php) — catalog entries for Pro Tracker 1.x, 2.x, 3.x
 - [zxart.ee PT archive](https://zxart.ee/) — searchable archive of `.PT1` / `.PT2` / `.PT3` modules
 - [Bulba's Vortex Project](https://bulba.untergrund.net/) — home of VTII; documents PT3 lineage
 - [Grimware PT3 source documentation](https://www.grimware.org/doku.php/sources/pt3) — byte-exact PT3 reference including sub-version differences

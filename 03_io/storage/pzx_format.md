@@ -4,7 +4,7 @@
 
 The [.TAP](tap_format.md) and [.TZX](tzx_format.md) formats are block-based: they represent a tape as a sequence of logical blocks (headers, data blocks, silences, etc.). The [.CSW format](csw_format.md) is pulse-based but unstructured: it represents the tape as a flat stream of pulse widths. The **.PZX format** takes a middle path: it is **pulse-based but chunked**, combining the fidelity of .CSW with the structure of .TZX/.SZX.
 
-Created in 2010 by **Fredrik Öhrström** (a Spectrum enthusiast and emulator author), .PZX was designed to address the limitations of both .TZX (which struggles with some non-standard encodings) and .CSW (which lacks structure and metadata). The format uses an **IFF-like chunk structure** (similar to [.SZX](../snapshots/szx_format.md)) to organise the tape data into named, length-prefixed chunks, while preserving the pulse-level fidelity needed for accurate preservation.
+Created in 2010 by **Fredrik Öhrström** (a Spectrum enthusiast and emulator author), .PZX was designed to address the limitations of both .TZX (which struggles with some non-standard encodings) and .CSW (which lacks structure and metadata). The format uses an **IFF-like chunk structure** (similar to [.SZX](../snapshots/szx_format.md)) to organize the tape data into named, length-prefixed chunks, while preserving the pulse-level fidelity needed for accurate preservation.
 
 This article covers the .PZX format: its history, the chunk-based file structure, the pulse data representation, how to read and write .PZX files, and how it compares to .CSW and .TZX. For the higher-level tape formats, see [tap_format.md](tap_format.md) and [tzx_format.md](tzx_format.md). For the lower-level .CSW format, see [csw_format.md](csw_format.md).
 
@@ -27,7 +27,7 @@ The .PZX format was created in 2010 by **Fredrik Öhrström**, the author of the
 - **Metadata support** (like .TZX): publisher, year, author, and other information can be included.
 - **Simple and clean design**: the format avoids the historical cruft of .TZX (which has 13 minor versions and many rarely-used block types).
 
-The format has not been formally standardised (there is no specification document comparable to the .TZX specification), but it is documented in the Unreal Speccy source code and has been adopted by several other emulators.
+The format has not been formally standardized (there is no specification document comparable to the .TZX specification), but it is documented in the Unreal Speccy source code and has been adopted by several other emulators.
 
 ### 1.2 Design philosophy
 
@@ -53,7 +53,7 @@ Each chunk has:
 - A **4-byte length** (the size of the chunk's data, in bytes, little-endian).
 - The chunk **data** itself.
 
-The loader reads chunks one at a time. If it doesn't recognise a chunk ID, it skips that chunk (using the length field) and continues.
+The loader reads chunks one at a time. If it doesn't recognize a chunk ID, it skips that chunk (using the length field) and continues.
 
 This is the same design as [.SZX](../snapshots/szx_format.md) (the snapshot format), and it has the same benefits: extensibility, robustness, and ease of parsing.
 
@@ -131,7 +131,7 @@ Multiple `PULS` and `PAUS` chunks can appear in sequence, representing the block
 
 ### 2.5 Skipping unknown chunks
 
-As with .SZX, the most important rule of .PZX loading is: **if you encounter a chunk ID you don't recognise, skip it using the chunk data length and continue with the next chunk**. Do not abort the load.
+As with .SZX, the most important rule of .PZX loading is: **if you encounter a chunk ID you don't recognize, skip it using the chunk data length and continue with the next chunk**. Do not abort the load.
 
 This rule is what makes .PZX extensible. A loader that aborts on unknown chunks would be unable to load .PZX files written by newer tools.
 
@@ -427,7 +427,7 @@ For emulator developers, .PZX is often easier to implement than .TZX (because th
 
 ### 7.3 Analog protection analysis
 
-For reverse engineers analysing analog protections, .PZX provides a faithful, cycle-exact representation of the tape signal. The pulse-level data can be analysed to understand the protection scheme.
+For reverse engineers analysing analog protections, .PZX provides a faithful, cycle-exact representation of the tape signal. The pulse-level data can be analyzed to understand the protection scheme.
 
 ### 7.4 Custom loader development
 

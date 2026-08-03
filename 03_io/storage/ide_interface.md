@@ -4,7 +4,7 @@
 
 This article is the **hardware reference** for the IDE era: port maps, banking schemes, cable pinouts, and the register-level protocol the Z80 uses to talk to an IDE device. It does not cover the SD-card interfaces (those are in [sd_interface.md](sd_interface.md)), nor the DOS firmware in depth (that is in [divide_divmmc.md](divide_divmmc.md) and [esxdos.md](../../04_operating_systems/esxdos.md)).
 
-**Audience:** Hardware-level emulator authors modelling the DivIDE or SMUC port blocks, demoscene coders writing direct-to-disk loaders that bypass ESXDOS, retro-hardware builders adapting CompactFlash to a clone, and anyone curious why the Spectrum speaks a 16-bit PC protocol through an 8-bit 1982 bus.
+**Audience:** Hardware-level emulator authors modeling the DivIDE or SMUC port blocks, demoscene coders writing direct-to-disk loaders that bypass ESXDOS, retro-hardware builders adapting CompactFlash to a clone, and anyone curious why the Spectrum speaks a 16-bit PC protocol through an 8-bit 1982 bus.
 
 **Prerequisites:** Familiarity with [I/O port decoding](../../05_development/03_memory_and_io/io_port_decoding.md) and the general [memory-and-I/O model](../../05_development/03_memory_and_io/memory_and_io_48k.md) of the Spectrum. The [overview article](hdd_overview.md) situates the IDE era in the wider storage story.
 
@@ -191,7 +191,7 @@ The **KAY IDE** is the IDE controller built into the **KAY-1024** clone (a Russi
 
 The KAY IDE occupies a port footprint in the `#08`–`#0F` family, sharing the address-decoding logic with the KAY's other on-board peripherals. It is driven by the KAY's system ROM and by IS-DOS / custom loaders, in the same way the Nemo IDE is driven on the Pentagon.
 
-The KAY IDE matters mainly to owners of original KAY hardware and to emulator authors modelling the KAY-1024 specifically. For everyone else, the DivIDE's port layout is the relevant one, because the KAY's software library is small and largely inaccessible outside the Russian scene.
+The KAY IDE matters mainly to owners of original KAY hardware and to emulator authors modeling the KAY-1024 specifically. For everyone else, the DivIDE's port layout is the relevant one, because the KAY's software library is small and largely inaccessible outside the Russian scene.
 
 ### 5.4 The ATM Turbo / Z-Controller IDE
 

@@ -4,7 +4,7 @@
 
 The **ZX Spectrum 128K** (codenamed *Darwin* during development, popularly known as the **"Toast Rack"** after its rectangular case with a raised rear section housing the heatsink) was launched in **September 1985 in Spain** and **February 1986 in the UK**. It was the **last ZX Spectrum designed by Sinclair Research** before the Amstrad acquisition in April 1986, and the first Spectrum to ship with **bank-switched memory, an AY-3-8912 sound chip, a keypad, and 32 KB of ROM split across two switchable banks**.
 
-The 128K was the result of a joint development effort between Sinclair Research and **Investrónica**, the Spanish distributor of Sinclair products, which had identified the Spanish market's strong demand for a more capable Spectrum — particularly for the educational sector and for the growing Spanish demoscene. The Spanish launch preceded the UK launch by five months because Investrónica had effectively forced Sinclair's hand: the Spanish version was firmware-finalised first, and the UK release had to wait for localisation and the Sinclair/Amstrad transition.
+The 128K was the result of a joint development effort between Sinclair Research and **Investrónica**, the Spanish distributor of Sinclair products, which had identified the Spanish market's strong demand for a more capable Spectrum — particularly for the educational sector and for the growing Spanish demoscene. The Spanish launch preceded the UK launch by five months because Investrónica had effectively forced Sinclair's hand: the Spanish version was firmware-finalized first, and the UK release had to wait for localisation and the Sinclair/Amstrad transition.
 
 Although superseded within a year by the Amstrad-branded +2, the 128K is **architecturally the bridge** between the original Sinclair design philosophy and the Amstrad era. Its core decisions — the `#7FFD` paging register layout, the bank numbering scheme, the dual-ROM switching, the AY chip at ports `#FFFD`/`#BFFD`, the keypad scanning via the AY's I/O port — were inherited unchanged by every later Spectrum model and by every Soviet/Russian clone. Understanding the 128K is therefore a prerequisite for understanding the +2, +2A, +3, Pentagon, Scorpion, and ATM Turbo.
 
@@ -219,7 +219,7 @@ The AY-3-8912 on the 128K runs at **1.7734 MHz** — half the Z80 clock of 3.546
 The AY's three analog audio outputs are summed together with the Spectrum's traditional **1-bit beeper** (still present at port `#FE` bit 4) and routed to the same audio amplifier that drives the 48K's internal speaker and the EAR/MIC jacks. This means:
 
 - The beeper and the AY can play simultaneously, mixed analog
-- The beeper is effectively **deprecated** on the 128K for new software, but kept for 48K backwards compatibility
+- The beeper is effectively **deprecated** on the 128K for new software, but kept for 48K backward compatibility
 - Connecting headphones or an amplifier to the EAR jack picks up both the beeper and the AY audio
 
 For a deeper look at the AY-3-8912 architecture, register set, and use in Spectrum music, see [ay_ym_synthesis.md](../../06_sound/synthesis/ay_ym_synthesis.md).
@@ -236,7 +236,7 @@ The 128K case adds a **20-key numeric keypad** to the right of the main QWERTY k
 - ENTER
 - DELETE
 - CAPS SHIFT and SYMBOL SHIFT duplicates
-- A blank function key (often labelled EDIT or used as a custom function)
+- A blank function key (often labeled EDIT or used as a custom function)
 
 The keypad is **scanned via the AY-3-8912's I/O port** (register 14, the 8912's only bidirectional 8-bit port) rather than via the main keyboard matrix. This is why the keypad does not work on the 48K — the AY chip is not present.
 
@@ -299,7 +299,7 @@ The 128K provides **three video outputs**, all on the rear panel:
 
 | Output | Connector | Signal |
 |---|---|---|
-| **RGB video** | 8-pin DIN | RGB analogue (TTL-level RGBI + composite sync), 50 Hz vertical refresh, intended for the Sinclair TM1620 monitor or any compatible RGB monitor |
+| **RGB video** | 8-pin DIN | RGB analog (TTL-level RGBI + composite sync), 50 Hz vertical refresh, intended for the Sinclair TM1620 monitor or any compatible RGB monitor |
 | **Monochrome composite** | phono (RCA) jack | Composite video, 50 Hz, suitable for a monochrome monitor or any TV with a composite input |
 | **RF (UHF)** | Coaxial | PAL-modulated UHF on channel 36 (UK) or channel 27 (Spain, different RF modulator) |
 

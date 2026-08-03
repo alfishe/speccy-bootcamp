@@ -683,7 +683,7 @@ Debugger features unique to ZX-M8XXX (none of UnrealSpeccy / ZXMAK2 / unreal-ng 
 | **Cross-references (XRefs)** | Tracks every reference to every labeled address (Ghidra/IDA-style). Click a label, see every callsite. |
 | **Subroutine detection + code folding** | Identifies `CALL`/`RET` boundaries automatically; subroutines can be collapsed/expanded in the disassembly view. |
 | **Runtime call stack tracking** | Tracks `CALL`/`RST`/`INT`/`RET` dynamically — the call stack that STS could only approximate via SP inspection. |
-| **Execution trace history** | 10,000-instruction rolling history with navigation; step backwards through execution. |
+| **Execution trace history** | 10,000-instruction rolling history with navigation; step backward through execution. |
 | **Breakpoint ΔT counter** | Cycle-exact timing measurement between breakpoints — replaces the manual "set breakpoint at start, set breakpoint at end, subtract t-states" workflow. |
 | **Labels import/export** | Project-level label persistence; the symbol-table bridge generalized beyond ALASM 3.5 to any source format. |
 | **Project save/load** | Complete session state (breakpoints, labels, markings, bookmarks, watches) serialized for later resumption or sharing. |
@@ -832,7 +832,7 @@ Planned per-tool deep-dives (separate articles in this directory):
 
 ## References
 
-- [Spectrum Computing — Zeus Assembler entry](https://spectrumcomputing.co.uk/entry/9010/ZX-Spectrum/Zeus_Assembler) — catalogue and download
+- [Spectrum Computing — Zeus Assembler entry](https://spectrumcomputing.co.uk/entry/9010/ZX-Spectrum/Zeus_Assembler) — catalog and download
 - [Spectrum Computing — HiSoft Devpac entry](https://spectrumcomputing.co.uk/entry/8091/ZX-Spectrum/HiSoft_Devpac) — DevPac download and metadata
 - [HiSoft DevPac 4 manual (PDF)](https://worldofspectrum.org/pub/sinclair/games-info/h/HiSoftDevpacV4.0.pdf) — primary documentation
 - [desdes.com — Zeus Z80 Assembler resources](https://www.desdes.com/products/oldfiles/zeus.htm) — modern Zeus distribution and extras

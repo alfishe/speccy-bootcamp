@@ -128,7 +128,7 @@ The BDOS is CP/M's file system and I/O layer. It exposes a small set of function
 - Send and receive via a serial port.
 - Get and set the date (in versions that support it).
 
-The BDOS is hardware-independent: every CP/M system has the same BDOS, with the same function numbers, calling conventions, and behaviour. This is what makes CP/M software portable — a program written against the BDOS will run on any CP/M system that provides the BIOS routines the BDOS calls.
+The BDOS is hardware-independent: every CP/M system has the same BDOS, with the same function numbers, calling conventions, and behavior. This is what makes CP/M software portable — a program written against the BDOS will run on any CP/M system that provides the BIOS routines the BDOS calls.
 
 ### 2.4 The BIOS (Basic I/O System)
 
@@ -489,7 +489,7 @@ There is also a modern CP/M emulator that runs under NextZXOS on the ZX Spectrum
 A common question: can a Pentagon or Scorpion (the standard Soviet clones) run CP/M? The answer is **generally no**, for two reasons:
 
 1. **Memory layout.** The Pentagon's ROM-at-the-bottom layout is incompatible with CP/M's RAM-everywhere expectation. Converting the Pentagon to a flat-RAM machine requires significant hardware modification.
-2. **No market demand.** The Soviet scene standardised on TR-DOS for disk I/O and never developed a strong CP/M ecosystem. Soviet users who needed "serious" computing typically used a Soviet-built PC clone (the Electronika, Poisk, or ES-1840) rather than a Spectrum running CP/M.
+2. **No market demand.** The Soviet scene standardized on TR-DOS for disk I/O and never developed a strong CP/M ecosystem. Soviet users who needed "serious" computing typically used a Soviet-built PC clone (the Electronika, Poisk, or ES-1840) rather than a Spectrum running CP/M.
 
 The result is that CP/M is primarily a Western-Spectrum phenomenon, with the +3 as its main vehicle.
 
@@ -568,7 +568,7 @@ The CP/M software library is preserved by:
 - **The comp.os.cpm newsgroup**: still active, with regular posts from CP/M enthusiasts.
 - **The Retro Computing community**: active discussion of CP/M on Retro Computing forums and Reddit.
 
-Almost the entire CP/M commercial catalogue is now abandonware and freely downloadable.
+Almost the entire CP/M commercial catalog is now abandonware and freely downloadable.
 
 ---
 
@@ -596,7 +596,7 @@ These emulators let users explore the CP/M software library without any 1980s ha
 
 ### 8.3 The Spectrum CP/M community
 
-The Spectrum-specific CP/M community is small but dedicated. It centres on:
+The Spectrum-specific CP/M community is small but dedicated. It centers on:
 
 - **Owners of real +3 hardware**: a few hundred active users worldwide, mostly in the UK and Eastern Europe.
 - **Spectrum emulator users**: a much larger group, primarily running +3 CP/M via Fuse, ZEsarUX, or Spectaculator.

@@ -98,7 +98,7 @@ When you type `10 LET A = 42` and press ENTER, the tokeniser stores the **comple
 The ROM decides which form to use. Small integers in the range `1`–`65535` use `#0F`; everything else (negative integers, fractions, large numbers) uses `#0E`. The special value `#0F #00 #00` represents the small integer `0`.
 
 > [!NOTE]
-> The 5-byte floating-point form is: byte 0 = exponent (biased by `#80`), bytes 1–4 = mantissa (high bit always set for normalised numbers). For zero, all 5 bytes are `#00`. Full details in [basic_48k.md](../05_development/01_basic/basic_48k.md).
+> The 5-byte floating-point form is: byte 0 = exponent (biased by `#80`), bytes 1–4 = mantissa (high bit always set for normalized numbers). For zero, all 5 bytes are `#00`. Full details in [basic_48k.md](../05_development/01_basic/basic_48k.md).
 
 ---
 

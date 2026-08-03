@@ -31,8 +31,8 @@ The ROM accesses all system variables through the IY register (`IY = #5C3A`, so 
 | `#5C09` | IY-49 | `REPDEL` | 1 | Delay before auto-repeat starts (in frames, default 35) |
 | `#5C0A` | IY-48 | `REPPER` | 1 | Auto-repeat period (in frames between repeats, default 5) |
 | `#5C0B` | IY-47 | `DEFADD` | 2 | Address of arguments of user-defined function, or `#0000` |
-| `#5C0D` | IY-45 | `K_DATA` | 1 | 2nd byte of colour controls entered from keyboard |
-| `#5C0E` | IY-44 | `TVDATA` | 2 | Bytes of colour, AT and TAB controls going to TV |
+| `#5C0D` | IY-45 | `K_DATA` | 1 | 2nd byte of color controls entered from keyboard |
+| `#5C0E` | IY-44 | `TVDATA` | 2 | Bytes of color, AT and TAB controls going to TV |
 | `#5C10` | IY-42 | `STRMS` | 30 | Stream data: 15 streams × 2 bytes. Stream 0 = keyboard, 1 = screen, 2 = printer |
 | `#5C36` | IY-4 | `CHARS` | 2 | Address minus 256 of the character set (96 chars × 8 bytes = 768 bytes). Default: `#3C00` (= `#3D00 − #0100`, pointing to ROM character set at `#3D00`–`#3FFF`). See [character_set.md](../10_references/character_set.md) for details. |
 | `#5C38` | IY-2 | `RASP` | 1 | Length of warning buzz |
@@ -47,7 +47,7 @@ The ROM accesses all system variables through the IY register (`IY = #5C3A`, so 
 | `#5C44` | IY+10 | `NSPPC` | 1 | Statement number within line for continuation |
 | `#5C45` | IY+11 | `PPC` | 2 | Line number of statement currently being executed |
 | `#5C47` | IY+13 | `SUBPPC` | 1 | Statement number within line currently being executed |
-| `#5C48` | IY+14 | `BORDCR` | 1 | Border colour × 8; also lower screen attributes |
+| `#5C48` | IY+14 | `BORDCR` | 1 | Border color × 8; also lower screen attributes |
 | `#5C49` | IY+15 | `E_PPC` | 2 | Number of current line (with program cursor) |
 | `#5C4B` | IY+17 | `VARS` | 2 | Address of the start of the variables area (grows upward) |
 | `#5C4D` | IY+19 | `DEST` | 2 | Destination address for `GO TO`/`GO SUB` line lookup |
@@ -309,7 +309,7 @@ When Sinclair Interface 1 is connected, the area from `#5CB6` to `#5CEF` is used
 | `#5CB9` | `SBRT` | 10 | ROM paging routine workspace |
 | `#5CC3` | `BAUD` | 2 | RS232 timing constant: `(3500000 / (26 × baudrate)) - 2` |
 | `#5CC5` | `NTSTAT` | 1 | Network station number |
-| `#5CC6` | `IOBORD` | 1 | Border colour during I/O. Default 0 (black) |
+| `#5CC6` | `IOBORD` | 1 | Border color during I/O. Default 0 (black) |
 | `#5CC7` | `SER_FL` | 1 | Number of buffered serial characters (0 or 1) |
 | `#5CC8` | `SER_BF` | 1 | One-byte serial input buffer |
 | `#5CC9` | `SECTOR` | 2 | Counter of sectors examined during Microdrive ops |
@@ -370,7 +370,7 @@ TR-DOS (Technology Research DOS) is the disk operating system used by the Beta 1
 
 | Address | Size | Description |
 |---------|------|-------------|
-| `#5CA6` | 1 | Current sector number during catalogue reading |
+| `#5CA6` | 1 | Current sector number during catalog reading |
 | `#5CA7` | 1 | `#80` = disk drive ready |
 | `#5CA8` | 1 | `#00` = sector reading, `#FF` = sector writing |
 | `#5CAD` | 8 | File name in ASCII |

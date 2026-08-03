@@ -6,7 +6,7 @@ Every Spectrum ever made contains a **ROM** — read-only memory holding the BAS
 
 Over the 40+ years of Spectrum history, many different ROM versions have been produced. Sinclair issued several revisions of the 48K ROM. The Spanish and Russian markets had localised versions. Amstrad added disk commands in the +2A and +3 ROMs. Soviet clones shipped with their own variants. Modern hobbyist replacements (SE BASIC, OpenSE) provide alternative ROMs that fix bugs or add features.
 
-This article is a **catalogue** of the major Spectrum ROM versions. For each: physical identification, internal checksums, notable contents, and quirks. For the technical details of what's inside a ROM — the BASIC interpreter, the calculator stack, the editor — see [rom_48k.md](rom_48k.md), [rom_128k.md](rom_128k.md), and [rom_plus2.md](rom_plus2.md).
+This article is a **catalog** of the major Spectrum ROM versions. For each: physical identification, internal checksums, notable contents, and quirks. For the technical details of what's inside a ROM — the BASIC interpreter, the calculator stack, the editor — see [rom_48k.md](rom_48k.md), [rom_128k.md](rom_128k.md), and [rom_plus2.md](rom_plus2.md).
 
 ---
 
@@ -79,7 +79,7 @@ The original Sinclair-produced ROMs are **copyrighted software**, currently held
 - **Emulator users** may legally download and use the original Sinclair ROMs for personal, non-commercial use.
 - **Redistribution** of original ROMs (e.g., bundling them with software) is technically a copyright violation but is widely tolerated for the original 16 KB 48K ROM.
 - **Clone ROMs** (Pentagon, etc.) are typically in a similar legal grey zone.
-- **Modern replacement ROMs** (SE BASIC, OpenSE, the NextZXOS ROM) are released under explicit open-source licences (typically GPL).
+- **Modern replacement ROMs** (SE BASIC, OpenSE, the NextZXOS ROM) are released under explicit open-source licenses (typically GPL).
 
 The practical upshot: if you want a Spectrum ROM for emulation, the canonical sources are World of Spectrum (`worldofspectrum.org`) and the Spectrum ROM archive at `www.chiark.greenend.org.uk/~jmayrand/SpectrumROMs/`. Both have the common ROMs freely downloadable.
 
@@ -99,7 +99,7 @@ Identification:
 - **Magic bytes at offset `#1FFE`**: `00 00`.
 - **Notable bug**: the floating-point routine `INT(-0.5)` returns `-0` (zero with the sign bit set) rather than `-1`. This bug was fixed in the Issue 2.
 
-The Issue 1 ROM is sought after by collectors and is the only way to experience the very first Spectrum behaviour. Practically, almost no software depends on Issue 1 quirks.
+The Issue 1 ROM is sought after by collectors and is the only way to experience the very first Spectrum behavior. Practically, almost no software depends on Issue 1 quirks.
 
 ### 2.2 Issue 2 ROM (mid-1982)
 
@@ -184,9 +184,9 @@ The Spectrum 128K — code-named "Blair" — was Sinclair's last machine, design
 
 ### 3.1 ROM layout
 
-The 128K ROM is **32 KB**, organised as two 16 KB banks:
+The 128K ROM is **32 KB**, organized as two 16 KB banks:
 
-- **Bank 0 (the "0" ROM)** — A modified 48K BASIC ROM. Used when running in 48K mode for backwards compatibility.
+- **Bank 0 (the "0" ROM)** — A modified 48K BASIC ROM. Used when running in 48K mode for backward compatibility.
 - **Bank 1 (the "1" ROM)** — The new 128K editor + extensions. Used when running in native 128K mode.
 
 The two banks are switched into the bottom 16 KB of address space (`#0000`–`#3FFF`) via port `#7FFD` bit 4. The user sees a single unified environment.
@@ -235,7 +235,7 @@ CRC32: `0xD81E4F2A` for the full 32 KB.
 
 ## §4. The +2A / +3 ROM (December 1987)
 
-The Amstrad-made **+2A** (early 1988, a +3 with a tape drive instead of a disk drive) and **+3** (December 1987) shipped with a substantially expanded ROM — 64 KB total, organised as four 16 KB pages.
+The Amstrad-made **+2A** (early 1988, a +3 with a tape drive instead of a disk drive) and **+3** (December 1987) shipped with a substantially expanded ROM — 64 KB total, organized as four 16 KB pages.
 
 ### 4.1 The four-page ROM
 
@@ -256,7 +256,7 @@ ROM 0 of the +2A/+3 is the new full-screen editor with disk commands. It is func
 
 ### 4.3 ROM 1 (48K BASIC)
 
-ROM 1 is essentially the Sinclair 48K ROM, included for backwards compatibility. When the user selects "48 BASIC" from the boot menu, this is what runs.
+ROM 1 is essentially the Sinclair 48K ROM, included for backward compatibility. When the user selects "48 BASIC" from the boot menu, this is what runs.
 
 This 48K ROM is **slightly different** from the Sinclair Issue 2/3 48K ROM. The differences are mostly minor — bug fixes, plus a few patches to support running in the +3's banked environment. Most 48K software works fine under this ROM, but timing-sensitive machine-code programs may behave differently.
 
@@ -355,7 +355,7 @@ The Pentagon's ROM is **functionally compatible** with the Sinclair 128K + TR-DO
 Notable differences from the Sinclair 128K:
 - The Pentagon has a slightly different memory banking layout (which affects a small amount of machine code).
 - The Pentagon's keyboard layout has Cyrillic characters mapped to certain key combinations.
-- The Pentagon's ROM is typically optimised for the Russian market (Cyrillic character set).
+- The Pentagon's ROM is typically optimized for the Russian market (Cyrillic character set).
 
 ### 6.2 Scorpion 256 / Scorpion ZS-256
 
@@ -440,7 +440,7 @@ In the 2000s and beyond, the Spectrum hobbyist community produced several modern
 **OpenSE BASIC** is the modern continuation of SE BASIC, hosted on GitHub (`github.com/cheveron/sebasic`). The current version (4.x) targets both stock Spectrums and the ZX Spectrum Next, with additional Next-specific extensions.
 
 - **Size**: 16 KB (drop-in replacement).
-- **Compatibility**: backwards-compatible with the 48K ROM.
+- **Compatibility**: backward-compatible with the 48K ROM.
 - **Additions**: all of SE BASIC's features, plus Next hardware extensions.
 - **Licence**: GPL.
 - **Status**: actively maintained (last release 2023).
@@ -464,7 +464,7 @@ The **+3E ROM** is a community-developed upgrade to the original +3 ROM, created
 - Adds support for external disk drives (the original +3 ROM only supports the internal 3-inch drive).
 - Adds support for hard disk partitions.
 - Fixes bugs in the original +3 DOS.
-- Maintains full backwards compatibility with the original +3 ROM.
+- Maintains full backward compatibility with the original +3 ROM.
 
 The +3E ROM is a popular upgrade for real +3 hardware in 2024. It is open source and freely distributable.
 
@@ -527,7 +527,7 @@ Some ROMs can be identified by inspecting specific bytes at fixed offsets:
 | 128K ROM | `#7FFC` (end of bank 1) | specific identifier bytes |
 | +3 ROM page header | `#0000` | `#ED` `#FE` (initial DI; EXX pattern) |
 
-The "magic bytes" approach is used by software that needs to detect the ROM at runtime. For example, a game might check the byte at `#0A5C` to determine whether it's running on an Issue 2 or Issue 3 48K ROM and adjust its behaviour accordingly.
+The "magic bytes" approach is used by software that needs to detect the ROM at runtime. For example, a game might check the byte at `#0A5C` to determine whether it's running on an Issue 2 or Issue 3 48K ROM and adjust its behavior accordingly.
 
 ### 8.4 Boot message text
 
@@ -548,7 +548,7 @@ The boot message is a quick way to identify a ROM in an emulator.
 
 ### 8.5 Online databases
 
-Several online databases catalogue Spectrum ROM versions and their checksums:
+Several online databases catalog Spectrum ROM versions and their checksums:
 
 - **World of Spectrum** (`worldofspectrum.org`) — the canonical Spectrum software archive. Has a ROMs section with identification info.
 - **The Fuse emulator's ROM identification** — the source code of the Fuse emulator contains a table of known ROMs with CRC32 values.
@@ -573,7 +573,7 @@ These books document every byte of the standard Sinclair ROMs with detailed comm
 
 The original Sinclair ROMs are copyrighted by Amstrad (now Sky). Amstrad's then-CEO Cliff Lawson issued a statement in 1999 permitting free distribution of the original Sinclair ROMs for non-commercial emulator use. This permission was reaffirmed by Sky when they acquired Amstrad.
 
-Practical upshot: you may legally download and use the original Sinclair 48K, 128K, and +3 ROMs for personal emulator use. Commercial redistribution (e.g., bundling them in a paid product) requires a licence from Sky.
+Practical upshot: you may legally download and use the original Sinclair 48K, 128K, and +3 ROMs for personal emulator use. Commercial redistribution (e.g., bundling them in a paid product) requires a license from Sky.
 
 ### 9.2 Where to download
 
@@ -612,7 +612,7 @@ If you have a real Spectrum and want to dump its ROM, you can use:
 
 The dumped ROM can then be used in an emulator or compared against the known CRC values for identification.
 
-For most users in 2024, downloading the standard ROMs from World of Spectrum is the easier path. Dumping from real hardware is interesting for verification or for cataloguing rare ROM variants.
+For most users in 2024, downloading the standard ROMs from World of Spectrum is the easier path. Dumping from real hardware is interesting for verification or for cataloging rare ROM variants.
 
 ---
 
@@ -634,4 +634,4 @@ For most users in 2024, downloading the standard ROMs from World of Spectrum is 
 
 ## License
 
-This document is licensed under **Creative Commons Attribution-ShareAlike 4.0 International** (CC BY-SA 4.0). You are free to share and adapt this material, provided you give appropriate credit, indicate changes, and distribute derivative works under the same licence.
+This document is licensed under **Creative Commons Attribution-ShareAlike 4.0 International** (CC BY-SA 4.0). You are free to share and adapt this material, provided you give appropriate credit, indicate changes, and distribute derivative works under the same license.

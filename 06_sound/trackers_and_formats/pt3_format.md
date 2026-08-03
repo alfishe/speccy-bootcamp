@@ -123,7 +123,7 @@ The first byte after the sentinel marks the **loop position** — the pattern nu
 
 ### Pattern Length
 
-Every pattern in PT3 has **64 rows** by default (named `00`–`3F` in the editor). This is hardcoded into the player; the position table does not store per-position lengths. VTII supports a per-song tempo that scales the row duration, but the row count itself is fixed. Composers who need shorter patterns simply leave the trailing rows empty (note-off at the desired row, silence afterwards).
+Every pattern in PT3 has **64 rows** by default (named `00`–`3F` in the editor). This is hardcoded into the player; the position table does not store per-position lengths. VTII supports a per-song tempo that scales the row duration, but the row count itself is fixed. Composers who need shorter patterns simply leave the trailing rows empty (note-off at the desired row, silence afterward).
 
 ### Example: A Simple Verse–Chorus–Verse Song
 
@@ -562,7 +562,7 @@ A `.ts` TurboSound module is simply two PT3 modules concatenated with a small wr
 - [Vortex Tracker II](vortex_tracker.md) — the PC editor that produces most modern PT3 files
 - [Arkos Tracker](arkos_tracker.md) — alternative format family (`.akg`, `.aky`) for game developers
 - [PSG Format](psg_format.md) — alternative "register dump" format (no player routine needed)
-- [AY Music Formats](ay_music_formats.md) — comprehensive catalogue including `.AY`, `.EMUL`, `.SNDH`
+- [AY Music Formats](ay_music_formats.md) — comprehensive catalog including `.AY`, `.EMUL`, `.SNDH`
 - [AY-3-8912 PSG Silicon](../hardware/ay_3_8912.md) — the chip whose register map PT3 drives
 - [Player Routines](../players/README.md) — embedded player architecture in depth
 

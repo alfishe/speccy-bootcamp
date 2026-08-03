@@ -67,7 +67,7 @@ CSpect implements the **Z80N** — a Z80-compatible core with additional instruc
 | Test-and-set bit | `BRLC DE,B` | Barrels / rotates |
 | Pop DE and push HL | `POP HD` / `PUSH HD` | 16-bit stack manipulation variants |
 
-CSpect implements these instructions correctly per the official Z80N specification. Some undocumented Z80 instructions (the famous `SLL` / `SLI` from the original Z80) are also handled for backwards compatibility with legacy Spectrum code.
+CSpect implements these instructions correctly per the official Z80N specification. Some undocumented Z80 instructions (the famous `SLL` / `SLI` from the original Z80) are also handled for backward compatibility with legacy Spectrum code.
 
 ### Layer 2 Framebuffer
 

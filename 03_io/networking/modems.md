@@ -2,7 +2,7 @@
 
 # Modems — Telephone-Line Connectivity for the ZX Spectrum
 
-A **modem** (modulator-demodulator) is a device that converts digital data to and from an analogue signal suitable for transmission over a telephone line. For the ZX Spectrum era (1982–1990s), modems were the **only practical means of wide-area network connectivity** — connecting a Spectrum to remote computers, information services, bulletin boards (BBSes), and (eventually) the Internet.
+A **modem** (modulator-demodulator) is a device that converts digital data to and from an analog signal suitable for transmission over a telephone line. For the ZX Spectrum era (1982–1990s), modems were the **only practical means of wide-area network connectivity** — connecting a Spectrum to remote computers, information services, bulletin boards (BBSes), and (eventually) the Internet.
 
 The Spectrum's modem story spans the 1980s and 1990s and divides into several eras:
 
@@ -63,7 +63,7 @@ timeline
 
 ### Spectrum-to-Modem Interfaces
 
-A modem is an analogue device; the Spectrum is digital. The two connect through a **serial interface**, of which the Spectrum had several options:
+A modem is an analog device; the Spectrum is digital. The two connect through a **serial interface**, of which the Spectrum had several options:
 
 | Interface | Baud rate | Era | Notes |
 |---|---|---|---|

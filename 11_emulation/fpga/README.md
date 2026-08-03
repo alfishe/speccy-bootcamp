@@ -2,7 +2,7 @@
 
 # Emulation — FPGA Cores
 
-This directory covers **FPGA-based** Spectrum implementations — synthesised hardware re-implementations of the ZX Spectrum in programmable logic. Unlike software emulators, FPGA cores reconstruct the original hardware at the gate level, providing cycle-exact timing and authentic video/audio output.
+This directory covers **FPGA-based** Spectrum implementations — synthesized hardware re-implementations of the ZX Spectrum in programmable logic. Unlike software emulators, FPGA cores reconstruct the original hardware at the gate level, providing cycle-exact timing and authentic video/audio output.
 
 For software emulators, see the [software](../software/) directory. For MCU-based emulation, see the [mcu](../mcu/) directory.
 

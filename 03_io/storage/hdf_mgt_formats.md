@@ -39,7 +39,7 @@ In most cases the file's **content is identical** — a byte-for-byte copy of th
 
 ### 2.1 What "raw" means
 
-A **raw image** is a file whose bytes are an exact copy of the storage medium's sectors, in order, starting at sector 0. If the medium is a 512 MB CompactFlash card organised into 512-byte sectors, the raw image is a 536,870,912-byte file in which byte offset `N × 512` is the first byte of sector `N`. There is no header, no footer, no metadata, and no compression. The file size equals the medium size.
+A **raw image** is a file whose bytes are an exact copy of the storage medium's sectors, in order, starting at sector 0. If the medium is a 512 MB CompactFlash card organized into 512-byte sectors, the raw image is a 536,870,912-byte file in which byte offset `N × 512` is the first byte of sector `N`. There is no header, no footer, no metadata, and no compression. The file size equals the medium size.
 
 This is the same concept as a `dd if=/dev/sdX of=image.img` dump on Unix, or a "Read Device to Image File" operation in Win32 Disk Imager. The result is universally readable: any tool that understands FAT can mount the image (usually via a loopback device) and browse its files, because the image's internal structure is exactly what a real medium's structure would be.
 

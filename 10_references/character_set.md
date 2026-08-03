@@ -2,7 +2,7 @@
 
 # ZX Spectrum Character Set — Codes, ROM Font, UDG, Tokens
 
-The ZX Spectrum's character set is an 8-bit code with the lower 96 entries modelled on ASCII (with Spectrum-specific symbols replacing the standard punctuation at `#5B`–`#60`), the middle range used for **block graphics** characters, and the upper range used for **BASIC keyword tokens**. This article is the reference table: code → character, ROM address, pixel pattern, and how to redirect or replace the font.
+The ZX Spectrum's character set is an 8-bit code with the lower 96 entries modeled on ASCII (with Spectrum-specific symbols replacing the standard punctuation at `#5B`–`#60`), the middle range used for **block graphics** characters, and the upper range used for **BASIC keyword tokens**. This article is the reference table: code → character, ROM address, pixel pattern, and how to redirect or replace the font.
 
 For the 48K ROM internals (including token system, line storage, character routines), see [rom_48k.md](../04_operating_systems/rom_48k.md). For the system variable table, see [system_variables.md](../04_operating_systems/system_variables.md).
 
@@ -17,7 +17,7 @@ For the 48K ROM internals (including token system, line storage, character routi
 | `#5B`–`#60` | 6 | **Spectrum-specific** | `£` `#5B`, `?` `#5C`, `©` `#5D`, `→` `#5E`, `←` `#5F`, `` ` `` `#60` |
 | `#61`–`#7A` | 26 | **ASCII lowercase** | `a`–`z` (lowercase sits on baseline — no descenders) |
 | `#7B`–`#7E` | 4 | **ASCII punctuation** | `{` `|` `}` `~` |
-| `#7F` | 1 | **Inverse space** | Solid block of ink colour — the classic "ink block" character |
+| `#7F` | 1 | **Inverse space** | Solid block of ink color — the classic "ink block" character |
 | `#80`–`#8F` | 16 | **Mosaic graphics (2×2)** | All 16 combinations of a 2×2 sub-cell × 4 pixels per row |
 | `#90`–`#A4` | 21 | **UDG (built-in)** | User-definable graphics `A`–`U` (default patterns in ROM) |
 | `#A5`–`#C4` | 32 | **Statement tokens** | `RND`, `INKEY$`, `PI`, `FN`, `POINT`, `SCREEN$`, `ATTR`, `AT`, `TAB`, `VAL$`, `CODE`, `VAL`, `LEN`, `SIN`, `COS`, `TAN`, `ASN`, `ACS`, `ATN`, `LN`, `EXP`, `INT`, `SQR`, `SGN`, `ABS`, `PEEK`, `IN`, `USR`, `STR$`, `CHR$`, `NOT`, `BIN` |

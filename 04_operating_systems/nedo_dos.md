@@ -29,14 +29,14 @@ This article covers NedoDOS as a system: its place in the NedoPC ecosystem, its 
 
 ### 1.1 Origins
 
-NedoDOS was developed in the late 2000s and early 2010s by the **NedoPC team** — a group of Russian hardware and software developers centred around **Aleksandr (Alex) Zhuravlev** (also known as `tsl` in the Russian Spectrum community) and other contributors. The NedoPC team is best known for designing the **ZX Evolution** — an FPGA-based Spectrum clone that is the most popular modern Russian Spectrum hardware.
+NedoDOS was developed in the late 2000s and early 2010s by the **NedoPC team** — a group of Russian hardware and software developers centered around **Aleksandr (Alex) Zhuravlev** (also known as `tsl` in the Russian Spectrum community) and other contributors. The NedoPC team is best known for designing the **ZX Evolution** — an FPGA-based Spectrum clone that is the most popular modern Russian Spectrum hardware.
 
 The original motivation for NedoDOS was practical: the ZX Evolution ships with a CompactFlash card slot and an SD card slot, and the existing DOSes (TR-DOS, IS-DOS) could not make good use of these. TR-DOS is too primitive (flat filesystem, no long filenames). IS-DOS is essentially abandoned. The team needed a modern DOS that could:
 
 - Read and write FAT16/FAT32 partitions on CompactFlash and SD cards.
 - Support long filenames for compatibility with PC-side file management.
 - Provide a clean assembly API for new software.
-- Maintain backwards compatibility with classic TR-DOS software where possible.
+- Maintain backward compatibility with classic TR-DOS software where possible.
 
 NedoDOS was the answer. It was designed from scratch to be the "modern DOS" for the Russian Spectrum world, in the same way that ESXDOS is the modern DOS for the Western world.
 
@@ -599,7 +599,7 @@ The current stable version (mid-2024) is well-tested. Development snapshots are 
 
 ### 9.3 Community
 
-The NedoDOS community is centred on Russian-language forums and the NedoPC team's IRC/Discord channels. English-language support is limited but available via the wider Spectrum community.
+The NedoDOS community is centered on Russian-language forums and the NedoPC team's IRC/Discord channels. English-language support is limited but available via the wider Spectrum community.
 
 For Russian Spectrum enthusiasts, NedoDOS is the standard modern DOS in 2024. It is what TR-DOS was in the 1990s: the default way to manage files on a Spectrum.
 
@@ -630,4 +630,4 @@ For users of ZX Evolution hardware, these limitations are minor. For users of ot
 
 ## License
 
-This document is licensed under **Creative Commons Attribution-ShareAlike 4.0 International** (CC BY-SA 4.0). You are free to share and adapt this material, provided you give appropriate credit, indicate changes, and distribute derivative works under the same licence.
+This document is licensed under **Creative Commons Attribution-ShareAlike 4.0 International** (CC BY-SA 4.0). You are free to share and adapt this material, provided you give appropriate credit, indicate changes, and distribute derivative works under the same license.

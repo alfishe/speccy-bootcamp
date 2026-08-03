@@ -43,13 +43,13 @@ Each category has a distinct purpose:
 | **Memory snapshots** | No | The snapshot includes a player | 30–100 KB | Emulator-native playback |
 | **Modern embedded** | Source `.aks` is editable; the player formats are not | Yes — but format is player-coupled | 2–8 KB | Game / demo integration |
 
-The rest of this article catalogues every significant format in each category.
+The rest of this article catalogs every significant format in each category.
 
 ---
 
 ## Tracker Module Formats
 
-Tracker modules are the **source-of-truth** format: they store musical intent (notes, instruments, patterns, song structure) and require a tracker-specific player routine to convert to AY register writes at runtime. Each on-Spectrum tracker defined its own module format; the fragmentation of the 1990s produced the long tail of formats catalogued here.
+Tracker modules are the **source-of-truth** format: they store musical intent (notes, instruments, patterns, song structure) and require a tracker-specific player routine to convert to AY register writes at runtime. Each on-Spectrum tracker defined its own module format; the fragmentation of the 1990s produced the long tail of formats cataloged here.
 
 ### The Pro Tracker / Vortex Lineage
 
@@ -170,7 +170,7 @@ All three are **non-editable** — they capture a final register-write stream. T
 
 ## The `.AY` Container Format
 
-The `.ay` format is the most unusual entry in the catalogue. It is **not** a register dump and **not** a pure module — it is a hybrid: a ZX Spectrum memory snapshot containing the original module plus its player routine, packaged with metadata so an AY-aware player can locate and execute them.
+The `.ay` format is the most unusual entry in the catalog. It is **not** a register dump and **not** a pure module — it is a hybrid: a ZX Spectrum memory snapshot containing the original module plus its player routine, packaged with metadata so an AY-aware player can locate and execute them.
 
 ### Concept
 
@@ -351,7 +351,7 @@ VTII is the universal **reader** of legacy module formats. AT3 is the universal 
 
 ## References
 
-- [zxtunes.com software list](https://zxtunes.com/software_list.php) — authoritative catalogue of on-Spectrum trackers
+- [zxtunes.com software list](https://zxtunes.com/software_list.php) — authoritative catalog of on-Spectrum trackers
 - [zxart.ee](https://zxart.ee/) — largest archive of AY music, indexed by format
 - [Bulba's Vortex Project](https://bulba.untergrund.net/) — home of VTII and `ay_emul`
 - [Arkos Tracker 3 on GitHub](https://github.com/ArkosTracker/arkestracker) — modern embedded format source

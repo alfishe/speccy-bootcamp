@@ -29,8 +29,8 @@ The ULA generates a picture with the following regions:
 └────────────────────────────────────────────────────┘  around all four sides
 ```
 
-- **Paper area**: 256×192 pixels = 32×24 attribute cells, displayed at the centre of the frame
-- **Border area**: a single colour surrounding the paper, set by bits 3-5 of port `#FE`
+- **Paper area**: 256×192 pixels = 32×24 attribute cells, displayed at the center of the frame
+- **Border area**: a single color surrounding the paper, set by bits 3-5 of port `#FE`
 - **Total video frame**: 312 scanlines × ~448 T-states worth of horizontal time (48K)
 
 The ULA generates 256 pixels horizontally within a 224-T-state scanline. Each pixel is displayed for **approximately 0.9787 µs** (1/3.5 MHz × ~3.43 T-states).
@@ -101,7 +101,7 @@ When the Spectrum is connected via composite video (RF modulator on 48K, composi
 
 ### Dot Crawl
 
-The PAL colour encoding alternates the phase of the V (R-Y) component on each scanline. This causes the chroma information to appear to "crawl" vertically across multiple frames — visible as a wavy pattern along edges between saturated colours.
+The PAL color encoding alternates the phase of the V (R-Y) component on each scanline. This causes the chroma information to appear to "crawl" vertically across multiple frames — visible as a wavy pattern along edges between saturated colors.
 
 ```
 Frame N:   pixel X on scanline Y shows colour A
@@ -115,7 +115,7 @@ Result: horizontal edges between bright colours show visible "crawl"
 
 ### Colour Bleed (Chroma Crosstalk)
 
-Adjacent bright colours on the same scanline may bleed into each other because the chroma bandwidth of composite PAL (~1 MHz) is much lower than the luminance bandwidth (~5 MHz). This is why a single pixel of red surrounded by blue may appear purple on composite but red on RGB.
+Adjacent bright colors on the same scanline may bleed into each other because the chroma bandwidth of composite PAL (~1 MHz) is much lower than the luminance bandwidth (~5 MHz). This is why a single pixel of red surrounded by blue may appear purple on composite but red on RGB.
 
 ### Luminance Smearing
 
@@ -145,7 +145,7 @@ The original target hardware. Properties:
 - **Visible area**: ~85-90% of the transmitted frame, with substantial overscan crop
 - **Pixel aspect**: 1:1 after PAL compensation
 - **Colour reproduction**: accurate within PAL gamut; bright/dim distinction visible
-- **Border colour**: visible around paper, but the outermost 1-2 cm may be cropped
+- **Border color**: visible around paper, but the outermost 1-2 cm may be cropped
 - **Phosphor decay**: ~5-15 ms, providing natural motion smoothing
 - **Flicker**: minimal at 50 Hz, mild at 25 Hz (GigaScreen)
 
@@ -218,7 +218,7 @@ The most variable case. Emulators offer many options:
 
 - **Avoid pure saturated primaries adjacent to each other** (red next to blue, magenta next to cyan) — they bleed on composite
 - **Use the BRIGHT attribute to double your palette** but be aware that bright variants may wash out on poorly-adjusted CRTs
-- **For GigaScreen ([clone_video_modes.md](clone_video_modes.md))**: choose colour pairs with similar luminance to minimise 25 Hz flicker (see [interlace_and_flicker.md](interlace_and_flicker.md))
+- **For GigaScreen ([clone_video_modes.md](clone_video_modes.md))**: choose color pairs with similar luminance to minimize 25 Hz flicker (see [interlace_and_flicker.md](interlace_and_flicker.md))
 
 ### Pixel-Level Detail
 
@@ -241,12 +241,12 @@ The most variable case. Emulators offer many options:
 |---|---|---|
 | Picture squeezed horizontally on LCD | Pixel aspect not corrected | Enable 4:3 aspect ratio in emulator/upscaler |
 | Circles look like ellipses on LCD | Pixel aspect correction off | Enable PAL aspect correction |
-| Circles look like tall ellipses on PVM | RGB monitor not applying PAL correction | This is correct behaviour — design artwork for it |
+| Circles look like tall ellipses on PVM | RGB monitor not applying PAL correction | This is correct behavior — design artwork for it |
 | Diagonal lines look jagged on LCD | No scanline simulation | Enable CRT shader |
-| Saturated colours bleed on composite | Composite chroma crosstalk | Switch to RGB (SCART) output |
+| Saturated colors bleed on composite | Composite chroma crosstalk | Switch to RGB (SCART) output |
 | Border looks "cropped" on emulator | Emulator is showing full frame (no overscan) | This is correct — real CRTs cropped this |
 | Image rolls or won't sync | Refresh rate mismatch (50 Hz source, 60 Hz display) | Use OSSC with proper line multiplication, or VRR display |
-| Flicker visible on GigaScreen | 25 Hz attribute alternation | Use lower-contrast colour pairs; see [interlace_and_flicker.md](interlace_and_flicker.md) |
+| Flicker visible on GigaScreen | 25 Hz attribute alternation | Use lower-contrast color pairs; see [interlace_and_flicker.md](interlace_and_flicker.md) |
 
 ---
 
@@ -260,7 +260,7 @@ For historically accurate Spectrum graphics, the reference display is a **1980s 
 - Phosphor decay provides natural motion smoothing
 - 50 Hz refresh is at the edge of flicker perception but acceptable
 
-All other display types introduce some deviation from this reference. Emulators with CRT shaders come closest; pixel-perfect modern LCDs are the most accurate in pixel terms but the least accurate in motion behaviour.
+All other display types introduce some deviation from this reference. Emulators with CRT shaders come closest; pixel-perfect modern LCDs are the most accurate in pixel terms but the least accurate in motion behavior.
 
 ---
 
@@ -269,7 +269,7 @@ All other display types introduce some deviation from this reference. Emulators 
 - [Video output hardware](../../03_io/peripherals/video_output.md) — connectors, cables, modulators, encoders
 - [Interlace and flicker](interlace_and_flicker.md) — perception physics, CRT vs LCD
 - [Video frame overview](video_frame_overview.md) — PAL fundamentals and ULA frame cycle
-- [Color system](color_system.md) — the 15-colour palette, BRIGHT, FLASH, colour clash
+- [Color system](color_system.md) — the 15-color palette, BRIGHT, FLASH, color clash
 - [Border effects](border_effects.md) — practical raster bar and timing code
 - [Clone video modes](clone_video_modes.md) — GigaScreen, hires, multicolor
 - [Video frame comparison](video_frame_comparison.md) — per-model timing comparison

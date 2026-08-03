@@ -142,7 +142,7 @@ The +3 uses three I/O ports for the WD1772-PH, plus one bit of the general-purpo
 | `#FF` | (floating) | +3DOS ROM page control | Writing to `#FF` pages +3DOS in/out (see §3.3). |
 | `#7FFD` | (floating) | Configuration latch | Motor (bit 5), side select (bit 6), plus RAM/ROM config (see §3.4). |
 
-Wait — that's **four** WD1772 ports (`#1F`, `#3F`, `#5F`, `#7F`), exactly the same pattern as the Beta Disk Interface! The +3's port-decoding logic recognises the **low 5 bits** of the port address (`A0..A4`) for the WD1772 and ignores bits 5–7. So actually:
+Wait — that's **four** WD1772 ports (`#1F`, `#3F`, `#5F`, `#7F`), exactly the same pattern as the Beta Disk Interface! The +3's port-decoding logic recognizes the **low 5 bits** of the port address (`A0..A4`) for the WD1772 and ignores bits 5–7. So actually:
 
 - `#1F`, `#3F`, `#5F`, `#7F` all access the WD1772 (just like on the Beta Disk Interface).
 - Port `#FF` is a separate decode that controls +3DOS ROM paging.
@@ -255,7 +255,7 @@ The two most important practical differences are:
 
 1. **The WD1772 has no built-in spin-up timer.** Software must turn on the motor (via `#7FFD` bit 5), wait at least 0.5 seconds (preferably 1 second for safety) for the drive to reach operating speed, and only then issue Type II or Type III commands. The +3DOS ROM handles this automatically; user code that bypasses +3DOS must do it manually.
 
-2. **The WD1772 has no built-in motor control.** On the +3, software must turn the motor on and off explicitly via `#7FFD` bit 5. There is no "the motor stays on for 15 index pulses after the last command" behaviour — if software forgets to turn the motor off, it stays on forever (wearing out the drive belt and wasting power).
+2. **The WD1772 has no built-in motor control.** On the +3, software must turn the motor on and off explicitly via `#7FFD` bit 5. There is no "the motor stays on for 15 index pulses after the last command" behavior — if software forgets to turn the motor off, it stays on forever (wearing out the drive belt and wasting power).
 
 ### 4.3 The double-density capability
 
@@ -467,7 +467,7 @@ Amstrad shipped a small number of variants of the +3 itself:
 
 ### 7.4 Compatible clones
 
-No Spectrum clone (Pentagon, Scorpion, etc.) cloned the +3's floppy subsystem — they all used the Beta Disk Interface port map instead. This is because the +3 was a relatively late Western product (1987), and the Soviet clones had already standardised on the Beta Disk Interface / TR-DOS model by 1989.
+No Spectrum clone (Pentagon, Scorpion, etc.) cloned the +3's floppy subsystem — they all used the Beta Disk Interface port map instead. This is because the +3 was a relatively late Western product (1987), and the Soviet clones had already standardized on the Beta Disk Interface / TR-DOS model by 1989.
 
 The ZX Spectrum Next, ZX Evolution, and other modern FPGA clones typically include **both** a Beta Disk-compatible FDC and an optional +3-compatible FDC, so they can run either TR-DOS or +3DOS software. The +3 mode is usually selected via a configuration register.
 

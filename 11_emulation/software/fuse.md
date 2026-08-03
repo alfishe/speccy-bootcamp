@@ -237,7 +237,7 @@ For disk images, Fuse supports:
 - **TRD** — TR-DOS disk image (for Russian clones)
 - **SCL** — Russian disk layout format
 
-Loading from tape is faithful — the user sees the familiar coloured loading stripes, hears the loading screech, and waits (or accelerates) just as on real hardware.
+Loading from tape is faithful — the user sees the familiar colored loading stripes, hears the loading screech, and waits (or accelerates) just as on real hardware.
 
 ---
 

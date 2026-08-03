@@ -34,13 +34,13 @@ Where a term has multiple meanings or is used differently across the three track
 
 - **Amstrad ASIC** — The custom gate-array chip (Amstrad part numbers 40084 and 40085) used in the ZX Spectrum +2A and +3. Replaced the discrete logic of the 128K/+2, changed the memory contention pattern from `6-5-4-3-2-1-0-0` to `1-0-7-6-5-4-3-2`, and added the `#1FFD` paging register with CP/M-compatible 64 KB mode. *See [zx_spectrum_plus2a_plus3.md](../02_hardware/original/zx_spectrum_plus2a_plus3.md).*
 
-- **AY-3-8912** — The General Instruments (later Microchip) sound chip used in every ZX Spectrum from the 128K onward, in every Soviet clone with sound, and synthesised in essentially every FPGA Spectrum. Three-voice PSG (Programmable Sound Generator) with a noise generator and envelope. The Soviet clone is the Т34ВГ1; Yamaha's YM2149 is software-compatible and was used in some clones. *See [ay_3_8912.md](../06_sound/hardware/ay_3_8912.md).*
+- **AY-3-8912** — The General Instruments (later Microchip) sound chip used in every ZX Spectrum from the 128K onward, in every Soviet clone with sound, and synthesized in essentially every FPGA Spectrum. Three-voice PSG (Programmable Sound Generator) with a noise generator and envelope. The Soviet clone is the Т34ВГ1; Yamaha's YM2149 is software-compatible and was used in some clones. *See [ay_3_8912.md](../06_sound/hardware/ay_3_8912.md).*
 
 - **Beeper** — The 1-bit speaker driven directly by bit 4 of the `#FE` ULA port on every original Spectrum. No dedicated sound chip on the 48K — only the beeper. The demoscene's "1-bit music" genre is entirely beeper-driven. *See [beeper_synthesis.md](../06_sound/synthesis/beeper_synthesis.md) and [1bit_music_scene.md](../07_demoscene/1bit_music_scene.md).*
 
 - **Beta 128** — The standard Soviet-era disk interface, designed by Dmitry Mikhalchenko for the Pentagon. Based on the Western Beta interface but using the VG-93 (WD1793-compatible) FDC. The TR-DOS disk operating system runs on top of it. Built into nearly every Soviet clone. *See [beta_disk_interface.md](../03_io/storage/beta_disk_interface.md) and [trdos.md](../04_operating_systems/trdos.md).*
 
-- **Copper** — The raster coprocessor in the ZX Spectrum Next, inspired by the Amiga copper. Executes a program of `WAIT` and `MOVE` instructions synchronised to the video beam, allowing per-scanline register changes for effects like raster bars, mid-scanline palette swaps, and dynamic layer mixing. *See [zx_next.md](../02_hardware/newgen/zx_next.md).*
+- **Copper** — The raster coprocessor in the ZX Spectrum Next, inspired by the Amiga copper. Executes a program of `WAIT` and `MOVE` instructions synchronized to the video beam, allowing per-scanline register changes for effects like raster bars, mid-scanline palette swaps, and dynamic layer mixing. *See [zx_next.md](../02_hardware/newgen/zx_next.md).*
 
 - **Covox** — A simple resistor-ladder DAC attached to a Z80 parallel port, providing 8-bit sampled audio without a dedicated sound chip. Common on Soviet clones as an upgrade; also seen as the "SounDrive" interface. *See [covox_sounDrive.md](../06_sound/hardware/covox_sounDrive.md).*
 
@@ -104,7 +104,7 @@ Where a term has multiple meanings or is used differently across the three track
 
 - **Pixel file** — The 6144-byte region of RAM (`#4000-#57FF`) containing the 256×192 1-bit-per-pixel bitmap, organized as 24 rows × 8 third-rows × 32 bytes per row. The most counter-intuitive aspect of the layout is the third-row interleave. *See [memory_maps.md](../10_references/memory_maps.md) and [screen_access.md](../05_development/06_graphics/screen_access.md).*
 
-- **Raster** — The beam position of the TV/monitor, expressed as (scanline, T-state-within-scanline). Raster effects are those synchronised to specific beam positions; the ZX Spectrum Next's copper is a hardware raster coprocessor.
+- **Raster** — The beam position of the TV/monitor, expressed as (scanline, T-state-within-scanline). Raster effects are those synchronized to specific beam positions; the ZX Spectrum Next's copper is a hardware raster coprocessor.
 
 - **Scanline** — One horizontal pass of the video beam. Original Spectrums have 312 scanlines per frame (48K) or 311 (128K/+2/+2A/+3); the Pentagon has 320. *See [video_frame_comparison.md](../05_development/05_display_and_timing/video_frame_comparison.md).*
 
@@ -208,7 +208,7 @@ Where a term has multiple meanings or is used differently across the three track
 
 ## 6. Cultural and Demoscene Terms
 
-- **1-bit music** — Music synthesised using only the beeper (1-bit output), without a dedicated sound chip. A distinctive Soviet/Russian scene specialty. Pioneers include Follin, Holtz, and (Russian) Shiru. *See [1bit_music_scene.md](../07_demoscene/1bit_music_scene.md) and [beeper_synthesis.md](../06_sound/synthesis/beeper_synthesis.md).*
+- **1-bit music** — Music synthesized using only the beeper (1-bit output), without a dedicated sound chip. A distinctive Soviet/Russian scene specialty. Pioneers include Follin, Holtz, and (Russian) Shiru. *See [1bit_music_scene.md](../07_demoscene/1bit_music_scene.md) and [beeper_synthesis.md](../06_sound/synthesis/beeper_synthesis.md).*
 
 - **AY music** — Music composed for and played back on the AY-3-8912 (or YM2149) PSG. The dominant genre on original Spectrums from the 128K onward and on every Soviet clone. *See [ay_music_formats.md](../06_sound/trackers_and_formats/ay_music_formats.md).*
 

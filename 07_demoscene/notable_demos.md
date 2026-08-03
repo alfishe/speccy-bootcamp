@@ -2,7 +2,7 @@
 
 # Notable Demos — Analysis of Landmark Works
 
-> **Scope**: This article catalogues **specific ZX Spectrum demos that pushed the platform past its perceived limits**, with analysis of what each achieved and why it mattered. It is the empirical companion to the technique-focussed articles ([effects_catalog.md](effects_catalog.md), [multicolor_techniques.md](multicolor_techniques.md), [precalc_trigonometry.md](precalc_trigonometry.md)) and the historical articles ([demoscene_history.md](demoscene_history.md), [soviet_demo_scene.md](soviet_demo_scene.md)).
+> **Scope**: This article catalogs **specific ZX Spectrum demos that pushed the platform past its perceived limits**, with analysis of what each achieved and why it mattered. It is the empirical companion to the technique-focussed articles ([effects_catalog.md](effects_catalog.md), [multicolor_techniques.md](multicolor_techniques.md), [precalc_trigonometry.md](precalc_trigonometry.md)) and the historical articles ([demoscene_history.md](demoscene_history.md), [soviet_demo_scene.md](soviet_demo_scene.md)).
 >
 > The article is deliberately selective: rather than list every demo ever released (Pouet.net and ZXArt.ee do that), it covers the **landmark works** that defined genres, introduced techniques, or represented the state of the art at their moment of release. Each entry includes the year, group, target platform, the techniques it pioneered or perfected, and where to find more detail.
 
@@ -88,9 +88,9 @@ A non-exhaustive timeline of landmark demos, with more detail in the era-specifi
 
 ### 2.3 Geographic Distribution
 
-Landmark demos are not evenly distributed geographically. The vast majority of post-1996 landmark demos come from the **post-Soviet space** (Russia, Ukraine, Belarus, Kazakhstan, the Baltic states), reflecting the Soviet scene's scale and continuity. Western Europe (UK, Germany, Finland, Poland, Czech Republic, Slovakia) produced most of the pre-1996 landmarks and a smaller but steady stream afterwards. The North American and Asian scenes have produced few Spectrum-specific landmarks.
+Landmark demos are not evenly distributed geographically. The vast majority of post-1996 landmark demos come from the **post-Soviet space** (Russia, Ukraine, Belarus, Kazakhstan, the Baltic states), reflecting the Soviet scene's scale and continuity. Western Europe (UK, Germany, Finland, Poland, Czech Republic, Slovakia) produced most of the pre-1996 landmarks and a smaller but steady stream afterward. The North American and Asian scenes have produced few Spectrum-specific landmarks.
 
-The geographic split matters because the two traditions developed **different aesthetic priorities**: Western demos tend to emphasise coding tricks and effect variety; Soviet demos tend to emphasise multicolor richness and musical sophistication. The landmark works of each tradition are not directly comparable.
+The geographic split matters because the two traditions developed **different aesthetic priorities**: Western demos tend to emphasize coding tricks and effect variety; Soviet demos tend to emphasize multicolor richness and musical sophistication. The landmark works of each tradition are not directly comparable.
 
 ### 2.4 The Article's Scope Limits
 
@@ -108,7 +108,7 @@ A typical 1987 crack intro contained:
 
 - A **title screen** with the group's logo (often hand-drawn pixel art, sometimes a converted font).
 - A **scroll text** — a horizontally moving text line at the bottom of the screen, typically 40 characters wide, with the group's "news" and greetings to other groups.
-- A **simple visual effect** behind the scroll text: animated colour bars (border-only), a bouncing sprite, or a static image.
+- A **simple visual effect** behind the scroll text: animated color bars (border-only), a bouncing sprite, or a static image.
 - **Beeper music**: a single-voice melody played by toggling the speaker at a fixed rate. The music had no envelopes, no chords, no percussion — just a sequence of pitched beeps.
 
 Total code size: typically 2–8 KB. Total music data: typically 200–500 bytes.
@@ -119,7 +119,7 @@ The crack intro is the **origin of the demoscene** as a distinct cultural form. 
 
 1. **It separated the demo from the game**. Before crack intros, the only "demos" were the game's own attract mode. The crack intro was the first time a Spectrum user saw original code that wasn't part of a commercial product.
 2. **It established the competition**. Crackers competed on intro quality because intro quality was a proxy for cracker skill. The groups with the best intros (The Surge, Flash, Ikari, MAD, Lord Blagger's tools) attracted the best suppliers.
-3. **It built the techniques**. The scroll text, the bouncing sprite, the colour bars, the beeper melody — these were the building blocks that the demoscene later refined into plasma, tunnel, and multicolor. Every later technique has an ancestor in a 1987 crack intro.
+3. **It built the techniques**. The scroll text, the bouncing sprite, the color bars, the beeper melody — these were the building blocks that the demoscene later refined into plasma, tunnel, and multicolor. Every later technique has an ancestor in a 1987 crack intro.
 
 ### 3.3 The Hardware Baseline
 
@@ -133,14 +133,14 @@ These constraints shaped the aesthetic of the era: small, tight, focused on what
 
 ### 3.4 Notable Groups of the Era
 
-Specific demo titles from this era are difficult to verify today — most crack intros were unsigned or attributed only by rumour. Well-documented groups active in this period include:
+Specific demo titles from this era are difficult to verify today — most crack intros were unsigned or attributed only by rumor. Well-documented groups active in this period include:
 
 - **The Surge** (UK) — early beeper-music pioneers.
 - **Ikari** (European, multi-national) — prolific crackers with distinctive intro style.
 - **MAD** — early Hungarian group, part of the Eastern European tradition that later fed into the Soviet scene.
 - **Lord Blagger** (UK) — produced well-known cracking tools and accompanying intros.
 
-The intros themselves are mostly anonymous — viewers in 1987 knew them by group, not by title. ZXArt.ee and Pouet.net catalogue many of these as "intro" or "cracktro" without specific titles.
+The intros themselves are mostly anonymous — viewers in 1987 knew them by group, not by title. ZXArt.ee and Pouet.net catalog many of these as "intro" or "cracktro" without specific titles.
 
 ### 3.5 The Transition to Standalone Demos
 
@@ -153,7 +153,7 @@ The first standalone Spectrum demos (1989) were essentially crack intros repacka
 To convey the leap from crack intro to early standalone demo, here is what a typical 1989 Spectrum demo looked like:
 
 - **Load**: tape-loading screen with the group's name in large font.
-- **Part 1 (20 seconds)**: scroll text over a colour-bar effect, beeper music playing.
+- **Part 1 (20 seconds)**: scroll text over a color-bar effect, beeper music playing.
 - **Part 2 (15 seconds)**: a single rotating wireframe cube (16-bit fixed-point), no music.
 - **Part 3 (10 seconds)**: a static "greet screen" with the names of 20+ other groups.
 - **End**: blank screen, music fades, demo halts.
@@ -228,7 +228,7 @@ The Czech/Slovak scene hosted the first major Spectrum-specific demoparty, **For
 
 ### 4.6 The Polish Scene
 
-Poland was the other major Western-adjacent centre. Polish groups tended to bridge the Western and Soviet scenes, both geographically and culturally:
+Poland was the other major Western-adjacent center. Polish groups tended to bridge the Western and Soviet scenes, both geographically and culturally:
 
 - **X-Trade Syndicate** (mid-1990s onward) — Polish group that bridged into the post-Soviet era; known for technically ambitious demos that competed directly with the Russian scene's output.
 - **LANACS** and other Polish groups — participated in early megademo development.
@@ -237,9 +237,9 @@ The Polish scene also developed strong ties to the Atari and Commodore scenes, l
 
 ### 4.7 The Western European and Nordic Scene
 
-In parallel with Central Europe, a smaller but significant Western scene existed in **the United Kingdom, Germany, Finland, and the Netherlands**. Western European groups tended to favour effect variety and coding tricks over multicolor richness (which required timing-precise Pentagon-style hardware that was less common in the West). Notable activity included:
+In parallel with Central Europe, a smaller but significant Western scene existed in **the United Kingdom, Germany, Finland, and the Netherlands**. Western European groups tended to favor effect variety and coding tricks over multicolor richness (which required timing-precise Pentagon-style hardware that was less common in the West). Notable activity included:
 
-- **UK groups** — direct inheritors of the crack intro tradition, producing demos that emphasised scroll-text culture and visual humour.
+- **UK groups** — direct inheritors of the crack intro tradition, producing demos that emphasized scroll-text culture and visual humor.
 - **Finnish groups** — a small but technically accomplished scene, with cross-pollination to the C64 and Amiga scenes.
 - **German groups** — bridges to the strong German C64 and PC scenes.
 
@@ -264,7 +264,7 @@ To convey the state of the art in the Western Golden Age, here is what a typical
 - **Intro (15 seconds)**: animated logo, scroll text, AY music starts.
 - **Part 1 — plasma (30 seconds)**: smooth XOR plasma in attribute cells, music continues.
 - **Part 2 — 3D wireframe (20 seconds)**: rotating cube or star, hidden-line removal, fades out.
-- **Part 3 — raster bars (25 seconds)**: horizontal colour bars in the border, synced to the music beat.
+- **Part 3 — raster bars (25 seconds)**: horizontal color bars in the border, synced to the music beat.
 - **Part 4 — starfield (20 seconds)**: 3D starfield with perspective.
 - **Part 5 — greet screen (30 seconds)**: scrolling list of 40+ group names, music shifts to a different pattern.
 - **Credits (15 seconds)**: names of coder, musician, graphician; demo halts.
@@ -275,7 +275,7 @@ Total: ~3 minutes, ~50 KB on 128K hardware. By 1995 standards, this was state of
 
 ## 5. The Soviet Peak (1996–2005)
 
-Between 1996 and 2005, the centre of gravity of the Spectrum demoscene shifted decisively to the **post-Soviet space** (Russia, Ukraine, Belarus, Kazakhstan, the Baltic states). The Soviet scene had been active since 1993, but from 1996 onward it produced the bulk of the platform's landmark demos and effectively defined the form for the next decade. This section is the demos-and-groups view of the era; the cultural, hardware, and music-industry aspects are covered in [soviet_demo_scene.md](soviet_demo_scene.md).
+Between 1996 and 2005, the center of gravity of the Spectrum demoscene shifted decisively to the **post-Soviet space** (Russia, Ukraine, Belarus, Kazakhstan, the Baltic states). The Soviet scene had been active since 1993, but from 1996 onward it produced the bulk of the platform's landmark demos and effectively defined the form for the next decade. This section is the demos-and-groups view of the era; the cultural, hardware, and music-industry aspects are covered in [soviet_demo_scene.md](soviet_demo_scene.md).
 
 ### 5.1 Why the Soviet Scene Took Over
 
@@ -301,21 +301,21 @@ See [soviet_demo_scene.md](soviet_demo_scene.md) §2 for the full Pentagon hardw
 
 ### 5.3 The 8×1 Multicolor Revolution
 
-The defining technical first of the Soviet peak was **8×1 multicolor** — also called "true multicolor" — which overrode the Spectrum's 8×8 attribute grid with a new attribute every 8 pixels (every 4 T-states during paper scan). The result: up to 32 colours per scanline, or 6,144 attribute cells per frame instead of 768.
+The defining technical first of the Soviet peak was **8×1 multicolor** — also called "true multicolor" — which overrode the Spectrum's 8×8 attribute grid with a new attribute every 8 pixels (every 4 T-states during paper scan). The result: up to 32 colors per scanline, or 6,144 attribute cells per frame instead of 768.
 
 The technique was known in theory in the early 1990s, but it was perfected on the Pentagon between 1997 and 1999. The breakthrough was realising that:
 
 - The ULA reads the attribute byte at a **fixed, predictable cycle** in each character row.
-- The CPU can change the attribute byte at `#5800 + row*32 + col` **just before** the ULA reads it, then change it again immediately afterwards.
-- The result is that each 8-pixel-wide cell can have its own INK and PAPER, eliminating colour clash for any effect that respects the 8-pixel column boundary.
+- The CPU can change the attribute byte at `#5800 + row*32 + col` **just before** the ULA reads it, then change it again immediately afterward.
+- The result is that each 8-pixel-wide cell can have its own INK and PAPER, eliminating color clash for any effect that respects the 8-pixel column boundary.
 
 The cost was enormous: ~150,000 T-states per frame for a full 8×1 multicolor picture, leaving only ~34,000 T-states for everything else (music, effect, framework). Full details are in [multicolor_techniques.md](multicolor_techniques.md) §4.
 
 The 8×1 multicolor revolution made possible:
 
-- **Photorealistic images** in Spectrum "screens" — converted from JPEG with 32 colours per line.
-- **Smooth colour gradients** that the original hardware could not produce.
-- **Multicolor animations** — 50 Hz motion pictures with per-line colour.
+- **Photorealistic images** in Spectrum "screens" — converted from JPEG with 32 colors per line.
+- **Smooth color gradients** that the original hardware could not produce.
+- **Multicolor animations** — 50 Hz motion pictures with per-line color.
 
 It became the visual signature of the Soviet peak: a 2003 Pentagon demo that did *not* use 8×1 multicolor was considered retrograde.
 
@@ -362,7 +362,7 @@ The Soviet peak produced dozens of significant groups. Some of the best-document
 - **Wecrew**, **Proxima**, **Phantasy**, **Sinclair Club**, **Mindflow**, **Sage**, **Antares**, **Digital Reality**, **Infinite** — all active in the late 1990s / early 2000s peak.
 - **SkrewJack**, **Eremine**, **C-jump** — individual sceners whose work appeared across multiple group productions.
 
-Specific demo titles from this era are harder to verify from Western archives; ZXArt.ee and Pouet.net catalogue several hundred Soviet-era productions, but attributions and release years are sometimes uncertain. The safest reference for any specific title is the disk-magazine archive at [zxpress.ru](https://zxpress.ru) (§7).
+Specific demo titles from this era are harder to verify from Western archives; ZXArt.ee and Pouet.net catalog several hundred Soviet-era productions, but attributions and release years are sometimes uncertain. The safest reference for any specific title is the disk-magazine archive at [zxpress.ru](https://zxpress.ru) (§7).
 
 ### 5.8 The 2003 Peak
 
@@ -385,7 +385,7 @@ To convey the state of the art at the Soviet peak, here is what a typical 2003 P
 
 - **Load (10–30 seconds)**: TR-DOS disk load, with a static title screen showing the group logo.
 - **Intro (20 seconds)**: animated logo, PT3 music starts, fade-in.
-- **Part 1 — multicolor image (30 seconds)**: a photograph or painted image, rendered in 8×1 multicolor with 32 colours per line.
+- **Part 1 — multicolor image (30 seconds)**: a photograph or painted image, rendered in 8×1 multicolor with 32 colors per line.
 - **Part 2 — multicolor video (30 seconds)**: a short clip of pre-rendered animation (a face, a landscape, an abstract shape), streamed from disk at 25 Hz.
 - **Part 3 — 3D object (20 seconds)**: a rotating filled-polygon object (cube, ship, or abstract shape) with hidden-surface removal.
 - **Part 4 — plasma or twister (25 seconds)**: a classic demoscene effect, but in 8×1 multicolor (smooth gradients).
@@ -437,16 +437,16 @@ This is in stark contrast to the Soviet era, where a demo was developed on a sin
 
 The most important hardware development of the modern era is the **ZX Spectrum Next** (Kickstarter 2017, shipped 2017–2020). The Next is a modern FPGA-based Spectrum-compatible machine with substantial extensions:
 
-- **Layer 2**: a 256-colour framebuffer at 320×256, in addition to the classic Spectrum display.
-- **Tilemap**: a hardware tilemap engine, like the C64's character mode but with 256-colour tiles.
-- **Hardware sprites**: up to 64 independent sprites per frame, with 256-colour palettes.
+- **Layer 2**: a 256-color framebuffer at 320×256, in addition to the classic Spectrum display.
+- **Tilemap**: a hardware tilemap engine, like the C64's character mode but with 256-color tiles.
+- **Hardware sprites**: up to 64 independent sprites per frame, with 256-color palettes.
 - **Copper unit**: a programmable display-list processor similar to the Amiga's copper.
 - **28 MHz Z80** (in turbo mode), in addition to the original 3.5 MHz.
 - **2 MB RAM**, expanded via the esxDOS interface.
 - **Two AY chips** (six voices), in addition to the original beeper.
 - **PCM playback** through the DMA engine.
 
-The Next is described in detail in [demo_frameworks.md](demo_frameworks.md) §9. From a landmark-demos perspective, the Next matters because it allowed Spectrum sceners to write demos in a new register: 256-colour visuals, hardware-accelerated sprites, and Amiga-level sound. The Next-targeted demos are the only modern demos that compete on equal terms with the C64 and Atari ST demoscenes for visual richness on stock "8-bit-class" hardware.
+The Next is described in detail in [demo_frameworks.md](demo_frameworks.md) §9. From a landmark-demos perspective, the Next matters because it allowed Spectrum sceners to write demos in a new register: 256-color visuals, hardware-accelerated sprites, and Amiga-level sound. The Next-targeted demos are the only modern demos that compete on equal terms with the C64 and Atari ST demoscenes for visual richness on stock "8-bit-class" hardware.
 
 Notable Next-targeted demos have premiered at the Next-directed parties and at Forever; the Next-specific party circuit is still forming as of 2024.
 
@@ -481,7 +481,7 @@ To convey the modern era's state of the art, here is what a typical 2023 Next-ta
 
 - **Load (instant)**: the demo loads from SD card via esxDOS, no perceptible delay.
 - **Intro (15 seconds)**: animated logo on Layer 2, PCM soundtrack starts, copper bars in the border.
-- **Part 1 — Layer 2 video (30 seconds)**: full 256-colour animation, equivalent to an Amiga AGA demo.
+- **Part 1 — Layer 2 video (30 seconds)**: full 256-color animation, equivalent to an Amiga AGA demo.
 - **Part 2 — hardware sprites (25 seconds)**: dozens of moving sprites with rotation and scaling.
 - **Part 3 — tilemap (20 seconds)**: a scrolling level reminiscent of a Nintendo game, but rendered as a demo effect.
 - **Part 4 — classic 8×1 multicolor (30 seconds)**: a callback to the Soviet peak, rendered on the legacy ULA layer.
@@ -566,7 +566,7 @@ Where this article is uncertain, it says so explicitly. For definitive attributi
 - [demoscene_history.md](demoscene_history.md) — the full cultural and historical narrative. §§3–6 of this article correspond to §§3–8 of the history article.
 - [soviet_demo_scene.md](soviet_demo_scene.md) — the dedicated article on the post-Soviet scene. §5 of this article depends heavily on §§2–6 of that article.
 - [demoscene_platforms.md](demoscene_platforms.md) — the Spectrum vs C64/Amiga/Atari ST/MSX comparison that contextualises "what made the Spectrum demos unique".
-- [effects_catalog.md](effects_catalog.md) — the techniques themselves. Every demo discussed in §§3–6 is built from effects catalogued there.
+- [effects_catalog.md](effects_catalog.md) — the techniques themselves. Every demo discussed in §§3–6 is built from effects cataloged there.
 - [multicolor_techniques.md](multicolor_techniques.md) — the 8×1 multicolor technique that defines the Soviet peak (§5.3 of this article).
 - [precalc_trigonometry.md](precalc_trigonometry.md) — the precomputed-table foundation underlying most 3D and plasma effects.
 - [compression_packing.md](compression_packing.md) — the depackers and compressors that make size-coding possible.

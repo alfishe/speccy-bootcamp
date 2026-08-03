@@ -176,7 +176,7 @@ sdcc -mz80 --no-std-crt0 --code-loc 0x8000 --data-loc 0xC000 \
 | `--data-loc N`   | Address of the `_DATA` segment (initialized data). |
 | `--stack-loc N`  | Initial value of SP. |
 
-These are *linker* options, but `sdcc` forwards them to `sdldz80` automatically.
+These are *linker* options, but `sdcc` forward them to `sdldz80` automatically.
 
 ### Optimization
 

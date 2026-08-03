@@ -47,7 +47,7 @@ Most commercial software from the TR-DOS era is distributed today as .SCL files 
 
 ### 1.3 A short history
 
-The **.TRD** format originated in the early 1990s with the first PC-based Spectrum emulators. The format was standardised by the Russian Spectrum community (zxevo.ru, zx-pk.ru) in the late 1990s.
+The **.TRD** format originated in the early 1990s with the first PC-based Spectrum emulators. The format was standardized by the Russian Spectrum community (zxevo.ru, zx-pk.ru) in the late 1990s.
 
 The **.SCL** format was created around the same time, originally as a "compressed" alternative to .TRD for software distribution. The format was designed by the authors of the X128 emulator and was quickly adopted by other emulators.
 
@@ -264,7 +264,7 @@ Because the .SCL format stores only the file's name, type, length, and data, it 
 
 In particular, .SCL files **cannot represent copy-protected disks**. Any disk that uses non-standard sector layouts, deliberately corrupted sectors, or sector-placement-dependent protection (the common techniques used by 1980s commercial software) cannot be faithfully stored in a .SCL file. For such disks, use .TRD (which at least preserves the sector-by-sector layout) or — better — a flux-level format like .SCP (see [scp_format.md](scp_format.md)).
 
-### 3.7 Loader behaviour
+### 3.7 Loader behavior
 
 When an emulator loads a .SCL file into its virtual floppy drive, it does the following:
 

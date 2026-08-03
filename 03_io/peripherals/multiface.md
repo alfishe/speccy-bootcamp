@@ -194,7 +194,7 @@ The complete flow, step by step:
 
 2. **Press the button.** The red switch shorts the `/NMI` bus line to ground. The Z80 finishes the current instruction, pushes the return address onto the stack, and jumps to `#0066`.
 
-3. **The CPU fetches `#0066`.** This is an instruction fetch (`M1` cycle) at the NMI vector. The Multiface's decode logic — built from a 5-input NOR gate (74LS260) feeding an 8-input NAND (74LS30) and a 3-input NOR (74LS27) — recognises `A0=0, A1=1, A2=1, A3=0, ..., A15=0` combined with `M1=0, MREQ=0, RD=0`. It clocks the page-in flip-flop.
+3. **The CPU fetches `#0066`.** This is an instruction fetch (`M1` cycle) at the NMI vector. The Multiface's decode logic — built from a 5-input NOR gate (74LS260) feeding an 8-input NAND (74LS30) and a 3-input NOR (74LS27) — recognizes `A0=0, A1=1, A2=1, A3=0, ..., A15=0` combined with `M1=0, MREQ=0, RD=0`. It clocks the page-in flip-flop.
 
 4. **Page-in.** The flip-flop's output drives the Multiface's `/ROMCS` and `/RAMCS` low and asserts a signal that disables the main ROM. From the next bus cycle onward:
    - Reads from `#0000-#1FFF` return bytes from the Multiface ROM

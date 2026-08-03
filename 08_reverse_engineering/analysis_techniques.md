@@ -102,7 +102,7 @@ Then press F5 in VS Code. DeZog connects, loads the snapshot, and you get:
 - **Conditional breakpoints** (e.g., break at `#8000` only when `B == 0`)
 - **Memory view** with hex/ASCII
 - **Call stack** when stepping through nested calls
-- **Reverse debugging** — step backwards through execution history
+- **Reverse debugging** — step backward through execution history
 
 For full DeZog setup details, see [debugging.md](../09_toolchain/debugging.md).
 
@@ -497,16 +497,16 @@ Trace logging works even on self-modifying code, encrypted code (after decryptio
 
 ### Reverse Debugging
 
-ZEsarUX supports **reverse execution** — the ability to step backwards through previously executed code. This is invaluable for answering the question "how did the program get into this state?"
+ZEsarUX supports **reverse execution** — the ability to step backward through previously executed code. This is invaluable for answering the question "how did the program get into this state?"
 
 The typical workflow:
 
 1. Set a breakpoint at a crash or interesting behavior.
 2. When it triggers, examine the state.
-3. Step **backwards** to find the instruction that set the bad value.
+3. Step **backward** to find the instruction that set the bad value.
 4. Set a breakpoint at that instruction, run forward, and watch the bug develop.
 
-In ZEsarUX, press `ri` (reverse instruction) in the debugger to undo the last executed instruction. You can also use `rb` (reverse breakpoint) to run backwards until a specific address is reached.
+In ZEsarUX, press `ri` (reverse instruction) in the debugger to undo the last executed instruction. You can also use `rb` (reverse breakpoint) to run backward until a specific address is reached.
 
 > [!WARNING]
 > Reverse debugging requires significant memory — the entire execution history is kept in RAM. For long sessions, this can consume gigabytes. Use sparingly: capture the interesting moment with a breakpoint, then use reverse-stepping only in the immediate vicinity.

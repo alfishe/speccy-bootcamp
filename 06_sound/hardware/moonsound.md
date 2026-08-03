@@ -55,8 +55,8 @@ While the TSFM uses Yamaha's **OPN** family (the same lineage as the Sega Genesi
 
 ### Secondary Engine Differences
 
-- **TSFM provides SSG**: It bundles a fully backwards-compatible AY-style Programmable Sound Generator. This allows TSFM to play legacy ZX Spectrum chiptunes natively.
-- **MoonSound provides Wavetable**: It completely drops the SSG in favor of a 24-channel sample playback engine with a 1MB General MIDI ROM. **MoonSound has zero backwards compatibility with the AY.** It cannot play legacy ZX Spectrum chiptunes unless they are completely rewritten to use FM or PCM samples.
+- **TSFM provides SSG**: It bundles a fully backward-compatible AY-style Programmable Sound Generator. This allows TSFM to play legacy ZX Spectrum chiptunes natively.
+- **MoonSound provides Wavetable**: It completely drops the SSG in favor of a 24-channel sample playback engine with a 1MB General MIDI ROM. **MoonSound has zero backward compatibility with the AY.** It cannot play legacy ZX Spectrum chiptunes unless they are completely rewritten to use FM or PCM samples.
 
 ---
 

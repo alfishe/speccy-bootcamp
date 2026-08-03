@@ -31,7 +31,7 @@ The .SCP format is one of several flux-level formats in use today (others includ
 
 - **Open** (the specification is published).
 - **Self-contained** (each .SCP file contains all the flux data for the entire disk).
-- **Multi-revolution** (each track can be sampled up to 5 times, to characterize weak-bit behaviour).
+- **Multi-revolution** (each track can be sampled up to 5 times, to characterize weak-bit behavior).
 - **Modulation-agnostic** (the format stores raw flux timings, not MFM-decoded bits).
 
 ### 1.2 The SuperCard Pro hardware
@@ -66,7 +66,7 @@ The .SCP format is **strictly more expressive** than .EDSK and .UDI: anything th
 
 ### 1.4 A short history
 
-The SuperCard Pro hardware was launched in 2012 by Jim Drew, originally targeted at the Commodore Amiga preservation community. The .SCP format was standardised by Drew in 2014 (with revisions in subsequent years), and the format specification was published openly to encourage adoption.
+The SuperCard Pro hardware was launched in 2012 by Jim Drew, originally targeted at the Commodore Amiga preservation community. The .SCP format was standardized by Drew in 2014 (with revisions in subsequent years), and the format specification was published openly to encourage adoption.
 
 By the late 2010s, .SCP had become the dominant interchange format for flux-level floppy-disk imaging, with support from major preservation projects (the Internet Archive's Software Collection, the MAME project, the Amiga Preservation Foundation, the Atari ST preservation project). The Spectrum community adopted .SCP more slowly, since most Spectrum software is on standard TR-DOS disks that .TRD / .SCL can represent perfectly well, but .SCP is now the recommended format for archival imaging of original Spectrum disk media.
 
@@ -227,7 +227,7 @@ When the revolutions-per-track byte in the header is greater than 1, each track'
 
 A reader can compare the data from multiple revolutions to identify weak-bit regions (where the flux transitions differ between revolutions). For example, if the same physical region on the disk reads as `0xFF` in revolution 0 and `0x00` in revolution 1, that region is a weak bit, and the reader should report it as non-deterministic.
 
-Multi-revolution sampling is the key advantage of .SCP over sector-level formats. The .EDSK and .UDI formats only store a single sample per sector, so they cannot distinguish a stable region from a weak one. The .SCP format, by storing 5 (or however many) full-revolution samples, allows the reader to fully characterise the disk's magnetic behaviour.
+Multi-revolution sampling is the key advantage of .SCP over sector-level formats. The .EDSK and .UDI formats only store a single sample per sector, so they cannot distinguish a stable region from a weak one. The .SCP format, by storing 5 (or however many) full-revolution samples, allows the reader to fully characterize the disk's magnetic behavior.
 
 ### 3.6 RLE compression
 
@@ -288,7 +288,7 @@ The following software tools can read, write, or convert .SCP files:
 - **SuperCard Pro software** (Windows) — the official software for the SuperCard Pro hardware. Reads, writes, and analyses .SCP files.
 - **HxCFloppyEmulatorTool** (Windows / Linux, by Jean-François DEL NERO) — a multi-format disk-image tool that can convert .SCP to / from .EDSK, .HFE, .IMG, and many other formats. The de facto standard for cross-format conversion.
 - **GreaseWeazle tools** (Python, by Keir Fraser) — the official GreaseWeazle software. Reads, writes, and analyses .SCP files.
-- **MAME's floptool** — part of the MAME project; can convert .SCP to / from many other formats, and can analyse flux data for sector extraction.
+- **MAME's floptool** — part of the MAME project; can convert .SCP to / from many other formats, and can analyze flux data for sector extraction.
 - **cwtool** — a Unix raw flux tool that can produce .SCP files (and other formats) from raw flux captures.
 - **a2flux** (Apple II-focused) — converts .SCP to / from the Apple II's WOZ format.
 
@@ -315,7 +315,7 @@ HxCFloppyEmulatorTool and MAME's floptool can perform all of these conversions. 
 
 ### 4.5 .EDSK / .TRD → .SCP
 
-Converting **from** a sector-level format **to** .SCP is not generally possible, because the sector-level format does not contain enough information to reconstruct the flux transitions. There are tools that **synthesise** a plausible flux pattern from a .EDSK or .TRD file (e.g., for use on a Gotek that has no .SCP support), but the result is not a faithful preservation of any real disk — it is a freshly-generated flux pattern that, when read by an FDC, produces the sectors of the original disk.
+Converting **from** a sector-level format **to** .SCP is not generally possible, because the sector-level format does not contain enough information to reconstruct the flux transitions. There are tools that **synthesize** a plausible flux pattern from a .EDSK or .TRD file (e.g., for use on a Gotek that has no .SCP support), but the result is not a faithful preservation of any real disk — it is a freshly-generated flux pattern that, when read by an FDC, produces the sectors of the original disk.
 
 ### 4.6 When to use .SCP
 

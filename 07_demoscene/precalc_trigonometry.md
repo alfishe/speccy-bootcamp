@@ -64,7 +64,7 @@ Common Q-formats on Z80:
 
 - **Q8.8** (16-bit signed): range [−128, +127.996], step 1/256 ≈ 0.0039. Used for general-purpose math.
 - **Q7.8** (16-bit signed): range [−128, +127], step 1/256. The signed variant of Q8.8.
-- **Q4.4** (8-bit signed): range [−8, +7.9375], step 1/16. Used for unit-range values (sine/cosine, normalised vectors) where 16-bit storage is too expensive.
+- **Q4.4** (8-bit signed): range [−8, +7.9375], step 1/16. Used for unit-range values (sine/cosine, normalized vectors) where 16-bit storage is too expensive.
 - **Q0.8** (8-bit unsigned): range [0, 0.9961], step 1/256. Used for sub-entity fractional positions or table indices.
 - **Q0.7** (8-bit signed): range [−1, +0.992], step 1/128. Common for unit-circle sines.
 
@@ -137,7 +137,7 @@ Many Spectrum demos avoid signedness entirely by using **biased values**: a sine
 
 The sine table is the most fundamental and most-used precomputed table in demoscene work. It is the basis of:
 
-- **Plasma** (sines of x and y coordinates produce a smooth colour field).
+- **Plasma** (sines of x and y coordinates produce a smooth color field).
 - **Wobblers / distorters** (sines offset bitmap rows or attributes).
 - **Tunnels** (sines and cosines of an angle produce the tunnel's polar coordinates).
 - **3D rotation** (sines and cosines of the rotation angle build the rotation matrix).
@@ -151,7 +151,7 @@ The most common layout is a **256-entry, full-period** sine table stored in a si
 Two encoding choices are common:
 
 1. **Signed Q4.4** (range −16..+16 in the byte, representing sine −1..+1 in Q4.4 real). Used for math where the result feeds further computation.
-2. **Unsigned 0..255** (offset 128 = sine 0; range −128..+127 representing sine −1..+1). Used for direct screen-coordinate writes where the value will be added to a centre coordinate.
+2. **Unsigned 0..255** (offset 128 = sine 0; range −128..+127 representing sine −1..+1). Used for direct screen-coordinate writes where the value will be added to a center coordinate.
 
 A complete generation script in Python:
 
@@ -212,7 +212,7 @@ Cost: ~30 T-states for the lookup itself — still far faster than software `sin
 
 The "right" number of entries depends on the effect:
 
-- **32 entries** (full period): low resolution, useful only for slow-changing values (e.g. colour cycling). Step ~11°.
+- **32 entries** (full period): low resolution, useful only for slow-changing values (e.g. color cycling). Step ~11°.
 - **64 entries** (full period): medium resolution, useful for wobblers and slow plasmas. Step ~5.6°.
 - **128 entries** (full period): good general-purpose resolution. Step ~2.8°.
 - **256 entries** (full period): the **standard** demoscene resolution. Step ~1.41°.
@@ -658,7 +658,7 @@ This section walks through how precomputed tables enable four classic Spectrum e
 
 ### 9.1 Plasma
 
-A plasma is a smoothly-varying colour field. The classic formula:
+A plasma is a smoothly-varying color field. The classic formula:
 
 ```
 colour(x, y, t) = sin(x/16 + t) + sin(y/24 + t) + sin((x+y)/32 + 2t)
@@ -669,7 +669,7 @@ Implementation on Spectrum:
 - Precompute a 256-entry 8-bit sine table (256 bytes).
 - Per frame, for each attribute cell (768 cells = 32×24):
   - Compute three sine lookups (different step sizes).
-  - Sum the sines, scale, and use as an index into a colour palette.
+  - Sum the sines, scale, and use as an index into a color palette.
 - Cost per cell: ~40 T-states × 768 cells = ~30000 T-states. Tractable at 50 Hz.
 
 The plasma is **the canonical demonstration of precomputed sines**: without the table, this effect would be impossible.
@@ -705,19 +705,19 @@ For a 100-vertex object: ~100 × 20 = 2000 multiplies per frame ≈ 600000 T-sta
 
 ### 9.4 Vector shading (Gouraud-style)
 
-For each face of the 3D object, compute the dot product of the rotated face normal with a fixed light direction. Use the dot product to select an attribute colour for the face.
+For each face of the 3D object, compute the dot product of the rotated face normal with a fixed light direction. Use the dot product to select an attribute color for the face.
 
 Precompute:
 
 - Sine/cosine tables for the rotation.
-- A 16-entry "brightness → colour" table.
+- A 16-entry "brightness → color" table.
 
 Per face per frame:
 
 1. Rotate the face normal (matrix-vector multiply, 9 multiplies).
 2. Dot product with light direction (3 multiplies + 2 adds).
-3. Look up colour in brightness table.
-4. Fill the face's pixels with that colour (or fill the face's attribute cell for fast shading).
+3. Look up color in brightness table.
+4. Fill the face's pixels with that color (or fill the face's attribute cell for fast shading).
 
 This gives the "rotating shaded 3D object" effect that Soviet demos (Extreme, E-Mage) pioneered on the Spectrum in the late 1990s.
 
@@ -730,7 +730,7 @@ This gives the "rotating shaded 3D object" effect that Soviet demos (Extreme, E-
 | Tunnel | sqrt + atan2 + sine | ~180000 |
 | Rasterbars | 8-bit sine | ~10000 |
 | 3D rotation | 16-bit sine + square + recip | ~600000 |
-| Vector shading | 3D rotation + colour LUT | ~700000 |
+| Vector shading | 3D rotation + color LUT | ~700000 |
 
 The most expensive (vector shading) is on the edge of tractability. The cheapest (rasterbars) is essentially free. Every effect above relies on precomputed tables to fit in the frame budget.
 

@@ -65,7 +65,7 @@ The floppy subsystem — the IBM 3740 physical layer shared by every Spectrum di
 
 ### Hard Disk / SD ✅ 6 articles complete
 
-The mass-storage subsystem — the IDE and SD interfaces that gave the Spectrum megabyte-to-gigabyte capacity, the image formats that capture them, and the FAT/IS-DOS filesystems that organise them. Three generations of hardware (IDE → SD) with a common filesystem abstraction.
+The mass-storage subsystem — the IDE and SD interfaces that gave the Spectrum megabyte-to-gigabyte capacity, the image formats that capture them, and the FAT/IS-DOS filesystems that organize them. Three generations of hardware (IDE → SD) with a common filesystem abstraction.
 
 **Overview (start here):**
 

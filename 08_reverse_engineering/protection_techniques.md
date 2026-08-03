@@ -76,7 +76,7 @@ Some publishers abandoned the standard block format entirely:
 - **Non-standard bit encoding** — instead of pulse-length encoding (zero = short, one = long), some loaders used phase encoding, Manchester encoding, or frequency-shift keying. The ROM loader cannot read these at all.
 - **Analog protections** — tapes with deliberately degraded signal levels, or special pilot frequencies that consumer tape decks cannot reproduce cleanly. The .PZX format ([pzx_format.md](../03_io/storage/pzx_format.md)) preserves these at the pulse level.
 
-For the full catalogue of Soviet-era custom loaders (LD0, LOADERS BY LAS, SHR, boot-trap loaders), see [beta_disk_interface.md §11.5](../03_io/storage/beta_disk_interface.md).
+For the full catalog of Soviet-era custom loaders (LD0, LOADERS BY LAS, SHR, boot-trap loaders), see [beta_disk_interface.md §11.5](../03_io/storage/beta_disk_interface.md).
 
 ---
 

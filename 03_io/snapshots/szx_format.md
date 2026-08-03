@@ -4,7 +4,7 @@
 
 The .SNA format (1992) and .Z80 format (1994) dominated Spectrum snapshots for over a decade, but both have a fundamental limitation: they use a **fixed-layout header**. Every new feature requires either adding new fields to the header (breaking older loaders) or overloading existing fields (creating ambiguity). The .Z80 format's evolution through v1, v2, and v3 shows the friction of this approach.
 
-The **.SZX format** (created by **César Hernández Bauset** for the **ZEsarUX** emulator around 2005) takes a different approach: it uses a **chunk-based (IFF-like)** file structure, where each piece of state is stored in a separately-identified "chunk". New chunks can be added to capture new state without breaking older loaders — they just ignore chunks they don't recognise. This design makes .SZX the most extensible and future-proof of the major snapshot formats.
+The **.SZX format** (created by **César Hernández Bauset** for the **ZEsarUX** emulator around 2005) takes a different approach: it uses a **chunk-based (IFF-like)** file structure, where each piece of state is stored in a separately-identified "chunk". New chunks can be added to capture new state without breaking older loaders — they just ignore chunks they don't recognize. This design makes .SZX the most extensible and future-proof of the major snapshot formats.
 
 .SZX is ZEsarUX's **native** format, but the format specification was published openly, and several other emulators (Fuse, SpectaNet, etc.) support it. Today it is the format of choice for capturing complex Spectrum state — particularly state involving peripherals, custom hardware, or cycle-exact timing.
 
@@ -63,7 +63,7 @@ Each chunk has:
 - A **4-byte length** (the size of the chunk's data, in bytes, little-endian).
 - The chunk **data** itself.
 
-The loader reads chunks one at a time. If it doesn't recognise a chunk ID, it skips that chunk (using the length field) and continues.
+The loader reads chunks one at a time. If it doesn't recognize a chunk ID, it skips that chunk (using the length field) and continues.
 
 ### 1.4 Why .SZX matters
 
@@ -118,7 +118,7 @@ If multiple chunks of the same type appear (e.g., multiple "RAM " chunks for dif
 
 ### 2.4 Skipping unknown chunks
 
-The most important rule of .SZX loading: **if you encounter a chunk ID you don't recognise, skip it using the chunk data length and continue with the next chunk**. Do not abort the load.
+The most important rule of .SZX loading: **if you encounter a chunk ID you don't recognize, skip it using the chunk data length and continue with the next chunk**. Do not abort the load.
 
 This rule is what makes .SZX extensible. A loader that aborts on unknown chunks would be unable to load .SZX files written by newer emulators.
 
@@ -305,7 +305,7 @@ The `CFGR` chunk's hardware ID byte identifies the source machine. The list is e
 | 27 | TS-Conf |
 | 28+ | (Reserved for future hardware) |
 
-A loader should accept any ID and, if it doesn't recognise the hardware, treat it as 48K with a warning (or refuse to load, depending on policy).
+A loader should accept any ID and, if it doesn't recognize the hardware, treat it as 48K with a warning (or refuse to load, depending on policy).
 
 ### 4.2 Hardware configuration extensions
 
@@ -340,7 +340,7 @@ This section enumerates exactly what .SZX captures, compared to .SNA and .Z80.
 | Full RAM (48K) | ✅ | ✅ |
 | 128K paging (`#7FFD`) | ✅ | ✅ |
 | PC (explicit) | (on stack) | ✅ |
-| Border colour | ❌ | ✅ |
+| Border color | ❌ | ✅ |
 | AY-3-8910 state | ❌ | ✅ |
 | Hardware identification | ❌ | ✅ |
 | MEMPTR (undocumented Z80 register) | ❌ | ✅ |
@@ -541,7 +541,7 @@ One of .SZX's great strengths is its extensibility. This section describes how t
 If you are an emulator author and want to add a new chunk type for your emulator's private state, you have two options:
 
 1. **Register a new standard chunk ID** with the ZEsarUX project. This makes your chunk part of the official .SZX spec.
-2. **Use a "private use" chunk ID** (with an `X` prefix, like `XMYE` for "MY Emulator"). Other emulators will skip it, but your emulator will recognise it.
+2. **Use a "private use" chunk ID** (with an `X` prefix, like `XMYE` for "MY Emulator"). Other emulators will skip it, but your emulator will recognize it.
 
 The convention is that chunk IDs starting with `X` are private to a specific emulator. Standard chunk IDs (without the `X` prefix) should be registered to avoid collisions.
 
@@ -636,4 +636,4 @@ In practice, .SZX is most useful when both you and your target audience are usin
 
 ## License
 
-This document is licensed under **Creative Commons Attribution-ShareAlike 4.0 International** (CC BY-SA 4.0). You are free to share and adapt this material, provided you give appropriate credit, indicate changes, and distribute derivative works under the same licence.
+This document is licensed under **Creative Commons Attribution-ShareAlike 4.0 International** (CC BY-SA 4.0). You are free to share and adapt this material, provided you give appropriate credit, indicate changes, and distribute derivative works under the same license.

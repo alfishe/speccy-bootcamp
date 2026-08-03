@@ -729,7 +729,7 @@ Fuse is the recommended default emulator for non-Next development.
 
 - **All Spectrum models** plus ZX-Uno, ZX Spectrum Next, Chroma 81, and other modern hardware
 - **Rich debugging**: breakpoints, watchpoints, conditional traps, full register inspection
-- **Reverse debugging**: step backwards through execution
+- **Reverse debugging**: step backward through execution
 - **TS-Conf and Baseconf support**: emulates the ZX Evolution's extended graphics modes
 - **Cross-platform**: Linux, macOS, Windows, Raspberry Pi
 
@@ -1200,7 +1200,7 @@ Planned emulator deep-dives in `11_emulation/software/`:
 - [Break Into Program — ZX Spectrum development with modern tools](http://www.breakintoprogram.co.uk/software_development/zx-spectrum-development-with-modern-tools) — Dean Belfield's reference toolchain guide
 - [Break Into Program — Installing and Configuring Visual Studio Code](http://www.breakintoprogram.co.uk/development-tools/installing-and-configuring-visual-studio-code) — VS Code Z80 setup walkthrough
 - [A Tour of Z80 Cross-Assemblers — Bumbershoot Software](https://bumbershootsoft.wordpress.com/2025/03/15/a-tour-of-z80-cross-assemblers/) — comparative review of cross-assemblers
-- [Stack Overflow: Favourite ZX Spectrum development tools](https://stackoverflow.com/questions/77507/what-are-your-favourite-zx-spectrum-development-tools) — community discussion (archived)
+- [Stack Overflow: Favourite ZX Spectrum development tools](https://stackoverflow.com/questions/77507/what-are-your-favorite-zx-spectrum-development-tools) — community discussion (archived)
 - [Creating Future — ZX Spectrum Assembly Programming](https://www.creatingfuture.eu/2022/04/12/zx-spectrum-assembly-programming/) — modern tool survey
 - [SDCC homepage](https://sdcc.sourceforge.net/) — Small Device C Compiler
 - [vasm homepage](http://sun.hasenbraten.de/vasm/) — portable retargetable assembler

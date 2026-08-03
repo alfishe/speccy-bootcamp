@@ -2,7 +2,7 @@
 
 # TR-DOS — The Soviet Disk Standard
 
-Where Western Spectrum owners booted a +3 DOS disk or copied files to cassette, the entire Soviet and post-Soviet demoscene standardised on a single disk operating system: **TR-DOS**. Bundled with every Pentagon, Scorpion, and Kay clone from 1987 onwards, TR-DOS is the file system on which the Russian-language demo scene's megademos, disk magazines, and party entries were distributed for almost two decades. A modern emulator loading a `.TRD` image is mounting a TR-DOS disk.
+Where Western Spectrum owners booted a +3 DOS disk or copied files to cassette, the entire Soviet and post-Soviet demoscene standardized on a single disk operating system: **TR-DOS**. Bundled with every Pentagon, Scorpion, and Kay clone from 1987 onwards, TR-DOS is the file system on which the Russian-language demo scene's megademos, disk magazines, and party entries were distributed for almost two decades. A modern emulator loading a `.TRD` image is mounting a TR-DOS disk.
 
 TR-DOS is the work of two engineers, neither of them Sinclair: **Evgeny Samarsky** (Евгений Самарский, Leningrad) and **Charles Ingman** (Moscow). Samarsky wrote the original version for the Beta 128 disk interface around 1985–1987; the result is a 16 KB ROM that pages into the Spectrum address space and exposes a BASIC extension (the `*` commands such as `*CAT`, `*LOAD`, `*SAVE`) plus a small assembly-level API called the **hook codes**. The file system is a custom 80-track, 16-sector layout with a flat directory — simple, fast for sequential access, and uniquely tolerant of poorly-floppy media of the late-Soviet era.
 
@@ -209,7 +209,7 @@ CALL #3D13              ; the TR-DOS entry point (see §6.1)
 Reassuringly, TR-DOS does **not** touch:
 
 - The screen RAM (`#4000`–`#57FF`) — your display is safe.
-- The attribute file (`#5800`–`#5AFF`) — your colours are safe.
+- The attribute file (`#5800`–`#5AFF`) — your colors are safe.
 - The system variables area (`#5B00`–`#5CB5`) — except for the specific bytes TR-DOS uses as its own workspace (see below).
 - RAM banks other than the one currently paged in at `#C000` — useful for keeping data safe across DOS calls.
 
@@ -314,7 +314,7 @@ Sectors are interleaved on a single track in physical order 1, 2, 3, ..., 16 (no
 
 ### 5.2 The catalog (track 0)
 
-The first 8 sectors of **track 0, side 0** (sectors 1–8, 2048 bytes total) hold the disk catalog. This region is organised as:
+The first 8 sectors of **track 0, side 0** (sectors 1–8, 2048 bytes total) hold the disk catalog. This region is organized as:
 
 - **8 file descriptors** (each 16 bytes) in sectors 1–4: 4 descriptors × 16 bytes × 4 sectors = 256 bytes per sector. Total: 128 file slots.
 - **Free-space and disk metadata** in sectors 5–8.
@@ -558,7 +558,7 @@ This pattern appears, with minor variations, in essentially every Soviet demo an
 
 ### 6.7 Direct sector I/O
 
-For specialised uses — boot sectors, copy protection, disk editors, custom file systems — TR-DOS exposes the `READ_SECTOR` and `WRITE_SECTOR` hook codes (#02 and #03). These bypass the catalog entirely and let you read or write any sector by its physical coordinates.
+For specialized uses — boot sectors, copy protection, disk editors, custom file systems — TR-DOS exposes the `READ_SECTOR` and `WRITE_SECTOR` hook codes (#02 and #03). These bypass the catalog entirely and let you read or write any sector by its physical coordinates.
 
 ```z80
 ; Read track 5, sector 3, into address #8000
@@ -768,7 +768,7 @@ The reverse — code written for 5.00 running on 5.03 — is universally safe. I
 
 ### 8.6 TR-DOS and 128K BASIC
 
-A subtle point: when TR-DOS is installed, the 128K editor ROM is patched to recognise the `*` prefix and dispatch to TR-DOS commands. This patch is applied by TR-DOS at boot time and is invisible to the user. However, if you boot a 128K Spectrum without a TR-DOS disk in the drive, the patch is not applied — and `*` commands will not work in the editor.
+A subtle point: when TR-DOS is installed, the 128K editor ROM is patched to recognize the `*` prefix and dispatch to TR-DOS commands. This patch is applied by TR-DOS at boot time and is invisible to the user. However, if you boot a 128K Spectrum without a TR-DOS disk in the drive, the patch is not applied — and `*` commands will not work in the editor.
 
 This is rarely a problem in practice (a Pentagon without TR-DOS is like a fish without water), but it confuses users of modern emulators who boot a 128K machine, type `*CAT`, and see an error.
 
@@ -852,7 +852,7 @@ This continuity is a rare thing in computing. Most 8-bit disk formats (Commodore
 
 - [README.md](README.md) — section index
 - [rom_48k.md](rom_48k.md) — the 48K BASIC ROM, which TR-DOS displaces at `#0000`–`#3FFF` when paged in
-- [rom_128k.md](rom_128k.md) — the 128K editor ROM, which TR-DOS patches to recognise `*` commands
+- [rom_128k.md](rom_128k.md) — the 128K editor ROM, which TR-DOS patches to recognize `*` commands
 - [system_variables.md](system_variables.md) — the system variable area at `#5C00`-range; TR-DOS uses some of the reserved bytes
 - [plus3dos.md](plus3dos.md) — the Western alternative to TR-DOS, used on the Amstrad +3
 - [esxdos.md](esxdos.md) — the modern DivIDE/DivMMC OS that coexists with TR-DOS compatibility
@@ -865,7 +865,7 @@ This continuity is a rare thing in computing. Most 8-bit disk formats (Commodore
 - [../05_development/03_memory_and_io/memory_and_io_pentagon.md](../05_development/03_memory_and_io/memory_and_io_pentagon.md) — Pentagon memory map and I/O ports, including Beta 128
 - [../07_demoscene/demo_frameworks.md](../07_demoscene/demo_frameworks.md) §5 — how megademos use TR-DOS for part loading and disk streaming
 - [../07_demoscene/notable_demos.md](../07_demoscene/notable_demos.md) §5.6 — TS-Config disk streaming on the ZX Evolution
-- [../07_demoscene/soviet_demo_scene.md](../07_demoscene/soviet_demo_scene.md) — the Soviet scene that standardised on TR-DOS
+- [../07_demoscene/soviet_demo_scene.md](../07_demoscene/soviet_demo_scene.md) — the Soviet scene that standardized on TR-DOS
 - [../08_reverse_engineering/README.md](../08_reverse_engineering/README.md) — disk-based copy protection schemes (which used TR-DOS direct sector I/O)
 
 ### 10.3 External resources

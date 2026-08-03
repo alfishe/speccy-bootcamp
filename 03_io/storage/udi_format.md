@@ -130,7 +130,7 @@ A reader that encounters an unknown tag should skip it. The metadata tag list is
 A reader should validate the following:
 
 - The magic string at offset 0 is `"UDI!"`.
-- The version byte at offset 4 is recognised (typically `0x00` or `0x01`).
+- The version byte at offset 4 is recognized (typically `0x00` or `0x01`).
 - The cylinders and sides fields are reasonable (e.g., cylinders in 1–84, sides in 1–2).
 - The information block length is consistent with `cylinders * sides * 8` plus the metadata tag list.
 - The track data block offset points to a valid position within the file.
@@ -292,7 +292,7 @@ Use .UDI when:
 - You are working with **Russian Spectrum clones** (Pentagon, Scorpion) that have non-standard sector layouts or use FM encoding on some tracks.
 - You are working with **mixed-modulation disks** that combine MFM and FM tracks.
 - You need a format that is **controller-independent** (does not assume the WD177x status byte conventions).
-- Your toolchain is centred on UnrealSpeccy or the ZX Evolution.
+- Your toolchain is centered on UnrealSpeccy or the ZX Evolution.
 
 For most other Spectrum archival work, prefer .EDSK (which is more widely supported) or .SCP (which is the gold standard for preservation).
 

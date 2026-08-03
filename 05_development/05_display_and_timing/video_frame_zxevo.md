@@ -45,7 +45,7 @@ The Evolution was designed for **maximum compatibility with the existing Russian
 
 The name **PentEvo** is literal: the machine was designed as a hardware-level successor to the **Pentagon 1024 SL 2.x**. The design goals were:
 
-1. **Recreate the Pentagon** — same timing, same memory map, same no-contention behaviour.
+1. **Recreate the Pentagon** — same timing, same memory map, same no-contention behavior.
 2. **Replace aging discrete logic with CPLDs** — the Pentagon's hundreds of 74-series chips were failing by the late 2000s; two CPLDs replace them all.
 3. **Add modern peripherals** — IDE, PS/2 keyboard, PS/2 mouse, SD card via expansion.
 4. **Stay binary-compatible** — every existing Pentagon demo, game, and OS should boot unmodified.
@@ -153,7 +153,7 @@ The Evolution outputs **VGA** rather than composite video. The VGA signal is gen
 
 - **Base frame rate**: 48.83 Hz (unchanged from Pentagon)
 - **Visible resolution**: doubled vertically, typically 640×480 within a 60 Hz or 50 Hz VGA frame depending on monitor compatibility
-- **Colour depth**: 8-bit RGB per pixel (256 colours) — the original Spectrum palette is mapped into a larger TS-Conf palette space
+- **Colour depth**: 8-bit RGB per pixel (256 colors) — the original Spectrum palette is mapped into a larger TS-Conf palette space
 
 > [!WARNING]
 > Modern VGA monitors may refuse to sync to a 48.83 Hz signal — the standard VGA minimum is 56 Hz. The Evolution works best on CRT monitors, multisync LCDs, or via an OSSC/upscaler. Some TS-Conf software includes a "60 Hz mode" that adjusts the frame counter to 65,000 T-states for monitor compatibility, at the cost of breaking Pentagon-compatibility.

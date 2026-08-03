@@ -16,7 +16,7 @@ This article covers the Spectranet's history, hardware design, firmware TCP/IP s
 
 By the mid-2000s, the Internet had transformed computing but the ZX Spectrum was essentially cut off from it. The Russian clone scene had used [FidoNet](modems.md) through the 1990s, but FidoNet was in decline worldwide. The original UK Spectrum scene had never had substantial Internet connectivity — the few TCP/IP experiments (SpeccyTCP, early Internet utilities) required awkward modem setups.
 
-The problem was fundamental: the Spectrum had no networking hardware designed for TCP/IP. The Interface 1's ZX Net was a 9600 bit/s polling LAN; the RS-232 port could drive a modem but at analogue-telephone-line speeds. The Internet ran on Ethernet at megabit speeds with TCP/IP packet switching — none of which the Spectrum could do without new hardware.
+The problem was fundamental: the Spectrum had no networking hardware designed for TCP/IP. The Interface 1's ZX Net was a 9600 bit/s polling LAN; the RS-232 port could drive a modem but at analog-telephone-line speeds. The Internet ran on Ethernet at megabit speeds with TCP/IP packet switching — none of which the Spectrum could do without new hardware.
 
 ### Development (2006–2007)
 
@@ -68,7 +68,7 @@ timeline
 
 The Spectranet's hardware design centers on the **Microchip ENC28J60** Ethernet controller, a single-chip 10base-T IEEE 802.3-compliant controller with an SPI interface. The ENC28J60 handles:
 
-- **Physical layer (PHY)** — the analogue Ethernet signaling, collision detection, link integrity
+- **Physical layer (PHY)** — the analog Ethernet signaling, collision detection, link integrity
 - **Media access control (MAC)** — Ethernet framing, source/destination MAC addressing, CRC generation/checking
 - **Buffer management** — internal 8 KB packet buffer for transmit and receive
 

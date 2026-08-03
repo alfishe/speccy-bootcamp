@@ -57,7 +57,7 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [rom_128k.md](04_operating_systems/rom_128k.md) | 128K ROM 0: dual-ROM architecture, ROM call bridge, ROM swap calling convention, PLAY/SOUND/BANK handlers, AY-3-8912 register map, RAM disk, editor internals |
 | [rom_plus2.md](04_operating_systems/rom_plus2.md) | +2A/+3 ROM internals: 64 KB four-page layout, paging ports `#7FFD`/`#1FFD`, four paging modes (128K compat / all-RAM 0-3 / all-RAM 4-7 / Plus 3), CP/M boot, bugs |
 | [system_variables.md](04_operating_systems/system_variables.md) | ROM-defined system variables: FRAMES, PROG, VARS, CHANS, keyboard state, memory boundaries — the ROM's API surface |
-| [rom_versions.md](04_operating_systems/rom_versions.md) | ROM version catalogue: 48K Issues 1-6 CRC32 values, 128K, +2 grey, +2A/+3 four-page, localised ROMs, clone ROMs (Pentagon, Scorpion, ATM Turbo, ZX Evolution, Timex), modern replacements (SE BASIC, OpenSE, +3E, NextZXOS) |
+| [rom_versions.md](04_operating_systems/rom_versions.md) | ROM version catalog: 48K Issues 1-6 CRC32 values, 128K, +2 grey, +2A/+3 four-page, localised ROMs, clone ROMs (Pentagon, Scorpion, ATM Turbo, ZX Evolution, Timex), modern replacements (SE BASIC, OpenSE, +3E, NextZXOS) |
 
 #### Disk Operating Systems
 
@@ -152,7 +152,7 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [video_frame_zxevo.md](05_development/05_display_and_timing/video_frame_zxevo.md) | ZX Evolution (PentEvo): real Z80 + Altera MAX CPLDs, Pentagon-compatible base, BaseConf vs TS-Conf configurations |
 | [contention_timing.md](05_development/05_display_and_timing/contention_timing.md) | Per-T-state delay tables (Ferranti 6-5-4-3-2-1-0-0, Amstrad 1-0-7-6-5-4-3-2), per-instruction contended cost tables |
 | [interlace_and_flicker.md](05_development/05_display_and_timing/interlace_and_flicker.md) | Non-interlaced output, 50 Hz perception threshold, attribute flicker, GigaScreen flicker math, CRT vs LCD |
-| [crt_output.md](05_development/05_display_and_timing/crt_output.md) | Developer view of CRT/LCD output: pixel aspect ratio, overscan, composite artifacts, per-display-type behaviour |
+| [crt_output.md](05_development/05_display_and_timing/crt_output.md) | Developer view of CRT/LCD output: pixel aspect ratio, overscan, composite artifacts, per-display-type behavior |
 | [video_frame_comparison.md](05_development/05_display_and_timing/video_frame_comparison.md) | Synthesis: all models side-by-side — T-states/frame, contention, turbo, compatibility matrix, detection decision tree |
 
 #### Graphics Techniques ✅ F12 COMPLETE
@@ -224,7 +224,7 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | Article | Description |
 |---------|------------|
 | [tracker_history.md](06_sound/trackers_and_formats/tracker_history.md) | **30-year history of ZX music editors** — beeper trackers (1985), Pro Tracker lineage (Golden Disk Corp.), VTII / Arkos split, modern cross-platform tools (AT3, VT3) |
-| [ay_music_formats.md](06_sound/trackers_and_formats/ay_music_formats.md) | **Master catalogue**: every AY/YM music file format (`.PT3`, `.PSG`, `.YM`, `.AY`, `.AKG`, etc.) — modules, dumps, containers, modern embedded |
+| [ay_music_formats.md](06_sound/trackers_and_formats/ay_music_formats.md) | **Master catalog**: every AY/YM music file format (`.PT3`, `.PSG`, `.YM`, `.AY`, `.AKG`, etc.) — modules, dumps, containers, modern embedded |
 | [sound_tracker.md](06_sound/trackers_and_formats/sound_tracker.md) | **Sound Tracker 1.1** (Bzyk, 1990) — the first AY grid editor; established the pattern/sample/ornament paradigm |
 | [asc_sound_master.md](06_sound/trackers_and_formats/asc_sound_master.md) | **Asc Sound Master** (Sendetskiy, 1992) — Soviet alternative with envelope-mode-per-tick instrument model |
 | [protracker.md](06_sound/trackers_and_formats/protracker.md) | **Pro Tracker 1/2/3** (Golden Disk Corp., 1995–1997) — the format-defining lineage that produced `.PT3` |
@@ -421,7 +421,7 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [cycle_exact_accuracy.md](11_emulation/software/cycle_exact_accuracy.md) | **Cycle-exact accuracy** — frame timing divergence, CRT vs LCD, host sync strategies, AY audio clocks, judder mitigation, worst-case Pentagon@60Hz conclusion |
 | [test_suites.md](11_emulation/software/test_suites.md) | **Test suites** — ZEXALL, FUSE test suite, Sensible Software tests, Yamagraph, application-specific test ROMs |
 
-**FPGA Cores** — synthesised hardware re-implementations ([sub-section README](11_emulation/fpga/README.md))
+**FPGA Cores** — synthesized hardware re-implementations ([sub-section README](11_emulation/fpga/README.md))
 
 | Article | Description |
 |---------|-------------|
@@ -455,7 +455,7 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [z80_opcode_table.md](10_references/z80_opcode_table.md) | One-page Z80 opcode lookup: every documented instruction by group with byte count, T-states, and flag effects |
 | [io_port_map.md](10_references/io_port_map.md) | Complete I/O port reference: every port across all models, Black_Cat table with annotations, decoding bitmasks, per-model differences |
 | [character_set.md](10_references/character_set.md) | ZX Spectrum character set: code ranges, ROM font layout, UDG system, CHARS redirection |
-| [color_palette.md](10_references/color_palette.md) | Standard 15-colour palette (FUSE/Skoolkid/ZEsarUX variants), ULAplus 64-colour, ZX Spectrum Next 256-colour |
+| [color_palette.md](10_references/color_palette.md) | Standard 15-color palette (FUSE/Skoolkid/ZEsarUX variants), ULAplus 64-color, ZX Spectrum Next 256-color |
 | [memory_maps.md](10_references/memory_maps.md) | Consolidated memory maps for every model (16K/48K, 128K/+2, +2A/+3, Pentagon, Scorpion, ATM Turbo, Next) — contended regions, banking registers, RAMTOP defaults, compatibility cheat sheet |
 | [basic_token_table.md](10_references/basic_token_table.md) | Sinclair BASIC token table: byte values and tokenisation rules for 48K/128K/+2/+2A/+3 ROMs — control codes, function tokens, UDGs, block graphics |
 | [error_codes.md](10_references/error_codes.md) | All BASIC/DOS error codes — 10 Sinclair BASIC, +3 DOS (12), TR-DOS (Russian), ESXDOS (POSIX-style), IS-DOS, NextZXOS — recovery patterns |
@@ -514,7 +514,7 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 34. [ZX Spectrum Next Audio](06_sound/hardware/zx_next_audio.md) — 3× FPGA AY + DMA + beeper
 35. [Multi-Track and Multi-Chip Synthesis](06_sound/synthesis/multitrack_multichip.md) — TurboSound, cross-chip effects
 36. [Tracker History](06_sound/trackers_and_formats/tracker_history.md) — 30 years of ZX music editors: from Sound Tracker (1990) to Arkos Tracker 3
-37. [AY Music Formats](06_sound/trackers_and_formats/ay_music_formats.md) — master catalogue: `.PT3`, `.PSG`, `.YM`, `.AY`, `.AKG`, all module/dump/container formats
+37. [AY Music Formats](06_sound/trackers_and_formats/ay_music_formats.md) — master catalog: `.PT3`, `.PSG`, `.YM`, `.AY`, `.AKG`, all module/dump/container formats
 38. [Sound Tracker 1.1](06_sound/trackers_and_formats/sound_tracker.md) — Bzyk's 1990 first AY grid editor; established the pattern/sample/ornament paradigm
 39. [Asc Sound Master](06_sound/trackers_and_formats/asc_sound_master.md) — Sendetskiy's 1992 Soviet alternative with envelope-mode-per-tick instruments
 40. [Pro Tracker 1/2/3](06_sound/trackers_and_formats/protracker.md) — Golden Disk Corp.'s 1995–1997 format-defining lineage that produced `.PT3`

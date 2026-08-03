@@ -2,7 +2,7 @@
 
 # ZX Spectrum Next Video Frame — Configurable Timing, 28 MHz CPU, and a Copper Coprocessor
 
-The ZX Spectrum Next (2017–2020) is an FPGA-based modern recreation of the Spectrum that ships in a desktop case with new hardware features: Layer 2 256-colour graphics, hardware sprites, tilemap, DMA, and a **copper coprocessor** for raster-precise register writes. Its video timing is **configurable at runtime** — a single machine can run with 48K, 128K, +2A, or Pentagon timing depending on the mode select.
+The ZX Spectrum Next (2017–2020) is an FPGA-based modern recreation of the Spectrum that ships in a desktop case with new hardware features: Layer 2 256-color graphics, hardware sprites, tilemap, DMA, and a **copper coprocessor** for raster-precise register writes. Its video timing is **configurable at runtime** — a single machine can run with 48K, 128K, +2A, or Pentagon timing depending on the mode select.
 
 > [!NOTE]
 > This article covers the **video frame timing** of the Next. For hardware architecture (FPGA, Z80N CPU, memory map), see [memory_and_io_next.md](../03_memory_and_io/memory_and_io_next.md). For the copper's instruction set, see [zx_next.md#the-copper-coprocessor](../../02_hardware/newgen/zx_next.md#the-copper-coprocessor). For DMA, sprites, and Layer 2, see [zx_next.md](../../02_hardware/newgen/zx_next.md).
@@ -120,7 +120,7 @@ Two instructions:
 
 A copper program is a flat byte sequence written into the copper's RAM (separate from main RAM). It auto-starts at line 0 of each frame and runs until it executes `STOP` or reaches the end.
 
-### Example: Border colour bars without CPU cycles
+### Example: Border color bars without CPU cycles
 
 ```
 COPPER_DATA:
@@ -148,7 +148,7 @@ For multicolor effects that need to write to ATTR RAM at varying positions, copp
 
 ## Layer 2, Tilemap, Sprites — Independent of Base Timing
 
-The Next's three enhanced graphics layers (Layer 2 256-colour, hardware sprites, tilemap) all read from their own dedicated video memory and **do not affect the base frame timing**:
+The Next's three enhanced graphics layers (Layer 2 256-color, hardware sprites, tilemap) all read from their own dedicated video memory and **do not affect the base frame timing**:
 
 - Layer 2 fetches 256×192 bytes per frame from a dedicated RAM region
 - Sprites are fetched from a 64 KB sprite pattern memory
@@ -222,7 +222,7 @@ The Next's `#xx` horizontal-scroll and vertical-scroll registers can be updated 
 
 - **Smooth per-line horizontal scrolling** — copper updates H-SCROLL every line, producing pixel-precise scroll offsets that aren't possible on classic hardware
 - **Vertical parallax** — different lines scroll at different rates
-- **Scanline-synchronised palette swaps** — copper writes to Layer 2 palette registers, producing per-line 256-colour gradients
+- **Scanline-synchronized palette swaps** — copper writes to Layer 2 palette registers, producing per-line 256-color gradients
 
 These effects require precise copper programming — see [zx_next.md#the-copper-coprocessor](../../02_hardware/newgen/zx_next.md#the-copper-coprocessor) for the full copper programming reference.
 
@@ -274,7 +274,7 @@ This is **reliable** because the machine ID register exists only on real Next ha
 
 ### What Still Requires Classic Techniques
 
-1. **ATTR-based multicolor** (8×1 pixel colour) still requires CPU loops writing to screen RAM — copper doesn't have main-RAM access.
+1. **ATTR-based multicolor** (8×1 pixel color) still requires CPU loops writing to screen RAM — copper doesn't have main-RAM access.
 2. **Floating bus tricks** for raster sync are still needed if you don't want to commit to copper programming.
 3. **Contention-dependent timing** in classic 48K mode is fully emulated — old code behaves exactly as on real 48K.
 
@@ -300,4 +300,4 @@ This is **reliable** because the machine ID register exists only on real Next ha
 - **NextBASIC Manual** — chapter on copper programming and the WAIT/MOVE instruction format.
 - **CSpect emulator** ([cspect.org](https://cspect.org)) — primary development emulator for the Next, implements all timing modes and the copper.
 - **ZEsarUX** — full Next timing emulation including 48K/128K/+2A/Pentagon mode switching.
-- **The "Definitive ZX Spectrum Next Tester" ROM** — community test suite that verifies copper timing, CPU speed switching, and per-mode contention behaviour on real hardware.
+- **The "Definitive ZX Spectrum Next Tester" ROM** — community test suite that verifies copper timing, CPU speed switching, and per-mode contention behavior on real hardware.

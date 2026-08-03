@@ -162,7 +162,7 @@ A key feature of .TZX is that unknown block types can be skipped without abortin
 
 However, skipping an unknown block requires knowing its length. The .TZX specification defines a convention for this:
 
-- **Block IDs 0x00–0x7F** (well-known blocks): the length is determined by the block type. If the loader does not recognise the block ID, it cannot determine the length and must abort.
+- **Block IDs 0x00–0x7F** (well-known blocks): the length is determined by the block type. If the loader does not recognize the block ID, it cannot determine the length and must abort.
 - **Block IDs 0x80–0xFF** (extension blocks): the first 4 bytes after the block ID are a 32-bit length, giving the total size of the block data (not including the 5-byte block header). This allows loaders to skip unknown extension blocks.
 
 In practice, most modern loaders support all well-known block IDs (0x00–0x7F), so the abort case is rare.
@@ -351,11 +351,11 @@ A silence block represents a period of silence (no signal) on the tape.
 | 0 | 1 | Block ID (`0x20`) |
 | 1 | 2 | Silence duration (ms) |
 
-The silence block is used for gaps between blocks. Typically, a 1000 ms silence block separates each data block, matching the standard ROM behaviour.
+The silence block is used for gaps between blocks. Typically, a 1000 ms silence block separates each data block, matching the standard ROM behavior.
 
 ### 4.9 Block 0x21 / 0x22: Group start / end
 
-These blocks mark the start and end of a named group of blocks. They are used to organise the .TZX file into logical sections (e.g., "Loader", "Title screen", "Level 1").
+These blocks mark the start and end of a named group of blocks. They are used to organize the .TZX file into logical sections (e.g., "Loader", "Title screen", "Level 1").
 
 | Block ID | Field |
 |---|---|
@@ -898,7 +898,7 @@ The .TZX specification has evolved through 13 minor versions. The most important
 - **v1.3 (1999)**: Added direct recording (0x15) for raw signal capture.
 - **v1.4 (2000)**: Refined the turbo speed block; added the 24-bit length for pure data (0x14).
 - **v1.8 (2003)**: Added the C64 ROM type (0x16) and C64 turbo type (0x17).
-- **v1.10 (2004)**: Added the "generalised data" block (0x18) for very complex encodings.
+- **v1.10 (2004)**: Added the "generalized data" block (0x18) for very complex encodings.
 - **v1.13 (2008)**: Current version; minor clarifications and bug fixes.
 
 Most .TZX files on the internet are v1.10 or later. Files from the late 1990s may be v1.0–v1.3, but these are rare.
@@ -1051,7 +1051,7 @@ These live in the sibling [../snapshots/](../snapshots/README.md) directory.
 
 ### 10.3 Related topics
 
-- [Reverse engineering](../../08_reverse_engineering/) — .TZX files are often analysed during reverse engineering to extract the turbo loader and the protected code.
+- [Reverse engineering](../../08_reverse_engineering/) — .TZX files are often analyzed during reverse engineering to extract the turbo loader and the protected code.
 - [Demoscene](../../07_demoscene/) — demos often use custom loaders that push the boundaries of the .TZX format.
 - [BASIC interpreter internals](../../04_operating_systems/) — the BASIC interpreter handles the `LOAD`, `SAVE`, `MERGE`, `VERIFY` commands.
 

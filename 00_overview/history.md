@@ -190,7 +190,7 @@ The **Pentagon 48K**, designed by **Dmitry Mikhalchenko** and first produced in 
 - **No memory contention.** The Pentagon does not steal CPU cycles during video generation, making code run faster and more predictably than on real Sinclair hardware.
 - **Built-in Kempston joystick** and **Beta 128 disk interface** — features that on a Sinclair would require external interfaces.
 
-These differences mean Pentagon software is **not timing-compatible** with original Sinclair Spectrums. The post-Soviet software scene standardised on Pentagon timing and the TR-DOS disk format, producing a parallel ecosystem of software that runs on the Pentagon but is unreliable on Western Spectrums.
+These differences mean Pentagon software is **not timing-compatible** with original Sinclair Spectrums. The post-Soviet software scene standardized on Pentagon timing and the TR-DOS disk format, producing a parallel ecosystem of software that runs on the Pentagon but is unreliable on Western Spectrums.
 
 For the full technical story, see [pentagon.md](../02_hardware/clones/pentagon.md). For the expanded Pentagon models (128K, 512K, 1024K), see [pentagon_1024.md](../02_hardware/clones/pentagon_1024.md).
 
@@ -213,7 +213,7 @@ The Spectrum became the dominant post-Soviet home computer for a combination of 
 3. **Educational value.** The Spectrum's Z80 CPU was well-documented, the architecture was open enough to teach computer architecture, and the ROM disassembly was available for study. Soviet technical education system adopted the Spectrum widely.
 4. **Cultural fit.** The Spectrum's emphasis on clever programming over raw hardware power matched the constraints and aesthetics of the post-Soviet demoscene, where extraordinary visual effects were achieved within the 3.5 MHz / 256×192 / 8×8-attribute constraints.
 
-By the late 1990s, the Spectrum was so entrenched in post-Soviet computing culture that it survived the PC's otherwise-complete victory in the region. The Russian-language demoscene — centred on the Pentagon, the TR-DOS disk format, and Russian-language disk magazines like *Spectrofon*, *ZX-Format*, and *Body* — continued producing original software, music, and graphics into the 2000s, long after the platform had been commercially dead in the West.
+By the late 1990s, the Spectrum was so entrenched in post-Soviet computing culture that it survived the PC's otherwise-complete victory in the region. The Russian-language demoscene — centered on the Pentagon, the TR-DOS disk format, and Russian-language disk magazines like *Spectrofon*, *ZX-Format*, and *Body* — continued producing original software, music, and graphics into the 2000s, long after the platform had been commercially dead in the West.
 
 ---
 
@@ -235,9 +235,9 @@ The Spanish **ZX Uno** (~2016) extended this approach with a 28 MHz accelerator,
 
 ### The ZX Spectrum Next (2017–present)
 
-The **ZX Spectrum Next** is the most ambitious modern-revival project. Designed by a team including **Victor Trucco, Fabio Belavenuto, Henrique Olgui, Jim Bagley, and Rick Dickinson** (the original Spectrum case designer, before his death in 2018), the Next was **crowdfunded via Kickstarter in 2017** and shipped to backers from 2020 onward. It is an FPGA-based machine that is both **fully backwards-compatible with the original Spectrum** (down to cycle-exact 48K/128K/+2A/+3 timing) and **a new platform in its own right**, with:
+The **ZX Spectrum Next** is the most ambitious modern-revival project. Designed by a team including **Victor Trucco, Fabio Belavenuto, Henrique Olgui, Jim Bagley, and Rick Dickinson** (the original Spectrum case designer, before his death in 2018), the Next was **crowdfunded via Kickstarter in 2017** and shipped to backers from 2020 onward. It is an FPGA-based machine that is both **fully backward-compatible with the original Spectrum** (down to cycle-exact 48K/128K/+2A/+3 timing) and **a new platform in its own right**, with:
 
-- An expanded **Z80N** CPU (a synthesised Z80 with new instructions including `MUL D,E` for hardware multiply, `PIXELADD`, `SWAPNIB`, and others) running at up to 28 MHz
+- An expanded **Z80N** CPU (a synthesized Z80 with new instructions including `MUL D,E` for hardware multiply, `PIXELADD`, `SWAPNIB`, and others) running at up to 28 MHz
 - **Layer 2** graphics: a 256-color linear framebuffer at 256×192 covering the standard screen area, double-buffered across two RAM banks
 - **Hardware sprites**: 64 sprites per scanline, 16×16 pixels, with per-pixel priority and rotation
 - **Tilemap**: a hardware-scrollable 320×256 tile-based video mode
@@ -353,7 +353,7 @@ The Pentagon is often described in Western histories as a "Sinclair Spectrum clo
 - **Sinclair User magazine archive** (1982–1993) — The longest-running UK Spectrum magazine.
 - **Chris Smith — *The ZX Spectrum ULA*** (2010) — The definitive technical reference on the Ferranti ULA, including detailed history of its development.
 - **Rodnay Zaks — *Programming the Z80*** (1979) — The contemporary Z80 reference used by Spectrum developers.
-- **Adam Adelman, *The Spectrum Compendium*** (1985) — Early-era software catalogue and platform reference.
+- **Adam Adelman, *The Spectrum Compendium*** (1985) — Early-era software catalog and platform reference.
 - **Tony Stratton, *The Spectrum ROM Disassembly*** (1983) — Annotated 48K ROM source, used as a primary reference by ROM hackers.
 - **Andrew Owen — [*The ZX Spectrum ROMs*](https://www.users.globalnet.co.uk/~jg27paw4/)** — Disassembly references for the 48K, 128K, +2, +2A, and +3 ROMs.
 - **Alessandro Grussu — [Spectrumpedia](https://www.alessandrogrussu.it/zx/)** — Comprehensive historical and technical encyclopedia of all ZX Spectrum models, including Spanish variants.

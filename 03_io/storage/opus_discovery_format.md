@@ -429,7 +429,7 @@ The +D's DOS is called **G+DOS**. It is binary-compatible with GDOS at the disk-
 
 ### 6.3 The SAM Coupé (MGT, 1989)
 
-In 1989, MGT released the **SAM Coupé**, a Spectrum-compatible computer with improved hardware (256-colour palette, 4-channel sound, 32 KB ROM with built-in DOS). The SAM Coupé uses an extended MGT format called **SAMDOS 2**:
+In 1989, MGT released the **SAM Coupé**, a Spectrum-compatible computer with improved hardware (256-color palette, 4-channel sound, 32 KB ROM with built-in DOS). The SAM Coupé uses an extended MGT format called **SAMDOS 2**:
 
 - Same physical geometry (80 × 2 × 10 × 512 = 800 KB).
 - Same 256-byte directory entry layout.

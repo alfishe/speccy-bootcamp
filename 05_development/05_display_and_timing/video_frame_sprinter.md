@@ -62,7 +62,7 @@ The Sprinter supports several video modes via a custom video controller (a discr
 | **ZX Spectrum** | 256×192 | 8 + bright | Standard Spectrum mode, 70 Hz refresh |
 | **Text 80×25** | 640×400 | Monochrome | CP/M-compatible |
 | **Text 80×30** | 640×480 | Monochrome | Sprinter's native text mode |
-| **Text 80×50** | 640×400 | 16 colours | Enhanced text with attributes |
+| **Text 80×50** | 640×400 | 16 colors | Enhanced text with attributes |
 | **Graphics 640×480** | 640×480 | Monochrome | CP/M graphics |
 
 In ZX Spectrum mode, the screen layout matches the 48K (256×192 pixels + attributes + border), but the **frame timing is independent** — the visible area is rendered at 70 Hz within an SVGA frame.

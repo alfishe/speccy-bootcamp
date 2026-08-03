@@ -154,14 +154,14 @@ Flash Inc's relationship to the CAFe demoparty (Kyiv, from 1998) is structural �
 **Progress** (Saint Petersburg) is the single most influential group in Soviet Spectrum history, not for their demos (though those were significant) but for **Pro Tracker**. Progress developed:
 
 - **Pro Tracker 1** (1993–1994): an early AY tracker.
-- **Pro Tracker 2 (PT2)** (~1995): the format that would standardise AY composition.
+- **Pro Tracker 2 (PT2)** (~1995): the format that would standardize AY composition.
 - **Pro Tracker 3 (PT3)** (~1997): the refined format that became the *de facto* global AY standard for the next two decades.
 
 PT3 is so important that §6 is dedicated to it. Without PT3, the Soviet scene would not have achieved its cultural reach.
 
 ### 3.6 Skrju (Belarus)
 
-**Skrju**, founded in Minsk, became one of the most respected Soviet groups. Their work is characterised by:
+**Skrju**, founded in Minsk, became one of the most respected Soviet groups. Their work is characterized by:
 
 - **Highly polished demos** with consistent design language.
 - **Long-running activity**: Skrju has been active from the late 1990s through the present.
@@ -177,7 +177,7 @@ By 1997 the Soviet scene had all the infrastructure of a mature demoscene:
 - Disk magazines carrying scene news and reviews.
 - A dominant music format (PT3) and a dominant hardware platform (Pentagon).
 - FidoNet echomail for real-time communication.
-- The first dedicated demoparties (ENLiGHT in St. Petersburg, organised by Random and others).
+- The first dedicated demoparties (ENLiGHT in St. Petersburg, organized by Random and others).
 
 What it lacked was contact with the West. That would change in 1997–1999, and the resulting cross-pollination would push both scenes forward dramatically. See [demoscene_history.md](demoscene_history.md) §5–§6 for the cross-border narrative.
 
@@ -266,7 +266,7 @@ A full technical treatment is in [multicolor_techniques.md](multicolor_technique
 
 ### 5.2 Gigascreen
 
-Gigascreen (also known as **interlace** or **attr-attr**) is a flicker-based colour-mixing technique: alternate two different attributes on successive frames (or successive scanlines), and the eye averages them to a perceived intermediate colour. With careful pairing, gigascreen can produce 15 or more perceived colours from the Spectrum's 8-attribute palette.
+Gigascreen (also known as **interlace** or **attr-attr**) is a flicker-based color-mixing technique: alternate two different attributes on successive frames (or successive scanlines), and the eye averages them to a perceived intermediate color. With careful pairing, gigascreen can produce 15 or more perceived colors from the Spectrum's 8-attribute palette.
 
 Gigascreen was pioneered in the Soviet scene and reached high sophistication there. Modern emulators render gigascreen correctly (mixing the two source frames), but on real CRT hardware the effect depended heavily on phosphor persistence and could look different from monitor to monitor.
 
@@ -279,7 +279,7 @@ For high-end Pentagon work, **TS-Config** is the enabling technology. The idea:
 - A multicolor effect requires ~6144 bytes of attribute data per frame (64×24 cells × 4 bytes per cell with metadata).
 - At 50 Hz, that is ~300 KB per second — far more than fits in 128 KB of RAM.
 - TS-Config defines a hardware/software standard for caching this data on disk and streaming it into RAM in real time via the Beta Disk interface.
-- The result is full-screen 15-colour video at 25 fps (50 Hz fields alternating, with gigascreen mixing).
+- The result is full-screen 15-color video at 25 fps (50 Hz fields alternating, with gigascreen mixing).
 
 TS-Config was originally a hardware extension (a custom disk-cache card for the Pentagon); modern implementations run on FPGA clones (ZX Evolution, ATM Turbo, ZX Uno, MiSTer's Pentagon core) without requiring the original hardware. TS-Config demos are common in modern Russian party releases.
 
@@ -317,7 +317,7 @@ The framework handled:
 
 - **Part sequencing**: loading and running parts in order, with fades between them.
 - **Music continuity**: keeping the PT3 player running across part transitions.
-- **Disk access**: standardised calls into TR-DOS for loading part data.
+- **Disk access**: standardized calls into TR-DOS for loading part data.
 - **Memory banking**: switching Pentagon 128 RAM banks cleanly.
 - **Error handling**: what to do when a part fails to load (usually show a fixed error screen).
 
@@ -371,10 +371,10 @@ By 2000, PT3 had become so universal that the format itself became a kind of soc
 
 ### 6.4 The PT3 player as a code library
 
-The PT3 player routine itself is a remarkable piece of code. It was reverse-engineered, optimised, and re-released by many hands over the years. Notable versions:
+The PT3 player routine itself is a remarkable piece of code. It was reverse-engineered, optimized, and re-released by many hands over the years. Notable versions:
 
 - **PT3P (S.../MMA)**: the canonical Soviet-era player, distributed as relocatable Z80 source.
-- **EPT3 / ETracker player**: optimised for size, used in many 1K/4K intros.
+- **EPT3 / ETracker player**: optimized for size, used in many 1K/4K intros.
 - **PT3 x1000** (used by many post-2000 demos): a high-tempo variant supporting tempo multiplication for more expressive timing.
 - **Modern SjAsmJ versions**: re-assembled with contemporary cross-assemblers for use in modern demos.
 
@@ -417,7 +417,7 @@ The aggressive register preservation (saving the alternate register set, which P
 
 ### 6.5 PT3 composers and the AY aesthetic
 
-PT3 enabled a distinctive Soviet AY aesthetic. Soviet composers (among many others: **MW**, **Nik-O**, **Ironman**, **ASBel**, **Miguk**, **Tiboh**, **X-Trade's Yerzmyey**, **Zilogator**) developed a sound characterised by:
+PT3 enabled a distinctive Soviet AY aesthetic. Soviet composers (among many others: **MW**, **Nik-O**, **Ironman**, **ASBel**, **Miguk**, **Tiboh**, **X-Trade's Yerzmyey**, **Zilogator**) developed a sound characterized by:
 
 - **Rich ornaments** used as a substitute for chord instruments — arpeggiated 3- and 4-note chords produced from a single AY channel, since the chip has only three tone channels.
 - **Sample-driven envelopes** that mimicked acoustic instruments (guitar-like plucks, drum-like percussive attacks, brass-like swells).
@@ -474,7 +474,7 @@ Diskmag editors wielded significant cultural authority. A positive *Body* or *ZX
 
 ### 7.2 FidoNet echomail
 
-**FidoNet** was a store-and-forward dial-up networking system used widely in the Soviet bloc before HTTP internet access became common. FidoNet organised communication into **echomail conferences** (echoes), each devoted to a topic. Messages propagated node-by-node over nightly long-distance calls.
+**FidoNet** was a store-and-forward dial-up networking system used widely in the Soviet bloc before HTTP internet access became common. FidoNet organized communication into **echomail conferences** (echoes), each devoted to a topic. Messages propagated node-by-node over nightly long-distance calls.
 
 The most important FidoNet echoes for the Soviet scene were:
 
@@ -483,7 +483,7 @@ The most important FidoNet echoes for the Soviet scene were:
 - **`RU.HACK`** and **`RU.EMULATOR`**: broader Russian-language echoes that touched on Spectrum topics.
 - **`ECHO.SPECTRUM`**: an English-language echo occasionally bridged into `ZX.SPECTRUM`.
 
-FidoNet was the Soviet scene's IRC. It was where group members coordinated, parties were organised, techniques were debated, and flame wars burned for months. The store-and-forward nature (messages took 1–3 days to propagate across the network) meant that discussions had a slower, more deliberate pace than modern chat.
+FidoNet was the Soviet scene's IRC. It was where group members coordinated, parties were organized, techniques were debated, and flame wars burned for months. The store-and-forward nature (messages took 1–3 days to propagate across the network) meant that discussions had a slower, more deliberate pace than modern chat.
 
 FidoNet archives survive at zx-pk.ru and nedoPC.ru. They are a critical primary source for Soviet scene history, preserving day-to-day texture that no retrospective article can fully reconstruct.
 
@@ -573,7 +573,7 @@ Demo parties continued through the post-Soviet transition, but attendance contra
 - **Sundown** (UK, 2004–) carried the Western-flag banner through the late 2000s.
 - **Syntax** (Russia) emerged as a smaller event.
 
-The party circuit did not collapse — it shrank and specialised. By 2012, sceners who wanted serious Spectrum compo competition went to Forever; sceners who wanted Russian-scene social reunion went to CC or DiHAlt.
+The party circuit did not collapse — it shrank and specialized. By 2012, sceners who wanted serious Spectrum compo competition went to Forever; sceners who wanted Russian-scene social reunion went to CC or DiHAlt.
 
 ### 8.5 Technical baseline at 2012
 

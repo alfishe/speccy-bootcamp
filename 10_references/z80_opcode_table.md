@@ -2,7 +2,7 @@
 
 # Z80 Opcode Table — One-Page Lookup
 
-Every documented Z80 opcode organised by group, with byte count, T-state cost, and flag effects. Compresses the prose from [z80_instruction_set.md](../01_cpu/z80_instruction_set.md) into scan-able tables. For undocumented opcodes (SLL, `OUT (C),0`, IX/IY half-registers, MEMPTR), see [z80_undocumented.md](../01_cpu/z80_undocumented.md).
+Every documented Z80 opcode organized by group, with byte count, T-state cost, and flag effects. Compresses the prose from [z80_instruction_set.md](../01_cpu/z80_instruction_set.md) into scan-able tables. For undocumented opcodes (SLL, `OUT (C),0`, IX/IY half-registers, MEMPTR), see [z80_undocumented.md](../01_cpu/z80_undocumented.md).
 
 > [!NOTE]
 > T-states are for unconditional execution at 3.5 MHz (1 T-state = 285 ns). On the ZX Spectrum, add **contention delay** when accessing contended memory or I/O during the screen-rendering window — see [contention_model.md](../05_development/03_memory_and_io/contention_model.md). All timing assumes no `WAIT` insertion.
@@ -346,7 +346,7 @@ All CB-prefix, 3 operations × 8 bits × 8 registers = 192 instructions.
 
 - [Z80 Instruction Set](../01_cpu/z80_instruction_set.md) — the full prose reference with examples and encoding explanations
 - [Z80 Undocumented Instructions](../01_cpu/z80_undocumented.md) — SLL, `OUT (C),0`, IXH/IXL, MEMPTR, etc.
-- [Z80 Flags](../01_cpu/z80_flags.md) — detailed flag behaviour per instruction group
+- [Z80 Flags](../01_cpu/z80_flags.md) — detailed flag behavior per instruction group
 - [Z80 Addressing Modes](../01_cpu/z80_addressing.md) — register/immediate/indexed/indirect explanations
 - [Z80 Timing](../01_cpu/z80_timing.md) — M-cycles, bus timing, WAIT pin
 - [Contention Model](../05_development/03_memory_and_io/contention_model.md) — how the ULA adds delay during screen-rendering windows
@@ -357,6 +357,6 @@ All CB-prefix, 3 operations × 8 bits × 8 registers = 192 instructions.
 ## Primary Sources
 
 - **Zilog Z80 CPU User Manual (UM0080)** — [zilog.com/docs/z80/um0080.pdf](https://www.zilog.com/docs/z80/um0080.pdf). The canonical ISA reference; opcode tables; flag definitions; electrical timing.
-- **z80.info** — [z80.info](http://www.z80.info). Community-maintained opcode tables, undocumented behaviour references (Deczl Y Gyr), and per-clone divergence notes.
+- **z80.info** — [z80.info](http://www.z80.info). Community-maintained opcode tables, undocumented behavior references (Deczl Y Gyr), and per-clone divergence notes.
 - **The Undocumented Z80 Documented** — Sean Young's canonical reference for undocumented instructions, MEMPTR/WZ, and flag quirks. Hosted at [mydocuments.nl](http://www.mydocuments.nl/z80/).
 - **z80 Instruction Set Reference** — [clrhome.org/support/rgbasm/docs/z80](https://clrhome.org/support/rgbasm/docs/z80/). Online opcode search; useful for quick lookups.

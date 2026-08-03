@@ -36,7 +36,7 @@ The most demanding timing-dependent effects are in the demoscene:
 - **Multicolor** — changing attribute bytes during the horizontal border to produce a 2-pixel-wide color effect (8 attributes per character line × 8 lines = 64 colors per character cell position per frame)
 - **Bobs** — software sprites drawn via attribute changes timed to specific scanlines
 - **Sync-scroller** — synchronizing to a specific scanline and using timed memory writes to produce smooth horizontal scrolling
-- **Copper bars** — changing the BORDER register at specific horizontal positions to produce coloured vertical bars
+- **Copper bars** — changing the BORDER register at specific horizontal positions to produce colored vertical bars
 
 These effects require **T-state-precise** timing — a 1-cycle error is visible as a misaligned pixel. A core that is off by even one T-state in its contention pattern will produce visible glitches in multicolor demos.
 
@@ -331,7 +331,7 @@ A: Minimal at 3.5 MHz — any modern FPGA can run a Spectrum core at this speed 
 
 **Q: Why does my core work in simulation but glitch on hardware?**
 
-A: This is the classic sim-vs-hardware gap. Causes: PLL jitter, asynchronous signal crossings, timing violations not modeled in simulation, or RTL that synthesises differently than expected. Use static timing analysis (STA) to confirm the synthesised design meets timing at the target clock, and verify with on-hardware logic analyser (e.g., Altera SignalTap, Xilinx ChipScope).
+A: This is the classic sim-vs-hardware gap. Causes: PLL jitter, asynchronous signal crossings, timing violations not modeled in simulation, or RTL that synthesises differently than expected. Use static timing analysis (STA) to confirm the synthesized design meets timing at the target clock, and verify with on-hardware logic analyser (e.g., Altera SignalTap, Xilinx ChipScope).
 
 ---
 

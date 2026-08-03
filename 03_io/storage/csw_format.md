@@ -62,7 +62,7 @@ The .CSW format matters because:
 - **It can represent any tape signal**, including analog protections and non-standard encodings that .TZX cannot.
 - **It is the format of last resort** for preservation: when no other format can faithfully represent a tape, .CSW can.
 - **It is the basis for some emulator features** like "record to tape" (where the emulator records the EAR signal to a .CSW file).
-- **It is simpler than raw audio**: .CSW is much smaller than raw audio (because it stores pulse widths, not samples), and it is easier to process (because the pulses are already synchronised to the signal).
+- **It is simpler than raw audio**: .CSW is much smaller than raw audio (because it stores pulse widths, not samples), and it is easier to process (because the pulses are already synchronized to the signal).
 
 ---
 
@@ -74,13 +74,13 @@ A .CSW file consists of a header followed by a stream of compressed pulse widths
 
 The v1 header (introduced in 2001) is a small, fixed-size header that identifies the file and provides the minimum information needed to interpret the pulse data. It contains three pieces of information:
 
-1. **A magic string** — a short ASCII identifier (a truncated form of "Compressed Square Wave") that allows loaders to recognise the file as a .CSW file.
+1. **A magic string** — a short ASCII identifier (a truncated form of "Compressed Square Wave") that allows loaders to recognize the file as a .CSW file.
 2. **A sample rate** — a 16-bit little-endian value giving the sample rate in Hz (typically 44100). All pulse widths in the file are measured in samples at this rate.
 3. **A polarity flag** — a single byte indicating whether the first pulse is high or low (most loaders default to positive-first, where the first pulse is a rising edge).
 
 The v1 header is followed immediately by the compressed pulse data stream (see §3). There is no metadata beyond these three fields: no filename, no publisher, no year, no compression-scheme selector. This was one of the main limitations that motivated the v2 revision.
 
-> **Note**: The exact byte offsets of the v1 header fields vary slightly between implementations and are not fully standardised in the original specification. The v2 header (below) is the recommended format for new .CSW files because it defines a precise, documented layout.
+> **Note**: The exact byte offsets of the v1 header fields vary slightly between implementations and are not fully standardized in the original specification. The v2 header (below) is the recommended format for new .CSW files because it defines a precise, documented layout.
 
 ### 2.2 The v2 header (32 bytes)
 

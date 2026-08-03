@@ -2,7 +2,7 @@
 
 # ALASM + STS — The Dominant Native Assembler of the Soviet and Post-Soviet Spectrum Scene
 
-**ALASM** (АЛАСМ, sometimes "A.L.A.S.M." — *ALenkin Assembler*, named for its origin author) is the most widely used native Z80 assembler in the Soviet and post-Soviet ZX Spectrum clone ecosystem. Developed across the 1990s in versions 3.0 through 5.x by several Russian authors, ALASM was the standard tool at every major Russian demoscene party — **CC** (Championship of Russia), **diHALT**, **CAFe**, **FUNtop** — and at the game studios producing software for the TR-DOS disk ecosystem centred on the [Pentagon](../02_hardware/clones/pentagon.md) and Scorpion clones.
+**ALASM** (АЛАСМ, sometimes "A.L.A.S.M." — *ALenkin Assembler*, named for its origin author) is the most widely used native Z80 assembler in the Soviet and post-Soviet ZX Spectrum clone ecosystem. Developed across the 1990s in versions 3.0 through 5.x by several Russian authors, ALASM was the standard tool at every major Russian demoscene party — **CC** (Championship of Russia), **diHALT**, **CAFe**, **FUNtop** — and at the game studios producing software for the TR-DOS disk ecosystem centered on the [Pentagon](../02_hardware/clones/pentagon.md) and Scorpion clones.
 
 ALASM's reign was roughly **1992–2005** — from the consolidation of the Russian clone scene through the final years of native Spectrum development in the former Soviet Union. In the West, the equivalent period (1983–1990) was dominated by [Zeus](zeus_assembler.md) and [DevPac](devpac_gens_mons.md); in Russia, ALASM (and to a lesser extent [XAS](xas_assembler.md)) filled the same role. ALASM was designed from the start for TR-DOS disk storage, fast assembly on slow clone hardware, and tight integration with the **STS** (*S*tep *T*race *S*ystem) debugger — a pairing as natural to Russian developers as GENS+MONS was to UK studios.
 
@@ -16,7 +16,7 @@ This article is the **deep-dive reference** for ALASM as a tool: its history, de
 
 The Russian Spectrum clone scene emerged in 1989–1990 with the first Pentagon and Scorpion clones, built from Soviet-manufactured TTL logic and Z80-compatible CPUs (КР1858ВМ1). For the first two years, Russian developers used whatever Western tools they could obtain — typically pirated copies of DevPac or older Zeus — running on the clone hardware. These tools were ill-suited to the Russian workflow: they were tape-oriented, English-language, and unaware of TR-DOS disk or the clone-specific I/O ports.
 
-By 1992, the Russian scene was large enough to support native tools. Several Russian programmers began writing assemblers specifically for the TR-DOS / Pentagon ecosystem, optimising for:
+By 1992, the Russian scene was large enough to support native tools. Several Russian programmers began writing assemblers specifically for the TR-DOS / Pentagon ecosystem, optimizing for:
 
 - **TR-DOS disk I/O** for source and binary (not tape)
 - **Cyrillic comment support** (Russian-language comments in source files)
@@ -34,8 +34,8 @@ ALASM was developed across multiple versions by different Russian authors. The v
 | **ALASM 3.0** | 1992 | Alenkin (origin author) | Initial release; TR-DOS native, fast two-pass assembly, basic monitor |
 | **ALASM 3.1** | 1993 | Alenkin + contributors | Bug fixes, expanded macro support |
 | **ALASM 4.0** | 1995 | Community (post-Alenkin) | Improved editor, multi-file projects via `INCLUDE` |
-| **ALASM 4.5** | 1997 | Community | STS debugger integration formalised |
-| **ALASM 5.0** | 1999 | Community | Final classic version; expanded macro language, optimised assembly |
+| **ALASM 4.5** | 1997 | Community | STS debugger integration formalized |
+| **ALASM 5.0** | 1999 | Community | Final classic version; expanded macro language, optimized assembly |
 | **ALASM 5.x** | 2000s | Various maintainers | Minor patches; scene adoption declining as cross-platform tools spread |
 
 The "Alenkin" attribution is the origin of the name (ALenkin ASseMbler); later versions were community-maintained, and the original author's involvement ended around version 4. By version 5, ALASM was a collective product of the Russian Spectrum scene.
@@ -71,7 +71,7 @@ The practical consequence: ALASM's edit-assemble-test cycle was seconds-long fro
 
 ### Fast Assembly on Slow Hardware
 
-Soviet clone hardware was often slower than original Sinclair hardware, due to slower Soviet DRAM and the simpler memory controller logic of clones like the Pentagon (which lacked the Sinclair ULA's contended-memory timing — see [contention_timing.md](../05_development/05_display_and_timing/contention_timing.md)). ALASM was specifically **optimised for fast assembly on this hardware**:
+Soviet clone hardware was often slower than original Sinclair hardware, due to slower Soviet DRAM and the simpler memory controller logic of clones like the Pentagon (which lacked the Sinclair ULA's contended-memory timing — see [contention_timing.md](../05_development/05_display_and_timing/contention_timing.md)). ALASM was specifically **optimized for fast assembly on this hardware**:
 
 - Tight Z80 code in the assembler's inner loop
 - Minimised disk I/O during assembly (single-pass where possible)
@@ -185,7 +185,7 @@ ALASM 5 added more elaborate macro features, including:
 - **Repeat blocks** (`REPT n` ... `ENDR`) for unrolling loops at assembly time
 - **String manipulation** in macros — useful for generating lookup tables
 
-The macro system was less elaborate than XAS's, but adequate for most demoscene and game-development needs. Where XAS specialised in code-generation macros, ALASM prioritised reliable everyday macros.
+The macro system was less elaborate than XAS's, but adequate for most demoscene and game-development needs. Where XAS specialized in code-generation macros, ALASM prioritized reliable everyday macros.
 
 ### Multi-File Projects
 
@@ -230,7 +230,7 @@ STS's distinctive feature — and the reason for its "Step Trace System" name �
 STS, on Pentagon and Scorpion hardware with the appropriate debug hardware (a small add-on board or specific clone revisions), could trace every executed instruction by hooking the Z80's `M1` signal. This gave STS capabilities beyond what Western monitors offered:
 
 - **Full execution trace** — log every instruction executed, with register state at each step
-- **Reverse debugging** — step backwards through execution to find where a bug was introduced
+- **Reverse debugging** — step backward through execution to find where a bug was introduced
 - **Conditional tracing** — trace only when a specific register has a specific value
 
 These capabilities anticipated features that would become common in modern emulators (ZEsarUX's reverse debugging) by a decade or more. They were unique to STS in the 1990s.
@@ -288,7 +288,7 @@ The disk-based workflow was fast by 1990s standards — the full cycle took 10�
 
 ### ALASM-STS Integration (Version 4.5+)
 
-ALASM 4.5 (1997) formalised the integration between ALASM and STS. Rather than two fully separate programs, ALASM 4.5+ could **invoke STS directly** from the editor — pressing a key in ALASM dropped into STS with the assembled binary loaded, much like Zeus's integrated monitor. STS remained a separate program in memory, but the developer no longer had to manually load STS, locate the binary, and so on.
+ALASM 4.5 (1997) formalized the integration between ALASM and STS. Rather than two fully separate programs, ALASM 4.5+ could **invoke STS directly** from the editor — pressing a key in ALASM dropped into STS with the assembled binary loaded, much like Zeus's integrated monitor. STS remained a separate program in memory, but the developer no longer had to manually load STS, locate the binary, and so on.
 
 This brought the ALASM+STS cycle down to seconds — competitive with Zeus — while preserving the separate-program architecture for stability. By the late 1990s, this was the standard Russian-scene workflow.
 
@@ -302,7 +302,7 @@ ALASM was not the only Russian-native assembler. **XAS** (see [xas_assembler.md]
 |---|---|---|
 | **Origin** | Alenkin (1992) | Russian community (early 1990s) |
 | **Editor** | Full-screen, traditional | Full-screen, IDE-like, multi-window |
-| **Macro system** | Solid, parameterised | **Elaborate** — specialised for code generation |
+| **Macro system** | Solid, parameterised | **Elaborate** — specialized for code generation |
 | **Multi-file projects** | `INCLUDE` (ALASM 4+) | `INCLUDE` (XAS 7+) |
 | **STS integration** | Formal (ALASM 4.5+) | Loose — typically used external STS |
 | **Scene adoption** | **Dominant** — most Russian demo crews | Popular at Elite Group, Progress, some demoscene crews |
@@ -357,7 +357,7 @@ No. ALASM development ceased before the Next's release. Modern Russian-scene dev
 
 ### Why did the Russian scene use ALASM rather than DevPac or Zeus?
 
-Three reasons: (1) DevPac and Zeus were tape-oriented and English-language; ALASM was TR-DOS-native and Cyrillic-friendly. (2) DevPac and Zeus were not distributed in the USSR/Russia in the early 1990s; ALASM was freely available within the scene. (3) ALASM was specifically optimised for Pentagon/Scorpion clone hardware and the TR-DOS workflow, which Western tools did not understand.
+Three reasons: (1) DevPac and Zeus were tape-oriented and English-language; ALASM was TR-DOS-native and Cyrillic-friendly. (2) DevPac and Zeus were not distributed in the USSR/Russia in the early 1990s; ALASM was freely available within the scene. (3) ALASM was specifically optimized for Pentagon/Scorpion clone hardware and the TR-DOS workflow, which Western tools did not understand.
 
 ### What's the difference between STS 5.0 and earlier STS versions?
 

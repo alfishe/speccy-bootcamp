@@ -173,7 +173,7 @@ Music data on the Spectrum comes in several formats:
 **Finding the music data**: Set a write watchpoint on the AY register port (`#FFFD`). When the music player writes AY registers, trace back to find the data source:
 
 1. `wp #FFFD` — break on AY register select write
-2. Single-step backwards from the watchpoint to find the player routine
+2. Single-step backward from the watchpoint to find the player routine
 3. The player routine reads from a fixed address — that is the music data pointer
 4. Follow the pointer to find the music data
 

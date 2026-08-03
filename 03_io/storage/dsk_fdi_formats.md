@@ -182,7 +182,7 @@ A .EDSK file can represent:
 - Disks with weak / fuzzy data (via the special `0xFF` size code, see §3.5).
 - Disks with deliberately bogus sector IDs (used by some copy-protection schemes).
 
-The .EDSK format is backwards-compatible: a .DSK reader that only looks at the DIB's "track size" field can still read an .EDSK file, but it will get incorrect results for non-uniform tracks. Modern readers always check the magic string to distinguish .DSK from .EDSK.
+The .EDSK format is backward-compatible: a .DSK reader that only looks at the DIB's "track size" field can still read an .EDSK file, but it will get incorrect results for non-uniform tracks. Modern readers always check the magic string to distinguish .DSK from .EDSK.
 
 ### 3.2 The .EDSK disk information block (DIB)
 
@@ -193,7 +193,7 @@ The DIB layout is identical to .DSK, except for two changes:
 | 0 | 34 | Magic | `"MV - CPC"` (8 chars + zeros) | `"EXTENDED CPC DSK File Format"` (exactly 34 chars) |
 | 50 | 2 | Track size | Single 16-bit track size value | **High byte = 0, low byte = 0** (per-track sizes are in the per-track size table) |
 
-In .DSK, the "track size" field at offset 50 of the DIB is a single 16-bit value that applies to every track. In .EDSK, this field is set to zero, signalling that the file contains a separate **per-track size table**.
+In .DSK, the "track size" field at offset 50 of the DIB is a single 16-bit value that applies to every track. In .EDSK, this field is set to zero, signaling that the file contains a separate **per-track size table**.
 
 ### 3.3 The per-track size table
 

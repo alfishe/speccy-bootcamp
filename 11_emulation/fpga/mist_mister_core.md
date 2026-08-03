@@ -2,7 +2,7 @@
 
 # MiST / MiSTer ZX Spectrum Core — FPGA Hardware Emulation
 
-The **MiST** and **MiSTer** projects are FPGA-based retro-computing platforms that host **hardware cores** — synthesised re-implementations of classic computers in programmable logic. The **ZX Spectrum core for MiST/MiSTer** recreates the Sinclair hardware at the gate level, offering a level of authenticity no software emulator can match: cycle-exact CPU timing, real video signal generation, and exact peripheral behavior. For Spectrum enthusiasts who want a "real" Spectrum without vintage hardware unreliability, the MiSTer Spectrum core is the gold standard of modern hardware emulation.
+The **MiST** and **MiSTer** projects are FPGA-based retro-computing platforms that host **hardware cores** — synthesized re-implementations of classic computers in programmable logic. The **ZX Spectrum core for MiST/MiSTer** recreates the Sinclair hardware at the gate level, offering a level of authenticity no software emulator can match: cycle-exact CPU timing, real video signal generation, and exact peripheral behavior. For Spectrum enthusiasts who want a "real" Spectrum without vintage hardware unreliability, the MiSTer Spectrum core is the gold standard of modern hardware emulation.
 
 This article covers the MiSTer platform, the Spectrum core's history, its hardware coverage (Sinclair models, Russian/Spanish clones, peripherals), the core's architecture and configuration, and how it compares to both real hardware and software emulators like [Fuse](../software/fuse.md) and [ZEsarUX](../software/zesarux.md). Other FPGA options are covered in [zx_uno_core.md](zx_uno_core.md), [zxevo.md](zxevo.md), and [harlequin_sizif.md](harlequin_sizif.md).
 
@@ -24,7 +24,7 @@ The DE10-Nano's combination of:
 - **Large FPGA fabric** (85K LEs) — enough for the most complex retro machines (Amiga 1200 with AGA, IBM PC AT, Neo Geo)
 - **ARM HPS running Linux** — handles file I/O, networking, and user interface
 - **Affordable price** (~$130 USD for the bare board, $200+ with add-ons) — accessible to hobbyists
-- **Open hardware ecosystem** — many add-on boards (USB hub, SDRAM, I/O board, analogue video output)
+- **Open hardware ecosystem** — many add-on boards (USB hub, SDRAM, I/O board, analog video output)
 
 has made MiSTer the dominant FPGA retro-computing platform of the modern era. Hundreds of thousands of MiSTer units are in active use worldwide.
 
@@ -118,7 +118,7 @@ Files are selected via the MiSTer on-screen-display (OSD) menu, accessible via F
 
 ## Core Architecture
 
-The MiSTer ZX Spectrum core is implemented in **Verilog HDL**, synthesised to the Cyclone V FPGA. The core's top-level modules include:
+The MiSTer ZX Spectrum core is implemented in **Verilog HDL**, synthesized to the Cyclone V FPGA. The core's top-level modules include:
 
 ### Z80 CPU
 
@@ -258,7 +258,7 @@ Software emulators are preferred when:
 ## FAQ
 
 **Q: How accurate is the MiSTer Spectrum core compared to real hardware?**
-Very accurate — typically indistinguishable for software that does not depend on sub-cycle analogue effects. The CPU is cycle-exact; the ULA's memory contention matches the original; the AY-3-8912 produces correct tones. Known divergences are typically in obscure edge cases (specific floating-bus cycles, exact PAL color phase, etc.) that affect a handful of demos but no commercial software.
+Very accurate — typically indistinguishable for software that does not depend on sub-cycle analog effects. The CPU is cycle-exact; the ULA's memory contention matches the original; the AY-3-8912 produces correct tones. Known divergences are typically in obscure edge cases (specific floating-bus cycles, exact PAL color phase, etc.) that affect a handful of demos but no commercial software.
 
 **Q: Can I load my old Spectrum tape collection?**
 Yes. The core loads `.tap` and `.tzx` files, with the original ROM-based loading routine. You can experience the famous loading bars and screeching audio — or use the "load instant" option if you prefer to skip the wait.
@@ -267,7 +267,7 @@ Yes. The core loads `.tap` and `.tzx` files, with the original ROM-based loading
 Partial. There is a separate **Spectrum Next core** for MiSTer that implements some Next features (Z80N, layer 2, sprites, tilemap), but it is less complete than [CSpect](../software/cspect.md) for Next-specific work. The standard Spectrum core focuses on original Sinclair hardware.
 
 **Q: Do I need the Analogue I/O Board?**
-No — MiSTer works with HDMI alone. The Analogue I/O Board adds VGA/composite/S-video outputs and analogue audio, which are valuable for CRT enthusiasts but not required for general use.
+No — MiSTer works with HDMI alone. The Analogue I/O Board adds VGA/composite/S-video outputs and analog audio, which are valuable for CRT enthusiasts but not required for general use.
 
 **Q: Do I need the SDRAM module?**
 For the Spectrum core, no — the Spectrum's 48K/128K RAM fits comfortably in the FPGA's on-chip memory. Other cores (Amiga, PC) require the SDRAM module, so most MiSTer owners add it as standard.

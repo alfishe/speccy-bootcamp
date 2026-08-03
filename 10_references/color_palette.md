@@ -2,13 +2,13 @@
 
 # ZX Spectrum Color Palette — Reference Tables
 
-Quick-reference color tables for all ZX Spectrum palette systems: the standard 15-colour attribute palette, the ULAplus 64-colour extension, and the ZX Spectrum Next 256-colour Layer 2 palette. For the conceptual model (attribute bytes, attribute clash, BRIGHT/FLASH semantics, ULA hardware color generation), see [color_system.md](../05_development/05_display_and_timing/color_system.md).
+Quick-reference color tables for all ZX Spectrum palette systems: the standard 15-color attribute palette, the ULAplus 64-color extension, and the ZX Spectrum Next 256-color Layer 2 palette. For the conceptual model (attribute bytes, attribute clash, BRIGHT/FLASH semantics, ULA hardware color generation), see [color_system.md](../05_development/05_display_and_timing/color_system.md).
 
 ---
 
 ## Standard 15-Colour Palette
 
-The ZX Spectrum's attribute byte encodes **INK (3 bits) + PAPER (3 bits) + BRIGHT (1 bit) + FLASH (1 bit)**. The 3-bit colour code selects one of 8 base colours; the BRIGHT flag toggles between the dim and bright variants, giving **15 unique colours** (bright black = normal black):
+The ZX Spectrum's attribute byte encodes **INK (3 bits) + PAPER (3 bits) + BRIGHT (1 bit) + FLASH (1 bit)**. The 3-bit color code selects one of 8 base colors; the BRIGHT flag toggles between the dim and bright variants, giving **15 unique colors** (bright black = normal black):
 
 | Code | Binary | Normal (BRIGHT=0) | Bright (BRIGHT=1) |
 |---|---|---|---|
@@ -82,9 +82,9 @@ FF FF FF    ; 7 Bright White
 
 ---
 
-## Border Colour (8 colours)
+## Border Colour (8 colors)
 
-The border colour is set via port `#FE` bits 3-5 (the same encoding as PAPER). It supports only the **8 base colours**, not the bright variants — there is no BRIGHT bit for the border on original Sinclair/Amstrad hardware.
+The border color is set via port `#FE` bits 3-5 (the same encoding as PAPER). It supports only the **8 base colors**, not the bright variants — there is no BRIGHT bit for the border on original Sinclair/Amstrad hardware.
 
 ```z80
 ; Set border to colour N (0-7)
@@ -100,7 +100,7 @@ Some clones (Pentagon, ATM Turbo) and FPGA implementations (ZX-Uno, Harlequin) e
 
 ## ULAplus 64-Colour Palette
 
-ULAplus is a hardware extension implemented in FPGA clones (ZX-Uno, MiSTer, Harlequin, Sizif-512) and several emulators. It adds a **programmable 64-colour palette** with 2 bits per RGB channel:
+ULAplus is a hardware extension implemented in FPGA clones (ZX-Uno, MiSTer, Harlequin, Sizif-512) and several emulators. It adds a **programmable 64-color palette** with 2 bits per RGB channel:
 
 ```
 ULAplus palette entry format (6 bits):
@@ -120,11 +120,11 @@ Each of the 2-bit channel values maps to an output intensity (not strictly linea
 | `10` | Medium | `#AA` |
 | `11` | Full | `#FF` |
 
-So ULAplus entry `%10 01 10` (R=2, G=1, B=2) = `#AA #55 #AA` = a medium-violet colour.
+So ULAplus entry `%10 01 10` (R=2, G=1, B=2) = `#AA #55 #AA` = a medium-violet color.
 
 ### Palette Mapping to Attribute Bytes
 
-The 16 standard attribute values (8 colours × 2 brightness) are remapped to **16 of the 64 palette entries** in ULAplus mode. The mapping is:
+The 16 standard attribute values (8 colors × 2 brightness) are remapped to **16 of the 64 palette entries** in ULAplus mode. The mapping is:
 
 | Attribute byte | ULAplus entry |
 |---|---|
@@ -164,15 +164,15 @@ For ULAplus detection, attribute clash workarounds, and 8×1 attribute mode, see
 
 ## ZX Spectrum Next 256-Colour Palette
 
-The ZX Spectrum Next (2017–2020) provides a **256-colour indexed palette** for its Layer 2 (256×192, 8-bpp) and enhanced attribute modes. Each palette entry is a **24-bit RGB888** value stored in three NextReg writes.
+The ZX Spectrum Next (2017–2020) provides a **256-color indexed palette** for its Layer 2 (256×192, 8-bpp) and enhanced attribute modes. Each palette entry is a **24-bit RGB888** value stored in three NextReg writes.
 
 ### Layer 2 Palette Encoding
 
-The 256 palette entries are indexed by an 8-bit value (0-255). Each entry is 24-bit RGB with 8 bits per channel. The default palette provides a smooth gradient plus the standard 15 Spectrum colours.
+The 256 palette entries are indexed by an 8-bit value (0-255). Each entry is 24-bit RGB with 8 bits per channel. The default palette provides a smooth gradient plus the standard 15 Spectrum colors.
 
 | Index range | Default contents |
 |---|---|
-| 0–15 | Standard Spectrum colours (matches FUSE palette above) |
+| 0–15 | Standard Spectrum colors (matches FUSE palette above) |
 | 16–127 | Smooth gradients across the RGB cube |
 | 128–255 | Reserved / additional gradients |
 
@@ -199,11 +199,11 @@ The palette index auto-increments after each 3-byte write, allowing fast bulk pa
 
 ### Layer 2 vs Layer 1 (ULA) Palette Independence
 
-On the Next, Layer 2 has its own **separate 256-entry palette** that does not affect the ULA (Layer 1) display. The Next can display both layers simultaneously with different palettes, enabling full-colour sprites over attribute-constrained backgrounds.
+On the Next, Layer 2 has its own **separate 256-entry palette** that does not affect the ULA (Layer 1) display. The Next can display both layers simultaneously with different palettes, enabling full-color sprites over attribute-constrained backgrounds.
 
 ### Per-Scanline Palette via Copper
 
-The Next's **copper coprocessor** can rewrite palette entries at specific scanlines, enabling per-scanline colour cycling (e.g., copper-bar effects, horizon gradients). See [video_frame_next.md](../05_development/05_display_and_timing/video_frame_next.md) for the copper instruction set and timing.
+The Next's **copper coprocessor** can rewrite palette entries at specific scanlines, enabling per-scanline color cycling (e.g., copper-bar effects, horizon gradients). See [video_frame_next.md](../05_development/05_display_and_timing/video_frame_next.md) for the copper instruction set and timing.
 
 For complete Next hardware details (Layer 2, sprites, tilemap, copper, DMA), see [memory_and_io_next.md](../05_development/03_memory_and_io/memory_and_io_next.md).
 
@@ -211,15 +211,15 @@ For complete Next hardware details (Layer 2, sprites, tilemap, copper, DMA), see
 
 ## Timex TS/TC 2068 Extended Modes
 
-The Timex Sinclair 2068 (US) and Timex Computer 2048 (Poland) use the **same 15-colour palette** as the standard Spectrum but with two extended display modes that change **how** attributes are arranged (not the colours themselves):
+The Timex Sinclair 2068 (US) and Timex Computer 2048 (Poland) use the **same 15-color palette** as the standard Spectrum but with two extended display modes that change **how** attributes are arranged (not the colors themselves):
 
 | Mode | Attributes | Notes |
 |---|---|---|
 | Standard | 8×8 cells | Same as ZX Spectrum |
 | HiColor | 8×1 cells | 6,144 attribute bytes, eliminates vertical attribute clash |
-| HiRes | 2 colours per 8×1 strip | 512×192 pixel resolution, no separate attribute bytes |
+| HiRes | 2 colors per 8×1 strip | 512×192 pixel resolution, no separate attribute bytes |
 
-The colour values and palette are identical — only the addressing changes. See [color_system.md](../05_development/05_display_and_timing/color_system.md) for details.
+The color values and palette are identical — only the addressing changes. See [color_system.md](../05_development/05_display_and_timing/color_system.md) for details.
 
 ---
 

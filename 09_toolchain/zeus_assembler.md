@@ -14,7 +14,7 @@ This article is the **deep-dive reference** for Zeus as a tool: its history, des
 
 Neil Mottershead wrote the original Zeus in 1981 for the **Nascom 2**, a British kit computer based on the Z80 and launched in 1979. The Nascom had a small but enthusiastic developer community, and Mottershead's assembler stood out for its integration: rather than the typical separate editor/assembler/linker toolchain of the era, Zeus combined editing, assembly, and debugging in a single program. This integration was possible because the Nascom ran a single-tasking ROM-based OS — there was no benefit to separate programs, and a lot of benefit to a unified workflow.
 
-When Sinclair launched the ZX Spectrum in April 1982, Mottershead recognised it as the natural successor to the Nascom — same CPU, similar memory map, much larger market. He began porting Zeus, joined by **Simon Brattel**, a UK developer who had worked on other Nascom software.
+When Sinclair launched the ZX Spectrum in April 1982, Mottershead recognized it as the natural successor to the Nascom — same CPU, similar memory map, much larger market. He began porting Zeus, joined by **Simon Brattel**, a UK developer who had worked on other Nascom software.
 
 ### The 1983 Spectrum Launch (Crystal Computing)
 
@@ -38,7 +38,7 @@ This integration is what set Zeus apart. DevPac users had to switch between GENS
 | **Zeus 1.0** | 1983 | Initial Spectrum release; full-screen editor, monitor, disassembler |
 | **Zeus 2.0** | 1985 | Improved macro language, +3 DOS support for disk-based sources |
 | **Zeus 3.0** | 1987 | Conditional assembly enhancements, 128K RAM support, faster assembly |
-| **Zeus 3.5** | 1989 | Bug fixes; final "classic" version that commercial studios standardised on |
+| **Zeus 3.5** | 1989 | Bug fixes; final "classic" version that commercial studios standardized on |
 | **Zeus 4** (early) | 1990s | Limited distribution; transition to Next-era development begins |
 
 By the late 1980s, Zeus had become the **standard tool at serious hobbyist and small-studio developers** in the UK. Commercial studios typically used HiSoft DevPac (which was seen as more reliable for very large sources), but Zeus had the enthusiasts.
@@ -47,7 +47,7 @@ By the late 1980s, Zeus had become the **standard tool at serious hobbyist and s
 
 Through the 1990s, Spectrum-native development declined as developers moved to PCs and cross-assemblers. Zeus development slowed. Simon Brattel continued to maintain the code privately, but no major release appeared for over a decade.
 
-The Russian Spectrum scene — which kept native development alive through the late 1990s — standardised on **ALASM** and **XAS** instead, neither of which shared any lineage with Zeus. The Pentagon/Scorpion ecosystem developed its own toolchain conventions optimised for TR-DOS disk storage; Zeus's UK tape/disk heritage was irrelevant there.
+The Russian Spectrum scene — which kept native development alive through the late 1990s — standardized on **ALASM** and **XAS** instead, neither of which shared any lineage with Zeus. The Pentagon/Scorpion ecosystem developed its own toolchain conventions optimized for TR-DOS disk storage; Zeus's UK tape/disk heritage was irrelevant there.
 
 ### The Zeus 4 Revival (2010s–present)
 
@@ -435,7 +435,7 @@ Mostly yes, with minor edits. Zeus uses `#` for hex (`#FF`) where sjasmplus uses
 
 ### Why didn't Zeus dominate the Soviet scene?
 
-By the time the Soviet clone scene matured (1989–1992), Zeus had no distribution in the USSR. The Russian scene standardised on **ALASM** and **XAS**, which were written by Russian authors for the TR-DOS / Pentagon ecosystem. Zeus's UK tape/disk heritage was irrelevant to the Soviet workflow. See [alasm_sts.md](alasm_sts.md) and [xas_assembler.md](xas_assembler.md).
+By the time the Soviet clone scene matured (1989–1992), Zeus had no distribution in the USSR. The Russian scene standardized on **ALASM** and **XAS**, which were written by Russian authors for the TR-DOS / Pentagon ecosystem. Zeus's UK tape/disk heritage was irrelevant to the Soviet workflow. See [alasm_sts.md](alasm_sts.md) and [xas_assembler.md](xas_assembler.md).
 
 ### Why did commercial UK studios prefer DevPac over Zeus?
 

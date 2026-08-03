@@ -22,6 +22,6 @@ Video frame generation, per-model timing, raster synchronization, contention, fl
 | [video_frame_sprinter.md](video_frame_sprinter.md) | Peters Plus Sprinter: SVGA 70 Hz frame (not PAL 50 Hz), 20 MHz Z80, 5 video modes, music tempo 40% faster |
 | [video_frame_zxevo.md](video_frame_zxevo.md) | ZX Evolution (PentEvo): real Z80 + Altera MAX CPLDs, Pentagon-compatible base timing, BaseConf vs TS-Conf configurations |
 | [contention_timing.md](contention_timing.md) | Per-T-state delay tables (Ferranti 6-5-4-3-2-1-0-0, Amstrad 1-0-7-6-5-4-3-2), per-instruction contended cost tables, I/O contention |
-| [interlace_and_flicker.md](interlace_and_flicker.md) | Spectrum's non-interlaced output, 50 Hz perception threshold, attribute flicker, GigaScreen flicker math, CRT vs LCD behaviour |
-| [crt_output.md](crt_output.md) | Software developer's view of CRT/LCD output: pixel aspect ratio, overscan, composite artifacts, per-display-type behaviour |
+| [interlace_and_flicker.md](interlace_and_flicker.md) | Spectrum's non-interlaced output, 50 Hz perception threshold, attribute flicker, GigaScreen flicker math, CRT vs LCD behavior |
+| [crt_output.md](crt_output.md) | Software developer's view of CRT/LCD output: pixel aspect ratio, overscan, composite artifacts, per-display-type behavior |
 | [video_frame_comparison.md](video_frame_comparison.md) | Synthesis: all models side-by-side — T-states/frame, scanlines, contention pattern, turbo, compatibility matrix, detection decision tree |

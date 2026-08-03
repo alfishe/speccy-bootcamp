@@ -103,7 +103,7 @@ See [AY-3-8912 PSG Silicon](../hardware/ay_3_8912.md) for the chip's register se
 
 ### Register 13 Quirk
 
-AY register `#13` (envelope shape) has a special property: **writing to it resets the envelope generator**. The standard practice in PSG dumps is to write `0xFF` to register 13 in any frame where the envelope shape should *not* change — players detect `0xFF` as a "no write" sentinel and skip the register write. This preserves correct envelope-continue behaviour.
+AY register `#13` (envelope shape) has a special property: **writing to it resets the envelope generator**. The standard practice in PSG dumps is to write `0xFF` to register 13 in any frame where the envelope shape should *not* change — players detect `0xFF` as a "no write" sentinel and skip the register write. This preserves correct envelope-continue behavior.
 
 A PSG player that does not implement this sentinel will audibly glitch envelope shapes on every frame.
 

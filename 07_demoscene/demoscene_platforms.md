@@ -12,13 +12,13 @@
 
 A demoscene is, fundamentally, a long argument with a piece of hardware about what that hardware can be made to do. The argument's character depends entirely on the hardware:
 
-- **C64 sceners** argue with the VIC-II's hardware sprites and the SID's analogue filter — they want to *extend* capabilities the chip already provides.
+- **C64 sceners** argue with the VIC-II's hardware sprites and the SID's analog filter — they want to *extend* capabilities the chip already provides.
 - **Amiga sceners** argue with the Copper, Blitter, and Paula — they want to *combine* existing co-processors in ways the chip designers did not anticipate.
 - **Spectrum sceners** argue with the absence of hardware support — they want to *build, in software, what other platforms get for free*.
 
-These three argument-styles produce profoundly different bodies of work. A C64 effect that looks effortless (a smooth 8-pixel horizontal scroll) is impossible on the Spectrum without cycle-counted multicolor work; a Spectrum effect that looks effortless (full-frame attribute manipulation, 15-colour interlaced gigascreen) is impossible on the C64 because the VIC-II owns its colour RAM. Cross-platform comparison is the only way to understand why each scene's tradition looks the way it does.
+These three argument-styles produce profoundly different bodies of work. A C64 effect that looks effortless (a smooth 8-pixel horizontal scroll) is impossible on the Spectrum without cycle-counted multicolor work; a Spectrum effect that looks effortless (full-frame attribute manipulation, 15-color interlaced gigascreen) is impossible on the C64 because the VIC-II owns its color RAM. Cross-platform comparison is the only way to understand why each scene's tradition looks the way it does.
 
-Comparison also reveals **cross-pollination**: the AY/YM sound chip is shared (with minor variations) between Spectrum, ST, MSX, and CPC; certain demoscene effects (raster sync, copper-style per-scanline register manipulation) have analogues across multiple platforms; and tracker formats (notably PT3) crossed the East–West border. See §9 for the AY/YM bridge.
+Comparison also reveals **cross-pollination**: the AY/YM sound chip is shared (with minor variations) between Spectrum, ST, MSX, and CPC; certain demoscene effects (raster sync, copper-style per-scanline register manipulation) have analogs across multiple platforms; and tracker formats (notably PT3) crossed the East–West border. See §9 for the AY/YM bridge.
 
 ### Article Roadmap
 
@@ -46,12 +46,12 @@ The table below summarises the principal demoscene-relevant hardware features of
 | **CPU** | Z80A @ 3.5 MHz | Z80A @ 3.54690 MHz | MOS 6510 @ 1.023 MHz | Motorola 68000 @ 7.09 MHz (PAL) | Motorola 68000 @ 8.0 MHz | Z80A @ 3.58 MHz | Z80A @ 4.0 MHz |
 | **CPU register width** | 8-bit (16-bit BC/DE/HL pairs) | same | 8-bit | 16/32-bit (32 internal) | 16/32-bit (32 internal) | 8-bit | 8-bit |
 | **Base RAM** | 16K/48K | 128K (banked) | 64K | 512K (chip RAM + fast RAM) | 512K/1024K | 8K–64K (32K typical) | 64K/128K |
-| **Video** | Ferranti ULA-variant: framebuffer with attribute bytes; 256×192, 32×24 attribute cells | same + extra video modes (not used by demoscene) | VIC-II: 40×25 text, 320×200 hi-res, 160×200 multicolour, 8 hardware sprites, 16-colour fixed palette, hardware smooth-scroll | OCS: bitplanes (up to 6), 320×256 / 320×512 (interlaced), 32/64/4096 colours, dual-playfield, hardware sprites | Yamaha YM701 (ST Shifter): 320×200 (16 colours) / 640×200 (mono), no sprites, no hardware scroll | TMS9918A: 16-colour 256×192, 32 hardware sprites, fixed palette of 15 | ASIC ("Gate Array"): 160×200 (16 colours) / 320×200 (4 colours) / 640×200 (2 colours), no sprites, no hardware scroll |
-| **Palette (hardware colours)** | 8 colours × 2 brightness = 15 | same | 16 fixed | 4096 (12-bit RGB) | 512 (9-bit RGB), 16 on screen | 15 fixed | 27 fixed (12-bit RGB from 4096); 16/4/2 on screen depending on mode |
-| **Attribute resolution** | 8×8 cells (32×24 grid) | same | Per-pixel (separate colour RAM) — *no attribute clash* | Per-pixel (bitplane-per-colour-index) | Per-pixel | Per-cell but in a different sense (colour table indirection); no clash | Per-pixel |
-| **Hardware sprites** | None | None | 8 sprites, 24×21, multicolour mode, per-sprite expand | Up to 8 (in lo-res, dual playfield mode) per frame, 16-colour | None | 32 single-colour sprites, 8 per scanline | None |
+| **Video** | Ferranti ULA-variant: framebuffer with attribute bytes; 256×192, 32×24 attribute cells | same + extra video modes (not used by demoscene) | VIC-II: 40×25 text, 320×200 hi-res, 160×200 multicolour, 8 hardware sprites, 16-color fixed palette, hardware smooth-scroll | OCS: bitplanes (up to 6), 320×256 / 320×512 (interlaced), 32/64/4096 colors, dual-playfield, hardware sprites | Yamaha YM701 (ST Shifter): 320×200 (16 colors) / 640×200 (mono), no sprites, no hardware scroll | TMS9918A: 16-color 256×192, 32 hardware sprites, fixed palette of 15 | ASIC ("Gate Array"): 160×200 (16 colors) / 320×200 (4 colors) / 640×200 (2 colors), no sprites, no hardware scroll |
+| **Palette (hardware colors)** | 8 colors × 2 brightness = 15 | same | 16 fixed | 4096 (12-bit RGB) | 512 (9-bit RGB), 16 on screen | 15 fixed | 27 fixed (12-bit RGB from 4096); 16/4/2 on screen depending on mode |
+| **Attribute resolution** | 8×8 cells (32×24 grid) | same | Per-pixel (separate color RAM) — *no attribute clash* | Per-pixel (bitplane-per-color-index) | Per-pixel | Per-cell but in a different sense (color table indirection); no clash | Per-pixel |
+| **Hardware sprites** | None | None | 8 sprites, 24×21, multicolour mode, per-sprite expand | Up to 8 (in lo-res, dual playfield mode) per frame, 16-color | None | 32 single-color sprites, 8 per scanline | None |
 | **Hardware scrolling** | None | None | Yes (VIC-II registers `XSCROLL`/`YSCROLL`) | Yes (modulo-based playfield scrolling) | No (must be done in software, like Spectrum) | Yes (TMS9918A `NAME TABLE BASE`/`PGC BASE` indirection) | No |
-| **Sound chip** | None (1-bit beeper) | AY-3-8912 | MOS 6581/8580 SID (3-voice, analogue filter) | Paula (4-channel 8-bit PCM, hard-panned stereo) | Yamaha YM2149 (3-voice PSG; AY-compatible) | AY-3-8910 (3-voice PSG) | AY-3-8912 (3-voice PSG) |
+| **Sound chip** | None (1-bit beeper) | AY-3-8912 | MOS 6581/8580 SID (3-voice, analog filter) | Paula (4-channel 8-bit PCM, hard-panned stereo) | Yamaha YM2149 (3-voice PSG; AY-compatible) | AY-3-8910 (3-voice PSG) | AY-3-8912 (3-voice PSG) |
 | **Sound chip registers** | n/a (1-bit OUT) | 0xFFFD (address), 0xBFFD (data) | 0xD400–0xD41E (SID is 29 bytes) | Custom DMA audio ($BFxxxx) | 0xFFFF (address), 0xFF8802 (data, ST) | 0xA0–0xA1 (PSG ports) | 0xF6xx (Gate Array latches) |
 | **Sample playback (4-bit)** | Manual bit-banging via beeper (~28 kHz theoretical, ~6–8 kHz usable) | Manual via AY envelope or beeper; also external interfaces | Via SID + CPU modulation (4-bit samples possible at low rate) | Hardware — Paula plays 8-bit samples via DMA at arbitrary rate | Bit-banged via YM2149 envelope; some technique | Bit-banged via AY envelope | Bit-banged via AY envelope |
 | **Storage** | Cassette (~1500 baud standard, custom loaders up to ~8000 baud) | Cassette + 3" disk (+3) or TR-DOS (Soviet clones) | Cassette (C2N, ~300 baud Datasette) + 1541 floppy (5¼") | 3½" DD floppy (880 KB), internal IDE (later) | 3½" DD floppy (720 KB) + ACSI/HDD | Cassette + ROM cartridge + (later) floppy | 3" floppy (180 KB single-sided) |
@@ -64,8 +64,8 @@ The table below summarises the principal demoscene-relevant hardware features of
 
 A few patterns emerge immediately:
 
-- **The Spectrum is the only major platform with no dedicated video co-processor**. The CPU does *everything* — every pixel write, every attribute change, every colour register poke. This is the Spectrum's defining constraint and its defining opportunity.
-- **The Spectrum is the only major platform with no hardware sprites**. The C64 has 8, the Amiga has 8, the MSX has 32 (single-colour), the ST and CPC have none — but the ST and CPC compensate with bitplane/linear-framebuffer modes that make software sprites easier.
+- **The Spectrum is the only major platform with no dedicated video co-processor**. The CPU does *everything* — every pixel write, every attribute change, every color register poke. This is the Spectrum's defining constraint and its defining opportunity.
+- **The Spectrum is the only major platform with no hardware sprites**. The C64 has 8, the Amiga has 8, the MSX has 32 (single-color), the ST and CPC have none — but the ST and CPC compensate with bitplane/linear-framebuffer modes that make software sprites easier.
 - **Three platforms share the AY/YM sound chip family**: Spectrum 128, ST (YM2149), MSX1 (AY-3-8910), CPC (AY-3-8912). This is the basis for cross-pollination of music (§9).
 - **The Spectrum is the slowest** of the comparable platforms in raw CPU speed, but only by a small margin (3.5 MHz vs 3.58 MHz MSX or 4 MHz CPC). The C64's 1 MHz 6510 is *slower* per-instruction-cycle but executes 1 instruction per 2 cycles vs the Z80's typical 4–10 cycles per instruction, so per-instruction throughput is comparable.
 - **The Amiga is in a different class entirely** — 16-bit CPU at 7 MHz with multiple co-processors. Spectrum-vs-Amiga is not really a fair comparison; the Amiga could do things the Spectrum simply cannot.
@@ -80,26 +80,26 @@ The ZX Spectrum and the Commodore 64 are the most compared platforms in the 8-bi
 
 ### 3.1 Hardware contrast in one paragraph
 
-The C64's VIC-II provides 8 hardware sprites, 16 fixed colours with per-pixel colour RAM, hardware horizontal and vertical scrolling, three display modes (hi-res, multicolour, extended colour), a raster-interrupt line, and a sprite-sprite collision register. The Spectrum's ULA provides *none* of these — no sprites, no scrolling, no raster interrupt, fixed attribute cells at 8×8 resolution, and a 15-colour palette. The C64's SID provides 3 synthesised voices with an analogue filter and ADSR envelopes; the Spectrum 48K has a 1-bit beeper. Even where the two platforms overlap — both are 8-bit, both have ~16-colour palettes, both have ~64K RAM — the *quality* of those features differs enormously in the C64's favour.
+The C64's VIC-II provides 8 hardware sprites, 16 fixed colors with per-pixel color RAM, hardware horizontal and vertical scrolling, three display modes (hi-res, multicolour, extended color), a raster-interrupt line, and a sprite-sprite collision register. The Spectrum's ULA provides *none* of these — no sprites, no scrolling, no raster interrupt, fixed attribute cells at 8×8 resolution, and a 15-color palette. The C64's SID provides 3 synthesized voices with an analog filter and ADSR envelopes; the Spectrum 48K has a 1-bit beeper. Even where the two platforms overlap — both are 8-bit, both have ~16-color palettes, both have ~64K RAM — the *quality* of those features differs enormously in the C64's favor.
 
 ### 3.2 What the C64 does that the Spectrum cannot
 
 - **Smooth hardware scrolling.** A C64 demo scrolls the playfield by writing two registers; a Spectrum demo scrolls the playfield by re-writing every visible byte of the framebuffer in real time. C64 demos can scroll arbitrarily at 50 Hz; Spectrum scrolls are partial and use clever encoding (precomputed deltas).
 - **Hardware sprites.** C64 demos routinely have 8 sprites on screen per scanline, multiplexed (the raster interrupt repositions them mid-frame) to give the appearance of dozens. Spectrum demos have *no* sprites; every moving object is software-rendered pixel-by-pixel.
-- **Per-pixel colour.** The C64's separate colour RAM gives every 8×1 character cell its own colour, independently of the rest of the screen. The Spectrum's 8×8 attribute grid produces the famous **attribute clash**: a horizontal stripe of 8 pixels must share a single ink and paper colour.
-- **SID music.** The SID's analogue filter enables pads, sweeps, and bass lines that have no direct equivalent on the AY (or, worse, the beeper). C64 music tradition (Hubbard, Galway, Daglish) is the deepest of any 8-bit platform and the standard against which other 8-bit music is measured.
+- **Per-pixel color.** The C64's separate color RAM gives every 8×1 character cell its own color, independently of the rest of the screen. The Spectrum's 8×8 attribute grid produces the famous **attribute clash**: a horizontal stripe of 8 pixels must share a single ink and paper color.
+- **SID music.** The SID's analog filter enables pads, sweeps, and bass lines that have no direct equivalent on the AY (or, worse, the beeper). C64 music tradition (Hubbard, Galway, Daglish) is the deepest of any 8-bit platform and the standard against which other 8-bit music is measured.
 - **Raster effects without cycle counting.** The VIC-II generates a raster interrupt at any programmable scanline; the CPU can update registers between interrupts. The Spectrum's only raster tool is *cycle-counting* the CPU against the ULA's display fetches — possible but much harder.
 
 ### 3.3 What the Spectrum does that the C64 cannot
 
-- **Per-frame attribute manipulation at zero CPU cost during display.** The VIC-II owns its colour RAM during the visible display; the C64 CPU can write to colour RAM at any time, but the *visible* per-scanline colour is fixed by what the VIC-II fetches. The Spectrum's attribute RAM is just ordinary RAM — the CPU can rewrite it mid-display if it can keep up. This is the basis of **multicolor** (see [multicolor_techniques.md](multicolor_techniques.md)).
-- **Full-frame arbitrary attribute patterns.** Because colour RAM on the Spectrum is the same as display RAM, a single `LDIR` copy from a precomputed buffer can repaint every attribute cell on screen. C64 demos need to rewrite the entire 1K colour RAM to achieve the same effect.
+- **Per-frame attribute manipulation at zero CPU cost during display.** The VIC-II owns its color RAM during the visible display; the C64 CPU can write to color RAM at any time, but the *visible* per-scanline color is fixed by what the VIC-II fetches. The Spectrum's attribute RAM is just ordinary RAM — the CPU can rewrite it mid-display if it can keep up. This is the basis of **multicolor** (see [multicolor_techniques.md](multicolor_techniques.md)).
+- **Full-frame arbitrary attribute patterns.** Because color RAM on the Spectrum is the same as display RAM, a single `LDIR` copy from a precomputed buffer can repaint every attribute cell on screen. C64 demos need to rewrite the entire 1K color RAM to achieve the same effect.
 - **Direct framebuffer access.** The Spectrum's pixel framebuffer is a simple (if weirdly-laid-out) 6144-byte linear region. The C64's framebuffer is interleaved with the VIC-II's display fetches and has more complex layout constraints.
 - **1-bit music engines.** The Spectrum beeper tradition (see [1bit_music_scene.md](1bit_music_scene.md)) has no C64 equivalent, because the C64 never had a beeper — every C64 has a SID. This forced the development of software 1-bit synthesis on the Spectrum that the C64 scene never needed.
 
 ### 3.4 The attribute-clash question
 
-The Spectrum's attribute grid is often cited as the platform's biggest weakness. It is — but it is also the basis of the Spectrum's most distinctive tradition. Soviet-scene coders (in particular) reframed attribute clash as an *aesthetic*: demos like *I am the seed* (Inward, 2005) deliberately used attribute clash as a visual style, producing blocky colour fields that read as pixel-art abstraction. A C64 demo could not produce this look even if the artist wanted it; the VIC-II's per-pixel colour defeats it.
+The Spectrum's attribute grid is often cited as the platform's biggest weakness. It is — but it is also the basis of the Spectrum's most distinctive tradition. Soviet-scene coders (in particular) reframed attribute clash as an *aesthetic*: demos like *I am the seed* (Inward, 2005) deliberately used attribute clash as a visual style, producing blocky color fields that read as pixel-art abstraction. A C64 demo could not produce this look even if the artist wanted it; the VIC-II's per-pixel color defeats it.
 
 This is a recurring pattern in cross-platform comparison: what looks like a limitation from outside becomes a tradition from inside. The Spectrum's limits *produced* its scene's identity.
 
@@ -120,9 +120,9 @@ The two scenes rarely reference each other directly — the C64 scene is firmly 
 |---|---|---|
 | Easier smooth scrolling? | **C64** (hardware) | Spectrum (software, hard) |
 | Easier hardware sprites? | **C64** (8 sprites) | Spectrum (none) |
-| Easier per-pixel colour? | **C64** (separate colour RAM) | Spectrum (8×8 attribute grid) |
+| Easier per-pixel color? | **C64** (separate color RAM) | Spectrum (8×8 attribute grid) |
 | Easier music? | **C64** (SID filter) | Spectrum (beeper or AY) |
-| Easier full-frame colour cycling? | Spectrum (LDIR attribute buffer) | Spectrum wins |
+| Easier full-frame color cycling? | Spectrum (LDIR attribute buffer) | Spectrum wins |
 | Easier multicolor 8×1 / 8×2 effects? | Spectrum (CPU rewrites attributes per scanline) | Spectrum wins |
 | Easier 1-bit beeper music? | n/a | **Spectrum only** |
 
@@ -139,7 +139,7 @@ The Amiga comparison is, in some sense, unfair: the Amiga is a 16-bit platform f
 - **The Copper** — a small coprocessor that waits for a specific scanline and x-position, then writes a value to a hardware register. This enables per-scanline palette changes, mode switches, and "copper bars" — all without CPU involvement.
 - **The Blitter** — a block-copy engine that can move memory regions (including bitplane-aligned data), fill patterns, draw lines, and apply minterms (logic operations) at memory bandwidth (≈3.5 MB/s on OCS).
 - **Paula audio** — four 8-bit PCM channels, hard-panned (two left, two right), playing at any sample rate up to ~28 kHz. The classic Amiga "MOD" format is just four sample streams with pitch/volume info; the player reads them and feeds Paula.
-- **Bitplanes** instead of attribute cells. The Amiga's 6-bitplane mode gives 64 simultaneous colours from a 4096-colour palette (or 32 in EHB mode, 4096 in HAM mode), with per-pixel colour. There is no attribute clash.
+- **Bitplanes** instead of attribute cells. The Amiga's 6-bitplane mode gives 64 simultaneous colors from a 4096-color palette (or 32 in EHB mode, 4096 in HAM mode), with per-pixel color. There is no attribute clash.
 
 ### 4.2 The Spectrum's answer
 
@@ -149,15 +149,15 @@ The Spectrum has none of these. What the Spectrum does have is **a CPU that can 
 - **Blitter-style block copies** → Spectrum **`LDIR`/`LDDR`-based software blits** or precomputed table lookups.
 - **Paula PCM** → Spectrum **beeper-driven PWM** or AY envelope tricks.
 - **Dual-playfield parallax** → Spectrum **multiple attribute layers and timing tricks**.
-- **64/4096 colours** → Spectrum **15-colour fixed palette with gigascreen interlace mixing** (see [multicolor_techniques.md](multicolor_techniques.md)).
+- **64/4096 colors** → Spectrum **15-color fixed palette with gigascreen interlace mixing** (see [multicolor_techniques.md](multicolor_techniques.md)).
 
-The trade-off is stark: where the Amiga achieves these effects with a few register writes, the Spectrum achieves them by spending the entire CPU budget on per-frame raster-synchronised code. The result is that **Spectrum effects are, on a strict technical comparison, much less impressive** — but the *craft* of producing them is much more intricate.
+The trade-off is stark: where the Amiga achieves these effects with a few register writes, the Spectrum achieves them by spending the entire CPU budget on per-frame raster-synchronized code. The result is that **Spectrum effects are, on a strict technical comparison, much less impressive** — but the *craft* of producing them is much more intricate.
 
 ### 4.3 What the Amiga cannot do
 
 There are a few effects where the Spectrum wins by virtue of having *less* hardware:
 
-- **Per-frame full-screen attribute changes**. The Amiga's bitplanes are heavy (6 bitplanes × 320×256 = 60 KB per frame for 64-colour mode). The Spectrum's attribute grid is 768 bytes. An `LDIR` of 768 bytes per frame is trivial; rewriting 60 KB on Amiga per frame is harder.
+- **Per-frame full-screen attribute changes**. The Amiga's bitplanes are heavy (6 bitplanes × 320×256 = 60 KB per frame for 64-color mode). The Spectrum's attribute grid is 768 bytes. An `LDIR` of 768 bytes per frame is trivial; rewriting 60 KB on Amiga per frame is harder.
 - **Cycle-exact CPU-vs-raster play**. The Amiga's Copper handles this; the CPU is not normally used for it. But on the rare Amiga demos that try CPU-cycle-precision work, the result is often superior on the Spectrum simply because the Spectrum's CPU is *always* doing it.
 - **Tight 1K/4K intros**. The Spectrum's smaller RAM (48K vs 512K) and simpler I/O model make very small intros tractable. Amiga 4K intros exist but are rarer; the equivalent Spectrum work is abundant.
 
@@ -183,7 +183,7 @@ This implicit standardisation pushed the Spectrum scene toward effects that, str
 | Smooth parallax / dual-playfield? | **Amiga** (hardware) | Spectrum (software, partial) |
 | Per-scanline copper bars? | **Amiga** (Copper coprocessor) | Spectrum (cycle-counted rasterbars) |
 | 4-channel sample music? | **Amiga** (Paula hardware) | Spectrum (beeper PWM or AY tricks) |
-| 64/4096 colours? | **Amiga** (bitplanes/HAM) | Spectrum (15 colours, gigascreen mixing) |
+| 64/4096 colors? | **Amiga** (bitplanes/HAM) | Spectrum (15 colors, gigascreen mixing) |
 | 1K/4K intros? | Possible but rarer | **Spectrum** (tighter, easier) |
 | Full-screen attribute swap per frame? | Possible but expensive | **Spectrum** (768-byte `LDIR`) |
 
@@ -201,9 +201,9 @@ Crucially, the **Atari ST and the Spectrum 128 share the same sound chip family*
 The ST is much faster and more capable than the Spectrum:
 
 - **68000 CPU at 8 MHz** vs Z80A at 3.5 MHz. The 68000 has 32-bit internal registers, 16-bit external bus, and a far richer instruction set. Per-instruction throughput is ~2–4× higher.
-- **Bitplane video** (3 or 4 bitplanes for 8/16 colours at 320×200, monochrome at 640×400) instead of the Spectrum's attribute grid. The ST has no attribute clash.
-- **Hardware-blankable borders**. The ST can drop the borders and run a 320×200 full-screen display. The Spectrum's border is hardware-fixed (though it can be colour-cycled).
-- **512 colours** on the palette (9-bit RGB), 16 on screen simultaneously in low-res. The Spectrum has 15 colours with no palette registers.
+- **Bitplane video** (3 or 4 bitplanes for 8/16 colors at 320×200, monochrome at 640×400) instead of the Spectrum's attribute grid. The ST has no attribute clash.
+- **Hardware-blankable borders**. The ST can drop the borders and run a 320×200 full-screen display. The Spectrum's border is hardware-fixed (though it can be color-cycled).
+- **512 colors** on the palette (9-bit RGB), 16 on screen simultaneously in low-res. The Spectrum has 15 colors with no palette registers.
 - **No hardware sprites, no hardware scrolling, no Copper**. The ST is essentially a 16-bit Spectrum in architecture: software does everything.
 
 ### 5.2 The ST-Shifter limitation
@@ -211,9 +211,9 @@ The ST is much faster and more capable than the Spectrum:
 A notable ST-specific constraint: the **Shifter video chip** outputs pixels synchronously from a FIFO that the CPU/DMA must feed. There is no per-scanline register-update coprocessor (no Copper equivalent). ST "raster effects" therefore require:
 
 - **Cycle-counted HBL (horizontal blank) interrupts** to update the Shifter palette mid-line. This is the ST's equivalent of Spectrum rasterbars.
-- **Software-synchronised "sync scrolling"** for parallax. ST demos use cycle-counted code to fake smooth scroll by rewriting the Shifter's video address.
+- **Software-synchronized "sync scrolling"** for parallax. ST demos use cycle-counted code to fake smooth scroll by rewriting the Shifter's video address.
 
-These techniques mirror the Spectrum's cycle-counted multicolor work, but with a much faster CPU. The result is that **ST demos often look like Spectrum demos with vastly more colours and smoother motion**.
+These techniques mirror the Spectrum's cycle-counted multicolor work, but with a much faster CPU. The result is that **ST demos often look like Spectrum demos with vastly more colors and smoother motion**.
 
 ### 5.3 Why ST "feels" like a 16-bit Spectrum
 
@@ -227,7 +227,7 @@ Several factors make the ST/Spectrum comparison structurally similar:
 The main differences are:
 
 - **CPU speed**: the ST is 2–4× faster per instruction, giving it room for more sophisticated software rendering.
-- **Colour depth**: the ST's 16-on-screen-512-palette gives it much more visual range than the Spectrum's 15-fixed-colours.
+- **Colour depth**: the ST's 16-on-screen-512-palette gives it much more visual range than the Spectrum's 15-fixed-colors.
 - **RAM**: the ST's 512K standard RAM (vs Spectrum's 48K) gives more room for precomputed tables and buffers.
 
 ### 5.4 What the ST scene gave the Spectrum scene
@@ -250,7 +250,7 @@ The ST scene pioneered several techniques that the Spectrum scene later adopted:
 | Question | Atari ST | ZX Spectrum |
 |---|---|---|
 | CPU speed for software rendering? | **ST** (8 MHz 68000) | Spectrum (3.5 MHz Z80) |
-| Number of on-screen colours? | **ST** (16 from 512) | Spectrum (15 fixed) |
+| Number of on-screen colors? | **ST** (16 from 512) | Spectrum (15 fixed) |
 | Attribute clash? | **ST** (no clash, per-pixel) | Spectrum (8×8 cells) |
 | AY/YM music? | Same chip family | Same chip family (cross-portable) |
 | Hardware sprites? | None | None (both build in software) |
@@ -270,11 +270,11 @@ The MSX is the most architecturally similar 8-bit platform to the ZX Spectrum: b
 - **CPU**: Z80A at 3.58 MHz on MSX vs 3.5 MHz on Spectrum. Almost identical effective CPU speed.
 - **Sound**: MSX has the AY-3-8910 (or compatible YM2149 in MSX2+) built in from the start (all MSX models). The Spectrum 48K has only a beeper; only the Spectrum 128K has an AY.
 - **Video**: MSX uses the **Texas Instruments TMS9918A** (later Yamaha V9938 on MSX2, V9958 on MSX2+). The TMS9918A provides:
-  - 16-colour 256×192 mode (similar resolution to the Spectrum).
-  - 32 single-colour hardware sprites (4-colour mode available), 8 per scanline.
+  - 16-color 256×192 mode (similar resolution to the Spectrum).
+  - 32 single-color hardware sprites (4-color mode available), 8 per scanline.
   - Hardware scroll via `NAME TABLE BASE` register indirection (not full playfield scroll, but functional).
   - **Separate VRAM** (16 KB on MSX1) — the CPU does not see VRAM directly; it writes via port-mapped I/O to the VDP. This is a critical architectural difference.
-- **Palette**: MSX1 has a fixed 15-colour palette (with one extra for transparency); MSX2 has 256 colours from 512.
+- **Palette**: MSX1 has a fixed 15-color palette (with one extra for transparency); MSX2 has 256 colors from 512.
 
 ### 6.2 The VRAM wall
 
@@ -295,7 +295,7 @@ This means MSX demos have an **indirection tax** that the Spectrum does not pay.
 - **Hardware sprites** (32 sprites, 8 per scanline). MSX demos have rich software-sprite-free traditions; arcade-style games are much easier than on the Spectrum.
 - **Hardware scroll** (via name-table indirection on TMS9918A; full playfield scroll on V9938/V9958). Smooth scroll is essentially free.
 - **Sound from day one** — every MSX has an AY; the Spectrum had to wait for the 128K model.
-- **Per-pixel colour** via the VDP's pattern/colour-table architecture (different model from the Spectrum's attribute grid, but no clash).
+- **Per-pixel color** via the VDP's pattern/color-table architecture (different model from the Spectrum's attribute grid, but no clash).
 - **Extensions**: MSX-Music (YM2413 FM), MSX-Audio (Y8950), Moonsound (YMF278B), and the MSX's cartridge slot make adding capabilities trivial. The Spectrum's expansion model is messier.
 
 ### 6.4 What the Spectrum does better
@@ -333,7 +333,7 @@ A frequent misconception: **openMSX is the canonical MSX emulator, not a Spectru
 |---|---|---|
 | CPU speed? | Essentially identical (3.58 vs 3.5 MHz) | Essentially identical |
 | Direct framebuffer access? | **MSX pays VDP indirection tax** | **Spectrum** (direct RAM writes) |
-| Hardware sprites? | **MSX** (32 single-colour) | Spectrum (none) |
+| Hardware sprites? | **MSX** (32 single-color) | Spectrum (none) |
 | Hardware scroll? | **MSX** (TMS9918A indirection) | Spectrum (none) |
 | AY from base model? | **MSX** (every MSX) | Spectrum 128K only |
 | Per-scanline attribute changes? | Hard (VDP indirection) | **Spectrum** (multicolor) |
@@ -351,23 +351,23 @@ The Amstrad CPC (464, 664, 6128), released in 1984, is the third Z80+AY platform
 - **CPU**: Z80A at 4 MHz on CPC vs 3.5 MHz on Spectrum. CPC is ~14% faster in raw clock, but with **wait-states imposed by the Gate Array** during display fetch (the GA reads 2 bytes per μs from RAM, denying the CPU access). Effective CPU speed is ~3.3 MHz — comparable to the Spectrum with contention.
 - **Sound**: AY-3-8912, same chip as the Spectrum 128/+2. Same register layout.
 - **Video**: Amstrad Gate Array drives three modes:
-  - **Mode 0**: 160×200, 16 colours (from 27-colour fixed palette).
-  - **Mode 1**: 320×200, 4 colours (from 27).
-  - **Mode 2**: 640×200, 2 colours (from 27).
+  - **Mode 0**: 160×200, 16 colors (from 27-color fixed palette).
+  - **Mode 1**: 320×200, 4 colors (from 27).
+  - **Mode 2**: 640×200, 2 colors (from 27).
 - **Linear framebuffer**: CPC display RAM is a true linear framebuffer (no attribute indirection, no weird Spectrum byte interleaving). Pixel x,y → address is a simple formula. This is the CPC's biggest advantage.
-- **Palette**: 27 fixed colours (3 bits R × 3 bits G × 3 bits B, with hardware hue/saturation adjustments giving 27 effective hues). Modest but more flexible than the Spectrum's 15.
-- **Per-pixel colour** in all modes — no attribute clash.
+- **Palette**: 27 fixed colors (3 bits R × 3 bits G × 3 bits B, with hardware hue/saturation adjustments giving 27 effective hues). Modest but more flexible than the Spectrum's 15.
+- **Per-pixel color** in all modes — no attribute clash.
 
 ### 7.2 Why the CPC didn't develop a multicolor tradition
 
-The CPC has direct framebuffer access (like the Spectrum) and per-pixel colour (unlike the Spectrum). One might expect the CPC to have developed an even more sophisticated multicolor tradition. It did not, for two reasons:
+The CPC has direct framebuffer access (like the Spectrum) and per-pixel color (unlike the Spectrum). One might expect the CPC to have developed an even more sophisticated multicolor tradition. It did not, for two reasons:
 
-1. **Resolution tradeoff.** To get 16 colours on the CPC, you drop to 160×200 — too low for the Spectrum-style "high-resolution overlay" effects. To get 320×200 you only have 4 colours. There is no mode that gives both high resolution and high colour count.
+1. **Resolution tradeoff.** To get 16 colors on the CPC, you drop to 160×200 — too low for the Spectrum-style "high-resolution overlay" effects. To get 320×200 you only have 4 colors. There is no mode that gives both high resolution and high color count.
 2. **CRTC dependency for raster effects.** The CPC's CRT controller (a Hitachi HD6845S or equivalent) *can* be reprogrammed mid-frame, but it requires more cycle-counting than the Spectrum's BORD register trick. CPC raster effects exist (*raster splits*, *CRTC tricks*) but are more delicate than Spectrum multicolor.
 
 Instead, CPC demos developed:
 
-- **Mode-0 16-colour artwork** (the basis of the famous CPC pixel-art tradition).
+- **Mode-0 16-color artwork** (the basis of the famous CPC pixel-art tradition).
 - **CRTC split-screen effects** (changing the CRTC's display address mid-frame).
 - **Massive software-sprite engines** in Mode 0.
 - **Pre-rendered full-screen animations** (similar to Soviet TS-Config work).
@@ -400,7 +400,7 @@ Both scenes produced sophisticated work; neither was clearly superior. The archi
 | CPU speed? | **CPC** (4 MHz, ~3.3 MHz effective) | Spectrum (3.5 MHz, ~2.9 MHz effective contended) |
 | Sound chip? | Same (AY-3-8912) | Same |
 | Linear framebuffer? | **CPC** (true linear) | Spectrum (interleaved, attribute-indirect) |
-| Per-pixel colour? | **CPC** (in all modes) | Spectrum (8×8 attribute grid) |
+| Per-pixel color? | **CPC** (in all modes) | Spectrum (8×8 attribute grid) |
 | Hardware sprites? | None | None |
 | Mode-switching mid-frame? | **CPC** (3 modes via GA) | Spectrum (single mode) |
 | Multicolor 8×1 tradition? | n/a (CPC has per-pixel) | **Spectrum** (signature technique) |
@@ -415,11 +415,11 @@ Beyond the C64, Amiga, ST, MSX, and CPC, several other platforms occasionally ap
 
 ### 8.1 BBC Micro and Acorn Electron
 
-The BBC Micro (1981) is a 6502-based UK platform with a custom video ULA (Teletext mode, 2/4/16-colour modes, 160×256 / 320×256 / 640×256). It has a small but persistent UK demoscene. Comparisons to the Spectrum are uncommon because the Beeb has per-pixel colour and modest hardware scrolling. The BBC scene and Spectrum scene were contemporaries in the UK but operated in parallel with minimal overlap.
+The BBC Micro (1981) is a 6502-based UK platform with a custom video ULA (Teletext mode, 2/4/16-color modes, 160×256 / 320×256 / 640×256). It has a small but persistent UK demoscene. Comparisons to the Spectrum are uncommon because the Beeb has per-pixel color and modest hardware scrolling. The BBC scene and Spectrum scene were contemporaries in the UK but operated in parallel with minimal overlap.
 
 ### 8.2 Apple II and Apple IIGS
 
-The Apple II (1977) is older than the Spectrum and had a small Western demoscene. The Apple IIe/IIc have 280×192 hi-res with quirky colour encoding (1-bit-per-pixel producing colours via NTSC artefacts). The Apple IIGS (1986) is a 16-bit platform with Ensoniq DOC sound. Both are essentially irrelevant to the Spectrum scene; there is no significant cross-pollination.
+The Apple II (1977) is older than the Spectrum and had a small Western demoscene. The Apple IIe/IIc have 280×192 hi-res with quirky color encoding (1-bit-per-pixel producing colors via NTSC artefacts). The Apple IIGS (1986) is a 16-bit platform with Ensoniq DOC sound. Both are essentially irrelevant to the Spectrum scene; there is no significant cross-pollination.
 
 ### 8.3 NES (Famicom)
 
@@ -427,11 +427,11 @@ The Nintendo Entertainment System (1983/1985) is a games console with sophistica
 
 ### 8.4 MSX2, MSX2+, MSX turbo R
 
-The MSX2 (1985) adds the Yamaha V9938 VDP (80-column mode, hardware scroll, hardware multipage display, 256×212 in 16/256 colours) and a real-time clock. The MSX2+ (1988) adds the V9958 with hardware yuhaku scroll and interlaced scan. The turbo R (1990) is the final MSX model with a 16-bit R800 CPU at ~7 MHz. All three are direct descendants of MSX1 and have small but active scenes. Comparison to the Spectrum is similar to MSX1 but the MSX2+ and turbo R are substantially more capable.
+The MSX2 (1985) adds the Yamaha V9938 VDP (80-column mode, hardware scroll, hardware multipage display, 256×212 in 16/256 colors) and a real-time clock. The MSX2+ (1988) adds the V9958 with hardware yuhaku scroll and interlaced scan. The turbo R (1990) is the final MSX model with a 16-bit R800 CPU at ~7 MHz. All three are direct descendants of MSX1 and have small but active scenes. Comparison to the Spectrum is similar to MSX1 but the MSX2+ and turbo R are substantially more capable.
 
 ### 8.5 SAM Coupé
 
-The SAM Coupé (1989) is a UK-developed "Spectrum-compatible" platform with substantially enhanced hardware (256×192 in 16 colours, or 512×192 in 4 colours, from 128-colour palette; built-in disk; 256K RAM). It was marketed as the "Spectrum's successor". A small demoscene developed around it, including some cross-port work from the Spectrum scene. SAM Coupé demos occasionally appear in Spectrum-adjacent archives but the platform is essentially a separate ecosystem.
+The SAM Coupé (1989) is a UK-developed "Spectrum-compatible" platform with substantially enhanced hardware (256×192 in 16 colors, or 512×192 in 4 colors, from 128-color palette; built-in disk; 256K RAM). It was marketed as the "Spectrum's successor". A small demoscene developed around it, including some cross-port work from the Spectrum scene. SAM Coupé demos occasionally appear in Spectrum-adjacent archives but the platform is essentially a separate ecosystem.
 
 ### 8.6 Enterprise 64/128, Memotech MTX, Tatung Einstein
 
@@ -465,16 +465,16 @@ All AY/YM-family chips provide:
 - **1 noise channel** (programmable noise period, mixable into any combination of tone channels).
 - **1 envelope generator** (programmable attack/decay, shareable across channels).
 - **15 volume levels per channel** (0=silent, 15=max), or envelope-driven volume.
-- **28 write-only registers** organised as: 3×2 tone period (R0–R5), 1×1 noise period (R6), 1×1 mixer (R7), 3×1 channel volume (R8–R10), 1×2 envelope period (R11–R12), 1×1 envelope shape (R13), and 2× I/O ports (R14–R15, AY-8910 only).
+- **28 write-only registers** organized as: 3×2 tone period (R0–R5), 1×1 noise period (R6), 1×1 mixer (R7), 3×1 channel volume (R8–R10), 1×2 envelope period (R11–R12), 1×1 envelope shape (R13), and 2× I/O ports (R14–R15, AY-8910 only).
 
-The register layout is identical across the AY-3-8910, AY-3-8912 (one I/O port instead of two), and YM2149 (which adds a different envelope mode and slightly different analogue output).
+The register layout is identical across the AY-3-8910, AY-3-8912 (one I/O port instead of two), and YM2149 (which adds a different envelope mode and slightly different analog output).
 
 ### 9.2 Differences that matter
 
 - **Clock speed.** Each platform clocks the chip at a different frequency, so the same register value produces a different pitch. A note table compiled for the Spectrum 128 will play back at a slightly different pitch on ST, MSX, or CPC. Players must use a per-platform note table.
 - **I/O port presence.** AY-3-8910 has two 8-bit I/O ports (used for joysticks, printers, etc. on MSX); AY-3-8912 has one (used on Spectrum and CPC for the keystick port); YM2149 has two but their usage varies by platform.
 - **Envelope shape.** The YM2149 has a slightly different envelope generator with one extra mode. Most music does not use the difference.
-- **Output stage.** The YM2149 has a 2V DC offset on outputs; the AY-3-8910 has a 0.2V offset when the envelope is active. This affects analogue mixing on real hardware but is irrelevant for register-level cross-portability.
+- **Output stage.** The YM2149 has a 2V DC offset on outputs; the AY-3-8910 has a 0.2V offset when the envelope is active. This affects analog mixing on real hardware but is irrelevant for register-level cross-portability.
 
 ### 9.3 The shared music format ecosystem
 
@@ -489,7 +489,7 @@ A sophisticated cross-platform infrastructure exists for converting between thes
 
 ### 9.4 The shared composer community
 
-Several AY composers are recognised across multiple scenes:
+Several AY composers are recognized across multiple scenes:
 
 - **Ben Daglish** (C64 SID primarily, but composed for AY platforms too).
 - **Jochen Hippel (Mad Max)**: ST AY composer whose modules are routinely ported to Spectrum.
@@ -514,8 +514,8 @@ After comparing the Spectrum to its peers across §3–§9, the platform's disti
 
 The Spectrum is the **best platform in the comparison set** for:
 
-1. **Multicolor effects** (8×1 or 8×2 attribute resolution). The combination of direct RAM access + small attribute grid + cycle-countable ULA behaviour makes per-scanline attribute manipulation uniquely tractable. No other major platform can do this as effectively.
-2. **Gigascreen (interlace-based colour mixing).** The 50 Hz frame rate and the Spectrum's hard 15-colour palette paradoxically enable a sophisticated 15-colour perceived-colour mixing technique that does not work the same way on per-pixel-colour platforms.
+1. **Multicolor effects** (8×1 or 8×2 attribute resolution). The combination of direct RAM access + small attribute grid + cycle-countable ULA behavior makes per-scanline attribute manipulation uniquely tractable. No other major platform can do this as effectively.
+2. **Gigascreen (interlace-based color mixing).** The 50 Hz frame rate and the Spectrum's hard 15-color palette paradoxically enable a sophisticated 15-color perceived-color mixing technique that does not work the same way on per-pixel-color platforms.
 3. **1-bit beeper music.** The beeper is a unique Spectrum feature. The Soviets and the Polish scene developed the only true 1-bit music composition tradition in the demoscene world (see [1bit_music_scene.md](1bit_music_scene.md)).
 4. **Tight 1K / 4K intros.** The Spectrum's small RAM and simple I/O model make very small demos tractable. The size-coding tradition on Spectrum is the deepest of any 8-bit platform (see [size_coding.md](size_coding.md)).
 5. **Full-screen attribute buffer effects.** Because the attribute grid is only 768 bytes, an `LDIR` copy per frame is essentially free. This enables a class of effects that other platforms cannot match without rewriting significantly more memory.
@@ -523,9 +523,9 @@ The Spectrum is the **best platform in the comparison set** for:
 
 ### 10.2 Where the Spectrum loses
 
-1. **Hardware sprites.** C64 has 8 multicolour sprites; MSX has 32 single-colour; Amiga has 8 dual-playfield sprites. Spectrum has zero. All moving-object work is software-rendered.
+1. **Hardware sprites.** C64 has 8 multicolour sprites; MSX has 32 single-color; Amiga has 8 dual-playfield sprites. Spectrum has zero. All moving-object work is software-rendered.
 2. **Hardware scrolling.** C64, MSX, and Amiga all have hardware playfield scrolling. Spectrum has none. All scrolling is software.
-3. **Per-pixel colour.** C64, MSX (pattern-table indirection), CPC, ST, Amiga — all give per-pixel colour. Spectrum's 8×8 attribute grid produces attribute clash.
+3. **Per-pixel color.** C64, MSX (pattern-table indirection), CPC, ST, Amiga — all give per-pixel color. Spectrum's 8×8 attribute grid produces attribute clash.
 4. **Music sophistication.** The SID (C64) and Paula (Amiga) are fundamentally more capable chips than the AY-3-8912. The AY is good — and the Soviet scene pushed it to its limits — but it cannot match the SID's filter or Paula's PCM.
 5. **CPU throughput.** 3.5 MHz Z80 is competitive with the C64's 1 MHz 6510 (per-instruction, roughly), but the Amiga's 7 MHz 68000 and the ST's 8 MHz 68000 are 2–4× faster in effective throughput.
 6. **Real-time sample playback.** Paula on Amiga plays four channels of 8-bit PCM via DMA — trivially. SID and AY require CPU bit-banging for any sample work; the Spectrum beeper's 1-bit output is the most constrained of all.
@@ -547,7 +547,7 @@ The table below summarises which Spectrum techniques transfer to other platforms
 | **Hardware sprites** | C64 / Amiga / MSX | No (Spectrum has none) | n/a | Spectrum builds software sprites instead. |
 | **Hardware smooth scroll** | C64 / Amiga / MSX | No (Spectrum has none) | n/a | Spectrum builds software scroll. |
 | **Multicolor 8×1 / 8×2** | Spectrum | n/a | Yes (CPC: possible but rarely done) | Spectrum-exclusive refinement. |
-| **Gigascreen (frame interlace colour mixing)** | Spectrum (Soviet) | n/a | Yes (any 50 Hz platform with attribute grid; but pointless on per-pixel platforms) | Works only on attribute-clash platforms. |
+| **Gigascreen (frame interlace color mixing)** | Spectrum (Soviet) | n/a | Yes (any 50 Hz platform with attribute grid; but pointless on per-pixel platforms) | Works only on attribute-clash platforms. |
 | **Copper bars** | Amiga | Yes (Spectrum rasterbars via BORD register) | Yes (ST has HBL version) | Universal technique. |
 | **Tracker-module music** | Amiga (MOD) / ST (YM) | Yes (PT3) | Yes (Spectrum's PT3 → ST, MSX, CPC) | See §9. |
 | **1-bit beeper music** | Spectrum (and Apple II) | n/a | No (no equivalent hardware on C64/Amiga/ST/MSX/CPC) | Spectrum-only tradition. |

@@ -587,7 +587,7 @@ If you are building replacement hardware or upgrading a Spectrum:
 - [The AY Sound: Perception, Emotion, and the Hardware Soul](ay_ym_perception.md) — psychoacoustics, analog signal chain, why real hardware sounds "better" than emulation
 - [PSG Format](../trackers_and_formats/psg_format.md) — the register-dump format most affected by AY vs YM playback differences
 - [PT3 Format](../trackers_and_formats/pt3_format.md) — the dominant module format; player behavior on AY vs YM
-- [AY Music Formats](../trackers_and_formats/ay_music_formats.md) — full format catalogue; many encode the intended target chip
+- [AY Music Formats](../trackers_and_formats/ay_music_formats.md) — full format catalog; many encode the intended target chip
 - [ZX Spectrum Next Audio](../hardware/zx_next_audio.md) — the FPGA soft model that uses 32-step envelopes natively
 
 ## References

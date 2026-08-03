@@ -9,7 +9,7 @@ The articles in this section are grouped into four thematic areas:
 - **ROM internals** — dissection of the original Sinclair ROM variants (48K, 128K, +2A/+3) and the system variables that the ROM defines.
 - **Disk operating systems** — the DOSes that brought file I/O to the Spectrum: TR-DOS, +3 DOS, ESXDOS, IS-DOS, NedoDOS, and the ZX Evolution BIOS that hosts them.
 - **Alternative operating systems** — non-DOS OSes that ran on Spectrum-compatible hardware: CP/M 2.2 and FUZIX.
-- **BASIC dialects and ROM identification** — survey of all Sinclair BASIC variants, plus the catalogue of ROM versions for identification.
+- **BASIC dialects and ROM identification** — survey of all Sinclair BASIC variants, plus the catalog of ROM versions for identification.
 
 ## ROM Internals
 
@@ -19,7 +19,7 @@ The articles in this section are grouped into four thematic areas:
 | [rom_128k.md](rom_128k.md) | 128K ROM 0: dual-ROM architecture, ROM call bridge (how ROM 0 delegates to ROM 1 via RAM paging routines), ROM swap calling convention with mermaid flow diagrams, start-up sequence, PLAY/SOUND/BANK/SPECTRUM handlers, AY-3-8912 register map and programming, RAM disk data structures, editor internals, +2A/+3 deep dive, 6 use cases |
 | [rom_plus2.md](rom_plus2.md) | +2A/+3 ROM internals: the 64 KB four-page ROM layout (128K editor, original 48K BASIC, +3 DOS, patched 48K with disk extensions), paging ports `#7FFD` and `#1FFD`, four paging modes (128K compat / all-RAM 0-3 / all-RAM 4-7 / Plus 3), CP/M boot support, bugs and quirks |
 | [system_variables.md](system_variables.md) | ROM-defined system variables: FRAMES counter, PROG/VARS pointers, keyboard state, display color, error handling, memory boundaries, 128K workspace — the ROM's API surface |
-| [rom_versions.md](rom_versions.md) | ROM version catalogue: 48K Issues 1-6 with CRC32 values, 128K ROM, +2 grey, +2A/+3 four-page ROM, localised ROMs (Spanish, Russian), clone ROMs (Pentagon, Scorpion, ATM Turbo, Sprinter, ZX Evolution, Timex), modern replacements (SE BASIC, OpenSE BASIC, +3E ROM, NextZXOS ROM), identification guide |
+| [rom_versions.md](rom_versions.md) | ROM version catalog: 48K Issues 1-6 with CRC32 values, 128K ROM, +2 grey, +2A/+3 four-page ROM, localised ROMs (Spanish, Russian), clone ROMs (Pentagon, Scorpion, ATM Turbo, Sprinter, ZX Evolution, Timex), modern replacements (SE BASIC, OpenSE BASIC, +3E ROM, NextZXOS ROM), identification guide |
 
 ## Disk Operating Systems
 

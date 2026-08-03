@@ -4,7 +4,7 @@
 
 On most home computers of the 1980s, BASIC was a programming language. On the ZX Spectrum, BASIC was **the operating system**. When you switched the machine on, you got a BASIC prompt. To load software, you typed BASIC keywords. To manipulate files, you typed BASIC commands. The ROM that contained the BASIC interpreter also contained the keyboard handler, the display driver, the cassette tape routines, the floating-point library, the character set, and every other piece of "system software" the Spectrum had.
 
-The Spectrum shipped with one BASIC dialect — **Sinclair BASIC** — but over the next 40 years that dialect proliferated into a family of related but distinct BASICs. Each new Spectrum model added keywords or modified behaviour. Soviet clones added their own extensions. The modern community has produced SE BASIC, OpenSE, NextBASIC, and several other rewrites. This article covers the family of BASIC dialects that have run on Spectrum-compatible hardware, from the original 48K ROM of 1982 to the modern NextBASIC of the 2020s.
+The Spectrum shipped with one BASIC dialect — **Sinclair BASIC** — but over the next 40 years that dialect proliferated into a family of related but distinct BASICs. Each new Spectrum model added keywords or modified behavior. Soviet clones added their own extensions. The modern community has produced SE BASIC, OpenSE, NextBASIC, and several other rewrites. This article covers the family of BASIC dialects that have run on Spectrum-compatible hardware, from the original 48K ROM of 1982 to the modern NextBASIC of the 2020s.
 
 For the underlying ROMs themselves — version numbers, bug lists, contents — see [rom_48k.md](rom_48k.md), [rom_128k.md](rom_128k.md), and [rom_plus2.md](rom_plus2.md). For TR-DOS's BASIC extensions, see [trdos.md](trdos.md). For NextBASIC's hardware-acceleration extensions, see [nextzxos.md](nextzxos.md).
 
@@ -229,11 +229,11 @@ The 48K ROM has several well-documented bugs and quirks:
 
 - **The (c) 1982 message delay**: if you press a key during the copyright message at boot, the message is held for an extra 0.5 seconds per keypress. This is a deliberate "don't make the user think the machine has crashed" feature.
 - **The INT(-1) bug**: `INT(-0.5)` correctly returns `-1`, but `INT(-1)` returns `-1` rather than the mathematically-expected `-1`. Actually, this is correct; the famous bug is `INT(x)` returning a wrong value for very large floats near the integer limit.
-- **The SAVE bug**: if you type `SAVE "name" LINE 0`, the saved program auto-runs from line 0 — but line 0 doesn't exist (Sinclair BASIC conventionally starts at line 10). The behaviour is that the program runs from the lowest line number, which works fine.
+- **The SAVE bug**: if you type `SAVE "name" LINE 0`, the saved program auto-runs from line 0 — but line 0 doesn't exist (Sinclair BASIC conventionally starts at line 10). The behavior is that the program runs from the lowest line number, which works fine.
 - **The famous "stack bug"**: a deeply recursive GOSUB chain can corrupt the calculator stack. The fix (in 128K and later) was to grow the stack downward into the GO SUB stack area.
 - **Floating-point inaccuracy**: `(0.1 + 0.2) - 0.3` does not return exactly 0.0 because of binary floating-point representation. Same bug as every IEEE float system in history.
 
-These bugs are extensively documented; see [rom_48k.md](rom_48k.md) for the full catalogue.
+These bugs are extensively documented; see [rom_48k.md](rom_48k.md) for the full catalog.
 
 ---
 ## §3. The 128K BASIC (1986)
@@ -242,7 +242,7 @@ The Spectrum 128K — code-named "Blair" during development and released in Sept
 
 ### 3.1 The 32 KB ROM
 
-The 128K ROM is 32 KB, divided into two 16 KB banks. Bank 0 contains a modified version of the 48K BASIC ROM, mostly for backwards compatibility. Bank 1 contains:
+The 128K ROM is 32 KB, divided into two 16 KB banks. Bank 0 contains a modified version of the 48K BASIC ROM, mostly for backward compatibility. Bank 1 contains:
 
 - A **new full-screen editor** that replaces the old single-line editor.
 - **128K-specific BASIC extensions**: PLAY, SPECTRUM, EDIT.
@@ -279,7 +279,7 @@ The string contains note letters (`c`, `d`, `e`, `f`, `g`, `a`, `b`, `C` for upp
 
 This plays two channels simultaneously — a melody and a harmony.
 
-**SPECTRUM** — selects 48K BASIC mode for backwards compatibility. Used to switch from the 128K editor back to the 48K-style command-line editor. Rare in practice.
+**SPECTRUM** — selects 48K BASIC mode for backward compatibility. Used to switch from the 128K editor back to the 48K-style command-line editor. Rare in practice.
 
 **EDIT** — invokes the new full-screen editor on the specified line number.
 
@@ -323,7 +323,7 @@ The 128K ROM is designed to run 48K BASIC programs unchanged. Programs that stic
 
 - Use machine code that depends on the 48K ROM being at `#0000`–`#3FFF`. On the 128K, the bottom 16 KB can be either bank 0 (mostly 48K-compatible) or bank 1 (the new editor and extensions). If the program tries to call a ROM routine at a specific address, the call may end up in the wrong bank.
 - Use the screen memory layout in ways that assume the 48K's 6.9 KB screen (vs. the 128K's larger contended-RAM layout, which is the same but with extra banks for shadow screens).
-- Rely on undocumented 48K ROM behaviour that was changed in the 128K.
+- Rely on undocumented 48K ROM behavior that was changed in the 128K.
 
 Most commercial Spectrum software works on both machines. The few that don't usually have separate 48K and 128K versions.
 
@@ -338,7 +338,7 @@ When Amstrad bought the Sinclair brand in 1986, they quickly released two new ma
 The +2 and +3 contain a **64 KB ROM** divided into four 16 KB pages:
 
 - **Page 0**: The 128K editor ROM (similar to the 128K's bank 1).
-- **Page 1**: The original 48K BASIC ROM (for backwards compatibility).
+- **Page 1**: The original 48K BASIC ROM (for backward compatibility).
 - **Page 2**: The +3 DOS ROM (disk operating system).
 - **Page 3**: A patched 48K BASIC with a few +3-specific changes.
 
@@ -383,7 +383,7 @@ From a BASIC-language standpoint, the +2, +2A, and +3 are essentially identical.
 
 ### 4.5 Compatibility issues
 
-The +2/+3's BASIC is mostly backwards-compatible with the 128K's, which is mostly backwards-compatible with the 48K's. The main compatibility issues are:
+The +2/+3's BASIC is mostly backward-compatible with the 128K's, which is mostly backward-compatible with the 48K's. The main compatibility issues are:
 
 - **Tape-load timing** changed slightly. Some tape-loading software that depends on exact timing breaks.
 - **The 128K RAM disk** is preserved but accessed differently (the `M:` and `N:` drives are emulated using the banked RAM).
@@ -557,7 +557,7 @@ For Spectrum owners who want a "better BASIC" than the original Sinclair ROM, Op
 
 ### 7.4 Compatibility
 
-SE BASIC / OpenSE BASIC are designed to be backwards-compatible with the original 48K ROM. Programs that stick to standard Sinclair BASIC run unchanged. The new features are opt-in — old programs do not use them.
+SE BASIC / OpenSE BASIC are designed to be backward-compatible with the original 48K ROM. Programs that stick to standard Sinclair BASIC run unchanged. The new features are opt-in — old programs do not use them.
 
 The main compatibility issue is that SE BASIC is faster than the original ROM, which can break timing-sensitive machine-code programs that hook into ROM routines. For pure BASIC programs, this is rarely an issue.
 
@@ -571,7 +571,7 @@ The ZX Spectrum Next ships with **NextBASIC** — a substantially extended BASIC
 
 NextBASIC was designed to:
 
-1. Be **source-compatible with the original 48K/128K BASIC** for backwards compatibility.
+1. Be **source-compatible with the original 48K/128K BASIC** for backward compatibility.
 2. Add **structured programming constructs** (proper IF/ELSE, DO/LOOP, multi-line procedures).
 3. Provide **direct access to the Next's hardware** from BASIC, without dropping to machine code.
 4. Be **extensible** — new keywords can be added by NextBASIC extensions loaded from SD card.
@@ -586,11 +586,11 @@ NextBASIC's distinguishing feature is the **`#` syntax** for hardware extensions
 # L2 POKE 100, 50, 255
 ```
 
-This writes a single pixel (colour 255) at position (100, 50) on the Layer 2 (256-colour) framebuffer. The equivalent machine code would be dozens of instructions involving bank switching and port writes.
+This writes a single pixel (color 255) at position (100, 50) on the Layer 2 (256-color) framebuffer. The equivalent machine code would be dozens of instructions involving bank switching and port writes.
 
 The major `#` subsystems are:
 
-- **`#L2`** — Layer 2 (256-colour framebuffer): pixel plotting, line drawing, copying, clearing.
+- **`#L2`** — Layer 2 (256-color framebuffer): pixel plotting, line drawing, copying, clearing.
 - **`#SPRITE`** — hardware sprites: define, move, hit-test, animate.
 - **`#TILEMAP`** — hardware tilemap: define tiles, draw, scroll.
 - **`#COPPER`** — copper (programmable raster effects): load, run, stop.
@@ -645,7 +645,7 @@ After this, the keywords `MYEXT` defined in the extension become available. This
 
 ### 8.5 Compatibility with original BASIC
 
-NextBASIC runs original 48K and 128K BASIC programs unchanged. The original keywords are all there with their original behaviour. The new features are purely additive — they do not change the meaning of existing keywords.
+NextBASIC runs original 48K and 128K BASIC programs unchanged. The original keywords are all there with their original behavior. The new features are purely additive — they do not change the meaning of existing keywords.
 
 The one notable exception is performance: NextBASIC runs on the Next's turbo mode (28 MHz Z80) by default, which is roughly 7x faster than a stock Spectrum. Timing-sensitive programs may need to be throttled with `PAUSE` statements.
 
@@ -672,7 +672,7 @@ This section pulls together the dialects discussed above into a single feature m
 | Sound | Beep | Beep + AY | Beep + AY | Beep + AY | Beep + AY | Beep + AY + DMA |
 | Hardware sprites | **No** | No | No | No | **No** | **Yes** |
 | Tilemap | **No** | No | No | No | **No** | **Yes** |
-| Layer 2 (256-colour) | **No** | No | No | No | **No** | **Yes** |
+| Layer 2 (256-color) | **No** | No | No | No | **No** | **Yes** |
 | Copper | **No** | No | No | No | **No** | **Yes** |
 | Networking | **No** | No | No | No | **No** | **Yes** (ESP32) |
 | Year | 1982 | 1986 | 1987 | 1985+ | 2002 | 2017 |
@@ -726,4 +726,4 @@ For a 2024 hobbyist:
 
 ## License
 
-This document is licensed under **Creative Commons Attribution-ShareAlike 4.0 International** (CC BY-SA 4.0). You are free to share and adapt this material, provided you give appropriate credit, indicate changes, and distribute derivative works under the same licence.
+This document is licensed under **Creative Commons Attribution-ShareAlike 4.0 International** (CC BY-SA 4.0). You are free to share and adapt this material, provided you give appropriate credit, indicate changes, and distribute derivative works under the same license.

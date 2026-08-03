@@ -255,7 +255,7 @@ For drop-in replacement of a real Z80 in an existing Spectrum:
 
 - **Pinout adapter** — a small PCB that maps the RP2040's GPIO pins to the Z80's 40-pin DIP layout
 - **Level shifters** — 74HCT245 buffers on the data bus, 74HCT541 on the address and control lines
-- **Crystal oscillator** — replace the Spectrum's existing clock or use the RP2040's PLL to synthesise 3.5 MHz
+- **Crystal oscillator** — replace the Spectrum's existing clock or use the RP2040's PLL to synthesize 3.5 MHz
 - **Firmware** — RP2040 firmware that emulates the Z80 and presents the correct bus signals
 
 Several vendors sell ready-made "Pico Z80" boards with all the required hardware. For DIY builders, the design is reproducible from open-source schematics.

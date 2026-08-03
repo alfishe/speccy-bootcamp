@@ -343,7 +343,7 @@ The modern emulator scene is the result of 30+ years of accumulated refinement, 
 
 ### Test Suites and Validation
 
-- See [test_suites.md](test_suites.md) for the standardised test ROMs and snapshots used to validate emulator accuracy
+- See [test_suites.md](test_suites.md) for the standardized test ROMs and snapshots used to validate emulator accuracy
 
 ### Cross-References
 

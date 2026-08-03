@@ -21,7 +21,7 @@ This article covers the .Z80 format in detail: its history, the byte-level layou
 5. **The compression scheme** — run-length encoding via the 0xED 0xED marker
 6. **Hardware identification** — the hardware ID byte and its values
 7. **Writing a .Z80 loader** — reference loader implementation
-8. **Compatibility and quirks** — emulator-specific behaviours
+8. **Compatibility and quirks** — emulator-specific behaviors
 9. **Comparison with .SNA and .SZX** — when to use which
 10. **Cross-references** — where to go next
 
@@ -103,7 +103,7 @@ The v1 .Z80 header is 30 bytes long. All multi-byte register values are stored *
 | 21 | 2 | HL' | Alternate HL pair (L' low, H' high) |
 | 23 | 2 | DE' | Alternate DE pair (E' low, D' high) |
 | 25 | 2 | DE | Main DE pair (E low, D high) |
-| 27 | 1 | Border colour | Bits 0–2: border colour (0–7). Other bits reserved |
+| 27 | 1 | Border color | Bits 0–2: border color (0–7). Other bits reserved |
 | 28 | 1 | Flags byte | Bit 0: AY in use; Bit 1: (v2+) mod_128 rom paged; Bit 3: 48K ROM modified flag; Bit 4: compressed RAM flag; Bit 5: 128K paging locked; Bit 6: (v3) later; Bit 7: output to video splitter port |
 | 29 | 1 | Sound mode byte | Bits 0–1: sound mode (0=none, 1=beeper, 2=AY, 3=both). Bit 2: full ROM mod info follows. Bits 3–7: reserved |
 
@@ -589,7 +589,7 @@ If validation fails, the loader should refuse to apply the snapshot.
 
 ## §8. Compatibility and Quirks
 
-The .Z80 format has been around for 30+ years and has accumulated several quirks and emulator-specific behaviours.
+The .Z80 format has been around for 30+ years and has accumulated several quirks and emulator-specific behaviors.
 
 ### 8.1 The 54 vs 55 byte ambiguity
 
@@ -597,7 +597,7 @@ Some early v3 emulators wrote a 54-byte extension header; others wrote 55 bytes.
 
 ### 8.2 The MEMPTR field
 
-The MEMPTR field (also called W or WZ) is the undocumented Z80 register that some instructions (`BIT n,(HL)`, `LD (NN),A`, `LD A,(NN)`, `OUT (N),A`, `IN A,(N)`) modify. The .Z80 v3 format captures this, but many older loaders ignore it. For most software this doesn't matter, but for demos and copy-protection code that relies on MEMPTR's behaviour, ignoring it can cause incorrect execution.
+The MEMPTR field (also called W or WZ) is the undocumented Z80 register that some instructions (`BIT n,(HL)`, `LD (NN),A`, `LD A,(NN)`, `OUT (N),A`, `IN A,(N)`) modify. The .Z80 v3 format captures this, but many older loaders ignore it. For most software this doesn't matter, but for demos and copy-protection code that relies on MEMPTR's behavior, ignoring it can cause incorrect execution.
 
 ### 8.3 The T-state counter
 
@@ -667,4 +667,4 @@ When in doubt, test your .Z80 file against multiple emulators.
 
 ## License
 
-This document is licensed under **Creative Commons Attribution-ShareAlike 4.0 International** (CC BY-SA 4.0). You are free to share and adapt this material, provided you give appropriate credit, indicate changes, and distribute derivative works under the same licence.
+This document is licensed under **Creative Commons Attribution-ShareAlike 4.0 International** (CC BY-SA 4.0). You are free to share and adapt this material, provided you give appropriate credit, indicate changes, and distribute derivative works under the same license.

@@ -4,7 +4,7 @@
 
 **HiSoft DevPac** was the most widely used native Z80 assembler in the UK commercial Spectrum software industry. Released in **1983** by HiSoft (UK), DevPac was a two-program suite — **GENS** (the assembler, "Generator of Equated Notes and Source") and **MONS** (the monitor/debugger) — that together formed the daily toolchain at virtually every UK software house through the late 1980s. Where [Zeus](zeus_assembler.md) was the *innovator's choice* — first with a full-screen editor, first with integrated debugging — DevPac was the *workhorse*: reliable, conservative, and trusted with the largest commercial source files.
 
-DevPac's reign spanned roughly **1983–1990**, from the early Spectrum tape era through the +2A/+3 disk era. By the late 1980s, HiSoft DevPac 3 and 4 (the disk-integrated releases) were the de facto standard at studios like Ocean, Gremlin, Ultimate, and the smaller houses producing the era's biggest games. The Russian Spectrum scene standardised on **ALASM** and **XAS** instead (DevPac had no Soviet distribution); DevPac's lineage ended when UK Spectrum development itself wound down around 1990.
+DevPac's reign spanned roughly **1983–1990**, from the early Spectrum tape era through the +2A/+3 disk era. By the late 1980s, HiSoft DevPac 3 and 4 (the disk-integrated releases) were the de facto standard at studios like Ocean, Gremlin, Ultimate, and the smaller houses producing the era's biggest games. The Russian Spectrum scene standardized on **ALASM** and **XAS** instead (DevPac had no Soviet distribution); DevPac's lineage ended when UK Spectrum development itself wound down around 1990.
 
 This article is the **deep-dive reference** for DevPac as a tool: its history, design philosophy, the GENS assembler's source language and directives, the MONS monitor's debugging model, the two-program workflow, commercial studio adoption, the +3 DOS integration, and DevPac's legacy. For the broader native-toolchain survey, see [native_toolchain.md](native_toolchain.md). For DevPac's primary Western competitor, see [zeus_assembler.md](zeus_assembler.md).
 
@@ -14,7 +14,7 @@ This article is the **deep-dive reference** for DevPac as a tool: its history, d
 
 ### HiSoft and the 1983 Launch
 
-**HiSoft** was a UK software house founded in the early 1980s to produce developer tools for 8-bit microcomputers. The company's product line ranged across the ZX Spectrum, Amstrad CPC, Commodore 64, and later the Atari ST and Amiga. HiSoft's tools were characterised by **professional polish and conservative reliability** rather than experimental features — a positioning that suited commercial studios who would not adopt bleeding-edge tools when deadlines were at stake.
+**HiSoft** was a UK software house founded in the early 1980s to produce developer tools for 8-bit microcomputers. The company's product line ranged across the ZX Spectrum, Amstrad CPC, Commodore 64, and later the Atari ST and Amiga. HiSoft's tools were characterized by **professional polish and conservative reliability** rather than experimental features — a positioning that suited commercial studios who would not adopt bleeding-edge tools when deadlines were at stake.
 
 **DevPac for the ZX Spectrum** shipped in **1983** at a comparable price to Zeus (£12–15). The original 1983 release was tape-only, targeted at the 48K Spectrum, and consisted of two programs: **GENS** (the assembler) and **MONS** (the monitor). The naming convention reflected HiSoft's CP/M heritage — `GEN` and `MON` were traditional CP/M-era tool names; HiSoft added the trailing `S` (variously interpreted as "Source" for GENS and "System" for MONS, though HiSoft's documentation never officially expanded the abbreviations).
 
@@ -53,7 +53,7 @@ DevPac's defining design choice — set by HiSoft in 1983 and preserved through 
 
 - **Separate programs crash separately.** An editor crash did not lose the source. An assembler crash did not lose the in-progress binary. A monitor crash during debugging did not corrupt the source.
 - **Separate programs are easier to maintain.** HiSoft could ship a GENS bug fix without re-testing MONS, and vice versa. This mattered for a small commercial tools vendor.
-- **Commercial studios wanted predictable behaviour.** A studio shipping a game in six weeks could not afford a toolchain that did surprising things. DevPac's conservatism was a feature, not a bug.
+- **Commercial studios wanted predictable behavior.** A studio shipping a game in six weeks could not afford a toolchain that did surprising things. DevPac's conservatism was a feature, not a bug.
 
 The trade-off was **workflow friction**. Switching from GENS to MONS required saving the source (to tape on early DevPac, to disk on DevPac 4), exiting GENS, loading MONS, loading the assembled binary into MONS, and only then starting to debug. The cycle took a minute or more on tape; on the +3 with disk, perhaps 15 seconds. Compare Zeus's seconds-long integrated cycle, and the DevPac trade-off looks punishing for hobbyists.
 
@@ -313,7 +313,7 @@ The Russian Spectrum scene, which kept native development alive through the late
 DevPac's influence on Z80 assembly conventions persists in modern cross-assemblers:
 
 - **The `ORG` directive name** — used by sjasmplus, pasmo, z88dk-z80asm; originated in the CP/M-era tradition DevPac inherited
-- **The `DB`/`DW`/`DS` directive names** — used by virtually every Z80 assembler; DevPac standardised these on the Spectrum
+- **The `DB`/`DW`/`DS` directive names** — used by virtually every Z80 assembler; DevPac standardized these on the Spectrum
 - **Uppercase label conventions** — many modern Spectrum projects still use `CLEAR_SCREEN:` rather than `clear_screen:` as a DevPac-era convention
 - **The `#` hex prefix** — used by sjasmplus and several other modern assemblers; DevPac popularised it on the Spectrum (Zeus also used it; the two conventions converged)
 
@@ -352,7 +352,7 @@ MONS is primitive by modern standards — it lacks source-level debugging, condi
 
 ## Summary
 
-HiSoft DevPac — GENS the assembler, MONS the monitor — was the **workhorse of the UK commercial Spectrum era**. From its 1983 launch through the late 1980s, DevPac was the standard tool at virtually every UK software house producing Spectrum games. Its conservative, two-program design prioritised reliability over innovation, and this conservatism was exactly what commercial studios with deadlines needed.
+HiSoft DevPac — GENS the assembler, MONS the monitor — was the **workhorse of the UK commercial Spectrum era**. From its 1983 launch through the late 1980s, DevPac was the standard tool at virtually every UK software house producing Spectrum games. Its conservative, two-program design prioritized reliability over innovation, and this conservatism was exactly what commercial studios with deadlines needed.
 
 DevPac's reign ended with the commercial Spectrum market around 1990. The Russian Spectrum scene, which kept native development alive longer, used ALASM and XAS instead — DevPac had no Soviet lineage. Today, DevPac is of historical interest: its source-file conventions (`#` hex, `ORG`, `DB`/`DW`/`DS`, uppercase labels) live on in modern cross-assemblers, and archived commercial source from the 1980s remains readable by sjasmplus with minor edits.
 

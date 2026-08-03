@@ -4,7 +4,7 @@
 
 It is the **hardware companion** to [esxdos.md](../../04_operating_systems/esxdos.md), which covers the ESXDOS operating system — the DOS API, the dot-command interface, and the assembly calling conventions. The two articles are designed to be read together: this one answers "what is the box and how do I set it up?", the other answers "how do I program the DOS that runs on it?".
 
-**Audience:** Retro-hardware buyers choosing between a DivIDE and a DivMMC, new Spectrum owners setting up their first SD card, emulator authors modelling the DivIDE boot sequence, and anyone curious what lives inside the small plastic case plugged into the back of a 2024 Spectrum.
+**Audience:** Retro-hardware buyers choosing between a DivIDE and a DivMMC, new Spectrum owners setting up their first SD card, emulator authors modeling the DivIDE boot sequence, and anyone curious what lives inside the small plastic case plugged into the back of a 2024 Spectrum.
 
 **Prerequisites:** The [IDE interface article](ide_interface.md) covers the protocol and port map; the [overview article](hdd_overview.md) situates these cards in the storage story. No familiarity with ESXDOS itself is required — this article references it but defers the details to its own article.
 
@@ -40,7 +40,7 @@ The DivIDE is a single PCB roughly the size of a playing card, designed to plug 
 
 ### 2.2 The port block
 
-The DivIDE responds to I/O reads and writes in the `#E3`–`#E7` block (with mirrors at `#A3`–`#A7` on some revisions), as documented in [ide_interface.md §5.1](ide_interface.md). The three primary ports are `#E3` (IDE data low), `#E5` (IDE data high), and `#E7` (the control register). The control register is the interface's nerve centre: it selects the visible ROM bank, toggles the firmware write-protect, and on some revisions controls an IDE bank-switch bit.
+The DivIDE responds to I/O reads and writes in the `#E3`–`#E7` block (with mirrors at `#A3`–`#A7` on some revisions), as documented in [ide_interface.md §5.1](ide_interface.md). The three primary ports are `#E3` (IDE data low), `#E5` (IDE data high), and `#E7` (the control register). The control register is the interface's nerve center: it selects the visible ROM bank, toggles the firmware write-protect, and on some revisions controls an IDE bank-switch bit.
 
 ### 2.3 Power and the CF choice
 
@@ -104,7 +104,7 @@ This is the crucial trick: the DivIDE does not need the Spectrum ROM's cooperati
 
 After the NMI handler has run at least once, ESXDOS installs a small **hook** in RAM that allows subsequent machine-code programs to invoke ESXDOS API functions without pressing the NMI button. The mechanism is the **auto-map** flag: when a program executes an `RST 8` (or a `CALL` to a specific hook address, depending on firmware version), the paging logic briefly pages the DivIDE ROM back in, executes the requested function, and pages it back out.
 
-This is how dot commands and application programs call `M_GETSETDRV`, `F_OPEN`, `F_READ`, and the rest of the ESXDOS API. The programmer sees a normal subroutine call; the hardware handles the ROM paging transparently. The full API catalogue is in [esxdos.md §6](../../04_operating_systems/esxdos.md).
+This is how dot commands and application programs call `M_GETSETDRV`, `F_OPEN`, `F_READ`, and the rest of the ESXDOS API. The programmer sees a normal subroutine call; the hardware handles the ROM paging transparently. The full API catalog is in [esxdos.md §6](../../04_operating_systems/esxdos.md).
 
 ### 4.4 Why ESXDOS does not patch the BASIC ROM
 
@@ -138,7 +138,7 @@ The emulation is near-perfect for software that uses the TR-DOS hook codes corre
 
 - **Direct hardware access breaks.** Software that bypasses the hook codes and talks to the WD1793 registers directly — to use a non-standard sector size, say, or a custom interleaving — may not be emulated correctly, because divman models the standard TR-DOS geometry. Copy-protected disks and custom loaders often fall here.
 - **Timing-dependent software.** Programs that rely on exact WD1793 command timing (some fast loaders do) may run at the wrong speed, because the emulated controller responds instantly rather than after real seek and settle delays.
-- **Write behaviour.** Writes to the virtual floppy modify the `.TRD` file on the storage volume, which is usually desired (save games work) but can corrupt a master image if the user is not careful. The dot command `*.wp` (write-protect) marks the current image read-only to prevent this.
+- **Write behavior.** Writes to the virtual floppy modify the `.TRD` file on the storage volume, which is usually desired (save games work) but can corrupt a master image if the user is not careful. The dot command `*.wp` (write-protect) marks the current image read-only to prevent this.
 
 For the vast majority of the TR-DOS library — games that load and run, demos that stream data — the emulation is transparent and perfect. The `.TRD` image format itself is documented in [trd_scl_formats.md](trd_scl_formats.md).
 
@@ -184,7 +184,7 @@ Hundreds of additional dot commands are available from the community (file manag
 
 Beyond `/SYS`, the volume's structure is up to the user. Typical conventions:
 
-- `/GAMES` — `.z80` and `.sna` snapshots of games, often organised by genre or year.
+- `/GAMES` — `.z80` and `.sna` snapshots of games, often organized by genre or year.
 - `/TRDOS` — `.trd` images for the TR-DOS virtual floppy.
 - `/TAPES` — `.tap` and `.tzx` images for the tape emulator.
 - `/DEMOS` — demoscene productions.
@@ -222,16 +222,16 @@ All run ESXDOS and are software-compatible at the API level.
 
 The DivMMC has been cloned and re-spun many times since 2013. The principal variants are:
 
-- **DivMMC "Future" / "FutureWas"** — the most widely manufactured 2020s variant, with a MicroSD socket, a 3D-printed or injection-moulded case, and a refined power circuit. Sold ready-to-use.
+- **DivMMC "Future" / "FutureWas"** — the most widely manufactured 2020s variant, with a MicroSD socket, a 3D-printed or injection-molded case, and a refined power circuit. Sold ready-to-use.
 - **DivMMC "Resident"** — a variant designed to mount entirely inside a 48K or 128K Spectrum, drawing power from the internal rail and presenting the SD slot at the rear. No external dongle.
 - **DivMMC "Slim"** — a bare-board version for DIY enclosure, the cheapest option.
 - **ZX Spectrum Next internal SD** — the Next's built-in MicroSD slots are DivMMC-compatible at the firmware level, running NextZXOS.
 
 All of these run the same ESXDOS firmware and accept the same FAT-formatted card. The choice between them is physical (case vs bare board, external vs internal) rather than functional.
 
-### 7.3 Emulator modelling
+### 7.3 Emulator modeling
 
-For emulator authors, the practical takeaway is that modelling the **DivIDE 57c port block** (`#E3`–`#E7`) and the ESXDOS NMI/menu behaviour is sufficient to run the overwhelming majority of modern Spectrum software. Fuse, ZEsarUX, CSpect, and UnrealSpeccy all do this. The DivMMC needs no separate modelling — it is the same port block with an SPI driver swapped in for the IDE driver, which the firmware handles invisibly.
+For emulator authors, the practical takeaway is that modeling the **DivIDE 57c port block** (`#E3`–`#E7`) and the ESXDOS NMI/menu behavior is sufficient to run the overwhelming majority of modern Spectrum software. Fuse, ZEsarUX, CSpect, and UnrealSpeccy all do this. The DivMMC needs no separate modeling — it is the same port block with an SPI driver swapped in for the IDE driver, which the firmware handles invisibly.
 
 ## §8. Cross-references and License
 
