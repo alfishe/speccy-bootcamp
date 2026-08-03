@@ -313,7 +313,17 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 
 *See [07_demoscene/README.md](07_demoscene/README.md) for the section index.*
 
-### 00 — Overview · 03 — I/O · 08 — RE · 09 — Toolchain · 10 — References · 11 — Emulation
+### 00 — Overview ✅ F14 COMPLETE
+
+| Article | Description |
+|---------|------------|
+| [history.md](00_overview/history.md) | **Narrative synthesis of the ZX Spectrum's 40+ year story**: five distinct eras (Pre-Spectrum 1972–1981, Sinclair 1982–1986, Amstrad 1986–1992, Post-Soviet clone 1989–2000s, Modern revival 2010s–present), verified dates from canonical Sinclair Wiki source, embedded Mermaid `timeline` diagram 1976–2022, cultural/economic context for each transition, 5 pitfalls |
+| [hardware_models.md](00_overview/hardware_models.md) | **Navigational hub for hardware models across three tracks**: Original/Soviet Clones/New Gen taxonomy, three per-track model tables (7 Original, 10 Soviet clones, 8 New Gen), three cross-track comparison matrices (frame timing, memory architecture, sound capability), "How to Choose a Model" decision matrix with 8 use cases, every model row links to per-model deep-dive article |
+| [glossary.md](00_overview/glossary.md) | **Platform-specific terminology reference**: 100+ terms organized by category (Hardware, Display, Memory, Storage, Software/System, Cultural/Demoscene, Track-Specific), each entry has 2–4 sentence definition with "See X" cross-reference, abbreviations listed both short form (ULA) and full form (Uncommitted Logic Array), 5 pitfalls |
+
+*See [00_overview/README.md](00_overview/README.md) for the section index. All 3 articles complete (F14 series — 4-article plan consolidated to 3 by merging timeline into history per user approval).*
+
+### 03 — I/O · 08 — RE · 09 — Toolchain · 10 — References · 11 — Emulation
 
 **Section 03 — I/O (Snapshots / Storage / Peripherals / Networking)**
 
