@@ -797,3 +797,13 @@ Always save and restore the bank register. Since `#7FFD` is write-only, track th
 - **Bank switching** (128K paging, ISR considerations): [bank_switching_patterns.md](../03_memory_and_io/bank_switching_patterns.md)
 - **I/O ports** (#FE border, #FFFD AY register): [memory_and_io_48k.md](../03_memory_and_io/memory_and_io_48k.md)
 - **Clone timing** (per-model frame differences): [clone_timing.md](../../02_hardware/clones/clone_timing.md)
+
+### Companion Articles in the F11 Interrupt Series
+
+This article is the foundational reference. Five companion articles cover specialized interrupt topics in depth:
+
+- **Race-the-beam multicolor** (8×8 constraint, sync strategies, BIFROST* engine): [race_the_beam.md](race_the_beam.md)
+- **NMI and the Multiface** (74LS74 hardware, NMI-safe code rules, DivIDE magic button): [nmi.md](nmi.md)
+- **Demoscene IM2 effects** (15-game survey, vector table placement, manager patterns): [im2_effects.md](im2_effects.md)
+- **Disk load with AY music** (WD1793 byte budget, Ivan Roshchin math, workaround patterns): [im2_disk_music.md](im2_disk_music.md)
+- **Advanced IM2** (Next hardware IM2 mode, TS-Conf vectors, copper vs ISR, sample-rate ISRs): [im2_advanced.md](im2_advanced.md)

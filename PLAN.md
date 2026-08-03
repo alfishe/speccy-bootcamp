@@ -191,15 +191,13 @@ zx/
 │   │       ├── plus3_port_decoding.svg
 │   │       └── pentagon_port_decoding.svg
 │   ├── 04_interrupts/
-│   │   ├── interrupt_overview.md
-│   │   ├── im1_programming.md
-│   │   ├── im2_programming.md
-│   │   ├── isr_patterns.md
-│   │   ├── interrupt_timing.md
-│   │   ├── race_the_beam.md
-│   │   ├── nmi.md
-│   │   ├── interrupt_antipatterns.md
-│   │   └── interrupt_cookbook.md
+│   │   ├── README.md
+│   │   ├── interrupt_programming.md   # Foundational: IM1/IM2, vector tables, ISR patterns
+│   │   ├── race_the_beam.md           # Raster sync, multicolor, BIFROST*
+│   │   ├── nmi.md                     # Multiface, NMI-safe code rules
+│   │   ├── im2_effects.md             # Demoscene IM2: 15-game survey, manager patterns
+│   │   ├── im2_disk_music.md          # WD1793 + AY concurrency math
+│   │   └── im2_advanced.md            # Next/TS-Conf, copper, sample-rate ISRs
 │   ├── 05_display_and_timing/
 │   │   ├── README.md
 │   │   ├── video_frame_overview.md
@@ -711,13 +709,16 @@ zx/
 | `screen_layout.md` | Nonlinear pixel framebuffer: three-thirds structure, address calculation, lookup tables | ✅ |
 | `contention_model.md` | Unified contention: Ferranti vs gate array, per-model timing, I/O contention, cross-platform strategy | ✅ |
 
-#### 05_development/04_interrupts/ — Interrupt Programming
+#### 05_development/04_interrupts/ — Interrupt Programming ✅ COMPLETE (6 of 6 articles done)
 
 | File | Topic | Status |
 |---|---|---|
-| `interrupt_programming.md` | Practical guide: IM1/IM2 setup, vector tables, ISR patterns, timing, cookbook, antipatterns | Done |
-| `race_the_beam.md` | Race-the-beam programming: synchronizing code to raster position for multicolor, border effects, scanline tricks | Planned |
-| `nmi.md` | NMI handling: Multiface NMI, NMI button, what's safe in NMI context | Planned |
+| `interrupt_programming.md` | **Foundational guide**: IM1/IM2 setup, 257-byte vector table, ISR patterns, T-state budgets, contention, cookbook, antipatterns | ✅ |
+| `race_the_beam.md` | **Raster-synchronized multicolor**: 8×8 constraint reframed, T-state budget per scanline, 5 sync strategies (HALT, floating bus, port-#FF, line interrupt, copper), BIFROST* engine deep dive | ✅ |
+| `nmi.md` | **NMI and the Multiface**: 74LS74 flip-flop hardware, NMI vs INT, 4 NMI-safe code rules, DivIDE/ESXDOS magic button | ✅ |
+| `im2_effects.md` | **Demoscene IM2 effects**: vector table placement rules, 15-game disassembly survey (256 vs 257-byte tables), 3 manager patterns (direct / JP / Hudson Hawk), 5 ISR effect catalog | ✅ |
+| `im2_disk_music.md` | **Disk load with AY music**: WD1793 byte budget, Ivan Roshchin concurrency math, 3 workaround patterns, Western DOS comparison | ✅ |
+| `im2_advanced.md` | **Advanced IM2 platforms**: Next hardware IM2 mode (core 3.02+), TS-Conf vectors, copper vs ISR, Hudson Hawk 128K bank-switching ISR, sample-rate ISRs | ✅ |
 
 
 #### 05_development/05_display_and_timing/ — Video Subsystem ✅ COMPLETE (19 of 19 articles done)
@@ -1079,7 +1080,7 @@ Articles are written in priority order. README.md is synthesized AFTER articles 
 | 08 Reverse Engineering | **7/7** | ✅ **F5 COMPLETE** — consolidated from 10 planned into **7 comprehensive articles** (3,256 lines total): methodology.md (528), protection_techniques.md (492) [both pre-existing], analysis_techniques.md (597), protection_cracking.md (367), game_reversing.md (384), code_crunching.md (432), snapshot_repair.md (456). Merges: static_analysis+dynamic_analysis+tool_setup → analysis_techniques; speedlock_alkatraz → protection_cracking; decompilation → game_reversing |
 | 10 References | **10/10** | ✅ **COMPLETE** (Jul 2026) — z80_opcode_table, io_port_map, character_set, color_palette, memory_maps, basic_token_table, error_codes, timing_reference, pinouts, rom_routines |
 | 02 Hardware (all 3 streams) | 26/~28 | ✅ **F1/F2/F3 Largely DONE** — original 8/8 (16K/48K, 128K, +2, +2A/+3, ULA architecture/timing/contention, keyboard), clones 11/11 (Pentagon, Scorpion, ATM Turbo, Kay, Profi, Byte, Sizif/Harlequin, + others), newgen 7/8 (Next, Sprinter, Evo, TS-Conf, BaseConf, ZX Uno, Karabas). Descoped: power_supply, edge_connector, rom_contents (pure hardware, duplicative) |
-| 05_dev/04_interrupts | 1/~7 | 📝 interrupt_programming done; 6 more pending (im1_programming, im2_programming, isr_patterns, interrupt_timing, race_the_beam, nmi, interrupt_antipatterns, interrupt_cookbook) |
+| 05_dev/04_interrupts | **6/6** | ✅ **F11 COMPLETE** — consolidated from ~7 planned into **6 articles** (3,235 lines total): interrupt_programming.md (799, pre-existing foundational), race_the_beam.md (559 — raster sync, 5 strategies, BIFROST*), nmi.md (385 — Multiface 74LS74 hardware, 4 NMI-safe rules), im2_effects.md (527 — 15-game disassembly survey, 3 manager patterns), im2_disk_music.md (469 — WD1793 byte budget, Ivan Roshchin concurrency math), im2_advanced.md (477 — Next/TS-Conf IM2, copper vs ISR, Hudson Hawk bank-switching ISR). User feedback: "F11 is not a small one. Do full research how IM1, IM2 works… and how demo and game makers abuse IM2 for effects, timing sync, and even disk load with AY music" |
 | 05_dev/01_basic | 2/2 | ✅ F7 COMPLETE — consolidated to 2 comprehensive articles: basic_48k.md (1019 lines, merges intro/graphics/sound/peek_poke) + basic_128k.md (496 lines, PLAY/AY-3-8912/+2A+3 DOS). User feedback: "one for 48K comprehensive, one addon for 128K" |
 | 05_dev/02_assembly | 6/6 | ✅ **F7 COMPLETE** — consolidated from 10 planned articles into **6 comprehensive articles** (5,762 lines total): assembly_intro.md (705), rom_calls.md (1056), stack_and_rst.md (808), assembly_patterns.md (1016), assembly_optimization.md (860), c_interop.md (1311). Merges: rom_calls_128k → rom_calls; c_with_z88dk + c_with_sdcc + mixed_c_asm → c_interop. User feedback: "Good article should have 500+ lines, combine thin ones" |
 | 05_dev/06_graphics | 0/~26 | 📝 Empty (only README) |
@@ -1109,6 +1110,7 @@ Articles are written in priority order. README.md is synthesized AFTER articles 
 - **F7 (long-form, remaining)**: `05_development/06_graphics/screen_access.md` + 25 more (Graphics series). Long arc — next subsection to seed.
 - **Tier F8 — DOS and Tape Programming series** ✅ **COMPLETE** (Jul 2026): Consolidated from 11 planned articles into **5 comprehensive articles** (4,147 lines total): `tape_programming.md` (704 — ROM SA-BYTES/LD-BLOCK/SAVE/LOAD, custom bit-banging loaders via port #FE, turbo loaders 3000+ baud, custom savers, border effects), `trdos_programming.md` (817 — TR-DOS ROM banking via port #FF, 9 hook codes at #3D13, file operations, catalog reader, WD1793 sector I/O, demoscene double-buffered streaming), `dos_programming.md` (700 — +3 DOS RSX, ESXDOS hook codes at #0084, NextZXOS, dot commands at #2000, API comparison matrix, portable code, runtime DOS detection), `file_format_handling.md` (1107 — magic-byte detection, .TAP/.TZX/.TRD/.SCL/.DSK/.SNA/.Z80/.SCR parsing, directory traversal, .Z80 RLE decompression), `mass_storage_programming.md` (819 — IDE/CF ATA register access, SD card SPI bit-banging, read-only FAT16/32 reader, performance vs OS-mediated). Cross-verified against 25 existing storage reference articles and 4 OS reference articles to avoid duplication.
 - **Tier F5 — Reverse Engineering series** ✅ **COMPLETE** (Jul 2026): Consolidated from 10 planned articles into **7 comprehensive articles** (3,256 lines total): 2 pre-existing (`methodology.md` 528 — RE workflow hub, `protection_techniques.md` 492 — protection catalog) + 5 new: `analysis_techniques.md` (597 — SkoolKit disassembly, code/data separation, ROM call labeling, ZEsarUX/DeZog debugging, trace logging, reverse debugging, memory diffing), `protection_cracking.md` (367 — Speedlock/Alkatraz decryption analysis, timing check bypass, disk protection defeat, NMI countermeasure defeat, clean snapshot technique), `game_reversing.md` (384 — engine identification, sprite/map/music ripping, cheat codes, save game analysis, Z80-to-C reconstruction), `code_crunching.md` (432 — packer survey MegaLZ/HRUM/Hrust/ZX0, format identification, LZSS fundamentals, generic depacker template, overlap depacking), `snapshot_repair.md` (456 — corrupted .SNA/.Z80 repair, PC/SP fix, .Z80 decompression error handling, format conversion with Python scripts). Consolidation merges: static_analysis+dynamic_analysis+tool_setup → analysis_techniques; speedlock_alkatraz → protection_cracking; decompilation → game_reversing.
+- **Tier F11 — Interrupt Programming series** ✅ **COMPLETE** (Jul 2026): Expanded from 1 existing foundational article into **6 comprehensive articles** (3,235 lines total): `interrupt_programming.md` (799 — pre-existing foundational reference, added Companion Articles cross-reference block), `race_the_beam.md` (559 — 8×8 constraint reframed, T-state budget per scanline, 5 sync strategies HALT/floating-bus/port-#FF/line-interrupt/copper, BIFROST* engine deep dive), `nmi.md` (385 — NMI vs INT, Multiface hardware 74LS74 flip-flops, 4 NMI-safe code rules, NMI during common operations, DivIDE/ESXDOS magic button), `im2_effects.md` (527 — vector table placement rules, 15-game disassembly survey showing 13/15 use unsafe 256-byte tables, 3 manager patterns direct/JP/Hudson Hawk, 5 ISR effect catalog, demo framework effect sequencer), `im2_disk_music.md` (469 — WD1793 32-T-state byte budget, Ivan Roshchin concurrency math Pentagon 48.83 Hz × 300 RPM = 9.77 interrupts/rev non-integer causing 138-byte drift, 3 workaround patterns music-after-sector/stop-motor-resync/custom-WD1793-driver, +3DOS UPD765 16-byte FIFO and ESXDOS block-buffered tolerance), `im2_advanced.md` (477 — Next hardware IM2 mode core 3.02+ with 8 prioritized interrupt sources and RETI mandatory, TS-Conf separate frame/line/DMA vectors, copper vs ISR decision matrix, Hudson Hawk 128K bank-switching ISR pattern with shadow variable at #70D4, sample-rate ISRs AY/Covox/beeper PWM). Triggered by user pushback: "F11 interrupts - is not a small one. Do full research how IM1, IM2 works on zx-spectrum specifically and how demo and game makers abuse IM2 for effects, timing sync, and even disk load with AY music on". Cross-verified against z80_interrupts.md (CPU-level), video_frame_*.md (timing), and bank_switching_patterns.md (128K paging) to avoid duplication. User feedback on chunk size: "make changes by smaller chunks. otherwise LLM timeout" — all articles written in 100-250 line chunks after feedback.
 
 After articles exist: README.md (documentation map), TODO.md (gap analysis), section README.md indexes.
 

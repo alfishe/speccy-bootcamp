@@ -118,11 +118,18 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [contention_model.md](05_development/03_memory_and_io/contention_model.md) | Unified contention reference: per-model timing, Ferranti vs gate array patterns, I/O contention |
 | [bank_switching_patterns.md](05_development/03_memory_and_io/bank_switching_patterns.md) | Practical 128K+ paging: #7FFD, cross-bank access, double buffering, +2A/+3 modes |
 
-#### Interrupt Programming
+#### Interrupt Programming ✅ COMPLETE
 
 | Article | Description |
 |---------|------------|
-| [interrupt_programming.md](05_development/04_interrupts/interrupt_programming.md) | Practical guide: IM1/IM2 setup, ISR patterns, timing, cookbook, antipatterns |
+| [interrupt_programming.md](05_development/04_interrupts/interrupt_programming.md) | **Foundational guide**: IM1/IM2 setup, 257-byte vector table, ISR patterns, T-state budgets, contention, cookbook, antipatterns |
+| [race_the_beam.md](05_development/04_interrupts/race_the_beam.md) | **Raster-synchronized multicolor**: 8×8 constraint reframed, T-state budget per scanline, 5 sync strategies (HALT, floating bus, port-#FF, line interrupt, copper), BIFROST* engine deep dive |
+| [nmi.md](05_development/04_interrupts/nmi.md) | **NMI and the Multiface**: 74LS74 flip-flop hardware, NMI vs INT comparison, 4 NMI-safe code rules, NMI during common operations table, DivIDE/ESXDOS magic button |
+| [im2_effects.md](05_development/04_interrupts/im2_effects.md) | **Demoscene IM2 effects**: vector table placement rules, 15-game disassembly survey (256 vs 257-byte tables), 3 manager patterns (direct / JP trampoline / Hudson Hawk bank-switching), 5 ISR effect catalog, demo framework sequencer |
+| [im2_disk_music.md](05_development/04_interrupts/im2_disk_music.md) | **Disk load with AY music**: WD1793 byte budget, Ivan Roshchin concurrency math (Pentagon 48.83 Hz, 9.77 interrupts/rev, 138-byte drift), 3 workaround patterns (music-after-sector / stop-motor resync / custom WD1793 driver), Western DOS comparison |
+| [im2_advanced.md](05_development/04_interrupts/im2_advanced.md) | **Advanced IM2 platforms**: ZX Spectrum Next hardware IM2 mode (core 3.02+, 8 prioritized sources, RETI mandatory), TS-Conf separate frame/line/DMA vectors, copper vs ISR decision matrix, Hudson Hawk 128K bank-switching ISR deep dive, sample-rate ISRs (AY/Covox/beeper PWM) |
+
+*See [04_interrupts/README.md](05_development/04_interrupts/README.md) for the section index. All 6 articles complete.*
 
 #### Display & Timing
 
