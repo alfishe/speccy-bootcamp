@@ -148,7 +148,7 @@ The **Quorum** (Кворум, produced in Moscow, 1990–1992) is a family of lo
 
 ### Architecture
 
-The Quorum uses a hybrid design — part discrete TTL, part Soviet-made gate array (Т34ВГ1). The Т34ВГ1 is a Soviet-produced ULA replacement that implements the video generation and memory arbitration functions. See [ula_replacements.md](ula_replacements.md) for details on this chip.
+The Quorum uses a hybrid design — part discrete TTL, part Soviet-made gate array (Т34ВГ1). The Т34ВГ1 is a Soviet-produced ULA replacement that implements the video generation and memory arbitration functions. (A dedicated `ula_replacements.md` article is planned; see the [section README](README.md) for now.)
 
 The Quorum's timing is **approximately 48K-compatible** — close enough for most software, but with minor INT timing drift that can affect cycle-exact code.
 
@@ -352,7 +352,7 @@ Romania was the first Eastern Bloc country to clone the Spectrum, and produced t
 - [Profi](profi.md) — Ukrainian professional clone with ISA/VGA
 - [Byte](byte.md) — compact Ukrainian clone
 - [Clone timing](clone_timing.md) — cross-clone timing comparison and detection
-- [ULA replacements](ula_replacements.md) — Soviet-made gate arrays (Т34ВГ1, etc.)
+- [Section README](README.md) — notes on Soviet-made gate arrays (Т34ВГ1, etc.) — dedicated `ula_replacements.md` article is planned
 - [Clone video frames](../../05_development/05_display_and_timing/video_frame_other_soviet.md) — detailed timing for all clones
 - [Floating bus](../../05_development/05_display_and_timing/floating_bus.md) — why TTL clones lack the floating bus
 - [Soviet demoscene](../../07_demoscene/soviet_demo_scene.md) — cultural context

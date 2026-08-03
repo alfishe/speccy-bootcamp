@@ -390,7 +390,7 @@ The Sinclair tape format modulates data as a series of pulse widths:
 | Data bit 0 | 723 + 723 T-states | ~1,489 Hz | Each bit is two pulses |
 | Data bit 1 | 1,446 + 1,446 T-states | ~797 Hz | Each bit is two pulses |
 
-A full block has a **pilot tone (~5 seconds for header, ~2 seconds for data)**, sync, then the data. The first block loaded is always a 17-byte header (filename, data length, params); subsequent blocks contain the actual data. See [tape_loading.md](../../05_development/08_dos_tape/tape_loading.md) for the programmer view and [tape_saving.md](../../05_development/08_dos_tape/tape_saving.md) for the save side.
+A full block has a **pilot tone (~5 seconds for header, ~2 seconds for data)**, sync, then the data. The first block loaded is always a 17-byte header (filename, data length, params); subsequent blocks contain the actual data. See [tape_programming.md](../../05_development/08_dos_tape/tape_programming.md) for the programmer view of both load and save.
 
 ### Custom Turbo Loaders
 
@@ -577,6 +577,6 @@ As a collector's item, yes. For practical use, no — almost all interesting Spe
 - [48K ROM](../../04_operating_systems/rom_48k.md) — ROM map and cold-start sequence
 - [System Variables](../../04_operating_systems/system_variables.md) — `CHARS`, `P_RAMT`, `FRAMES`, and the rest
 - [Beeper Synthesis](../../06_sound/synthesis/beeper_synthesis.md) — what bit 4 of `#FE` can do
-- [Tape Loading](../../05_development/08_dos_tape/tape_loading.md) — ROM LOAD, turbo loaders, custom formats
+- [Tape Programming](../../05_development/08_dos_tape/tape_programming.md) — ROM LOAD/SAVE, turbo loaders, custom formats
 - [Protection Techniques](../../08_reverse_engineering/protection_techniques.md) — Speedlock, Alkatraz, Bleepload
 - [128K Memory & I/O](../../05_development/03_memory_and_io/memory_and_io_128k.md) — what changed from 48K to 128K

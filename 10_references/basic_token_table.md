@@ -5,7 +5,7 @@
 The byte values, mnemonics, and tokenisation rules for every Sinclair BASIC keyword, control code, function, and operator across the 48K, 128K, +2, +2A, and +3 ROMs. The Spectrum's BASIC stores its programs in a compressed **tokenised** form: every multi-character keyword is reduced to a single byte in the range `#A5`–`#FF`, while printable characters below `#20` are encoded as control codes. This article is the **complete lookup table** — you come here when you need to convert a byte back to its BASIC meaning or vice versa.
 
 > [!NOTE]
-> For the *concept* of tokenisation, the syntax of individual statements, and how the ROM parser works, see [basic_intro.md](../05_development/01_basic/basic_intro.md) (pending). This article is the **raw byte table** — pure reference, no explanations of what each command does.
+> For the *concept* of tokenisation, the syntax of individual statements, and how the ROM parser works, see [basic_48k.md](../05_development/01_basic/basic_48k.md). This article is the **raw byte table** — pure reference, no explanations of what each command does.
 
 ---
 
@@ -98,7 +98,7 @@ When you type `10 LET A = 42` and press ENTER, the tokeniser stores the **comple
 The ROM decides which form to use. Small integers in the range `1`–`65535` use `#0F`; everything else (negative integers, fractions, large numbers) uses `#0E`. The special value `#0F #00 #00` represents the small integer `0`.
 
 > [!NOTE]
-> The 5-byte floating-point form is: byte 0 = exponent (biased by `#80`), bytes 1–4 = mantissa (high bit always set for normalised numbers). For zero, all 5 bytes are `#00`. Full details in [basic_intro.md](../05_development/01_basic/basic_intro.md).
+> The 5-byte floating-point form is: byte 0 = exponent (biased by `#80`), bytes 1–4 = mantissa (high bit always set for normalised numbers). For zero, all 5 bytes are `#00`. Full details in [basic_48k.md](../05_development/01_basic/basic_48k.md).
 
 ---
 
@@ -350,8 +350,8 @@ NOT_TOKEN:
 - [rom_routines.md](rom_routines.md) — `TOKENS` and `TOKENS_ADDRESS` routines
 - [memory_maps.md](memory_maps.md) — where tokenised programs live in memory
 - [error_codes.md](error_codes.md) — error codes reported when tokens are misused
-- [basic_intro.md](../05_development/01_basic/basic_intro.md) — BASIC language tutorial (pending)
-- [basic_dialects_comparison.md](../05_development/01_basic/basic_dialects_comparison.md) — comparing 48K, 128K, +3, Pentagon BASIC (pending)
+- [basic_48k.md](../05_development/01_basic/basic_48k.md) — BASIC language tutorial (48K comprehensive reference)
+- [basic_dialects.md](../04_operating_systems/basic_dialects.md) — comparing 48K, 128K, +3, Pentagon BASIC
 
 ---
 

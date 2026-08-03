@@ -21,7 +21,7 @@ This directory covers **Sinclair BASIC programming** on the ZX Spectrum — the 
 - [basic_token_table.md](../../10_references/basic_token_table.md) — byte-level token values for every keyword across all ROM versions
 - [rom_48k.md](../../04_operating_systems/rom_48k.md), [rom_128k.md](../../04_operating_systems/rom_128k.md), [rom_plus2.md](../../04_operating_systems/rom_plus2.md) — ROM internals for the three families
 - [ay_3_8912.md](../../06_sound/hardware/ay_3_8912.md) — AY-3-8912 PSG complete reference (assembly-level)
-- [beeper.md](../../06_sound/beeper/beeper.md) — the 1-bit beeper hardware
+- [beeper_synthesis.md](../../06_sound/synthesis/beeper_synthesis.md) — the 1-bit beeper hardware
 
 ---
 

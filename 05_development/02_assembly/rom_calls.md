@@ -701,7 +701,7 @@ ay_read:
     RET
 ```
 
-The full AY-3-8912 register reference is in [ay_3_8912.md](../../06_sound/chips/ay_3_8912.md). The standard music tracker players (PT3, ASC, PLY) all use direct port access rather than the ROM.
+The full AY-3-8912 register reference is in [ay_3_8912.md](../../06_sound/hardware/ay_3_8912.md). The standard music tracker players (PT3, ASC, PLY) all use direct port access rather than the ROM.
 
 ---
 
@@ -1042,7 +1042,7 @@ Or read it twice and check for consistency:
 - **[basic_48k.md](../01_basic/basic_48k.md)** — Sinclair BASIC reference; documents the BASIC commands that wrap these routines
 - **[basic_128k.md](../01_basic/basic_128k.md)** — PLAY command reference; covers the same AY-3-8912 access from BASIC
 - **[beeper_synthesis.md](../../06_sound/synthesis/beeper_synthesis.md)** — write your own beeper routine instead of using ROM `BEEP`
-- **[ay_3_8912.md](../../06_sound/chips/ay_3_8912.md)** — full AY-3-8912 register reference (128K machines)
+- **[ay_3_8912.md](../../06_sound/hardware/ay_3_8912.md)** — full AY-3-8912 register reference (128K machines)
 - **[keyboard_matrix.md](../../02_hardware/original/keyboard_matrix.md)** — direct keyboard scan via port `#FE`
 - **[screen_layout.md](../03_memory_and_io/screen_layout.md)** — pixel and attribute file layout for direct screen access
 - **[memory_and_io_128k.md](../03_memory_and_io/memory_and_io_128k.md)** — 128K banking details

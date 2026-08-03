@@ -102,7 +102,7 @@ A **distinct Moldovan clone** was sold under the Byte name, produced at the **Dn
 | **Elektronika VI-201 (Parus)** | Dniester plant, Bender | More reliable power supply, KR1013RE1-020 ROM with Didaktik Skalica firmware |
 | **Elektronika VI-202** | Dniester plant, Bender | East German **U880 CPU**, **Angstrem T34VG1 ULA** (Soviet gate array), plastic keys, integrated joystick port |
 
-The VI-202 is particularly notable for being one of the few Soviet Spectrums to use the **T34VG1 ULA** — a Soviet-designed gate array that reimplements the Ferranti ULA's functionality in a single chip. See [ula_replacements.md](ula_replacements.md) for details on this chip.
+The VI-202 is particularly notable for being one of the few Soviet Spectrums to use the **T34VG1 ULA** — a Soviet-designed gate array that reimplements the Ferranti ULA's functionality in a single chip. (A dedicated `ula_replacements.md` article is planned; see the [section README](README.md) for now.)
 
 > [!WARNING]
 > When a Soviet software product refers to running on the "Byte," it almost always means the **Brest (Belarusian) Byte** — the Moldovan variant was produced in much smaller numbers and was largely confined to the Moldavian and Ukrainian markets.
@@ -236,7 +236,7 @@ The Byte's main distinction is being the **only mass-produced Soviet Spectrum cl
 - [Floating bus](../../05_development/05_display_and_timing/floating_bus.md) — why the floating bus doesn't work on TTL clones
 - [Clone joysticks](clone_joysticks.md) — Kempston joystick conventions on Soviet clones
 - [Contention model](../../05_development/03_memory_and_io/contention_model.md) — why the Byte has no contention
-- [ULA replacements](ula_replacements.md) — the T34VG1 gate array used in the Moldovan VI-202 variant
+- [Section README](README.md) — notes on the T34VG1 gate array used in the Moldovan VI-202 variant (dedicated `ula_replacements.md` article is planned)
 
 ---
 

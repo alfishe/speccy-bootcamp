@@ -167,7 +167,7 @@ SAVERET:
         ; ... continues here
 ```
 
-The `SAVE` routine is **not** re-entrant and disables interrupts. For Turbo load routines, see the deep-dive in [tape_loading.md](../05_development/08_dos_tape/tape_loading.md).
+The `SAVE` routine is **not** re-entrant and disables interrupts. For Turbo load routines, see the deep-dive in [tape_programming.md](../05_development/08_dos_tape/tape_programming.md).
 
 ### `LOAD` at `#21CC`
 
@@ -278,7 +278,7 @@ The 128K ROM adds routines for AY-3-8912 sound, RAM banking, and the menu system
 - [rom_48k.md](../04_operating_systems/rom_48k.md) — 48K ROM deep dive
 - [rom_128k.md](../04_operating_systems/rom_128k.md) — 128K ROM deep dive
 - [rom_plus2.md](../04_operating_systems/rom_plus2.md) — +2 grey ROM deep dive
-- [tape_loading.md](../05_development/08_dos_tape/tape_loading.md) — custom tape routines
+- [tape_programming.md](../05_development/08_dos_tape/tape_programming.md) — custom tape routines (load and save)
 - [assembly_patterns.md](../05_development/02_assembly/assembly_patterns.md) — calling ROM routines from machine code
 
 ---

@@ -351,7 +351,7 @@ Quick reference for the most-used frame-relative T-state counts:
 - [contention_timing.md](../05_development/05_display_and_timing/contention_timing.md) — contention timing patterns
 - [floating_bus.md](../05_development/05_display_and_timing/floating_bus.md) — floating bus technique
 - [race_the_beam.md](../05_development/04_interrupts/race_the_beam.md) — cycle-exact beam racing (pending)
-- [interrupt_overview.md](../05_development/04_interrupts/interrupt_overview.md) — interrupt handling overview
+- [interrupt_programming.md](../05_development/04_interrupts/interrupt_programming.md) — interrupt handling overview and programming reference
 
 ---
 

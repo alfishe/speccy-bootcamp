@@ -998,7 +998,7 @@ The general rule: if a task takes fewer than ~50 lines of BASIC, write it in BAS
 - [AY-3-8912 PSG](../../06_sound/hardware/ay_3_8912.md) — 128K and later sound chip
 - [Color system](../05_display_and_timing/color_system.md) — the 8-color attribute system, ink/paper/bright/flash
 - [Video frame overview](../05_display_and_timing/video_frame_overview.md) — pixel grid, attribute grid, contended memory
-- [Pixel address calculation](../05_display_and_timing/pixel_address.md) (planned) — the ROM's `X-Y to screen address` formula
+- [Screen layout](../03_memory_and_io/screen_layout.md) — pixel address calculation and the ROM's `X-Y to screen address` formula
 - [Screen access](../06_graphics/screen_access.md) (planned) — direct pixel and attribute writes in Z80
 - [Contention timing](../05_display_and_timing/contention_timing.md) — why PRINT sometimes feels slow
 - [Assembly intro](../02_assembly/assembly_intro.md) (planned) — learning Z80 assembly

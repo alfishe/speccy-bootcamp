@@ -24,7 +24,7 @@ For the **historical narrative**, see [history.md](history.md). For the **per-mo
 
 Entries are grouped by category and alphabetised within each category. Each entry follows the same format:
 
-- **Term** — definition (2–4 sentences). *See [link](path) for the full article.*
+- **Term** — definition (2–4 sentences). *See `[target-article.md]` for the full article.*
 
 Where a term has multiple meanings or is used differently across the three tracks (Original / Soviet Clones / New Gen), each variant is noted. Abbreviations are listed both under their short form (e.g., **ULA**) and spelled out at their full form (e.g., **Uncommitted Logic Array**) with a cross-reference.
 

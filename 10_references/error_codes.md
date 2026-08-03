@@ -118,7 +118,7 @@ ESXDOS (the SD-card DOS used by DivMMC and the original ESX interface) uses its 
 | 18 | `ECRC` | CRC error |
 | 19 | `EBADIMAGE` | Bad disk image |
 
-ESXDOS follows the POSIX convention more closely than the older DOSes. See [esxdos.md](../04_operating_systems/esxdos.md) and [esxdos_programming.md](../05_development/08_dos_tape/esxdos_programming.md).
+ESXDOS follows the POSIX convention more closely than the older DOSes. See [esxdos.md](../04_operating_systems/esxdos.md) and [dos_programming.md](../05_development/08_dos_tape/dos_programming.md).
 
 ---
 
@@ -161,7 +161,7 @@ The ZX Spectrum Next's NextZXOS extends ESXDOS and adds Next-specific errors:
 | 17 | `Sprite busy` | Sprites being accessed by hardware |
 | 18 | `Tilemap busy` | Tilemap being accessed |
 
-See [nextzxos.md](../04_operating_systems/nextzxos.md) and [nextzxos_programming.md](../05_development/08_dos_tape/nextzxos_programming.md).
+See [nextzxos.md](../04_operating_systems/nextzxos.md) and [dos_programming.md](../05_development/08_dos_tape/dos_programming.md).
 
 ---
 

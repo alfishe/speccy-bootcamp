@@ -230,6 +230,6 @@ On the Pentagon and other Soviet clones, a common convention is to store **two f
 - **48K ROM internals** (token table, character routines, font address): [rom_48k.md](../04_operating_systems/rom_48k.md)
 - **System variables** (`CHARS`, `UDG`, `RASP`, `CH_ADD`): [system_variables.md](../04_operating_systems/system_variables.md)
 - **48K memory map** (where the font lives in RAM/ROM): [memory_and_io_48k.md](../05_development/03_memory_and_io/memory_and_io_48k.md)
-- **Custom fonts, proportional text, 64-column modes** (uses UDG mechanism): [fonts_and_text.md](../05_development/06_graphics/fonts_and_text.md) (planned)
+- **Custom fonts, proportional text, 64-column modes** (uses UDG mechanism): see the [Graphics section](../05_development/06_graphics/README.md) for coverage of font rendering techniques
 - **Screen layout** (attribute/pixel byte mapping): [screen_layout.md](../05_development/03_memory_and_io/screen_layout.md)
 - **BASIC token table** (complete keyword→token mapping): [basic_token_table.md](basic_token_table.md) (planned)

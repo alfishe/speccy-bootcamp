@@ -865,7 +865,7 @@ The Mr Gluk Reset Service (§10.6) repurposes the MAGIC button: pressing it duri
 
 ### 11.4 Common disk protection schemes
 
-The Soviet scene invented and refined dozens of floppy-disk protection schemes. Most exploit specific WD1793 behaviour that is difficult to replicate with a generic `*COPY`. See [protection_techniques.md §2](../08_reverse_engineering/protection_techniques.md#2-disk-based-protection) for the full protection-and-bypass catalogue; the most common ones encountered on Beta Disk software:
+The Soviet scene invented and refined dozens of floppy-disk protection schemes. Most exploit specific WD1793 behavior that is difficult to replicate with a generic `*COPY`. See [protection_techniques.md §2](../../08_reverse_engineering/protection_techniques.md#2-disk-based-protection) for the full protection-and-bypass catalog; the most common ones encountered on Beta Disk software:
 
 - **Weak-bit protection.** The original disk has a track where the magnetic flux is written at a level that is on the edge of the drive's read amplifier threshold. Each read produces a slightly different bit pattern. The protection check reads the track twice and compares; if they match (because a copier wrote deterministic bits), the software refuses to run. READ TRACK (Type III) is the command used to capture the raw bytes.
 - **Non-standard sector IDs.** Sectors are numbered, e.g., `0x01, 0x02, 0x80, 0x81, 0x82, ...` instead of `1, 2, 3, 4, ...`. TR-DOS's READ SECTOR will fail to find them; only a custom loader that issues READ SECTOR with the right sector number will succeed.
@@ -908,7 +908,7 @@ A non-exhaustive list of historically important Soviet custom loaders:
 
 ### 12.3 Reverse engineering and demoscene angles
 
-- For custom loaders, protection schemes, and disk-based DRM that run on a Beta Disk Interface: see §11 of this article for the overview, and [05_reversing/custom_loaders_and_drm.md](../../08_reverse_engineering/README.md) for the full catalogue.
+- For custom loaders, protection schemes, and disk-based DRM that run on a Beta Disk Interface: see §11 of this article for the overview, and the [Reverse Engineering section](../../08_reverse_engineering/README.md) for the full catalog.
 - For unpacking / decrunching custom loaders: see [05_reversing/unpacking_and_decrunching.md](../../08_reverse_engineering/README.md) and [05_reversing/patching_techniques.md](../../08_reverse_engineering/README.md).
 - For cycle-exact Beta Disk Interface emulation in modern emulators: see [11_emulation/](../../11_emulation/).
 - For TR-DOS extensions and modern disk operating systems that build on the Beta Disk Interface (ESXDOS, FatFS, etc.): see [04_operating_systems/](../../04_operating_systems/). The TR-DOS version matrix is in §10 of this article.
