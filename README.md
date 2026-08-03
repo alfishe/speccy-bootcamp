@@ -155,6 +155,19 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [crt_output.md](05_development/05_display_and_timing/crt_output.md) | Developer view of CRT/LCD output: pixel aspect ratio, overscan, composite artifacts, per-display-type behaviour |
 | [video_frame_comparison.md](05_development/05_display_and_timing/video_frame_comparison.md) | Synthesis: all models side-by-side — T-states/frame, contention, turbo, compatibility matrix, detection decision tree |
 
+#### Graphics Techniques ✅ F12 COMPLETE
+
+| Article | Description |
+|---------|------------|
+| [screen_access.md](05_development/06_graphics/screen_access.md) | **Foundational primitives**: address lookup tables (pixel + attribute), fast clear via stack push (DI/EI safety), block copy, attribute manipulation, custom font rendering (8×8 + FZX proportional), viewport clipping, dirty rectangle |
+| [sprites_and_masking.md](05_development/06_graphics/sprites_and_masking.md) | **Software sprites**: four compositing modes (XOR / OR / LOAD / MASK) with T-state budgets, pre-shifted sprites (24×16 effective ×8 shifts), masked sprite layout interleaved vs planar, three-screen buffered drawing with eight-phase frame loop, sprite pools, engine surveys (SP1, AGD/MPAGD, BIFROST*, NIRVANA+), color clash workarounds |
+| [scrolling_and_buffering.md](05_development/06_graphics/scrolling_and_buffering.md) | **Scrolling**: character-cell scroll, pixel-smooth horizontal scroll via stack push (Dean Belfield 25 Hz two-frame cycle, dixel), 128K shadow screen double buffering (port #7FFD bit 3, banks 5/7), dirty rectangle partial update, vertical scroll, parallax, split-screen |
+| [multicolor_engines.md](05_development/06_graphics/multicolor_engines.md) | **Multicolor engines**: the **direct continuation of [race_the_beam.md](05_development/04_interrupts/race_the_beam.md)** — engine survey (BIFROST* 8×1 18×18, NIRVANA+ 8×2 32×23, ZXodus), ULAplus 64-color palette (G3R3B2 encoding, ports #BF3B/#FF3B, 4 palette groups, runtime detection), Timex HiColor (8×1 hardware) and HiRes (512×192 mono), decision matrix |
+| [3d_graphics.md](05_development/06_graphics/3d_graphics.md) | **3D on the Z80**: the math problem (no hardware MUL/DIV), table-driven quarter-square multiply, 8.8/1.15 fixed-point, Bresenham line draw, rotation matrices, perspective projection with reciprocal table, near-plane clipping, **wireframe** case study (*Elite*), **filled-polygon** case study (*Driller*/Freescape, 3D Construction Kit, painter's algorithm), **isometric** (Filmation engine, *Knight Lore*/*Head Over Heels*, projection math `(x-y, (x+y)/2-z)`), **raycasting** (pseudo-3D), performance budgets, common pitfalls |
+| [next_graphics.md](05_development/06_graphics/next_graphics.md) | **ZX Spectrum Next graphics**: 6-layer stack (ULA + LoRes + Layer 2 + tilemap + hardware sprites + border), Layer 2 (256-color framebuffer, linear layout, 3×16 KB banks at MMU slots 0-2, palette via NextReg #40/#41, double buffering with banks 11-13), hardware sprites (64/scanline, 16×16, ports #303B/#57/#55, eliminates pre-shifting/masking), tilemap (hardware scrolling via two NextReg writes), copper coprocessor (MOVE/WAIT/STOP, zero CPU cost for raster effects), mixing-layer architectures, 28 MHz CPU with `MUL D,E` |
+
+*See [06_graphics/README.md](05_development/06_graphics/README.md) for the section index. All 6 articles complete (F12 series).*
+
 #### DOS & Tape
 
 | Article | Description |

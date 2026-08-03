@@ -222,29 +222,11 @@ zx/
 │   ├── 06_graphics/
 │   │   ├── README.md
 │   │   ├── screen_access.md
-│   │   ├── fonts_and_text.md
-│   │   ├── monochrome_techniques.md
-│   │   ├── color_clash_workarounds.md
-│   │   ├── attribute_manipulation.md
 │   │   ├── sprites_and_masking.md
-│   │   ├── sprite_engines.md
-│   │   ├── scrolling.md
-│   │   ├── double_buffering.md
-│   │   ├── multicolor_overview.md
-│   │   ├── multicolor_techniques.md
+│   │   ├── scrolling_and_buffering.md
 │   │   ├── multicolor_engines.md
-│   │   ├── ula_plus.md
-│   │   ├── dual_screen.md
-│   │   ├── blit_techniques.md
-│   │   ├── clipping_and_regions.md
-│   │   ├── 3d_line_wireframe.md
-│   │   ├── 3d_filled_sorting.md
-│   │   ├── raycasting.md
-│   │   ├── isometric.md
-│   │   ├── 3d_performance.md
-│   │   ├── timex_video_modes.md
-│   │   ├── next_layer2_graphics.md
-│   │   └── next_tilemap.md
+│   │   ├── 3d_graphics.md
+│   │   └── next_graphics.md
 │   ├── 07_audio/                     # MOVED to 06_sound/ — see below
 │   ├── 08_dos_tape/
 │   │   ├── README.md
@@ -752,47 +734,19 @@ zx/
 | `clone_video_modes.md` | Clone video modes beyond standard ULA: GigaScreen, ATM Turbo hires, Profi 512×256, Kay CPLD modes, TS-Conf | ✅ |
 | `crt_output.md` | Developer view of CRT/LCD output: pixel aspect ratio, overscan, composite artifacts, per-display-type behaviour | ✅ |
 
-#### 05_development/06_graphics/ — Graphics Techniques
+#### 05_development/06_graphics/ — Graphics Techniques ✅ COMPLETE
 
 | File | Topic |
 |---|---|
-| `README.md` | Index — graphics technique progression: monochrome → color → multicolor → dual screen → 3D |
-| **Foundation** | |
-| `screen_access.md` | Fast screen write: lookup tables, stack-based fills, attribute tricks, column-major addressing |
-| `fonts_and_text.md` | Custom fonts, proportional text, 64-column modes, UDG |
-| **Monochrome** | |
-| `monochrome_techniques.md` | Monochrome / hi-res: 1-bit per pixel, dithering patterns, halftone, stipple shading — no attribute limits |
-| **Color (and Color Clash)** | |
-| `color_system.md` | Attribute-based color: INK/PAPER, BRIGHT, FLASH — 8x8 cells, color clash as fundamental constraint |
-| `color_clash_workarounds.md` | Color clash workarounds: careful attribute planning, character-cell-aligned sprites, Paper=Black tricks, attribute-preserving drawing |
-| `attribute_manipulation.md` | Attribute manipulation: fast attribute updates, color cycling, FLASH tricks, per-row attribute effects |
-| **Sprites** | |
-| `sprites_and_masking.md` | Software sprites: pre-shifted, masked, character-cell vs pixel-precise, XOR/OR/AND compositing |
-| `sprite_engines.md` | Sprite engine design: pre-shifted table generation, sprite pools, frame budgets, multiplexor patterns |
-| **Scrolling** | |
-| `scrolling.md` | Pixel scrolling: character scroll, smooth scroll tricks, 128K double-buffer, attribute scroll |
-| **Double Buffering** | |
-| `double_buffering.md` | Double buffering: 128K bank 5/7 switching, partial screen update, dirty-rectangle, flicker elimination |
-| **Timing-Based Multicolor** | |
-| `multicolor_overview.md` | Multicolor overview: why interrupt-synchronized color changes are the Spectrum's most impressive trick |
-| `multicolor_techniques.md` | Multicolor / attribute interrupt: timing-critical code, 8x1/8x2 pixel color, race the beam |
-| `multicolor_engines.md` | Multicolor engines: published engines and frameworks, T-state budgets, line-accurate color changes |
-| `ula_plus.md` | ULAplus: 64-color palette, 8x1 attribute mode, hardware-assisted multicolor on FPGA clones |
-| **Dual Screen Techniques** | |
-| `dual_screen.md` | Dual screen / split screen: upper/lower screen with different attribute schemes, bank-switched display, 128K screen banks |
-| **Blit Techniques** | |
-| `blit_techniques.md` | Blit techniques: fast block copy, masked blit, LDIR-based transfer, stack-based blit, aligned vs unaligned |
-| `clipping_and_regions.md` | Clipping: screen edge clipping, viewport clipping, partial sprite clipping |
-| **3D Graphics** | |
-| `3d_line_wireframe.md` | Line drawing and wireframe 3D: Bresenham, fast line draw, 3D projection, rotation matrices |
-| `3d_filled_sorting.md` | Filled 3D: face sorting (painter's algorithm), back-face culling, fixed-point math, vertex transformation |
-| `raycasting.md` | Raycasting: how Spectrum games did pseudo-3D (Legendary, Tomb of Cairo), column-based rendering |
-| `isometric.md` | Isometric engines: Knight Lore legacy, projection math, z-sorting, room-based engines |
-| `3d_performance.md` | 3D performance: what's achievable at 3.5 MHz, tables vs calculation, integer-only math, frame budgets |
-| **Platform-Specific** | |
-| `timex_video_modes.md` | Timex Sinclair 2068: 8x1 color, high-res 512x192, dual screen |
-| `next_layer2_graphics.md` | ZX Next Layer 2: 256-color mode, direct pixel access, hardware acceleration |
-| `next_tilemap.md` | ZX Next tilemap: hardware scrolling, tile-based rendering |
+| `README.md` | Index — graphics technique progression: foundation → sprites → scrolling → multicolor → 3D → Next | ✅ |
+| `screen_access.md` | Foundational primitives: address lookup tables (pixel + attribute), fast clear via stack push, block copy, custom font rendering, viewport clipping, dirty rectangle | ✅ |
+| `sprites_and_masking.md` | Software sprites: compositing modes (XOR/OR/LOAD/MASK), pre-shifted sprites, masked layout (interleaved/planar), three-screen buffered drawing, sprite pools, engine surveys (SP1, AGD/MPAGD, BIFROST*, NIRVANA+), color clash workarounds | ✅ |
+| `scrolling_and_buffering.md` | Scrolling: character-cell scroll, pixel-smooth horizontal scroll (stack-push, 25 Hz two-frame cycle, dixel), 128K shadow screen double buffering (port #7FFD bit 3), dirty rectangle partial update, vertical scroll, parallax, split-screen | ✅ |
+| `multicolor_engines.md` | Engines that break the 8×8 constraint: BIFROST* (8×1, 18×18), NIRVANA+ (8×2, 32×23), ZXodus, ULAplus (64-color hardware palette, ports #BF3B/#FF3B, G3R3B2), Timex HiColor/HiRes, decision matrix — direct continuation of race_the_beam.md | ✅ |
+| `3d_graphics.md` | 3D on the Z80: fixed-point math (1.15 / 8.8), rotation matrices, table-driven multiply (quarter-square), Bresenham line drawing, near-plane clipping, wireframe case study (*Elite*), filled-polygon case study (*Driller*/Freescape, 3D Construction Kit), isometric (Filmation/*Knight Lore*/*Head Over Heels*), raycasting, performance budgets, common pitfalls | ✅ |
+| `next_graphics.md` | ZX Spectrum Next: layer stack (ULA + LoRes + Layer 2 + tilemap + sprites + border), Layer 2 programming (256-color framebuffer, linear layout, bank switching, palette, double buffering), hardware sprites (64/scanline, 16×16), tilemap (hardware scrolling), copper coprocessor, mixing-layer architectures, 28 MHz CPU, common pitfalls | ✅ |
+
+> **Scope consolidation note**: The original plan had 22 fine-grained articles in this directory (fonts, monochrome techniques, attribute manipulation, dual screen, blit techniques, clipping, three separate 3D articles, etc.). These were consolidated into 6 articles because the topics overlapped heavily and most planned articles were small. The consolidation follows the same pattern used in F7 (Sprites), F8 (Memory Banking), and F11 (Interrupt Programming): one comprehensive article per major topic, with cross-references to existing articles in other directories (e.g., `color_system.md` covers the attribute byte format, `screen_layout.md` covers address math, `c_interop.md` covers fixed-point arithmetic, `asset_tools.md` covers sprite authoring tools). Demoscene-side multicolor coverage remains in [07_demoscene/multicolor_techniques.md](../07_demoscene/multicolor_techniques.md); this directory covers the game-programmer perspective.
 
 > **MOVED to [06_sound/](06_sound/README.md)** — Audio content has been promoted to its own root-level section. The planned articles below are tracked there.
 
@@ -1083,7 +1037,7 @@ Articles are written in priority order. README.md is synthesized AFTER articles 
 | 05_dev/04_interrupts | **6/6** | ✅ **F11 COMPLETE** — consolidated from ~7 planned into **6 articles** (3,235 lines total): interrupt_programming.md (799, pre-existing foundational), race_the_beam.md (559 — raster sync, 5 strategies, BIFROST*), nmi.md (385 — Multiface 74LS74 hardware, 4 NMI-safe rules), im2_effects.md (527 — 15-game disassembly survey, 3 manager patterns), im2_disk_music.md (469 — WD1793 byte budget, Ivan Roshchin concurrency math), im2_advanced.md (477 — Next/TS-Conf IM2, copper vs ISR, Hudson Hawk bank-switching ISR). User feedback: "F11 is not a small one. Do full research how IM1, IM2 works… and how demo and game makers abuse IM2 for effects, timing sync, and even disk load with AY music" |
 | 05_dev/01_basic | 2/2 | ✅ F7 COMPLETE — consolidated to 2 comprehensive articles: basic_48k.md (1019 lines, merges intro/graphics/sound/peek_poke) + basic_128k.md (496 lines, PLAY/AY-3-8912/+2A+3 DOS). User feedback: "one for 48K comprehensive, one addon for 128K" |
 | 05_dev/02_assembly | 6/6 | ✅ **F7 COMPLETE** — consolidated from 10 planned articles into **6 comprehensive articles** (5,762 lines total): assembly_intro.md (705), rom_calls.md (1056), stack_and_rst.md (808), assembly_patterns.md (1016), assembly_optimization.md (860), c_interop.md (1311). Merges: rom_calls_128k → rom_calls; c_with_z88dk + c_with_sdcc + mixed_c_asm → c_interop. User feedback: "Good article should have 500+ lines, combine thin ones" |
-| 05_dev/06_graphics | 0/~26 | 📝 Empty (only README) |
+| 05_dev/06_graphics | **7/7** | ✅ **F12 COMPLETE** — consolidated from 22 planned into **6 comprehensive articles + README** (~3,059 lines total): screen_access.md (639), sprites_and_masking.md (485), scrolling_and_buffering.md (329), multicolor_engines.md (419 — direct continuation of race_the_beam.md), 3d_graphics.md (713 — wireframe Elite + filled Driller/Freescape + isometric Filmation + raycasting), next_graphics.md (474 — Layer 2 + hardware sprites + tilemap + copper). User feedback: "do extensive research for f12 prior to writing, find proper delimitations between articles" — 5-phase research → 6-article consolidation. Chunk discipline: 100-250 line Write+SearchReplace calls throughout. |
 | 05_dev/08_dos_tape | 5/5 | ✅ **F8 COMPLETE** — consolidated from 11 planned into **5 comprehensive articles** (4,147 lines total): tape_programming.md (704), trdos_programming.md (817), dos_programming.md (700), file_format_handling.md (1107), mass_storage_programming.md (819). User feedback: "combine thin ones" applied consistently |
 | 05_dev/09_gamedev | 0/9 | 📝 Empty (only README) |
 | 00 Overview | 0/4 | 📝 Empty (only README) — history, hardware_models, timeline, glossary |
@@ -1107,10 +1061,11 @@ Articles are written in priority order. README.md is synthesized AFTER articles 
 - **F6 — 09 Toolchain gap fill** ✅ **DONE** (Jul 2026): 19 per-tool deep dives delivered in 4 batches (batch 1: pasmo, z88dk_z80asm, vasm, wla_dx, zmac, rasm, tniasm; batch 2: tasm_cross, as_macro_assembler, zasm_kio, spectrum_basic_mcode, zx_spin; batch 3: tasm_native, zxasm_native, pikasm, laser_genius, avras, sarcasm; batch 4: zdevstudio). `zxdstudio.md` descoped (Russian ZX Disk Studio disk-image utility, not an IDE — documented in [09_toolchain/README.md](09_toolchain/README.md)).
 - **Tier F7 — Sinclair BASIC series** ✅ **COMPLETE** (Jul 2026): Consolidated from 9 planned articles into **2 comprehensive articles**: `basic_48k.md` (1019 lines — merges intro/graphics/sound/peek_poke into a single reference covering tokens, variables, floating-point, calculator stack, parser, PLOT/DRAW/CIRCLE/POINT/ATTR, BEEP, PEEK/POKE/USR) and `basic_128k.md` (496 lines — full-screen editor, boot menu, PLAY mini-language in depth, AY-3-8912 register access from BASIC, +2A/+3 DOS commands, token table differences, RAM disk). User feedback: "don't need many articles about basic — one for 48K comprehensive, one addon for 128K".
 - **Tier F7 — Z80 Assembly series** ✅ **COMPLETE** (Jul 2026): Consolidated from 10 planned articles into **6 comprehensive articles** (5,762 lines total): `assembly_intro.md` (705 — first program, toolchain, memory map, Hello World, building, debugging), `rom_calls.md` (1056 — ROM entry points, save/restore state, cookbook for output/keyboard/screen/math/sound, 128K PLAY, AY-3-8912, macros, when NOT to use ROM), `stack_and_rst.md` (808 — stack mechanics, balanced stack rule, RST vectors, calling conventions, shadow registers, computed calls, ERR_SP try/catch, recursion), `assembly_patterns.md` (1016 — state machines, dispatch tables, table-driven code, function pointer tables, coroutines, SMC, macros, modular files, 128K banking), `assembly_optimization.md` (860 — optimization workflow, T-state budgeting, hot-loop techniques, lookup tables, fast multiply/divide, SMC, contention, 10-recipe cookbook), `c_interop.md` (1311 — sccz80 vs zsdcc, calling conventions in depth, C-calls-asm + asm-calls-C, inline assembly, shared globals, project structure, zcc pipeline, performance patterns, library interop, worked multi-file project). User feedback: "do extensive research, create outlines first, combine thin articles".
-- **F7 (long-form, remaining)**: `05_development/06_graphics/screen_access.md` + 25 more (Graphics series). Long arc — next subsection to seed.
+- **F7 (long-form, remaining)**: ~~`05_development/06_graphics/screen_access.md` + 25 more (Graphics series). Long arc — next subsection to seed.~~ → promoted to **F12** (see below).
 - **Tier F8 — DOS and Tape Programming series** ✅ **COMPLETE** (Jul 2026): Consolidated from 11 planned articles into **5 comprehensive articles** (4,147 lines total): `tape_programming.md` (704 — ROM SA-BYTES/LD-BLOCK/SAVE/LOAD, custom bit-banging loaders via port #FE, turbo loaders 3000+ baud, custom savers, border effects), `trdos_programming.md` (817 — TR-DOS ROM banking via port #FF, 9 hook codes at #3D13, file operations, catalog reader, WD1793 sector I/O, demoscene double-buffered streaming), `dos_programming.md` (700 — +3 DOS RSX, ESXDOS hook codes at #0084, NextZXOS, dot commands at #2000, API comparison matrix, portable code, runtime DOS detection), `file_format_handling.md` (1107 — magic-byte detection, .TAP/.TZX/.TRD/.SCL/.DSK/.SNA/.Z80/.SCR parsing, directory traversal, .Z80 RLE decompression), `mass_storage_programming.md` (819 — IDE/CF ATA register access, SD card SPI bit-banging, read-only FAT16/32 reader, performance vs OS-mediated). Cross-verified against 25 existing storage reference articles and 4 OS reference articles to avoid duplication.
 - **Tier F5 — Reverse Engineering series** ✅ **COMPLETE** (Jul 2026): Consolidated from 10 planned articles into **7 comprehensive articles** (3,256 lines total): 2 pre-existing (`methodology.md` 528 — RE workflow hub, `protection_techniques.md` 492 — protection catalog) + 5 new: `analysis_techniques.md` (597 — SkoolKit disassembly, code/data separation, ROM call labeling, ZEsarUX/DeZog debugging, trace logging, reverse debugging, memory diffing), `protection_cracking.md` (367 — Speedlock/Alkatraz decryption analysis, timing check bypass, disk protection defeat, NMI countermeasure defeat, clean snapshot technique), `game_reversing.md` (384 — engine identification, sprite/map/music ripping, cheat codes, save game analysis, Z80-to-C reconstruction), `code_crunching.md` (432 — packer survey MegaLZ/HRUM/Hrust/ZX0, format identification, LZSS fundamentals, generic depacker template, overlap depacking), `snapshot_repair.md` (456 — corrupted .SNA/.Z80 repair, PC/SP fix, .Z80 decompression error handling, format conversion with Python scripts). Consolidation merges: static_analysis+dynamic_analysis+tool_setup → analysis_techniques; speedlock_alkatraz → protection_cracking; decompilation → game_reversing.
 - **Tier F11 — Interrupt Programming series** ✅ **COMPLETE** (Jul 2026): Expanded from 1 existing foundational article into **6 comprehensive articles** (3,235 lines total): `interrupt_programming.md` (799 — pre-existing foundational reference, added Companion Articles cross-reference block), `race_the_beam.md` (559 — 8×8 constraint reframed, T-state budget per scanline, 5 sync strategies HALT/floating-bus/port-#FF/line-interrupt/copper, BIFROST* engine deep dive), `nmi.md` (385 — NMI vs INT, Multiface hardware 74LS74 flip-flops, 4 NMI-safe code rules, NMI during common operations, DivIDE/ESXDOS magic button), `im2_effects.md` (527 — vector table placement rules, 15-game disassembly survey showing 13/15 use unsafe 256-byte tables, 3 manager patterns direct/JP/Hudson Hawk, 5 ISR effect catalog, demo framework effect sequencer), `im2_disk_music.md` (469 — WD1793 32-T-state byte budget, Ivan Roshchin concurrency math Pentagon 48.83 Hz × 300 RPM = 9.77 interrupts/rev non-integer causing 138-byte drift, 3 workaround patterns music-after-sector/stop-motor-resync/custom-WD1793-driver, +3DOS UPD765 16-byte FIFO and ESXDOS block-buffered tolerance), `im2_advanced.md` (477 — Next hardware IM2 mode core 3.02+ with 8 prioritized interrupt sources and RETI mandatory, TS-Conf separate frame/line/DMA vectors, copper vs ISR decision matrix, Hudson Hawk 128K bank-switching ISR pattern with shadow variable at #70D4, sample-rate ISRs AY/Covox/beeper PWM). Triggered by user pushback: "F11 interrupts - is not a small one. Do full research how IM1, IM2 works on zx-spectrum specifically and how demo and game makers abuse IM2 for effects, timing sync, and even disk load with AY music on". Cross-verified against z80_interrupts.md (CPU-level), video_frame_*.md (timing), and bank_switching_patterns.md (128K paging) to avoid duplication. User feedback on chunk size: "make changes by smaller chunks. otherwise LLM timeout" — all articles written in 100-250 line chunks after feedback.
+- **Tier F12 — Graphics Techniques series** ✅ **COMPLETE** (Jul 2026): Consolidated from 22 planned articles into **6 comprehensive articles** (~3,059 lines total): `screen_access.md` (639 — address lookup tables pixel+attr, fast clear via stack push, block copy DI/EI safety, attribute manipulation, custom font rendering 8×8 + FZX, viewport clipping, dirty rectangle, common pitfalls), `sprites_and_masking.md` (485 — compositing modes XOR/OR/LOAD/MASK with T-state budgets, pre-shifted sprites 24×16 effective ×8 shifts, masked sprite layout interleaved vs planar, three-screen buffered drawing with eight-phase frame loop, sprite pools, engine surveys SP1/AGD-MPAGD/BIFROST*/NIRVANA+, color clash workarounds), `scrolling_and_buffering.md` (329 — character-cell scroll, pixel-smooth horizontal scroll stack-push 25Hz two-frame cycle Dean Belfield dixel, 128K shadow screen port #7FFD bit 3 bank 5/7, dirty rectangle partial update, vertical scroll, parallax, split-screen), `multicolor_engines.md` (419 — direct continuation of race_the_beam.md, engine survey BIFROST* 8×1 18×18 / NIRVANA+ 8×2 32×23 / ZXodus / ULAplus 64-color G3R3B2 ports #BF3B #FF3B / Timex HiColor 8×1 hardware / Timex HiRes 512×192 mono, decision matrix), `3d_graphics.md` (713 — Z80 math problem, table-driven quarter-square multiply, 8.8/1.15 fixed-point, Bresenham line draw, rotation matrices, perspective projection with reciprocal table, near-plane clipping, wireframe case study Elite, filled-polygon case study Driller/Freescape + 3D Construction Kit painter's algorithm, isometric Filmation Knight Lore/Head Over Heels projection math `(x-y, (x+y)/2-z)`, raycasting pseudo-3D, performance budgets, common pitfalls), `next_graphics.md` (474 — Next layer stack 6 layers, Layer 2 256-color framebuffer linear layout 3×16KB banks, hardware sprites 64/scanline 16×16, tilemap hardware scroll, copper coprocessor MOVE/WAIT/STOP, mixing-layer architectures, 28MHz CPU MUL instruction). Cross-verified against screen_layout.md, color_system.md (display_and_timing), asset_tools.md (toolchain), c_interop.md (assembly), race_the_beam.md + multicolor_techniques.md (interrupts + demoscene) to avoid duplication. Triggered by user instruction: "do extensive research for f12 prior to writing, find proper delimitations between articles" — 5-phase research identified the 22 planned articles as too granular and consolidated them following the same pattern used in F5/F7/F8/F11. User feedback on chunk size: "do changes with reasonably small chunks" — all articles written in 100-250 line Write+SearchReplace chunks.
 
 After articles exist: README.md (documentation map), TODO.md (gap analysis), section README.md indexes.
 
