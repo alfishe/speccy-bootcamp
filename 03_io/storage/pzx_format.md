@@ -80,7 +80,7 @@ Every .PZX file begins with an 8-byte header:
 
 | Offset | Size | Field | Notes |
 |---|---|---|---|
-| 0 | 4 | Magic | "PZXT" (0x50 0x5A 0x58 0x54) — identifies this as a .PZX file |
+| 0 | 4 | Magic | "PZXT" (#50 #5A #58 #54) — identifies this as a .PZX file |
 | 4 | 4 | Version (little-endian) | The .PZX format version. Currently 1 |
 
 If the first 4 bytes are not "PZXT", the file is not a .PZX file. Loaders should reject it.
@@ -483,7 +483,7 @@ The `PULS` chunk for a single pulse of 2168 T-states:
 68 08                   <- Pulse width: 0x0868 = 2168 (little-endian)
 ```
 
-(0x0868 = 2168 in decimal.)
+(#0868 = 2168 in decimal.)
 
 ### 9.3 A complete .PZX file
 

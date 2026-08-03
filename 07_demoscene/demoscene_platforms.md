@@ -52,7 +52,7 @@ The table below summarises the principal demoscene-relevant hardware features of
 | **Hardware sprites** | None | None | 8 sprites, 24×21, multicolour mode, per-sprite expand | Up to 8 (in lo-res, dual playfield mode) per frame, 16-color | None | 32 single-color sprites, 8 per scanline | None |
 | **Hardware scrolling** | None | None | Yes (VIC-II registers `XSCROLL`/`YSCROLL`) | Yes (modulo-based playfield scrolling) | No (must be done in software, like Spectrum) | Yes (TMS9918A `NAME TABLE BASE`/`PGC BASE` indirection) | No |
 | **Sound chip** | None (1-bit beeper) | AY-3-8912 | MOS 6581/8580 SID (3-voice, analog filter) | Paula (4-channel 8-bit PCM, hard-panned stereo) | Yamaha YM2149 (3-voice PSG; AY-compatible) | AY-3-8910 (3-voice PSG) | AY-3-8912 (3-voice PSG) |
-| **Sound chip registers** | n/a (1-bit OUT) | 0xFFFD (address), 0xBFFD (data) | 0xD400–0xD41E (SID is 29 bytes) | Custom DMA audio ($BFxxxx) | 0xFFFF (address), 0xFF8802 (data, ST) | 0xA0–0xA1 (PSG ports) | 0xF6xx (Gate Array latches) |
+| **Sound chip registers** | n/a (1-bit OUT) | #FFFD (address), #BFFD (data) | #D400–#D41E (SID is 29 bytes) | Custom DMA audio ($BFxxxx) | #FFFF (address), 0xFF8802 (data, ST) | #A0–#A1 (PSG ports) | 0xF6xx (Gate Array latches) |
 | **Sample playback (4-bit)** | Manual bit-banging via beeper (~28 kHz theoretical, ~6–8 kHz usable) | Manual via AY envelope or beeper; also external interfaces | Via SID + CPU modulation (4-bit samples possible at low rate) | Hardware — Paula plays 8-bit samples via DMA at arbitrary rate | Bit-banged via YM2149 envelope; some technique | Bit-banged via AY envelope | Bit-banged via AY envelope |
 | **Storage** | Cassette (~1500 baud standard, custom loaders up to ~8000 baud) | Cassette + 3" disk (+3) or TR-DOS (Soviet clones) | Cassette (C2N, ~300 baud Datasette) + 1541 floppy (5¼") | 3½" DD floppy (880 KB), internal IDE (later) | 3½" DD floppy (720 KB) + ACSI/HDD | Cassette + ROM cartridge + (later) floppy | 3" floppy (180 KB single-sided) |
 | **Filesystem for scene distribution** | `.tap` (cassette image), `.z80`/`.sna` (snapshot), `.trd`/`.scl` (TR-DOS) | same + `.trd`/`.scl` (TR-DOS) | `.prg`, `.t64`, `.d64` (1541 disk image), `.tap` | `.adf` (Amiga disk file), `.lha` | `.st` (disk image), `.msa` | `.cas` (cassette), `.rom`, `.dsk` | `.dsk`, `.cdt` (cassette) |
@@ -286,7 +286,7 @@ The MSX's defining constraint — and the one that made its demoscene tradition 
         ; The VDP has an internal auto-incrementing address register
 ```
 
-Each VRAM write is roughly 2–3× slower than the equivalent Spectrum RAM write. Worse, the VDP's address-register setup overhead (writing low and high address bytes via port 0x99) makes scattered writes painful.
+Each VRAM write is roughly 2–3× slower than the equivalent Spectrum RAM write. Worse, the VDP's address-register setup overhead (writing low and high address bytes via port #99) makes scattered writes painful.
 
 This means MSX demos have an **indirection tax** that the Spectrum does not pay. For effects that need to rewrite the entire display every frame (multicolor, copper-style raster changes), the Spectrum is dramatically faster.
 

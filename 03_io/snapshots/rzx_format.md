@@ -77,8 +77,8 @@ Every .RZX file begins with a 10-byte header:
 
 | Offset | Size | Field | Notes |
 |---|---|---|---|
-| 0 | 4 | Magic | "RZX!" (0x52 0x5A 0x58 0x21) — identifies this as an .RZX file |
-| 4 | 4 | Version (32-bit, little-endian) | The .RZX format version. Currently 1 (0x01 0x00 0x00 0x00) |
+| 0 | 4 | Magic | "RZX!" (#52 #5A #58 #21) — identifies this as an .RZX file |
+| 4 | 4 | Version (32-bit, little-endian) | The .RZX format version. Currently 1 (#01 #00 #00 #00) |
 | 8 | 2 | Flags | Bit 0: embedded snapshot present; other bits reserved |
 
 If the first 4 bytes are not "RZX!", the file is not an .RZX file. Loaders should reject it.
@@ -99,12 +99,12 @@ The block ID identifies the block type. The block data length gives the total si
 
 | Block ID | Name | Content |
 |---|---|---|
-| 0x01 | Creator | The emulator that created the recording, plus version and timing info |
-| 0x02 | Snapshot | An embedded initial snapshot (`.SNA`, `.Z80`, or `.SZX`) |
-| 0x03 | Input | A chunk of input recording (one or more frames of input data) |
-| 0x04 | Sign | A cryptographic signature for verified recordings |
-| 0x10 | Creator info extension | Additional creator metadata (rare) |
-| 0x80+ | (Reserved for custom blocks) | Custom block IDs for private extensions |
+| #01 | Creator | The emulator that created the recording, plus version and timing info |
+| #02 | Snapshot | An embedded initial snapshot (`.SNA`, `.Z80`, or `.SZX`) |
+| #03 | Input | A chunk of input recording (one or more frames of input data) |
+| #04 | Sign | A cryptographic signature for verified recordings |
+| #10 | Creator info extension | Additional creator metadata (rare) |
+| #80+ | (Reserved for custom blocks) | Custom block IDs for private extensions |
 
 A typical .RZX file has the following block order:
 

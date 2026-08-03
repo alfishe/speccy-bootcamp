@@ -145,7 +145,7 @@ A first byte of `0x00`–`0xFC` is the start of a normal 14-byte frame.
 
 ### Compression Effectiveness
 
-The skip opcode typically compresses PSG files to **40–60% of their raw size**. Songs with sustained notes compress better; songs with rapid arpeggios or continuous envelope modulation compress worse. The format is asymmetric: encoding is more complex than decoding (the encoder must detect frame-to-frame repetition), but decoding is just "if first byte is 0xFE, repeat previous; otherwise read 13 more bytes".
+The skip opcode typically compresses PSG files to **40–60% of their raw size**. Songs with sustained notes compress better; songs with rapid arpeggios or continuous envelope modulation compress worse. The format is asymmetric: encoding is more complex than decoding (the encoder must detect frame-to-frame repetition), but decoding is just "if first byte is #FE, repeat previous; otherwise read 13 more bytes".
 
 ---
 

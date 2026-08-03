@@ -89,8 +89,8 @@ Every .SZX file begins with an 8-byte file header:
 
 | Offset | Size | Field | Notes |
 |---|---|---|---|
-| 0 | 4 | Magic | "ZXST" (0x5A 0x58 0x53 0x54) — identifies this as an .SZX file |
-| 4 | 4 | Version (32-bit, little-endian) | The .SZX format version. Currently 1 (0x01 0x00 0x00 0x00) |
+| 0 | 4 | Magic | "ZXST" (#5A #58 #53 #54) — identifies this as an .SZX file |
+| 4 | 4 | Version (32-bit, little-endian) | The .SZX format version. Currently 1 (#01 #00 #00 #00) |
 
 If the first 4 bytes are not "ZXST", the file is not an .SZX file. Loaders should reject it.
 

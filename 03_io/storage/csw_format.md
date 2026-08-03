@@ -128,14 +128,14 @@ The .CSW compression scheme exploits the fact that many pulses have the same wid
 The .CSW encoding distinguishes between short pulses and long runs:
 
 - **Short pulses** (width 1–255 samples): stored as a single byte, the width in samples.
-- **Long runs** (many pulses of the same width, or pulses wider than 255 samples): stored as a marker byte (0x00), followed by a count (2 bytes), followed by a width (2 bytes).
+- **Long runs** (many pulses of the same width, or pulses wider than 255 samples): stored as a marker byte (#00), followed by a count (2 bytes), followed by a width (2 bytes).
 
 The encoding rules are:
 
 **v1 encoding (the standard RLE scheme):**
 - The data is a sequence of bytes.
 - A byte value of 1–255 represents a single pulse of that many samples.
-- A byte value of 0x00 is a special marker: the next 2 bytes are a count (little-endian), and the following 2 bytes are a width (little-endian, in samples). This represents "count" consecutive pulses of "width" samples each.
+- A byte value of #00 is a special marker: the next 2 bytes are a count (little-endian), and the following 2 bytes are a width (little-endian, in samples). This represents "count" consecutive pulses of "width" samples each.
 
 So for a single pulse of 100 samples, the encoding is just `0x64` (one byte).
 
@@ -178,7 +178,7 @@ The polarity typically doesn't matter for loading (the Schmitt trigger on the EA
 
 The .CSW file ends when there are no more bytes to read. There is no explicit end-of-data marker — the file just ends.
 
-Some .CSW files have a trailing 0x00 marker (with count 0 and width 0) to indicate the end, but this is not standard. The standard way to detect end-of-data is to check for EOF.
+Some .CSW files have a trailing #00 marker (with count 0 and width 0) to indicate the end, but this is not standard. The standard way to detect end-of-data is to check for EOF.
 
 ### 3.6 Compression ratio
 
@@ -472,7 +472,7 @@ For a single pulse of 27 samples, the .CSW encoding is:
 0x1B    <- Single byte: width = 27 samples
 ```
 
-(0x1B = 27 in decimal.)
+(#1B = 27 in decimal.)
 
 ### 9.3 A run of pulses
 

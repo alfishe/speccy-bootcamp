@@ -66,7 +66,7 @@ Speedlock's weakness: the decryption key and encrypted code were in RAM after lo
 - **Self-decrypting code** — the loaded code contained a decryption stub that ran on load completion, overwriting itself with the final code
 - **Stack-based integrity check** — the loader placed canary values on the stack; if a debugger or snapshot tool had pushed extra data, the canary check failed
 
-Alkatraz was used primarily by Hewson Consultants and later by other publishers. See [tzx_format.md §5.1](../03_io/storage/tzx_format.md) for the exact timing parameters as stored in .TZX block 0x11.
+Alkatraz was used primarily by Hewson Consultants and later by other publishers. See [tzx_format.md §5.1](../03_io/storage/tzx_format.md) for the exact timing parameters as stored in .TZX block #11.
 
 ### 1.4 Headerless / Custom-Format Tapes
 

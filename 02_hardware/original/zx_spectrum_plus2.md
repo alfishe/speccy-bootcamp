@@ -101,7 +101,7 @@ The keyboard is laid out in a **compressed QWERTY arrangement** with the cursor 
 
 The +2's keyboard matrix is **different from the 48K's 8×5 matrix**. It uses an **8×8 matrix** (8 row lines from the address bus, 8 column reads instead of 5), which allows for the additional keys. The matrix is scanned via the same `#FE` port, but with slightly different decoding for the extra column bits.
 
-The keypad scan via the AY's I/O port (register 14) is **still present** on the +2 — the firmware retains the keypad-reading code from the 128K — but with no physical keypad attached, the reads always return 0xFF (no keys pressed). Software that explicitly reads the AY keypad port will work but will never see any input.
+The keypad scan via the AY's I/O port (register 14) is **still present** on the +2 — the firmware retains the keypad-reading code from the 128K — but with no physical keypad attached, the reads always return #FF (no keys pressed). Software that explicitly reads the AY keypad port will work but will never see any input.
 
 For the matrix layout details, see [keyboard_matrix.md](keyboard_matrix.md).
 

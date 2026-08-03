@@ -19,7 +19,7 @@ The simpler .TRD and .SCL formats (see [trd_scl_formats.md](trd_scl_formats.md))
 - **CP/M disks** on the Spectrum +3, which use a different sector layout (typically 9 sectors of 512 bytes per track on side 0, and 5 sectors of 1024 bytes on side 1, due to the +3's "reverse side" hardware trick).
 - **+3DOS disks** with non-standard geometry (e.g., third-party formatters that used 10-sector / 512-byte layouts instead of the +3's standard 9-sector layout).
 - **Opus Discovery disks** (a Western alternative to TR-DOS), which use yet another sector layout.
-- **Copy-protected disks** that use non-standard sector IDs (e.g., sector 0xA1 on cylinder 5 side 0), non-standard sector sizes (e.g., 128-byte, 1024-byte, or 4096-byte sectors), weak bits, or deliberately corrupted CRCs to defeat naive disk-copy programs.
+- **Copy-protected disks** that use non-standard sector IDs (e.g., sector #A1 on cylinder 5 side 0), non-standard sector sizes (e.g., 128-byte, 1024-byte, or 4096-byte sectors), weak bits, or deliberately corrupted CRCs to defeat naive disk-copy programs.
 
 For all of these cases, **a sector-level format that preserves the per-track layout is needed**. The .DSK / .EDSK / .FDI formats are the answer: they store the disk at the **per-sector** level (with sector IDs, sizes, data marks, and — in some cases — error flags), rather than at the per-byte level of .TRD / .SCL.
 
@@ -77,7 +77,7 @@ The .DSK format does **not** support per-track variation in sector count or sect
 | 34 | 1 | **Creator** (start of a 14-byte field) | A 14-byte ASCII string identifying the tool that wrote the file (e.g., `"Caprice    "`). Padded with spaces. |
 | 48 | 1 | **Tracks** | Number of tracks (cylinders × sides, since each "track" in .DSK terminology is one head pass). For an 80-track 2-sided disk, this is 160 (80 × 2). For a 40-track 1-sided disk, this is 40. |
 | 49 | 1 | **Sides raw** | Number of heads: 1 or 2. (Sometimes 0 or 128 for legacy reasons.) |
-| 50 | 2 | **Track size** | The size in bytes of each track's TIB (track information block), including the TIB header. For a 9-sector × 512-byte track with the standard 0x100 TIB header, this would be `0x100 + 9 × 0x200 = 0x1300`. **All tracks must have the same size** — this is the .DSK limitation. |
+| 50 | 2 | **Track size** | The size in bytes of each track's TIB (track information block), including the TIB header. For a 9-sector × 512-byte track with the standard #100 TIB header, this would be `0x100 + 9 × 0x200 = 0x1300`. **All tracks must have the same size** — this is the .DSK limitation. |
 | 52 | 2 | **Number of sectors per track** | The same value for every track. |
 | 54 | 2 | **Sector size** | The size in bytes of every sector (typically 512). |
 | 56 | 2 | **Gap 3 length** | The formatted gap-3 value used by the WD1772 / WD1773 when writing this disk (see [fdc_vg93.md](fdc_vg93.md)). |
@@ -89,7 +89,7 @@ The 256-byte DIB is **always** at offset 0 in the .DSK file. The remaining bytes
 
 ### 2.3 The track information block (TIB)
 
-Each track information block consists of a per-track header followed by the per-sector data. The per-track header is 0x100 bytes (256 bytes):
+Each track information block consists of a per-track header followed by the per-sector data. The per-track header is #100 bytes (256 bytes):
 
 | Offset | Length | Field | Notes |
 |---|---|---|---|

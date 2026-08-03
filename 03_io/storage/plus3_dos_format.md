@@ -176,7 +176,7 @@ In CP/M 2.2, the **DSM** field is the **highest** block number (not the count) �
 | 0 | **SPT** (sectors per track) | `0x0024` = 36 | Counted in 128-byte records, so 9 sectors × 4 records = 36 |
 | 2 | **BSH** (block shift) | `0x03` | Block size = `2^(BSH+7)` = 2^10 = 1024 bytes |
 | 3 | **BLM** (block mask) | `0x07` | `2^BSH - 1` = 7 |
-| 4 | **EXM** (extent mask) | `0x00` | With BLM = 0x07 and DSM < 256, EXM = 0 (16 blocks per entry) |
+| 4 | **EXM** (extent mask) | `0x00` | With BLM = #07 and DSM < 256, EXM = 0 (16 blocks per entry) |
 | 5 | **DSM** (max data block number) | `0x02CA` = 714 | Highest block number; total blocks = 715 × 1 KB = 715 KB |
 | 7 | **DRM** (max directory entry number) | `0x003F` = 63 | Number of directory entries minus 1 (so 64 entries) |
 | 9 | **AL0** (alloc. bitmap byte 0) | `0xC0` | First 2 blocks reserved for directory (2 × 1 KB = 2 KB) |
@@ -194,7 +194,7 @@ The DPB defines the following important parameters:
 - **Data blocks:** 715 − 2 = 713 (= ~713 KB available for file data).
 - **Directory size:** 2 × 1024 = 2048 bytes = 64 directory entries × 32 bytes.
 
-**Notes on the DSM value.** The exact DSM value varies slightly between sources: some references cite DSM = 710, others 714, others 719. The differences arise from how each source accounts for the boot sector and the directory reservation. The value 714 (= 0x02CA) is the most commonly cited and is used by the standard +3 ROM; with BSH = 3 (1 KB blocks), this gives 715 KB of total file-system space, leaving the remaining ~5 KB unused on the 720 KB physical disk. Most +3 software does not depend on the exact DSM value, since few disks fill more than ~700 blocks.
+**Notes on the DSM value.** The exact DSM value varies slightly between sources: some references cite DSM = 710, others 714, others 719. The differences arise from how each source accounts for the boot sector and the directory reservation. The value 714 (= #02CA) is the most commonly cited and is used by the standard +3 ROM; with BSH = 3 (1 KB blocks), this gives 715 KB of total file-system space, leaving the remaining ~5 KB unused on the 720 KB physical disk. Most +3 software does not depend on the exact DSM value, since few disks fill more than ~700 blocks.
 
 The reason the DPB counts in **128-byte records** (note SPT = 36 = 9 × 4, not 9) is a CP/M convention: every BDOS-level file operation works in units of 128-byte records, so all DPB fields are scaled accordingly.
 
@@ -202,8 +202,8 @@ The reason the DPB counts in **128-byte records** (note SPT = 36 = 9 × 4, not 9
 
 The standard +3 DPB described above applies to the standard 720 KB DSDD disk. Other geometries have different DPBs:
 
-- **Single-sided 40-track disk (180 KB):** SPT = 36, BSH = 3, BLM = 7, EXM = 0, DSM = 178, DRM = 31, AL0 = 0xC0, AL1 = 0x00, CKS = 8, OFF = 0.
-- **Single-sided 80-track disk (360 KB):** SPT = 36, BSH = 3, BLM = 7, EXM = 0, DSM = 358, DRM = 63, AL0 = 0xC0, AL1 = 0x00, CKS = 16, OFF = 0.
+- **Single-sided 40-track disk (180 KB):** SPT = 36, BSH = 3, BLM = 7, EXM = 0, DSM = 178, DRM = 31, AL0 = #C0, AL1 = #00, CKS = 8, OFF = 0.
+- **Single-sided 80-track disk (360 KB):** SPT = 36, BSH = 3, BLM = 7, EXM = 0, DSM = 358, DRM = 63, AL0 = #C0, AL1 = #00, CKS = 16, OFF = 0.
 - **High-density 80-track 2-sided disk (1.44 MB):** This was not commonly used on the +3 (the +3's controller only supported DSDD), but some third-party interfaces supported it. The DPB would have SPT = 72, DSM = ~1430.
 
 Custom DPBs can be supplied to the `*FORMAT` command for non-standard layouts. The DPB is stored in the +3's DOS workspace and is consulted by every file-system operation.
@@ -336,7 +336,7 @@ When the +3's BASIC saves a file with `SAVE "name"`, `SAVE "name" LINE n`, or `S
 |---|---|---|---|
 | 0 | 1 | **File type** | `0x00` = BASIC program, `0x01` = number array, `0x02` = character array, `0x03` = binary code |
 | 1 | 2 | **Data length** (LE) | Length of the data block following this header |
-| 3 | 2 | **Parameter 1** (LE) | For BASIC: the autostart line number (or 0x8000 for no autostart). For code: the start address. |
+| 3 | 2 | **Parameter 1** (LE) | For BASIC: the autostart line number (or #8000 for no autostart). For code: the start address. |
 | 5 | 2 | **Parameter 2** (LE) | Length of BASIC program (excluding variables). For code: always equals the data length. |
 | 7 | 2 | **(reserved / unused)** | |
 | 9+ | N | **File data** | The actual file data |

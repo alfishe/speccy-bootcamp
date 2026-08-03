@@ -269,10 +269,10 @@ The TR-DOS snapshot format is identical to the **.SNA format** (see [sna_format.
 
 A Spectrum "code file" (also called a "binary file") is a contiguous block of memory saved to disk. The 9-byte header for code files contains:
 
-- Type byte (0x03).
+- Type byte (#03).
 - Length in bytes (LE 16-bit).
 - Start address (LE 16-bit) — where the file should be loaded in memory.
-- 32768 (0x8000) as parameter 2 — unused for code files.
+- 32768 (#8000) as parameter 2 — unused for code files.
 
 To load a code file at address X and length L, a Spectrum DOS reads the 9-byte header, then reads L bytes from the file into address X. Code files are the standard way to distribute machine-code programs, demoscene effects, and games.
 

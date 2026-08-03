@@ -70,7 +70,7 @@ Every .TZX file begins with a 10-byte header that identifies the format and vers
 
 | Offset | Size | Field | Notes |
 |---|---|---|---|
-| 0 | 7 | Magic | "ZXTape!" (0x5A 0x58 0x54 0x61 0x70 0x65 0x21) — identifies this as a .TZX file |
+| 0 | 7 | Magic | "ZXTape!" (#5A #58 #54 #61 #70 #65 #21) — identifies this as a .TZX file |
 | 7 | 1 | Major version (binary) | Typically 1 |
 | 8 | 1 | Minor version (binary) | Typically 13 (for v1.13) |
 | 9 | 1 | File integrity byte | (Deprecated; typically 0) |
@@ -89,7 +89,7 @@ The bytes decode as:
 
 - `5A 58 54 61 70 65 21` = "ZXTape!" (ASCII).
 - `01` = major version 1.
-- `0D` = minor version 13 (hexadecimal 0x0D = decimal 13).
+- `0D` = minor version 13 (hexadecimal #0D = decimal 13).
 - `00` = integrity byte (deprecated).
 
 ### 2.3 Version handling
@@ -162,10 +162,10 @@ A key feature of .TZX is that unknown block types can be skipped without abortin
 
 However, skipping an unknown block requires knowing its length. The .TZX specification defines a convention for this:
 
-- **Block IDs 0x00–0x7F** (well-known blocks): the length is determined by the block type. If the loader does not recognize the block ID, it cannot determine the length and must abort.
-- **Block IDs 0x80–0xFF** (extension blocks): the first 4 bytes after the block ID are a 32-bit length, giving the total size of the block data (not including the 5-byte block header). This allows loaders to skip unknown extension blocks.
+- **Block IDs #00–#7F** (well-known blocks): the length is determined by the block type. If the loader does not recognize the block ID, it cannot determine the length and must abort.
+- **Block IDs #80–#FF** (extension blocks): the first 4 bytes after the block ID are a 32-bit length, giving the total size of the block data (not including the 5-byte block header). This allows loaders to skip unknown extension blocks.
 
-In practice, most modern loaders support all well-known block IDs (0x00–0x7F), so the abort case is rare.
+In practice, most modern loaders support all well-known block IDs (#00–#7F), so the abort case is rare.
 
 ### 3.4 The block ID registry
 
@@ -186,7 +186,7 @@ The standard block IDs defined by the .TZX specification:
 | `0x22` | Group end | Marks the end of a group |
 | `0x23` | Jump | Jumps to a specific block index (for loops) |
 | `0x24` | Loop | Repeats the following blocks N times |
-| `0x25` | Pulse sequence (32-bit) | Like 0x13 but with 32-bit pulse counts |
+| `0x25` | Pulse sequence (32-bit) | Like #13 but with 32-bit pulse counts |
 | `0x26` | BNC data | (Rare) |
 | `0x27` | BNC program | (Rare) |
 | `0x30` | Text description | A free-text description of the tape |
@@ -201,11 +201,11 @@ The standard block IDs defined by the .TZX specification:
 
 The most important block types for Spectrum tapes are:
 
-- **0x10** (standard speed): used for ROM-loaded blocks.
-- **0x11** (turbo speed): used for turbo-loaded blocks.
-- **0x20** (silence): used for gaps between blocks.
-- **0x30** (text description): used for metadata.
-- **0x32** (archive info): used for publisher/year information.
+- **#10** (standard speed): used for ROM-loaded blocks.
+- **#11** (turbo speed): used for turbo-loaded blocks.
+- **#20** (silence): used for gaps between blocks.
+- **#30** (text description): used for metadata.
+- **#32** (archive info): used for publisher/year information.
 
 ### 3.5 A typical .TZX file
 
@@ -225,7 +225,7 @@ A typical .TZX file for a turbo-loaded game might look like:
 ...
 ```
 
-The loader (loaded by the ROM via the two 0x10 blocks) takes over and reads the subsequent 0x11 blocks at turbo speed.
+The loader (loaded by the ROM via the two #10 blocks) takes over and reads the subsequent #11 blocks at turbo speed.
 
 ---
 
@@ -233,7 +233,7 @@ The loader (loaded by the ROM via the two 0x10 blocks) takes over and reads the 
 
 This section covers the most important .TZX block types in detail, with their byte-level structure.
 
-### 4.1 Block 0x10: Standard speed data block
+### 4.1 Block #10: Standard speed data block
 
 This is the .TZX equivalent of a .TAP block. It represents a standard ROM block (pilot + sync + data + final pulse) with the standard timings.
 
@@ -248,7 +248,7 @@ The data field is identical to the payload of a .TAP block: flag byte + data + c
 
 The `pause after block` field is the length of the gap after the block, in milliseconds. This corresponds to the silence between blocks on a real tape.
 
-### 4.2 Block 0x11: Turbo speed data block
+### 4.2 Block #11: Turbo speed data block
 
 This is the key innovation of .TZX: a turbo loader block with **fully customisable timings**. Every timing parameter can be set independently, allowing .TZX to represent any turbo loader.
 
@@ -266,19 +266,19 @@ This is the key innovation of .TZX: a turbo loader block with **fully customisab
 | 16 | 2 | Pause after block (ms) |
 | 18 | varies | Data — the block's payload |
 
-The data field is the same as for block 0x10: flag byte + data + checksum (though the flag byte may have a non-standard value, and the checksum may be a custom checksum).
+The data field is the same as for block #10: flag byte + data + checksum (though the flag byte may have a non-standard value, and the checksum may be a custom checksum).
 
-### 4.3 Block 0x11 timing parameters
+### 4.3 Block #11 timing parameters
 
-The timing parameters in block 0x11 allow the .TZX file to represent any turbo loader. For example:
+The timing parameters in block #11 allow the .TZX file to represent any turbo loader. For example:
 
 - **Speedlock v1**: pilot 2168, sync 667/735, zero 600, one 1200, pilot count 10000+.
 - **Alcatraz**: pilot 2168, sync 667/735, zero 400, one 800, pilot count 5000+.
 - **Custom loader**: pilot 2000, sync 600/700, zero 500, one 1000, pilot count 8000.
 
-The standard ROM timings can also be represented with block 0x11: pilot 2168, sync 667/735, zero 855, one 1710, pilot count 8063 (header) or 3223 (data). This is equivalent to block 0x10, just with explicit timings.
+The standard ROM timings can also be represented with block #11: pilot 2168, sync 667/735, zero 855, one 1710, pilot count 8063 (header) or 3223 (data). This is equivalent to block #10, just with explicit timings.
 
-### 4.4 Block 0x12: Pure tone block
+### 4.4 Block #12: Pure tone block
 
 A pure tone block represents a sequence of pulses at a fixed frequency. It is used for the pilot tone when the data block that follows uses a different encoding (and therefore a separate data block).
 
@@ -290,7 +290,7 @@ A pure tone block represents a sequence of pulses at a fixed frequency. It is us
 
 The pure tone block does not include any data — it just generates the specified number of pulses at the specified length.
 
-### 4.5 Block 0x13: Pulse sequence block
+### 4.5 Block #13: Pulse sequence block
 
 A pulse sequence block represents an arbitrary sequence of pulses. It is used for sync pulses, custom marker pulses, and any other case where a fixed sequence of pulses is needed.
 
@@ -309,9 +309,9 @@ For example, the standard sync pulses (667 and 735 T-states) can be represented 
 DF 02               <- 0x02DF = 735 T-states
 ```
 
-### 4.6 Block 0x14: Pure data block
+### 4.6 Block #14: Pure data block
 
-A pure data block represents raw data with custom bit timings, without a pilot tone or sync pulses. It is used after a pure tone block (0x12) and a pulse sequence block (0x13) to complete the block structure.
+A pure data block represents raw data with custom bit timings, without a pilot tone or sync pulses. It is used after a pure tone block (#12) and a pulse sequence block (#13) to complete the block structure.
 
 | Offset (within block) | Size | Field |
 |---|---|---|
@@ -323,9 +323,9 @@ A pure data block represents raw data with custom bit timings, without a pilot t
 | 8 | 3 | Data length (little-endian, 24-bit) — allows blocks larger than 64 KB |
 | 11 | varies | Data |
 
-The pure data block allows data lengths up to 16 MB (24-bit length), compared to the 64 KB limit of blocks 0x10 and 0x11. This is useful for very large turbo-loaded blocks.
+The pure data block allows data lengths up to 16 MB (24-bit length), compared to the 64 KB limit of blocks #10 and #11. This is useful for very large turbo-loaded blocks.
 
-### 4.7 Block 0x15: Direct recording block
+### 4.7 Block #15: Direct recording block
 
 A direct recording block represents the raw tape signal, sampled at a fixed rate. Each byte represents 8 T-states of the EAR signal (bit 7 = first T-state, bit 6 = second T-state, ..., bit 0 = eighth T-state).
 
@@ -340,9 +340,9 @@ A direct recording block represents the raw tape signal, sampled at a fixed rate
 
 The direct recording block is the most faithful representation of a tape signal: it captures the exact EAR level at every T-state. It is used for tapes that cannot be represented by any other block type (e.g., analog protections, non-standard encodings).
 
-The downside is size: a direct recording block at 8 T-states per sample requires about 400 KB per second of tape (8 T-states per byte × 4.4 MB/sec Z80 clock ÷ 8 = 437500 bytes/sec). This is much larger than the equivalent 0x10 or 0x11 block, so direct recording is rarely used for whole tapes.
+The downside is size: a direct recording block at 8 T-states per sample requires about 400 KB per second of tape (8 T-states per byte × 4.4 MB/sec Z80 clock ÷ 8 = 437500 bytes/sec). This is much larger than the equivalent #10 or #11 block, so direct recording is rarely used for whole tapes.
 
-### 4.8 Block 0x20: Silence block
+### 4.8 Block #20: Silence block
 
 A silence block represents a period of silence (no signal) on the tape.
 
@@ -353,7 +353,7 @@ A silence block represents a period of silence (no signal) on the tape.
 
 The silence block is used for gaps between blocks. Typically, a 1000 ms silence block separates each data block, matching the standard ROM behavior.
 
-### 4.9 Block 0x21 / 0x22: Group start / end
+### 4.9 Block #21 / #22: Group start / end
 
 These blocks mark the start and end of a named group of blocks. They are used to organize the .TZX file into logical sections (e.g., "Loader", "Title screen", "Level 1").
 
@@ -364,7 +364,7 @@ These blocks mark the start and end of a named group of blocks. They are used to
 
 Group start/end blocks are purely informational — they do not affect the tape signal. Emulators can use them to display the current loading stage to the user.
 
-### 4.10 Block 0x23: Jump block
+### 4.10 Block #23: Jump block
 
 A jump block instructs the player to jump to a specific block index, allowing loops and conditionals.
 
@@ -375,7 +375,7 @@ A jump block instructs the player to jump to a specific block index, allowing lo
 
 The jump block is used for multi-load games that need to re-read a block (e.g., when the player dies and the game reloads the level). The block index is relative to the current block (positive = forward, negative = backward).
 
-### 4.11 Block 0x24: Loop block
+### 4.11 Block #24: Loop block
 
 A loop block instructs the player to repeat the following blocks N times.
 
@@ -384,9 +384,9 @@ A loop block instructs the player to repeat the following blocks N times.
 | 0 | 1 | Block ID (`0x24`) |
 | 1 | 2 | Number of repetitions |
 
-The loop block is paired with an "end loop" marker (block 0x25 or just the implicit end of the loop region). It is used for tapes that have repetitive sections (e.g., the same pilot tone repeated 10 times).
+The loop block is paired with an "end loop" marker (block #25 or just the implicit end of the loop region). It is used for tapes that have repetitive sections (e.g., the same pilot tone repeated 10 times).
 
-### 4.12 Block 0x30: Text description block
+### 4.12 Block #30: Text description block
 
 A text description block contains a free-text description of the tape.
 
@@ -398,7 +398,7 @@ A text description block contains a free-text description of the tape.
 
 The text is typically the game title, the publisher, and the year (e.g., "Manic Miner by Bug-Byte, 1983"). Emulators display this text when the .TZX file is loaded.
 
-### 4.13 Block 0x31: Message block
+### 4.13 Block #31: Message block
 
 A message block contains a text message that is displayed to the user during playback (typically at a specific point in the loading process).
 
@@ -411,7 +411,7 @@ A message block contains a text message that is displayed to the user during pla
 
 The message block is used for instructions like "Press PLAY on your tape recorder" or "Side A complete — insert Side B".
 
-### 4.14 Block 0x32: Archive info block
+### 4.14 Block #32: Archive info block
 
 An archive info block contains structured metadata about the tape.
 
@@ -436,7 +436,7 @@ The info string type IDs include:
 
 The archive info block is used by archives like World of Spectrum to record the provenance of each tape.
 
-### 4.15 Block 0x33: Hardware type block
+### 4.15 Block #33: Hardware type block
 
 A hardware type block specifies the machine that the tape was designed for.
 
@@ -461,7 +461,7 @@ The hardware type IDs include:
 
 The hardware type block tells the emulator which machine to emulate when playing back the tape.
 
-### 4.16 Block 0x5A: Glue block
+### 4.16 Block #5A: Glue block
 
 The glue block is used to concatenate .TZX files. It marks the boundary between two concatenated files.
 
@@ -497,7 +497,7 @@ Neither option is acceptable for preservation.
 
 ### 5.2 How .TZX solves the problem
 
-The .TZX format solves the problem with the **turbo speed block** (0x11), which allows every timing parameter to be specified explicitly:
+The .TZX format solves the problem with the **turbo speed block** (#11), which allows every timing parameter to be specified explicitly:
 
 - Pilot pulse length
 - Sync pulse lengths (two pulses)
@@ -525,13 +525,13 @@ A typical .TZX file for a Speedlock-loaded game has the following structure:
 ...
 ```
 
-The first two blocks (0x10) are loaded by the ROM's `LOAD ""` command. These blocks contain the turbo loader itself — a small machine code program that takes over and reads the subsequent blocks at turbo speed.
+The first two blocks (#10) are loaded by the ROM's `LOAD ""` command. These blocks contain the turbo loader itself — a small machine code program that takes over and reads the subsequent blocks at turbo speed.
 
-The subsequent blocks (0x11) contain the actual game data, encoded at the turbo loader's timings. The turbo loader (running on the emulated Spectrum) reads these blocks via the EAR input, exactly as it would on a real Spectrum.
+The subsequent blocks (#11) contain the actual game data, encoded at the turbo loader's timings. The turbo loader (running on the emulated Spectrum) reads these blocks via the EAR input, exactly as it would on a real Spectrum.
 
 ### 5.4 How the emulator plays back turbo blocks
 
-When the emulator plays back a turbo speed block (0x11), it:
+When the emulator plays back a turbo speed block (#11), it:
 
 1. Reads the timing parameters (pilot, sync, zero, one, count).
 2. Generates the pilot tone (count pulses of pilot length).
@@ -553,15 +553,15 @@ The .TZX format itself does not encode cycle-exact information — it just speci
 
 Some turbo loaders use non-standard bit encodings — for example, three pulse durations (instead of two) to encode ternary data, or variable-length pulses to encode run-length-compressed data.
 
-The .TZX format can represent these via the **pure tone** (0x12), **pulse sequence** (0x13), and **pure data** (0x14) blocks, which allow arbitrary sequences of pulses with arbitrary lengths. By combining these blocks, any encoding can be represented.
+The .TZX format can represent these via the **pure tone** (#12), **pulse sequence** (#13), and **pure data** (#14) blocks, which allow arbitrary sequences of pulses with arbitrary lengths. By combining these blocks, any encoding can be represented.
 
-For truly unusual encodings (e.g., analog protections that rely on the Schmitt trigger's exact threshold), the **direct recording** block (0x15) can be used to capture the raw signal. This is the most faithful representation, but also the largest (in file size).
+For truly unusual encodings (e.g., analog protections that rely on the Schmitt trigger's exact threshold), the **direct recording** block (#15) can be used to capture the raw signal. This is the most faithful representation, but also the largest (in file size).
 
 ### 5.7 The Speedlock pilot tone quirk
 
 Some turbo loaders (notably Speedlock) use a **non-standard pilot tone** that is shorter than the standard 8063 pulses. For example, Speedlock v3 uses a pilot tone of about 100 pulses, which the loader uses to detect the start of the block.
 
-The .TZX format represents this by setting the `pilot pulse count` field in the turbo speed block (0x11) to the actual count (e.g., 100). The emulator generates only the specified number of pilot pulses, matching the original tape.
+The .TZX format represents this by setting the `pilot pulse count` field in the turbo speed block (#11) to the actual count (e.g., 100). The emulator generates only the specified number of pilot pulses, matching the original tape.
 
 This level of detail is what makes .TZX the format of choice for preservation — it captures the exact timings and counts of the original tape, allowing perfect reproduction.
 
@@ -587,7 +587,7 @@ void tzx_write_header(FILE *f) {
 }
 ```
 
-### 6.2 Writing a standard speed block (0x10)
+### 6.2 Writing a standard speed block (#10)
 
 ```c
 void tzx_write_standard_block(FILE *f, const uint8_t *data,
@@ -603,7 +603,7 @@ void tzx_write_standard_block(FILE *f, const uint8_t *data,
 }
 ```
 
-### 6.3 Writing a turbo speed block (0x11)
+### 6.3 Writing a turbo speed block (#11)
 
 ```c
 typedef struct {
@@ -643,7 +643,7 @@ void tzx_write_turbo_block(FILE *f, const uint8_t *data, uint16_t length,
 }
 ```
 
-### 6.4 Writing a silence block (0x20)
+### 6.4 Writing a silence block (#20)
 
 ```c
 void tzx_write_silence(FILE *f, uint16_t duration_ms) {
@@ -655,7 +655,7 @@ void tzx_write_silence(FILE *f, uint16_t duration_ms) {
 }
 ```
 
-### 6.5 Writing a text description block (0x30)
+### 6.5 Writing a text description block (#30)
 
 ```c
 void tzx_write_text_description(FILE *f, const char *text) {
@@ -705,8 +705,8 @@ void tzx_generate_turbo_game(const char *filename,
 Converting a .TAP file to a .TZX file is straightforward:
 
 1. Write the .TZX file header.
-2. For each block in the .TAP file, write a corresponding standard speed block (0x10).
-3. (Optionally) insert silence blocks (0x20) between blocks.
+2. For each block in the .TAP file, write a corresponding standard speed block (#10).
+3. (Optionally) insert silence blocks (#20) between blocks.
 
 The resulting .TZX file represents the same tape as the .TAP file, but in the more capable .TZX format. It can be played back by any .TZX-aware emulator.
 
@@ -743,21 +743,21 @@ The emulator's .TZX playback works as follows:
 1. Read and verify the file header.
 2. Read the next block.
 3. Dispatch on the block ID:
-   - 0x10: play a standard speed block.
-   - 0x11: play a turbo speed block.
-   - 0x12: play a pure tone.
-   - 0x13: play a pulse sequence.
-   - 0x14: play pure data.
-   - 0x15: play direct recording data.
-   - 0x20: generate silence.
-   - 0x21 / 0x22: group start/end (no playback action).
-   - 0x23: jump to a different block.
-   - 0x24: loop the following blocks.
-   - 0x30 / 0x31 / 0x32 / 0x33: metadata (display to user, no playback action).
+   - #10: play a standard speed block.
+   - #11: play a turbo speed block.
+   - #12: play a pure tone.
+   - #13: play a pulse sequence.
+   - #14: play pure data.
+   - #15: play direct recording data.
+   - #20: generate silence.
+   - #21 / #22: group start/end (no playback action).
+   - #23: jump to a different block.
+   - #24: loop the following blocks.
+   - #30 / #31 / #32 / #33: metadata (display to user, no playback action).
    - Unknown: skip.
 4. Repeat from step 2 until EOF or a jump/loop changes the position.
 
-### 7.2 Playing a standard speed block (0x10)
+### 7.2 Playing a standard speed block (#10)
 
 To play a standard speed block:
 
@@ -789,7 +789,7 @@ void tzx_play_standard_block(SpectrumState *state, const TzxStandardBlock *block
 }
 ```
 
-### 7.3 Playing a turbo speed block (0x11)
+### 7.3 Playing a turbo speed block (#11)
 
 To play a turbo speed block:
 
@@ -830,7 +830,7 @@ This is why cycle-exact Z80 emulation is so important for accurate .TZX playback
 
 ### 7.5 Handling jumps and loops
 
-The jump (0x23) and loop (0x24) blocks require the emulator to maintain a block index and to seek backward or forward in the file.
+The jump (#23) and loop (#24) blocks require the emulator to maintain a block index and to seek backward or forward in the file.
 
 ```c
 void tzx_play_with_jumps(SpectrumState *state, FILE *f) {
@@ -864,7 +864,7 @@ This is more complex than the linear playback of .TAP files, but it allows .TZX 
 
 ### 7.6 Warp playback for .TZX
 
-Like .TAP, .TZX supports warp playback (instant loading) for standard blocks (0x10). For turbo blocks (0x11), warp playback is more difficult: the emulator must understand the turbo loader's encoding to load the data directly.
+Like .TAP, .TZX supports warp playback (instant loading) for standard blocks (#10). For turbo blocks (#11), warp playback is more difficult: the emulator must understand the turbo loader's encoding to load the data directly.
 
 Some emulators implement "smart warp" for .TZX: they identify the turbo loader (e.g., by matching the timings against known loaders) and use a loader-specific fast-load routine. This achieves near-instant loading for common turbo loaders.
 
@@ -894,18 +894,18 @@ Most modern emulators support .TZX v1.10 or later. The current specification is 
 The .TZX specification has evolved through 13 minor versions. The most important differences:
 
 - **v1.0 (1996)**: Standard speed, turbo speed, pure tone, pulse sequence, pure data, silence, group, text, message, archive info, hardware type.
-- **v1.1 (1997)**: Added the glue block (0x5A) for concatenating .TZX files.
-- **v1.3 (1999)**: Added direct recording (0x15) for raw signal capture.
-- **v1.4 (2000)**: Refined the turbo speed block; added the 24-bit length for pure data (0x14).
-- **v1.8 (2003)**: Added the C64 ROM type (0x16) and C64 turbo type (0x17).
-- **v1.10 (2004)**: Added the "generalized data" block (0x18) for very complex encodings.
+- **v1.1 (1997)**: Added the glue block (#5A) for concatenating .TZX files.
+- **v1.3 (1999)**: Added direct recording (#15) for raw signal capture.
+- **v1.4 (2000)**: Refined the turbo speed block; added the 24-bit length for pure data (#14).
+- **v1.8 (2003)**: Added the C64 ROM type (#16) and C64 turbo type (#17).
+- **v1.10 (2004)**: Added the "generalized data" block (#18) for very complex encodings.
 - **v1.13 (2008)**: Current version; minor clarifications and bug fixes.
 
 Most .TZX files on the internet are v1.10 or later. Files from the late 1990s may be v1.0–v1.3, but these are rare.
 
 ### 8.3 Conversion to .TAP
 
-Converting a .TZX file to a .TAP file is possible only if the .TZX file contains **only standard speed blocks** (0x10). If the .TZX file contains turbo blocks (0x11) or any other non-standard blocks, the conversion will lose information.
+Converting a .TZX file to a .TAP file is possible only if the .TZX file contains **only standard speed blocks** (#10). If the .TZX file contains turbo blocks (#11) or any other non-standard blocks, the conversion will lose information.
 
 Conversion tools typically warn the user if the .TZX file cannot be losslessly converted to .TAP. Some tools offer a "best effort" conversion that replaces turbo blocks with standard blocks (which will not load correctly on a real Spectrum), but this is rarely useful.
 
@@ -913,13 +913,13 @@ For most modern use cases, .TZX files are kept as .TZX (since every modern emula
 
 ### 8.4 The "PAUSE" bug
 
-Some early .TZX files have a bug where the `pause after block` field in standard speed blocks (0x10) is set to 0, which can cause some emulators to skip the block entirely (because they interpret 0 as "no pause, immediately start the next block"). This was fixed in the .TZX specification v1.4 by clarifying that 0 means "no pause" (the next block starts immediately), not "skip this block".
+Some early .TZX files have a bug where the `pause after block` field in standard speed blocks (#10) is set to 0, which can cause some emulators to skip the block entirely (because they interpret 0 as "no pause, immediately start the next block"). This was fixed in the .TZX specification v1.4 by clarifying that 0 means "no pause" (the next block starts immediately), not "skip this block".
 
 Modern emulators handle this correctly, but some older emulators may not.
 
 ### 8.5 The hardware type block
 
-The hardware type block (0x33) specifies the machine that the tape was designed for. For Spectrum tapes, the hardware type is typically:
+The hardware type block (#33) specifies the machine that the tape was designed for. For Spectrum tapes, the hardware type is typically:
 
 - `0x00` (ZX Spectrum 16K / 48K): for tapes that work on all 48K Spectrums.
 - `0x02` (ZX Spectrum 128K): for tapes that require the 128K.
@@ -930,7 +930,7 @@ The emulator uses this block to decide which machine to emulate when playing bac
 
 ### 8.6 Custom block types
 
-The .TZX specification reserves block IDs 0x80–0xFF for extension blocks. These blocks have a 4-byte length field after the block ID, allowing loaders to skip them.
+The .TZX specification reserves block IDs #80–#FF for extension blocks. These blocks have a 4-byte length field after the block ID, allowing loaders to skip them.
 
 Some emulator authors have defined custom extension blocks for their emulators. For example, an emulator might define a custom block to store its own metadata (e.g., save states, debugger info). These custom blocks are skipped by other emulators, which is the whole point of the extension mechanism.
 
@@ -954,14 +954,14 @@ This section compares .TZX and .TAP in detail, to help you choose the right form
 |---|---|---|
 | **File header** | None | 10-byte header ("ZXTape!" + version) |
 | **Block structure** | Uniform (2-byte length + data) | Per-block-type structure |
-| **Standard speed blocks** | ✅ | ✅ (block 0x10) |
-| **Turbo speed blocks** | ❌ | ✅ (block 0x11) |
+| **Standard speed blocks** | ✅ | ✅ (block #10) |
+| **Turbo speed blocks** | ❌ | ✅ (block #11) |
 | **Custom timings** | ❌ | ✅ |
-| **Custom encodings** | ❌ | ✅ (blocks 0x12, 0x13, 0x14, 0x15) |
-| **Silence / gaps** | Implicit (between blocks) | Explicit (block 0x20) |
-| **Grouping** | ❌ | ✅ (blocks 0x21, 0x22) |
-| **Jumps / loops** | ❌ | ✅ (blocks 0x23, 0x24) |
-| **Metadata** | ❌ | ✅ (blocks 0x30, 0x31, 0x32, 0x33) |
+| **Custom encodings** | ❌ | ✅ (blocks #12, #13, #14, #15) |
+| **Silence / gaps** | Implicit (between blocks) | Explicit (block #20) |
+| **Grouping** | ❌ | ✅ (blocks #21, #22) |
+| **Jumps / loops** | ❌ | ✅ (blocks #23, #24) |
+| **Metadata** | ❌ | ✅ (blocks #30, #31, #32, #33) |
 | **File size (typical)** | Smaller | Larger (overhead for block headers) |
 | **Parser complexity** | Simple | Complex (per-block-type dispatch) |
 | **Forward compatibility** | N/A | ✅ (unknown blocks skipped) |
@@ -999,9 +999,9 @@ For turbo-loaded software, only .TZX can represent the tape. The .TZX file is ty
 
 ### 9.5 Conversion
 
-Converting .TAP → .TZX is straightforward (see §6.7). The resulting .TZX file uses only standard speed blocks (0x10) and can be played by any .TZX-aware emulator.
+Converting .TAP → .TZX is straightforward (see §6.7). The resulting .TZX file uses only standard speed blocks (#10) and can be played by any .TZX-aware emulator.
 
-Converting .TZX → .TAP is possible only if the .TZX file contains only standard speed blocks. If the .TZX file contains turbo blocks (0x11) or other non-standard blocks, the conversion cannot be done losslessly.
+Converting .TZX → .TAP is possible only if the .TZX file contains only standard speed blocks. If the .TZX file contains turbo blocks (#11) or other non-standard blocks, the conversion cannot be done losslessly.
 
 ### 9.6 The modern recommendation
 
@@ -1068,7 +1068,7 @@ These live in the sibling [../snapshots/](../snapshots/README.md) directory.
 After understanding the .TZX format, the natural next steps are:
 
 - **For preservation**: read about the .TZX Preservation Project and consider contributing .TZX images of tapes that have not yet been preserved.
-- **For emulator development**: implement .TZX playback in your emulator. Start with standard speed blocks (0x10), then add turbo speed blocks (0x11), then the other block types.
+- **For emulator development**: implement .TZX playback in your emulator. Start with standard speed blocks (#10), then add turbo speed blocks (#11), then the other block types.
 - **For reverse engineering**: study the turbo loader block timings in a .TZX file to understand how the original turbo loader worked. The timings reveal the loader's encoding, which is the first step to extracting the protected code.
 - **For the lower-level signal representation**: read about [csw_format.md](csw_format.md) (Compressed Square Wave), which captures the tape signal below the block structure. This is useful for tapes that cannot be represented by any .TZX block type.
 

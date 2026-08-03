@@ -18,7 +18,7 @@ This article covers the .Z80 format in detail: its history, the byte-level layou
 2. **The v1 .Z80 format** — original 30-byte header, 48K only
 3. **The v2 .Z80 format** — 128K support, extended header
 4. **The v3 .Z80 format** — full hardware identification, AY state, peripherals
-5. **The compression scheme** — run-length encoding via the 0xED 0xED marker
+5. **The compression scheme** — run-length encoding via the #ED #ED marker
 6. **Hardware identification** — the hardware ID byte and its values
 7. **Writing a .Z80 loader** — reference loader implementation
 8. **Compatibility and quirks** — emulator-specific behaviors
@@ -91,7 +91,7 @@ The v1 .Z80 header is 30 bytes long. All multi-byte register values are stored *
 | 1 | 1 | F | Main flags register |
 | 2 | 2 | BC | Main BC pair (C low, B high) |
 | 4 | 2 | HL | Main HL pair (L low, H high) |
-| 6 | 2 | PC | **Program counter**. If 0x0000, this is a v2/v3 file — see §2.3 |
+| 6 | 2 | PC | **Program counter**. If #0000, this is a v2/v3 file — see §2.3 |
 | 8 | 2 | SP | Stack pointer |
 | 10 | 2 | IY | IY pair |
 | 12 | 2 | IX | IX pair |
@@ -113,13 +113,13 @@ The v1 .Z80 header is 30 bytes long. All multi-byte register values are stored *
 
 Unlike .SNA, the .Z80 format stores PC **explicitly** in the header (at offset 6). This avoids the .SNA format's reliance on PC being on the stack, which can be fragile (see [sna_format.md](sna_format.md) §7.1). The loader simply sets `z80.PC = header.PC` after loading — no `RET` trick is needed.
 
-The exception to this rule is when PC is **0x0000**, which is used as a sentinel to indicate a v2 or v3 file (see §2.3 below). A real PC value is never 0x0000 because address 0x0000 is ROM.
+The exception to this rule is when PC is **#0000**, which is used as a sentinel to indicate a v2 or v3 file (see §2.3 below). A real PC value is never #0000 because address #0000 is ROM.
 
 ### 2.3 The PC=0 trick for v2/v3 detection
 
 The most important rule of the .Z80 format is: **if bytes 6 and 7 (the PC field) are both zero, the file is v2 or v3, not v1**.
 
-Why? Because a real PC of 0x0000 is essentially impossible — no Spectrum program executes code at address 0x0000 (which is ROM). The Z80 emulator's authors used this "impossible" value as a sentinel to indicate that more header data follows.
+Why? Because a real PC of #0000 is essentially impossible — no Spectrum program executes code at address #0000 (which is ROM). The Z80 emulator's authors used this "impossible" value as a sentinel to indicate that more header data follows.
 
 When a loader sees PC=0x0000, it should:
 
@@ -127,7 +127,7 @@ When a loader sees PC=0x0000, it should:
 2. Look at the next 2 bytes (bytes 30–31) for the **additional header length** (typically 23 for v2, 54 or 55 for v3, plus variable-length extensions).
 3. Read the additional header and apply it.
 
-This is the key mechanism for backward compatibility: a v1-only loader will see PC=0, attempt to resume at 0x0000, and either crash or do something obviously wrong — but it will not silently corrupt data.
+This is the key mechanism for backward compatibility: a v1-only loader will see PC=0, attempt to resume at #0000, and either crash or do something obviously wrong — but it will not silently corrupt data.
 
 ### 2.4 RAM data follows the header
 
@@ -145,7 +145,7 @@ The v2 format extends v1 to support the 128K Spectrum and its Russian clones. Th
 A v2 file is detected by:
 
 1. The v1 PC field (offsets 6–7) is `0x0000`.
-2. The 2 bytes following the 30-byte v1 header (offsets 30–31) give the **additional header length**: a 16-bit little-endian value. For v2, this is typically **23** (0x17 0x00).
+2. The 2 bytes following the 30-byte v1 header (offsets 30–31) give the **additional header length**: a 16-bit little-endian value. For v2, this is typically **23** (#17 #00).
 
 When the loader sees PC=0x0000, it reads the next 2 bytes, then reads that many more bytes as the v2 extension header.
 
@@ -155,14 +155,14 @@ The v2 extension header sits at offsets 30–52 of the file (after the 30-byte v
 
 | Offset (from file start) | Size | Field | Notes |
 |---|---|---|---|
-| 30 | 2 | Extension header length | For v2, this is 0x0017 (23). For v3, it's 0x0036 (54) or 0x0037 (55) |
+| 30 | 2 | Extension header length | For v2, this is #0017 (23). For v3, it's #0036 (54) or #0037 (55) |
 | 32 | 2 | PC | **The real program counter** (replaces the v1 sentinel at offset 6) |
 | 34 | 1 | Hardware ID | 0=48K, 1=48K+IF1, 2=48K+MGT, 3=128K, 4=128K+IF1, 5=128K+MGT, 6=+3 (v3 extended this) |
 | 35 | 1 | Extended hardware flags (v2) | Bits 0–6: IF1 ROM paged; Bits 7: issue 2 emulation |
-| 36 | 1 | Modified ROM flag | 0x00=standard, 0xFF=modified (or use Interface 1 / custom ROM) |
+| 36 | 1 | Modified ROM flag | #00=standard, #FF=modified (or use Interface 1 / custom ROM) |
 | 37 | 1 | AY-3-8910 current register | The currently-selected AY register (0–15) |
 | 38 | 16 | AY-3-8910 register values | All 16 AY register values (only 14 are defined; bits in unused registers are ignored) |
-| 54 | 1 | (Final byte) | Often 0x00. Used as a padding/version marker |
+| 54 | 1 | (Final byte) | Often #00. Used as a padding/version marker |
 
 The extension header provides all the information needed to resume a 128K machine: PC, hardware identification, AY state, and (in the additional RAM data following) all 8 RAM banks.
 
@@ -186,7 +186,7 @@ For a 128K Spectrum snapshot, the 8 banks are stored in this order:
 | Offset | Size | Field |
 |---|---|---|
 | 0 | 1 | Bank number (5, 2, 0, 1, 3, 4, 6, 7 for the 8 banks; or other values for clones with extended memory) |
-| 1 | 2 | Page length (little-endian). If 0xFFFF, the page is uncompressed 16384 bytes. Otherwise, the page is compressed and this gives the compressed length |
+| 1 | 2 | Page length (little-endian). If #FFFF, the page is uncompressed 16384 bytes. Otherwise, the page is compressed and this gives the compressed length |
 
 After each page header, the page data follows (either 16384 bytes uncompressed, or the compressed length).
 
@@ -221,7 +221,7 @@ The v3 format extends v2 to support Russian clones, the +3's special paging mode
 A v3 file is detected by:
 
 1. The v1 PC field is `0x0000`.
-2. The extension header length (offsets 30–31) is **0x0036 (54)** or **0x0037 (55)**.
+2. The extension header length (offsets 30–31) is **#0036 (54)** or **#0037 (55)**.
 
 ### 4.2 v3 extension header layout
 
@@ -229,7 +229,7 @@ The v3 extension header is 54 bytes long (some sources say 55 — there's a 1-by
 
 | Offset (from file start) | Size | Field | Notes |
 |---|---|---|---|
-| 30 | 2 | Extension header length | 54 (0x0036) or 55 (0x0037) |
+| 30 | 2 | Extension header length | 54 (#0036) or 55 (#0037) |
 | 32 | 2 | PC | The real program counter |
 | 34 | 1 | Hardware ID | Extended list: 0–6 same as v2; 7=Spectrum +3E; 8=+3 Spanish; 9=Pentagon 128; 10=Scorpion 256; 11=Profi 512; 12=Kay 1024; 13=ZS Scorpion 256; ... up to about 20+ |
 | 35 | 1 | Extended hardware flags | Bits 0–6: IF1 ROM paged; Bit 7: issue 2 emulation |
@@ -237,7 +237,7 @@ The v3 extension header is 54 bytes long (some sources say 55 — there's a 1-by
 | 37 | 1 | AY-3-8910 current register | |
 | 38 | 16 | AY-3-8910 register values | |
 | 54 | 1 | Low byte of `#7FFD` paging port value | The 128K paging state |
-| 55 | 1 | (v3+) High byte — usually 0xFF if `#7FFD` was last set, or 0x00 if `#1FFD` modifier | |
+| 55 | 1 | (v3+) High byte — usually #FF if `#7FFD` was last set, or #00 if `#1FFD` modifier | |
 | 56 | 1 | `#1FFD` paging port value (for +2A/+3 and clones) | Captures the +3's special paging mode |
 | 57 | 1 | ROM paged flag (IF1, IF2, etc.) | Which ROM is at `#0000`–`#3FFF` |
 | 58–59 | 2 | AY-3-8910 register (low 8 bits of the selected register, plus chip select for TurboSound) | |
@@ -273,9 +273,9 @@ With v3, the .Z80 format can faithfully resume essentially any Spectrum software
 
 The .Z80 format supports optional compression of the RAM data, using a simple **run-length encoding (RLE) scheme**. The compression is applied independently to each RAM page (in v2/v3) or to the entire RAM block (in v1).
 
-### 5.1 The 0xED 0xED marker
+### 5.1 The #ED #ED marker
 
-The compression scheme is based on the byte sequence **0xED 0xED** as a marker. The choice of marker is not arbitrary: `0xED 0xED` is the prefix for two consecutive `ED` opcode prefixes in the Z80 instruction set, which is a "redundant" sequence that almost never appears in real Z80 code (real code uses at most one `ED` prefix). This makes it a safe choice for a marker.
+The compression scheme is based on the byte sequence **#ED #ED** as a marker. The choice of marker is not arbitrary: `0xED 0xED` is the prefix for two consecutive `ED` opcode prefixes in the Z80 instruction set, which is a "redundant" sequence that almost never appears in real Z80 code (real code uses at most one `ED` prefix). This makes it a safe choice for a marker.
 
 ### 5.2 Encoding
 
@@ -283,9 +283,9 @@ The compression works as follows. The encoder scans the RAM data byte-by-byte:
 
 - **For a run of 1–4 identical bytes**: store them verbatim (no compression).
 - **For a run of 5+ identical bytes**: emit `0xED 0xED` followed by the count byte (1 byte) followed by the value byte (1 byte). The count is the number of repetitions minus 1.
-- **For a literal `0xED 0xED` sequence in the data**: emit `0xED 0xED 0x00 0xED`. The count byte `0x00` is interpreted as "1 repetition of 0xED" — which, when decoded, produces a single 0xED. The decoder will then re-emit the second 0xED verbatim.
+- **For a literal `0xED 0xED` sequence in the data**: emit `0xED 0xED 0x00 0xED`. The count byte `0x00` is interpreted as "1 repetition of #ED" — which, when decoded, produces a single #ED. The decoder will then re-emit the second #ED verbatim.
 
-The maximum run that can be encoded in a single marker is 256 bytes (count byte 0xFF = 255 repetitions of one value).
+The maximum run that can be encoded in a single marker is 256 bytes (count byte #FF = 255 repetitions of one value).
 
 ### 5.3 When compression is used
 
@@ -605,7 +605,7 @@ The T-state counter field (v3 offsets 60–63) is the position within the curren
 
 ### 8.4 The `0xED 0xED 0x00 0xED` edge case
 
-The literal `0xED 0xED` encoding (`0xED 0xED 0x00 0xED`) is a known edge case. Some buggy decoders treat the count byte 0 as "0 repetitions" (producing no output) instead of "1 repetition" (producing one 0xED byte). This corrupts snapshots that contain literal `0xED 0xED` sequences.
+The literal `0xED 0xED` encoding (`0xED 0xED 0x00 0xED`) is a known edge case. Some buggy decoders treat the count byte 0 as "0 repetitions" (producing no output) instead of "1 repetition" (producing one #ED byte). This corrupts snapshots that contain literal `0xED 0xED` sequences.
 
 If you write a .Z80 decoder, double-check this edge case.
 

@@ -68,14 +68,14 @@ The Pentagon was never commercially manufactured to a consistent standard. Diffe
 | **Frame rate** | 50.08 Hz (PAL) | 50.0 Hz (nominal) | Pentagon has slightly fewer scanlines per frame; timing-sensitive code (e.g. multicolor) must be re-tuned. |
 | **Total scanlines per frame** | 311 (64+192+56, VBLANK split) | 320 (more VBLANK time) | Pentagon gives coders more CPU time per frame than Sinclair — a quiet advantage for cycle-counted effects. |
 | **Memory contention** | ULA contends CPU during visible display | No contention | Pentagon code runs at full speed always. ~17% faster effective CPU on average for code in contended banks. |
-| **Memory map** | Banks 0–7 at 0xC000–0xFFFF via 0x7FFD | Banks 0–7 at 0xC000–0xFFFF via 0x7FFD (same scheme, different numbering) | Mostly compatible, but some Pentagon demos assume Pentagon-specific banking extensions (e.g. Pentagon 1024's 0x7FFD + 0xeff7 schemes). |
+| **Memory map** | Banks 0–7 at #C000–#FFFF via #7FFD | Banks 0–7 at #C000–#FFFF via #7FFD (same scheme, different numbering) | Mostly compatible, but some Pentagon demos assume Pentagon-specific banking extensions (e.g. Pentagon 1024's #7FFD + #EFF7 schemes). |
 | **Disk interface** | None on Sinclair 128; +3 has +3DOS (3" drive) | Beta Disk Interface (WD1793 controller, 5¼" or 3½" drives), TR-DOS filesystem | All Pentagon disk software uses TR-DOS, which is incompatible with +3DOS. Pentagon software distribution is on TR-DOS `.trd` and `.scl` images. |
-| **Sound chip** | AY-3-8912 at 0xFFFD/0xBFFD | AY-3-8912 (later YM2149F) at same ports, plus optional TurboSound (dual AY) and General Sound | Pentagon has the same base AY but most serious Pentagon work assumes TurboSound (six channels) or General Sound (digital audio). |
+| **Sound chip** | AY-3-8912 at #FFFD/#BFFD | AY-3-8912 (later YM2149F) at same ports, plus optional TurboSound (dual AY) and General Sound | Pentagon has the same base AY but most serious Pentagon work assumes TurboSound (six channels) or General Sound (digital audio). |
 | **ROM** | Sinclair 128 ROM (3 banks) | Usually a custom ROM with TR-DOS 5.x embedded | Pentagon ROM includes a TR-DOS boot menu; software can call TR-DOS routines directly without loading them. |
 
 ### 2.3 The contention difference — and why it mattered
 
-On a Sinclair 128, the CPU is slowed down by ~17% during the visible display because the ULA needs to read character and attribute bytes from RAM at the same time the CPU is fetching instructions. The slowdown (called **contention**) means code in contended RAM (banks 5, 2, 0 in the original 128K layout, i.e. addresses 0x4000–0x7FFF) runs slower than code in uncontended RAM (banks 1, 3, 4, 6, 7, plus the ROM area 0x0000–0x3FFF).
+On a Sinclair 128, the CPU is slowed down by ~17% during the visible display because the ULA needs to read character and attribute bytes from RAM at the same time the CPU is fetching instructions. The slowdown (called **contention**) means code in contended RAM (banks 5, 2, 0 in the original 128K layout, i.e. addresses #4000–#7FFF) runs slower than code in uncontended RAM (banks 1, 3, 4, 6, 7, plus the ROM area #0000–#3FFF).
 
 The Pentagon has no contention. Code runs at full speed always. This has two practical effects:
 
@@ -88,7 +88,7 @@ The contention difference is the single biggest reason Soviet multicolor work su
 
 The original Pentagon 128 had 128 KB of RAM. Later versions expanded this:
 
-- **Pentagon 1024**: 1024 KB (1 MB) via extended banking (additional control registers at 0x7FFD and 0xeff7).
+- **Pentagon 1024**: 1024 KB (1 MB) via extended banking (additional control registers at #7FFD and #EFF7).
 - **ATM Turbo 1/2/3/4**: a Pentagon-compatible with turbo modes (7 MHz and 14 MHz) and CGA-like 640×200 graphics modes.
 - **ZX Evolution**: a modern FPGA-based Pentagon-compatible.
 - **TS-Config**: a hardware standard for caching multicolor data from disk, enabling full-screen video at 25–50 fps. See §5.4.

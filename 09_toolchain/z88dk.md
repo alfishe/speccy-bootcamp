@@ -409,7 +409,7 @@ This is the canonical way to override CRT0 behavior in a Makefile without editin
 |---|---|---|
 | `CRT_ORG_CODE` | 24000 (newlib), 30000 (classic) | Origin of the `code_zx` section. Override for custom loaders (e.g. Multiface slot, ROM-pack). |
 | `CRT_ORG_BSS` | (computed) | Origin of `bss_zx`. Override to place uninitialized data in a banked page. |
-| `REGISTER_SP` / `STACKPTR` | 0xFF57 | Initial stack pointer. |
+| `REGISTER_SP` / `STACKPTR` | #FF57 | Initial stack pointer. |
 | `CLIB_EXIT` | 0 (new), 1 (classic) | If 1, `main()` returns to a clean shutdown that swaps a stack frame and executes `RST 0` (or jumps to the Spectrum's `COPY_LINE` to return to BASIC). If 0, `main()` returns directly to the loader stub; in the 48K Spectrum case, the program ends but BASIC may be unstable. |
 | `CLIB_STDIO_HEAP` | 0 (none) | Size in bytes of the stdio heap (for `fopen_zfile` etc.). |
 | `CRT_ENABLE_RELOC` | 0 | If 1, CRT0 self-relocates on startup — required for ROMMable builds. |
@@ -830,7 +830,7 @@ Run `zcc -v +zx -clib=new hello.c -s -o hello.bin` to see the assembly output (`
 
 - A single `SECTION code_user` with the inlined `main`.
 - Calls into `zx_cls`, `zx_print_str`, `draw`, `bit_beep`, `in_wait_key` (all library routines, all `__z88dk_callee` or `__z88dk_fastcall` — minimum stack traffic).
-- A small CRT0 prologue that sets SP to 0xFF57, initializes bss to zero, calls `_main`, then returns to the loader.
+- A small CRT0 prologue that sets SP to #FF57, initializes bss to zero, calls `_main`, then returns to the loader.
 
 The same source can be cross-compiled for the Spectrum Next by changing the target and adding a `+zxn` include:
 

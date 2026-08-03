@@ -190,7 +190,7 @@ The disadvantage: playing an `.ay` file requires a Z80 emulator, making it unsui
 | Field | Size | Contents |
 |---|---|---|
 | Magic | 4 | `"ZXAYEMUL"` |
-| File type | 1 | 0x10–0x16 (snapshot type marker: 16K, 48K, 128K, etc.) |
+| File type | 1 | #10–#16 (snapshot type marker: 16K, 48K, 128K, etc.) |
 | Pointer to author | 2 | Offset of author string in file |
 | Pointer to misc text | 2 | Offset of additional metadata string |
 | Song count | 1 | Usually 1; can be more for multi-song modules |

@@ -85,7 +85,7 @@ The Next's hardware features are configured via **NextReg registers** — a flat
 
 | Port | Direction | Function |
 |---|---|---|
-| `#243B` | Write | **Register select** — write the register number (0x00–0xFF) here |
+| `#243B` | Write | **Register select** — write the register number (#00–#FF) here |
 | `#253B` | Read/Write | **Register data** — read or write the selected register's value |
 
 Example — write the value `0x01` to NextReg `0x15` (enable Layer 2):
@@ -823,7 +823,7 @@ The Next ends the joystick standards war by simply implementing **all of it**. I
 
 Two further upgrades matter for new software: the Next is one of the few Spectrum-family machines with **two Kempston-style ports** (`#1F` and `#37`), making dual-stick games practical; and its Mega Drive pad support brings **three or six fire buttons** to a platform that spent four decades with one.
 
-### The Two Ports and NextReg 0x05
+### The Two Ports and NextReg #05
 
 Both DB9 connectors use the **Atari-standard pinout**. What each port *is* depends on NextReg `0x05` (Peripheral 1 setting), which holds a 3-bit mode for each joystick:
 

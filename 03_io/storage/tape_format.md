@@ -21,7 +21,7 @@ The Spectrum's tape system has two layers:
 | **Hardware / physical** | How bits become pulses on the EAR/MIC lines | [tape_interface.md](tape_interface.md) |
 | **Logical / data format** | What the bytes mean: filenames, block types, parameters, checksums | This article |
 
-The hardware layer says: "a 0 bit is two pulses of 855 T-states each; a 1 bit is two pulses of 1710 T-states each". The logical layer says: "the first byte of every block is a flag byte (0x00 for headers, 0xFF for data); the next 17 bytes of a header are the filename and parameters; the last byte is a checksum".
+The hardware layer says: "a 0 bit is two pulses of 855 T-states each; a 1 bit is two pulses of 1710 T-states each". The logical layer says: "the first byte of every block is a flag byte (#00 for headers, #FF for data); the next 17 bytes of a header are the filename and parameters; the last byte is a checksum".
 
 A loader (or saver) must implement both layers. The ROM does. Turbo loaders typically implement the hardware layer differently (faster timings) but keep the logical layer unchanged — this is why a turbo-loaded BASIC program still appears in the LOAD "" menu with its correct filename.
 
@@ -193,7 +193,7 @@ Filenames can contain any character except the quote character (`"`) and some co
 
 The **data length** field (bytes 11–12 of the header) gives the length of the following data block, in bytes. This is the number of bytes the loader should read after the data block's flag byte.
 
-For example, if the data length is `#00 0x40` (little-endian for 16384 = 0x4000), the data block's payload is 16384 bytes of data + 1 flag byte + 1 checksum byte = 16386 bytes total.
+For example, if the data length is `#00 0x40` (little-endian for 16384 = #4000), the data block's payload is 16384 bytes of data + 1 flag byte + 1 checksum byte = 16386 bytes total.
 
 The data length is a 16-bit value, so the maximum block size is 65535 bytes. In practice, blocks are typically a few KB; the ROM itself loads data in 256-byte chunks for its own purposes, but the data block can be any size.
 

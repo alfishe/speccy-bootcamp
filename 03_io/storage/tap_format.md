@@ -122,7 +122,7 @@ Blocks are **not padded** to any alignment boundary. The next block starts immed
 
 ### 2.6 Big-endian vs little-endian
 
-The block length is stored **little-endian** (low byte first, then high byte), matching the Z80's convention. So a block of length 0x0013 (19) is stored as the two bytes `13 00` (not `00 13`).
+The block length is stored **little-endian** (low byte first, then high byte), matching the Z80's convention. So a block of length #0013 (19) is stored as the two bytes `13 00` (not `00 13`).
 
 This is consistent with the rest of the Spectrum's tape format (where all multi-byte values are little-endian) and with the Z80's native byte order.
 

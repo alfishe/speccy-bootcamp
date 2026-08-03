@@ -925,7 +925,7 @@ Two scenarios force decompression to happen at unusual times:
 
 ### 12.1 Streaming during tape load
 
-The classic Soviet approach (used in many late-1990s demos) overlaps `LD- BORDER-loading loops with depack work. The ROM's tape-loading routine at `0x0556` is a tight loop that polls the EAR bit; between iterations, there is enough CPU time to depack a few bytes. The depacker must be **interruptable**: it saves its state on exit and resumes from the same state on the next call.
+The classic Soviet approach (used in many late-1990s demos) overlaps `LD- BORDER-loading loops with depack work. The ROM's tape-loading routine at `#0556` is a tight loop that polls the EAR bit; between iterations, there is enough CPU time to depack a few bytes. The depacker must be **interruptable**: it saves its state on exit and resumes from the same state on the next call.
 
 All major packers have interruptable depacker variants. The standard pattern is:
 

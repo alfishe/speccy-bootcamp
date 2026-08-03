@@ -790,7 +790,7 @@ That single command produces a `.tap` file with everything wired up. The CRT0, t
 
 - **The default SDCC memory model is "small"** — which on Z80 means "everything in the same 64 KB address space, no banking". If you have >32 KB of code or data, you must implement your own banking.
 - **No automatic BSS zeroing without CRT0.** If your CRT0 doesn't explicitly zero `_s_BSS` through `_s_BSS + _l_BSS`, uninitialized globals contain whatever was in memory at load time. Symptom: program works on a freshly-reset Spectrum but crashes after a warm restart.
-- **Stack placement is your responsibility.** SDCC does not check that `--stack-loc` is in valid RAM. Setting SP outside the Spectrum's 0x4000–0xFFFF range (e.g. into ROM) is a hard crash.
+- **Stack placement is your responsibility.** SDCC does not check that `--stack-loc` is in valid RAM. Setting SP outside the Spectrum's #4000–#FFFF range (e.g. into ROM) is a hard crash.
 
 ### Code generation pitfalls
 

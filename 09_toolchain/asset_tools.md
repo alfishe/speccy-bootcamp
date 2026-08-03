@@ -243,14 +243,14 @@ The simplest and most common format: 96 (or 128, or 256) characters × 8 bytes p
 
 ```
 Character 'A' (ASCII 65) in standard Spectrum ROM font (8 bytes):
-0x00   ........
-0x38   ..###...
-0x7C   .#####..
-0xC6   ##...##.
-0xC6   ##...##.
-0xFE   #######.
-0xC6   ##...##.
-0x00   ........
+#00   ........
+#38   ..###...
+#7C   .#####..
+#C6   ##...##.
+#C6   ##...##.
+#FE   #######.
+#C6   ##...##.
+#00   ........
 ```
 
 To point the ROM's `RST 0x10` (print char) routine at a custom font, you write the address into the `CHARS` system variable at `0x5C36`. To use the font with z88dk's `<stdio.h>` functions, set `typedef struct _font` — see the z88dk docs.
@@ -309,9 +309,9 @@ For a simple 8×8 font replacement:
 custom_font:
     INCBIN "assets/myfont.fnt"     ; 768 bytes (96 chars * 8 bytes)
 
-        ; install the font for ROM RST 0x10 printing:
+        ; install the font for ROM RST #10 printing:
         ld hl, custom_font
-        ld (0x5C36), hl              ; CHARS system variable
+        ld (#5C36), hl              ; CHARS system variable
 ```
 
 For FZX in z88dk:
@@ -457,7 +457,7 @@ zx0 title.scr               # produces title.scr.zx0
 ```z80
 ; At runtime: depack from HL (compressed source) to DE (target)
         ld hl, title_scr_zx0           ; the compressed bytes
-        ld de, 0x4000                  ; target: video RAM
+        ld de, #4000                  ; target: video RAM
         call dzx0_standard             ; from the ZX0 depacker .asm
 ```
 
@@ -471,7 +471,7 @@ title_scr_zx0:
 
 show_title:
         ld hl, title_scr_zx0
-        ld de, 0x4000
+        ld de, #4000
         call dzx0_standard
         ret
 ```
@@ -493,7 +493,7 @@ At runtime:
         ld de, screen_buffer
         call dzx0_standard
         ld hl, screen_buffer
-        ld de, 0x4000
+        ld de, #4000
         call rcs_restore                 ; inverse of RCS
 ```
 
@@ -732,13 +732,13 @@ level1_data:
 ; === Install font on startup ===
 install_font:
         ld hl, custom_font
-        ld (0x5C36), hl                ; CHARS system variable
+        ld (#5C36), hl                ; CHARS system variable
         ret
 
 ; === Decompress and display title screen ===
 show_title:
         ld hl, title_screen_zx0
-        ld de, 0x4000
+        ld de, #4000
         call dzx0_standard
         ret
 

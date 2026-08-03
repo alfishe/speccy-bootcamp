@@ -92,10 +92,10 @@ The format is intentionally simple — the header is small, the track-offset tab
 | Offset | Length | Field | Notes |
 |---|---|---|---|
 | 0 | 3 | **Magic** | ASCII: `"SCP"` (`53 43 50`). Identifies the file as .SCP. |
-| 3 | 1 | **Version / category** | Bit 7 = disk category (0 = floppy, 1 = hard disk); bits 0–6 = format version (currently 0x00–0x05). |
-| 4 | 1 | **Revolutions per track** | The number of flux-capture revolutions stored per track. Values: 0x01 (single revolution), 0x02–0x05 (multi-revolution). 0x00 is reserved. |
-| 5 | 1 | **Start track** | The first track in the image (typically 0x00). Non-zero values are used for partial disk images. |
-| 6 | 1 | **End track** | The last track in the image (typically 0xA2 = 162 for a 2-sided 80-track disk, since .SCP numbers tracks as `cylinder * 2 + side`). |
+| 3 | 1 | **Version / category** | Bit 7 = disk category (0 = floppy, 1 = hard disk); bits 0–6 = format version (currently #00–#05). |
+| 4 | 1 | **Revolutions per track** | The number of flux-capture revolutions stored per track. Values: #01 (single revolution), #02–#05 (multi-revolution). #00 is reserved. |
+| 5 | 1 | **Start track** | The first track in the image (typically #00). Non-zero values are used for partial disk images. |
+| 6 | 1 | **End track** | The last track in the image (typically #A2 = 162 for a 2-sided 80-track disk, since .SCP numbers tracks as `cylinder * 2 + side`). |
 | 7 | 1 | **Flags** | Bit 0 = "index mode" (see §3.3); bit 1 = "288 RPM mode" (vs. 300 RPM); bit 2 = "use 25 ns cell width" (vs. the default 40 ns); bit 3 = "flux data is RLE-compressed". |
 | 8 | 4 | **Sample rate** (BE, big-endian) | The sampling rate in Hz at which the flux was captured (typically 25,000,000 for SuperCard Pro). Big-endian (unusual; most other fields are LE). |
 | 12 | 4 | **Amount of flux data** (BE) | The total size of all track data blocks combined, in bytes. Big-endian. |
@@ -197,7 +197,7 @@ The encoding handles two special cases:
 | Value | Meaning |
 |---|---|
 | `0x0001`–`0xFFFF` (1–65535) | The time between this flux transition and the next one, in sample clock ticks. |
-| `0x0000` | **Spacer / overflow**. The previous flux interval is **continued** by adding 65536 to the next interval. This allows intervals longer than 65536 ticks (~2.6 ms) to be encoded, by chaining multiple 0x0000 values together. |
+| `0x0000` | **Spacer / overflow**. The previous flux interval is **continued** by adding 65536 to the next interval. This allows intervals longer than 65536 ticks (~2.6 ms) to be encoded, by chaining multiple #0000 values together. |
 
 For example, an interval of 80,000 ticks would be encoded as:
 
@@ -244,7 +244,7 @@ A reader should check the RLE flag in the header and decode the flux data accord
 
 Consider a single-revolution image of a track with 100,000 flux transitions, each averaging 250 ticks (10 µs) apart:
 
-- Header (16 bytes): `"SCP"`, version=0, revolutions=1, start=0, end=0xA2, flags=0x01 (index mode), sample_rate=25 MHz, total_data_size=200,412 (12-byte descriptor + 200,000 bytes flux data, plus the 4-byte "TRK" header).
+- Header (16 bytes): `"SCP"`, version=0, revolutions=1, start=0, end=#A2, flags=0x01 (index mode), sample_rate=25 MHz, total_data_size=200,412 (12-byte descriptor + 200,000 bytes flux data, plus the 4-byte "TRK" header).
 - Track-offset table (4 bytes): offset 20 (= start of track 0's data).
 - Track data block:
   - Track header: `"TRK"` + track_number 0 + 12-byte per-revolution descriptor:

@@ -101,7 +101,7 @@ z80dasm writes symbol files in the same format with `--sym-output=FILE`, so the 
 
 ### Block files
 
-A block file specifies the type of each region of the input. This is how you tell z80dasm "treat 0x4000-0x5AFF as bytedata" (the Spectrum display file) or "0x5B00-0x5B7F as pointers" (the system variables area):
+A block file specifies the type of each region of the input. This is how you tell z80dasm "treat #4000-#5AFF as bytedata" (the Spectrum display file) or "#5B00-#5B7F as pointers" (the system variables area):
 
 ```
 ; Spectrum 48K memory layout
@@ -344,7 +344,7 @@ The `--comments` (`-c`) flag controls per-line annotation:
 The `--explain` flag adds English-language descriptions of what each instruction does:
 
 - `--explain 1`: only data references
-- `--explain 2`: every instruction (`LD A, 0x2e` → "Load A with 0x2e")
+- `--explain 2`: every instruction (`LD A, 0x2e` → "Load A with #2E")
 
 ### Helper script: `generate_string_locations.sh`
 
@@ -754,7 +754,7 @@ The classic failure mode: a sprite, font, or music score gets disassembled as a 
 
 ### Wrong bank assumption (128K Spectrum)
 
-A 128K Spectrum snapshot has all eight 16 KB RAM banks saved in the file. If you disassemble the entire file linearly from the start, you will see Bank 0 (page 0, which is the home bank at slot 0-0x3FFF after a reset) followed by Bank 1, Bank 2, etc. But the CPU's view of memory at runtime is one home bank plus whichever page is paged into `0xC000-0xFFFF` via the 7FFDh port. You must disassemble with bank awareness, or disassemble each bank separately with its correct load offset.
+A 128K Spectrum snapshot has all eight 16 KB RAM banks saved in the file. If you disassemble the entire file linearly from the start, you will see Bank 0 (page 0, which is the home bank at slot 0-#3FFF after a reset) followed by Bank 1, Bank 2, etc. But the CPU's view of memory at runtime is one home bank plus whichever page is paged into `0xC000-0xFFFF` via the 7FFDh port. You must disassemble with bank awareness, or disassemble each bank separately with its correct load offset.
 
 ### Self-modifying code and overlays
 
