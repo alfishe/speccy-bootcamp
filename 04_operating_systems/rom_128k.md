@@ -1122,3 +1122,13 @@ A fully bank-aware ISR must either:
 - **Bank switching patterns**: [bank_switching_patterns.md](../05_development/03_memory_and_io/bank_switching_patterns.md)
 - **Interrupt programming** (AY interrupt, IM2, bank switching in ISR): [interrupt_programming.md](../05_development/04_interrupts/interrupt_programming.md)
 - **I/O ports** (#7FFD paging, #FFFD AY register): [memory_and_io_128k.md](../05_development/03_memory_and_io/memory_and_io_128k.md)
+
+## References
+
+### External references
+
+- **128K ROM Disassembly** (community-maintained, on WoS archive) — the canonical annotated 128K editor ROM source; covers ROM 0 (48K BASIC, identical to the standalone 48K ROM), ROM 1 (128K editor + 48K BASIC + tape editor), and the editor's menu system.
+- **Complete Spectrum ROM Disassembly** (Logan / O'Hara, 1982) — the canonical reference for the underlying 48K ROM routines that ROM 0 wraps; every routine inherited from the 48K is documented here.
+- **Sinclair 128K Service Manual** (Sinclair Research, 1986) — the canonical hardware reference covering ROM chip select, the `#7FFD` paging port, and the AY-3-8912 audio chip ports that the 128K ROM drives.
+- **Sinclair ZX Specifications** (Martin Korth, `problemkaputt.de/zxdocs.htm`) — cross-model hardware reference; documents the 128K ROM's relationship to the +2 (grey), +2A, +3 ROMs and the regional variants.
+- **Spectrumpedia** (Grussu) — print reference for the Spanish / Italian / Russian / French 128K ROM variants; documents the modified editor menu text and the locale-specific BASIC keywords.

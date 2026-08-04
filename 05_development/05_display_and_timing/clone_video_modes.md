@@ -265,3 +265,13 @@ For production software, the most reliable approach is to provide a **configurat
 - **Border effects** (multicolor borders, raster bars): [border_effects.md](border_effects.md)
 - **Screen layout** (standard pixel/attribute addressing): [screen_layout.md](../03_memory_and_io/screen_layout.md)
 - **ZX Evolution hardware**: [clone_timing.md#zx-evolution](../../02_hardware/clones/clone_timing.md)
+
+## References
+
+### External references
+
+- **TS-Conf documentation** (`zxevo.ru` wiki) — the canonical reference for the ZX Evolution's FPGA-based video subsystem, including 640x200 / 320x200 / 256x192 modes, hardware tiles, and the layer sprite engine.
+- **ATM Turbo documentation** (`atmturbo.com`, archived) — the original HIRES and TEXT mode specifications for the ATM Turbo 1/2, the first widely deployed Soviet-clone video extensions.
+- **Kay 2006 NB CPLD documentation** (`zxpress.ru` article archive) — the CPLD-based video subsystem that brought 16-color mode and programmable palettes to the late Kay lineage.
+- **Profi 512x256 hires reference** — community-maintained documentation for the Profi's non-standard hires mode; rarely used in production software but historically important.
+- **GigaScreen documentation** (Russian demoscene articles, `zx-pk.ru`) — the temporal-mixing technique that pairs two screens at 50 Hz to simulate 8x8 attribute resolution; documented extensively in the Brainwave/Eternity Industry demo archives.

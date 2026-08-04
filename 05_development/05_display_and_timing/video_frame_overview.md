@@ -275,3 +275,13 @@ For detailed timing diagrams, contention patterns, and model-specific behavior:
 - **Race the beam** (timing-critical effects): [race_the_beam.md](raster_timing.md)
 - **Screen pixel layout**: [screen_layout.md](../03_memory_and_io/screen_layout.md)
 - **Emulation implications** (non-standard frame rates on modern displays): [cycle_exact_accuracy.md](../../11_emulation/software/cycle_exact_accuracy.md)
+
+## References
+
+### External references
+
+- **Chris Smith — *The ZX Spectrum ULA*** (book) — the definitive reference for the 48K / 128K frame parameters compared in this article (scanline counts, contention pattern, INT pulse placement).
+- **Sinclair ZX Specifications** (Martin Korth, `problemkaputt.de/zxdocs.htm`) — the canonical cross-model hardware reference covering the 48K, 128K, +2, +2A, +3 line and T-state counts.
+- **Spectrumpedia** (Alessandro Grussu) — the most complete cross-model comparison table in print form, including the Soviet clones and the modern FPGA reimplementations.
+- **`cycle_exact_accuracy.md`** — internal cross-link to the emulator-side discussion of non-standard frame rates on modern 50 Hz / 60 Hz / variable-refresh displays.
+- **WoS archive hardware reference pages** — community-maintained tables of per-model frame parameters, originally compiled for use by emulator authors.

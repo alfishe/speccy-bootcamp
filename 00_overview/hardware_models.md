@@ -201,3 +201,13 @@ The right model depends on what you are doing:
 - [io_port_map.md](../10_references/io_port_map.md) — Per-model I/O port reference.
 - [timing_reference.md](../10_references/timing_reference.md) — T-state timing tables for every instruction and addressing mode.
 - [next_graphics.md](../05_development/06_graphics/next_graphics.md) — The Next's Layer 2 / sprites / tilemap / copper architecture.
+
+## References
+
+### External references
+
+- **Chris Smith — *The ZX Spectrum ULA*** (book, 2010) — the definitive reference for the original Sinclair 48K and 128K hardware; covers the Ferranti ULA variants, the +2's ASIC evolution, and the gate-array layout.
+- **Sinclair ZX Specifications** (Martin Korth, `problemkaputt.de/zxdocs.htm`) — the canonical cross-model hardware reference; documents every Sinclair-released Spectrum variant (Issue 1/2/3/4/5/6 mainboards, +2, +2A, +3, +2B, Spanish 128K).
+- **Spectrumpedia** (Alessandro Grussu) — the most complete print reference for Soviet-clone hardware; covers Pentagon, Scorpion, Kay, Profi, Leningrad, ATM Turbo, and the modern FPGA reimplementations.
+- **`zx-pk.ru` hardware reference wiki** — community-maintained cross-reference of Soviet clone hardware specs, including rare variants (Pentagon 1024SL V2, Scorpion ZS-256 Turbo+, Kay 2006 NB CPLD).
+- **ZX Spectrum Next Weekend Assembly documentation** (`zxnext.io`) — the canonical reference for the Next's hardware (2-layer board, expansion bus, the FPGA core), and for the modern extensions to the original architecture.

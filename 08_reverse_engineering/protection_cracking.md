@@ -365,3 +365,13 @@ The end goal of most cracking work is a **clean snapshot** — a .SNA or .Z80 fi
 | Z80 NMI mechanics | [z80_interrupts.md](../01_cpu/z80_interrupts.md) |
 | Scorpion Shadow Monitor | [scorpion.md](../02_hardware/clones/scorpion.md) |
 | Debugging toolchain | [debugging.md](../09_toolchain/debugging.md) |
+
+## References
+
+### External references
+
+- **Speedlock / Alkatraz / Power Load documentation** — community-maintained analyses of the three most widespread Western Spectrum protection schemes; Speedlock alone was used on over 300 commercial titles.
+- **`zx-pk.ru` protection cracking forum** — primary Russian-language venue for documented analyses of Soviet-era custom loaders (Star Sky, 5B Group, Mafia Corporation); the source of most published decryption tables.
+- **UnrealSpeccy / ZEsarUX source code** — emulator-side references for the exact timing / pulse patterns used by Speedlock and Laserload; emulators must reproduce these bit-for-bit to load protected images.
+- **Magazine archives on `zxpress.ru`** — primary-source articles from *Spectrofon*, *ZX-Format*, *Adventurer*, and *ZX-Review* on disk protection schemes and the Russian custom-loader ecosystem.
+- **Andrew Broad's *Speedlock Disassembly* (WoS archive)** — the canonical English-language worked example of cracking a Speedlock-protected title, originally distributed as a commented .z80 disassembly.

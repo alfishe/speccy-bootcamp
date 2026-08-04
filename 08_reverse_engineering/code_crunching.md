@@ -430,3 +430,13 @@ Some packers use self-modifying code in the depacker stub (e.g., modifying the d
 | File format parsing | [file_format_handling.md](../05_development/08_dos_tape/file_format_handling.md) |
 | Memory and I/O (48K) | [memory_and_io_48k.md](../05_development/03_memory_and_io/memory_and_io_48k.md) |
 | Assembly patterns | [assembly_patterns.md](../05_development/02_assembly/assembly_patterns.md) |
+
+## References
+
+### External references
+
+- **`zx7` documentation** (Antonio Villena) — the canonical modern packer; documents the exhaustive-search algorithm that achieves better compression than the classic ZX-series crunchers at the cost of slower packing.
+- **`lz4` and `aplib` format references** — generic LZ formats that some modern Spectrum releases use for cross-platform compatibility; the decompressor is more complex but compression is tighter.
+- **`MegaLZ` documentation** (Bulba / Maxim) — the LZ-based packer widely used in the late 1990s Russian demoscene; documents the bit-stream encoding and the asymmetric packing constraint (decompresses to any address, packs on a different machine).
+- **`zx-pk.ru` packer benchmark threads** — Russian-language community benchmarks comparing compression ratios of `zx7` / `MegaLZ` / `HRUM` / `LZ4` / `aplib` on standard test corpora (game binaries, demo code, graphics).
+- **`z88dk-appmake` documentation** — the z88dk-side reference for packing Spectrum binaries; includes worked examples of the `--combine` and `--app-type` flags for producing packed `.tap` / `.tzx` images.

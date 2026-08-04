@@ -323,3 +323,13 @@ Attribute file (#5800–#5AFF, 768 bytes):
 - **Graphics techniques** (sprites, scrolling, multicolor): [06_graphics/README.md](../06_graphics/README.md)
 - **Attribute color system** (INK, PAPER, BRIGHT, FLASH): [color_system.md](../05_display_and_timing/color_system.md)
 - **Complete I/O port map** (all ports, all models, decoding bitmasks): [io_port_map.md](../../10_references/io_port_map.md)
+
+## References
+
+### External references
+
+- **Chris Smith — *The ZX Spectrum ULA*** (book) — definitive reference for the pixel/attribute interleaving scheme (every 3rd display byte is an attribute byte), the display file address-decode logic, and the off-screen memory holes at `#4000`–`#57FF` (display) and `#5800`–`#5AFF` (attributes).
+- **Sinclair ZX Specifications** (Martin Korth) — the canonical pixel addressing formula (`((Y&192)<<5) | ((Y&7)<<8) | ((Y&56)<<5) | X`) and the attribute address formula.
+- **Complete Spectrum ROM Disassembly** (Logan / O'Hara) — annotated 48K ROM showing how the `PRINT`, `PLOT`, and `CLS` routines compute display addresses using the standard formula.
+- **Spectrumpedia** (Grussu) — cross-model reference covering the 128K shadow screen at `#C000`–`#FFAF` and the Soviet clones' alternate screen banks.
+- **`zx-pk.ru` screen layout discussions** — Russian-language threads on Pentagon / Scorpion alternate-screen banking and the demoscene techniques that exploit multiple screen buffers.

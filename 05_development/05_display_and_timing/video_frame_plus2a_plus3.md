@@ -168,3 +168,13 @@ See [bank_switching_patterns.md](../03_memory_and_io/bank_switching_patterns.md)
 - **Contention model** (per-model comparison): [contention_model.md](../03_memory_and_io/contention_model.md)
 - **Bank switching** (+2A/+3 special modes): [bank_switching_patterns.md](../03_memory_and_io/bank_switching_patterns.md)
 - **Floating bus** (why it's unreliable on +2A/+3): [floating_bus.md](floating_bus.md)
+
+## References
+
+### External references
+
+- **Amstrad +2A / +3 Service Manual** (Z70835 mainboard) — the canonical hardware reference for the +2A/+3's gate array (the "AMSTRAD 40040" or "40058" ASIC); documents the modified contention scanline range and the absence of floating-bus reads.
+- **Chris Smith — *The ZX Spectrum ULA*** (book) — while the book focuses on the Ferranti ULA, it also documents the gate array evolution in the 128K lineage and explains why the +2A/+3 breaks compatibility with 48K timing-sensitive code.
+- **Sinclair ZX Specifications** (Martin Korth) — the cross-model hardware reference covering the +2A/+3's paging port (`#1FFD`, the special MMU modes), the contention scanline range (64–255 vs the 128K's 64–191), and the 4-bank ROM layout.
+- **Spectrumpedia** (Grussu) — cross-model print reference for the +2A/+3's special modes (ROM 0/1/2/3 selection, special RAM config, all-RAM mode for development).
+- **SpecEmu / ZEsarUX source code** — emulator references for the +2A/+3's exact scanline timing and the differences from the earlier +2 (grey) Z70830 mainboard.

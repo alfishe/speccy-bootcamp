@@ -233,3 +233,13 @@ On the Pentagon and other Soviet clones, a common convention is to store **two f
 - **Custom fonts, proportional text, 64-column modes** (uses UDG mechanism): see the [Graphics section](../05_development/06_graphics/README.md) for coverage of font rendering techniques
 - **Screen layout** (attribute/pixel byte mapping): [screen_layout.md](../05_development/03_memory_and_io/screen_layout.md)
 - **BASIC token table** (complete keyword→token mapping): [basic_token_table.md](basic_token_table.md) (planned)
+
+## References
+
+### External references
+
+- **Complete Spectrum ROM Disassembly** (Logan / O'Hara, 1982) — the canonical annotated source for the 48K ROM's character handling: the `PRINT CHR$` routine, the token-expansion table, the UDG / user font mechanism, and the character-pixel lookup table.
+- **Sinclair ZX Spectrum Manual** (Vickers, 1982) — the primary-source reference for the character set as documented for end users; covers UDGs, `CHR$`, `CODE`, and the character-pixel layouts of all 96 printable ASCII characters.
+- **Sinclair ZX Spectrum +2 / +3 Manual** (Amstrad, 1987/1988) — primary-source reference for the +2A/+3 extended character set, including the additional 128K glyphs and the modified token table.
+- **Spectrumpedia** (Grussu) — cross-model print reference covering the Spanish, Italian, Russian, and Greek Spectrum variants; documents the modified character-pixel tables for accented characters.
+- **`zx-pk.ru` Russian character set threads** — primary venue for documentation of Soviet-clone Cyrillic character sets (Pentagon's dual English/Cyrillic font, Profi's CP-866 mapping, Scorpion's `#00`–`#FF` font ROM).

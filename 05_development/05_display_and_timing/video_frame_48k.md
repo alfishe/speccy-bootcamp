@@ -262,3 +262,13 @@ ULA overhead:              ~18% stolen for video generation
 - **Race the beam** (raster sync techniques): [race_the_beam.md](raster_timing.md)
 - **Z80 interrupt system**: [z80_interrupts.md](../../01_cpu/z80_interrupts.md)
 - **Floating bus reference**: [floating_bus.md](floating_bus.md)
+
+## References
+
+### External references
+
+- **Chris Smith — *The ZX Spectrum ULA*** (book) — the definitive reference for the 48K's Ferranti ULA 5C/6C: every scanline count, every T-state, the 69888-T-state frame, the 64-line top border, the 56-line bottom border, the 256-line display, and the contention pattern.
+- **Sinclair ZX Specifications** (Martin Korth) — hardware reference covering the 48K bus timing, the CPU clock, and the INT pulse placement that anchors every frame-sensitive technique.
+- **Complete Spectrum ROM Disassembly** (Logan / O'Hara) — annotated 48K ROM showing how the standard frame budget is used by the BASIC interrupt handler and the BEEP routine.
+- **`zx-pk.ru` 48K timing threads** — primary discussion venue for Soviet-clone deviations from 48K timing; documents why Pentagon code written against 48K frame parameters fails.
+- **SpecEmu / ZEsarUX source code** — emulator references for the 48K's exact scanline-by-scanline contention and the floating-bus reference values used in test software.

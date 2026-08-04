@@ -231,3 +231,13 @@ Most 48K code runs correctly on the 128K because the frame structure is **simila
 - **ULA timing deep dive**: [ula_timing.md](../../02_hardware/original/ula_timing.md)
 - **Clone timing** (Pentagon, Scorpion): [clone_timing.md](../../02_hardware/clones/clone_timing.md)
 - **Floating bus** (complete reference): [floating_bus.md](floating_bus.md)
+
+## References
+
+### External references
+
+- **Chris Smith — *The ZX Spectrum ULA*** (book) — definitive reference for the 128K's modified ULA (the gate array / ASIC hybrid in +2/+2A/+3 lineage); covers the 70908-T-state frame, the 128K's different contention scanline range, and the shadow-screen paging.
+- **Sinclair ZX Specifications** (Martin Korth, `problemkaputt.de/zxdocs.htm`) — the canonical 128K / +2 / +2A / +3 hardware reference; documents the `#7FFD` paging port, the screen-selection bit, and the contention differences vs the 48K.
+- **Amstrad +2 / +3 Service Manuals** — full schematics for the +2 (Z70830) and +2A/+3 (Z70835) mainboards; document the gate array and the modified video timing generator.
+- **Spectrumpedia** (Grussu) — cross-model reference covering the early-vs-late timing split within the 128K family and the Russian +2 clones.
+- **UnrealSpeccy / ZEsarUX source code** — emulator references for the 128K's exact scanline-by-scanline contention pattern and the early/late timing variants.

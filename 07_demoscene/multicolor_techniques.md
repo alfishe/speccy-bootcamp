@@ -776,6 +776,18 @@ The likely future: multicolor will continue to be developed for as long as there
 
 ---
 
+## References
+
+### External references
+
+- **`zx-pk.ru` multicolor / multitekst threads** — primary Russian-language forum for multicolor technique discussions; documents the Pentagon-specific scanline counts and the demoscene idioms for synchronizing to the raster without floating-bus reads.
+- **ZXArt (`zxart.ee`)** — the canonical archive of Spectrum demos; search for "multicolor" to find the canonical reference demos (e.g., *Extasy*, *Epic 128*, *Reanimation*, *Shock*, *Crystal Dream*).
+- **Gerton Lunter's *Multicolor demonstration* routines** — early worked examples of the timing-safe inner loops that make `8x8` and `8x4` color modes possible at 50 Hz on the 48K.
+- **Andrew Owen's *Multicolor Tutorial*** (community-maintained, on WoS archive) — the canonical English-language introduction to multicolor timing for newcomers.
+- **`z88dk` and `sjasmplus` documentation** — modern toolchain references for assembling multicolor code with macros that generate the timing tables automatically.
+
+---
+
 ## License
 
 This article is licensed under [Creative Commons Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/) (CC BY-SA 4.0). You are free to share and adapt this material, provided you give appropriate credit and distribute any derivative works under the same license.

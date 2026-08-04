@@ -660,6 +660,18 @@ The community-developed +3E ROM (see [rom_versions.md](rom_versions.md) §7.4) f
 
 ---
 
+## References
+
+### External references
+
+- **Amstrad +2 Service Manual** (Z70830 mainboard, 1987) — the canonical hardware reference for the +2 (grey): ROM chip select logic, gate array addressing, and the 32-4-0 ROM/RAM bank layout that the +2 ROM assumes.
+- **Complete Spectrum ROM Disassembly** (Logan / O'Hara, 1982) — the canonical annotated 48K ROM source; the +2 grey's editor ROM is essentially the 128K ROM 1, which itself is largely a wrapper around the 48K ROM core routines.
+- **Sinclair ZX Specifications** (Martin Korth, `problemkaputt.de/zxdocs.htm`) — hardware reference covering the +2's `#7FFD` paging port, the AY-3-8912 ports, and the editor ROM's menu system.
+- **Spectrumpedia** (Grussu) — cross-model reference for the +2's editor (1987 grey vs 1987 Spanish vs 1987/+2A 128K ROM 3) and the small but consequential differences between them.
+- **Fuse / ZEsarUX source code** — emulator references for the +2 grey's exact ROM entry points and the editor's tape / RS-232 / Keypad / 128K menu system behavior.
+
+---
+
 ## License
 
 This document is licensed under **Creative Commons Attribution-ShareAlike 4.0 International** (CC BY-SA 4.0). You are free to share and adapt this material, provided you give appropriate credit, indicate changes, and distribute derivative works under the same license.

@@ -290,3 +290,13 @@ For a complete machine detection routine, see [video_frame_pentagon.md](video_fr
 - **Contention model** (how contention affects timing loops): [contention_model.md](../03_memory_and_io/contention_model.md)
 - **ULA timing** (hardware-level raster generation): [ula_timing.md](../../02_hardware/original/ula_timing.md)
 - **Interrupt programming** (HALT, IM2, hardware line interrupts): [interrupt_programming.md](../04_interrupts/interrupt_programming.md)
+
+## References
+
+### External references
+
+- **Chris Smith — *The ZX Spectrum ULA*** (book) — the canonical reference for VSYNC / HSYNC placement, the 64µs line period, and the 69888-T-state 48K frame that underpins every raster-sync technique.
+- **Sinclair ZX Specifications** (Martin Korth) — hardware timing diagrams and the canonical INT pulse placement at the top of the VBLank interval.
+- **Complete Spectrum ROM Disassembly** (Logan / O'Hara) — annotated 48K ROM showing how the `HALT` instruction is used in standard ROM routines to synchronize with the raster.
+- **`zx-pk.ru` raster sync threads** — primary venue for Soviet-clone raster research; documents the Pentagon's 48.83 Hz frame and the detection heuristics used in cross-platform demoscene code.
+- **ZEsarUX / UnrealSpeccy documentation** — emulator references for the floating-bus read patterns that substitute for direct raster-position polling on the 48K.

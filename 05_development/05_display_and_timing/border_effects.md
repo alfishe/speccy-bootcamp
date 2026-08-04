@@ -274,3 +274,13 @@ This means:
 - **48K video frame** (scanline map): [video_frame_48k.md](video_frame_48k.md)
 - **I/O ports** (#FE register details): [memory_and_io_48k.md](../03_memory_and_io/memory_and_io_48k.md)
 - **Contention model** (I/O contention on Ferranti ULA): [contention_model.md](../03_memory_and_io/contention_model.md)
+
+## References
+
+### External references
+
+- **Chris Smith — *The ZX Spectrum ULA*** (book) — definitive reference for the Ferranti ULA 5C/6C, including the `#FE` border/beeper/MIC/EAR port decoding and the contention timing that constrains border-effect loops.
+- **Sinclair ZX Specifications** (Martin Korth, `problemkaputt.de/zxdocs.htm`) — hardware specs, port maps, and the canonical 48K/128K border-line counts (64 top / 48 bottom / 48 left / 48 right).
+- **Spectrumpedia** (Alessandro Grussu) — cross-model reference covering the +2A/+3 64-tap border register layout and the Pentagon's divergent border-line counts.
+- **`zx-pk.ru` demoscene forum** — primary discussion venue for raster-bar and multicolor border techniques on Soviet clones (where border timing differs from the Sinclair original).
+- **WoS archive** — historic Border-trick demos (e.g., *Epic 128*, *Shock*) that established the standard border-effect idioms.

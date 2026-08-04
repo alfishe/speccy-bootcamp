@@ -1105,3 +1105,13 @@ The .TAP block length field gives the number of bytes **after** the length field
 | Western DOS file operations | [dos_programming.md](dos_programming.md) |
 | Direct mass storage access | [mass_storage_programming.md](mass_storage_programming.md) |
 | Screen layout reference | [screen_layout.md](../03_memory_and_io/screen_layout.md) |
+
+## References
+
+### External references
+
+- **`.tap` Format Reference** (Martijn van der Heide, WoS archive) — the canonical reference for the standard Spectrum tape image format; documents the block types (Header / Data / ROM / Number / Tape/Sound), the 19/256-byte header layout, and the file-type byte values.
+- **`.tzx` Format Specification** (Tomaz Kac, v1.20 and later) — the canonical reference for the preservation-format tape image; documents the 30+ block types covering every commercial loader scheme (Speedlock, Alkatraz, Bleepload, Custom).
+- **`.scr` Screen Format** — the simplest snapshot format (6912 bytes raw pixel + attribute data); documented on the WoS archive.
+- **`.z80` Snapshot Format Specification** (Gerton Lunter, original author; extended by the WoS community) — the canonical reference covering versions 1/2/3, the page-extension blocks, and the AY register block.
+- **`z88dk-appmake` documentation** — the canonical tool reference for packing Spectrum binaries into all the above formats; documents the `--combine`, `--app-type`, and `--block-abort` flags used to produce commercial-style loaders.

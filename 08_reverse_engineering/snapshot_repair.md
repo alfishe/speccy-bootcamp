@@ -454,3 +454,13 @@ If only partial code was loaded, you may need to manually reconstruct the missin
 | System variables | [system_variables.md](../04_operating_systems/system_variables.md) |
 | Memory and I/O (48K) | [memory_and_io_48k.md](../05_development/03_memory_and_io/memory_and_io_48k.md) |
 | Memory and I/O (128K) | [memory_and_io_128k.md](../05_development/03_memory_and_io/memory_and_io_128k.md) |
+
+## References
+
+### External references
+
+- **`.z80` Snapshot Format Specification** (Gerton Lunter, original author of the xzx emulator; extended by the WoS community) — the canonical format reference covering versions 1/2/3, the page-extension blocks, the AY register block, and the Multiface state block.
+- **`.szx` (Spectrum Z80 eXtended) format specification** (Fuse emulator team) — the modern XML-based snapshot format that replaces the brittle fixed-layout `.z80` extension blocks; supports arbitrary hardware state (DivIDE, Spectranet, Betadisk NE555, etc.).
+- **`.sna` format documentation** — the simpler 48K-only snapshot format inherited from the Amstrad CPC; documented in the WoS archive.
+- **Fuse / ZEsarUX / UnrealSpeccy source code** — emulator references for how snapshots are loaded and saved; the de facto specification is whatever the major emulators agree on.
+- **`zx-pk.ru` snapshot repair threads** — Russian-language venue for discussions of corrupt snapshots from old `.z80` archives and the recovery techniques used to repair them.

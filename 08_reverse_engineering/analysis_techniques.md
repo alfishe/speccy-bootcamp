@@ -595,3 +595,13 @@ Code that runs in an interrupt service routine (ISR) is invisible to normal step
 | System variables | [system_variables.md](../04_operating_systems/system_variables.md) |
 | Assembly series | [assembly series](../05_development/02_assembly/README.md) |
 | Interrupt programming | [interrupt_programming.md](../05_development/04_interrupts/interrupt_programming.md) |
+
+## References
+
+### External references
+
+- **IDA Pro and Ghidra documentation** — the two leading disassemblers used for ZX Spectrum reverse engineering; both support Z80 mode and the ZX Spectrum Next's Z80N extended ISA.
+- **`z88dk-appmake`** — the z88dk tool for unpacking and repacking ZX Spectrum binary formats (`.tap`, `.tzx`, `.z80`, `.sna`); essential for splitting a release into analyzable code + data sections.
+- **Complete Spectrum ROM Disassembly** (Logan / O'Hara, 1982) — the canonical worked example of reverse-engineering a complex Spectrum binary; every routine annotated and cross-referenced.
+- **`zx-pk.ru` reversing forum** — primary Russian-language venue for Soviet-era game intros / loaders / protections; the source of most documented custom-loader analyses.
+- **`chibiakumas.com` (Keith S. of CPU shack)** — English-language archive of translated Russian reversing articles, magazine scans, and disassembly listings for famous Soviet-era intros.

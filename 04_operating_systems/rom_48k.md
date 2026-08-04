@@ -1305,3 +1305,13 @@ The Spectrum ROM reflects the constraints of its era:
 - **Interrupt programming** (hooking #0038, ISR design): [interrupt_programming.md](../05_development/04_interrupts/interrupt_programming.md)
 - **Character set** (pixel layout, token table): [screen_layout.md](../05_development/03_memory_and_io/screen_layout.md)
 - **I/O ports** (#FE keyboard, beeper, border): [memory_and_io_48k.md](../05_development/03_memory_and_io/memory_and_io_48k.md)
+
+## References
+
+### External references
+
+- **Complete Spectrum ROM Disassembly** (Logan / O'Hara, 1982) — the canonical annotated 48K ROM source; every routine, every entry point, every magic address documented and cross-referenced. The single most important reference for 48K ROM work.
+- **Ian Logan and Martin O'Hara — *The Complete Spectrum ROM Disassembly*** (book, available on WoS archive) — primary-source print edition of the above.
+- **Sinclair ZX Specifications** (Martin Korth, `problemkaputt.de/zxdocs.htm`) — the canonical 48K hardware reference covering the bus timing and ROM chip select that the ROM routines rely on.
+- **`comp.sys.sinclair` FAQ** — community-maintained reference for the documented 48K ROM entry points that became de facto standards (the `RST` hooks, the channel-I/O system, the calculator stack).
+- **Fuse / ZEsarUX source code** — emulator references for the exact `RST 8` / `RST 16` / `RST 24` / `RST 32` / `RST 40` / `RST 56` behavior and the floating-point calculator's edge cases.

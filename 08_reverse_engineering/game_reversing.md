@@ -382,3 +382,13 @@ Every game stores its variables at different addresses. Techniques that work for
 | Character set and tokens | [character_set.md](../10_references/character_set.md) |
 | File format parsing | [file_format_handling.md](../05_development/08_dos_tape/file_format_handling.md) |
 | Memory and I/O (48K) | [memory_and_io_48k.md](../05_development/03_memory_and_io/memory_and_io_48k.md) |
+
+## References
+
+### External references
+
+- **The Tipshop Archive** (community-maintained, on the WoS archive) — multi-decade community archive of POKE lists, infinite-lives patches, and level-skip codes for thousands of commercial Spectrum titles; the primary source for reverse-engineering the resulting memory-mod patterns.
+- **`spectranet` / `divide` / `divmmc` snapshot-based debugging references** — modern real-hardware debugging infrastructure that allows setting hardware breakpoints and reading machine state without affecting game timing.
+- **`zx-pk.ru` game reversing forum** — primary Russian-language venue for documented analyses of Soviet-era RPGs (*Black Crow*, *Star Legacy*) and the custom data formats they used.
+- **The Speedlock Reference** (community-maintained) — the canonical English-language analysis of the Speedlock / Alkatraz families used on Western commercial titles.
+- **IDA Pro / Ghidra Z80 processor modules** — the two leading disassemblers used for game reversing; both support annotating memory maps, structuring data layouts, and identifying standard library calls.
