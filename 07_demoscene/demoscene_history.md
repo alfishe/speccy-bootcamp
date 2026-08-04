@@ -44,7 +44,7 @@ This installed base created three cultural precursors to the demoscene, none of 
 British home computing magazines — * Sinclair User *, *Your Spectrum*, *CRASH*, *Your Sinclair*, *ZX Computing* — published hundreds of type-in BASIC and machine-code programs every year. These were the first body of home computer code that existed *for the purpose of being looked at* rather than played. Type-in programs included:
 
 - **Listing demos**: short BASIC programs that drew patterns, played tunes, displayed scrolling text. Many were technically trivial but established the convention of "code that exists to show off code".
-- **Game previews**: magazine-published previews of upcoming commercial games, sometimes with playable snippets. Ocean, Hewson, Ultimate, and Gremlin all used this channel.
+- **Game previews**: magazine-published previews of upcoming commercial games, sometimes with playable snippets. Ocean, [Hewson](https://archive.org/), Ultimate, and Gremlin all used this channel.
 - **Border-breaking tricks**: the first experiments with `OUT 254`, the ULA's speaker/border port, producing effects the Spectrum's designers never intended. These were the precursors to multicolor and gigascreen techniques that would arrive a decade later.
 
 ### 2.2 Game preview screens and attract modes (1983–1986)

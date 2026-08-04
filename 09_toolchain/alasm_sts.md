@@ -403,4 +403,4 @@ For modern Spectrum development, use **sjasmplus + VS Code + DeZog + ZEsarUX/CSp
 - [Cross-Platform Toolchain](cross_platform_toolchain.md) — modern replacements that ended the ALASM era
 - [Debugging](debugging.md) — modern source-level debugging with [DeZog](https://github.com/maziac/DeZog), ZEsarUX, CSpect
 - [[sjasmplus](https://github.com/z00m128/sjasmplus)](sjasmplus.md) — the de facto modern cross-assembler that replaced ALASM for new development
-- [[[[Pentagon clone](../02_hardware/clones/pentagon.md) — the dominant Soviet clone hardware](https://zx-pk.ru/)](https://zx-pk.ru/)](https://zx-pk.ru/) ALASM targeted
+- [[[[[Pentagon clone](../02_hardware/clones/pentagon.md) — the dominant Soviet clone hardware](https://zx-pk.ru/)](https://zx-pk.ru/)](https://zx-pk.ru/)](https://zx-pk.ru/) ALASM targeted

@@ -19,7 +19,11 @@ import re
 import sys
 
 SECTION_RE = re.compile(
-    r'^#{2,3}\s(?!.*Cross-?[Rr]ef).*?(?:[Rr]eferences|[Ss]ources\b|[Ff]urther\s[Rr]eading|[Ee]xternal)',
+    r'^#{2,3}\s+(?!.*Cross-?[Rr]ef)(?:\d+(?:\.\d+)*\s+|:\s+)?'
+    r'(?:[Ee]xternal\b|[Rr]eferences?\b|[Ss]ources\b|[Ff]urther\s[Rr]eading|'
+    r'[Pp]rimary\s[Ss]ources|[Aa]dditional\s[Rr]eferences|'
+    r'[Bb]ooks(?:\s+and\s+[Aa]rticles)?|[Mm]agazines?\b|'
+    r'[Ww]eb\s+[Rr]eferences|[Oo]nline\s+[Rr]eferences)',
     re.MULTILINE,
 )
 CROSSREF_SECTION_RE = re.compile(r'^#{2,3}\s.*Cross-?[Rr]ef', re.MULTILINE)

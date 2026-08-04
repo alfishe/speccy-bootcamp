@@ -375,4 +375,4 @@ For modern Spectrum development, use **sjasmplus + VS Code + Lua scripting** for
 - [Cross-Platform Toolchain](cross_platform_toolchain.md) — modern replacements including [sjasmplus](https://github.com/z00m128/sjasmplus)
 - [[sjasmplus](https://github.com/z00m128/sjasmplus)](sjasmplus.md) — the modern cross-assembler whose macro + Lua capabilities extend XAS's tradition
 - [Debugging](debugging.md) — modern source-level debugging with [DeZog](https://github.com/maziac/DeZog), ZEsarUX, CSpect
-- [[[[Pentagon clone](../02_hardware/clones/pentagon.md) — the dominant Soviet clone hardware](https://zx-pk.ru/)](https://zx-pk.ru/)](https://zx-pk.ru/) XAS targeted
+- [[[[[Pentagon clone](../02_hardware/clones/pentagon.md) — the dominant Soviet clone hardware](https://zx-pk.ru/)](https://zx-pk.ru/)](https://zx-pk.ru/)](https://zx-pk.ru/) XAS targeted
