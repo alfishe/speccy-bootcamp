@@ -385,13 +385,13 @@ For modern Spectrum development, use **sjasmplus + VS Code + DeZog + ZEsarUX/CSp
 
 - [ALASM 5.x documentation](https://zxpress.ru/) — the canonical reference for ALASM commands, directives, and operating procedures. Original author documentation, archived at Russian Spectrum sites.
 - **STS 5.0 documentation** (Russian) — the canonical reference for STS debugging commands and hardware-assisted features.
-- **Russian demoscene party proceedings** — CC, diHALT, CAFe, FUNtop results and released source code, archived at zx-art.ru and Proton's site.
+- **Russian demoscene party proceedings** — CC, diHALT, CAFe, FUNtop results and released source code, archived at [zx-art.ru](http://zx-art.ru) and Proton's site.
 
 ### Modern Sources
 
 - **Proton's Spectrum site** (Russian) — primary modern archive for ALASM, STS, and other Russian-scene tools
 - **trd.speccy.com** — TR-DOS software archive, including ALASM-format source files released by Russian demo crews
-- **zx-art.ru** — Russian demoscene archive with downloadable productions, many including source
+- [zx-art.ru](http://zx-art.ru) — Russian demoscene archive with downloadable productions, many including source
 - **Spectrum-Forum.ru** — active Russian-language forum where ALASM-era developers discuss 1990s scene history
 
 ### Related Articles in This Knowledge Base
@@ -402,5 +402,5 @@ For modern Spectrum development, use **sjasmplus + VS Code + DeZog + ZEsarUX/CSp
 - [XAS Assembler](xas_assembler.md) — [ALASM](https://zxpress.ru/)'s Russian-scene competitor
 - [Cross-Platform Toolchain](cross_platform_toolchain.md) — modern replacements that ended the [ALASM](https://zxpress.ru/) era
 - [Debugging](debugging.md) — modern source-level debugging with [DeZog](https://github.com/maziac/DeZog), ZEsarUX, CSpect
-- [[sjasmplus](https://github.com/z00m128/sjasmplus)](sjasmplus.md) — the de facto modern cross-assembler that replaced ALASM for new development
-- [[[[[[Pentagon clone](../02_hardware/clones/pentagon.md) — the dominant Soviet clone hardware](https://zx-pk.ru/)](https://zx-pk.ru/)](https://zx-pk.ru/)](https://zx-pk.ru/)](https://zx-pk.ru/) ALASM targeted
+- [sjasmplus](sjasmplus.md) — the de facto modern cross-assembler that replaced ALASM for new development
+- [Pentagon clone](../02_hardware/clones/pentagon.md) — the dominant Soviet clone hardware ALASM targeted

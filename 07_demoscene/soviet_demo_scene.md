@@ -695,14 +695,14 @@ Demographically, the modern Russian scene skews older than at its peak (most act
 
 ### 10.3 External archives and primary sources
 
-- **zx-art.ru** — Russian-language canonical archive of demos, music, graphics.
+- [zx-art.ru](http://zx-art.ru) — Russian-language canonical archive of demos, music, graphics.
 - **[zxart.ee](https://zxart.ee)** — Estonian comprehensive archive.
-- **bbb.retroscene.org** — Russian-curated demo archive.
+- [bbb.retroscene.org](https://bbb.retroscene.org) — Russian-curated demo archive.
 - [Demozoo.org](https://demozoo.org/) — cross-platform English-language archive.
 - **[zx-pk.ru](https://zx-pk.ru)** — largest Russian-language Spectrum forum; FidoNet archives also accessible.
-- **nedoPC.ru** — Russian forum and file archive.
+- [nedoPC.ru](https://nedopc.ru) — Russian forum and file archive.
 - [zxdemo.org](https://demozoo.org/) — Gasman's long-running archive, now powered by Demozoo.
-- **Scene.org** — mirror service.
+- [Scene.org](https://www.scene.org) — mirror service.
 - **Mustekala magazine** (2008 article by Elfh/Inward) — primary source quoted in §3 and §4. Available at [http://mustekala.org/archive/](http://mustekala.org/archive/) (or via the Wayback Machine).
 
 ### 10.4 Key books and academic sources

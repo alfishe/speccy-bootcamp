@@ -282,6 +282,6 @@ For users, the test suites provide a way to evaluate emulator claims. An emulato
 
 - [Emulator Comparison](emulator_comparison.md) — which emulators pass which tests
 - [Cycle-Exact Accuracy](cycle_exact_accuracy.md) — the technical challenges test suites try to catch
-- [[[[[[[Fuse](fuse.md) — the reference emulator](https://fuse-emulator](https://fuse-emulator](https://fuse-emulator](https://fuse-emulator](https://fuse-emulator](https://fuse-emulator.sourceforge.net/).sourceforge.net/).sourceforge.net/).sourceforge.net/).sourceforge.net/).sourceforge.net/) and test suite source
-- [[ZEsarUX](https://github.com/chernandezba/zesarux)](zesarux.md) — broadest test coverage for clones
+- [Fuse](fuse.md) — the reference emulator and test suite source
+- [ZEsarUX](zesarux.md) — broadest test coverage for clones
 - [CSpect](cspect.md) — Next-specific test programs

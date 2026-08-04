@@ -486,7 +486,7 @@ The modern alternative is **sjasmplus + VS Code + CSpect**, which trades integra
 
 - [Native Toolchain](native_toolchain.md) — survey of all four major native assemblers (Zeus, DevPac, [ALASM](https://zxpress.ru/), XAS)
 - [Cross-Platform Toolchain](cross_platform_toolchain.md) — modern sjasmplus, [z88dk](https://github.com/z88dk/z88dk), SDCC alternatives
-- [[sjasmplus](https://github.com/z00m128/sjasmplus)](sjasmplus.md) — Zeus 4's modern cross-platform counterpart for Next development
+- [sjasmplus](sjasmplus.md) — Zeus 4's modern cross-platform counterpart for Next development
 - [devpac_gens_mons.md](devpac_gens_mons.md) — HiSoft DevPac, Zeus's Western contemporary
 - [alasm_sts.md](alasm_sts.md) — dominant Soviet-native assembler
 - [xas_assembler.md](xas_assembler.md) — Soviet alternative to [ALASM](https://zxpress.ru/)

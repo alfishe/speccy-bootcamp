@@ -27,7 +27,10 @@ SECTION_RE = re.compile(
     re.MULTILINE,
 )
 CROSSREF_SECTION_RE = re.compile(r'^#{2,3}\s.*Cross-?[Rr]ef', re.MULTILINE)
-HTTP_URL_RE = re.compile(r'\[[^\]]+\]\(https?://[^)]+\)')
+# Conservative: skip ANY bullet that already contains http(s):// anywhere.
+# This prevents re-processing bullets that already have URLs (proper links,
+# bare URLs, or malformed/nested links from earlier auto-linker runs).
+HTTP_URL_RE = re.compile(r'https?://')
 
 DOMAIN_TO_URL = [
     (r'zx-pk\.ru',                'https://zx-pk.ru'),
@@ -66,17 +69,55 @@ DOMAIN_TO_URL = [
     (r'hype\.retroscene\.org',      'https://hype.retroscene.org/'),
     (r'computinghistory\.org\.uk',  'https://www.computinghistory.org.uk/'),
     (r'cpmtools\.sourceforge\.net', 'http://cpmtools.sourceforge.net'),
+    # Added 2026-07-19: more domains found in prose External bullets
+    (r'zx-art\.ru',                  'http://zx-art.ru'),
+    (r'zxbyte\.ru',                  'http://zxbyte.ru'),
+    (r'nedopc\.ru',                  'https://nedopc.ru'),
+    (r'didaktik\.sk',                'https://www.didaktik.sk'),
+    (r'scene\.org',                  'https://www.scene.org'),
+    (r'bbb\.retroscene\.org',       'https://bbb.retroscene.org'),
+    (r'speedrun\.com',               'https://www.speedrun.com'),
+    (r'spectrumcomputing\.co\.uk',   'https://spectrumcomputing.co.uk'),
+    (r'spectrum-computing\.co\.uk',  'https://spectrumcomputing.co.uk'),
+    (r'vc\.ru',                      'https://vc.ru'),
+    (r'sinclair\.wiki',              'https://sinclair.wiki.zx/'),
+    (r'github\.com',                 'https://github.com'),
+    (r'gitlab\.com',                 'https://gitlab.com'),
+    (r'youtube\.com',                'https://www.youtube.com'),
+    (r'wikipedia\.org',              'https://en.wikipedia.org'),
+    (r'creativecommons\.org',        'https://creativecommons.org'),
+    (r'raspberrypi\.com',            'https://www.raspberrypi.com'),
+    (r'raspberrypi\.org',            'https://www.raspberrypi.org'),
+    (r'analog\.com',                 'https://www.analog.com'),
+    (r'ti\.com',                     'https://www.ti.com'),
+    (r'intel\.com',                  'https://www.intel.com'),
+    (r'zilog\.com',                  'https://www.zilog.com'),
+    (r'espressif\.com',              'https://www.espressif.com'),
+    (r'goodreads\.com',              'https://www.goodreads.com'),
+    (r'amigadev\.elowar\.com',      'https://www.amigadev.elowar.com'),
+    (r'hex-rays\.com',               'https://hex-rays.com'),
+    (r'ghidra-sre\.org',             'https://ghidra-sre.org'),
+    (r'demozoo\.org',                'https://demozoo.org'),
+    (r'ganssle\.com',                'https://www.ganssle.com'),
+    (r'arxiv\.org',                  'https://arxiv.org'),
+    (r'datatracker\.ietf\.org',     'https://datatracker.ietf.org'),
+    (r'groups\.google\.com',        'https://groups.google.com'),
+    (r'computer-engineering\.org',   'https://www.computer-engineering.org'),
+    (r'ddwg\.org',                   'https://www.ddwg.org'),
+    (r'hdmi\.org',                   'https://www.hdmi.org'),
+    (r'usb\.org',                    'https://www.usb.org'),
+    (r'sdcard\.org',                 'https://www.sdcard.org'),
 ]
 
 # Pattern A: bullet starts with **`domain`...** (backticked domain inside bold)
 # Captures the rest of the title (between closing backtick and closing **)
 PAT_A = re.compile(
-    r'^\*\*`((?:' + '|'.join(pat for pat, _ in DOMAIN_TO_URL) + r'))`\s*(.*?)\*\*'
+    r'^\*\*`((?:' + '|'.join(pat for pat, _ in DOMAIN_TO_URL) + r'))`\s*(.*?)\*\*', re.IGNORECASE
 )
 
 # Pattern B: bare domain in prose (no preceding code/link/paren)
 PAT_B = re.compile(
-    r'(?<![`/\[(.])(' + '|'.join(pat for pat, _ in DOMAIN_TO_URL) + r')(?![/)`])'
+    r'(?<![`/\[(.])(' + '|'.join(pat for pat, _ in DOMAIN_TO_URL) + r')(?![/)`])', re.IGNORECASE
 )
 
 # Pattern C: **Title** (Author, `domain/path`) — common form in batch-6 articles
@@ -84,28 +125,28 @@ PAT_B = re.compile(
 _DOMAIN_OR_PATH = r'(?:https?://)?(?:' + '|'.join(pat for pat, _ in DOMAIN_TO_URL) + r')(?:/[^`]+)?'
 _GITHUB_PATH = r'(?:https?://)?github\.com/[A-Za-z0-9_-]+/[A-Za-z0-9_.-]+'
 PAT_C = re.compile(
-    r'^\*\*([^*]+?)\*\*\s+\([^)]*?,\s*`(' + _DOMAIN_OR_PATH + r'|' + _GITHUB_PATH + r')`\)'
+    r'^\*\*([^*]+?)\*\*\s+\([^)]*?,\s*`(' + _DOMAIN_OR_PATH + r'|' + _GITHUB_PATH + r')`\)', re.IGNORECASE
 )
 
 # Pattern D: **Title** (`domain`) — backticked domain in trailing parens (no author)
 PAT_D = re.compile(
-    r'^\*\*([^*]+?)\*\*\s+\(`(' + _DOMAIN_OR_PATH + r')`\)'
+    r'^\*\*([^*]+?)\*\*\s+\(`(' + _DOMAIN_OR_PATH + r')`\)', re.IGNORECASE
 )
 
 # Pattern I: **Title** (`domain` extra) — backticked domain with trailing text in parens
 # e.g., **TS-Conf documentation** (`zxevo.ru` wiki) — desc
 PAT_I = re.compile(
-    r'^\*\*([^*]+?)\*\*\s+\(`(' + _DOMAIN_OR_PATH + r')`\s+[^)]*\)'
+    r'^\*\*([^*]+?)\*\*\s+\(`(' + _DOMAIN_OR_PATH + r')`\s+[^)]*\)', re.IGNORECASE
 )
 
 # Pattern K: **domain** — bolded bare domain without backticks (e.g., **velesoft.speccy.cz**)
 PAT_K = re.compile(
-    r'^\*\*(' + '|'.join(pat for pat, _ in DOMAIN_TO_URL) + r')\*\*'
+    r'^\*\*(' + '|'.join(pat for pat, _ in DOMAIN_TO_URL) + r')\*\*', re.IGNORECASE
 )
 
 # Pattern E: **Title** (domain) — bare domain in parens, no backticks
 PAT_E = re.compile(
-    r'^\*\*([^*]+?)\*\*\s+\(((?:https?://)?(?:' + '|'.join(pat for pat, _ in DOMAIN_TO_URL) + r')(?:/[^)]+)?)\)'
+    r'^\*\*([^*]+?)\*\*\s+\(((?:https?://)?(?:' + '|'.join(pat for pat, _ in DOMAIN_TO_URL) + r')(?:/[^)]+)?)\)', re.IGNORECASE
 )
 
 # Pattern F: **Title** (`https://full-url/`) — full URL already in backticks
@@ -116,7 +157,7 @@ PAT_F = re.compile(
 # Pattern H: **Title (`domain`)** — backticked domain in parens INSIDE the bold span
 # e.g., **ZXArt (`zxart.ee`)** — desc
 PAT_H = re.compile(
-    r'^\*\*([^(*]+?)\s+\(`(' + '|'.join(pat for pat, _ in DOMAIN_TO_URL) + r')`\)\*\*'
+    r'^\*\*([^(*]+?)\s+\(`(' + '|'.join(pat for pat, _ in DOMAIN_TO_URL) + r')`\)\*\*', re.IGNORECASE
 )
 
 # Pattern G: Named source mapping (e.g., Chris Smith ULA book, Spectrumpedia, magazines)
@@ -380,9 +421,9 @@ NAMED_SOURCES = [
 
 def _url_for_domain(domain_str):
     for pat, url in DOMAIN_TO_URL:
-        if re.fullmatch(pat, domain_str):
+        if re.fullmatch(pat, domain_str, re.IGNORECASE):
             return url
-    return 'https://' + domain_str
+    return 'https://' + domain_str.lower()
 
 
 def _resolve_backticked(s):
@@ -396,7 +437,7 @@ def _resolve_backticked(s):
         return 'https://' + m.group(1)
     # Known domain?
     for pat, url in DOMAIN_TO_URL:
-        m = re.match(pat, s)
+        m = re.match(pat, s, re.IGNORECASE)
         if m:
             # If there's a path beyond the domain, use the full string as URL
             if len(s) > m.end():
@@ -502,7 +543,7 @@ def transform_bullet(text):
     # CRITICAL: when there's a leading **bold title**, only consider matches that
     # occur INSIDE the title text. This prevents words like "Speedlock" in the
     # description from hijacking the URL of a bullet whose title is unrelated.
-    bold_match = re.match(r'^\*\*(.+?)\*\*(?:\*|\s|\(|$)', text)
+    bold_match = re.match(r'^\*\*(.+?)\*\*(?:\*|\s|\(|,|\.|;|:|$)', text)
     if bold_match:
         title = bold_match.group(1)
         # If title has unmatched italic markers (odd count of *), strip them

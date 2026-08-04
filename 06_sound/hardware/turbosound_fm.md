@@ -883,6 +883,6 @@ YM2203 emulation is well-understood — the chip is in MAME, and FPGA implementa
 - [Multi-Track and Multi-Chip Synthesis](../synthesis/multitrack_multichip.md) — composition techniques for mixed multi-chip systems
 - [ZX Spectrum Next Audio](zx_next_audio.md) — modern 3× AY + DMA subsystem
 - [General Sound](gs_general_sound.md) — alternative Soviet sound card based on dedicated Z80 sample mixing
-- [[MoonSound](https://www.msx.org/wiki/MoonSound)](moonsound.md) — OPL4 wavetable expansion (much more powerful than TSFM)
+- [MoonSound](moonsound.md) — OPL4 wavetable expansion (much more powerful than TSFM)
 - [Sound Hardware Ecosystem Overview](sound_overview.md) — full decision guide across all sound hardware options
 

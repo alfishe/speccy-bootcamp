@@ -1031,7 +1031,7 @@ This article sits within the ZX Spectrum demoscene knowledge base and connects t
 
 - [Logan & O'Hara, "The Spectrum ROM Disassembly"](https://worldofspectrum.org/ROMdisassembly.zip) — the canonical reference for ROM routine addresses.
 - [Pouet.net](https://www.pouet.net/) — searchable archive of size-coded Spectrum productions.
-- **ZXArt.ee** — Spectrum-specific archive with size categorisation.
+- [ZXArt.ee](https://zxart.ee) — Spectrum-specific archive with size categorisation.
 - [Einar Saukas's ZX0 release](https://github.com/einar-saukas) — the modern standard Spectrum compressor.
 - **ZX Size Coding wiki** (community-maintained) — techniques and tutorials.
 

@@ -694,7 +694,7 @@ FAT structures are little-endian, and the Z80 is also little-endian. This means 
 - [NextZXOS API PDF](https://sarah.speccy.cz/sarah/nextzxos_api.pdf) — NextZXOS function reference
 - [+3 Manual Chapter 8](https://worldofspectrum.net/ZXSpectrum128+3Manual/chapter8pt26.html) — +3 DOS machine-code API
 - [+3 DOS System Reference](../../04_operating_systems/plus3dos.md) — in-repo canonical reference
-- [[ESXDOS](https://github.com/joneiricon/ESXDOS) System Reference](../../04_operating_systems/esxdos.md) — in-repo canonical reference
-- [[NextZXOS](https://gitlab.com/thesmog358/tbblue) System Reference](../../04_operating_systems/nextzxos.md) — in-repo canonical reference
+- [ESXDOS System Reference](../../04_operating_systems/esxdos.md) — in-repo canonical reference
+- [NextZXOS System Reference](../../04_operating_systems/nextzxos.md) — in-repo canonical reference
 - [ESXDOS forums](http://board.esxdos.org/) — community support and API discussions
 - [The Fossil Record](http://www.thefossilrecord.co.uk/tag/esxdos/) — ESXDOS development articles

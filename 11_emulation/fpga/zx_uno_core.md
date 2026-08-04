@@ -317,7 +317,7 @@ For Spanish-scene enthusiasts, demoscene producers using ULAplus, or anyone who 
 ### Cross-References
 - [MiST / MiSTer Core](mist_mister_core.md) — general FPGA retro-computing platform
 - [ZX Evolution](zxevo.md) — Russian FPGA Spectrum
-- [Harlequin / [Sizif](harlequin](https://github.com/MarkOdnw/Sizif)_sizif.md) — original-form-factor modern Spectrum
+- [Harlequin / Sizif](harlequin_sizif.md) — original-form-factor modern Spectrum
 - [FPGA Implementation](fpga_implementation.md) — how these cores are designed
 - [FPGA Timing Accuracy](fpga_timing_accuracy.md) — cycle-exact timing in FPGA
-- [[Spectranet](https://github.com/spectrum-pi/spectranet)](../../03_io/networking/spectranet.md) — Andrew Owen's other major Spectrum project (related to ULAplus by author)
+- [Spectranet](../../03_io/networking/spectranet.md) — Andrew Owen's other major Spectrum project (related to ULAplus by author)

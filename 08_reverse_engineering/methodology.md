@@ -525,4 +525,4 @@ ZX Spectrum reverse engineering has a **mature, well-established ethical traditi
 - [PT3 Format](../06_sound/trackers_and_formats/pt3_format.md) — Russian AY music format
 - [Cross-Platform Toolchain](../09_toolchain/cross_platform_toolchain.md) — modern assembler/debugger setup
 - [Debugging](../09_toolchain/debugging.md) — [DeZog](https://github.com/maziac/DeZog), ZEsarUX setup, debug workflow
-- [[sjasmplus](https://github.com/z00m128/sjasmplus)](../09_toolchain/sjasmplus.md) — primary recommended assembler
+- [sjasmplus](../09_toolchain/sjasmplus.md) — primary recommended assembler

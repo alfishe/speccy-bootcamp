@@ -257,7 +257,7 @@ For Spectrum enthusiasts who own original hardware and want to keep it alive, th
 
 ### Cross-References
 - [MiST / MiSTer Core](mist_mister_core.md) — alternative FPGA approach (HDL Z80, multi-platform)
-- [[ZX-Uno](https://github.com/zxdos/zx-uno)](zx_uno_core.md) — Sizif-512 uses the same Cyclone IV EP4CE6 FPGA
+- [ZX-Uno](zx_uno_core.md) — Sizif-512 uses the same Cyclone IV EP4CE6 FPGA
 - [ZX Evolution](zxevo.md) — Russian hybrid approach (real Z80 + CPLD)
 - [FPGA Implementation](fpga_implementation.md) — how these ULA recreations are designed
 - [FPGA Timing Accuracy](fpga_timing_accuracy.md) — cycle-exact timing considerations

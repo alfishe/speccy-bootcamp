@@ -447,8 +447,8 @@ The open-source Spectrum FPGA community provides extensive reference material: t
 
 ### Cross-References
 - [FPGA Timing Accuracy](fpga_timing_accuracy.md) — cycle-exact timing considerations
-- [MiST / [MiSTer Core](mist_mister_core.md) — specific MiSTer Spectrum](https://github.com/MiSTer-devel/ZX-Spectrum_MiSTer) core
-- [[ZX-Uno](https://github.com/zxdos/zx-uno)](zx_uno_core.md) — specific ZX-Uno core
+- [MiST / MiSTer Core](mist_mister_core.md) — specific MiSTer Spectrum core
+- [ZX-Uno](zx_uno_core.md) — specific ZX-Uno core
 - [ZX Evolution](zxevo.md) — hybrid Z80 + CPLD + MCU approach
-- [Harlequin / [Sizif](harlequin](https://github.com/MarkOdnw/Sizif)_sizif.md) — drop-in ULA recreation
+- [Harlequin / Sizif](harlequin_sizif.md) — drop-in ULA recreation
 - [Test Suites](../software/test_suites.md) — test programs used for verification

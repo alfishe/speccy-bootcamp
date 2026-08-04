@@ -360,5 +360,5 @@ For further reading, see the other emulator deep-dives: [zesarux.md](zesarux.md)
 - [Emulator Comparison](emulator_comparison.md) — [Fuse vs other emulator](https://fuse-emulator.sourceforge.net/)s
 - [Cycle-Exact Accuracy](cycle_exact_accuracy.md) — technical challenges Fuse solves
 - [Test Suites](test_suites.md) — validation programs Fuse passes
-- [[ZEsarUX](https://github.com/chernandezba/zesarux)](zesarux.md) — alternative emulator with broader clone coverage
+- [ZEsarUX](zesarux.md) — alternative emulator with broader clone coverage
 - [CSpect](cspect.md) — alternative emulator with ZX Spectrum Next support

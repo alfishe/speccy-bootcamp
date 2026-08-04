@@ -351,6 +351,6 @@ For 99% of users who just want to telnet to a BBS from their Spectrum, an ESP-01
 
 - [ZiFi](zifi.md) — the formal Spectrum-specific [ESP8266](https://www.espressif.com/en/support/documents/technical-documents) project using serial + AT commands
 - [ZX Spectrum Next WiFi](zx_next_wifi.md) — built-in ESP-12 module on the Next
-- [[Spectranet](https://github.com/spectrum-pi/spectranet)](spectranet.md) — the older Ethernet-based TCP/IP interface
+- [Spectranet](spectranet.md) — the older Ethernet-based TCP/IP interface
 - [Modems](modems.md) — the 1980s dial-up era that ESP WiFi replaced
 - [ZX Net](zx_net.md) — Sinclair's 1983 classroom LAN

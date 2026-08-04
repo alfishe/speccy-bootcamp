@@ -356,14 +356,14 @@ For modern Spectrum development, use **sjasmplus + VS Code + Lua scripting** for
 ### Primary Sources
 
 - **XAS 9.x documentation** (Russian) — the canonical reference for XAS commands, directives, and macro system. Author documentation archived at Russian Spectrum sites.
-- **Elite Group and Progress production source code** — released demoscene productions showing XAS macro patterns in real use, archived at zx-art.ru
+- **Elite Group and Progress production source code** — released demoscene productions showing XAS macro patterns in real use, archived at [zx-art.ru](http://zx-art.ru)
 - **Russian demoscene party proceedings** — CC, diHALT, CAFe results with downloadable XAS-developed productions
 
 ### Modern Sources
 
 - **Proton's Spectrum site** (Russian) — primary modern archive for XAS and other Russian-scene tools
 - **trd.speccy.com** — TR-DOS software archive, including XAS-developed productions with source
-- **zx-art.ru** — Russian demoscene archive with downloadable productions, many including XAS-format source
+- [zx-art.ru](http://zx-art.ru) — Russian demoscene archive with downloadable productions, many including XAS-format source
 - [sjasmplus documentation](https://github.com/z00m128/sjasmplus) — modern cross-assembler that provides equivalent macro and Lua-scripting capabilities
 
 ### Related Articles in This Knowledge Base
@@ -371,8 +371,8 @@ For modern Spectrum development, use **sjasmplus + VS Code + Lua scripting** for
 - [Native Toolchain](native_toolchain.md) — survey of all four major native assemblers (Zeus, DevPac, [ALASM](https://zxpress.ru/), XAS)
 - [Zeus Assembler](zeus_assembler.md) — the Western innovator's-choice alternative
 - [HiSoft DevPac / GENS-MONS](devpac_gens_mons.md) — the Western commercial-studio alternative
-- [[ALASM](https://zxpress.ru/) + STS](alasm_sts.md) — XAS's Russian-scene competitor
+- [ALASM + STS](alasm_sts.md) — XAS's Russian-scene competitor
 - [Cross-Platform Toolchain](cross_platform_toolchain.md) — modern replacements including [sjasmplus](https://github.com/z00m128/sjasmplus)
-- [[sjasmplus](https://github.com/z00m128/sjasmplus)](sjasmplus.md) — the modern cross-assembler whose macro + Lua capabilities extend XAS's tradition
+- [sjasmplus](sjasmplus.md) — the modern cross-assembler whose macro + Lua capabilities extend XAS's tradition
 - [Debugging](debugging.md) — modern source-level debugging with [DeZog](https://github.com/maziac/DeZog), ZEsarUX, CSpect
-- [[[[[[Pentagon clone](../02_hardware/clones/pentagon.md) — the dominant Soviet clone hardware](https://zx-pk.ru/)](https://zx-pk.ru/)](https://zx-pk.ru/)](https://zx-pk.ru/)](https://zx-pk.ru/) XAS targeted
+- [Pentagon clone](../02_hardware/clones/pentagon.md) — the dominant Soviet clone hardware XAS targeted

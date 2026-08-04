@@ -348,7 +348,7 @@ The modern emulator scene is the result of 30+ years of accumulated refinement, 
 ### Cross-References
 
 - [Fuse](fuse.md) — the cross-platform accuracy-focused standard
-- [[ZEsarUX](https://github.com/chernandezba/zesarux)](zesarux.md) — broadest hardware coverage, reverse engineering tools
+- [ZEsarUX](zesarux.md) — broadest hardware coverage, reverse engineering tools
 - [CSpect](cspect.md) — ZX Spectrum Next reference emulator
 - [Cycle-Exact Accuracy](cycle_exact_accuracy.md) — the technical challenges of faithful Spectrum emulation
 - [Test Suites](test_suites.md) — validation ROMs and test software

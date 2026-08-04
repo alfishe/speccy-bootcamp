@@ -135,9 +135,9 @@ SARCASM occasionally appears in forum threads comparing Z80 cross-assemblers, us
 
 For any new development, **do not use SARCASM**. Use:
 
-- [[SjASMPlus]([sjasmplus](https://github.com/z00m128/sjasmplus).md)](https://github.com/z00m128/sjasmplus) — the modern de facto standard
-- [[[Pasmo](https://www.naslag.info/pasmo/)](pasmo.md)](https://www.naslag.info/pasmo/) — minimalist alternative
-- [[[z88dk](https://github.com/z88dk/z88dk) z80asm](z88dk_z80asm.md)](https://github.com/z88dk/z88dk) — for z88dk-integrated work
+- [SjASMPlus](sjasmplus.md) — the modern de facto standard
+- [Pasmo](pasmo.md) — minimalist alternative
+- [z88dk z80asm](z88dk_z80asm.md) — for z88dk-integrated work
 
 ---
 

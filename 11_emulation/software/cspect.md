@@ -291,5 +291,5 @@ The combination of comprehensive Next hardware emulation, an excellent debugger 
 - [Emulator Comparison](emulator_comparison.md) — CSpect vs other emulators at a glance
 - [Test Suites](test_suites.md) — test programs used to validate Next emulator behavior
 - [Fuse](fuse.md) — the cycle-accurate original-hardware workhorse
-- [[ZEsarUX](https://github.com/chernandezba/zesarux)](zesarux.md) — the broad-coverage reverse engineering workstation (CSpect's main alternative for Next work)
+- [ZEsarUX](zesarux.md) — the broad-coverage reverse engineering workstation (CSpect's main alternative for Next work)
 - [Cross-Platform Toolchain](../../09_toolchain/cross_platform_toolchain.md) — [z88dk](https://github.com/z88dk/z88dk) / sjasmplus targeting the Next

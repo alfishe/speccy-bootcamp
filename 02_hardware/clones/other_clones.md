@@ -373,4 +373,4 @@ Romania was the first Eastern Bloc country to clone the Spectrum, and produced t
 - **Soviet ZX Spectrum clones** (Zoe Blade's notebook, notebook.zoeblade.com) — curated English-language index of Soviet clones
 - [Alone Coder, *ACNews* series](https://zxpress.ru/) — Russian-language retrospective articles on minor Soviet clone manufacturers
 - **icefelix.ro / hc85.3x.ro** — Romanian Felix HC series documentation (Romanian/English)
-- **Didaktik.sk** — Slovak Didaktik clone documentation
+- [Didaktik.sk](https://www.didaktik.sk) — Slovak Didaktik clone documentation

@@ -316,8 +316,8 @@ For modern exploration, **Fuse and ZEsarUX** provide complete ZX Net simulation.
 ### Related Articles in This Knowledge Base
 
 - [Modems](modems.md) — early Internet connectivity via telephone lines
-- [[Spectranet](https://github.com/spectrum-pi/spectranet)](spectranet.md) — modern TCP/IP networking hardware for the Spectrum
-- [[ZiFi](zifi.md) — modern WiFi](https://zx-pk.ru/) module for the Spectrum
+- [Spectranet](spectranet.md) — modern TCP/IP networking hardware for the Spectrum
+- [ZiFi](zifi.md) — modern WiFi module for the Spectrum
 - [ESP WiFi](esp_wifi.md) — [ESP8266](https://www.espressif.com/en/support/documents/technical-documents)/ESP32-based WiFi modules
 - [ZX Spectrum Next WiFi](zx_next_wifi.md) — the Next's built-in WiFi capability
 - [Storage Formats](../storage/README.md) — [Interface 1](https://worldofspectrum.org/) microdrive and RS-232 documentation
