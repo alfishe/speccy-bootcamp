@@ -1,3 +1,5 @@
+[← Home](../../README.md) · [Peripherals](README.md)
+
 # Magnum Light Phaser — ZX Spectrum Light Gun
 
 ## Overview

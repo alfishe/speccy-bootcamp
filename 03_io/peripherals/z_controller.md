@@ -1,3 +1,5 @@
+[← Home](../../README.md) · [Peripherals](README.md)
+
 # Z-Controller — Russian Multi-I/O Peripheral (PS/2 + IDE + SD)
 
 ## Overview

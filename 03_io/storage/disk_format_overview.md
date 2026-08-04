@@ -1,3 +1,5 @@
+[← Home](../../README.md) · [I/O](../) · [Storage](README.md)
+
 # Spectrum Floppy Disk Formats: A Comparative Overview
 
 **Scope:** A high-level comparison of every floppy disk format used on the ZX Spectrum family and its clones — the **physical** sector layer they all share, the **four logical** file-system formats they use (TR-DOS, +3DOS, CP/M, MGT/Opus), and the **eight disk-image** file formats used to capture them today (`.TRD`, `.SCL`, `.DSK`, `.EDSK`, `.FDI`, `.MGT`, `.UDI`, `.SCP`).

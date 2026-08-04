@@ -1,3 +1,5 @@
+[← Home](../../README.md) · [I/O](../) · [Storage](README.md)
+
 # TR-DOS Disk Format
 
 **Scope:** The **logical** disk format used by TR-DOS — the directory structure, file types, file headers, disk descriptor, free-space bookkeeping, and boot process. The hardware that reads and writes this format (the WD1793 controller chip and the Beta Disk Interface) is covered in [fdc_vg93.md](fdc_vg93.md) and [beta_disk_interface.md](beta_disk_interface.md); the file-image formats used to preserve TR-DOS disks (.TRD, .SCL) are covered in [trd_scl_formats.md](trd_scl_formats.md).

@@ -1,3 +1,5 @@
+[← Home](../../README.md) · [Peripherals](README.md)
+
 # ZX Bus — The Expansion Edge Connector
 
 ## Overview

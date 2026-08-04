@@ -1,3 +1,5 @@
+[← Home](../../README.md) · [I/O](../) · [Storage](README.md)
+
 # Opus Discovery Disk Format
 
 **Scope:** The **Opus Discovery** disk interface and its associated disk format — a Western (UK-developed) alternative to TR-DOS and +3DOS, popular in the mid-to-late 1980s among UK Spectrum users. The Opus Discovery used the **WD1770** floppy controller and the **MGT** logical disk format (also used by the +D and Disciple interfaces, and later by the SAM Coupé). This article covers both the **physical** disk format (sectors, MFM encoding) and the **logical** file system (directory layout, file entries).

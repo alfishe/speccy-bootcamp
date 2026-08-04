@@ -1,3 +1,5 @@
+[← Home](../../README.md) · [Peripherals](README.md)
+
 # Keyboard Reading — Cross-Model Programming Patterns
 
 ## Overview

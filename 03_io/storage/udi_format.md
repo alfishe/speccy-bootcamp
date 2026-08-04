@@ -1,3 +1,5 @@
+[← Home](../../README.md) · [I/O](../) · [Storage](README.md)
+
 # .UDI Universal Disk Image Format
 
 **Scope:** The **.UDI** (Universal Disk Image) format — a sector-level format designed to be **universal** across different disk modulation schemes (MFM, FM, GCR, etc.) and different floppy controller families (WD177x, NEC765, uPD765, etc.). The .UDI format is used by a subset of Spectrum emulators and archival tools, particularly in the Russian Spectrum community.

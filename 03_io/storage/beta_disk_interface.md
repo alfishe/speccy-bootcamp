@@ -1,3 +1,5 @@
+[← Home](../../README.md) · [I/O](../) · [Storage](README.md)
+
 # Beta Disk Interface
 
 **Scope:** Hardware and host-glue aspects of the Beta Disk Interface — the address decoder, port map, TR-DOS ROM bank switching, drive/motor/side control, cable, variants, and common issues. The floppy controller chip itself (WD1793 / KR1818VG93) is covered in the sibling article [fdc_vg93.md](fdc_vg93.md); the TR-DOS logical disk format (directory, file types, disk parameters) is covered in [trd_disk_format.md](trd_disk_format.md).

@@ -1,3 +1,5 @@
+[← Home](../../README.md) · [I/O](../) · [Storage](README.md)
+
 # Hard Disk Partitioning and Filesystems on the ZX Spectrum
 
 **Scope:** The **partition table** and **filesystem layers** that sit between the raw sectors of a Spectrum mass-storage device (CompactFlash, SD card, hard disk) and the files that ESXDOS, NextZXOS, and IS-DOS present to the user. This article covers the **Master Boot Record**, the **BIOS Parameter Block**, the **FAT16 and FAT32** filesystems, the **Long File Name** extension, and the Russian **IS-DOS** alternative.

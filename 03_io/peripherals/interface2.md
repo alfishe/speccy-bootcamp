@@ -1,3 +1,5 @@
+[← Home](../../README.md) · [Peripherals](README.md)
+
 # ZX Interface 2 — ROM Cartridges, Twin Joysticks, and the Cart That Wouldn't Page
 
 ## Overview

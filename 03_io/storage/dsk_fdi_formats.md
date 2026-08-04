@@ -1,3 +1,5 @@
+[← Home](../../README.md) · [I/O](../) · [Storage](README.md)
+
 # .DSK / .EDSK / .FDI Disk Image Formats
 
 **Scope:** The three preservation-level disk image formats that can capture **non-standard** sector layouts: **.DSK** (the original CPCEMU "MV - CPC" format), **.EDSK** (the extended CPC DSK format), and **.FDI** (Vincent Joguin's "Full Disk Image"). These are the formats used by archivists to preserve disks that .TRD and .SCL cannot represent — disks with non-standard sector sizes, non-standard sector IDs, deliberate corruption, or copy-protection tricks.

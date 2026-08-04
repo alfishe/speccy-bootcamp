@@ -1,3 +1,5 @@
+[← Home](../../README.md) · [I/O](../) · [Storage](README.md)
+
 # .TRD and .SCL Disk Image Formats
 
 **Scope:** The two file-image formats used to store TR-DOS disks as files on modern computers: **.TRD** (a sector-by-sector disk image) and **.SCL** (a file-by-file logical image). The on-disk TR-DOS format itself is covered in [trd_disk_format.md](trd_disk_format.md); the floppy hardware that reads TR-DOS disks is covered in [beta_disk_interface.md](beta_disk_interface.md).

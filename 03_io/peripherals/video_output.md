@@ -1,3 +1,5 @@
+[← Home](../../README.md) · [Peripherals](README.md)
+
 # Video Output — RF, Composite, RGB, SCART, and VGA Adapters
 
 ## Overview

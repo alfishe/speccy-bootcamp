@@ -1,3 +1,5 @@
+[← Home](../../README.md) · [I/O](../) · [Storage](README.md)
+
 # Spectrum Hard Disk and SD Storage: An Overview
 
 **Scope:** A high-level introduction to **mass storage beyond the floppy disk** on the ZX Spectrum family and its clones — the **three generations** of storage technology (floppy, IDE hard disk, SD card), the **interface hardware** that brought each to the Spectrum, and the **file systems** (FAT16, FAT32, IS-DOS) that organized the data.

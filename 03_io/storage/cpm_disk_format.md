@@ -1,3 +1,5 @@
+[← Home](../../README.md) · [I/O](../) · [Storage](README.md)
+
 # CP/M 2.2 Disk Format on the Spectrum
 
 **Scope:** The **CP/M 2.2** disk format as used on the ZX Spectrum family and its clones — including the Spectrum +3 (with its bundled CP/M mode), the ATM Turbo (a Soviet clone with native CP/M support), and the Sprinter (a more modern Russian Spectrum-compatible PC). This article covers the **on-disk** format: the File Control Block (FCB), the disk directory, the Disk Parameter Block (DPB), and the differences between each machine's CP/M variant.

@@ -1,3 +1,5 @@
+[← Home](../../README.md) · [Peripherals](README.md)
+
 # Multiface — Snapshot Tool, Poke Finder, and the Red Button
 
 ## Overview

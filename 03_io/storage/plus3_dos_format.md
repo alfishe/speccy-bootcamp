@@ -1,3 +1,5 @@
+[← Home](../../README.md) · [I/O](../) · [Storage](README.md)
+
 # +3DOS Logical Disk Format
 
 **Scope:** The **+3DOS** logical disk format used by the Sinclair ZX Spectrum +3 and +2A (the "Plus" range). +3DOS is the file system that the +3's built-in DOS uses to organize files on floppy disks — it defines the on-disk directory, the file allocation table (in the form of CP/M-style block pointers), the file type bytes, and the conventions for naming and addressing files. This article covers the **logical** layer; the **physical** layer (sector IDs, MFM encoding, the WD1772-PH controller) is covered in [plus3_floppy.md](plus3_floppy.md), and the MFM signal layer is covered in [mfm_encoding.md](mfm_encoding.md).

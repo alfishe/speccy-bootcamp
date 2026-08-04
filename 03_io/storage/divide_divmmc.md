@@ -1,3 +1,5 @@
+[← Home](../../README.md) · [I/O](../) · [Storage](README.md)
+
 # The DivIDE and DivMMC: Hardware and Setup Guide
 
 **Scope:** A **hardware and practical-setup** treatment of the **DivIDE** (Zeax, 2007) and the **DivMMC** (Zoxon, 2013) — the two expansion cards that together define modern real-hardware Spectrum mass storage. This article covers the physical boards, the firmware boot sequence, the TR-DOS virtual-floppy emulation layer, and how to prepare the storage card.

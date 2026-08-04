@@ -1,3 +1,5 @@
+[← Home](../../README.md) · [I/O](../) · [Storage](README.md)
+
 # Hard Disk and SD Image Formats: .HDF, .IMG, .MGT
 
 **Scope:** The **disk-image file formats** that emulator authors use to capture **mass-storage volumes** — the CompactFlash, SD-card, and hard-disk partitions that the DivIDE, DivMMC, ZXMMC, and ZX Spectrum Next read and write. This article covers the **`.HDF`** hard-disk image, the **`.IMG`** raw image, and recaps the **`.MGT`** floppy image (covered in depth in [opus_discovery_format.md](opus_discovery_format.md)) for completeness.

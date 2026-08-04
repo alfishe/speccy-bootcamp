@@ -1,3 +1,5 @@
+[← Home](../../README.md) · [Peripherals](README.md)
+
 # Mouse Interfaces — Kempston Mouse, AMX Mouse, and Modern Successors
 
 ## Overview

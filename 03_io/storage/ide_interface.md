@@ -1,3 +1,5 @@
+[← Home](../../README.md) · [I/O](../) · [Storage](README.md)
+
 # IDE Interfaces on the ZX Spectrum
 
 **Scope:** A hardware-level comparison of every significant **IDE (Integrated Drive Electronics)** interface that brought parallel-ATA hard disks and CompactFlash cards to the ZX Spectrum family and its clones — the **DivIDE**, **Nemo IDE**, **KAY IDE**, the **ATM Turbo / Z-Controller IDE**, and the **SMUC** ISA bridge.

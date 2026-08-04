@@ -1,3 +1,5 @@
+[← Home](../../README.md) · [Peripherals](README.md)
+
 # Printers — ZX Printer, Centronics Adapters, and Soviet SM640/SM646
 
 ## Overview

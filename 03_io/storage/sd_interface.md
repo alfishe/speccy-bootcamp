@@ -1,3 +1,5 @@
+[← Home](../../README.md) · [I/O](../) · [Storage](README.md)
+
 # SD Card Interfaces on the ZX Spectrum
 
 **Scope:** A hardware-level comparison of every significant **SD card** interface that brought Secure Digital storage to the ZX Spectrum family and its clones — the **DivMMC**, **ZXMMC**, the **ZX Spectrum Next** internal slots, and the **Z-Controller** — together with the **SPI-mode SD protocol** that all of them must implement. The IDE/ATA parallel protocol and its host adapters are covered in the sibling article [ide_interface.md](ide_interface.md); both families share the same destination (a FAT volume of Spectrum software) but speak entirely different device protocols.

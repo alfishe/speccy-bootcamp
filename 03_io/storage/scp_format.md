@@ -1,3 +1,5 @@
+[← Home](../../README.md) · [I/O](../) · [Storage](README.md)
+
 # .SCP (SuperCard Pro) Flux-Level Disk Image Format
 
 **Scope:** The **.SCP** (SuperCard Pro) format — a **flux-level** disk image format that captures the disk at the lowest possible level: the raw timing of magnetic flux transitions on the disk surface. The .SCP format is the modern gold standard for floppy-disk preservation, capable of representing any disk that any FDC could write (and many that no FDC could write — deliberately weak bits, spurious transitions, custom modulation schemes, etc.).

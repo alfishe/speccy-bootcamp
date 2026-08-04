@@ -1,3 +1,5 @@
+[← Home](../../README.md) · [I/O](../) · [Storage](README.md)
+
 # +3 Internal Floppy Drive Hardware
 
 **Scope:** The hardware of the ZX Spectrum +3's built-in floppy subsystem — the WD1772-PH controller chip, its port map, drive geometry, cable, and maintenance. The logical disk format used by the +3's DOS (the +3DOS directory structure, file extents, attribute bytes, and +3DOS-vs-CP/M differences) is covered in the sibling article [plus3_dos_format.md](plus3_dos_format.md). The general MFM signal layer is covered in [mfm_encoding.md](mfm_encoding.md).
