@@ -375,6 +375,14 @@ ESXDOS does not require alignment, but a card formatted on a modern OS will be a
 | [nextzxos.md](../../04_operating_systems/nextzxos.md) | The Next's DOS, which uses the same FAT structure as ESXDOS |
 | [beta_disk_interface.md](beta_disk_interface.md) / [trd_disk_format.md](trd_disk_format.md) | The floppy-only predecessors that had no partition table |
 
-### 8.3 License
+### 8.3 External references
+
+- **Microsoft Extensible Firmware Initiative FAT32 File System Specification** (Microsoft, 2000, public) — the canonical reference for the FAT16/FAT32 boot sector, FSINFO structure, and directory entry layout used by every DivIDE/DivMMC card.
+- **SD Association — SD Simplified Specification** (sdcard.org) — the public specification for SD card physical layer, SPI mode command set, and CSR/CSD register layout.
+- **ESXDOS documentation** (Dylan Smith) — the canonical DOS reference for the DivIDE/DivMMC; documents the partition-detection heuristics and FAT mount sequence.
+- **`cpmtools` documentation** — Unix manual pages and disk definitions for working with CP/M-style partitions on +3 and ATM Turbo disks.
+- **zx-pk.ru** — Russian Spectrum forum; the origin of IS-DOS partitioning and the discussion venue for Pentagon/Scorpion partition compatibility issues.
+
+### 8.4 License
 
 This article is licensed under [CC BY-SA 4.0](../../README.md). The FAT specification referenced in §3 is published by Microsoft in the Extensible Firmware Initiative FAT File System Specification; the SD card physical layer referenced in §7.3 is published by the SD Association. Both are used here for documentation purposes.

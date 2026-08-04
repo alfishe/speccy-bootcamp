@@ -952,3 +952,25 @@ Sampled speech was a showpiece feature on the ZX Spectrum. Games like *Ghosthack
 For longer phrases, **delta modulation** is essential. Instead of storing the absolute volume for each sample, store only the *change* from the previous sample (±1, 0). This gives 4 samples per byte instead of 2, halving memory usage. The tradeoff is higher CPU cost per sample (the decoder must maintain a running accumulator) and susceptibility to drift errors.
 
 ---
+
+## References
+
+### Internal cross-references
+
+- [ay_ym_synthesis.md](ay_ym_synthesis.md) — the hardware-reference companion to this article. Covers the AY-3-8910/YM2149 register file, the counter model, and the clock domains that the techniques above exploit.
+- [ay_3_8912.md](../hardware/ay_3_8912.md) — the ZX Spectrum 128K's on-board AY-3-8912 hardware article (port map, contention, contention-aware access patterns).
+- [turbosound.md](../hardware/turbosound.md) — dual-AY configuration; doubles the polyphony available to the techniques above.
+- [ay_player_routines.md](../players/ay_player_routines.md) — the runtime side: how a tracker module becomes the register writes this article manipulates.
+
+### External references
+
+- **AY-3-8910/8912 Programmers Guide** (Microchip Technology, formerly General Instrument) — the canonical datasheet; defines the register file, the envelope generator, and the I/O ports. The original 1980s data book is the authoritative source for behavior under all edge cases.
+- **YM2149 Data Sheet** (Yamaha) — the Yamaha-rebranded AY variant with the envelope-divide-by-2 select pin (BC1); documents the clock-domain differences exploited by Sync-Square and Phase Interference.
+- **Chris Cowley — Phaezo tutorial series** — the foundational community reference for AY/YM synthesis techniques on the Spectrum, originally distributed as a series of disk-magazine articles in the 1990s.
+- **Standard Spectrum tracker formats (Sound Tracker, Pro Tracker, VTII, ASC Sound Master)** — community-maintained documentation for each module format; shows how each effect column maps to the register-write patterns this article describes.
+- **ZXArt (`zxart.ee`)** — the canonical archive of AY-tracked Spectrum music; the technique index above maps directly to the effects used in archived modules.
+- **Atari ST, Amstrad CPC, MSX AY demo scene** — the same YM2149 chip was used on multiple platforms; cross-platform demoscene research (Pouet, Demozoo) reveals techniques that the Russian Spectrum scene later adopted and extended.
+
+### License
+
+This article is licensed under [CC BY-SA 4.0](../../README.md). Cross-referenced articles retain their own licenses as stated in each file.

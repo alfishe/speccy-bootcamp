@@ -26,7 +26,8 @@ SECTIONS = [
     ('pitfalls',        [r'^## .*Pitfall', r'^## .*Common Mistake', r'^## .*Gotcha', r'^## .*Warning', r'^## .*Troubleshoot']),
     ('use_cases',       [r'^## .*Use Case', r'^## .*Use-Case', r'^## .*Applications', r'^## .*Practical', r'^## .*In the Wild']),
     ('faq',             [r'^## FAQ', r'^## .*Frequently Asked']),
-    ('references',      [r'^## .*Reference', r'^## .*Sources', r'^## .*Further Reading', r'^## .*Bibliography', r'^## .*Citations']),
+    # 'references' = dedicated section listing external sources. Exclude 'Cross-references' (internal links).
+    ('references',      [r'(?i)^#{2,3} (?!.*Cross-?ref).*Reference', r'(?i)^#{2,3} (?!.*Cross-?ref).*Sources', r'(?i)^#{2,3} .*Further Reading', r'(?i)^#{2,3} .*Bibliography', r'(?i)^#{2,3} .*Citations', r'(?i)^#{2,3} .*Primary Sources']),
     ('cross_refs',      [r'^## .*Cross-?ref', r'^## .*See Also', r'^## .*Related', r'^## .*Internal Links', r'^## .*Next Steps']),
     ('mermaid',         [r'```mermaid']),
     ('code_example',    [r'```z80', r'```asm', r'```c\b', r'```basic', r'```sdcc', r'```z80asm', r'```assembly']),

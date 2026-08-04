@@ -258,6 +258,14 @@ For emulator authors, the practical takeaway is that modeling the **DivIDE 57c p
 | [beta_disk_interface.md](beta_disk_interface.md) | The Beta 128 hardware that divman emulates |
 | [tap_format.md](tap_format.md) / [tzx_format.md](tzx_format.md) | The tape image formats the DivIDE's tape emulator mounts |
 
-### 8.3 License
+### 8.3 External references
+
+- **DivIDE documentation** (Dylan Smith, 2007 and later) — the canonical hardware and firmware reference for the DivIDE: schematic, `#E3`–`#E7` port layout, 8 KB RAM/ROM banking, and the JP1/JP2 configuration jumpers.
+- **DivMMC documentation** (Zoran "Zoxon" Mačković, 2013) — the canonical hardware reference for the DivMMC; an SPI-on-SD evolution of the DivIDE port map.
+- **ESXDOS Reference Manual** (Dylan Smith) — the canonical DOS reference for the DivIDE/DivMMC firmware: dot commands, hook codes, the FAT assembly API, and the `*.run` / `*.load` execution model.
+- **ZX Spectrum Next SD documentation** (`zxnext.io`) — the Next's dual SD slot reference, including how NextZXOS extends ESXDOS with layer-2 / tilemap / sprite integration.
+- **zx-pk.ru DivIDE/DivMMC threads** — the primary discussion venue for Russian-language hardware mods and firmware forks of the DivIDE family.
+
+### 8.4 License
 
 This article is licensed under [CC BY-SA 4.0](../../README.md). Cross-referenced articles retain their own licenses as stated in each file.

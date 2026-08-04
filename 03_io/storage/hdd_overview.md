@@ -172,6 +172,14 @@ For software distribution, the **FAT-formatted SD card** has completely replaced
 | [evo_os.md](../../04_operating_systems/evo_os.md) | The ZX Evolution's BIOS/OS stack, which uses DivIDE-compatible ports for its IDE |
 | [io_port_decoding.md](../../05_development/03_memory_and_io/io_port_decoding.md) | How I/O ports like `#E3`–`#E7` are decoded; the foundation for the port maps in this sub-section |
 
-### 6.3 License
+### 6.3 External references
+
+- **World of Spectrum** (`worldofspectrum.org`) — the central Western Spectrum archive; scans of the original DivIDE/DivMMC documentation and the ESXDOS manual.
+- **Spectrumpedia (Alessandro Grussu)** — English/Italian encyclopedia covering the Sinclair/Amstrad line and the Russian clone ecosystem; the most authoritative cross-track print reference.
+- **zx-pk.ru** — the Russian-language Spectrum forum; the origin of most Pentagon/Scorpion mass-storage modifications and the primary discussion venue for Nemo IDE, SMUC, and Z-Controller.
+- **ZX Spectrum Next official docs** (`zxnext.io`) — the layer-2 / expansion-bus reference that defines the Next's dual SD slot and the NextZXOS FAT access API.
+- **The ESXDOS documentation** (Dylan Smith, 2008 and later) — the canonical reference for the FAT16/32 API, dot command system, and `#E3`–`#E7` port layout that defined the DivIDE era.
+
+### 6.4 License
 
 This article is licensed under [CC BY-SA 4.0](../../README.md). Cross-referenced articles retain their own licenses as stated in each file.

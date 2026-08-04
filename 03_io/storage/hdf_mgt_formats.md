@@ -214,6 +214,14 @@ For archival, **gzip the `.IMG`**; for active emulator use, use a **sparse file*
 | [trd_scl_formats.md](trd_scl_formats.md) / [dsk_fdi_formats.md](dsk_fdi_formats.md) | The floppy image formats, for comparison |
 | [udi_format.md](udi_format.md) / [scp_format.md](scp_format.md) | The flux-level floppy image formats, which capture far more detail but only for floppies |
 
-### 8.3 License
+### 8.3 External references
+
+- **Microsoft Virtual Hard Disk Image Format Specification** (public, 2006) — the canonical reference for the `.VHD` format cited in §6.1; defines the 512-byte footer structure used by `.HDF` files.
+- **ESXDOS `.HDF` documentation** — community-maintained documentation for the sparse `.HDF` format used by the DivIDE/DivMMC emulator workflows.
+- **`samdisk`** (Simon Owen, `simcoupe.org/samdisk`) — modern open-source multi-format disk-image converter; the reference implementation for reading/writing `.IMG`, `.HDF`, `.TRD`, `.DSK` interchangeably.
+- **ZX-Blockeditor** (Simon Owen) — the de facto cross-format disk-image editor; supports direct inspection of `.HDF` and `.IMG` partition tables and FAT structures.
+- **`libdsk`** — Unix library for reading non-standard floppy and hard-disk image formats; documents the on-disk layout conventions used by Spectrum emulators.
+
+### 8.4 License
 
 This article is licensed under [CC BY-SA 4.0](../../README.md). The Microsoft VHD format referenced in §6.1 is documented in the public Microsoft VHD Image Format Specification; the SD and FAT specifications referenced throughout are published by the SD Association and Microsoft respectively. All are used here for documentation purposes.

@@ -382,6 +382,14 @@ The one scenario that still favours IDE is the **ZX Evolution** and **Scorpion**
 | [evo_os.md](../../04_operating_systems/evo_os.md) | The ZX Evolution's BIOS, which includes a SMUC-compatible IDE bridge |
 | [io_port_decoding.md](../../05_development/03_memory_and_io/io_port_decoding.md) | The partial-decoding theory behind the `#E3`–`#E7` footprints |
 
-### 8.3 License
+### 8.3 External references
+
+- **ATA/ATAPI Command Set-2 (ACS-2)** — ANSI INCITS 482-2012, the successor to the original ATA/ATAPI-7 standard. Documents the IDE register file, `READ SECTORS`/`WRITE SECTORS` commands, and the LBA addressing scheme used by every Spectrum IDE interface.
+- **CompactFlash Association CF Specification** — the public CF specification covering "True IDE Mode" that most Spectrum IDE interfaces actually use via a CF socket.
+- **DivIDE documentation** (Dylan Smith et al.) — the canonical hardware and firmware reference for the `#E3`–`#E7` port block and 8 KB RAM/ROM banking.
+- **ZEsarUX source code** (Chema Nin, `github.com/chema-scugo/zesarux`) — emulator implementation of the DivIDE port layout; useful for verifying edge cases in banking and interrupt behavior.
+- **zx-pk.ru DivIDE / Nemo IDE threads** — the primary discussion venue for Russian-language IDE hardware mods (KAY IDE, ATM Turbo IDE, SMUC ISA bridge).
+
+### 8.4 License
 
 This article is licensed under [CC BY-SA 4.0](../../README.md). The port-map data in §5.4 and §5.5 is derived from **Black_Cat's ZX Ports Full Table** (BC Info Guide #4, 2008), preserved in the [tslabs/zx-evo repository](https://github.com/tslabs/zx-evo), and used here for documentation purposes.
