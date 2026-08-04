@@ -348,7 +348,7 @@ With these in place, an MCU-based Z80 can be indistinguishable from the original
 - [Zilog Z84C00 Z80 CPU Product Specification](https://www.zilog.com/docs/z80/um0080.pdf) — official datasheet with pinout, timing, instruction set
 - **Z80 Undocumented Instructions** — documented in various community references (Sean Young's "The Undocumented Z80 Documented")
 - [Raspberry Pi RP2040 Datasheet](https://www.raspberrypi.com/documentation/microcontrollers/) — PIO architecture, GPIO characteristics
-- **PicoROM project** — RP2040-based ROM/RAM/IO emulator, open-source
+- [PicoROM project](https://github.com/MarkOdnw/PR) — RP2040-based ROM/RAM/IO emulator, open-source
 - **libz80** — C Z80 emulator library by Lin Ke-Fong (used in FUSE and others)
 - **z80ex** — C Z80 emulator library, cycle-accurate
 - ["The ZX Spectrum ULA: How to Design a Microcomputer"](http://www.zxdesign.info/) by Chris Smith — background on ULA timing that constrains Z80 emulation

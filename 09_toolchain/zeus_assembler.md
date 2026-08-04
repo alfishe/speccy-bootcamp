@@ -479,7 +479,7 @@ The modern alternative is **sjasmplus + VS Code + CSpect**, which trades integra
 ### Modern Sources
 
 - [World of Spectrum archives](https://worldofspectrum.org/) — downloadable Zeus 1.0–3.5 TAP/TZX files for use in emulators
-- **ZX Spectrum Next forum** — active discussion of Zeus 4 features, bug reports, and release announcements
+- [ZX Spectrum Next forum](https://specnext.org/) — active discussion of Zeus 4 features, bug reports, and release announcements
 - **Simon Brattel interviews and talks** — author's perspective on the 40-year Zeus development history
 
 ### Related Articles in This Knowledge Base

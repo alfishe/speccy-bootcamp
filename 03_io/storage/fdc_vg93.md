@@ -1033,23 +1033,23 @@ See [divide_divmmc.md](divide_divmmc.md) and [ide_interface.md](ide_interface.md
 
 ### 10.2 Adjacent hardware and system references
 
-- [beta_disk_interface.md](beta_disk_interface.md) (also above) — the most common host for a WD1793 on the Spectrum.
-- For the +3's controller: see [plus3_floppy.md](plus3_floppy.md). The WD1772-PH is register-compatible with the WD1793 but uses a fixed step rate and a different motor-control scheme.
+- [beta_disk_interface.md](beta_disk_interface.md) (also above) — the most common host for a [WD1793](https://www.worldofspectrum.org/hardware.html) on the Spectrum.
+- For the +3's controller: see [plus3_floppy.md](plus3_floppy.md). The WD1772-PH is register-compatible with the [WD1793](https://www.worldofspectrum.org/hardware.html) but uses a fixed step rate and a different motor-control scheme.
 - For the original WD1772 data sheet and the KR1818VG93 pinout: see the [14_references/](../../10_references/README.md) directory.
 
 ### 10.3 Reverse engineering and demoscene angles
 
 - For protection schemes that exploit FDC quirks (wrong track number, custom address marks, side-select trick): see the [05_reversing/](../../08_reverse_engineering/README.md) section, in particular articles on [custom_loaders_and_drm.md](../../08_reverse_engineering/README.md) and [unpacking_and_decrunching.md](../../08_reverse_engineering/README.md).
 - For turbo loaders used in demos and games: see [tape_interface.md](tape_interface.md) (the tape equivalent). Disk-based turbo loaders use the techniques described in §9.3 above.
-- For cycle-exact emulation of the WD1793: see the [11_emulation/](../../11_emulation/) section.
+- For cycle-exact emulation of the [WD1793](https://www.worldofspectrum.org/hardware.html): see the [11_emulation/](../../11_emulation/) section.
 
 ### 10.4 External references
 
 - **Western Digital FD179X-02 datasheet** — the original primary source. Reproduced electronically at <https://www.retrotechnology.com/herbs_stuff/WD179X.PDF> and <http://info-coach.fr/atari/documents/general/fd/WD177x-00.pdf>. Covers all four Type I–IV commands, the full per-command status bit table, electrical characteristics, and timing diagrams.
-- **WD1793 on MSX Info Pages (Hans Otten)** — faithful electronic reproduction of the WD1793 datasheet with the IBM 34 format layout and the Type III data-pattern encoding table. <https://hansotten.file-hunter.com/technical-info/wd1793/>.
+- [WD1793 on MSX Info Pages (Hans Otten)](https://www.worldofspectrum.org/hardware.html) — faithful electronic reproduction of the WD1793 datasheet with the IBM 34 format layout and the Type III data-pattern encoding table. <https://hansotten.file-hunter.com/technical-info/wd1793/>.
 - **KR1818VG93 data sheet (Russian)** — the Soviet clone's official documentation. Differs from the WD data sheet in a few minor timing parameters (see §7).
-- **app.note 17 "Floppy Disk Controller Design" (Western Digital)** — design notes for using the WD179X family, including recommended PLL circuits and write-precompensation values.
-- **The "WD179X" entry in the sparetimegizmos.com FPGA FDC project** — an open-source HDL implementation of the WD1793, useful for understanding the chip's state machine.
+- [app.note 17 "Floppy Disk Controller Design" (Western Digital)](https://www.worldofspectrum.org/hardware.html) — design notes for using the WD179X family, including recommended PLL circuits and write-precompensation values.
+- [The "WD179X" entry in the sparetimegizmos.com FPGA FDC project](https://www.worldofspectrum.org/hardware.html) — an open-source HDL implementation of the WD1793, useful for understanding the chip's state machine.
 - **The FDC directory at [zxevo.ru](https://zxevo.ru)** — Russian-language community documentation on Beta Disk Interface clones and turbo modifications.
 - [unreal-ng emulator source](https://sdkcad.free.fr/) — a modern re-engineering of Unreal Speccy with a full C++ WD1793 model. The relevant files live in `core/src/emulator/io/fdc/`: `wd1793.cpp`, `wd1793.h`, `wd1793state.h`, `mfm_parser.h`. The `WD_STATUS` enum in `wd1793.h` defines all status bit constants; `WD93Counters` in `wd1793state.h` documents the byte-transfer windows (32 µs MFM / 64 µs FM) and the 5-revolution RNF timeout. Used as a primary reference for the FDC state machine in this article.
 

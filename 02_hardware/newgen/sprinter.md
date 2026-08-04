@@ -320,7 +320,7 @@ The Sprinter was largely superseded by the ZX Evolution after 2007, which had be
 
 ## References
 
-- **Sprinter FAQ** by Alex Goryachev / Peters Plus, Ltd. (created 17 December 2001) — the canonical hardware, software, and support reference; reprinted via ZXPRESS as "Iron — Sprinter? Questions and answers!" in Sinclair Club #05
+- [Sprinter FAQ](https://zxpress.ru/) by Alex Goryachev / Peters Plus, Ltd. (created 17 December 2001) — the canonical hardware, software, and support reference; reprinted via ZXPRESS as "Iron — Sprinter? Questions and answers!" in Sinclair Club #05
 - **Sprinter technical manual** (Peters Plus, ~1999–2001, Russian) — original hardware reference with port maps and BIOS entry points
 - **Peters Plus archive** ([nedopc.org](http://nedopc.org)) — Sprinter schematics, BIOS source, software archive
 - [ZX-Format magazine](https://zxpress.ru/library/categories.php?id=2) issues covering the Sprinter launch and ongoing development

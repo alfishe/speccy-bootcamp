@@ -454,7 +454,7 @@ The most popular approach is **DivMMC** — an expansion port adapter with micro
 ## References
 
 - [SD Physical Layer Simplified Specification](https://www.sdcard.org/downloads/) — SD Association, free download
-- **FatFs by Elm-Chan** — the standard FAT library for MCU (elm-chan.org)
+- [FatFs by Elm-Chan](https://elm-chan.org/fsw/ff/00index_e.html) — the standard FAT library for MCU (elm-chan.org)
 - [DivMMC documentation](https://github.com/westonrf/divide-ide) — community wiki and ESXOS documentation
 - [ZXMMC project](https://github.com/Zaxos/ZXMMC) — Zaxos's original design and community developments
 - [TAP file format specification](https://worldofspectrum.org/) — on the World of Spectrum archive

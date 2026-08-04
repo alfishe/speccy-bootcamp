@@ -686,7 +686,7 @@ FPGA implementations of the Next core (such as the **SpectrumNext** core for MiS
 ### Primary Sources
 
 - **ZX Spectrum Next Official Documentation** — [zxnext.io](https://zxnext.io/), 2017–present. Authoritative reference for the TBBlue register map and audio subsystem.
-- **TBBlue Register Specification** — Maintained by the Next team. Documents registers `#08`, `#22`–`#24`, `#29`–`#2C` for audio configuration.
+- [TBBlue Register Specification](https://specnext.org/) — Maintained by the Next team. Documents registers `#08`, `#22`–`#24`, `#29`–`#2C` for audio configuration.
 - **ZX Spectrum Next Core Source** — open-source Verilog, available on GitHub. The `audio.v` and `psg.v` modules document the FPGA implementation.
 
 ### Community Knowledge

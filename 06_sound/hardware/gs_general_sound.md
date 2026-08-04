@@ -660,7 +660,7 @@ FPGA implementations (TS-Conf, Universe) typically implement the GS coprocessor 
 - [TurboSound — Dual and Triple AY Configuration](turbosound.md) — Soviet multi-PSG expansion
 - [ZX Spectrum Next Audio](zx_next_audio.md) — modern DMA audio (the GS's conceptual successor)
 - [Covox & SounDrive](covox_sounDrive.md) — the simpler CPU-driven DAC
-- [MoonSound](moonsound.md) — alternative expansion with wavetable synthesis
+- [[MoonSound](https://www.msx.org/wiki/MoonSound)](moonsound.md) — alternative expansion with wavetable synthesis
 - [TurboSound FM](turbosound_fm.md) — FM synthesis expansion (different approach to richer timbres)
 - [Sound Hardware Ecosystem Overview](sound_overview.md) — full decision guide across all ZX sound hardware
 

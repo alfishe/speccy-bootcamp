@@ -1006,7 +1006,7 @@ The **sjasmplus** assembler is the canonical Next assembler. It supports the Z80
 
 - **Official Next documentation** ([specnext.com](https://www.specnext.com/tbblue-io-port-system/)) — canonical NextReg and port reference
 - **ZX Spectrum Next community site** ([zxnext.io](https://www.zxnext.io/)) — tutorials, software library, community forums
-- **TBBlue I/O Port System documentation** — the NextReg register table maintained by the development team
+- [TBBlue I/O Port System documentation](https://specnext.org/) — the NextReg register table maintained by the development team
 - **NextRegister Reference** (community-maintained PDF) — full bit layout of every NextReg
 - **NextZXOS source** ([GitHub](https://github.com/z00m128/NextZXOS)) — open-source firmware
 - **sjasmplus assembler** ([GitHub: z00m128/sjasmplus](https://github.com/z00m128/sjasmplus)) — canonical Next assembler with examples in `examples/l2_*.asm`, `examples/copper_*.asm`, `examples/dma_*.asm`, `examples/tilemap*.asm`

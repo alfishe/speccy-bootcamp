@@ -68,7 +68,7 @@ The TS-Configuration for ZX Evolution provides:
 #### Other FPGA Platforms
 
 - **[ZX-Uno](https://github.com/zxdos/zx-uno)**: Configurable Spectrum-on-FPGA. Supports ULAplus, Timex modes, and configurable contention. Interrupt sources depend on the loaded core.
-- **Sizif-512**: A standalone CPLD-based (Altera EPM1270) ZX Spectrum clone that fits in a 48K rubber case. Supports four machine modes — **Pentagon 128**, **Spectrum 128**, **Spectrum 48**, and **Spectrum +3e** — selectable at runtime. Includes 512K RAM, real AY-3-8910, ULAplus, and integrated DivMMC. The interrupt behavior follows whichever machine mode is active (Pentagon timing in Pentagon mode, standard ULA timing in 128/48 modes).
+- [Sizif-512**: A standalone CPLD-based (Altera EPM1270) ZX Spectrum clone that fits in a 48K rubber case. Supports four machine modes — **Pentagon 128**, **Spectrum 128**, **Spectrum 48**, and **Spectrum +3e](https://www.intel.com/content/www/us/en/products/details/fpga/max.html) — selectable at runtime. Includes 512K RAM, real AY-3-8910, ULAplus, and integrated DivMMC. The interrupt behavior follows whichever machine mode is active (Pentagon timing in Pentagon mode, standard ULA timing in 128/48 modes).
 
 > [!NOTE]
 > These extended interrupt sources are only available on their specific hardware. Software that targets them must detect the hardware first (via identification registers) and provide fallback code paths for standard Spectrum models.

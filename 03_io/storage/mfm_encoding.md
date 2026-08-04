@@ -749,7 +749,7 @@ The tape subsystem uses a completely different encoding scheme, but the underlyi
 
 ### 10.4 External resources
 
-- **The WD1793 datasheet** — the canonical reference for the WD1793 / KR1818VG93 FDC. Includes detailed timing diagrams of the MFM signal.
+- [The WD1793 datasheet](https://www.worldofspectrum.org/hardware.html) — the canonical reference for the WD1793 / KR1818VG93 FDC. Includes detailed timing diagrams of the MFM signal.
 - **The IBM 3740 format specification** — the original definition of the MFM track layout (IAM, IDAM, DAM, gaps). All later formats (including TR-DOS and +3 DOS) are descended from this.
 - **The " FluxSync" website** — a community resource on flux-level floppy preservation, with detailed articles on MFM encoding and PLL behavior.
 - **The SuperCard Pro documentation** — covers the .SCP flux format and includes tools for visualising MFM signals.

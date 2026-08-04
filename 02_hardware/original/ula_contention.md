@@ -313,7 +313,7 @@ For a canonical detection routine, see the World of Spectrum FAQ's "How to detec
 - [Chris Smith, *The ZX Spectrum ULA](http://www.zxdesign.info/): How to Design a Microcomputer* (Eigenbom, 2010) — the definitive hardware reference for the Ferranti ULA's video and contention design, with die-level analysis of the gate layout
 - Sinclair Wiki, "Contended memory" ([sinclair.wiki.zxnet.co.uk/wiki/Contended_memory](https://sinclair.wiki.zxnet.co.uk/wiki/Contended_memory)) — canonical per-T-state delay tables and per-model behavior
 - [World of Spectrum](https://worldofspectrum.org/), "48K Technical Reference" and "128K Technical Reference" FAQs — frame timing, contention start T-states, and contended bank lists
-- Ramsoft, *The Complete ZX Spectrum ROM Disassembly* and the fault-logging ROM test — real-hardware contention measurements used to verify emulator accuracy
+- [Ramsoft, *The Complete ZX Spectrum ROM Disassembly* and the fault-logging ROM](https://worldofspectrum.org/) test — real-hardware contention measurements used to verify emulator accuracy
 - [Fuse emulator](https://fuse-emulator.sourceforge.net/) source (`peripherals/ula.c`, `peripherals/dck.c`, `machines/plus3.c`) — open-source reference implementation of contention for all Sinclair and Amstrad models
 - [ZEsarUX](https://github.com/chernandezba/zesarux) source — cycle-exact contention for +2A/+3 including the 100 T-state gap
 - [comp.sys.sinclair](https://groups.google.com/g/comp.sys.sinclair) FAQ — historical discussion of when the +2A/+3 contention differences were first documented (mid-1990s)

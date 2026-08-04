@@ -280,10 +280,10 @@ The combination of comprehensive Next hardware emulation, an excellent debugger 
 ### Primary Sources
 - **CSpect download page**: hosted at the Sinclair ZX World forums; the primary distribution point for current CSpect releases
 - **Mike Dailly's developer blog / Twitter**: occasional announcements and notes on CSpect development
-- **ZX Spectrum Next documentation**: the official Next register map, copper instruction set, sprite/tilemap specifications — these define what CSpect emulates
+- **[ZX Spectrum Next documentation](https://specnext.dev/)**: the official Next register map, copper instruction set, sprite/tilemap specifications — these define what CSpect emulates
 
 ### Next Community Resources
-- **ZX Spectrum Next forum** (`specnext.org`): community discussion of Next features and CSpect-vs-real divergences
+- [ZX Spectrum Next forum](https://specnext.org) : community discussion of Next features and CSpect-vs-real divergences
 - **Sinclair ZX World CSpect thread**: bug reports, feature requests, release announcements
 - **Next demoscene releases**: many Next demos are developed with CSpect as the primary test platform
 

@@ -383,7 +383,7 @@ The original Sinclair power supply uses a **3.5 mm barrel jack** (outer negative
 - [Sinclair Research — *ZX Spectrum 128 Service Manual](https://www.worldofspectrum.org/hardware.html)*, 1986 — 128K pinouts
 - Amstrad — *ZX Spectrum +2 / +2A / +3 Service Manuals*, 1987–88 — Amstrad-era pinouts
 - Zilog — *[Z84C00](https://www.zilog.com/docs/z80/um0080.pdf) Z80 CPU Product Specification* — Z80 40-pin DIP pinout and timing
-- General Instrument — *AY-3-8910/8912 Programmers Manual* — AY chip pinout and register map
+- General Instrument — *[AY-3-8910/8912 Programmers Manual* — AY chip pinout and register](http://www.worldofspectrum.org/) map
 - [Chris Smith — *The ZX Spectrum ULA](http://www.zxdesign.info/)*, 2010 — definitive ULA and edge connector reference
 - Geoff Wearmouth — *ZX Spectrum Hardware Manual*, [wearmouth.demon.co.uk](https://www.wearmouth.demon.co.uk/zxspectr.htm) — community-maintained pinout tables
 - World of Spectrum — [Hardware FAQ](https://worldofspectrum.org/faq/hardware/hardware.htm)

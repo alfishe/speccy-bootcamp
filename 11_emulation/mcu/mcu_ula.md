@@ -407,7 +407,7 @@ With these implemented, an MCU-based ULA can be indistinguishable from the origi
 - [PicoVGA](https://github.com/Panda385/PicoVGA) — RP2040 VGA generation library
 - [Pico DVI](https://github.com/Wren6991/pico-dvi) — RP2040 DVI/HDMI generation via PIO
 - **PAL composite video specification** — for sync and color burst timing
-- **Harlequin project** — FPGA ULA recreation for comparison (see [harlequin_sizif.md](../fpga/harlequin_sizif.md))
+- [Harlequin project](http://www.zxdesign.info/) — FPGA ULA recreation for comparison (see [harlequin_sizif.md](../fpga/harlequin_sizif.md))
 - [Sensible tests by Andrew Owen](https://github.com/spectrum-pi/spectranet) — for floating bus and contention verification
 
 ## Cross-references

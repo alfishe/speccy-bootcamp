@@ -374,7 +374,7 @@ With these elements in place, the original hardware continues to work with all i
 
 ## References
 
-- **Western Digital WD1793 datasheet** — register interface, command set, timing
+- [Western Digital WD1793 datasheet](https://www.worldofspectrum.org/hardware.html) — register interface, command set, timing
 - **KR1818VG93 datasheet** (Russian) — pinout and behavior
 - **VG93Em-STM32 project** — GitHub repository with schematics and firmware
 - **TR-DOS documentation** — file format, BASIC extension, command reference

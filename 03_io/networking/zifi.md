@@ -321,7 +321,7 @@ The ZiFi approach has been so successful that **built-in ESP8266 WiFi** is now s
 ### Modern Sources
 
 - [World of Spectrum](https://worldofspectrum.org/) forums — ZiFi and ESP8266 discussions
-- ZX Spectrum Next documentation — built-in WiFi and ESP-12 integration
+- [ZX Spectrum Next documentation](https://specnext.dev/) — built-in WiFi and ESP-12 integration
 - Defence Review UK / Factor (Polish magazine) — articles on Russian/Polish scene WiFi projects
 - Various Spectrum demoscene releases that use ZiFi for network-controlled effects
 

@@ -284,4 +284,4 @@ All other display types introduce some deviation from this reference. Emulators 
 - **OSSC documentation** ([videogameperfection.com](https://www.videogameperfection.com)) — line multiplication modes and display compatibility.
 - **RGB-to-HDMI project** ([github.com/hoglet67/RGBtoHDMI](https://github.com/hoglet67/RGBtoHDMI)) — documents Spectrum-specific display handling, including aspect ratio correction and scanline simulation.
 - [World of Spectrum forums — "Monitor recommendations" threads](https://worldofspectrum.org/) — community-collected data on which CRT models work best with Spectrums, including visible-area measurements.
-- **RetroGFX / CRT emulation shader documentation** — software recreation of CRT visual properties for modern displays.
+- [RetroGFX / CRT emulation shader documentation](https://github.com/) — software recreation of CRT visual properties for modern displays.

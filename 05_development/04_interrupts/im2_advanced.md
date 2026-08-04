@@ -470,7 +470,7 @@ This is what every commercial IM2 game does. The Next's hardware IM2 mode (see a
 ## Sources
 
 - *Interrupts - SpecNext Wiki* (wiki.specnext.dev) — authoritative reference for Next hardware IM2 mode, core version requirements, and per-source vectors
-- *ZX Spectrum Next Regs Reference* (gitlab.com/SpectrumNext) — NextReg `#22` and `#C0` documentation
+- *[ZX Spectrum Next Regs Reference* (gitlab.com/SpectrumNext) — NextReg `#22` and `#C0` documentation](https://specnext.dev/)
 - *[TS-Conf](https://zxevo.ru/) documentation* (zxevo.org) — TS-Conf interrupt and DMA registers
 - *Hudson Hawk disassembly* (via zxspectrumcoding.wordpress.com) — Jim Bagley's bank-switching ISR pattern
 - *AY-3-8910/8912 Data Manual* (Microchip) — envelope period calculation for sample-rate interrupts

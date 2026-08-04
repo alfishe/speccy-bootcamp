@@ -636,7 +636,7 @@ For users of ZX Evolution hardware, these limitations are minor. For users of ot
 - **Sprinter 2000 documentation** (`sprinter.com`, archived) — the Sprinter's hardware reference; documents the ISA bus and PC-style peripheral layout that NedoDOS was designed to drive.
 - [zx-pk.ru / `nedopc.com` forum threads](https://zx-pk.ru) — primary discussion venue for NedoDOS extensions, the Z-Controller's FAT implementation, and the modern cross-platform ports of NedoDOS to DivIDE-class hardware.
 - [ESXDOS documentation](https://github.com/joneiricon/ESXDOS) — for direct comparison; NedoDOS and ESXDOS target similar use cases (hierarchical filesystem on Z80-class hardware) but evolved independently.
-- **`cpmtools` documentation** — Unix reference for working with the CP/M-style directory entries that influenced both NedoDOS and +3 DOS.
+- [`cpmtools` documentation](http://cpmtools.sourceforge.net/) — Unix reference for working with the CP/M-style directory entries that influenced both NedoDOS and +3 DOS.
 
 ---
 

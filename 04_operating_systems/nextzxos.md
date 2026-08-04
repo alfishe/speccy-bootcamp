@@ -769,7 +769,7 @@ The Next is not a static platform. It continues to grow.
 
 - **Official [NextZXOS](https://gitlab.com/thesmog358/tbblue) documentation**: https://specnext.dev/
 - **[NextZXOS](https://gitlab.com/thesmog358/tbblue) source code (GitHub)**: https://github.com/Threetwosevensix/NextZXOS
-- **ZX Spectrum Next forum**: https://spectrum-next.net/
+- **[ZX Spectrum Next forum](https://specnext.org/)**: https://spectrum-next.net/
 - **The Next's official site**: https://www.specnext.com/
 - **Outline party**: https://outline-party.org/
 - **[z88dk](https://github.com/z88dk/z88dk) Next target**: https://github.com/z88dk/z88dk/wiki/Platform-ZX-Next

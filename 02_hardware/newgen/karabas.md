@@ -360,4 +360,4 @@ The Karabas family occupies the **budget and experimenter** segment of the moder
 - **SpeccyWiki (speccy.info)** — Karabas Pro, Karabas 128, and Peridot articles with photos and specifications
 - [Unreal Speccy emulator](https://sdkcad.free.fr/) — implements Karabas Pro extensions for development testing
 - **ESP-12 WiFi documentation** (Espressif) — the WiFi module's AT command reference (for Peridot networking)
-- **Altera MAX II CPLD family datasheet** (Intel/Altera) — hardware reference for the EPM240/EPM570/EPM1270 used across the family
+- [Altera MAX II CPLD family datasheet](https://www.intel.com/content/www/us/en/products/details/fpga/max.html) — hardware reference for the EPM240/EPM570/EPM1270 used across the family

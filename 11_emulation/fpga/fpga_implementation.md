@@ -436,7 +436,7 @@ The open-source Spectrum FPGA community provides extensive reference material: t
 ### Open-Source Cores
 - **MiSTer ZX Spectrum core** — on GitHub, full Verilog source
 - [ZX-Uno core](https://github.com/zxdos/zx-uno) — GPL-licensed Verilog
-- **Harlequin project pages** — Chris Smith's documentation
+- [Harlequin project pages](http://www.zxdesign.info/) — Chris Smith's documentation
 - **Sizif-512 GitHub** — Victor Trucco's open-source project
 
 ### FPGA Development Tools

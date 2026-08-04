@@ -455,7 +455,7 @@ The MiSTer project and the ZX Spectrum Next implement the AY/YM as **hardware HD
 
 - **MiSTer AY core** (by José L. Cercós-Pita and others): Models the volume DAC, envelope generator, and DC offset at the silicon level. Output goes through real analog circuitry on the MiSTer's I/O board, capturing the analog warmth that software emulators must approximate.
 
-- **ZX Spectrum Next TurboSound Next**: Three AY/YM soft cores in the FPGA. The Next's cores are based on the AY-3-8910 model but include the YM2149's 32-step envelope. The result is a hybrid that sounds closer to YM than to AY — appropriate for a modern machine intended to run Soviet-clone-era software.
+- **ZX Spectrum Next [TurboSound Next](https://specnext.org/)**: Three AY/YM soft cores in the FPGA. The Next's cores are based on the AY-3-8910 model but include the YM2149's 32-step envelope. The result is a hybrid that sounds closer to YM than to AY — appropriate for a modern machine intended to run Soviet-clone-era software.
 
 - **Multicore 2 and other MiST-style FPGA boards**: Various community AY/YM cores, generally based on the same HDL origins as MiSTer with minor variations.
 

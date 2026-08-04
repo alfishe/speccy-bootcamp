@@ -336,7 +336,7 @@ The Next's WiFi represents, in many ways, **what 1980s Sinclair might have built
 
 ### Primary Sources
 
-- **ZX Spectrum Next Documentation** — official technical reference for the Next hardware and NextOS
+- [ZX Spectrum Next Documentation](https://specnext.dev/) — official technical reference for the Next hardware and NextOS
 - **NextOS source code and release notes** — WiFi driver implementation and changelog
 - **SpecNext forum and wiki** — community-contributed WiFi documentation and troubleshooting
 - **ESP-12 module datasheet** (Espressif Systems) — for hardware-level reference

@@ -266,7 +266,7 @@ The +2's keyboard matrix does not have isolation diodes, so pressing three keys 
 - [Sinclair User magazine, Issue 56](https://archive.org/details/sinclair-user-magazine) — +2 launch coverage
 - **Alan Sugar** — *What You See Is What You Get* (autobiography, 2010) — accounts of the Amstrad acquisition of Sinclair and the +2 product strategy
 - [World of Spectrum](https://worldofspectrum.org/) — hardware reference photos for the +2 grey
-- **The Centre for Computing History** — +2 technical documentation
+- [The Centre for Computing History](https://www.computinghistory.org.uk/) — +2 technical documentation
 - [ZX Spectrum Service Manual](https://www.worldofspectrum.org/hardware.html)
 
 ---

@@ -957,7 +957,7 @@ For longer phrases, **delta modulation** is essential. Instead of storing the ab
 
 ### Internal cross-references
 
-- [ay_ym_synthesis.md](ay_ym_synthesis.md) — the hardware-reference companion to this article. Covers the AY-3-8910/YM2149 register file, the counter model, and the clock domains that the techniques above exploit.
+- [ay_ym_synthesis.md](ay_ym_synthesis.md) — the hardware-reference companion to this article. Covers the [AY-3-8910/YM2149 register](http://www.worldofspectrum.org/) file, the counter model, and the clock domains that the techniques above exploit.
 - [ay_3_8912.md](../hardware/ay_3_8912.md) — the ZX Spectrum 128K's on-board AY-3-8912 hardware article (port map, contention, contention-aware access patterns).
 - [turbosound.md](../hardware/turbosound.md) — dual-AY configuration; doubles the polyphony available to the techniques above.
 - [ay_player_routines.md](../players/ay_player_routines.md) — the runtime side: how a tracker module becomes the register writes this article manipulates.

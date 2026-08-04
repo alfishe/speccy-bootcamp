@@ -240,7 +240,7 @@ The Harlequin and Sizif-512 have become **standard reference platforms** for ZX 
 ## References
 
 - [Chris Smith — "The ZX Spectrum ULA"](http://www.zxdesign.info/) — the definitive ULA reference that underpins the Harlequin design
-- **Harlequin project page** (zxhardware.net / zxdesign.info) — schematics, PCB layouts, and build guides for all Harlequin revisions
+- [Harlequin project page](http://www.zxdesign.info/) — schematics, PCB layouts, and build guides for all Harlequin revisions
 - **Tynemouth Software build guide** — practical assembly notes for the Harlequin v4 (Superfo) board
 - **Sizif-512 GitHub repo** ([`UzixLS/zx-sizif-512`](https://github.com/UzixLS/zx-sizif-512)) — CPLD source, schematics, machine modes, revision changelog, and tested-addon list
 - **Retro-Spektro Sizif-512 product page** (retro-spektro.com) — assembled board specifications and Sega gamepad button mapping

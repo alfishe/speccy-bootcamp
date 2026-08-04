@@ -517,7 +517,7 @@ A minimal Python reader for the directory of a +3 / CP/M disk is essentially the
 - **"CP/M 2.2 Interface Guide"** (Digital Research, 1979) — the canonical CP/M BDOS / BIOS specification.
 - **"The CP/M Handbook with MP/M"** by Rodney Zaks (Sybex, 1980) — a comprehensive CP/M programmer's guide.
 - ["Programming the Z80"](https://en.wikipedia.org/wiki/Rodnay_Zaks) by Rodnay Zaks (Sybex, 1979) — the canonical Z80 reference, with extensive CP/M examples.
-- **The `cpmtools` documentation** — Unix man pages and disk definitions for working with CP/M disks on modern systems.
+- [The `cpmtools` documentation](http://cpmtools.sourceforge.net/) — Unix man pages and disk definitions for working with CP/M disks on modern systems.
 - **The Unofficial CP/M Web Site** (www.cpm.z80.de) — archives of CP/M software, documentation, and utilities.
 - **The Spectrum +3 Manual Set** (Sinclair / Amstrad, 1987) — the original +3 hardware and CP/M reference.
 

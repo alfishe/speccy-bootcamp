@@ -653,7 +653,7 @@ The Commodore 64 had **no CPU contention** for screen memory (separate RAM), but
 - **Sinclair Wiki, "Contended Memory"** ([sinclair.wiki.zxnet.co.uk](https://sinclair.wiki.zxnet.co.uk/wiki/Contended_memory)) — Definitive contention reference with per-instruction breakdown
 - **World of Spectrum, "48K Technical Reference"** ([worldofspectrum.org](https://worldofspectrum.org/faq/reference/48kreference.htm)) — Frame timing, memory map, ULA behavior
 - [Chris Smith, "The ZX Spectrum ULA: How to design a microcomputer"](http://www.zxdesign.info/) — Hardware-level explanation of ULA bus arbitration
-- **Ramsoft, "The Complete ZX Spectrum Fault-Logging ROM Test"** — Real hardware timing measurements
+- [Ramsoft, "The Complete ZX Spectrum Fault-Logging ROM Test"](https://worldofspectrum.org/) — Real hardware timing measurements
 - **Bedazzle, "SpectraLab — ZX Spectrum Graphics Guide"** ([github.com/Bedazzle/SpectraLab](https://github.com/Bedazzle/SpectraLab)) — Snow effect per-machine behavior, DRAM refresh bus collision details
 - [Einar Saukas, "Bifrost² Multicolor Engine"](https://github.com/einar-saukas) — Practical multicolor implementation with T-state counting
 

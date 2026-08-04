@@ -282,7 +282,7 @@ For modern retro-computing, the Spectranet is the choice for users who want maxi
 
 - [Spectranet wiki and forums](https://github.com/spectrum-pi/spectranet) — active community documentation and Q&A
 - [World of Spectrum forums](https://worldofspectrum.org/) — discussion of Spectranet hardware, firmware, and software
-- **ZX Spectrum Next forum** — comparisons between Spectranet and the Next's built-in WiFi
+- [ZX Spectrum Next forum](https://specnext.org/) — comparisons between Spectranet and the Next's built-in WiFi
 
 ### Related Articles in This Knowledge Base
 

@@ -409,7 +409,7 @@ The result is a complete Spectrum that costs under £10, fits in the palm of you
 - **Pico Spectrum projects on GitHub** — various open-source implementations
 - **SpecHMI project** — STM32-based complete Spectrum (Russian community)
 - [Chris Smith's The ZX Spectrum ULA](http://www.zxdesign.info/) — for the ULA's behavior
-- **FatFs by Elm-Chan** — FAT file system library
+- [FatFs by Elm-Chan](https://elm-chan.org/fsw/ff/00index_e.html) — FAT file system library
 - [PicoVGA](https://github.com/Panda385/PicoVGA) by Miroslav Nemecek — VGA output library
 - [Pico DVI](https://github.com/Wren6991/pico-dvi) by Luke Wren — DVI output library
 

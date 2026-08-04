@@ -380,7 +380,7 @@ ESXDOS does not require alignment, but a card formatted on a modern OS will be a
 - [Microsoft Extensible Firmware Initiative FAT32 File System Specification](https://learn.microsoft.com/en-us/windows/win32/fileio/exfat-specification) — the canonical reference for the FAT16/FAT32 boot sector, FSINFO structure, and directory entry layout used by every DivIDE/DivMMC card.
 - [SD Association — SD Simplified Specification](https://www.sdcard.org/downloads/) — the public specification for SD card physical layer, SPI mode command set, and CSR/CSD register layout.
 - [ESXDOS documentation](https://github.com/joneiricon/ESXDOS) — the canonical DOS reference for the DivIDE/DivMMC; documents the partition-detection heuristics and FAT mount sequence.
-- **`cpmtools` documentation** — Unix manual pages and disk definitions for working with CP/M-style partitions on +3 and ATM Turbo disks.
+- [`cpmtools` documentation](http://cpmtools.sourceforge.net/) — Unix manual pages and disk definitions for working with CP/M-style partitions on +3 and ATM Turbo disks.
 - **[zx-pk.ru](https://zx-pk.ru)** — Russian Spectrum forum; the origin of IS-DOS partitioning and the discussion venue for Pentagon/Scorpion partition compatibility issues.
 
 ### 8.4 License

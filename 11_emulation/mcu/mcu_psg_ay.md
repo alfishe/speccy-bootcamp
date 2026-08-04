@@ -454,7 +454,7 @@ The RP2040, ESP32, and STM32 are all viable hosts. Implementation involves regis
 - **`.ay` file format specification** — AY music archive format
 - **`.ym` file format specification** — YM music format
 - **Spectrum 128K service manual** — PSG connection and audio circuitry
-- **AY-3-8912 register documentation** — community-maintained reference
+- [AY-3-8912 register documentation](http://www.worldofspectrum.org/) — community-maintained reference
 
 ## Cross-references
 

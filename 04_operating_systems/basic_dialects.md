@@ -707,7 +707,7 @@ For a 2024 hobbyist:
 - [The Spectrum ROM Disassembly](https://worldofspectrum.org/ROMdisassembly.zip) — the famous full disassembly of the 48K ROM with commentary. The standard reference for ROM hackers.
 - [The Complete Spectrum ROM Disassembly](https://worldofspectrum.org/ROMdisassembly.zip) — covers the 128K ROM as well.
 - **NextBASIC Manual** — the Next team's official documentation, available as a free PDF from the ZX Spectrum Next website.
-- **SE BASIC documentation** — in the OpenSE BASIC GitHub repository.
+- [SE BASIC documentation](https://github.com/cheveron/sebasic) — in the OpenSE BASIC GitHub repository.
 
 ---
 

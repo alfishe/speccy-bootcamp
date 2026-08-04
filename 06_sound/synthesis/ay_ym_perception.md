@@ -377,9 +377,9 @@ The single biggest improvement you can make to emulated AY sound is to **change 
 
 - MAME AY8910 driver source code — documents the DC offset difference and volume table measurements
 - nesdev.org AY-3-8910 / YM2149 emulation thread — detailed technical discussion of envelope and DAC differences
-- ZX Spectrum Next TurboSound Next documentation — ABC/ACB selection via TBBlue register
+- ZX Spectrum Next [TurboSound Next](https://specnext.org/) documentation — ABC/ACB selection via TBBlue register
 - vgmrips.net forum — AY vs YM envelope resolution discussion
-- Sergey Bulba's AYEmul — measured volume tables from real hardware
+- Sergey [Bulba](http://bulba.unterground.net/)'s AYEmul — measured volume tables from real hardware
 - Furnace tracker documentation — configurable AY-3-8910 / YM2149 emulation modes
 
 ---

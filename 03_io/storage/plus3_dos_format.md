@@ -579,7 +579,7 @@ For reverse-engineering +3 software distributed on +3DOS disks (see [05_reversin
 - ["Spectrum +3 DOS"](https://worldofspectrum.org/) — the canonical +3DOS reference in the World of Spectrum archive (originally published as part of the +3 user manual).
 - **"CP/M 2.2 Interface Guide"** (Digital Research) — the original CP/M BDOS / BIOS specification that +3DOS is based on.
 - **"LocoScript PCW disk format"** (LocoScript Software) — the Amstrad PCW CF2 disk format that inspired +3DOS.
-- **The `cpmtools` documentation** — Unix manual pages and disk definitions for working with CP/M-compatible disks.
+- [The `cpmtools` documentation](http://cpmtools.sourceforge.net/) — Unix manual pages and disk definitions for working with CP/M-compatible disks.
 
 ### 9.3 Trademarks
 

@@ -195,7 +195,7 @@ See [video_frame_other_soviet.md](../../05_development/05_display_and_timing/vid
 ## References
 
 - [Profi 5.03 / 5.04 schematics](https://zxpress.ru/library/) — original design documentation, distributed via *Radio* magazine advertisements and *ZX-Review*
-- ***ACNews #65*** (2008, Alone Coder) — reconstruction of the Kramis/Profi/Condor commercial history from *Radio* magazine ads and business registrations
+- [ACNews #65](https://zxpress.ru/) — reconstruction of the Kramis/Profi/Condor commercial history from *Radio* magazine ads and business registrations
 - ***Turbo2+* book** (MicroART) — confirms Profi's release date as late spring 1991
 - [ZX-Review magazine](https://zxpress.ru/library/) — Profi construction articles, modification guides, and ISA bus programming tutorials
 - **[zx-pk.ru](https://zx-pk.ru) forum** — *Профі* subforum contains hardware variants, VGA modification threads, and ISA card compatibility reports

@@ -906,7 +906,7 @@ A non-exhaustive list of historically important Soviet custom loaders:
 ### 12.2 Adjacent hardware references
 
 - [plus3_floppy.md](plus3_floppy.md) — for comparison: the +3's integrated WD1772-PH controller and its (different) port map.
-- For Spectrum clone onboard FDCs ([[Pentagon, Scorpion, ATM Turbo, Profi, Kay, ZX Evolution, Karabas): see §7 above, and the [02_hardware/](../../02_hardware](https://zx-pk.ru/)](https://zx-pk.ru/)/) section.
+- For Spectrum clone onboard FDCs ([[[Pentagon, Scorpion, ATM Turbo, Profi, Kay, ZX Evolution, Karabas): see §7 above, and the [02_hardware/](../../02_hardware](https://zx-pk.ru/)](https://zx-pk.ru/)](https://zx-pk.ru/)/) section.
 
 ### 12.3 Reverse engineering and demoscene angles
 

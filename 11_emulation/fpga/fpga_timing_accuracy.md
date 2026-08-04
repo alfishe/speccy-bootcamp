@@ -355,7 +355,7 @@ Modern high-quality cores — MiSTer, ZX-Uno, Harlequin, Sizif-512, ZX Evolution
 - [Zilog Z84C00 Z80 CPU Product Specification](https://www.zilog.com/docs/z80/um0080.pdf) — official datasheet with instruction timing
 - **MiSTer Spectrum core** — GitHub (sorgelig) — reference T-state-precise implementation
 - [ZX-Uno Verilog core](https://github.com/zxdos/zx-uno) — GitHub (Antonio Villena) — open-source cycle-exact core
-- **Harlequin project** — Chris Smith's project pages
+- [Harlequin project](http://www.zxdesign.info/) — Chris Smith's project pages
 - **Sizif-512** — GitHub (Victor Trucco) — open-source drop-in core
 - [FUSE emulator test suite](https://fuse-emulator.sourceforge.net/) — the standard test ROMs for Z80 and ULA timing verification
 - **Sensible tests** — Andrew Owen's floating bus / contention tests

@@ -225,5 +225,5 @@ If you have a board without revision markings, the **QFP-packaged Z80** and **Mi
 - **BruXy ZX Evolution review** ([bruxy.regnet.cz](https://bruxy.regnet.cz/web/8bit/EN/zx-evolution/)) — independent hands-on review with hardware photos, monitor compatibility tests, and software demonstrations
 - **Andrew Lazarev's ZX Evolution site** ([zx.andrew-lazarev.com/en/](https://zx.andrew-lazarev.com/en/)) — community-maintained programming guides and software archive
 - **[zx-pk.ru](https://zx-pk.ru) forum** — *ZX Evolution* subforum with BaseConf programming guides, SD/IDE/RTC tutorials, and user-ported software (Russian)
-- **Pentagon 1024 specification** (1989, Russian) — the original hardware specification that BaseConf implements
+- [Pentagon 1024 specification](https://zx-pk.ru/) — the original hardware specification that BaseConf implements
 - **Tetroid (Novosibirsk) distribution** — `tetroid@inbox.ru`, `tetroid.nedopc.com` — current manufacturer and support contact

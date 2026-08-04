@@ -845,7 +845,7 @@ This article is the canonical reference for the **asset pipeline**. Related deep
 - [z88dk FZX font library](https://github.com/z88dk/z88dk) — <https://github.com/z88dk/z88dk/tree/master/libsrc/_DEVELOPMENT/font>
 
 ### Music and SFX
-- **Vortex Tracker II** — <http://bulba.untergrund.net/vortex_e.htm>
+- [Vortex Tracker II](http://bulba.unterground.net/) — <http://bulba.untergrund.net/vortex_e.htm>
 - [Arkos Tracker 2 / 3](https://www.julien-nevo.com/arkostracker/) — <https://www.julien-nevo.com/arkos/>
 - **Beepola** (1-bit beeper tracker) — <https://shiru.untergrund.net/software.shtml>
 - **BeepFX** (1-bit SFX generator) — <https://shiru.untergrund.net/software.shtml>
