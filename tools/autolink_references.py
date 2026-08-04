@@ -18,8 +18,9 @@ import os
 import re
 import sys
 
+# Fix 2026-07-19: allow trailing period in section numbering (e.g., '## 10. References')
 SECTION_RE = re.compile(
-    r'^#{2,3}\s+(?!.*Cross-?[Rr]ef)(?:\d+(?:\.\d+)*\s+|:\s+)?'
+    r'^#{2,3}\s+(?!.*Cross-?[Rr]ef)(?:\d+(?:\.\d+)*\.?\s+|:\s+)?'
     r'(?:[Ee]xternal\b|[Rr]eferences?\b|[Ss]ources\b|[Ff]urther\s[Rr]eading|'
     r'[Pp]rimary\s[Ss]ources|[Aa]dditional\s[Rr]eferences|'
     r'[Bb]ooks(?:\s+and\s+[Aa]rticles)?|[Mm]agazines?\b|'
