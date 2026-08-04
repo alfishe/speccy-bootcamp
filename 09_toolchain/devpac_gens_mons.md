@@ -376,10 +376,10 @@ For modern Spectrum development, use **sjasmplus + VS Code + DeZog + ZEsarUX/CSp
 
 ### Related Articles in This Knowledge Base
 
-- [Native Toolchain](native_toolchain.md) — survey of all four major native assemblers (Zeus, DevPac, ALASM, XAS)
+- [Native Toolchain](native_toolchain.md) — survey of all four major native assemblers (Zeus, DevPac, [ALASM](https://zxpress.ru/), XAS)
 - [Zeus Assembler](zeus_assembler.md) — DevPac's primary Western competitor
-- [ALASM + STS](alasm_sts.md) — the dominant Soviet-native assembler
-- [XAS Assembler](xas_assembler.md) — the Soviet alternative to ALASM
+- [[ALASM](https://zxpress.ru/) + STS](alasm_sts.md) — the dominant Soviet-native assembler
+- [XAS Assembler](xas_assembler.md) — the Soviet alternative to [ALASM](https://zxpress.ru/)
 - [Cross-Platform Toolchain](cross_platform_toolchain.md) — modern replacements including sjasmplus, pasmo, [z88dk](https://github.com/z88dk/z88dk)
 - [Debugging](debugging.md) — modern source-level debugging with [DeZog](https://github.com/maziac/DeZog), ZEsarUX, CSpect
 - [[sjasmplus](https://github.com/z00m128/sjasmplus)](sjasmplus.md) — the de facto modern cross-assembler that inherited DevPac's conventions

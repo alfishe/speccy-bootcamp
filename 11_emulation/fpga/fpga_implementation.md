@@ -434,7 +434,7 @@ The open-source Spectrum FPGA community provides extensive reference material: t
 - [Sinclair ZX Spectrum service manual](https://www.worldofspectrum.org/hardware.html) — original hardware schematics
 
 ### Open-Source Cores
-- **MiSTer ZX Spectrum core** — on GitHub, full Verilog source
+- [MiSTer ZX Spectrum core](https://github.com/MiSTer-devel/ZX-Spectrum_MiSTer) — on GitHub, full Verilog source
 - [ZX-Uno core](https://github.com/zxdos/zx-uno) — GPL-licensed Verilog
 - [Harlequin project pages](http://www.zxdesign.info/) — Chris Smith's documentation
 - **Sizif-512 GitHub** — Victor Trucco's open-source project
@@ -447,8 +447,8 @@ The open-source Spectrum FPGA community provides extensive reference material: t
 
 ### Cross-References
 - [FPGA Timing Accuracy](fpga_timing_accuracy.md) — cycle-exact timing considerations
-- [MiST / MiSTer Core](mist_mister_core.md) — specific MiSTer Spectrum core
+- [MiST / [MiSTer Core](mist_mister_core.md) — specific MiSTer Spectrum](https://github.com/MiSTer-devel/ZX-Spectrum_MiSTer) core
 - [[ZX-Uno](https://github.com/zxdos/zx-uno)](zx_uno_core.md) — specific ZX-Uno core
 - [ZX Evolution](zxevo.md) — hybrid Z80 + CPLD + MCU approach
-- [Harlequin / Sizif](harlequin_sizif.md) — drop-in ULA recreation
+- [Harlequin / [Sizif](harlequin](https://github.com/MarkOdnw/Sizif)_sizif.md) — drop-in ULA recreation
 - [Test Suites](../software/test_suites.md) — test programs used for verification

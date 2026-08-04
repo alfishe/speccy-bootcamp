@@ -297,7 +297,7 @@ For development, reverse engineering, or casual use, software emulators like [Fu
 
 ### Primary Sources
 - **MiSTer FPGA project**: [misterfpga.org](https://misterfpga.org) — official MiSTer project site, documentation, and community forums
-- **MiSTer ZX Spectrum core on GitHub**: source code, releases, and issue tracking for the actively maintained core
+- **[MiSTer ZX Spectrum](https://github.com/MiSTer-devel/ZX-Spectrum_MiSTer) core on GitHub**: source code, releases, and issue tracking for the actively maintained core
 - **Terasic DE10-Nano board**: official hardware documentation for the MiSTer platform
 - **MiST legacy project**: archived information about the original MiST platform and cores
 
@@ -309,7 +309,7 @@ For development, reverse engineering, or casual use, software emulators like [Fu
 ### Cross-References
 - [[ZX-Uno](https://github.com/zxdos/zx-uno) Core](zx_uno_core.md) — alternative FPGA platform for the Spectrum
 - [ZX Evolution](zxevo.md) — Russian FPGA Spectrum
-- [Harlequin / Sizif](harlequin_sizif.md) — modern FPGA Spectrum hardware
+- [Harlequin / [Sizif](harlequin](https://github.com/MarkOdnw/Sizif)_sizif.md) — modern FPGA Spectrum hardware
 - [FPGA Implementation](fpga_implementation.md) — how Spectrum FPGA cores are designed
 - [FPGA Timing Accuracy](fpga_timing_accuracy.md) — deep dive on cycle-exact timing in FPGA cores
 - [Emulator Comparison](../software/emulator_comparison.md) — software emulators overview

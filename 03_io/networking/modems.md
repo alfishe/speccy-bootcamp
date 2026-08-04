@@ -258,6 +258,6 @@ Modems are now obsolete for Spectrum use. Modern alternatives — [Spectranet](s
 
 - [ZX Net](zx_net.md) — Sinclair's earlier (1983) classroom LAN product, predating widespread modem use
 - [[Spectranet](https://github.com/spectrum-pi/spectranet)](spectranet.md) — the modern Ethernet/TCP/IP alternative to modems
-- [ZiFi](zifi.md) — modern WiFi module replacing modems
+- [[ZiFi](zifi.md) — modern WiFi](https://zx-pk.ru/) module replacing modems
 - [ESP WiFi](esp_wifi.md) — DIY ESP-based WiFi alternatives
 - [ZX Spectrum Next WiFi](zx_next_wifi.md) — the Next's built-in WiFi

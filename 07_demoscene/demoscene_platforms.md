@@ -632,21 +632,21 @@ The 2020s have seen a general revival of retro-demoscene activity, partly driven
 
 - [Demozoo.org](https://demozoo.org/) — cross-platform archive; primary source for party results and demo release dates.
 - **Pouët.net** — cross-platform demo archive; especially strong on C64, Amiga, ST.
-- **CSDb.dk** — Commodore 64 Scene Database; the canonical C64-scene archive.
-- **Hall of Light** (hol.abime.net) — Amiga game/demo archive.
-- **AtariLegend**, **atarimania.com** — Atari ST archives.
-- **Generation-MSX** (generation-msx.nl) — MSX database.
-- **CPC-Wiki** (cpc-wiki.eu) — Amstrad CPC archive.
+- [CSDb.dk](https://csdb.dk/) — Commodore 64 Scene Database; the canonical C64-scene archive.
+- [Hall of Light](https://hol.abime.net/) — Amiga game/demo archive.
+- [AtariLegend**, **atarimania.com](https://www.atarilegend.com/) — Atari ST archives.
+- [Generation-MSX](https://www.generation-msx.nl/) — MSX database.
+- [CPC-Wiki](https://www.cpc-wiki.eu/) — Amstrad CPC archive.
 - **zxdemo.org**, **[zxart.ee](https://zxart.ee)**, **zx-pk.ru**, **bbb.retroscene.org** — Spectrum archives (see [soviet_demo_scene.md](soviet_demo_scene.md) §10.3).
 
 ### 13.4 Key reference works
 
 - **Andrew Owen / Raahir Ahmad**, "[ZX Spectrum Hardware Manual](https://www.worldofspectrum.org/hardware.html)" — primary reference for ULA timing.
-- **Christian Bauer**, "The Secret of the Amiga Hardware" — primary reference for Amiga OCS chipset.
-- **Rob nack/dKT**, "Commodore 64 Programmer's Reference Guide" — primary reference for VIC-II/SID.
-- **Don French**, "Atari ST Profibuch" — primary reference for ST hardware.
-- **MSX RED Book** — primary reference for MSX architecture.
-- **The Unofficial Amstrad WWW Repository** — primary reference for CPC Gate Array.
+- **[Christian Bauer**, "The Secret of the Amiga Hardware" — primary reference for Amiga](https://www.amigadev.elowar.com/) OCS chipset.
+- **Rob nack/dKT**, "[Commodore 64 Programmer's Reference Guide" — primary reference](https://www.ko-wapper.de/hp/c64-prg/) for VIC-II/SID.
+- **[Don French**, "Atari](https://www.atariarchives.org/) ST Profibuch" — primary reference for ST hardware.
+- [MSX RED Book](https://www.msxarchive.nl/) — primary reference for MSX architecture.
+- [The Unofficial Amstrad WWW Repository](https://www.cpcwiki.eu/) — primary reference for CPC Gate Array.
 
 ---
 

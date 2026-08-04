@@ -314,9 +314,9 @@ The ZiFi approach has been so successful that **built-in ESP8266 WiFi** is now s
 
 ### Primary Sources
 
-- Espressif Systems. **ESP8266 Datasheet** and **ESP8266 AT Instruction Set** — the official hardware and AT command references
-- Espressif Systems. **ESP8266EX Hardware User Guide** — schematic and PCB design guidance
-- ZiFi project documentation (Polish and Russian community sources)
+- Espressif Systems. **[ESP8266](https://www.espressif.com/en/support/documents/technical-documents) Datasheet** and **ESP8266 AT Instruction Set** — the official hardware and AT command references
+- [Espressif](https://www.espressif.com/) Systems. **ESP8266EX Hardware User Guide** — schematic and PCB design guidance
+- [ZiFi project](https://zx-pk.ru/) documentation (Polish and Russian community sources)
 
 ### Modern Sources
 
@@ -328,7 +328,7 @@ The ZiFi approach has been so successful that **built-in ESP8266 WiFi** is now s
 ### Cross-References
 
 - [[Spectranet](https://github.com/spectrum-pi/spectranet)](spectranet.md) — the alternative Ethernet-based TCP/IP solution
-- [ESP WiFi](esp_wifi.md) — broader family of ESP8266/ESP32-based Spectrum networking solutions
+- [ESP WiFi](esp_wifi.md) — broader family of [ESP8266](https://www.espressif.com/en/support/documents/technical-documents)/ESP32-based Spectrum networking solutions
 - [ZX Spectrum Next WiFi](zx_next_wifi.md) — built-in ESP WiFi on the Next
 - [Modems](modems.md) — the 1980s dial-up era that WiFi replaced
 - [ZX Net](zx_net.md) — Sinclair's 1983 classroom LAN

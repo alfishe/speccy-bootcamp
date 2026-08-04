@@ -329,27 +329,27 @@ For 99% of users who just want to telnet to a BBS from their Spectrum, an ESP-01
 
 ### Primary Sources
 
-- Espressif Systems. **ESP8266 Datasheet** and **ESP8266EX Hardware User Guide**
-- Espressif Systems. **ESP8266 AT Instruction Set** — the canonical AT command reference
-- Espressif Systems. **ESP-IDF Programming Guide** — for custom firmware development
-- **Arduino-ESP8266 core** documentation — for Arduino-style firmware development
+- Espressif Systems. **[ESP8266](https://www.espressif.com/en/support/documents/technical-documents) Datasheet** and **ESP8266EX Hardware User Guide**
+- Espressif Systems. **[ESP8266](https://www.espressif.com/en/support/documents/technical-documents) AT Instruction Set** — the canonical AT command reference
+- Espressif Systems. **[ESP-IDF](https://www.espressif.com/en/support/documents/technical-documents) Programming Guide** — for custom firmware development
+- [Arduino-ESP8266 core](https://www.espressif.com/en/support/documents/technical-documents) documentation — for Arduino-style firmware development
 
 ### Spectrum-Specific Sources
 
-- ZiFi project documentation (Polish/Russian community sources)
+- [ZiFi project](https://zx-pk.ru/) documentation (Polish/Russian community sources)
 - ZX Spectrum Next technical reference — built-in ESP-12 WiFi
-- Paradise WiFi product documentation
+- [Paradise WiFi](https://zx-pk.ru/) product documentation
 - [World of Spectrum](https://worldofspectrum.org/) forums — ESP8266 and ZiFi discussion threads
 
 ### Cross-Platform Sources
 
-- WiC64 project (Commodore 64) — code and techniques that cross-pollinated with Spectrum projects
+- [WiC64](https://www.wic64.de/) project (Commodore 64) — code and techniques that cross-pollinated with Spectrum projects
 - Retro WiFi bridges community (Twitter, Discord, retro-computing forums)
 - Various demoscene releases using ESP WiFi for network-controlled effects
 
 ### Cross-References
 
-- [ZiFi](zifi.md) — the formal Spectrum-specific ESP8266 project using serial + AT commands
+- [ZiFi](zifi.md) — the formal Spectrum-specific [ESP8266](https://www.espressif.com/en/support/documents/technical-documents) project using serial + AT commands
 - [ZX Spectrum Next WiFi](zx_next_wifi.md) — built-in ESP-12 module on the Next
 - [[Spectranet](https://github.com/spectrum-pi/spectranet)](spectranet.md) — the older Ethernet-based TCP/IP interface
 - [Modems](modems.md) — the 1980s dial-up era that ESP WiFi replaced

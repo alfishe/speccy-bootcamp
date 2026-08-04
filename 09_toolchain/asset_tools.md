@@ -853,13 +853,13 @@ This article is the canonical reference for the **asset pipeline**. Related deep
 - [World of Spectrum AY music archive](https://worldofspectrum.org/) — <https://worldofspectrum.net/archive/>
 
 ### Compression / crunchers
-- **ZX0** (Einar Saukas) — <https://github.com/einar-saukas/ZX0>
-- **ZX1** (simpler, faster variant) — <https://github.com/einar-saukas/ZX1>
+- [ZX0](https://github.com/einar-saukas/ZX0) — <https://github.com/einar-saukas/ZX0>
+- [ZX1](https://github.com/einar-saukas/ZX0) — <https://github.com/einar-saukas/ZX1>
 - [ZX7](https://github.com/AntoniVillena/zx7) — search "Einar Saukas ZX7"
 - [MegaLZ](https://github.com/ladislav-zezula/MegaLZ) — <https://github.com/tonyt76/MegaLZ>
-- **LZSA** (Emmanuel Marty) — <https://github.com/emmanuel-marty/lzsa>
+- [LZSA](https://github.com/emmanuel-marty/lzsa) — <https://github.com/emmanuel-marty/lzsa>
 - **State of the art byte compression for 8-bit computers** (encode.su community thread with benchmarks) — <https://encode.su/threads/3001-State-of-the-art-byte-compression-(for-8-bit-computers)>
-- **Optimizations in ZX0 compression** (heckmeck.de blog) — <https://heckmeck.de/blog/optimizations-in-zx0-compression/>
+- [Optimizations in ZX0 compression](https://github.com/einar-saukas/ZX0) — <https://heckmeck.de/blog/optimizations-in-zx0-compression/>
 
 ### Tile maps and level data
 - **Tiled** (the standard map editor) — <https://www.mapeditor.org/>

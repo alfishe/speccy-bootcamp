@@ -247,6 +247,6 @@ The Harlequin and Sizif-512 have become **standard reference platforms** for ZX 
 - **8bity.cz Sizif-512 review** (Martin's 8-bit blog, Czech) — independent hands-on review with photos and demonstrations
 - **The Retro Shack YouTube review** — hands-on video demonstration of the Sizif-512 across all four machine modes
 - **ZX Spectrum Neo documentation** (mumio.dev) — derived-platform docs confirming Lozovoy's authorship and Sizif lineage
-- **Chris Smith's Harlequin documentation** — design rationale, ULA verification methodology, and compatibility testing results
+- [Chris Smith's Harlequin documentation](http://www.zxdesign.info/) — design rationale, ULA verification methodology, and compatibility testing results
 - **[zx-pk.ru](https://zx-pk.ru) forum** — *Harlequin* and *Sizif* subforums contain compatibility reports, modifications, and software testing threads
 - **ZX Spectrum Next forums** — comparative discussions of Harlequin/Sizif vs the Next's hardware compatibility modes

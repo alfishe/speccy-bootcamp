@@ -1282,7 +1282,7 @@ Most non-trivial Boriel projects end up as hybrids: the high-level game logic in
 ### Community Resources
 
 - **Britlion's Library** — forum thread aggregating game-programming helpers (sprite rendering, scroll, random numbers).
-- **@em00k's ZX0 Integration** — forum thread documenting how to integrate Einar Saukas's ZX0 compressor with Boriel for asset compression.
+- [@em00k's ZX0 Integration](https://github.com/einar-saukas/ZX0) — forum thread documenting how to integrate Einar Saukas's ZX0 compressor with Boriel for asset compression.
 - **LCD's Next Extensions** — ZX Spectrum Next (`--arch zxnext`) examples and helpers.
 
 ### Standards and References

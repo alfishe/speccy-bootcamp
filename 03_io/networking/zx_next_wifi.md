@@ -349,7 +349,7 @@ The Next's WiFi represents, in many ways, **what 1980s Sinclair might have built
 
 ### Cross-References
 
-- [ESP WiFi](esp_wifi.md) — the broader family of ESP8266/ESP32-based Spectrum WiFi solutions
+- [ESP WiFi](esp_wifi.md) — the broader family of [ESP8266](https://www.espressif.com/en/support/documents/technical-documents)/ESP32-based Spectrum WiFi solutions
 - [ZiFi](zifi.md) — the most directly comparable external solution (serial + AT commands)
 - [[Spectranet](https://github.com/spectrum-pi/spectranet)](spectranet.md) — the older Ethernet-based TCP/IP interface
 - [Modems](modems.md) — the 1980s dial-up era that WiFi replaced
