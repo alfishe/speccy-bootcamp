@@ -817,3 +817,16 @@ SD card initialization requires a specific sequence: send 74+ dummy clock cycles
 | TR-DOS file operations | [trdos_programming.md](trdos_programming.md) |
 | Western DOS file operations | [dos_programming.md](dos_programming.md) |
 | File format parsing | [file_format_handling.md](file_format_handling.md) |
+
+---
+
+## References
+
+### External references
+
+- [Sinclair ZX Specifications (Martin Korth)](http://problemkaputt.de/zxdocs.htm) — canonical hardware reference covering the 128K / +2A / +3 expansion bus signals used by IDE, CF, and SD interfaces (`IORQGE`, `A0`–`A15`, `D0`–`D7`), and the partial decoding that produces the typical `#E3` / `#E7` / `#EB` DivIDE port ranges.
+- [DivIDE / DivMMC Hardware Reference (World of Spectrum FAQ)](https://worldofspectrum.org/faq/reference/plus3dosreference.htm) — community-maintained reference for the ATmega-based DivMMC and the original DivIDE interface; documents the banked ROM window at `#0000`–`#3FFF` and the `#E3` / `#E7` / `#EB` register file.
+- [TR-DOS Programmer's Reference (zxevo.ru)](https://zxevo.ru/) — the canonical Russian-language reference for the TR-DOS file API (`BASIC` extensions, the WD1793 driver entry points), and the disk image formats (`.TRD`, `.SCL`, `.FDI`) used by emulators.
+- [CompactFlash + IDE-8 Bit Mode Reference (SanDisk / CompactFlash Association)](https://www.compactflash.org/) — primary specification for CF cards operating in 8-bit True IDE mode, including the `0xE0` LBA read/write command bytes and the `0x41` / `0x58` / `0x59` status register bit layout documented in the ATA/ATAPI command set.
+- [SD Card Physical Layer Simplified Specification (SD Association)](https://www.sdcard.org/) — the official reference for SPI-mode SD initialization (CMD0 + CRC `#95`, CMD8 voltage check, ACMD41 initialization, the `#xFF` dummy clock requirement); the canonical source for the strict timing documented in §5.
+- [zx-pk.ru — mass storage and IDE subforum](https://zx-pk.ru/) — primary Russian-language community archive for homebrew IDE / CF / SD interfaces (SMUC, Z-Controller, divGMX), including per-clone port mappings and driver source code.

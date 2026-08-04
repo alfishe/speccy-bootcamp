@@ -724,6 +724,19 @@ For a 2024 hobbyist:
 
 ---
 
+## References
+
+### External references
+
+- [Complete Spectrum ROM Disassembly (Logan & O'Hara, 1983)](https://worldofspectrum.org/ROMdisassembly.zip) — the canonical annotated source of the 48K BASIC interpreter; documents every keyword, every syntax rule, and every error code referenced throughout this article.
+- [Sinclair ZX Spectrum 48K BASIC Manual (Vickers, 1982)](https://worldofspectrum.org/faq/reference/basicreference.htm) — the primary-source reference for the original Sinclair BASIC keyword set, syntax, and error handling.
+- [Andrew Owen — SE BASIC / OpenSE BASIC](https://github.com/cheveron/sebasic) — the modern open-source replacement ROM; reference implementation for the extended BASIC dialects covered in §7.
+- [Boriel — ZX BASIC Compiler](https://www.boriel.com/wiki/en/index.php/ZX_BASIC:Documentation) — modern cross-platform BASIC compiler that extends Sinclair BASIC syntax with structured-programming constructs.
+- [Spectrumpedia (Alessandro Grussu)](https://www.alessandrogrussu.it/zx/) — encyclopedic reference for the divergent BASIC dialects shipped with Soviet clones (ATM Turbo's `BASIC 128`, Profi's extended editor, Pentagon's Russian-localized ROM variants).
+- [zx-pk.ru — BASIC dialects and ROM extensions subforum](https://zx-pk.ru/) — primary Russian-language community archive for clone-specific BASIC extensions, Russian-language keyword sets, and homebrew replacement ROMs.
+
+---
+
 ## License
 
 This document is licensed under **Creative Commons Attribution-ShareAlike 4.0 International** (CC BY-SA 4.0). You are free to share and adapt this material, provided you give appropriate credit, indicate changes, and distribute derivative works under the same license.

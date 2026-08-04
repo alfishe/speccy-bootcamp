@@ -807,3 +807,15 @@ This article is the foundational reference. Five companion articles cover specia
 - **Demoscene IM2 effects** (15-game survey, vector table placement, manager patterns): [im2_effects.md](im2_effects.md)
 - **Disk load with AY music** (WD1793 byte budget, Ivan Roshchin math, workaround patterns): [im2_disk_music.md](im2_disk_music.md)
 - **Advanced IM2** (Next hardware IM2 mode, TS-Conf vectors, copper vs ISR, sample-rate ISRs): [im2_advanced.md](im2_advanced.md)
+
+---
+
+## References
+
+### External references
+
+- [Chris Smith — *The ZX Spectrum ULA: How to Design a Microcomputer* (2010)](http://www.zxdesign.info/) — the definitive hardware reference for the ULA's `INT` output, the 50/60 Hz vertical-sync pulse that drives IM1 and IM2, and the `HALT` instruction's interaction with the interrupt acknowledge cycle.
+- [Zilog — *Z80 CPU User Manual* (PDF)](https://www.zilog.com/docs/z80/um0080.pdf) — the primary reference for IM0 / IM1 / IM2 bus-cycle timing, the `IFF1` / `IFF2` enable flip-flops, the `R` register's refresh behavior during interrupt acknowledge, and the `RETI` / `RETN` return-from-interrupt opcodes.
+- [Sinclair ZX Specifications (Martin Korth)](http://problemkaputt.de/zxdocs.htm) — canonical cross-model hardware reference covering the 128K / +2 / +2A / +3 interrupt generation and the AY-3-8912's Timed I/O as an alternate interrupt source.
+- [World of Spectrum — Interrupts and IM2 FAQ](https://worldofspectrum.org/faq/reference/rampages.htm) — community-verified reference for IM2 vector-table placement, the 257-byte `0xFD` table pattern, and the historical software conventions for ISR-safe bank switching.
+- [Complete Spectrum ROM Disassembly (Logan & O'Hara, 1983)](https://worldofspectrum.org/ROMdisassembly.zip) — primary-source documentation of the 48K ROM's interrupt handler at `#0038` (the keyboard scanner, the `FRAMES` counter increment, and the one-second beep ticker).

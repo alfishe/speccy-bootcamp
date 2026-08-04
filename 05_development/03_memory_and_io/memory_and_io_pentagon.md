@@ -227,3 +227,15 @@ Port    Function                                     Pentagon specific
 - **Beta 128 FDC** (WD1793/VG93): [fdc_vg93.md](../../03_io/storage/fdc_vg93.md)
 - **Pentagon hardware**: [pentagon.md](../../02_hardware/clones/README.md)
 - **Complete I/O port map** (all ports, all models, decoding bitmasks): [io_port_map.md](../../10_references/io_port_map.md)
+
+---
+
+## References
+
+### External references
+
+- [zx-pk.ru — Pentagon hardware subforum](https://zx-pk.ru/) — the primary Russian-language knowledge base for the Pentagon 128/512/1024, including schematics for the `#7FFD` / `#DFFD` / `#EFF7` paging ports and the various memory extensions (1 MB, 4 MB "shadow RAM").
+- [SpeccyWiki — Pentagon (speccy.info)](https://speccy.info/) — Russian-language wiki article covering the Pentagon's architectural deviations from the 128K, including the absence of contention and the divergent TR-DOS banking.
+- [Black_Cat — *ZX Port Map* (tslabs/zx-evo)](https://github.com/tslabs/zx-evo/blob/master/pentevo/docs/ZX/zx-ports-full-table.txt) — comprehensive port-decoding reference covering Pentagon-specific ports (`#7FFD`, `#DFFD`, `#EFF7`, `#BFF7`) and their partial-decode mirrors.
+- [Pentagon Schematics Archive — Pentagon 128 / 512 / 1024 SL V2 (zx-pk.ru)](https://zx-pk.ru/) — community-verified schematic scans documenting the discrete logic that implements the `#7FFD` banking and the `#DFFD` extended bank selector on the 512 KB variants.
+- [ZXM-Phoenix / Pentagon hardware reference (chibiakumas.com)](https://chibiakumas.com/) — English-language translations of Russian hardware articles covering the Pentagon's design lineage from the Leningrad and the design choices that led to its de facto standard status in the post-Soviet scene.

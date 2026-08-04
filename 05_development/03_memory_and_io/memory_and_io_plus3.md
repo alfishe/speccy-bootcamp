@@ -237,3 +237,15 @@ Port    Function                                     +2A/+3 specific
 - **+3 floppy hardware**: [plus3_floppy.md](../../03_io/storage/plus3_floppy.md)
 - **AY programming**: [ay_programming.md](../../06_sound/hardware/ay_3_8912.md)
 - **Complete I/O port map** (all ports, all models, decoding bitmasks): [io_port_map.md](../../10_references/io_port_map.md)
+
+---
+
+## References
+
+### External references
+
+- [Sinclair ZX Specifications (Martin Korth)](http://problemkaputt.de/zxdocs.htm) — canonical hardware reference for the +2A / +3 ASIC's 4 paging modes (`#1FFD` bits 0–1 combined with `#7FFD`), the gate array's address decode, and the special ROM configuration that exposes CP/M.
+- [Amstrad +2A / +3 Service Manuals](https://zxfaq.eu/extra/amstrad_plus3_service_manual.pdf) — full schematics for the custom gate array that replaced the 128K's discrete paging logic, including the DRAM control signals and the address-decode equations that produce the 4 paging modes.
+- [World of Spectrum — +3 DOS Programmer Guide](https://worldofspectrum.org/faq/reference/plus3dosreference.htm) — reference for the +3's floppy disk subsystem integration, including how `#1FFD` switches between the +3 DOS ROM, the 48K BASIC ROM, and the external CP/M boot ROM.
+- [Spectrumpedia (Alessandro Grussu)](https://www.alessandrogrussu.it/zx/) — encyclopedic reference for the +2A / +3 lineage, including the Spanish +2 variant differences and the late Amstrad mainboard revisions that changed the gate array's contention behavior.
+- [Complete Spectrum ROM Disassembly (Logan & O'Hara, 1983)](https://worldofspectrum.org/ROMdisassembly.zip) — primary-source reference for the 48K ROM routines that the +3 still exposes in compatibility mode, including the channel-I/O hooks that `#1FFD` redirects into the +3 DOS ROM.

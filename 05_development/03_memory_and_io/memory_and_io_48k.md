@@ -393,3 +393,15 @@ Key differences: `P-RAMT` = `#7FFF` on 16K (vs `#FFFF` on 48K), much smaller BAS
 - **48K ROM disassembly** (routines, entry points): [rom_48k.md](../../04_operating_systems/rom_48k.md)
 - **Z80 address bus** (how 16-bit addressing works): [z80_architecture.md](../../01_cpu/z80_architecture.md)
 - **Complete I/O port map** (all ports, all models, decoding bitmasks): [io_port_map.md](../../10_references/io_port_map.md)
+
+---
+
+## References
+
+### External references
+
+- [Chris Smith — *The ZX Spectrum ULA: How to Design a Microcomputer* (2010)](http://www.zxdesign.info/) — the definitive reference for the 48K memory map, including the contended `#4000`–`#7FFF` region, the ULA's video-fetch bus arbitration, and the slow ROM chip select timing.
+- [Sinclair ZX Specifications (Martin Korth)](http://problemkaputt.de/zxdocs.htm) — canonical 48K hardware reference covering the address-decoding logic (`#7FFD` absent, ROM chip select at `#0000`–`#3FFF`, the ULA's `#4000`–`#7FFF` contention window).
+- [Skoolkid — 48K ROM Disassembly (System Variables)](https://skoolkid.github.io/rom/buffers/sysvars.html) — annotated walkthrough of every system variable in `#5C00`–`#5CB6`, the canonical reference for the 48K's fixed RAM layout above the screen.
+- [Complete Spectrum ROM Disassembly (Logan & O'Hara, 1983)](https://worldofspectrum.org/ROMdisassembly.zip) — primary-source documentation of the channel-I/O system, the calculator stack, and the BASIC program area that begins above the system variables.
+- [World of Spectrum — 48K Memory Map FAQ](https://worldofspectrum.org/faq/reference/rampages.htm) — community-verified reference for the contended/non-contended split, the UDG and print buffer areas, and the free-RAM ceiling at `#FF58`.

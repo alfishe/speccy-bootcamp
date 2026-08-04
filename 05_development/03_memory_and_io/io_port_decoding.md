@@ -428,3 +428,15 @@ see the reference: [io_port_map.md](../../10_references/io_port_map.md)
 - **Z80 I/O timing** (T-states for IN/OUT): [z80_timing.md](../../01_cpu/z80_timing.md)
 - **Hardware ports reference** (World of Spectrum): [ports.htm](https://worldofspectrum.org/faq/reference/ports.htm)
 - **Black_Cat's full port table** (per-model differences): [zx-ports-full-table.txt](https://github.com/tslabs/zx-evo/blob/master/pentevo/docs/ZX/zx-ports-full-table.txt)
+
+---
+
+## References
+
+### External references
+
+- [Sinclair ZX Specifications (Martin Korth)](http://problemkaputt.de/zxdocs.htm) — the canonical cross-model hardware reference for I/O port decode equations on the 48K ULA, 128K gate array, and +2A/+3 ASIC. Documents which address lines are actually checked for `#FE`, `#7FFD`, `#1FFD`, `#FFFD` / `#BFFD`.
+- [World of Spectrum — I/O Port Reference](https://worldofspectrum.org/faq/reference/ports.htm) — community-maintained port map with decoding bitmasks and mirroring for every Sinclair-released model.
+- [Black_Cat — *ZX Port Map* (tslabs/zx-evo)](https://github.com/tslabs/zx-evo/blob/master/pentevo/docs/ZX/zx-ports-full-table.txt) — the most comprehensive per-model port table, including Soviet clones (Pentagon, Scorpion, ATM Turbo) and modern FPGA extensions.
+- [Spectrumpedia (Alessandro Grussu)](https://www.alessandrogrussu.it/zx/) — cross-model encyclopedic reference documenting how Soviet-clone port decoding diverges from Sinclair's original (extra paging ports, audio extensions, FDC ranges).
+- [zx-pk.ru — hardware port decoding subforum](https://zx-pk.ru/) — primary Russian-language source for clone-specific decode quirks and conflict reports (e.g., Pentagon's `#FF` floating bus, DivIDE's `#E3`/`#E7`/`#EB` collisions).

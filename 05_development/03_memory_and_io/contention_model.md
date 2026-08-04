@@ -275,3 +275,15 @@ ENDIF
 - **48K video frame** (contention windows per scanline): [video_frame_48k.md](../05_display_and_timing/video_frame_48k.md)
 - **Z80 timing** (per-instruction T-state costs): [z80_timing.md](../../01_cpu/z80_timing.md)
 - **Complete I/O port map** (which ports are contended per model): [io_port_map.md](../../10_references/io_port_map.md)
+
+---
+
+## References
+
+### External references
+
+- [Chris Smith — *The ZX Spectrum ULA: How to Design a Microcomputer* (2010)](http://www.zxdesign.info/) — the definitive reference for the Ferranti ULA's bus-arbitration mechanism that causes contention on the 48K. Documents the exact T-state windows during which the ULA steals cycles from the CPU for video refresh.
+- [Sinclair ZX Specifications (Martin Korth)](http://problemkaputt.de/zxdocs.htm) — canonical hardware reference covering the gate-array variants in the 128K / +2 / +2A / +3 and how their contention patterns differ from the 48K Ferranti ULA.
+- [World of Spectrum — Contended Memory FAQ](https://worldofspectrum.org/faq/reference/rampages.htm) — community-verified contention tables and timing diagrams for every Sinclair model.
+- [zx-pk.ru — contention and clone timing subforum](https://zx-pk.ru/) — primary source for Soviet-clone timing differences (Pentagon has no contention; Scorpion and ATM Turbo vary by revision).
+- [Zilog Z80 CPU User Manual (PDF)](https://www.zilog.com/docs/z80/um0080.pdf) — official Z80 timing diagrams; required reading for understanding T-state budgets that contention consumes.

@@ -199,3 +199,15 @@ The Next can emulate 48K floating bus behavior in compatible modes, but it is **
 - **Raster timing** (HALT-based sync, beam position): [raster_timing.md](raster_timing.md)
 - **Contention model** (when memory access is delayed): [contention_model.md](../03_memory_and_io/contention_model.md)
 - **ULA timing** (hardware mechanism of ULA fetch): [ula_timing.md](../../02_hardware/original/ula_timing.md)
+
+---
+
+## References
+
+### External references
+
+- [Chris Smith — *The ZX Spectrum ULA: How to Design a Microcomputer* (2010)](http://www.zxdesign.info/) — the definitive reference for the floating bus phenomenon; documents the exact T-states during which the ULA reads screen bytes, leaving the stale data on the bus that the CPU can sample via `IN A, (#FF)`.
+- [Sinclair ZX Specifications (Martin Korth)](http://problemkaputt.de/zxdocs.htm) — canonical hardware reference covering the 48K ULA's address-decode logic and the bus-keeper circuitry that produces the floating bus signature; documents the gate-array differences that change the floating bus behavior on 128K / +2 / +2A / +3.
+- [World of Spectrum — Floating Bus FAQ](https://worldofspectrum.org/faq/reference/rampages.htm) — community-verified reference for the floating bus values returned at each T-state of the 48K video frame, including the famous alternation of pixel and attribute bytes.
+- [ZEsarUX — Floating Bus Implementation (GitHub)](https://github.com/chernandezba/zesarux) — emulator reference implementation of the 48K / 128K / +2A / +3 / Pentagon floating bus behavior, including the irregular `#FF` gaps that make the +2A/+3 unreliable for raster sync.
+- [zx-pk.ru — floating bus and raster sync subforum](https://zx-pk.ru/) — primary Russian-language community archive for per-clone floating bus findings (Pentagon returns `#FF`, Scorpion varies by revision, ATM Turbo implements a clean emulation of the 48K pattern).

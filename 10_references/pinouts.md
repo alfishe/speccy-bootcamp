@@ -158,7 +158,7 @@ The Zilog Z80 (and second-source parts from Mostek, SGS, and Russian KR1858VM1) 
 | 35 | `CLK` | IN | Single-phase clock input — driven by the ULA on the Spectrum (3.5 MHz 48K, 3.5469 MHz 128K/+2) |
 
 > [!NOTE]
-> Z80 chips are marked with a maximum clock rating (e.g., Z84C0006PEC = 6 MHz). The Spectrum drives them at 3.5 MHz, well below the maximum. Overclocking to 7 MHz is the basis of the Russian “Turbo” clones — usually works on a 6 MHz-rated part, marginal on a 4 MHz part.
+> Z80 chips are marked with a maximum clock rating (e.g., Z84C0006PEC = 6 MHz). The Spectrum drives them at 3.5 MHz, well below the maximum. Overclocking to 7 MHz is the basis of the Russian "Turbo" clones — usually works on a 6 MHz-rated part, marginal on a 4 MHz part.
 
 ---
 

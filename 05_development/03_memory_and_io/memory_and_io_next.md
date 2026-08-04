@@ -214,3 +214,15 @@ Port    Function                                     Next specific
 - **NextZXOS**: [nextzxos.md](../../04_operating_systems/nextzxos.md)
 - **Official Next documentation**: [zxnext.io](https://www.zxnext.io/)
 - **Complete I/O port map** (all ports, all models, decoding bitmasks): [io_port_map.md](../../10_references/io_port_map.md)
+
+---
+
+## References
+
+### External references
+
+- [ZX Spectrum Next — Official Documentation](https://www.zxnext.io/) — the canonical hardware reference for the Next's 2 MB paged memory, the MMU (8 windows of 8 KB), Layer 2 RAM bank, the copper coprocessor, and the hardware sprites. Source of truth for every port documented in this article.
+- [ZX Spectrum Next Registry — GitHub (SpecNext)](https://github.com/SpecNext) — official source for the Next's register-level documentation, including the `#23B` (Core ROM), `#243B` (NextReg), `#253B` (Sprite), `#303B` / `#57` (Layer 2), and `#6B` (Copper) port assignments.
+- [DE10-Nano FPGA Technical Reference Manual (Terasic)](https://www.terasic.com.tw/cgi-bin/page/archive.pl?Language=English&CategoryNo=205&No=941) — hardware reference for the Intel Cyclone V SoC that powers the Next, including the AXI bus bandwidth that constrains MMU throughput.
+- [NextZXOS — Source Repository (SpecNext/NextZXOS)](https://github.com/SpecNext/NextZXOS) — reference implementation of the Next's operating system layer that manages bank allocation, RAM disk, and the `.dot` command system.
+- [zx-pk.ru — ZX Spectrum Next subforum](https://zx-pk.ru/) — primary Russian-language community archive of Next hardware findings, errata for the official docs, and per-revision (board 2, board 3) differences.

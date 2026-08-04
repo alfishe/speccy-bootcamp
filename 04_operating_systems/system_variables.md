@@ -427,3 +427,15 @@ TR-DOS replaces the standard CHANS area with its own channel definitions:
 - **Interrupt programming** (hooking #0038, ISR design): [interrupt_programming.md](../05_development/04_interrupts/interrupt_programming.md)
 - **ROM disassembly** (complete system variable reference): [skoolkid ROM sysvars](https://skoolkid.github.io/rom/buffers/sysvars.html)
 - **I/O ports** (#FE keyboard reading): [memory_and_io_48k.md](../05_development/03_memory_and_io/memory_and_io_48k.md)
+
+---
+
+## References
+
+### External references
+
+- [Skoolkid — 48K ROM Disassembly (System Variables)](https://skoolkid.github.io/rom/buffers/sysvars.html) — the canonical annotated reference for every system variable in the `#5C00`–`#5CB6` range; documents bit-level layouts, default values, and which ROM routines read or write each byte.
+- [Complete Spectrum ROM Disassembly (Logan & O'Hara, 1983)](https://worldofspectrum.org/ROMdisassembly.zip) — primary-source print reference that defines the system variable layout; every routine in the 48K ROM that touches `FRAMES`, `ATTR_P`, `CHARS`, or `CHAR` is documented here.
+- [Sinclair ZX Specifications (Martin Korth)](http://problemkaputt.de/zxdocs.htm) — hardware reference covering the contended `#4000`-`#7FFF` region where system variables live; documents the ULA's bus-arbitration timing that affects `FRAMES` polling.
+- [World of Spectrum — System Variables FAQ](https://worldofspectrum.org/faq/reference/rampages.htm) — community-verified reference for the 48K variable layout, including the variable-length channel area, the streams table, and the BASIC program ceiling.
+- [128K / +2 / +3 System Variables Reference (Sinclair ZX Specs)](http://problemkaputt.de/zxdocs.htm) — canonical reference for the variables added in the 128K ROM (`BANK_M` at `#5B5C`, `RAMRST` / `RAMT` / `BANK678`), and how the +3 DOS extends the variable area when banked in.
