@@ -868,7 +868,7 @@ These live in the sibling [../snapshots/](../snapshots/README.md) directory.
 ### 10.4 External resources
 
 - [World of Spectrum](https://worldofspectrum.org/) — the largest archive of .TAP files for Spectrum software.
-- **The .TAP specification** — the canonical document for the .TAP format (very short, given the format's simplicity).
+- [The .TAP specification](https://worldofspectrum.org/faq/reference/48krom.htm) — the canonical document for the .TAP format (very short, given the format's simplicity).
 - **TZX Tools** — a command-line toolkit for converting between tape formats, including .TAP and .TZX.
 - [Fuse emulator](https://fuse-emulator.sourceforge.net/) — a reference implementation that can read, write, and play back .TAP files.
 

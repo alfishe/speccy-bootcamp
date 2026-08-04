@@ -27,10 +27,10 @@ SECTION_RE = re.compile(
     re.MULTILINE,
 )
 CROSSREF_SECTION_RE = re.compile(r'^#{2,3}\s.*Cross-?[Rr]ef', re.MULTILINE)
-# Conservative: skip ANY bullet that already contains http(s):// anywhere.
+# Conservative: skip ANY bullet that already contains http(s):// OR a markdown link.
 # This prevents re-processing bullets that already have URLs (proper links,
-# bare URLs, or malformed/nested links from earlier auto-linker runs).
-HTTP_URL_RE = re.compile(r'https?://')
+# bare URLs, internal .md links, or malformed/nested links from earlier runs).
+HTTP_URL_RE = re.compile(r'https?://|\]\([^)]*\)')
 
 DOMAIN_TO_URL = [
     (r'zx-pk\.ru',                'https://zx-pk.ru'),
@@ -158,6 +158,12 @@ PAT_F = re.compile(
 # e.g., **ZXArt (`zxart.ee`)** — desc
 PAT_H = re.compile(
     r'^\*\*([^(*]+?)\s+\(`(' + '|'.join(pat for pat, _ in DOMAIN_TO_URL) + r')`\)\*\*', re.IGNORECASE
+)
+
+# Pattern L: **Title (domain)** — bare domain in parens INSIDE the bold span (no backticks)
+# e.g., **SpeccyWiki (speccy.info)** — desc
+PAT_L = re.compile(
+    r'^\*\*([^(*]+?)\s+\((' + '|'.join(pat for pat, _ in DOMAIN_TO_URL) + r')\)\*\*', re.IGNORECASE
 )
 
 # Pattern G: Named source mapping (e.g., Chris Smith ULA book, Spectrumpedia, magazines)
@@ -416,6 +422,24 @@ NAMED_SOURCES = [
     (r'\bHRUM\b|\bHRUST\b',                                'https://github.com/lvd2/mhmt'),
     (r'\bmhmt\b',                                           'https://github.com/lvd2/mhmt'),
     (r'\boh1c\b|\boh2c\b',                                  'https://zx-pk.ru/'),
+    # Added 2026-07-19: more specific NAMED_SOURCES from remaining prose bullets
+    (r'\bSpeccyWiki\b',                                     'https://speccy.info/'),
+    (r'\.TZX specification\b|\.TZX format\b',               'https://worldofspectrum.org/TZXguide.html'),
+    (r'\.TAP specification\b|\.TAP format\b',               'https://worldofspectrum.org/faq/reference/48krom.htm'),
+    (r'\bz80ex\b',                                          'https://github.com/liquidos/z80ex'),
+    (r'\btrd\.speccy\.com\b',                            'http://trd.speccy.com/'),
+    (r'\bPro Tracker GS\b',                                'http://bulba.unterground.net/'),
+    (r'\bSizif.?512\b.*GitHub\b',                         'https://github.com/MarkOdnw/Sizif'),
+    (r'\bTynemouth Software\b',                            'https://www.tynemouthsoftware.co.uk/'),
+    (r'\bZ80Test\b|\bZEXALL\b|\bZEXDOC\b',             'https://www.worldofspectrum.org/faq/reference/48kreference.htm'),
+    (r'\bSean Young\b.*Undocumented Z80',                   'http://www.myquest.nl/z80undocumented/'),
+    (r'\bYMF278B\b|\bOPL4\b.*datasheet',                  'https://www.msx.org/wiki/MoonSound'),
+    (r'\bZX Spectrum Neo\b',                               'https://mumio.dev/'),
+    (r'\bVladimir Kladov\b',                               'https://zx-pk.ru/'),
+    (r'\bProton\'s Spectrum\b',                           'https://zx-pk.ru/'),
+    (r'\bZilog Z80 DMA\b',                                 'https://www.zilog.com/docs/z80/ps0179.pdf'),
+    (r'\bSAM Coupé\b.*Manual',                              'https://www.worldofspectrum.org/'),
+    (r'\bCesar Hernandez\b',                               'https://github.com/chernandezba/zesarux'),
 ]
 
 
@@ -530,6 +554,17 @@ def transform_bullet(text):
 
     # Pattern H: **Title (`domain`)** — backticked domain in parens INSIDE bold
     m = PAT_H.match(text)
+    if m:
+        title = m.group(1).strip()
+        domain = m.group(2)
+        url = _url_for_domain(domain)
+        after = text[m.end():]
+        sep = ' ' if after and not after[0].isspace() else ''
+        new_text = f'[{title}]({url})' + sep + after
+        return new_text, True
+
+    # Pattern L: **Title (domain)** — bare domain in parens INSIDE bold (no backticks)
+    m = PAT_L.match(text)
     if m:
         title = m.group(1).strip()
         domain = m.group(2)

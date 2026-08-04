@@ -695,7 +695,7 @@ The Z80's interrupt system was one of its major selling points for embedded and 
 - [Zilog Z80 CPU User Manual (UM0080)](https://www.zilog.com/docs/z80/um0080.pdf) — Chapter 5: Interrupts, full IM0/IM1/IM2/NMI specification
 - **Achim Flammenkamp, "Interrupt Behaviour of the Z80 CPU"** ([z80.info/interrup.htm](http://www.z80.info/interrup.htm)) — Precise interrupt timing analysis
 - **Sinclair Wiki, "Contended Memory"** — Interrupt contention timing
-- **Sean Young, "The Undocumented Z80 Documented"** — IFF1/IFF2 bug details
+- [Sean Young, "The Undocumented Z80 Documented"](http://www.myquest.nl/z80undocumented/) — IFF1/IFF2 bug details
 - **stardot.org.uk, "New discovery on Z80 interrupts"** — IFF2→IFF1 copy timing during RETI/RETN
 
 ### Cross-References

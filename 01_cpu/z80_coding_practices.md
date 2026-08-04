@@ -706,7 +706,7 @@ The development section (`05_development/02_assembly/`) will cover these advance
 - **Z80 Optimization** ([WikiTI/BrandonW](https://wikiti.brandonw.net/index.php?title=Z80_Optimization)) — Comprehensive optimization guide with register allocation and size/speed tradeoffs
 - **Grauw's Z80 Multiplication/Division** ([map.grauw.nl](https://map.grauw.nl/articles/mult_div_shifts.php)) — Optimized arithmetic routines, shift-based multiply by constants
 - **Z80 Programming Techniques** ([SMS Power](https://www.smspower.org/Development/Z80ProgrammingTechniques)) — Practical coding patterns for Z80
-- **ZEXALL/Z80Test** — Test suites that verify correct behavior of every Z80 instruction including undocumented features
+- [ZEXALL/Z80Test](https://www.worldofspectrum.org/faq/reference/48kreference.htm) — Test suites that verify correct behavior of every Z80 instruction including undocumented features
 - **Sean Young, "The Undocumented Z80 Documented"** ([z80.info](http://www.z80.info/z80undoc.htm)) — Reference for undocumented instruction behavior
 
 ### Cross-References

@@ -345,7 +345,7 @@ Combined with Fuse (general-purpose emulation), CSpect (Next reference), and Spe
 - [ZEsarUX website](https://github.com/chernandezba/zesarux) — `https://github.com/chernandezba/zesarux`
 - [ZEsarUX documentation](https://github.com/chernandezba/zesarux) — extensive wiki and help files
 - [ZEsarUX releases](https://github.com/chernandezba/zesarux) — prebuilt binaries for Linux, macOS, Windows
-- **Cesar Hernandez Nuñez's blog and tutorial videos** — many reverse engineering walkthroughs
+- [Cesar Hernandez Nuñez's blog and tutorial videos](https://github.com/chernandezba/zesarux) — many reverse engineering walkthroughs
 
 ### Community Resources
 

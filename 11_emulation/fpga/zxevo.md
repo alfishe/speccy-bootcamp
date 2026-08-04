@@ -291,7 +291,7 @@ While less known outside the Russian-speaking world than the [MiSTer](mist_miste
 ### Primary Sources
 - **ZX Evolution project website / SVN**: the original project repository with schematics, CPLD firmware, and MCU code
 - **NedoPC** (nedopc.org): Russian retro-computing retailer and community hub, primary source for ZX Evolution hardware and information
-- **Vladimir Kladov's project pages**: design notes and documentation by the ZX Evolution's lead designer
+- [Vladimir Kladov's project pages](https://zx-pk.ru/): design notes and documentation by the ZX Evolution's lead designer
 - **[BaseConf](https://nedopc.com/) source code**: Verilog/VHDL for the CPLD firmware, available on GitHub
 
 ### Community Resources

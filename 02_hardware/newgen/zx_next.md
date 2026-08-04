@@ -1011,7 +1011,7 @@ The **sjasmplus** assembler is the canonical Next assembler. It supports the Z80
 - **NextZXOS source** ([GitHub](https://github.com/z00m128/NextZXOS)) — open-source firmware
 - **sjasmplus assembler** ([GitHub: z00m128/sjasmplus](https://github.com/z00m128/sjasmplus)) — canonical Next assembler with examples in `examples/l2_*.asm`, `examples/copper_*.asm`, `examples/dma_*.asm`, `examples/tilemap*.asm`
 - **"ZX Spectrum Next Assembly Programming"** (D. R. M. Gomes and various community tutorials at speccy.xyz/next) — beginner-friendly programming guides
-- **Zilog Z80 DMA Technical Manual** (Zilog, 1984) — the canonical Z80 DMA reference (the Next DMA is a clone)
+- [Zilog Z80 DMA Technical Manual](https://www.zilog.com/docs/z80/ps0179.pdf) — the canonical Z80 DMA reference (the Next DMA is a clone)
 - **The Amiga Copper Hardware Reference** (Commodore, 1985) — the original inspiration for the Next's copper; useful conceptual background
 - **Pin Solutions store** (pinsolutions.co.uk) — current Next hardware vendor (Issue 4)
 - **CSpect emulator** ([cspect.org](https://cspect.org)) — reference emulator with debug views for sprites, copper, and DMA

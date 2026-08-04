@@ -645,7 +645,7 @@ FPGA implementations (TS-Conf, Universe) typically implement the GS coprocessor 
 - **General Sound Documentation** — original Russian-language manuals, 1994–1998. Circulates on [zx-pk.ru](https://zx-pk.ru/) as scanned PDFs.
 - **GS Firmware Source Code** — disassemblies of v1.7 firmware, annotated by the Russian scene.
 - **NeoGS Specification** — modern Russian documentation, available on the NeoGS GitHub project.
-- **Pro Tracker GS User Manual** — documents the .GS module format and player routine.
+- [Pro Tracker GS User Manual](http://bulba.unterground.net/) — documents the .GS module format and player routine.
 
 ### Community Knowledge
 

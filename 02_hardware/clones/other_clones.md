@@ -364,7 +364,7 @@ Romania was the first Eastern Bloc country to clone the Spectrum, and produced t
 - **List of ZX Spectrum clones** (Wikipedia / en-academic.com) — comprehensive list of Soviet, Eastern Bloc, and worldwide clones; primary source for the catalog above
 - [ZX-Review magazine](https://zxpress.ru/library/) — primary Russian-language source for clone construction articles, schematics, and reviews
 - **[zx-pk.ru](https://zx-pk.ru) forum** — individual subforums for each clone contain schematics, build guides, and repair threads (Russian)
-- **SpeccyWiki (speccy.info)** — comprehensive clone encyclopedia with photos and specifications
+- [SpeccyWiki](https://speccy.info) — comprehensive clone encyclopedia with photos and specifications
 - [Zonov, S.](https://zxpress.ru/library/) — *"The Scorpion Story"* (ZX-Review, 1994) — Leningrad-to-Scorpion evolution
 - **[chibiakumas.com](https://chibiakumas.com)** — English translations of Russian clone hardware articles
 - [Unreal Speccy emulator](https://sdkcad.free.fr/) — reference implementations of all clones listed here (see `machines/` directory)

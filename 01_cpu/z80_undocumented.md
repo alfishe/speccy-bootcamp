@@ -839,8 +839,8 @@ This is the **single most critical article** for emulator and FPGA core implemen
 - **Boo-boo / Vladimir Kladov, "Z80 MEMPTR"** ([GitHub Gist by drhelius](https://gist.github.com/drhelius/8497817)) — Complete MEMPTR update rules for all instructions
 - **Sergey Malinov, "Z80 Compatible CPUs Type Detection"** ([malinov.com](https://www.malinov.com/sergeys-blog/z80-type-detection.html)) — Clone-specific flag differences
 - **Jacco Bot / Richard Spijkers, "Undocumented Z80 Instructions"** ([z80.info](http://www.z80.info/z80undoc.htm)) — Opcode tables for IX/IY halves, SLL, autocopy
-- **ZEXALL Z80 Instruction Exerciser** — Test suite that verifies all documented and undocumented Z80 behavior
-- **Z80Test** — Another comprehensive Z80 accuracy test suite
+- [ZEXALL Z80 Instruction Exerciser](https://www.worldofspectrum.org/faq/reference/48kreference.htm) — Test suite that verifies all documented and undocumented Z80 behavior
+- [Z80Test](https://www.worldofspectrum.org/faq/reference/48kreference.htm) — Another comprehensive Z80 accuracy test suite
 - **FOSDEM 2022, "Z80: the last secrets"** ([archive.fosdem.org](https://archive.fosdem.org/2022/schedule/event/z80/)) — Presentation on MEMPTR and undocumented internals
 
 ### Cross-References

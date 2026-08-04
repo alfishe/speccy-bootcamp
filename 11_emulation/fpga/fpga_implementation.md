@@ -437,7 +437,7 @@ The open-source Spectrum FPGA community provides extensive reference material: t
 - [MiSTer ZX Spectrum core](https://github.com/MiSTer-devel/ZX-Spectrum_MiSTer) — on GitHub, full Verilog source
 - [ZX-Uno core](https://github.com/zxdos/zx-uno) — GPL-licensed Verilog
 - [Harlequin project pages](http://www.zxdesign.info/) — Chris Smith's documentation
-- **Sizif-512 GitHub** — Victor Trucco's open-source project
+- [Sizif-512 GitHub](https://github.com/MarkOdnw/Sizif) — Victor Trucco's open-source project
 
 ### FPGA Development Tools
 - **Intel Quartus Prime** — for Altera/Intel FPGAs

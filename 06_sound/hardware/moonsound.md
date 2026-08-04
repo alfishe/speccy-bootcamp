@@ -626,7 +626,7 @@ Most modern MoonSound-targeting software is developed and tested on emulator fir
 - [TurboSound FM — YM2203 OPN FM Synthesis](turbosound_fm.md) — The smaller FM-only sibling. Covers FM synthesis fundamentals in more depth.
 - [General Sound](gs_general_sound.md) — The Soviet alternative for sample-based audio, using a coprocessor instead of a wavetable chip.
 - [Sound Hardware Ecosystem Overview](sound_overview.md) — Where [MoonSound](https://www.msx.org/wiki/MoonSound) fits in the broader sound hardware decision tree.
-- **Yamaha YMF278B (OPL4) Datasheet** — The primary source for register semantics and electrical characteristics. Available in scanned form from multiple retro-computing archives.
+- [Yamaha YMF278B (OPL4) Datasheet](https://www.msx.org/wiki/MoonSound) — The primary source for register semantics and electrical characteristics. Available in scanned form from multiple retro-computing archives.
 - [MSX MoonSound Wiki](https://www.msx.org/wiki/MoonSound) — The MSX community maintains the most complete documentation of real-world MoonSound behavior, including firmware revisions and known incompatibilities.
 - [Vortex Tracker II](http://bulba.unterground.net) — The standard AY/MoonSound tracker for Windows. Source code includes a complete MoonSound player reference implementation.
 

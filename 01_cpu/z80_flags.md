@@ -798,7 +798,7 @@ Accurate flag behavior is one of the most critical aspects of Z80 emulation. Man
 - **Mark Rison, Z80 Page** — Original flag behavior research
 - **Sergey Malinov, "Z80 Compatible CPUs Type Detection"** ([malinov.com](https://www.malinov.com/sergeys-blog/z80-type-detection.html)) — Undocumented flag differences across Z80 clones
 - [Rodnay Zaks, "Programming the Z80"](https://en.wikipedia.org/wiki/Rodnay_Zaks) — BCD arithmetic and DAA explanation
-- **Z80Test / ZEXALL test suites** — Comprehensive flag accuracy verification
+- [Z80Test / ZEXALL test suites](https://www.worldofspectrum.org/faq/reference/48kreference.htm) — Comprehensive flag accuracy verification
 
 ### Cross-References
 

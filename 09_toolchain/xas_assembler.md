@@ -361,8 +361,8 @@ For modern Spectrum development, use **sjasmplus + VS Code + Lua scripting** for
 
 ### Modern Sources
 
-- **Proton's Spectrum site** (Russian) — primary modern archive for XAS and other Russian-scene tools
-- **trd.speccy.com** — TR-DOS software archive, including XAS-developed productions with source
+- [Proton's Spectrum site](https://zx-pk.ru/) — primary modern archive for XAS and other Russian-scene tools
+- [trd.speccy.com](http://trd.speccy.com/) — TR-DOS software archive, including XAS-developed productions with source
 - [zx-art.ru](http://zx-art.ru) — Russian demoscene archive with downloadable productions, many including XAS-format source
 - [sjasmplus documentation](https://github.com/z00m128/sjasmplus) — modern cross-assembler that provides equivalent macro and Lua-scripting capabilities
 

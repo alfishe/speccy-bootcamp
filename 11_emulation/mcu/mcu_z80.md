@@ -350,7 +350,7 @@ With these in place, an MCU-based Z80 can be indistinguishable from the original
 - [Raspberry Pi RP2040 Datasheet](https://www.raspberrypi.com/documentation/microcontrollers/) — PIO architecture, GPIO characteristics
 - [PicoROM project](https://github.com/MarkOdnw/PR) — RP2040-based ROM/RAM/IO emulator, open-source
 - **libz80** — C Z80 emulator library by Lin Ke-Fong (used in FUSE and others)
-- **z80ex** — C Z80 emulator library, cycle-accurate
+- [z80ex](https://github.com/liquidos/z80ex) — C Z80 emulator library, cycle-accurate
 - ["The ZX Spectrum ULA: How to Design a Microcomputer"](http://www.zxdesign.info/) by Chris Smith — background on ULA timing that constrains Z80 emulation
 - **Pico Spectrum projects on GitHub** — various open-source implementations
 - [74HCT245 / 74HCT541 datasheets](https://www.ti.com/lit/ds/symlink/sn74hct245.pdf) — TTL-compatible buffers for level shifting

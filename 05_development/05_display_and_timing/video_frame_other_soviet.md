@@ -241,5 +241,5 @@ The canonical decision tree is in [clone_timing.md § Clone Detection](../../02_
 - **Unreal Speccy emulator** ([github.com/mkoloberdin/unrealspeccy](https://github.com/mkoloberdin/unrealspeccy)) — `unreal.ini` defines the per-model frame timings: `FRAME=69888` (48K/Scorpion/Kay/ATM 3.5MHz/Profi), `FRAME=71680` (Pentagon/Leningrad), `FRAME=99880` (ATM 7MHz), `PAPER=14364` (Scorpion), `PAPER=12580` (Profi). These presets are the de facto timing reference for all emulators.
 - **ZXMAK2 emulator** ([github.com/zxmak/zxmak2](https://github.com/zxmak/zxmak2)) — 16+ clone models with separate contention profiles. Source code documents per-revision Scorpion contention and the ATM Turbo speedup anomaly.
 - **[zx-pk.ru](https://zx-pk.ru) forum threads** — Russian-language real-hardware measurements and clone-specific discussions. Notable threads: "Timing measurements on Profi 5.03", "ATM Turbo 7MHz real speed", "Kay 2006 GigaScreen details".
-- **SpeccyWiki (speccy.info)** — Russian-language clone encyclopaedia with per-clone hardware specifications.
+- [SpeccyWiki](https://speccy.info) — Russian-language clone encyclopaedia with per-clone hardware specifications.
 - **[spectrum-computing.co.uk](https://spectrumcomputing.co.uk) hardware catalog** — clone hardware profiles with original documentation links.

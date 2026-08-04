@@ -747,7 +747,7 @@ The bit-banging principles — tight timing loops, edge detection, careful conte
 ### 10.4 External resources
 
 - [World of Spectrum](https://worldofspectrum.org/) — the largest archive of Spectrum tape images, with thousands of programs in .TAP and .TZX format.
-- **The .TZX specification** — the canonical document for the .TZX format, with timings for all known turbo loaders.
+- [The .TZX specification](https://worldofspectrum.org/TZXguide.html) — the canonical document for the .TZX format, with timings for all known turbo loaders.
 - [The Spectrum ROM disassembly](https://worldofspectrum.org/ROMdisassembly.zip) — the canonical commented disassembly of the Spectrum's ROM, including the `LD-BYTES` and `SA-BYTES` routines.
 
 ### 10.5 Where to go next

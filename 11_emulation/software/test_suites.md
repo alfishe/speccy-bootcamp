@@ -261,7 +261,7 @@ For users, the test suites provide a way to evaluate emulator claims. An emulato
 
 ### Primary Sources
 
-- **Frank D. Cringle's ZEXALL/ZEXDOC** — original source and documentation, available from various CP/M archives
+- [Frank D. Cringle's ZEXALL/ZEXDOC](https://www.worldofspectrum.org/faq/reference/48kreference.htm) — original source and documentation, available from various CP/M archives
 - **The FUSE test suite** — hosted at the Fuse project's source repository on SourceForge
 - **Pentagon Diag ROM** — distributed with Pentagon ROM images on Russian Spectrum archive sites
 - **ZX Diag** — community diagnostic ROM, various versions circulating in the Spectrum community

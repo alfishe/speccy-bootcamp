@@ -1057,7 +1057,7 @@ These live in the sibling [../snapshots/](../snapshots/README.md) directory.
 
 ### 10.4 External resources
 
-- **The .TZX specification** — the canonical document for the .TZX format, maintained by the Spectrum community.
+- [The .TZX specification](https://worldofspectrum.org/TZXguide.html) — the canonical document for the .TZX format, maintained by the Spectrum community.
 - [World of Spectrum](https://worldofspectrum.org/) — the largest archive of .TZX files.
 - **The .TZX Preservation Project** — an ongoing effort to create faithful .TZX images of every Spectrum tape.
 - **TZX Tools** — a command-line toolkit for converting between tape formats.

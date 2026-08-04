@@ -250,7 +250,7 @@ This is the basic pattern; production code adds error handling (check the error 
 
 - **NEMO company documentation** (1991–1998) — original Kay 1024 schematics and Nemo bus specification
 - **[zx-pk.ru](https://zx-pk.ru) forum** — *Кэй 1024* subforum contains hardware variants, IDE controller schematics, and repair threads
-- **SpeccyWiki (speccy.info)** — Kay 1024 and Kay 2006 NB articles with CPLD programming details
+- [SpeccyWiki](https://speccy.info) — Kay 1024 and Kay 2006 NB articles with CPLD programming details
 - [Kay 2006 NB documentation](https://zx-pk.ru) — GigaScreen and multicolor mode specifications
 - [Unreal Speccy emulator](https://sdkcad.free.fr/) — reference implementation of Kay `#DFFD` paging and 2006 NB video modes
 - **FidoNet ZX.SPECTRUM echoes** (1995–2002) — contemporary discussions of Kay IDE programming and Nemo bus peripherals

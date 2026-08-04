@@ -298,6 +298,6 @@ For real-world detection code, see [video_frame_pentagon.md](video_frame_pentago
 - **ZEsarUX emulator** ([github.com/chernandezba/zesarux](https://github.com/chernandezba/zesarux)) — Implements both Ferranti and Amstrad contention with detailed per-cycle accuracy; supports ZX Spectrum Next and TS-Conf.
 - [Chris Smith, The ZX Spectrum ULA: How to Design a Microcomputer](http://www.zxdesign.info/) — the definitive hardware reference for the Sinclair-derived timing family.
 - **[zx-pk.ru](https://zx-pk.ru) forum** — Russian-language real-hardware measurements confirming emulator timings. Notable threads include "Pentagon 1024 timing measurements", "TS-Conf sprite timing", "ATM Turbo 7MHz real speed", "Evo 14MHz speed test".
-- **SpeccyWiki (speccy.info)** — Russian-language clone encyclopedia with per-clone hardware specifications.
+- [SpeccyWiki](https://speccy.info) — Russian-language clone encyclopedia with per-clone hardware specifications.
 - [spectrum-computing.co.uk](https://spectrumcomputing.co.uk) — hardware catalog with original documentation links for Soviet and modern clones.
 - **ZX Spectrum Next official documentation** ([specnext.com](https://specnext.com)) — copper, Layer 2, tilemap, sprite timing reference.

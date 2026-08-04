@@ -200,6 +200,6 @@ See [video_frame_other_soviet.md](../../05_development/05_display_and_timing/vid
 - [ZX-Review magazine](https://zxpress.ru/library/) — Profi construction articles, modification guides, and ISA bus programming tutorials
 - **[zx-pk.ru](https://zx-pk.ru) forum** — *Профі* subforum contains hardware variants, VGA modification threads, and ISA card compatibility reports
 - [velesoft.speccy.cz](https://velesoft.speccy.cz) — Solitude Soft's Profi 5.03 technical reference, including `#DFFD` paging tests and CP/M adaptation notes
-- **SpeccyWiki (speccy.info)** — Profi 5.03/5.04 articles with schematic scans and PCB layouts
+- [SpeccyWiki](https://speccy.info) — Profi 5.03/5.04 articles with schematic scans and PCB layouts
 - [Unreal Speccy emulator](https://sdkcad.free.fr/) — reference implementation of Profi `#DFFD` paging and paper-offset timing
 - **[chibiakumas.com](https://chibiakumas.com)** — English translations of Profi hardware articles and ISA programming guides

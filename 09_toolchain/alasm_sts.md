@@ -389,8 +389,8 @@ For modern Spectrum development, use **sjasmplus + VS Code + DeZog + ZEsarUX/CSp
 
 ### Modern Sources
 
-- **Proton's Spectrum site** (Russian) — primary modern archive for ALASM, STS, and other Russian-scene tools
-- **trd.speccy.com** — TR-DOS software archive, including ALASM-format source files released by Russian demo crews
+- [Proton's Spectrum site](https://zx-pk.ru/) — primary modern archive for ALASM, STS, and other Russian-scene tools
+- [trd.speccy.com](http://trd.speccy.com/) — TR-DOS software archive, including ALASM-format source files released by Russian demo crews
 - [zx-art.ru](http://zx-art.ru) — Russian demoscene archive with downloadable productions, many including source
 - **Spectrum-Forum.ru** — active Russian-language forum where ALASM-era developers discuss 1990s scene history
 

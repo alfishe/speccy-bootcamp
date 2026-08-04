@@ -326,5 +326,5 @@ The Sprinter was largely superseded by the ZX Evolution after 2007, which had be
 - [ZX-Format magazine](https://zxpress.ru/library/categories.php?id=2) issues covering the Sprinter launch and ongoing development
 - **ZX-Forum #2** (ZXF02.pdf) — interview with Alex Goryachev on the Sprinter's design and goals
 - **[zx-pk.ru](https://zx-pk.ru) forum** — *Sprinter* subforum with BIOS documentation and repair threads
-- **SpeccyWiki (speccy.info)** — Sprinter article with photos and specification tables
+- [SpeccyWiki](https://speccy.info) — Sprinter article with photos and specification tables
 - [World of Spectrum](https://worldofspectrum.org/) — Sprinter file archive with software, documentation, and interviews

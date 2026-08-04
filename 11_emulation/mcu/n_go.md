@@ -405,7 +405,7 @@ The result is a complete Spectrum that costs under £10, fits in the palm of you
 
 - [RP2040 datasheet](https://www.raspberrypi.com/documentation/microcontrollers/) — hardware reference for the Raspberry Pi Pico
 - **libz80 by Lin Ke-Fong** — Z80 emulator library (used in FUSE)
-- **z80ex** — cycle-accurate Z80 emulator
+- [z80ex](https://github.com/liquidos/z80ex) — cycle-accurate Z80 emulator
 - **Pico Spectrum projects on GitHub** — various open-source implementations
 - **SpecHMI project** — STM32-based complete Spectrum (Russian community)
 - [Chris Smith's The ZX Spectrum ULA](http://www.zxdesign.info/) — for the ULA's behavior
