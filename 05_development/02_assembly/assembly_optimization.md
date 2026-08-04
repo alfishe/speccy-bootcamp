@@ -852,7 +852,7 @@ swap_hl:
 
 ## References
 
-- *Z80 CPU User Manual* by Zilog — official timing tables
+- *[Z80 CPU User Manual](https://www.zilog.com/docs/z80/um0080.pdf)* by Zilog — official timing tables
 - *Programming the Z80* by [Rodnay Zaks](https://en.wikipedia.org/wiki/Rodnay_Zaks) — multiplication and division algorithms
 - Henry S. Warren Jr. — *Hacker's Delight* — bit-twiddling tricks, many of which apply to Z80
 - [z88dk wiki — Optimization](https://www.z88dk.org/wiki/) — community optimization guide

@@ -1091,7 +1091,7 @@ A quick-reference hex grid of all 256 unprefixed opcodes. For CB, ED, DD/FD page
 
 ## References
 
-- **Zilog Z80 CPU User Manual (UM0080)** — Complete instruction set reference, Chapter 6
+- [Zilog Z80 CPU User Manual (UM0080)](https://www.zilog.com/docs/z80/um0080.pdf) — Complete instruction set reference, Chapter 6
 - **Cristian Dinu, "Decoding Z80 Opcodes"** ([z80.info/decoding.htm](http://www.z80.info/decoding.htm)) — Octal-based opcode decode tables
 - **Sean Young, "The Undocumented Z80 Documented"** ([z80.info/z80undoc.htm](http://www.z80.info/z80undoc.htm)) — Undocumented instruction behavior
 - **Pastraiser Z80 Opcode Table** ([pastraiser.com](https://pastraiser.com/cpu/Z80/Z80_opcodes.html)) — Interactive opcode matrix with timing

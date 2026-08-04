@@ -550,7 +550,7 @@ This costs 8 T-states total (4 for `DI`, 4 for `EI`) but eliminates an entire cl
 
 ## Sources
 
-- Einar Saukas, *BIFROST* Engine documentation* (2012) — open-source multicolor engine, reference implementation
+- [Einar Saukas](https://github.com/einar-saukas), *BIFROST* Engine documentation* (2012) — open-source multicolor engine, reference implementation
 - Dave "R-Tape" Hughes, *BIFROST2 Engine* (2016) — extended display area
 - Steve Wetherill, *Chasing the raster on the ZX Spectrum in Sidewize* (2022) — port-`#FF` sync technique
 - Ast A. Moore, *The Definitive Programmer's Guide to Using the Floating Bus Trick on the ZX Spectrum* — +2A/+3 floating-bus workaround

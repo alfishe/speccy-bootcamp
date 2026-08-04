@@ -460,7 +460,7 @@ The most popular approach is **DivMMC** — an expansion port adapter with micro
 - [TAP file format specification](https://worldofspectrum.org/) — on the World of Spectrum archive
 - **TZX file format specification** — by Tomaz Kac, comprehensive
 - **SNA and Z80 file format specifications** — widely documented
-- **RP2040 SPI examples** — in the RP2040 SDK
+- [RP2040 SPI examples](https://www.raspberrypi.com/documentation/microcontrollers/) — in the RP2040 SDK
 - **Arduino SD library** — for simpler projects
 
 ## Cross-References

@@ -238,13 +238,13 @@ Modems are now obsolete for Spectrum use. Modern alternatives — [Spectranet](s
 ### Primary Sources
 
 - [Sinclair Research — ZX Interface 1 Manual](https://worldofspectrum.org/) — RS-232 port documentation and BASIC `STREAMS` interface
-- **Prism — *VTX-5000 User Manual*** (1984) — the canonical Spectrum-specific modem reference
-- **BT — *Prestel User Guide*** (various years, 1979–1994) — the videotex service documentation
+- [Prism — VTX-5000 User Manual](https://archive.org/) — the canonical Spectrum-specific modem reference
+- [BT — Prestel User Guide](https://archive.org/) — the videotex service documentation
 
 ### Contemporary Coverage
 
 - [Micronet 800 documentation](https://worldofspectrum.org/) — service guides and software downloads, archived at World of Spectrum and other retro-computing sites
-- **CRASH magazine modem reviews** (1984–1988) — contemporary assessments of Prism, RCP, and other Spectrum modems
+- [CRASH magazine modem reviews](https://archive.org/details/crash-magazine) — contemporary assessments of Prism, RCP, and other Spectrum modems
 - *Your Spectrum* and *[Sinclair User](https://archive.org/details/sinclair-user-magazine)* articles on BBSing and online services (1984–1989)
 - *Radio* magazine (Russian, 1988–1995) — Russian-language modem schematics and FidoNet tutorials
 

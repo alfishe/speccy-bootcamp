@@ -850,7 +850,7 @@ This article is the canonical reference for **standalone SDCC**. Related article
 ### `.cdb` debug format
 
 - [SDCC CDB format](https://sourceforge.net/p/sdcc/wiki/CDB%20file%20format/) — community-documented.
-- Internal SDCC source: `src/dbg/cdbfile.c` (canonical reference for advanced consumers).
+- Internal [SDCC](https://sdcc.sourceforge.net/) source: `src/dbg/cdbfile.c` (canonical reference for advanced consumers).
 
 ### SDCC vs z88dk
 

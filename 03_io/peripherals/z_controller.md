@@ -327,7 +327,7 @@ For a modern Russian-clone owner who wants a single board covering all four func
 - [SpeccyWiki (Russian): "Nemo IDE"](https://speccy.info/Nemo_IDE, archived at https://web.archive.org/web/20241118014803/https://speccy.info/Nemo_IDE) — original Nikolai Tyrsin 1994 IDE controller, of which the Z-Controller's IDE block is a software-compatible re-implementation
 - **MB03+ Ultimate documentation** (LMN128, https://sites.google.com/view/mb03plus/home) — explicitly lists "Z-Controller SD slot" as one of the legacy peripherals implemented in the FPGA
 - **MB03+ Programmer's Reference** (https://docs.google.com/document/d/13TADX_NDnTwVzgUwc03NiR2T0OVlg4SGwOctBSOVOWw/edit) — technical details of the MB03+'s Z-Controller compatibility mode
-- **ZX Spectrum Neo manual** (Mumio.dev, https://mumio.dev/files/ZX_Spectrum_Neo_EN_A5_v3.pdf) — explicitly notes that the Neo's SD card support uses Z-Controller mechanisms
+- [ZX Spectrum Neo manual](https://www.worldofspectrum.org/hardware.html) — explicitly notes that the Neo's SD card support uses Z-Controller mechanisms
 - **K-Mouse Turbo and PS/2 keyboard interfaces survey** (Sam.speccy.cz, https://sam.speccy.cz/hids.html) — context for the PS/2 keyboard and mouse landscape on the ZX Spectrum, including the relationship between the Z-Controller, K-Mouse Turbo, and MB03+
 - **Wild Disk Copier release notes** (KingOfEvil / Russian Speccy scene, v1.21 onward) — the first piece of software to support SD card access via the Z-Controller; required reading for Z-Controller users
 - [ZX Spectrum Hardware Ports Reference](https://groups.google.com/g/comp.sys.sinclair) — definitive reference for the standard port-decode conventions (Kempston Mouse, etc.) that the Z-Controller emulates

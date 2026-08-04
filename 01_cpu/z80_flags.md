@@ -793,7 +793,7 @@ Accurate flag behavior is one of the most critical aspects of Z80 emulation. Man
 
 ## References
 
-- **Zilog Z80 CPU User Manual (UM0080)** — Chapter 3: CPU Registers and Flag Status, official flag definitions
+- [Zilog Z80 CPU User Manual (UM0080)](https://www.zilog.com/docs/z80/um0080.pdf) — Chapter 3: CPU Registers and Flag Status, official flag definitions
 - **Sean Young, "Z80 Flag Affection"** ([z80.info/z80sflag.htm](http://www.z80.info/z80sflag.htm)) — Complete per-instruction flag behavior table
 - **Mark Rison, Z80 Page** — Original flag behavior research
 - **Sergey Malinov, "Z80 Compatible CPUs Type Detection"** ([malinov.com](https://www.malinov.com/sergeys-blog/z80-type-detection.html)) — Undocumented flag differences across Z80 clones

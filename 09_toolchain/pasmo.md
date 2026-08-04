@@ -484,5 +484,5 @@ A: Pasmo accepts this syntax. If you see an error, check that `IX` is correctly 
 
 - Julián Albo Santiago — *Pasmo Z80 Cross-Assembler*, [official site](http://www.arrakis.es/~ninsesabe/pasmo/) (archived; current versions on SourceForge)
 - Pasmo SourceForge project — [sourceforge.net/projects/pasmo](https://sourceforge.net/projects/pasmo/)
-- Linux distribution packages — `pasmo` in Debian, Ubuntu, Fedora, Arch AUR
-- Homebrew formula — `brew install pasmo` on macOS
+- Linux distribution packages — `[pasmo](https://www.naslag.info/pasmo/)` in Debian, Ubuntu, Fedora, Arch AUR
+- Homebrew formula — `brew install [pasmo](https://www.naslag.info/pasmo/)` on macOS

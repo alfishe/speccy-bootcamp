@@ -234,6 +234,55 @@ NAMED_SOURCES = [
     (r'\bGremlin Graphics\b',                               'https://archive.org/'),
     (r'\bImagine Software\b',                               'https://archive.org/'),
     (r'\bOcean Software\b',                                 'https://archive.org/'),
+    # MCU / modern hardware
+    (r'\bRP2040\b|\bRP2350\b',                            'https://www.raspberrypi.com/documentation/microcontrollers/'),
+    (r'\bRaspberry Pi Pico\b',                              'https://www.raspberrypi.com/documentation/microcontrollers/'),
+    (r'\bPicoVGA\b',                                        'https://github.com/Panda385/PicoVGA'),
+    (r'\bPico DVI\b',                                       'https://github.com/Wren6991/pico-dvi'),
+    (r'\bRGB-to-HDMI\b|\bRGBtoHDMI\b',                    'https://github.com/hoglet67/RGBtoHDMI'),
+    (r'\bADV7513\b',                                        'https://www.analog.com/en/products/adv7513.html'),
+    (r'\bADV7125\b',                                        'https://www.analog.com/en/products/adv7125.html'),
+    (r'\bTinyUSB\b',                                        'https://github.com/hathach/tinyusb'),
+    (r'\bTinyVGA\b',                                        'https://gitlab.com/b9lab/tinyvga'),
+    (r'\bRetroleum\b',                                      'https://retroleum.co.uk/'),
+    (r'\bZX-HD\b',                                          'https://retroleum.co.uk/'),
+    (r'\bSMARTi\b',                                         'https://retroleum.co.uk/'),
+    (r'\bSpectra\b.*adapter|\bSpectra\b.*video',           'https://retroleum.co.uk/'),
+    # Electronics / datasheets
+    (r'\b74HCT245\b|\b74HCT541\b',                        'https://www.ti.com/lit/ds/symlink/sn74hct245.pdf'),
+    (r'\b74LVC245\b',                                       'https://www.ti.com/lit/ds/symlink/sn74lvc245a.pdf'),
+    (r'\bTXB0108\b|\bTXS0108E\b',                         'https://www.ti.com/lit/ds/symlink/txb0108.pdf'),
+    (r'\bZilog Z80\b.*[Dd]atasheet|\bZ84C00\b',            'https://www.zilog.com/docs/z80/um0080.pdf'),
+    (r'\bZ80 CPU Manual\b|\bZ80 CPU User Manual\b',        'https://www.zilog.com/docs/z80/um0080.pdf'),
+    (r'\bARM Cortex-M0\b|\bCortex-M0\+\b',               'https://developer.arm.com/documentation/dui0662/b/'),
+    (r'\bDVI specification\b|\bDVI spec\b',                'https://www.ddwg.org/'),
+    (r'\bVGA timing\b',                                     'https://en.wikipedia.org/wiki/VGA-compatible_text_mode'),
+    (r'\bHDMI specification\b|\bHDMI spec\b',              'https://www.hdmi.org/'),
+    (r'\bUSB HID\b',                                        'https://usb.org/document-library/usb-hid-usage-tables-14'),
+    (r'\bPS/2 Keyboard Protocol\b|\bPS/2 protocol\b',     'https://www.computer-engineering.org/ps2keyboard/'),
+    (r'\bAdam Chapweske\b',                                 'https://www.computer-engineering.org/ps2keyboard/'),
+    (r'\bJack Ganssle\b|\bGanssle.*[Dd]ebounce\b',         'https://www.ganssle.com/debouncing.htm'),
+    (r'\bEli Hughes\b',                                     'https://www.youtube.com/user/emnhub'),
+    (r'\bKempston\b.*joystick|\bKempston\b.*interface',   'https://worldofspectrum.org/'),
+    (r'\bKempston\b.*mouse',                                'https://worldofspectrum.org/'),
+    # Famous compressors / authors
+    (r'\bYann Collet\b|\bLZ4 Block Format\b',             'https://github.com/lz4/lz4'),
+    (r'\bPasi Ojala\b|\bpucrunch.*Optimizing\b',          'https://github.com/mhaben/pucrunch'),
+    (r'\bJarek Duda\b|\basymmetric numeral systems\b',    'https://arxiv.org/abs/1311.2540'),
+    (r'\bPaul G\. Howard\b|\bJeffrey S\. Vitter\b',      'https://www.cs.brown.edu/cgc/stc/ddms/'),
+    (r'\bCharles Bloom\b|\bcbloom\b',                     'http://cbloomrants.blogspot.com/'),
+    (r'\bPhil Katz\b|\bDEFLATE.*RFC\b|\bRFC 1951\b',     'https://datatracker.ietf.org/doc/html/rfc1951'),
+    (r'\bIntrospec\b.*compression|\bencode\.su.*8-bit\b', 'https://encode.su/threads/1893-State-of-the-art-byte-compression-for-8-bit-computers'),
+    (r'\bEinar Saukas\b',                                   'https://github.com/einar-saukas'),
+    (r'\bEmmanuel Marty\b',                                 'https://github.com/emmanuel-marty'),
+    # Magazines / publications (broader)
+    (r'\bMicronet 800\b',                                   'https://archive.org/'),
+    (r'\bPrestel\b',                                        'https://archive.org/'),
+    (r'\bVTX-5000\b',                                       'https://archive.org/'),
+    (r'\bSpectrum Computing\b.*archive',                    'https://spectrumcomputing.co.uk/'),
+    (r'\bspectrumcomputing\.co\.uk\b',                    'https://spectrumcomputing.co.uk/'),
+    (r'\bZX-Spectrum\.info\b|\bzx-spectrum\.info\b',     'https://speccy.info/'),
+    (r'\bdef-guide\b|\bDefinitive Guide\b',               'https://worldofspectrum.org/'),
 ]
 
 
@@ -370,7 +419,7 @@ def transform_bullet(text):
         for pat, url in NAMED_SOURCES:
             if ' ' in url or not url.startswith(('http', 'https')):
                 continue
-            if re.search(pat, title):
+            if re.search(pat, title, re.IGNORECASE):
                 # Compute the after-text (post bold close)
                 after_stars = text[bold_match.end()-1:]
                 skip = 0
@@ -382,7 +431,11 @@ def transform_bullet(text):
                 paren_match = re.match(r'^\([^)]*\)\s*', after)
                 if paren_match:
                     after = after[paren_match.end():]
-                sep = ' ' if after and not after[0].isspace() else ''
+                # Don't add separator if after starts with space or punctuation
+                if after and not after[0].isspace() and after[0] not in '.,;:?!':
+                    sep = ' '
+                else:
+                    sep = ''
                 new_text = f'[{title}]({url})' + sep + after
                 return new_text, True
     else:
@@ -390,7 +443,7 @@ def transform_bullet(text):
         for pat, url in NAMED_SOURCES:
             if ' ' in url or not url.startswith(('http', 'https')):
                 continue
-            m = re.search(pat, text)
+            m = re.search(pat, text, re.IGNORECASE)
             if m:
                 replacement = f'[{m.group(0)}]({url})'
                 new_text = text[:m.start()] + replacement + text[m.end():]

@@ -803,6 +803,6 @@ If `some_routine` might crash, you want interrupts on so the user can recover wi
 
 ## References
 
-- *Z80 CPU User Manual* by Zilog — official reference for stack operations and instruction timings
+- *[Z80 CPU User Manual](https://www.zilog.com/docs/z80/um0080.pdf)* by Zilog — official reference for stack operations and instruction timings
 - *Programming the Z80* by [Rodnay Zaks](https://en.wikipedia.org/wiki/Rodnay_Zaks) — calling conventions and stack discipline
 - *The [Complete Spectrum ROM Disassembly](https://worldofspectrum.org/ROMdisassembly.zip)* by Ian Logan and Frank O'Hara — shows the ROM's calling convention in action

@@ -855,7 +855,7 @@ This article is the canonical reference for the **asset pipeline**. Related deep
 ### Compression / crunchers
 - **ZX0** (Einar Saukas) — <https://github.com/einar-saukas/ZX0>
 - **ZX1** (simpler, faster variant) — <https://github.com/einar-saukas/ZX1>
-- **ZX7** (older, still widely used) — search "Einar Saukas ZX7"
+- [ZX7](https://github.com/AntoniVillena/zx7) — search "Einar Saukas ZX7"
 - [MegaLZ](https://github.com/ladislav-zezula/MegaLZ) — <https://github.com/tonyt76/MegaLZ>
 - **LZSA** (Emmanuel Marty) — <https://github.com/emmanuel-marty/lzsa>
 - **State of the art byte compression for 8-bit computers** (encode.su community thread with benchmarks) — <https://encode.su/threads/3001-State-of-the-art-byte-compression-(for-8-bit-computers)>

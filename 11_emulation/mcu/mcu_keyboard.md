@@ -608,14 +608,14 @@ For most users, an expansion port adapter with USB keyboard support and Kempston
 
 - [The ZX Spectrum ULA: How to Design a Microcomputer](http://www.zxdesign.info/) by Chris Smith — definitive reference on the ULA including the keyboard scan logic
 - **Spectrum 48K Service Manual** — keyboard matrix schematic and connector pinouts
-- **PS/2 Keyboard Protocol** — Adam Chapweske's documentation, widely mirrored
-- **USB HID Usage Tables** — official specification of HID keycodes
-- **RP2040 datasheet** — for the Raspberry Pi Pico
-- **TinyUSB library** — for USB host and HID parsing on RP2040/STM32
+- [PS/2 Keyboard Protocol](https://www.computer-engineering.org/ps2keyboard/) — Adam Chapweske's documentation, widely mirrored
+- [USB HID Usage Tables](https://usb.org/document-library/usb-hid-usage-tables-14) — official specification of HID keycodes
+- [RP2040 datasheet](https://www.raspberrypi.com/documentation/microcontrollers/) — for the Raspberry Pi Pico
+- [TinyUSB library](https://github.com/hathach/tinyusb) — for USB host and HID parsing on RP2040/STM32
 - **ZXHIDKeyboard project** — open-source RP2040 USB keyboard adapter
 - **ZXKey project** — open-source Arduino PS/2 keyboard adapter (membrane replacement)
-- **Kempston joystick interface documentation** — for the Kempston I/O port protocol
-- **Kempston mouse documentation** — for the Kempston mouse protocol
+- [Kempston joystick interface documentation](https://worldofspectrum.org/) — for the Kempston I/O port protocol
+- [Kempston mouse documentation](https://worldofspectrum.org/) — for the Kempston mouse protocol
 
 ## Cross-References
 

@@ -487,7 +487,7 @@ Key facts:
 
 ## References
 
-- **Zilog Z80 CPU User Manual (UM0080)** — Chapter 5: CPU Timing — the authoritative source for M-cycle types and bus signal timing
+- [Zilog Z80 CPU User Manual (UM0080)](https://www.zilog.com/docs/z80/um0080.pdf) — Chapter 5: CPU Timing — the authoritative source for M-cycle types and bus signal timing
 - **Z80 Family CPU User Manual (UM0081)** — Additional timing details and electrical characteristics
 - **Kenneth Shia, "Z80 Instruction Timing"** — Detailed per-instruction M-cycle breakdown
 

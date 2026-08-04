@@ -192,13 +192,13 @@ The reverse influence is weak. Mainstream tools (`gzip`, `bzip2`, `xz`, `7z`, `z
 
 The asymmetry-principle analysis above is grounded in the following primary sources:
 
-- **Yann Collet, *LZ4 Block Format Description*** (lz4/lz4 GitHub, 2011–2022). Explicit format rationale: *"design is assumed to favor simplicity and speed."* Read alongside the LZ4 implementation notes on large-length handling and 16-bit register overflow, which directly mirror the Z80 depacker's length-counter concerns.
-- **Pasi Ojala, *pucrunch — An Optimizing Hybrid LZ77 RLE Data Compression Program*** (1996–1997). The original C64-targeted analysis of the asymmetric design: *"A system with a 1-MHz 3-register 8-bit processor and 64 kilobytes of memory certainly imposes a great challenge, and thus also a great sense of achievement for good results."* Same constraints apply to ZX.
-- **Jarek Duda, *Asymmetric numeral systems: entropy coding combining speed of Huffman with accuracy of arithmetic coding***, arXiv:1311.2540 (2013). Theoretical foundation for understanding why Elias gamma coding is the right choice for 8-bit depackers — it is the simplest ANS coder with uniform distribution.
-- **Paul G. Howard and Jeffrey S. Vitter, *Practical Implementations of Arithmetic Coding*** (Brown University Tech Report CS-92-18, 1992). Documents the per-symbol cost of arithmetic coding on conventional CPUs; on Z80 the cost is ~5–10× higher.
-- **Charles Bloom, *On LZ Optimal Parsing*** (cbloomrants blog, 2008) and ***Advanced Parsing Strategies*** (fastcompression blog, 2011). Source of the optimal-parsing and lazy-matching techniques used by all Generation 3 ZX packers.
-- **Introspec, *State of the art byte compression (for 8-bit computers)*** (encode.su forum thread, 2018–2019). Direct discussion between the ZX packer community (Introspec, Einar Saukas, Emmanuel Marty) and mainstream data-compression experts. The Pareto-frontier analysis in §2.6 is grounded in the data published in this thread and the linked 2017/2021 benchmark articles.
-- **Phil Katz, *DEFLATE Compressed Data Format Specification*** (RFC 1951, 1996). The reference for what a "big-machine" depacker looks like, and how it differs structurally from any ZX format.
+- [Yann Collet, LZ4 Block Format Description](https://github.com/lz4/lz4). Explicit format rationale: *"design is assumed to favor simplicity and speed."* Read alongside the LZ4 implementation notes on large-length handling and 16-bit register overflow, which directly mirror the Z80 depacker's length-counter concerns.
+- [Pasi Ojala, pucrunch — An Optimizing Hybrid LZ77 RLE Data Compression Program](https://github.com/mhaben/pucrunch). The original C64-targeted analysis of the asymmetric design: *"A system with a 1-MHz 3-register 8-bit processor and 64 kilobytes of memory certainly imposes a great challenge, and thus also a great sense of achievement for good results."* Same constraints apply to ZX.
+- [Jarek Duda, Asymmetric numeral systems: entropy coding combining speed of Huffman with accuracy of arithmetic coding](https://arxiv.org/abs/1311.2540), arXiv:1311.2540 (2013). Theoretical foundation for understanding why Elias gamma coding is the right choice for 8-bit depackers — it is the simplest ANS coder with uniform distribution.
+- [Paul G. Howard and Jeffrey S. Vitter, Practical Implementations of Arithmetic Coding](https://www.cs.brown.edu/cgc/stc/ddms/). Documents the per-symbol cost of arithmetic coding on conventional CPUs; on Z80 the cost is ~5–10× higher.
+- [Charles Bloom, On LZ Optimal Parsing](http://cbloomrants.blogspot.com/) and ***Advanced Parsing Strategies*** (fastcompression blog, 2011). Source of the optimal-parsing and lazy-matching techniques used by all Generation 3 ZX packers.
+- [Introspec, State of the art byte compression (for 8-bit computers)](https://encode.su/threads/1893-State-of-the-art-byte-compression-for-8-bit-computers). Direct discussion between the ZX packer community (Introspec, Einar Saukas, Emmanuel Marty) and mainstream data-compression experts. The Pareto-frontier analysis in §2.6 is grounded in the data published in this thread and the linked 2017/2021 benchmark articles.
+- [Phil Katz, DEFLATE Compressed Data Format Specification](https://datatracker.ietf.org/doc/html/rfc1951). The reference for what a "big-machine" depacker looks like, and how it differs structurally from any ZX format.
 
 ---
 
@@ -1194,8 +1194,8 @@ Without RCS, `logo.scr.zx0` would typically be ~1800–3000 B — RCS saves 15�
 - **LZ77/LZSS**: Ziv-Lempel 1977; Storer-Szymanski 1982. The fundamental family underlying every packer in this article.
 - **Elias gamma coding**: Peter Elias, 1975. Used by `ZX0`, `ZX7`, `[MegaLZ](https://github.com/ladislav-zezula/MegaLZ)`.
 - **Rice coding**: Robert Rice, 1979. Used by `HRUM`.
-- **Optimal parsing via Dijkstra**: classical graph-theoretic approach. Einar Saukas's `ZX0`/`ZX7` parser is claimed to be O(n); the classic algorithm is O(n log n).
-- **Byte-aligned formats**: pioneered for 8-bit by `LZ4` and `LZSA`.
+- **Optimal parsing via Dijkstra**: classical graph-theoretic approach. Einar Saukas's `ZX0`/`[ZX7](https://github.com/AntoniVillena/zx7)` parser is claimed to be O(n); the classic algorithm is O(n log n).
+- **Byte-aligned formats**: pioneered for 8-bit by `[LZ4](https://github.com/lz4/lz4)` and `LZSA`.
 
 ### Tools not covered in depth
 

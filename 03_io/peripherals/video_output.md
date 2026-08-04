@@ -410,6 +410,6 @@ For detailed per-clone frame timing and how it affects software, see [Clone Timi
 - **"RGB for ZX Spectrum 128, +2, +2A, +3"** (https://mts.speccy.cz/doc/128_rgb.pdf) — detailed PDF on RGB output, signal levels, and SCART cable construction for all four RGB-capable Spectrum models
 - **OSSC documentation** (https://www.videogameperfection.com/en-gb/products/open-source-scan-converter/) — OSSC line multiplication modes and display compatibility
 - **gbscontrol project** (https://github.com/ramapcsx2/gbscontrol) — open-source replacement firmware for the GBS-8200/8220 scan converters
-- **RGB-to-HDMI project** (https://github.com/hoglet67/RGBtoHDMI) — Raspberry Pi-based HDMI video output for retro computers, with explicit Spectrum support
+- [RGB-to-HDMI project](https://github.com/hoglet67/RGBtoHDMI) — Raspberry Pi-based HDMI video output for retro computers, with explicit Spectrum support
 - **Redhawk S-Video PCB** (https://github.com/redhawk668/ZX-Spectrum-S-Video) — open hardware S-Video modification board for the 48K Spectrum
 - **Sinclair Wiki — ZX Spectrum 16K/48K article** — overview of the RF modulator and the LM1889 encoder stage on the original Sinclair boards

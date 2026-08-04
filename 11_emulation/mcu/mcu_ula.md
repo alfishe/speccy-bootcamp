@@ -402,10 +402,10 @@ With these implemented, an MCU-based ULA can be indistinguishable from the origi
 ## References
 
 - **[Chris Smith**, *The ZX Spectrum ULA](http://www.zxdesign.info/): How to Design a Microcomputer* (2010) — the definitive ULA reference
-- **Raspberry Pi RP2040 Datasheet** — PIO architecture, DMA, GPIO characteristics
+- [Raspberry Pi RP2040 Datasheet](https://www.raspberrypi.com/documentation/microcontrollers/) — PIO architecture, DMA, GPIO characteristics
 - **Pico Spectrum projects on GitHub** — various open-source ULA-on-MCU implementations
-- **PicoVGA** — RP2040 VGA generation library
-- **Pico DVI** — RP2040 DVI/HDMI generation via PIO
+- [PicoVGA](https://github.com/Panda385/PicoVGA) — RP2040 VGA generation library
+- [Pico DVI](https://github.com/Wren6991/pico-dvi) — RP2040 DVI/HDMI generation via PIO
 - **PAL composite video specification** — for sync and color burst timing
 - **Harlequin project** — FPGA ULA recreation for comparison (see [harlequin_sizif.md](../fpga/harlequin_sizif.md))
 - [Sensible tests by Andrew Owen](https://github.com/spectrum-pi/spectranet) — for floating bus and contention verification

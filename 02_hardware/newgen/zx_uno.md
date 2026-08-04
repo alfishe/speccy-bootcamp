@@ -256,7 +256,7 @@ The ZX-Uno and the ZX Spectrum Next are **complementary** — the Next is the mo
 - **ZX-Uno project page** ([zxuno.speccy.org](http://zxuno.speccy.org/)) — official project page with schematics, bitstreams, manuals, and forum links (primarily Spanish)
 - **Antonio Villena's ZX-Uno pages** ([antoniovillena.es](https://antoniovillena.es/)) — design notes, hardware revisions, expansion modules by the project's President and BIOS author
 - **zonadepruebas.com retro-computing forum** — the Spanish-language forum where the ZX-Uno project was conceived in 2012 and developed over four years
-- **AZXUNO (Asociación de Desarrolladores de ZX-UNO)** — the Spanish non-profit association legally constituted to manage the project
+- [AZXUNO (Asociación de Desarrolladores de ZX-UNO)](https://github.com/zxdos/zx-uno) — the Spanish non-profit association legally constituted to manage the project
 
 ### Hardware and Bitstream
 

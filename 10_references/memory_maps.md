@@ -378,7 +378,7 @@ When writing code that must run on multiple models:
 ## References
 
 - Ian Logan, Frank O'Hara — *The [Complete Spectrum ROM Disassembly](https://worldofspectrum.org/ROMdisassembly.zip)*, Melbourne House, 1983 — canonical ROM listing with system variable addresses
-- Sinclair Research — *ZX Spectrum BASIC Programming* by Steven Vickers, 1982 — original 16K/48K manual with memory map and system variables
+- Sinclair Research — *[ZX Spectrum BASIC Programming* by Steven Vickers, 1982 — original 16K/48K manual](https://www.worldofspectrum.org/hardware.html) with memory map and system variables
 - Amstrad — *[ZX Spectrum +2 Manual*, 1987 and *+3 Manual](https://www.worldofspectrum.org/hardware.html)*, 1987 — original 128K/+2/+2A/+3 documentation
 - [Chris Smith — *The ZX Spectrum ULA](http://www.zxdesign.info/)*, 2010 — definitive ULA reverse-engineering, explains contention
 - Black_Cat — *BC Info Guide #4*, 2008 — port and memory map tables for clones ([github mirror](https://github.com/tslabs/zx-evo/blob/master/pentevo/docs/ZX/zx-ports-full-table.txt))

@@ -389,15 +389,15 @@ For most users, VGA via resistor DAC is the cheapest option (~£1) and works wit
 
 ## References
 
-- **PicoVGA** by Miroslav Nemecek — VGA output library for RP2040 (GitHub)
-- **Pico DVI** by Luke Wren — DVI output from RP2040 via PIO (GitHub)
-- **RGB-to-HDMI** project — scan converter using Raspberry Pi (project wiki)
-- **ADV7513 datasheet** — Analog Devices HDMI encoder
-- **ADV7125 datasheet** — Analog Devices triple video DAC
-- **VGA timing documentation** — widely available, e.g., TinyVGA
-- **DVI specification** — for TMDS encoding details
-- **RP2040 datasheet** — for PIO programming
-- **Retroleum SMARTi, ZX-HD, Spectra** — Spectrum-specific video adapters
+- [PicoVGA](https://github.com/Panda385/PicoVGA) by Miroslav Nemecek — VGA output library for RP2040 (GitHub)
+- [Pico DVI](https://github.com/Wren6991/pico-dvi) by Luke Wren — DVI output from RP2040 via PIO (GitHub)
+- [RGB-to-HDMI](https://github.com/hoglet67/RGBtoHDMI) project — scan converter using Raspberry Pi (project wiki)
+- [ADV7513 datasheet](https://www.analog.com/en/products/adv7513.html) — Analog Devices HDMI encoder
+- [ADV7125 datasheet](https://www.analog.com/en/products/adv7125.html) — Analog Devices triple video DAC
+- [VGA timing documentation](https://en.wikipedia.org/wiki/VGA-compatible_text_mode) — widely available, e.g., TinyVGA
+- [DVI specification](https://www.ddwg.org/) — for TMDS encoding details
+- [RP2040 datasheet](https://www.raspberrypi.com/documentation/microcontrollers/) — for PIO programming
+- [Retroleum SMARTi, ZX-HD, Spectra](https://retroleum.co.uk/) — Spectrum-specific video adapters
 - [Chris Smith's The ZX Spectrum ULA](http://www.zxdesign.info/) — for the Spectrum's video timing
 
 ## Cross-References

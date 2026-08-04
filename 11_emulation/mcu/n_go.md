@@ -403,15 +403,15 @@ The result is a complete Spectrum that costs under £10, fits in the palm of you
 
 ## References
 
-- **RP2040 datasheet** — hardware reference for the Raspberry Pi Pico
+- [RP2040 datasheet](https://www.raspberrypi.com/documentation/microcontrollers/) — hardware reference for the Raspberry Pi Pico
 - **libz80 by Lin Ke-Fong** — Z80 emulator library (used in FUSE)
 - **z80ex** — cycle-accurate Z80 emulator
 - **Pico Spectrum projects on GitHub** — various open-source implementations
 - **SpecHMI project** — STM32-based complete Spectrum (Russian community)
 - [Chris Smith's The ZX Spectrum ULA](http://www.zxdesign.info/) — for the ULA's behavior
 - **FatFs by Elm-Chan** — FAT file system library
-- **PicoVGA** by Miroslav Nemecek — VGA output library
-- **Pico DVI** by Luke Wren — DVI output library
+- [PicoVGA](https://github.com/Panda385/PicoVGA) by Miroslav Nemecek — VGA output library
+- [Pico DVI](https://github.com/Wren6991/pico-dvi) by Luke Wren — DVI output library
 
 ## Cross-References
 

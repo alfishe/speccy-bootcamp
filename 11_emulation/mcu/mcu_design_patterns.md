@@ -706,14 +706,14 @@ These patterns appear repeatedly in the [Z80](mcu_z80.md), [ULA](mcu_ula.md), [F
 
 ## References
 
-- **Zilog Z84C00 (Z80 CPU) Datasheet** — bus timing specifications, setup/hold times, output drive capabilities
-- **Raspberry Pi RP2040 Datasheet** — PIO architecture, GPIO drive strength and slew rate, DMA channels, SIO multicore FIFO
-- **Raspberry Pi Pico C/C++ SDK** — `gpio_set_drive_strength()`, `critical_section`, `multicore_fifo_*`, `__not_in_flash_func`
-- **74HCT245 / 74HCT541 datasheets** (Texas Instruments, Nexperia, ST) — TTL-compatible thresholds, bidirectional transceivers
-- **TXB0108 / TXS0108E datasheets** (Texas Instruments) — dedicated level translators for serial buses
-- **ARM Cortex-M0+ Generic User Guide** — interrupt latency, BASEPRI, NVIC priorities
-- **Jack Ganssle's "A Guide to Debouncing"** — practical input handling
-- **Eli Hughes's embedded systems talks** — patterns for real-time firmware on ARM Cortex-M
+- [Zilog Z84C00 (Z80 CPU) Datasheet](https://www.zilog.com/docs/z80/um0080.pdf) — bus timing specifications, setup/hold times, output drive capabilities
+- [Raspberry Pi RP2040 Datasheet](https://www.raspberrypi.com/documentation/microcontrollers/) — PIO architecture, GPIO drive strength and slew rate, DMA channels, SIO multicore FIFO
+- [Raspberry Pi Pico C/C++ SDK](https://www.raspberrypi.com/documentation/microcontrollers/) — `gpio_set_drive_strength()`, `critical_section`, `multicore_fifo_*`, `__not_in_flash_func`
+- [74HCT245 / 74HCT541 datasheets](https://www.ti.com/lit/ds/symlink/sn74hct245.pdf) — TTL-compatible thresholds, bidirectional transceivers
+- [TXB0108 / TXS0108E datasheets](https://www.ti.com/lit/ds/symlink/txb0108.pdf) — dedicated level translators for serial buses
+- [ARM Cortex-M0+ Generic User Guide](https://developer.arm.com/documentation/dui0662/b/) — interrupt latency, BASEPRI, NVIC priorities
+- [Jack Ganssle's "A Guide to Debouncing"](https://www.ganssle.com/debouncing.htm) — practical input handling
+- [Eli Hughes's embedded systems talks](https://www.youtube.com/user/emnhub) — patterns for real-time firmware on ARM Cortex-M
 - [Chris Smith's The ZX Spectrum ULA](http://www.zxdesign.info/) — bus timing details, contention pattern, refresh cycles
 - **Retro-computing community wikis** — SpecNext, ZX-Uno, MiSTer, Harlequin, all apply these patterns
 - **SparkFun and Adafruit level shifting tutorials** — beginner-friendly explanations of 3.3V/5V interfacing
