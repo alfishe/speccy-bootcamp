@@ -401,7 +401,7 @@ With these implemented, an MCU-based ULA can be indistinguishable from the origi
 
 ## References
 
-- **[Chris Smith**, *The ZX Spectrum ULA](http://www.zxdesign.info/): How to Design a Microcomputer* (2010) — the definitive ULA reference
+- [Chris Smith, *The ZX Spectrum ULA: How to Design a Microcomputer* (2010)](http://www.zxdesign.info/) — the definitive ULA reference
 - [Raspberry Pi RP2040 Datasheet](https://www.raspberrypi.com/documentation/microcontrollers/) — PIO architecture, DMA, GPIO characteristics
 - **Pico Spectrum projects on GitHub** — various open-source ULA-on-MCU implementations
 - [PicoVGA](https://github.com/Panda385/PicoVGA) — RP2040 VGA generation library

@@ -245,7 +245,7 @@ For Spectrum enthusiasts who own original hardware and want to keep it alive, th
 ## References
 
 ### Primary Sources
-- **[Chris Smith's book**: *The ZX Spectrum ULA](http://www.zxdesign.info/): How to Design a Microcomputer* — the definitive technical reference on the ULA, basis for the Harlequin design
+- [Chris Smith's *The ZX Spectrum ULA: How to Design a Microcomputer*](http://www.zxdesign.info/) — the definitive technical reference on the ULA, basis for the Harlequin design
 - **[Harlequin project](http://www.zxdesign.info/) pages**: Chris Smith's documentation of the Harlequin hardware and FPGA core
 - **Sizif-512 GitHub**: Victor Trucco's open-source project, including schematics and Verilog HDL
 - **[Retroleum](https://retroleum.co.uk/) catalog**: UK retro-computing retailer selling Harlequin boards

@@ -654,7 +654,7 @@ This table is intentionally selective. The full historical record is preserved a
 - **Demozoo**: [demozoo.org](https://demozoo.org/) — the canonical multi-platform demoscene database
 - **Forever party**: [forever.zeroteam.sk](http://forever.zeroteam.sk/) — Slovakia, longest-running Spectrum-focused party
 - **Chaos Constructions**: [cc.org.ru](https://cc.org.ru/) — St. Petersburg, largest Russian multi-platform party
-- **[UNESCO inscription (2021)**: Germany's national listing of demoscene](https://en.wikipedia.org/wiki/Demoscene) as Intangible Cultural Heritage
+- [UNESCO inscription (2021): Germany's national listing of demoscene as Intangible Cultural Heritage](https://en.wikipedia.org/wiki/Demoscene)
 - [Piotr Marecki, Yerzmyey, Robert Straka, Demoscena ZX Spectrum](https://press.uj.edu.pl/catalog/) — the first full academic study of the Spectrum scene
 
 ### Background on the broader demoscene

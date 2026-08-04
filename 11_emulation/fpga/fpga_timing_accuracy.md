@@ -350,7 +350,7 @@ Modern high-quality cores — MiSTer, ZX-Uno, Harlequin, Sizif-512, ZX Evolution
 
 ## References
 
-- **[Chris Smith**, *The ZX Spectrum ULA](http://www.zxdesign.info/): How to Design a Microcomputer* (2010) — the definitive reference on ULA timing, contention patterns, and video signal generation
+- [Chris Smith, *The ZX Spectrum ULA: How to Design a Microcomputer* (2010)](http://www.zxdesign.info/) — the definitive reference on ULA timing, contention patterns, and video signal generation
 - **T80 Verilog Z80 core** — OpenCores / GitHub (Daniel Wallner and contributors)
 - [Zilog Z84C00 Z80 CPU Product Specification](https://www.zilog.com/docs/z80/um0080.pdf) — official datasheet with instruction timing
 - [MiSTer Spectrum core](https://github.com/MiSTer-devel/ZX-Spectrum_MiSTer) — GitHub (sorgelig) — reference T-state-precise implementation

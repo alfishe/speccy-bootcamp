@@ -611,7 +611,7 @@ These are historical curiosities today, but they were important design choices i
 - **The +3 manual**: included as a PDF in most emulator distributions.
 - **[World of Spectrum](https://worldofspectrum.org/) archive**: https://worldofspectrum.org/
 - **The +3 DOS reference ([comp.sys.sinclair](https://groups.google.com/g/comp.sys.sinclair) FAQ)**: archived at https://worldofspectrum.org/faq/
-- **[Fuse emulator**: https://fuse-emulator](https://fuse-emulator.sourceforge.net/).sourceforge.net/
+- [Fuse emulator](https://fuse-emulator.sourceforge.net/)
 - **[ZEsarUX](https://github.com/chernandezba/zesarux)**: https://github.com/chernandezba/zesarux
 - **FlashFloppy (Gotek firmware)**: https://github.com/keirf/FlashFloppy
 - **ZX Spectrum Wiki on +3 DOS**: https://sinclair.wiki.zx/+3-dos

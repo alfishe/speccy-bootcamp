@@ -642,9 +642,9 @@ The 2020s have seen a general revival of retro-demoscene activity, partly driven
 ### 13.4 Key reference works
 
 - **Andrew Owen / Raahir Ahmad**, "[ZX Spectrum Hardware Manual](https://www.worldofspectrum.org/hardware.html)" — primary reference for ULA timing.
-- **[Christian Bauer**, "The Secret of the Amiga Hardware" — primary reference for Amiga](https://www.amigadev.elowar.com/) OCS chipset.
-- **Rob nack/dKT**, "[Commodore 64 Programmer's Reference Guide" — primary reference](https://www.ko-wapper.de/hp/c64-prg/) for VIC-II/SID.
-- **[Don French**, "Atari](https://www.atariarchives.org/) ST Profibuch" — primary reference for ST hardware.
+- [Christian Bauer, "The Secret of the Amiga Hardware"](https://www.amigadev.elowar.com/) — primary reference for Amiga OCS chipset.
+- **Rob nack/dKT**, "Commodore 64 Programmer's Reference Guide" — primary reference for VIC-II/SID.
+- [Don French, "Atari ST Profibuch"](https://www.atariarchives.org/) — primary reference for ST hardware.
 - [MSX RED Book](https://www.msxarchive.nl/) — primary reference for MSX architecture.
 - [The Unofficial Amstrad WWW Repository](https://www.cpcwiki.eu/) — primary reference for CPC Gate Array.
 
