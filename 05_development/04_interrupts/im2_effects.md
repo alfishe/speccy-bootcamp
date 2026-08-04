@@ -521,7 +521,7 @@ If the 257th byte is wrong, the program will crash the first time the floating b
 ## Sources
 
 - *Disassemble Interrupt Mode on some popular ZX Spectrum 128k Games* (andydansby, zxspectrumcoding.wordpress.com, 2021) — 13-game IM2 disassembly survey with addresses, I register values, and table sizes
-- *Compatibility: An open letter to the Russian scene* (Gasman, Subliminal Extacy #3, zxpress.ru) — canonical statement on `#40`–`#7F` IM2 table crash and the cross-platform portability plea
+- *Compatibility: An open letter to the Russian scene* (Gasman, [Subliminal Extacy](https://zxart.ee/) #3, zxpress.ru) — canonical statement on `#40`–`#7F` IM2 table crash and the cross-platform portability plea
 - *Jim Bagley comment on Hudson Hawk IM2 manager* (via zxspectrumcoding.wordpress.com, 2021) — first-person description of the `#70D4` bank-shadow technique
 - *Interrupts - SpecNext Wiki* (wiki.specnext.dev) — Next hardware IM2 mode reference
-- *Arkos Tracker — Using interruption player on ZX Spectrum* (julien-nevo.com) — Arkos AKG IM2 setup code by Gusman
+- *[Arkos Tracker](https://www.julien-nevo.com/arkostracker/) — Using interruption player on ZX Spectrum* (julien-nevo.com) — Arkos AKG IM2 setup code by Gusman

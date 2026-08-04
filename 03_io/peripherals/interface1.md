@@ -555,14 +555,14 @@ Modern recreations of IF1 hardware exist for collectors — the "ZX-Uno" FPGA co
 ### Cross-references within this knowledge base
 
 - [Beta Disk Interface](../storage/beta_disk_interface.md) — the Soviet competitor that won where the IF1 lost; uses the same shadow-ROM paging trick at `#3D00` instead of `#0008`.
-- [Opus Discovery / MGT Format](../storage/opus_discovery_format.md) — the Western floppy interface that replaced the Microdrive in the UK.
+- [[Opus Discovery](https://worldofspectrum.org/) / MGT Format](../storage/opus_discovery_format.md) — the Western floppy interface that replaced the Microdrive in the UK.
 - [ROM 48K — Streams and Channels](../../04_operating_systems/rom_48k.md#streams-and-channels) — the channel/stream architecture the IF1 extends.
-- [System Variables — Interface 1 Variables](../../04_operating_systems/system_variables.md#interface-1-variables-5cb6-5cef) — the 58-byte area at `#5CB6–#5CEF` populated by the shadow ROM.
+- [System Variables — [Interface 1](https://worldofspectrum.org/) Variables](../../04_operating_systems/system_variables.md#interface-1-variables-5cb6-5cef) — the 58-byte area at `#5CB6–#5CEF` populated by the shadow ROM.
 - [Interrupt Programming](../../05_development/04_interrupts/interrupt_programming.md) — for IM2-based RS-232 receive patterns.
 - [Tape Format](../storage/tape_format.md) — the 9-byte file header reused verbatim in IF1 microdrive file records.
 - [Z80 Snapshot Format .Z80](../snapshots/z80_format.md) — preserves IF1 hardware state (hardware ID 1 = 48K + IF1).
 - [SZX Snapshot Format](../snapshots/szx_format.md) — the `IF1 ` chunk stores microdrive, serial, and network state.
-- [DivIDE / DivMMC](../storage/divide_divmmc.md) — the modern "spiritual successor" providing IDE/SD storage.
+- [[DivIDE](https://github.com/westonrf/divide-ide) / DivMMC](../storage/divide_divmmc.md) — the modern "spiritual successor" providing IDE/SD storage.
 - [[NextZXOS](https://gitlab.com/thesmog358/tbblue)](../../04_operating_systems/nextzxos.md) — the ZX Spectrum Next's modern successor to the IF1/ESXDOS storage model.
 
 ---

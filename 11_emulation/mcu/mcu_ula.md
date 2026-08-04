@@ -408,7 +408,7 @@ With these implemented, an MCU-based ULA can be indistinguishable from the origi
 - **Pico DVI** — RP2040 DVI/HDMI generation via PIO
 - **PAL composite video specification** — for sync and color burst timing
 - **Harlequin project** — FPGA ULA recreation for comparison (see [harlequin_sizif.md](../fpga/harlequin_sizif.md))
-- **Sensible tests by Andrew Owen** — for floating bus and contention verification
+- [Sensible tests by Andrew Owen](https://github.com/spectrum-pi/spectranet) — for floating bus and contention verification
 
 ## Cross-references
 

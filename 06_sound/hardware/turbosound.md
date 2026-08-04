@@ -925,7 +925,7 @@ FPGA cores that implement TurboSound should follow the TS-Conf specification for
 
 - **Pro Tracker 3.x documentation** — S. Bulba, 1997–2003. The PT3 player source includes the canonical TS detection routine and per-clone port table.
 - **Vortex Tracker II documentation** — S. Bulba, 2003. Documents the .PT3 file format extensions for TurboSound and per-clone export options.
-- **TS-Conf specification** — Russian FPGA community, 2014–present. Defines the modern triple-AY hardware interface.
+- [TS-Conf specification](https://zxevo.ru/) — Russian FPGA community, 2014–present. Defines the modern triple-AY hardware interface.
 - **ZX Spectrum Next TBBlue Register Reference** — [zxnext.io](https://zxnext.io), 2017–present. Documents the `#2A` and `#2B` registers and legacy TS mode.
 
 ### Community Knowledge

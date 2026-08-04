@@ -220,7 +220,7 @@ If you have a board without revision markings, the **QFP-packaged Z80** and **Mi
 ## References
 
 - **NedoPC ZX Evolution page** ([nedopc.com/zxevo/zxevo_eng.php](http://nedopc.com/zxevo/zxevo_eng.php)) — official hardware documentation, schematics (rev B/C), bill of materials, user manual, soldering manual, and firmware downloads
-- **BaseConf source** (SVN at `svn.nedopc.com`) — official BaseConf bitstream source and build instructions
+- [BaseConf source](https://nedopc.com/) — official BaseConf bitstream source and build instructions
 - **TS-Conf official docs** ([github.com/tslabs/zx-evo](https://github.com/tslabs/zx-evo)) — alternative firmware (sprites, tilemap, DMA) — see [ts_conf.md](ts_conf.md)
 - **BruXy ZX Evolution review** ([bruxy.regnet.cz](https://bruxy.regnet.cz/web/8bit/EN/zx-evolution/)) — independent hands-on review with hardware photos, monitor compatibility tests, and software demonstrations
 - **Andrew Lazarev's ZX Evolution site** ([zx.andrew-lazarev.com/en/](https://zx.andrew-lazarev.com/en/)) — community-maintained programming guides and software archive

@@ -386,7 +386,7 @@ The one scenario that still favours IDE is the **ZX Evolution** and **Scorpion**
 
 - [ATA/ATAPI Command Set-2 (ACS-2)](https://www.t13.org/standards) — ANSI INCITS 482-2012, the successor to the original ATA/ATAPI-7 standard. Documents the IDE register file, `READ SECTORS`/`WRITE SECTORS` commands, and the LBA addressing scheme used by every Spectrum IDE interface.
 - **CompactFlash Association CF Specification** — the public CF specification covering "True IDE Mode" that most Spectrum IDE interfaces actually use via a CF socket.
-- **DivIDE documentation** (Dylan Smith et al.) — the canonical hardware and firmware reference for the `#E3`–`#E7` port block and 8 KB RAM/ROM banking.
+- [DivIDE documentation](https://github.com/westonrf/divide-ide) — the canonical hardware and firmware reference for the `#E3`–`#E7` port block and 8 KB RAM/ROM banking.
 - [ZEsarUX source code](https://github.com/chernandezba/zesarux) — emulator implementation of the DivIDE port layout; useful for verifying edge cases in banking and interrupt behavior.
 - **[zx-pk.ru](https://zx-pk.ru) DivIDE / Nemo IDE threads** — the primary discussion venue for Russian-language IDE hardware mods (KAY IDE, ATM Turbo IDE, SMUC ISA bridge).
 

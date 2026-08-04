@@ -865,7 +865,7 @@ YM2203 emulation is well-understood — the chip is in MAME, and FPGA implementa
 
 - **YM2203 Application Manual** — Yamaha, 1985. The authoritative reference for FM register layout, operator behavior, and electrical specs.
 - **Profi TurboSound FM schematic** — Profi community, 1996. Circulates on [zx-pk.ru](https://zx-pk.ru/).
-- **TS-Conf specification** — Russian FPGA community, 2017–present. Documents the FPGA-friendly TSFM port decoding.
+- [TS-Conf specification](https://zxevo.ru/) — Russian FPGA community, 2017–present. Documents the FPGA-friendly TSFM port decoding.
 
 ### Community Knowledge
 

@@ -316,10 +316,10 @@ TS-Conf and the Next solve the same problem (modern graphics for the Spectrum) b
 ## References
 
 - **TS-Conf official documentation** ([GitHub: tslabs/zx-evo — `pentevo/docs/TSconf/tsconf_en.md`](https://github.com/tslabs/zx-evo/blob/master/pentevo/docs/TSconf/tsconf_en.md)) — authoritative port and register reference, maintained by the tslabs team
-- **Aleksandr Zhuravlev (`tsl`) TS-Conf pages** — design notes and programming tutorials (Russian)
+- [Aleksandr Zhuravlev (`tsl`) TS-Conf pages](https://zxevo.ru/) — design notes and programming tutorials (Russian)
 - **NedoPC forum** ([nedopc.org](http://nedopc.org/zxevo/)) — TS-Conf-specific threads, software releases, and BaseConf/TS-Conf bitstream downloads
 - **[zx-pk.ru](https://zx-pk.ru) forum** — *TS-Conf* subforum with driver documentation and example programs (Russian)
-- **TS-Conf software archive** — games, demos, and utilities written specifically for TS-Conf
+- [TS-Conf software archive](https://zxevo.ru/) — games, demos, and utilities written specifically for TS-Conf
 - **Russian demoscene archives** — TS-Conf-targeted releases from CC Chaos Constructions, diHalt,FUNTOP, etc.
 - **[zxevo.ru](https://zxevo.ru) wiki** — ZX Evolution community wiki with TS-Conf programming guides (Russian)
 - **ZEsarUX emulator** ([GitHub: chernandezba/zesarux](https://github.com/chernandezba/zesarux)) — has a TS-Conf machine mode for development testing without real hardware

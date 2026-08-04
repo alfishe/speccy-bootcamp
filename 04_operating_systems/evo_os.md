@@ -697,7 +697,7 @@ For now (2024), the platform is healthy, and the community is active. New users 
 ### 10.3 External resources
 
 - **[nedopc.com](https://nedopc.com)** — The NedoPC team's website, with hardware documentation, BaseConf downloads, and NedoDOS releases.
-- **speccy.info** — A Russian-language Spectrum wiki with detailed ZX Evolution information.
+- [speccy.info](https://speccy.info) — A Russian-language Spectrum wiki with detailed ZX Evolution information.
 - **[zx-pk.ru](https://zx-pk.ru)** — The main Russian Spectrum community forum.
 
 ---

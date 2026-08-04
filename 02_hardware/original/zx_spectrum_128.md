@@ -389,7 +389,7 @@ The 128K's integrated keyboard uses a membrane that degrades over time. Replacem
 
 - [Sinclair Research Ltd.](https://www.worldofspectrum.org/hardware.html) — *ZX Spectrum 128K User Manual* (1986)
 - [Investrónica / Sinclair Research](https://www.worldofspectrum.org/hardware.html) — *ZX Spectrum 128K (versión española) Manual* (1985)
-- **Andrew Owen** — Sinclair ZX Spectrum 128K Technical Information (Sinclair Wiki)
+- [Andrew Owen](https://github.com/spectrum-pi/spectranet) — Sinclair ZX Spectrum 128K Technical Information (Sinclair Wiki)
 - [World of Spectrum](https://worldofspectrum.org/) — hardware documentation and reference photos
 - [Chris Smith](http://www.zxdesign.info/) — *The ZX Spectrum ULA: How to Design a Microcomputer* (2010) — although focused on the 48K ULA, the 128K gate array differences are documented in appendices
 - [ZX Spectrum Service Manual](https://www.worldofspectrum.org/hardware.html) — board schematics for issues 1, 2, and 3

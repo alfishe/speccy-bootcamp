@@ -317,5 +317,5 @@ For a canonical detection routine, see the World of Spectrum FAQ's "How to detec
 - [Fuse emulator](https://fuse-emulator.sourceforge.net/) source (`peripherals/ula.c`, `peripherals/dck.c`, `machines/plus3.c`) — open-source reference implementation of contention for all Sinclair and Amstrad models
 - [ZEsarUX](https://github.com/chernandezba/zesarux) source — cycle-exact contention for +2A/+3 including the 100 T-state gap
 - [comp.sys.sinclair](https://groups.google.com/g/comp.sys.sinclair) FAQ — historical discussion of when the +2A/+3 contention differences were first documented (mid-1990s)
-- The +3E ROM project notes (Andrew Owen) — discussion of how +3 DOS ROM code paths were adjusted for +2A/+3 timing
+- The +3E ROM project notes ([Andrew Owen](https://github.com/spectrum-pi/spectranet)) — discussion of how +3 DOS ROM code paths were adjusted for +2A/+3 timing
 

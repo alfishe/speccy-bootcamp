@@ -459,7 +459,7 @@ If only partial code was loaded, you may need to manually reconstruct the missin
 
 ### External references
 
-- **`.z80` Snapshot Format Specification** (Gerton Lunter, original author of the xzx emulator; extended by the WoS community) — the canonical format reference covering versions 1/2/3, the page-extension blocks, the AY register block, and the Multiface state block.
+- [`.z80` Snapshot Format Specification](https://worldofspectrum.org/z80format/) — the canonical format reference covering versions 1/2/3, the page-extension blocks, the AY register block, and the Multiface state block.
 - [`.szx` (Spectrum Z80 eXtended) format specification](https://fuse-emulator.sourceforge.net/) — the modern XML-based snapshot format that replaces the brittle fixed-layout `.z80` extension blocks; supports arbitrary hardware state (DivIDE, Spectranet, Betadisk NE555, etc.).
 - [`.sna` format documentation](https://worldofspectrum.org/) — the simpler 48K-only snapshot format inherited from the Amstrad CPC; documented in the WoS archive.
 - [Fuse / ZEsarUX / UnrealSpeccy source code](https://sdkcad.free.fr/) — emulator references for how snapshots are loaded and saved; the de facto specification is whatever the major emulators agree on.

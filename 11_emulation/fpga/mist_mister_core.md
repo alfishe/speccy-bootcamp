@@ -307,7 +307,7 @@ For development, reverse engineering, or casual use, software emulators like [Fu
 - **ZX Spectrum core wiki**: documentation specific to the Spectrum core, including configuration tips and known issues
 
 ### Cross-References
-- [ZX-Uno Core](zx_uno_core.md) — alternative FPGA platform for the Spectrum
+- [[ZX-Uno](https://github.com/zxdos/zx-uno) Core](zx_uno_core.md) — alternative FPGA platform for the Spectrum
 - [ZX Evolution](zxevo.md) — Russian FPGA Spectrum
 - [Harlequin / Sizif](harlequin_sizif.md) — modern FPGA Spectrum hardware
 - [FPGA Implementation](fpga_implementation.md) — how Spectrum FPGA cores are designed

@@ -269,7 +269,7 @@ Some older tutorials (especially for Game Boy and NES development) use TASM. If 
 
 For new development, prefer:
 
-- [[SjASMPlus](sjasmplus.md)](https://github.com/z00m128/sjasmplus) — for ZX Spectrum and ZX Spectrum Next
+- [[SjASMPlus]([sjasmplus](https://github.com/z00m128/sjasmplus).md)](https://github.com/z00m128/sjasmplus) — for ZX Spectrum and ZX Spectrum Next
 - **[WLA-DX](wla_dx.md)** — for Game Boy, NES, SNES, and multi-CPU work
 - **[vasm](vasm.md)** — for portable multi-CPU work
 - **RGBDS** — for Game Boy specifically (the modern standard)

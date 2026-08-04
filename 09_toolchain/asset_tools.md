@@ -825,11 +825,11 @@ This article is the canonical reference for the **asset pipeline**. Related deep
 ## References
 
 ### Screen graphics
-- **ZX Paintbrush** — <https://www.usebox.net/jjm/zxpaintbrush/>
-- **png2scr** (reidrac) — <https://github.com/reidrac/png2scr>
-- **zx-tools** (Anton Romanov, including `png2scr` variants, font tools) — <https://github.com/anton-bulanov/zx-tools>
+- [ZX Paintbrush](https://www.usebox.net/jjm/zxpaintbrush/) — <https://www.usebox.net/jjm/zxpaintbrush/>
+- [png2scr](https://github.com/reidrac/png2scr) — <https://github.com/reidrac/png2scr>
+- [zx-tools](https://github.com/anton-bulanov/zx-tools) — <https://github.com/anton-bulanov/zx-tools>
 - **ZX Spectrumizer** (browser-based) — <https://atornblad.github.io/zx-spectrumizer/>
-- **ZX-Modules** (Simon Owen; multi-format editor for Windows) — <https://worldofspectrum.net/zx-modules/>
+- [ZX-Modules](https://worldofspectrum.net/zx-modules/) — <https://worldofspectrum.net/zx-modules/>
 
 ### Sprites
 - [SevenUp](https://worldofspectrum.org/) / **SevenUp Plus** — widely distributed via World of Spectrum and the Spectrum Computing archive
@@ -840,13 +840,13 @@ This article is the canonical reference for the **asset pipeline**. Related deep
 
 ### Fonts
 - **FZX format specification** — <https://sinclair.wiki.zxnet.co.uk/wiki/FZX_format>
-- **FZX Editor (ZX-Modules)** — <https://worldofspectrum.net/zx-modules/100>
+- [FZX Editor (ZX-Modules)](https://worldofspectrum.net/zx-modules/) — <https://worldofspectrum.net/zx-modules/100>
 - **Fony** (Windows font editor) — <https://hukka.ncn.fi/?fony>
 - [z88dk FZX font library](https://github.com/z88dk/z88dk) — <https://github.com/z88dk/z88dk/tree/master/libsrc/_DEVELOPMENT/font>
 
 ### Music and SFX
 - **Vortex Tracker II** — <http://bulba.untergrund.net/vortex_e.htm>
-- **Arkos Tracker 2 / 3** — <https://www.julien-nevo.com/arkos/>
+- [Arkos Tracker 2 / 3](https://www.julien-nevo.com/arkostracker/) — <https://www.julien-nevo.com/arkos/>
 - **Beepola** (1-bit beeper tracker) — <https://shiru.untergrund.net/software.shtml>
 - **BeepFX** (1-bit SFX generator) — <https://shiru.untergrund.net/software.shtml>
 - **ayFX** (AY SFX) — <https://shiru.untergrund.net/software.shtml>
@@ -856,7 +856,7 @@ This article is the canonical reference for the **asset pipeline**. Related deep
 - **ZX0** (Einar Saukas) — <https://github.com/einar-saukas/ZX0>
 - **ZX1** (simpler, faster variant) — <https://github.com/einar-saukas/ZX1>
 - **ZX7** (older, still widely used) — search "Einar Saukas ZX7"
-- **MegaLZ** (introspec / spke) — <https://github.com/tonyt76/MegaLZ>
+- [MegaLZ](https://github.com/ladislav-zezula/MegaLZ) — <https://github.com/tonyt76/MegaLZ>
 - **LZSA** (Emmanuel Marty) — <https://github.com/emmanuel-marty/lzsa>
 - **State of the art byte compression for 8-bit computers** (encode.su community thread with benchmarks) — <https://encode.su/threads/3001-State-of-the-art-byte-compression-(for-8-bit-computers)>
 - **Optimizations in ZX0 compression** (heckmeck.de blog) — <https://heckmeck.de/blog/optimizations-in-zx0-compression/>

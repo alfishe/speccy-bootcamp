@@ -490,7 +490,7 @@ IN   A,(C)         ; Read hardware ID
 
 ## References
 
-- **Ivan Roshchin, "Display Driver for the Pentagon-128"** (ZX Review #3-4, 1997) — Practical multicolor on the Pentagon with timing details
+- [Ivan Roshchin, "Display Driver for the Pentagon-128"](https://zxpress.ru/) — Practical multicolor on the Pentagon with timing details
 - **Sinclair Wiki, "Contended Memory"** ([sinclair.wiki.zxnet.co.uk](https://sinclair.wiki.zxnet.co.uk/wiki/Contended_memory)) — Per-model contention patterns including +2A/+3 gate array
 - **ZX Spectrum Next Developer Reference** ([zxspectrumnext.dev](https://zxspectrumnext.dev)) — Next-specific timing, copper coprocessor, and enhanced video modes
 - **Scorpion ZS-256 Programmer's Reference** (ZXPress) — Scorpion I/O ports and configuration

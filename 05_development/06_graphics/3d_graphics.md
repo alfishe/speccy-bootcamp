@@ -706,7 +706,7 @@ Raycasting works because the ray-wall intersection is cheap for axis-aligned rec
 - Chris Y. Gray, Stephen Northcott, David Broadhurst, *Freescape engine* — Incentive Software, internal documentation excerpts archived at [Wikipedia](https://en.wikipedia.org/wiki/Freescape)
 - *3D Construction Kit* user manual (Incentive, 1991) — complete Freescape data format reference
 - bannalia.blogspot.com, *Filmation math* posts — derivation of the isometric projection used by *Knight Lore* and *Head Over Heels*
-- L. Spiro, *Ultimate Play the Game disassembly notes* — *Knight Lore* and *Alien 8* reverse-engineering writeups
+- L. Spiro, *[Ultimate Play the Game](https://archive.org/) disassembly notes* — *Knight Lore* and *Alien 8* reverse-engineering writeups
 - *Head Over Heels* source reconstruction project (Graham Goring) — commented Z80 source
 - *Star Glider* disassembly writeups — Argonaut's wireframe-with-ground engine
 - Russian demoscene raycasting source code — late-1990s productions archived at [zx-art.ru](http://zx-art.ru)

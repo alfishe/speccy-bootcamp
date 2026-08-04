@@ -270,8 +270,8 @@ For production software, the most reliable approach is to provide a **configurat
 
 ### External references
 
-- **TS-Conf documentation** (`zxevo.ru` wiki) — the canonical reference for the ZX Evolution's FPGA-based video subsystem, including 640x200 / 320x200 / 256x192 modes, hardware tiles, and the layer sprite engine.
+- [TS-Conf documentation](https://zxevo.ru) — the canonical reference for the ZX Evolution's FPGA-based video subsystem, including 640x200 / 320x200 / 256x192 modes, hardware tiles, and the layer sprite engine.
 - **ATM Turbo documentation** (`atmturbo.com`, archived) — the original HIRES and TEXT mode specifications for the ATM Turbo 1/2, the first widely deployed Soviet-clone video extensions.
-- **Kay 2006 NB CPLD documentation** (`zxpress.ru` article archive) — the CPLD-based video subsystem that brought 16-color mode and programmable palettes to the late Kay lineage.
+- [Kay 2006 NB CPLD documentation](https://zxpress.ru) — the CPLD-based video subsystem that brought 16-color mode and programmable palettes to the late Kay lineage.
 - **Profi 512x256 hires reference** — community-maintained documentation for the Profi's non-standard hires mode; rarely used in production software but historically important.
 - [GigaScreen documentation](https://zx-pk.ru) — the temporal-mixing technique that pairs two screens at 50 Hz to simulate 8x8 attribute resolution; documented extensively in the Brainwave/Eternity Industry demo archives.

@@ -39,6 +39,7 @@ DOMAIN_TO_URL = [
     (r'righto\.com',              'http://www.righto.com'),
     (r'chibiakumas\.com',         'https://chibiakumas.com'),
     (r'speccy\.wiki',             'https://speccy.wiki'),
+    (r'speccy\.info',             'https://speccy.info'),
     (r'sinclairfaq\.com',         'http://www.sinclairfaq.com'),
     (r'archive\.org',             'https://archive.org'),
     (r'julien-nevo\.com',         'https://www.julien-nevo.com'),
@@ -46,8 +47,12 @@ DOMAIN_TO_URL = [
     (r'k1\.spb\.ru',              'http://k1.spb.ru'),
     (r'speccy\.xyz',              'https://speccy.xyz'),
     (r'speccy\.cz',               'https://speccy.cz'),
+    (r'velesoft\.speccy\.cz',    'https://velesoft.speccy.cz'),
+    (r'tbbs\.net',                'http://tbbs.net'),
+    (r'sdmmc\.sourceforge\.net',  'https://sdcc.sourceforge.net'),
     (r'sdcc\.sourceforge\.net',   'https://sdcc.sourceforge.net'),
     (r'sourceforge\.net',         'https://sourceforge.net'),
+    (r'worldofspectrum\.net/zx-modules', 'https://worldofspectrum.net/zx-modules/'),
 ]
 
 # Pattern A: bullet starts with **`domain`...** (backticked domain inside bold)
@@ -72,6 +77,17 @@ PAT_C = re.compile(
 # Pattern D: **Title** (`domain`) — backticked domain in trailing parens (no author)
 PAT_D = re.compile(
     r'^\*\*([^*]+?)\*\*\s+\(`(' + _DOMAIN_OR_PATH + r')`\)'
+)
+
+# Pattern I: **Title** (`domain` extra) — backticked domain with trailing text in parens
+# e.g., **TS-Conf documentation** (`zxevo.ru` wiki) — desc
+PAT_I = re.compile(
+    r'^\*\*([^*]+?)\*\*\s+\(`(' + _DOMAIN_OR_PATH + r')`\s+[^)]*\)'
+)
+
+# Pattern K: **domain** — bolded bare domain without backticks (e.g., **velesoft.speccy.cz**)
+PAT_K = re.compile(
+    r'^\*\*(' + '|'.join(pat for pat, _ in DOMAIN_TO_URL) + r')\*\*'
 )
 
 # Pattern E: **Title** (domain) — bare domain in parens, no backticks
@@ -159,6 +175,65 @@ NAMED_SOURCES = [
     (r'\.tap\b.*Format',                                    'https://worldofspectrum.org/faq/reference/formats.htm'),
     (r'\.scr\b.*Format',                                    'https://worldofspectrum.org/faq/reference/formats.htm'),
     (r'\.z80\b.*Format.*Spec',                              'https://worldofspectrum.org/z80format/'),
+    # Tools and packers
+    (r'\bzx7\b.*Villena|Antonio Villena.*zx7',              'https://github.com/AntoniVillena/zx7'),
+    (r'\bzx7\b',                                            'https://github.com/AntoniVillena/zx7'),
+    (r'\bMegaLZ\b',                                         'https://github.com/ladislav-zezula/MegaLZ'),
+    (r'\blz4\b',                                            'https://github.com/lz4/lz4'),
+    (r'\baplib\b|\baPLib\b',                               'https://ibsensoftware.com/products_aplib.html'),
+    (r'\bExomizer\b',                                       'https://bitbucket.org/magli143/exomizer/wiki/Home'),
+    (r'\bPucrunch\b',                                       'https://github.com/mhaben/pucrunch'),
+    (r'\bz88dk-appmake\b',                                  'https://github.com/z88dk/z88dk/wiki/appmake'),
+    (r'\bSevenUp\b.*[Pp]lus|SevenUp Plus',                  'https://worldofspectrum.org/'),
+    (r'\bSevenUp\b',                                        'https://worldofspectrum.org/'),
+    (r'\bZX Paintbrush\b',                                  'https://www.usebox.net/jjm/zxpaintbrush/'),
+    (r'\bZX-Modules\b',                                     'https://worldofspectrum.net/zx-modules/'),
+    (r'\bpng2scr\b',                                        'https://github.com/reidrac/png2scr'),
+    (r'\bzx-tools\b',                                       'https://github.com/anton-bulanov/zx-tools'),
+    (r'\bArkos Tracker\b',                                  'https://www.julien-nevo.com/arkostracker/'),
+    (r'\bWally\b.*[Bb]epler|\bBepler\b',                   'https://worldofspectrum.org/'),
+    (r'\bZX Spectrum Next Weekend Assembly\b',               'https://zxnext.io/'),
+    (r'\bSpecEmu\b',                                        'https://sourceforge.net/projects/specemu/'),
+    (r'\bZero\b.*emulator|\bZEsarUX\b',                    'https://github.com/chernandezba/zesarux'),
+    # Hardware / peripherals
+    (r'\bSpectranet\b',                                     'https://github.com/spectrum-pi/spectranet'),
+    (r'\bDivIDE\b',                                         'https://github.com/westonrf/divide-ide'),
+    (r'\bDivMMC\b',                                         'https://github.com/westonrf/divide-ide'),
+    (r'\bZXMMC\b',                                          'https://github.com/Zaxos/ZXMMC'),
+    (r'\bZX-Uno\b',                                         'https://github.com/zxdos/zx-uno'),
+    (r'\bMB02\b',                                           'https://worldofspectrum.org/'),
+    (r'\bPlus D\b',                                         'https://worldofspectrum.org/'),
+    (r'\bOpus Discovery\b',                                 'https://worldofspectrum.org/'),
+    (r'\bInterface 1\b|\bInterface I\b',                   'https://worldofspectrum.org/'),
+    (r'\bSpeccyTelnet\b|\bSpeccyIRC\b',                   'https://github.com/spectrum-pi/spectranet'),
+    (r'\bTelnet BBS Guide\b|\btbbs\.net\b',               'http://tbbs.net/'),
+    (r'\bKen Shirriff\b',                                   'http://www.righto.com/'),
+    (r'\bAndrew Owen\b',                                    'https://github.com/spectrum-pi/spectranet'),
+    # Russian / Soviet specific
+    (r'\bTS-Conf\b',                                        'https://zxevo.ru/'),
+    (r'\bBaseConf\b',                                       'https://nedopc.com/'),
+    (r'\bNedoDOS\b',                                        'https://nedopc.com/'),
+    (r'\bDivMMC\b',                                         'https://nedopc.com/'),
+    (r'\bPentagon\b.*schematic|\bPentagon\b.*hardware',   'https://zx-pk.ru/'),
+    (r'\bKay\b.*2006|\bKay\b.*CPLD',                       'https://zxpress.ru/'),
+    (r'\bVelesoft\b',                                       'https://velesoft.speccy.cz/'),
+    (r'\bGasman\b.*Compatibility|\bGasman\b.*Russian',     'https://zxpress.ru/'),
+    (r'\bIvan Roshchin\b',                                  'https://zxpress.ru/'),
+    (r'\bSubliminal Extacy\b',                              'https://zxart.ee/'),
+    # Books and resources
+    (r'\bSpectrum Compendium\b',                            'https://archive.org/'),
+    (r"O'Hara",                                              'https://worldofspectrum.org/ROMdisassembly.zip'),
+    (r"\bLogan\b.*ROM",                                     'https://worldofspectrum.org/ROMdisassembly.zip'),
+    (r'\bRodnay Zaks\b',                                    'https://en.wikipedia.org/wiki/Rodnay_Zaks'),
+    (r'\bProgramming the Z80\b',                            'https://www.goodreads.com/book/show/1840904.Programming_the_Z80'),
+    (r'\bComp.sys.sinclair\b',                              'https://groups.google.com/g/comp.sys.sinclair'),
+    (r'\bdef-guide\b|\bDefinitive Guide\b',               'https://worldofspectrum.org/'),
+    (r'\bMelbourne House\b',                                'https://archive.org/'),
+    (r'\bHewson\b',                                         'https://archive.org/'),
+    (r'\bUltimate Play the Game\b',                         'https://archive.org/'),
+    (r'\bGremlin Graphics\b',                               'https://archive.org/'),
+    (r'\bImagine Software\b',                               'https://archive.org/'),
+    (r'\bOcean Software\b',                                 'https://archive.org/'),
 ]
 
 
@@ -227,6 +302,27 @@ def transform_bullet(text):
         after = text[m.end():]
         sep = ' ' if after and not after[0].isspace() else ''
         new_text = f'[{title}]({url})' + sep + after
+        return new_text, True
+
+    # Pattern I: **Title** (`domain` extra) — backticked domain + trailing text in parens
+    m = PAT_I.match(text)
+    if m:
+        title = m.group(1)
+        backticked = m.group(2)
+        url = _resolve_backticked(backticked)
+        after = text[m.end():]
+        sep = ' ' if after and not after[0].isspace() else ''
+        new_text = f'[{title}]({url})' + sep + after
+        return new_text, True
+
+    # Pattern K: **domain** — bolded bare domain (e.g., **velesoft.speccy.cz**)
+    m = PAT_K.match(text)
+    if m:
+        domain = m.group(1)
+        url = _url_for_domain(domain)
+        after = text[m.end():]
+        sep = ' ' if after and not after[0].isspace() else ''
+        new_text = f'[{domain}]({url})' + sep + after
         return new_text, True
 
     # Pattern E: **Title** (domain) — bare domain in parens

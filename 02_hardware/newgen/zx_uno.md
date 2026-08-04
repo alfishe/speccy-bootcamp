@@ -261,7 +261,7 @@ The ZX-Uno and the ZX Spectrum Next are **complementary** — the Next is the mo
 ### Hardware and Bitstream
 
 - **ZX-Uno bitstream source** ([GitHub: zxdos](https://github.com/zxdos)) — Verilog source for the FPGA core (GPL-licensed)
-- **ZX-Uno schematic and PCB** (Creative Commons Share-Alike) — published alongside the bitstream for hardware hackers
+- [ZX-Uno schematic and PCB](https://github.com/zxdos/zx-uno) — published alongside the bitstream for hardware hackers
 - **ZX-Uno Wiki** ([github.com/zxdos/zxuno/wiki](https://github.com/zxdos/zxuno/wiki)) — community-maintained documentation (English and Spanish)
 - **Multi-core framework by Samuel Baselga (Quest)** — the framework that allows loading up to 9 cores into the FPGA without a JTAG programmer
 

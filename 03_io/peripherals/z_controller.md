@@ -323,8 +323,8 @@ For a modern Russian-clone owner who wants a single board covering all four func
 
 ## Primary Sources
 
-- **SpeccyWiki (Russian): "Z-Controller"** (https://speccy.info/Z-Controller, archived at https://web.archive.org/web/20240918071026/https://speccy.info/Z-Controller) — the canonical Russian-language reference, including authorship attribution to Alexey Zhabin (KingOfEvil), 2007 design date, and the list of supported functions (PS/2 keyboard, PS/2 mouse, IDE, SD)
-- **SpeccyWiki (Russian): "Nemo IDE"** (https://speccy.info/Nemo_IDE, archived at https://web.archive.org/web/20241118014803/https://speccy.info/Nemo_IDE) — original Nikolai Tyrsin 1994 IDE controller, of which the Z-Controller's IDE block is a software-compatible re-implementation
+- [SpeccyWiki (Russian): "Z-Controller"](https://speccy.info/Z-Controller, archived at https://web.archive.org/web/20240918071026/https://speccy.info/Z-Controller) — the canonical Russian-language reference, including authorship attribution to Alexey Zhabin (KingOfEvil), 2007 design date, and the list of supported functions (PS/2 keyboard, PS/2 mouse, IDE, SD)
+- [SpeccyWiki (Russian): "Nemo IDE"](https://speccy.info/Nemo_IDE, archived at https://web.archive.org/web/20241118014803/https://speccy.info/Nemo_IDE) — original Nikolai Tyrsin 1994 IDE controller, of which the Z-Controller's IDE block is a software-compatible re-implementation
 - **MB03+ Ultimate documentation** (LMN128, https://sites.google.com/view/mb03plus/home) — explicitly lists "Z-Controller SD slot" as one of the legacy peripherals implemented in the FPGA
 - **MB03+ Programmer's Reference** (https://docs.google.com/document/d/13TADX_NDnTwVzgUwc03NiR2T0OVlg4SGwOctBSOVOWw/edit) — technical details of the MB03+'s Z-Controller compatibility mode
 - **ZX Spectrum Neo manual** (Mumio.dev, https://mumio.dev/files/ZX_Spectrum_Neo_EN_A5_v3.pdf) — explicitly notes that the Neo's SD card support uses Z-Controller mechanisms

@@ -297,13 +297,13 @@ For modern exploration, **Fuse and ZEsarUX** provide complete ZX Net simulation.
 
 ### Primary Sources
 
-- **Ian Logan & Mike O'Hare — *Sinclair ZX Interface 1 — Software ROM Disassembly*** (1984) — the canonical disassembly of the dock ROM, including the ZX Net protocol implementation
-- **Sinclair Research — *ZX Interface 1 Manual*** (1983) — the user-facing documentation of `*` commands including `*NET`, `*LOAD name N`, etc.
+- [Ian Logan & Mike O'Hare — Sinclair ZX Interface 1 — Software ROM Disassembly](https://worldofspectrum.org/) — the canonical disassembly of the dock ROM, including the ZX Net protocol implementation
+- [Sinclair Research — ZX Interface 1 Manual](https://worldofspectrum.org/) — the user-facing documentation of `*` commands including `*NET`, `*LOAD name N`, etc.
 - **Sinclair Research — *ZX Microdrive Manual*** (1983) — companion documentation for the microdrive file system that ZX Net exposed
 
 ### Contemporary Coverage
 
-- **CRASH magazine Interface 1 review** (Issue 6, 1984) — contemporary assessment of ZX Net's classroom potential
+- [CRASH magazine Interface 1 review](https://worldofspectrum.org/) — contemporary assessment of ZX Net's classroom potential
 - [Sinclair User](https://archive.org/details/sinclair-user-magazine) and **Your Spectrum** articles (1983–1985) — coverage of Interface 1 hardware, microdrive reliability, and educational deployments
 - **Comparative reviews of ZX Net vs Econet** (1984–1985) — contemporary discussion of the classroom-networking market
 
@@ -316,8 +316,8 @@ For modern exploration, **Fuse and ZEsarUX** provide complete ZX Net simulation.
 ### Related Articles in This Knowledge Base
 
 - [Modems](modems.md) — early Internet connectivity via telephone lines
-- [Spectranet](spectranet.md) — modern TCP/IP networking hardware for the Spectrum
+- [[Spectranet](https://github.com/spectrum-pi/spectranet)](spectranet.md) — modern TCP/IP networking hardware for the Spectrum
 - [ZiFi](zifi.md) — modern WiFi module for the Spectrum
 - [ESP WiFi](esp_wifi.md) — ESP8266/ESP32-based WiFi modules
 - [ZX Spectrum Next WiFi](zx_next_wifi.md) — the Next's built-in WiFi capability
-- [Storage Formats](../storage/README.md) — Interface 1 microdrive and RS-232 documentation
+- [Storage Formats](../storage/README.md) — [Interface 1](https://worldofspectrum.org/) microdrive and RS-232 documentation

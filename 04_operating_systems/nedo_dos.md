@@ -632,7 +632,7 @@ For users of ZX Evolution hardware, these limitations are minor. For users of ot
 
 ### External references
 
-- **NedoDOS documentation** (`nedopc.com`, Russian and English) — the canonical reference for NedoDOS as shipped with the Sprinter computer and the NedoPC team's later projects; covers the API, the dot-command system, and the FAT16 implementation.
+- [NedoDOS documentation](https://nedopc.com/) — the canonical reference for NedoDOS as shipped with the Sprinter computer and the NedoPC team's later projects; covers the API, the dot-command system, and the FAT16 implementation.
 - **Sprinter 2000 documentation** (`sprinter.com`, archived) — the Sprinter's hardware reference; documents the ISA bus and PC-style peripheral layout that NedoDOS was designed to drive.
 - [zx-pk.ru / `nedopc.com` forum threads](https://zx-pk.ru) — primary discussion venue for NedoDOS extensions, the Z-Controller's FAT implementation, and the modern cross-platform ports of NedoDOS to DivIDE-class hardware.
 - [ESXDOS documentation](https://github.com/joneiricon/ESXDOS) — for direct comparison; NedoDOS and ESXDOS target similar use cases (hierarchical filesystem on Z80-class hardware) but evolved independently.

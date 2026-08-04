@@ -292,7 +292,7 @@ While less known outside the Russian-speaking world than the [MiSTer](mist_miste
 - **ZX Evolution project website / SVN**: the original project repository with schematics, CPLD firmware, and MCU code
 - **NedoPC** (nedopc.org): Russian retro-computing retailer and community hub, primary source for ZX Evolution hardware and information
 - **Vladimir Kladov's project pages**: design notes and documentation by the ZX Evolution's lead designer
-- **BaseConf source code**: Verilog/VHDL for the CPLD firmware, available on GitHub
+- **[BaseConf](https://nedopc.com/) source code**: Verilog/VHDL for the CPLD firmware, available on GitHub
 
 ### Community Resources
 - **ZX-Forum.ru / Russian Spectrum forums**: primary Russian-language discussion of the ZX Evolution
@@ -301,7 +301,7 @@ While less known outside the Russian-speaking world than the [MiSTer](mist_miste
 
 ### Cross-References
 - [MiST / MiSTer Core](mist_mister_core.md) — alternative FPGA platform with Pentagon core
-- [ZX-Uno](zx_uno_core.md) — alternative FPGA Spectrum (Spanish scene)
+- [[ZX-Uno](https://github.com/zxdos/zx-uno)](zx_uno_core.md) — alternative FPGA Spectrum (Spanish scene)
 - [Harlequin / Sizif](harlequin_sizif.md) — other modern Spectrum hardware
 - [FPGA Implementation](fpga_implementation.md) — how FPGA cores are designed (the ZX Evolution uses CPLD, but similar principles)
 - [FPGA Timing Accuracy](fpga_timing_accuracy.md) — cycle-exact timing considerations

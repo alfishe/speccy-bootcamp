@@ -237,7 +237,7 @@ Modems are now obsolete for Spectrum use. Modern alternatives — [Spectranet](s
 
 ### Primary Sources
 
-- **Sinclair Research — *ZX Interface 1 Manual*** (1983) — RS-232 port documentation and BASIC `STREAMS` interface
+- [Sinclair Research — ZX Interface 1 Manual](https://worldofspectrum.org/) — RS-232 port documentation and BASIC `STREAMS` interface
 - **Prism — *VTX-5000 User Manual*** (1984) — the canonical Spectrum-specific modem reference
 - **BT — *Prestel User Guide*** (various years, 1979–1994) — the videotex service documentation
 
@@ -250,14 +250,14 @@ Modems are now obsolete for Spectrum use. Modern alternatives — [Spectranet](s
 
 ### Modern Sources
 
-- **Telnet BBS Guide** (tbbs.net) — modern listing of telnet-accessible BBSes for retro modem experimentation
+- [Telnet BBS Guide](http://tbbs.net) — modern listing of telnet-accessible BBSes for retro modem experimentation
 - [World of Spectrum modem archive](https://worldofspectrum.org/) — documentation of Spectrum-specific modem hardware
-- **Spectranet project** — modern TCP/IP alternative that replaced modems for Spectrum use
+- [Spectranet project](https://github.com/spectrum-pi/spectranet) — modern TCP/IP alternative that replaced modems for Spectrum use
 
 ### Related Articles in This Knowledge Base
 
 - [ZX Net](zx_net.md) — Sinclair's earlier (1983) classroom LAN product, predating widespread modem use
-- [Spectranet](spectranet.md) — the modern Ethernet/TCP/IP alternative to modems
+- [[Spectranet](https://github.com/spectrum-pi/spectranet)](spectranet.md) — the modern Ethernet/TCP/IP alternative to modems
 - [ZiFi](zifi.md) — modern WiFi module replacing modems
 - [ESP WiFi](esp_wifi.md) — DIY ESP-based WiFi alternatives
 - [ZX Spectrum Next WiFi](zx_next_wifi.md) — the Next's built-in WiFi

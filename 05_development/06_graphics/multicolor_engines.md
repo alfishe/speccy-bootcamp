@@ -412,7 +412,7 @@ A game that works on the standard Spectrum assumes 768 bytes of attribute file. 
 - Einar Saukas, *BIFROST\* Engine* — reference distribution and documentation, [World of Spectrum forum thread](https://worldofspectrum.org/forums/discussion/52615/)
 - Einar Saukas, *NIRVANA+ Engine* — reference distribution, [GitHub](https://github.com/einar-saukas/NIRVANA-Plus)
 - Andrew Owen, *ULAplus specification* — original 2008 document and reference implementation, [ULAplus homepage](https://www.imaginescape.co.uk/)
-- Andrew Owen, *ZXodus Engine* (2011)
+- [Andrew Owen](https://github.com/spectrum-pi/spectranet), *ZXodus Engine* (2011)
 - Timex Computer 2048 / TS2068 hardware reference manuals — HiColor and HiRes mode documentation
 - Cristina Gonzalez's *Pietro Bros* and *Gandalf* — worked examples of NIRVANA+ in shipping games
 - *Knights & Demons DX* — worked example of BIFROST* in a shipping game

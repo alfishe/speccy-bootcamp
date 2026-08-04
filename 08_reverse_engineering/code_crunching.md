@@ -435,8 +435,8 @@ Some packers use self-modifying code in the depacker stub (e.g., modifying the d
 
 ### External references
 
-- **`zx7` documentation** (Antonio Villena) — the canonical modern packer; documents the exhaustive-search algorithm that achieves better compression than the classic ZX-series crunchers at the cost of slower packing.
-- **`lz4` and `aplib` format references** — generic LZ formats that some modern Spectrum releases use for cross-platform compatibility; the decompressor is more complex but compression is tighter.
-- **`MegaLZ` documentation** (Bulba / Maxim) — the LZ-based packer widely used in the late 1990s Russian demoscene; documents the bit-stream encoding and the asymmetric packing constraint (decompresses to any address, packs on a different machine).
+- [`zx7` documentation](https://github.com/AntoniVillena/zx7) — the canonical modern packer; documents the exhaustive-search algorithm that achieves better compression than the classic ZX-series crunchers at the cost of slower packing.
+- [`lz4` and `aplib` format references](https://github.com/lz4/lz4) — generic LZ formats that some modern Spectrum releases use for cross-platform compatibility; the decompressor is more complex but compression is tighter.
+- [`MegaLZ` documentation](https://github.com/ladislav-zezula/MegaLZ) — the LZ-based packer widely used in the late 1990s Russian demoscene; documents the bit-stream encoding and the asymmetric packing constraint (decompresses to any address, packs on a different machine).
 - [zx-pk.ru packer benchmark threads](https://zx-pk.ru) — Russian-language community benchmarks comparing compression ratios of `zx7` / `MegaLZ` / `HRUM` / `LZ4` / `aplib` on standard test corpora (game binaries, demo code, graphics).
 - [`z88dk-appmake` documentation](https://github.com/z88dk/z88dk/wiki/appmake) — the z88dk-side reference for packing Spectrum binaries; includes worked examples of the `--combine` and `--app-type` flags for producing packed `.tap` / `.tzx` images.

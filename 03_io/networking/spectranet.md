@@ -268,27 +268,27 @@ For modern retro-computing, the Spectranet is the choice for users who want maxi
 
 ### Primary Sources
 
-- **Andrew Owen — Spectranet documentation** — the canonical hardware, firmware, and API documentation, hosted at the Spectranet project site
-- **Spectranet firmware source code** — open-source Z80 assembly implementing the TCP/IP stack, available on GitHub
-- **Spectranet PCB artwork and bill of materials** — open-source hardware design files
+- [Andrew Owen — Spectranet documentation](https://github.com/spectrum-pi/spectranet) — the canonical hardware, firmware, and API documentation, hosted at the Spectranet project site
+- [Spectranet firmware source code](https://github.com/spectrum-pi/spectranet) — open-source Z80 assembly implementing the TCP/IP stack, available on GitHub
+- [Spectranet PCB artwork and bill of materials](https://github.com/spectrum-pi/spectranet) — open-source hardware design files
 
 ### Software and Documentation
 
-- **SpeccyTelnet, SpeccyIRC** — Andrew Owen's reference client implementations
+- [SpeccyTelnet, SpeccyIRC](https://github.com/spectrum-pi/spectranet) — Andrew Owen's reference client implementations
 - [z88dk Spectranet wrapper](https://github.com/z88dk/z88dk) — C-callable Spectranet API for z88dk C programs
-- **Telnet BBS Guide** (tbbs.net) — modern listing of telnet-accessible BBSes
+- [Telnet BBS Guide](http://tbbs.net) — modern listing of telnet-accessible BBSes
 
 ### Community
 
-- **Spectranet wiki and forums** — active community documentation and Q&A
+- [Spectranet wiki and forums](https://github.com/spectrum-pi/spectranet) — active community documentation and Q&A
 - [World of Spectrum forums](https://worldofspectrum.org/) — discussion of Spectranet hardware, firmware, and software
 - **ZX Spectrum Next forum** — comparisons between Spectranet and the Next's built-in WiFi
 
 ### Related Articles in This Knowledge Base
 
 - [ZX Net](zx_net.md) — Sinclair's 1983 classroom LAN, the predecessor concept
-- [Modems](modems.md) — telephone-line connectivity that Spectranet replaced
-- [ZiFi](zifi.md) — WiFi alternative to Spectranet
+- [Modems](modems.md) — telephone-line connectivity that [Spectranet](https://github.com/spectrum-pi/spectranet) replaced
+- [ZiFi](zifi.md) — WiFi alternative to [Spectranet](https://github.com/spectrum-pi/spectranet)
 - [ESP WiFi](esp_wifi.md) — DIY ESP-based WiFi modules
 - [ZX Spectrum Next WiFi](zx_next_wifi.md) — the Next's built-in WiFi
 - [Cross-Platform Toolchain](../../09_toolchain/cross_platform_toolchain.md) — [z88dk](https://github.com/z88dk/z88dk)'s Spectranet C wrapper

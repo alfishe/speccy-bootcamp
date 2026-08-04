@@ -1050,7 +1050,7 @@ Or read it twice and check for consistency:
 ## References
 
 - Ian Logan, Frank O'Hara — *The [Complete Spectrum ROM Disassembly](https://worldofspectrum.org/ROMdisassembly.zip)*, Melbourne House, 1983 — canonical reference for every routine
-- Dr. Ian Logan — *ZX Spectrum 128 ROM Disassembly*, 1986 — the 128K ROM equivalent
+- Dr. Ian [Logan — *ZX Spectrum 128 ROM Disassembly*, 1986 — the 128K ROM](https://worldofspectrum.org/ROMdisassembly.zip) equivalent
 - Geoff Wearmouth — [*Gosh Wonderful ROM*](http://www.wearmouth.demon.co.uk/gw03.htm) — a community-improved 48K ROM with extensive annotations of every routine
 - Toni Baker — *Mastering Machine Code on Your ZX Spectrum*, 1983 — practical ROM routine usage from assembly
 - World of Spectrum — [ROM routines reference](https://worldofspectrum.org/faq/reference/romreference.htm)

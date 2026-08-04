@@ -305,12 +305,12 @@ For Spanish-scene enthusiasts, demoscene producers using ULAplus, or anyone who 
 ## References
 
 ### Primary Sources
-- **ZX-Uno project GitHub**: official repository for hardware, core, and documentation
+- **[ZX-Uno](https://github.com/zxdos/zx-uno) project GitHub**: official repository for hardware, core, and documentation
 - **Antonio Villena's website**: design notes, production information, and order links
-- **ZX-Uno wiki**: community-maintained documentation on configuration, software loading, and troubleshooting
+- **[ZX-Uno](https://github.com/zxdos/zx-uno) wiki**: community-maintained documentation on configuration, software loading, and troubleshooting
 
 ### Community Resources
-- **zorlac.es / speccy.org Spanish forums**: the primary ZX-Uno community discussion
+- **zorlac.es / speccy.org Spanish forums**: the primary [ZX-Uno](https://github.com/zxdos/zx-uno) community discussion
 - **[World of Spectrum](https://worldofspectrum.org/) forums**: English-language ZX-Uno discussion threads
 - **ULAplus specification** by Andrew Owen: technical documentation of the ULAplus palette extension
 
@@ -320,4 +320,4 @@ For Spanish-scene enthusiasts, demoscene producers using ULAplus, or anyone who 
 - [Harlequin / Sizif](harlequin_sizif.md) — original-form-factor modern Spectrum
 - [FPGA Implementation](fpga_implementation.md) — how these cores are designed
 - [FPGA Timing Accuracy](fpga_timing_accuracy.md) — cycle-exact timing in FPGA
-- [Spectranet](../../03_io/networking/spectranet.md) — Andrew Owen's other major Spectrum project (related to ULAplus by author)
+- [[Spectranet](https://github.com/spectrum-pi/spectranet)](../../03_io/networking/spectranet.md) — Andrew Owen's other major Spectrum project (related to ULAplus by author)

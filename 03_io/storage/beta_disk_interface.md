@@ -906,7 +906,7 @@ A non-exhaustive list of historically important Soviet custom loaders:
 ### 12.2 Adjacent hardware references
 
 - [plus3_floppy.md](plus3_floppy.md) — for comparison: the +3's integrated WD1772-PH controller and its (different) port map.
-- For Spectrum clone onboard FDCs (Pentagon, Scorpion, ATM Turbo, Profi, Kay, ZX Evolution, Karabas): see §7 above, and the [02_hardware/](../../02_hardware/) section.
+- For Spectrum clone onboard FDCs ([Pentagon, Scorpion, ATM Turbo, Profi, Kay, ZX Evolution, Karabas): see §7 above, and the [02_hardware/](../../02_hardware](https://zx-pk.ru/)/) section.
 
 ### 12.3 Reverse engineering and demoscene angles
 
@@ -924,7 +924,7 @@ A non-exhaustive list of historically important Soviet custom loaders:
 - [Spectrumpedia (Grussu, A.)](https://speccy.wiki/) — English-, Italian- and Spanish-language encyclopedia of the ZX Spectrum, including articles on the Soviet clone ecosystem and the Mr Gluk Reset Service. Italian first edition archived at <https://web.archive.org/web/20240121061245/https://worldofspectrum.net/pub/sinclair/books/s/Spectrumpedia.pdf>; author's site with revised editions at <https://www.alessandrogrussu.it/zx/>.
 - **The TR-DOS 5.03 ROM source code** — disassemblies are widely available (e.g. on the WoS archive, zxevo.ru, and [programandala.net/tr-dos](https://github.com/programandala-net/tr-dos)). Reading the TR-DOS source is the best way to understand how the Beta Disk Interface ports are used in practice.
 - **The Beta Disk Interface schematic** — original schematics are rare, but several reverse-engineered schematics circulate in the Spectrum community. The Pentagon and Scorpion motherboard schematics are also useful because they include the onboard FDC circuitry.
-- **Andrew Owen's "ZX Spectrum Hardware" pages** — original documentation on the Beta Disk Interface, with pinouts and address-decoder details.
+- [Andrew Owen's "ZX Spectrum Hardware" pages](https://github.com/spectrum-pi/spectranet) — original documentation on the Beta Disk Interface, with pinouts and address-decoder details.
 - [The comp.sys.sinclair FAQ](https://groups.google.com/g/comp.sys.sinclair) — historical context on the Beta Disk Interface and its competitors (Opus Discovery, Plus D, Rotronics Wafadrive, Microdrive).
 - [The "Beta 128 Disk Interface" entry on the World of Spectrum archive](https://worldofspectrum.org/) — software compatibility lists and historical information.
 

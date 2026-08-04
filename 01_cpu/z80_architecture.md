@@ -417,7 +417,7 @@ reti
 ## References
 
 - **Z80 CPU User Manual (UM0080)** — Zilog, the primary reference: zilog.com/docs/z80/um0080.pdf
-- **Ken Shirriff, "Down to the silicon: how the Z80's registers are implemented"** — die-level reverse engineering of the register file: righto.com/2014/10/how-z80s-registers-are-implemented-down.html
+- [Ken Shirriff, "Down to the silicon: how the Z80's registers are implemented"](http://www.righto.com/) — die-level reverse engineering of the register file: righto.com/2014/10/how-z80s-registers-are-implemented-down.html
 - **Z80 Technical Manual** — Mostek/Zilog, detailed hardware description: dunfield.classiccmp.org/r/z80tm.pdf
 - [Rodnay Zaks, "Programming the Z80"](https://en.wikipedia.org/wiki/Rodnay_Zaks) — classic programming reference
 - [Chris Smith, "The ZX Spectrum ULA: How to design a microcomputer"](http://www.zxdesign.info/) — explains why Sinclair chose the Z80

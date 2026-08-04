@@ -328,7 +328,7 @@ The ROM can be replaced with a 27C256 EPROM programmed with the canonical +2A or
 - Ian Colquhoun's "The Hardware Book" — Spectrums +2A and +3 chapters
 - Christopher Lampton, *The Spectrum +2A/+3 Hardware Reference* ([comp.sys.sinclair](https://groups.google.com/g/comp.sys.sinclair) archive)
 - The "[World of Spectrum](https://worldofspectrum.org/)" hardware registry — +2A and +3 entries (mirror at the Internet Archive)
-- +3E ROM project by Andrew Owen (community-maintained bug-fixed +3 ROM)
+- +3E ROM project by [Andrew Owen](https://github.com/spectrum-pi/spectranet) (community-maintained bug-fixed +3 ROM)
 - Zircon 2000 issue on Amstrad ASIC reverse-engineering (Russian hardware zine, English translation available)
 - Sinclair/Amstrad service manuals for the +2A (part 40084) and +3 (parts 40084/40085) — circuit diagrams and ASIC pinouts
 

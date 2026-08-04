@@ -36,9 +36,9 @@ The original 48K Spectrum has only one interrupt source (the ULA frame interrupt
 
 #### Classic Add-ons
 
-- **Interface 1**: Can generate interrupts for RS232 data reception. Rarely used by commercial software.
+- **[Interface 1](https://worldofspectrum.org/)**: Can generate interrupts for RS232 data reception. Rarely used by commercial software.
 - **Multiface 128 / Multiface 3**: Uses **NMI** (non-maskable), not INT — see below.
-- **MB02+, DivIDE, DivMMC**: Disk interfaces may assert INT for disk I/O completion or NMI for the "magic button" trap.
+- **MB02+, [DivIDE](https://github.com/westonrf/divide-ide), DivMMC**: Disk interfaces may assert INT for disk I/O completion or NMI for the "magic button" trap.
 - **General Sound / NeoGS**: A sound coprocessor card with its own Z80 CPU. The host sends commands via a shared queue; the card can assert **INT on completion** or when its output buffer needs refilling. This lets the host sleep in `HALT` and wake only when the card needs attention — far cheaper than polling. The card's Z80 handles all audio mixing; the host CPU is free for game logic.
 
 #### ZX Spectrum Next (TBBlue / FPGA)
@@ -67,7 +67,7 @@ The TS-Configuration for ZX Evolution provides:
 
 #### Other FPGA Platforms
 
-- **ZX-Uno**: Configurable Spectrum-on-FPGA. Supports ULAplus, Timex modes, and configurable contention. Interrupt sources depend on the loaded core.
+- **[ZX-Uno](https://github.com/zxdos/zx-uno)**: Configurable Spectrum-on-FPGA. Supports ULAplus, Timex modes, and configurable contention. Interrupt sources depend on the loaded core.
 - **Sizif-512**: A standalone CPLD-based (Altera EPM1270) ZX Spectrum clone that fits in a 48K rubber case. Supports four machine modes — **Pentagon 128**, **Spectrum 128**, **Spectrum 48**, and **Spectrum +3e** — selectable at runtime. Includes 512K RAM, real AY-3-8910, ULAplus, and integrated DivMMC. The interrupt behavior follows whichever machine mode is active (Pentagon timing in Pentagon mode, standard ULA timing in 128/48 modes).
 
 > [!NOTE]

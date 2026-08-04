@@ -329,6 +329,6 @@ Neither is "better" — they target different communities and different software
 - **ZX Evolution SVN/GitHub** — open-source CPLD and ATmega firmware
 - **NedoPC forum** (nedopc.org) — primary community hub, Russian-language
 - **[zx-pk.ru](https://zx-pk.ru) forum** — *ZX Evolution* subforum with build guides, repair threads, and software announcements
-- **TS-Conf documentation** (tsl / Aleksandr Zhuravlev) — the enhanced firmware's programmer reference
+- [TS-Conf documentation](https://zxevo.ru/) — the enhanced firmware's programmer reference
 - **Vladimir Kladov's personal pages** — design notes, history of the project
 - **Russian demoscene archives** (CC Chaos Constructions, diHalt, CAFe, FunTop, AXAC, ZX-Dev parties) — ZX Evolution-targeted demos and intros

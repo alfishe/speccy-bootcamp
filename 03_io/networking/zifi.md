@@ -327,7 +327,7 @@ The ZiFi approach has been so successful that **built-in ESP8266 WiFi** is now s
 
 ### Cross-References
 
-- [Spectranet](spectranet.md) — the alternative Ethernet-based TCP/IP solution
+- [[Spectranet](https://github.com/spectrum-pi/spectranet)](spectranet.md) — the alternative Ethernet-based TCP/IP solution
 - [ESP WiFi](esp_wifi.md) — broader family of ESP8266/ESP32-based Spectrum networking solutions
 - [ZX Spectrum Next WiFi](zx_next_wifi.md) — built-in ESP WiFi on the Next
 - [Modems](modems.md) — the 1980s dial-up era that WiFi replaced

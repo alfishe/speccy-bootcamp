@@ -318,7 +318,7 @@ isPentagon:
 
 ### External references
 
-- **Pentagon schematics and documentation** (`zx-pk.ru` archive) — the canonical reference for the Pentagon 48 / 128 / 1024 line counts: 64+256+48+48 = 622 lines at 3580 kHz CPU clock (vs the 48K's 3120 kHz and 312 lines).
+- [Pentagon schematics and documentation](https://zx-pk.ru) — the canonical reference for the Pentagon 48 / 128 / 1024 line counts: 64+256+48+48 = 622 lines at 3580 kHz CPU clock (vs the 48K's 3120 kHz and 312 lines).
 - **Mac Buster's Pentagon FAQ v1.0.2** (2001, archived) — the standard reference for Pentagon-specific behavior; documents the absence of memory contention and the resulting faster effective clock.
 - [`Sphinx` magazine archive](https://zxpress.ru) — primary-source Soviet-era articles on Pentagon video timing, including the design rationale for the 48.83 Hz frame (vs the 48K's 50.08 Hz).
 - [UnrealSpeccy source code](https://sdkcad.free.fr/) — the primary emulator that modeled the Pentagon's exact timing; documentation and source comments explain the scanline-count choice.

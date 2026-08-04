@@ -359,7 +359,7 @@ NOT_TOKEN:
 
 - Steven Vickers — *ZX Spectrum BASIC Programming*, Sinclair Research, 1982 — original keyword list
 - Ian Logan, Frank O'Hara — *The [Complete Spectrum ROM Disassembly](https://worldofspectrum.org/ROMdisassembly.zip)*, Melbourne House, 1983 — token table and TOKENS routine disassembly
-- Dr. Ian Logan — *ZX Spectrum 128 ROM Disassembly*, 1986 — 128K token table
+- Dr. Ian [Logan — *ZX Spectrum 128 ROM](https://worldofspectrum.org/ROMdisassembly.zip) Disassembly*, 1986 — 128K token table
 - Russell Marks — *Introduction to ZX Spectrum BASIC*, online — modern reference for 48K and 128K dialects
 - Geoff Wearmouth — *48K ROM Disassembly*, [wearmouth.demon.co.uk](https://www.wearmouth.demon.co.uk/zxsp2.htm) — authoritative byte-exact listing
 - World of Spectrum — [BASIC tokens FAQ](https://worldofspectrum.org/faq/reference/basicreference.htm)

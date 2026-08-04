@@ -656,7 +656,7 @@ For these disks, the TR-DOS catalog may be empty or may contain only the loader 
 ### 10.3 External references
 
 - [The TR-DOS 5.03 ROM source code](https://worldofspectrum.org/) — disassemblies are widely available (zxevo.ru, WoS archive). Reading the source is the best way to understand the on-disk format; the format is defined by what the ROM code reads and writes.
-- **"TR-DOS File Format Specification" by Andrew Owen** — the original designer's notes, occasionally available on Spectrum community sites.
+- ["TR-DOS File Format Specification" by Andrew Owen](https://github.com/spectrum-pi/spectranet) — the original designer's notes, occasionally available on Spectrum community sites.
 - [The TRDOS.LST file in the UnrealSpeccy emulator distribution](https://sdkcad.free.fr/) — a detailed format specification maintained by the emulator community.
 - [The comp.sys.sinclair FAQ and the Russian-language zx-pk.ru forum](https://groups.google.com/g/comp.sys.sinclair) — community-maintained documentation on TR-DOS variants and extensions.
 - [The "ESXDOS" documentation](https://github.com/joneiricon/ESXDOS) — for the modern TR-DOS-compatible system used by DivMMC and similar peripherals. ESXDOS extends TR-DOS with long filenames, subdirectories, and FAT compatibility.

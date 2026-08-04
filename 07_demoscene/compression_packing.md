@@ -1192,7 +1192,7 @@ Without RCS, `logo.scr.zx0` would typically be ~1800–3000 B — RCS saves 15�
 ### Background on compression theory
 
 - **LZ77/LZSS**: Ziv-Lempel 1977; Storer-Szymanski 1982. The fundamental family underlying every packer in this article.
-- **Elias gamma coding**: Peter Elias, 1975. Used by `ZX0`, `ZX7`, `MegaLZ`.
+- **Elias gamma coding**: Peter Elias, 1975. Used by `ZX0`, `ZX7`, `[MegaLZ](https://github.com/ladislav-zezula/MegaLZ)`.
 - **Rice coding**: Robert Rice, 1979. Used by `HRUM`.
 - **Optimal parsing via Dijkstra**: classical graph-theoretic approach. Einar Saukas's `ZX0`/`ZX7` parser is claimed to be O(n); the classic algorithm is O(n log n).
 - **Byte-aligned formats**: pioneered for 8-bit by `LZ4` and `LZSA`.

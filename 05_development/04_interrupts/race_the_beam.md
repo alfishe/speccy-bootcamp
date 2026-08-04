@@ -554,6 +554,6 @@ This costs 8 T-states total (4 for `DI`, 4 for `EI`) but eliminates an entire cl
 - Dave "R-Tape" Hughes, *BIFROST2 Engine* (2016) — extended display area
 - Steve Wetherill, *Chasing the raster on the ZX Spectrum in Sidewize* (2022) — port-`#FF` sync technique
 - Ast A. Moore, *The Definitive Programmer's Guide to Using the Floating Bus Trick on the ZX Spectrum* — +2A/+3 floating-bus workaround
-- Gasman, *Compatibility: An open letter to the Russian scene* (Subliminal Extacy #3, zxpress.ru) — vector table placement, multicolor cross-platform notes
+- [Gasman, *Compatibility](https://zxpress.ru/): An open letter to the Russian scene* (Subliminal Extacy #3, zxpress.ru) — vector table placement, multicolor cross-platform notes
 - rejunity, *zx-racing-the-beam* (GitHub) — open-source experiments with cycle-exact border opening
 

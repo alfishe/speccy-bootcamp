@@ -353,7 +353,7 @@ The Pentagon is often described in Western histories as a "Sinclair Spectrum clo
 - [Sinclair User magazine archive](https://archive.org/details/sinclair-user-magazine) — The longest-running UK Spectrum magazine.
 - [Chris Smith — The ZX Spectrum ULA](http://www.zxdesign.info/) — The definitive technical reference on the Ferranti ULA, including detailed history of its development.
 - [Rodnay Zaks — Programming the Z80](https://en.wikipedia.org/wiki/Rodnay_Zaks) — The contemporary Z80 reference used by Spectrum developers.
-- **Adam Adelman, *The Spectrum Compendium*** (1985) — Early-era software catalog and platform reference.
+- [Adam Adelman, The Spectrum Compendium](https://archive.org/) — Early-era software catalog and platform reference.
 - [Tony Stratton, The Spectrum ROM Disassembly](https://worldofspectrum.org/ROMdisassembly.zip) — Annotated 48K ROM source, used as a primary reference by ROM hackers.
 - **Andrew Owen — [*The ZX Spectrum ROMs*](https://www.users.globalnet.co.uk/~jg27paw4/)** — Disassembly references for the 48K, 128K, +2, +2A, and +3 ROMs.
 - **Alessandro Grussu — [Spectrumpedia](https://www.alessandrogrussu.it/zx/)** — Comprehensive historical and technical encyclopedia of all ZX Spectrum models, including Spanish variants.

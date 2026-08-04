@@ -220,5 +220,5 @@ The Evolution is, in effect, **the modern reference Pentagon**. If your software
 - **Unreal Speccy emulator** ([github.com/mkoloberdin/unrealspeccy](https://github.com/mkoloberdin/unrealspeccy)) — `Pentagon 1024 SL v2` and `PentEvo` model presets document the 71,680 T-state frame and INT-at-line-304 position.
 - **ZXMAK2 emulator** ([github.com/zxmak/zxmak2](https://github.com/zxmak2)) — Implements both BaseConf and TS-Conf personalities; source code documents the 7/14 MHz turbo mode timing.
 - **UnrealTSConf / Xevord emulator forks** — community forks that specifically test TS-Conf sprite/tile/palette timing.
-- **TS-Conf Programming Reference** (Russian, archived at nedopc.org) — official documentation for the sprite, tilemap, and palette API.
+- [TS-Conf Programming Reference](https://zxevo.ru/) — official documentation for the sprite, tilemap, and palette API.
 - **[zx-pk.ru](https://zx-pk.ru) forum threads** — Real-hardware measurements of the Evolution's VGA output, turbo-mode effectiveness, and TS-Conf quirks. Notable threads: "TS-Conf sprite timing", "PentEvo vs Pentagon timing comparison", "Evo 14MHz speed test".
