@@ -558,8 +558,8 @@ This reads a file by following the linked-list sector chain (§4.7) without cons
 - **The RAMSOFT DISCiPLE / +D Technical Guide** — the canonical reference for the MGT format on the Spectrum, including detailed byte-level layout of directory entries.
 - **John Garner's +D Information** — practical guide to the +D's hardware and DOS.
 - **SAM Coupé Technical Manual** (Allan Weston, 1990) — the SAM-specific extensions to MGT (SAMDOS 2, MasterDOS).
-- **The Sinclair Wiki MGT filesystem page** (`https://sinclair.wiki.zxnet.co.uk/wiki/MGT_filesystem`) — the most authoritative online source for the MGT format; this article draws heavily on it.
-- **World of Spectrum** (`https://worldofspectrum.org/`) — Spectrum software archive; many `.MGT` images available for download.
+- [The Sinclair Wiki MGT filesystem page](https://sinclair.wiki.zxnet.co.uk/wiki/MGT_filesystem) — the most authoritative online source for the MGT format; this article draws heavily on it.
+- [World of Spectrum](https://worldofspectrum.org/) — Spectrum software archive; many `.MGT` images available for download.
 
 ### 8.3 License
 

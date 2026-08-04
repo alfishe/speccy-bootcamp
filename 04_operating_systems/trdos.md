@@ -871,10 +871,10 @@ This continuity is a rare thing in computing. Most 8-bit disk formats (Commodore
 ### 10.3 External resources
 
 - **`trdtool` source**: https://github.com/sprinter98/trdtool
-- **Unreal Speccy emulator**: https://spectrum.lovelyish.com/
-- **ZEsarUX**: https://github.com/chernandezba/zesarux
+- **[Unreal Speccy](https://sdkcad.free.fr/) emulator**: https://spectrum.lovelyish.com/
+- **[ZEsarUX](https://github.com/chernandezba/zesarux)**: https://github.com/chernandezba/zesarux
 - **ZX Spectrum Wiki on TR-DOS**: https://sinclair.wiki.zx/tr-dos
-- **`trd.py` (Python TR-DOS library)**: bundled in many disk image tools; a clean reference implementation lives in the ZEsarUX source tree
+- **`trd.py` (Python TR-DOS library)**: bundled in many disk image tools; a clean reference implementation lives in the [ZEsarUX](https://github.com/chernandezba/zesarux) source tree
 - **The Pentagon hardware reference** (Russian): various docs in the `zx-pk.ru` and `speccy.info` archives
 - **Forever party archive** (live `.TRD` submissions from 1996 onwards): https://forever.zeroteam.sk
 

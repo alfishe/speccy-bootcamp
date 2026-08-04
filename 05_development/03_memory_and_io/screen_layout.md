@@ -328,8 +328,8 @@ Attribute file (#5800–#5AFF, 768 bytes):
 
 ### External references
 
-- **Chris Smith — *The ZX Spectrum ULA*** (book) — definitive reference for the pixel/attribute interleaving scheme (every 3rd display byte is an attribute byte), the display file address-decode logic, and the off-screen memory holes at `#4000`–`#57FF` (display) and `#5800`–`#5AFF` (attributes).
-- **Sinclair ZX Specifications** (Martin Korth) — the canonical pixel addressing formula (`((Y&192)<<5) | ((Y&7)<<8) | ((Y&56)<<5) | X`) and the attribute address formula.
-- **Complete Spectrum ROM Disassembly** (Logan / O'Hara) — annotated 48K ROM showing how the `PRINT`, `PLOT`, and `CLS` routines compute display addresses using the standard formula.
-- **Spectrumpedia** (Grussu) — cross-model reference covering the 128K shadow screen at `#C000`–`#FFAF` and the Soviet clones' alternate screen banks.
-- **`zx-pk.ru` screen layout discussions** — Russian-language threads on Pentagon / Scorpion alternate-screen banking and the demoscene techniques that exploit multiple screen buffers.
+- [Chris Smith — The ZX Spectrum ULA](http://www.zxdesign.info/) — definitive reference for the pixel/attribute interleaving scheme (every 3rd display byte is an attribute byte), the display file address-decode logic, and the off-screen memory holes at `#4000`–`#57FF` (display) and `#5800`–`#5AFF` (attributes).
+- [Sinclair ZX Specifications](http://problemkaputt.de/zxdocs.htm) — the canonical pixel addressing formula (`((Y&192)<<5) | ((Y&7)<<8) | ((Y&56)<<5) | X`) and the attribute address formula.
+- [Complete Spectrum ROM Disassembly](https://worldofspectrum.org/ROMdisassembly.zip) — annotated 48K ROM showing how the `PRINT`, `PLOT`, and `CLS` routines compute display addresses using the standard formula.
+- [Spectrumpedia](https://speccy.wiki/) — cross-model reference covering the 128K shadow screen at `#C000`–`#FFAF` and the Soviet clones' alternate screen banks.
+- [zx-pk.ru screen layout discussions](https://zx-pk.ru) — Russian-language threads on Pentagon / Scorpion alternate-screen banking and the demoscene techniques that exploit multiple screen buffers.

@@ -636,11 +636,11 @@ For most users in 2024, downloading the standard ROMs from World of Spectrum is 
 
 ### External references
 
-- **Complete Spectrum ROM Disassembly** (Logan / O'Hara, 1982) — the canonical annotated 48K ROM source; the entry-point table and routine addresses in this article are cross-checked against the disassembly.
-- **Sinclair ZX Specifications** (Martin Korth, `problemkaputt.de/zxdocs.htm`) — cross-model hardware reference covering ROM chip select logic, the 128K `#7FFD` ROM bank bit, and the +2A/+3 `#1FFD` 4-bank ROM selection.
-- **Spectrumpedia** (Alessandro Grussu) — the most comprehensive cross-model print reference for ROM version identification; documents regional variants (Spanish, Italian, Russian, Greek, French) and the small but consequential bug-fix differences.
-- **World of Spectrum ROM archive** — the canonical archive of dumped ROM images; each one checksummed and cross-referenced with the hardware model it shipped in.
-- **`zx-pk.ru` / `zxpress.ru` Soviet ROM threads** — primary Russian-language references for the Pentagon's bundled 128K ROM, the Scorpion's custom ROMs, the Profi's combined DOS/128K ROM, and the many Russian ROM variants that emulator authors must support.
+- [Complete Spectrum ROM Disassembly](https://worldofspectrum.org/ROMdisassembly.zip) — the canonical annotated 48K ROM source; the entry-point table and routine addresses in this article are cross-checked against the disassembly.
+- [Sinclair ZX Specifications](http://problemkaputt.de/zxdocs.htm) — cross-model hardware reference covering ROM chip select logic, the 128K `#7FFD` ROM bank bit, and the +2A/+3 `#1FFD` 4-bank ROM selection.
+- [Spectrumpedia](https://speccy.wiki/) — the most comprehensive cross-model print reference for ROM version identification; documents regional variants (Spanish, Italian, Russian, Greek, French) and the small but consequential bug-fix differences.
+- [World of Spectrum ROM archive](https://worldofspectrum.org/) — the canonical archive of dumped ROM images; each one checksummed and cross-referenced with the hardware model it shipped in.
+- [zx-pk.ru / `zxpress.ru` Soviet ROM threads](https://zx-pk.ru) — primary Russian-language references for the Pentagon's bundled 128K ROM, the Scorpion's custom ROMs, the Profi's combined DOS/128K ROM, and the many Russian ROM variants that emulator authors must support.
 
 ---
 

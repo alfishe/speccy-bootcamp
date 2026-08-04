@@ -278,10 +278,10 @@ All other display types introduce some deviation from this reference. Emulators 
 
 ## Primary Sources
 
-- **Chris Smith, *The ZX Spectrum ULA: How to Design a Microcomputer*** (2010) — documents the ULA's pixel pipeline and the analog output stages.
+- [Chris Smith, The ZX Spectrum ULA: How to Design a Microcomputer](http://www.zxdesign.info/) — documents the ULA's pixel pipeline and the analog output stages.
 - **ZX Spectrum 128K / +2 / +2A / +3 Service Manuals** (Amstrad/Sinclair, 1986-1990) — official documentation of the video output stages, signal levels, and recommended monitor types.
 - **Poynton, *Digital Video and HD: Algorithms and Interfaces*** — pixel aspect ratio mathematics for PAL and other broadcast standards.
 - **OSSC documentation** ([videogameperfection.com](https://www.videogameperfection.com)) — line multiplication modes and display compatibility.
 - **RGB-to-HDMI project** ([github.com/hoglet67/RGBtoHDMI](https://github.com/hoglet67/RGBtoHDMI)) — documents Spectrum-specific display handling, including aspect ratio correction and scanline simulation.
-- **World of Spectrum forums — "Monitor recommendations" threads** — community-collected data on which CRT models work best with Spectrums, including visible-area measurements.
+- [World of Spectrum forums — "Monitor recommendations" threads](https://worldofspectrum.org/) — community-collected data on which CRT models work best with Spectrums, including visible-area measurements.
 - **RetroGFX / CRT emulation shader documentation** — software recreation of CRT visual properties for modern displays.

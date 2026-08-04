@@ -503,7 +503,7 @@ A: Yes. The `MACRO` / `ENDM` block can contain any number of instructions, inclu
 
 - z88dk Project — [github.com/z88dk/z88dk](https://github.com/z88dk/z88dk)
 - z88dk Wiki — [github.com/z88dk/z88dk/wiki](https://github.com/z88dk/z88dk/wiki)
-- z80asm source — `src/z80asm/` in the z88dk repository
-- z88dk Classic Library — `libsrc/_DEVELOPMENT/` in the z88dk repository
-- Phillip Stevens (sprack) — long-time z88dk maintainer
-- BSD-3-Clause license — see `LICENSE` in the z88dk repository
+- z80asm source — `src/z80asm/` in the [z88dk](https://github.com/z88dk/z88dk) repository
+- [z88dk](https://github.com/z88dk/z88dk) Classic Library — `libsrc/_DEVELOPMENT/` in the z88dk repository
+- Phillip Stevens (sprack) — long-time [z88dk](https://github.com/z88dk/z88dk) maintainer
+- BSD-3-Clause license — see `LICENSE` in the [z88dk](https://github.com/z88dk/z88dk) repository

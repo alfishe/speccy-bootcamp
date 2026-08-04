@@ -627,10 +627,10 @@ Modern emulators (FUSE, ZEsarUX, SpecEmu, etc.) implement approximately cycle-ex
 
 ### 10.4 External references
 
-- **The Amstrad +3 Service Manual** — full schematics of the +3 motherboard, including the WD1772-PH wiring, the PAL address-decoder equations, and the power-supply circuitry.
+- [The Amstrad +3 Service Manual](https://www.worldofspectrum.org/hardware.html) — full schematics of the +3 motherboard, including the WD1772-PH wiring, the PAL address-decoder equations, and the power-supply circuitry.
 - **The WD1772-PH data sheet** (Western Digital, 1985) — full pin-out, command set, and timing specifications. The Atari ST and Amstrad CPC communities have extensively documented this chip.
-- **The comp.sys.sinclair FAQ** — historical context on the +3 and its competitors.
-- **The World of Spectrum +3 archive** — +3 disk images, software compatibility lists, and user-maintained documentation.
+- [The comp.sys.sinclair FAQ](https://groups.google.com/g/comp.sys.sinclair) — historical context on the +3 and its competitors.
+- [The World of Spectrum +3 archive](https://worldofspectrum.org/) — +3 disk images, software compatibility lists, and user-maintained documentation.
 - **The FlashFloppy documentation** — details on the Gotek firmware that supports .DSK and .EDSK images on the +3.
 
 ---

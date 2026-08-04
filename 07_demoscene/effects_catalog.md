@@ -710,11 +710,11 @@ When designing a demo:
 
 ### External references
 
-- **ZXArt (`zxart.ee`)** — the canonical cross-referenced archive of Spectrum demos; primary reference for the historical record of which effect appeared in which demo, and in which year.
-- **`zx-pk.ru` / `pouet.net` demoscene threads** — primary discussion venues for Spectrum demoscene effects; Russian-language (zx-pk) and international (pouet) coverage of classic and modern demos.
+- [ZXArt](https://zxart.ee) — the canonical cross-referenced archive of Spectrum demos; primary reference for the historical record of which effect appeared in which demo, and in which year.
+- [zx-pk.ru / `pouet.net` demoscene threads](https://zx-pk.ru) — primary discussion venues for Spectrum demoscene effects; Russian-language (zx-pk) and international (pouet) coverage of classic and modern demos.
 - **UTMC demoscene documentation** — the demoscene wiki; cross-references Spectrum effects with their counterparts on the C64, Amiga, Atari ST, and IBM PC for cross-platform effect comparison.
-- **Andrew Broad — *Spectrum Demo Reference*** (WoS archive) — community-maintained English-language reference documenting the historical evolution of Spectrum demo effects from 1985 through the late 1990s.
-- **`chibiakumas.com` demo archive** — English-language archive of translated Russian demo group interviews (dBd, ESI, BBM, FIX, SotL) covering the engineering behind landmark effects.
+- [Andrew Broad — Spectrum Demo Reference](https://worldofspectrum.org/) — community-maintained English-language reference documenting the historical evolution of Spectrum demo effects from 1985 through the late 1990s.
+- [chibiakumas.com demo archive](https://chibiakumas.com) — English-language archive of translated Russian demo group interviews (dBd, ESI, BBM, FIX, SotL) covering the engineering behind landmark effects.
 
 ---
 

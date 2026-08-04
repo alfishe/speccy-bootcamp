@@ -96,7 +96,7 @@ Post-Soviet players expect KEMPSTON/KEYBOARD/REDEFINE and little else; conversel
 ## References
 
 - [I/O Port Map — Beta 128 Disk Interface](../../10_references/io_port_map.md#beta-128-disk-interface) — the `#1F`–`#FF` collision in detail
-- zx-pk.ru — clone schematics (Pentagon, Scorpion) showing the on-board Kempston decode
+- [zx-pk.ru](https://zx-pk.ru) — clone schematics (Pentagon, Scorpion) showing the on-board Kempston decode
 
 ### Cross-References
 

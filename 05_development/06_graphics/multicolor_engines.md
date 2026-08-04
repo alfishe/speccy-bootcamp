@@ -416,4 +416,4 @@ A game that works on the standard Spectrum assumes 768 bytes of attribute file. 
 - Timex Computer 2048 / TS2068 hardware reference manuals — HiColor and HiRes mode documentation
 - Cristina Gonzalez's *Pietro Bros* and *Gandalf* — worked examples of NIRVANA+ in shipping games
 - *Knights & Demons DX* — worked example of BIFROST* in a shipping game
-- *World of Spectrum* forums — community-maintained discussions on multicolor engine tradeoffs
+- *[World of Spectrum](https://worldofspectrum.org/)* forums — community-maintained discussions on multicolor engine tradeoffs

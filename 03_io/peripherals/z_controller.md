@@ -330,6 +330,6 @@ For a modern Russian-clone owner who wants a single board covering all four func
 - **ZX Spectrum Neo manual** (Mumio.dev, https://mumio.dev/files/ZX_Spectrum_Neo_EN_A5_v3.pdf) — explicitly notes that the Neo's SD card support uses Z-Controller mechanisms
 - **K-Mouse Turbo and PS/2 keyboard interfaces survey** (Sam.speccy.cz, https://sam.speccy.cz/hids.html) — context for the PS/2 keyboard and mouse landscape on the ZX Spectrum, including the relationship between the Z-Controller, K-Mouse Turbo, and MB03+
 - **Wild Disk Copier release notes** (KingOfEvil / Russian Speccy scene, v1.21 onward) — the first piece of software to support SD card access via the Z-Controller; required reading for Z-Controller users
-- **ZX Spectrum Hardware Ports Reference** (Erik Kunze / comp.sys.sinclair FAQ, https://worldofspectrum.org/faq/reference/ports.htm) — definitive reference for the standard port-decode conventions (Kempston Mouse, etc.) that the Z-Controller emulates
+- [ZX Spectrum Hardware Ports Reference](https://groups.google.com/g/comp.sys.sinclair) — definitive reference for the standard port-decode conventions (Kempston Mouse, etc.) that the Z-Controller emulates
 - **BC Info Guide #4 — Guide to the ZX Spectrum ports** (Black_Cat, 2008, https://wiki.speccy.org/_media/cursos/ensamblador/zx-ports-full-table.pdf) — Russian-language ports table; documents the port-decoding conventions used by Russian clone peripherals
 - **iS-DOS documentation** (Russian Speccy scene) — the CP/M-like OS that was patched to support the Z-Controller's SD and IDE interfaces

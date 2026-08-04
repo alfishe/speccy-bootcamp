@@ -1058,10 +1058,10 @@ These live in the sibling [../snapshots/](../snapshots/README.md) directory.
 ### 10.4 External resources
 
 - **The .TZX specification** — the canonical document for the .TZX format, maintained by the Spectrum community.
-- **World of Spectrum** — the largest archive of .TZX files.
+- [World of Spectrum](https://worldofspectrum.org/) — the largest archive of .TZX files.
 - **The .TZX Preservation Project** — an ongoing effort to create faithful .TZX images of every Spectrum tape.
 - **TZX Tools** — a command-line toolkit for converting between tape formats.
-- **Fuse emulator** — a reference implementation that can read, write, and play back .TZX files.
+- [Fuse emulator](https://fuse-emulator.sourceforge.net/) — a reference implementation that can read, write, and play back .TZX files.
 
 ### 10.5 Where to go next
 

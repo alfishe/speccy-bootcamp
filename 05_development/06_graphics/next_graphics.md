@@ -467,7 +467,7 @@ Even when a Next game uses only Layer 2 (ULA disabled), the ULA hardware is stil
 
 - *ZX Spectrum Next Hardware Reference* — the official register-level documentation, [GitLab: SpectrumNext/ZX-Spectrum-Next](https://gitlab.com/SpectrumNext/ZX-Spectrum-Next-specs)
 - *ZX Spectrum Next Assembly Programming* by D. R. R. S. Rello — community-maintained tutorial series
-- *NextBASIC Programming Manual* — Garry Lancaster's official NextZXOS reference
+- *NextBASIC Programming Manual* — Garry Lancaster's official [NextZXOS](https://gitlab.com/thesmog358/tbblue) reference
 - *specnext.dev* — community wiki with worked examples for Layer 2, sprites, tilemap, and copper
 - *The Mojon Twins* game source code — open-source Next games showing typical architectures (Layer 2 + sprites, tilemap + sprites)
 - *NextSprT* and *Sprite Editor* tools — community sprite editors producing Next-compatible data

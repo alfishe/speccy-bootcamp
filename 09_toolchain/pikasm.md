@@ -242,7 +242,7 @@ A: Because it was a studio tool used in commercial production, not a public rele
 
 ## References
 
-- Russian Spectrum scene archives — zx-pk.ru forum and TR-DOS software collections
+- Russian Spectrum scene archives — [zx-pk.ru](https://zx-pk.ru) forum and TR-DOS software collections
 - Developer interviews and retrospectives on Soviet-era studios (Step Creative Group, Nemo, etc.)
 - Comparisons with contemporaries based on the documented feature sets of ALASM and XAS
 - Caveat: most information about PikAsm is second-hand, reconstructed from recollections rather than primary documentation

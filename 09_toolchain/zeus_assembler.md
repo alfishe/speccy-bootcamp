@@ -467,26 +467,26 @@ The modern alternative is **sjasmplus + VS Code + CSpect**, which trades integra
 ### Primary Sources
 
 - **Simon Brattel's Zeus site** — official source for Zeus 4 binaries, documentation, and release notes for the ZX Spectrum Next version
-- **Crystal Computing advertisements** in *Sinclair User*, *CRASH*, *Your Spectrum* (1983–1985) — launch-era documentation of Zeus 1.0–2.0 features and pricing
+- [Crystal Computing advertisements](https://archive.org/details/sinclair-user-magazine) in *Sinclair User*, *CRASH*, *Your Spectrum* (1983–1985) — launch-era documentation of Zeus 1.0–2.0 features and pricing
 - **ZX Spectrum Next Team — *ZX Spectrum Next Programmer's Guide*** (2017+) — official documentation of the Z80N CPU, `.nex` format, and NextReg system that Zeus 4 targets
 
 ### Contemporary Reviews
 
 - *Your Spectrum* review of Zeus (1983–1984 issues) — contemporary assessment of Zeus vs DevPac
 - *CRASH* assembler comparison articles (1984–1986) — feature comparisons across Zeus, DevPac, and other 1980s assemblers
-- *Sinclair User* toolchain roundups (1985–1987) — coverage of Zeus 2.0–3.0 enhancements
+- *[Sinclair User](https://archive.org/details/sinclair-user-magazine)* toolchain roundups (1985–1987) — coverage of Zeus 2.0–3.0 enhancements
 
 ### Modern Sources
 
-- **World of Spectrum archives** — downloadable Zeus 1.0–3.5 TAP/TZX files for use in emulators
+- [World of Spectrum archives](https://worldofspectrum.org/) — downloadable Zeus 1.0–3.5 TAP/TZX files for use in emulators
 - **ZX Spectrum Next forum** — active discussion of Zeus 4 features, bug reports, and release announcements
 - **Simon Brattel interviews and talks** — author's perspective on the 40-year Zeus development history
 
 ### Related Articles in This Knowledge Base
 
 - [Native Toolchain](native_toolchain.md) — survey of all four major native assemblers (Zeus, DevPac, ALASM, XAS)
-- [Cross-Platform Toolchain](cross_platform_toolchain.md) — modern sjasmplus, z88dk, SDCC alternatives
-- [sjasmplus](sjasmplus.md) — Zeus 4's modern cross-platform counterpart for Next development
+- [Cross-Platform Toolchain](cross_platform_toolchain.md) — modern sjasmplus, [z88dk](https://github.com/z88dk/z88dk), SDCC alternatives
+- [[sjasmplus](https://github.com/z00m128/sjasmplus)](sjasmplus.md) — Zeus 4's modern cross-platform counterpart for Next development
 - [devpac_gens_mons.md](devpac_gens_mons.md) — HiSoft DevPac, Zeus's Western contemporary
 - [alasm_sts.md](alasm_sts.md) — dominant Soviet-native assembler
 - [xas_assembler.md](xas_assembler.md) — Soviet alternative to ALASM

@@ -1050,8 +1050,8 @@ See [divide_divmmc.md](divide_divmmc.md) and [ide_interface.md](ide_interface.md
 - **KR1818VG93 data sheet (Russian)** — the Soviet clone's official documentation. Differs from the WD data sheet in a few minor timing parameters (see §7).
 - **app.note 17 "Floppy Disk Controller Design" (Western Digital)** — design notes for using the WD179X family, including recommended PLL circuits and write-precompensation values.
 - **The "WD179X" entry in the sparetimegizmos.com FPGA FDC project** — an open-source HDL implementation of the WD1793, useful for understanding the chip's state machine.
-- **The FDC directory at zxevo.ru** — Russian-language community documentation on Beta Disk Interface clones and turbo modifications.
-- **unreal-ng emulator source** (`alfishe/unreal-ng` on GitHub) — a modern re-engineering of Unreal Speccy with a full C++ WD1793 model. The relevant files live in `core/src/emulator/io/fdc/`: `wd1793.cpp`, `wd1793.h`, `wd1793state.h`, `mfm_parser.h`. The `WD_STATUS` enum in `wd1793.h` defines all status bit constants; `WD93Counters` in `wd1793state.h` documents the byte-transfer windows (32 µs MFM / 64 µs FM) and the 5-revolution RNF timeout. Used as a primary reference for the FDC state machine in this article.
+- **The FDC directory at [zxevo.ru](https://zxevo.ru)** — Russian-language community documentation on Beta Disk Interface clones and turbo modifications.
+- [unreal-ng emulator source](https://sdkcad.free.fr/) — a modern re-engineering of Unreal Speccy with a full C++ WD1793 model. The relevant files live in `core/src/emulator/io/fdc/`: `wd1793.cpp`, `wd1793.h`, `wd1793state.h`, `mfm_parser.h`. The `WD_STATUS` enum in `wd1793.h` defines all status bit constants; `WD93Counters` in `wd1793state.h` documents the byte-transfer windows (32 µs MFM / 64 µs FM) and the 5-revolution RNF timeout. Used as a primary reference for the FDC state machine in this article.
 
 ---
 

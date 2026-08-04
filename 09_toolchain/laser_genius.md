@@ -220,7 +220,7 @@ A: Only for completeness. The Interface 2 is rare and expensive. Emulator suppor
 ## References
 
 - Interface 2 cartridge archives — ROM dumps of Laser Genius
-- *Sinclair User*, *CRASH* — occasional mentions of Laser Genius in Ocean-era developer interviews
-- Nick Hampshire's writings in *Personal Computer World* and *Sinclair User*
+- *[Sinclair User](https://archive.org/details/sinclair-user-magazine)*, *CRASH* — occasional mentions of Laser Genius in Ocean-era developer interviews
+- Nick Hampshire's writings in *Personal Computer World* and *[Sinclair User](https://archive.org/details/sinclair-user-magazine)*
 - Comparisons with Zeus and DevPac based on their documented feature sets
 - Caveat: most information about Laser Genius is second-hand, reconstructed from cartridge ROM dumps and brief mentions in magazine interviews

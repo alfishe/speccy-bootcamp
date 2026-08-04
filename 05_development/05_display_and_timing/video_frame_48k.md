@@ -267,8 +267,8 @@ ULA overhead:              ~18% stolen for video generation
 
 ### External references
 
-- **Chris Smith — *The ZX Spectrum ULA*** (book) — the definitive reference for the 48K's Ferranti ULA 5C/6C: every scanline count, every T-state, the 69888-T-state frame, the 64-line top border, the 56-line bottom border, the 256-line display, and the contention pattern.
-- **Sinclair ZX Specifications** (Martin Korth) — hardware reference covering the 48K bus timing, the CPU clock, and the INT pulse placement that anchors every frame-sensitive technique.
-- **Complete Spectrum ROM Disassembly** (Logan / O'Hara) — annotated 48K ROM showing how the standard frame budget is used by the BASIC interrupt handler and the BEEP routine.
-- **`zx-pk.ru` 48K timing threads** — primary discussion venue for Soviet-clone deviations from 48K timing; documents why Pentagon code written against 48K frame parameters fails.
-- **SpecEmu / ZEsarUX source code** — emulator references for the 48K's exact scanline-by-scanline contention and the floating-bus reference values used in test software.
+- [Chris Smith — The ZX Spectrum ULA](http://www.zxdesign.info/) — the definitive reference for the 48K's Ferranti ULA 5C/6C: every scanline count, every T-state, the 69888-T-state frame, the 64-line top border, the 56-line bottom border, the 256-line display, and the contention pattern.
+- [Sinclair ZX Specifications](http://problemkaputt.de/zxdocs.htm) — hardware reference covering the 48K bus timing, the CPU clock, and the INT pulse placement that anchors every frame-sensitive technique.
+- [Complete Spectrum ROM Disassembly](https://worldofspectrum.org/ROMdisassembly.zip) — annotated 48K ROM showing how the standard frame budget is used by the BASIC interrupt handler and the BEEP routine.
+- [zx-pk.ru 48K timing threads](https://zx-pk.ru) — primary discussion venue for Soviet-clone deviations from 48K timing; documents why Pentagon code written against 48K frame parameters fails.
+- [SpecEmu / ZEsarUX source code](https://sourceforge.net/projects/specemu/) — emulator references for the 48K's exact scanline-by-scanline contention and the floating-bus reference values used in test software.

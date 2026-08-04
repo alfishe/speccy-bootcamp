@@ -390,8 +390,8 @@ A: Rarely. Most professionals used commercial assemblers (Zeus, DEVPAK) or wrote
 
 ## References
 
-- Vickers Melson — *ZX Spectrum BASIC Programming Manual*, Sinclair Research, 1982
-- *Your Sinclair*, *CRASH*, *Sinclair User* — magazine type-in program archives
+- Vickers Melson — *[ZX Spectrum BASIC Programming Manual](https://www.worldofspectrum.org/hardware.html)*, Sinclair Research, 1982
+- *[Your Sinclair](https://archive.org/details/yoursinclair-magazine)*, *CRASH*, *Sinclair User* — magazine type-in program archives
 - Steven Vickers — *Sinclair ZX Spectrum ROM Disassembly*, 1982-1983 (multiple revisions)
-- Logan Dr — *The Complete Spectrum ROM Disassembly*, Melbourne House, 1983
-- WoS (World of Spectrum) archive — machine code tutorials and historical BASIC programs
+- Logan Dr — *The [Complete Spectrum ROM Disassembly](https://worldofspectrum.org/ROMdisassembly.zip)*, Melbourne House, 1983
+- WoS ([World of Spectrum](https://worldofspectrum.org/)) archive — machine code tutorials and historical BASIC programs

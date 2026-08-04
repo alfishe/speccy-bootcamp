@@ -760,7 +760,7 @@ The most expensive (vector shading) is on the edge of tractability. The cheapest
 
 ### 10.4 External references
 
-- **Helmar Hartmann**, "Tables and fixed-point on Z80" — series of articles in *ZX-Format* and *Spectrofon* diskmags (1997–1999). Primary Soviet-era reference.
+- **Helmar Hartmann**, "Tables and fixed-point on Z80" — series of articles in *[ZX-Format](https://zxpress.ru/library/categories.php?id=2)* and *Spectrofon* diskmags (1997–1999). Primary Soviet-era reference.
 - **John Metcalf**, "Z80 fixed-point routines" — published code library.
 - **Shiru**, "Programming ZX Spectrum" — modern Russian-language tutorial covering table-driven effects extensively.
 - **z80-heaven** (GitHub) — open-source Z80 demo code collection with extensive table-driven routines.
@@ -772,7 +772,7 @@ For readers who want to understand *why* a 256-entry sine table gives 1.41° res
 
 - **Knuth, TAOCP vol. 2** — fixed-point arithmetic fundamentals.
 - **Hacker's Delight (Henry S. Warren, Jr.)** — bit-level arithmetic tricks applicable to Z80.
-- **IEEE 754** — for understanding why fixed-point is preferred on 8-bit CPUs (no FPU, no instruction-level support for normalisation).
+- [IEEE 754](https://en.wikipedia.org/wiki/IEEE_754) — for understanding why fixed-point is preferred on 8-bit CPUs (no FPU, no instruction-level support for normalisation).
 
 ---
 

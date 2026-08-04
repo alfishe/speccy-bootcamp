@@ -631,7 +631,7 @@ For Spectrum enthusiasts, CP/M is a side trip — interesting, historically impo
 - **Digital Research source archives**: Garry Kildall's original CP/M source code is preserved at the Computer History Museum
 - **"CP/M: An Oral History"** by David Craig, a comprehensive history of CP/M
 - **The comp.os.cpm newsgroup**: still active, archived on Google Groups
-- **World of Spectrum's +3 CP/M archive**: https://worldofspectrum.org/+3/cpm/
+- **[World of Spectrum](https://worldofspectrum.org/)'s +3 CP/M archive**: https://worldofspectrum.org/+3/cpm/
 
 ---
 

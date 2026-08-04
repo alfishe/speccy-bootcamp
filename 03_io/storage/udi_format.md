@@ -323,9 +323,9 @@ For most other Spectrum archival work, prefer .EDSK (which is more widely suppor
 
 ### 5.4 External references
 
-- **zxevo.ru** — the canonical reference for the .UDI format, in Russian.
-- **zx-pk.ru** — the Russian Spectrum community forum where the format was designed and discussed.
-- **UnrealSpeccy documentation** — an English-language summary of the .UDI format is available in the UnrealSpeccy manual.
+- **[zxevo.ru](https://zxevo.ru)** — the canonical reference for the .UDI format, in Russian.
+- **[zx-pk.ru](https://zx-pk.ru)** — the Russian Spectrum community forum where the format was designed and discussed.
+- [UnrealSpeccy documentation](https://sdkcad.free.fr/) — an English-language summary of the .UDI format is available in the UnrealSpeccy manual.
 - **Sprinter / ATM Turbo documentation** — these Soviet / Russian Spectrum clones also use .UDI as one of their disk-image formats.
 
 ### 5.5 License

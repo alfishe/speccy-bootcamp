@@ -267,10 +267,10 @@ If you're writing software that targets both CRT and LCD displays:
 
 ## Primary Sources
 
-- **Chris Smith, *The ZX Spectrum ULA: How to Design a Microcomputer*** (2010) — documents the ULA's non-interlaced output and its rationale.
+- [Chris Smith, The ZX Spectrum ULA: How to Design a Microcomputer](http://www.zxdesign.info/) — documents the ULA's non-interlaced output and its rationale.
 - **IEEE Ferry-Porter law literature** — the canonical reference for human flicker perception thresholds, basis for the 50 Hz design choice.
 - **Poynton, *Digital Video and HD: Algorithms and Interfaces*** — covers CRT vs LCD temporal response, sample-and-hold vs impulse display.
 - **OSSC documentation** ([github.com/marqs85/ossc](https://github.com/marqs85/ossc)) — documents the frame-rate mismatch issues between 50.08 Hz Spectrum output and 60 Hz LCD displays.
 - **RetroGFX CRT Shader documentation** — software emulation of phosphor decay for modern displays.
-- **ZX Spectrum +2 / +3 Service Manual** — Amstrad documentation of the gate array's slightly non-standard sync timing.
-- **zx-pk.ru GigaScreen threads** — real-hardware reports of which GigaScreen color pairs flicker most visibly on Soviet CRT TVs.
+- [ZX Spectrum +2 / +3 Service Manual](https://www.worldofspectrum.org/hardware.html) — Amstrad documentation of the gate array's slightly non-standard sync timing.
+- **[zx-pk.ru](https://zx-pk.ru) GigaScreen threads** — real-hardware reports of which GigaScreen color pairs flicker most visibly on Soviet CRT TVs.

@@ -605,7 +605,7 @@ AY-3-8912 pitch accuracy: 1,750,000 Hz clock preserved exactly
 
 ### Frame Timing
 
-- **Chris Smith, "The ZX Spectrum ULA: How to design a microcomputer"** (ZX Design and Media, 2010) — Hardware-level explanation of ULA frame timing, contention, and how the Ferranti ULA produces exactly 312 lines × 224 T-states
+- [Chris Smith, "The ZX Spectrum ULA: How to design a microcomputer"](http://www.zxdesign.info/) — Hardware-level explanation of ULA frame timing, contention, and how the Ferranti ULA produces exactly 312 lines × 224 T-states
 - **Sinclair Wiki, "Contended Memory"** ([sinclair.wiki.zxnet.co.uk](https://sinclair.wiki.zxnet.co.uk/wiki/Contended_memory)) — Per-model contention tables and T-state timing references
 - **World of Spectrum, "48K Technical Reference"** ([worldofspectrum.org](https://worldofspectrum.org/faq/reference/48kreference.htm)) — Official frame timing: 69,888 T-states, 312 lines, 50.08 Hz
 - **World of Spectrum, "128K Technical Reference"** ([worldofspectrum.org](https://worldofspectrum.org/faq/reference/128kreference.htm)) — 128K/+2 frame timing: 70,908 T-states, 311 lines, 228 T-states/line
@@ -635,7 +635,7 @@ AY-3-8912 pitch accuracy: 1,750,000 Hz clock preserved exactly
 
 - **Fuse — Free Unix Spectrum Emulator** ([sourceforge.net](https://sourceforge.net/p/fuse-emulator/)) — Reference open-source emulator, per-model contention tables and early/late timing
 - **ZEsarUX** ([github.com/chernandezba/zesarux](https://github.com/chernandezba/zesarux)) — Most configurable emulator, per-model timing configuration, ZX Spectrum Next support
-- **Unreal Speccy** — Dominant Russian-scene emulator; frame timing presets in `unreal.ini` define T-states, paper offset, and line timing per model
+- [Unreal Speccy](https://sdkcad.free.fr/) — Dominant Russian-scene emulator; frame timing presets in `unreal.ini` define T-states, paper offset, and line timing per model
 - **ZXMAK2** ([github.com/zxmak/zxmak2](https://github.com/zxmak/zxmak2)) — .NET-based emulator with 16+ clone models, each with separate timing/contention profiles
 
 ### Cross-References

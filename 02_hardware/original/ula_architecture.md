@@ -508,7 +508,7 @@ No access to Ferranti's process, and no economic reason to — 74-series TTL was
 
 - Chris Smith, [*The ZX Spectrum ULA: How to Design a Microcomputer*](https://www.amazon.com/dp/0956507107) — the definitive reverse engineering of the chip from die photography
 - [ZX Spectrum ULA Types — Spectrum for Everyone](https://www.spectrumforeveryone.com/technical/zx-spectrum-ula-types/) — revision table, cockroach/spider mods, replacement ULAs
-- Sinclair ZX Spectrum Service Manual — official ULA/board issue compatibility
+- [Sinclair ZX Spectrum Service Manual](https://www.worldofspectrum.org/hardware.html) — official ULA/board issue compatibility
 - [Complete I/O Port Map](../../10_references/io_port_map.md) — port decoding across all models
 
 ### Cross-References

@@ -194,12 +194,12 @@ See [video_frame_other_soviet.md](../../05_development/05_display_and_timing/vid
 
 ## References
 
-- **Profi 5.03 / 5.04 schematics** (1991, Moscow — JV Kramis / TOO Condor) — original design documentation, distributed via *Radio* magazine advertisements and *ZX-Review*
+- [Profi 5.03 / 5.04 schematics](https://zxpress.ru/library/) — original design documentation, distributed via *Radio* magazine advertisements and *ZX-Review*
 - ***ACNews #65*** (2008, Alone Coder) — reconstruction of the Kramis/Profi/Condor commercial history from *Radio* magazine ads and business registrations
 - ***Turbo2+* book** (MicroART) — confirms Profi's release date as late spring 1991
-- **ZX-Review magazine** (1991–1995) — Profi construction articles, modification guides, and ISA bus programming tutorials
-- **zx-pk.ru forum** — *Профі* subforum contains hardware variants, VGA modification threads, and ISA card compatibility reports
+- [ZX-Review magazine](https://zxpress.ru/library/) — Profi construction articles, modification guides, and ISA bus programming tutorials
+- **[zx-pk.ru](https://zx-pk.ru) forum** — *Профі* subforum contains hardware variants, VGA modification threads, and ISA card compatibility reports
 - **velesoft.speccy.cz** — Solitude Soft's Profi 5.03 technical reference, including `#DFFD` paging tests and CP/M adaptation notes
 - **SpeccyWiki (speccy.info)** — Profi 5.03/5.04 articles with schematic scans and PCB layouts
-- **Unreal Speccy emulator** — reference implementation of Profi `#DFFD` paging and paper-offset timing
-- **chibiakumas.com** — English translations of Profi hardware articles and ISA programming guides
+- [Unreal Speccy emulator](https://sdkcad.free.fr/) — reference implementation of Profi `#DFFD` paging and paper-offset timing
+- **[chibiakumas.com](https://chibiakumas.com)** — English translations of Profi hardware articles and ISA programming guides

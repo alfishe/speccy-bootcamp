@@ -247,7 +247,7 @@ A: There is no canonical download site. Search retro-computing archives like Wor
 
 ## References
 
-- *Your Sinclair*, *CRASH*, *Sinclair User* — magazine reviews and advertisements from 1983-1985
-- World of Spectrum software archive (mirrored) — TASM tape images and documentation
-- Discussions on retro-computing forums (World of Spectrum forums, retro-martyrship mailing lists) clarifying the multiple "TASM" tools
+- *[Your Sinclair](https://archive.org/details/yoursinclair-magazine)*, *CRASH*, *Sinclair User* — magazine reviews and advertisements from 1983-1985
+- [World of Spectrum](https://worldofspectrum.org/) software archive (mirrored) — TASM tape images and documentation
+- Discussions on retro-computing forums ([World of Spectrum](https://worldofspectrum.org/) forums, retro-martyrship mailing lists) clarifying the multiple "TASM" tools
 - Comparison with contemporaries based on the documented feature sets of Zeus, DevPac, and magazine type-in assemblers of the period

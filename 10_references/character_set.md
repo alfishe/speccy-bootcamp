@@ -238,8 +238,8 @@ On the Pentagon and other Soviet clones, a common convention is to store **two f
 
 ### External references
 
-- **Complete Spectrum ROM Disassembly** (Logan / O'Hara, 1982) — the canonical annotated source for the 48K ROM's character handling: the `PRINT CHR$` routine, the token-expansion table, the UDG / user font mechanism, and the character-pixel lookup table.
-- **Sinclair ZX Spectrum Manual** (Vickers, 1982) — the primary-source reference for the character set as documented for end users; covers UDGs, `CHR$`, `CODE`, and the character-pixel layouts of all 96 printable ASCII characters.
-- **Sinclair ZX Spectrum +2 / +3 Manual** (Amstrad, 1987/1988) — primary-source reference for the +2A/+3 extended character set, including the additional 128K glyphs and the modified token table.
-- **Spectrumpedia** (Grussu) — cross-model print reference covering the Spanish, Italian, Russian, and Greek Spectrum variants; documents the modified character-pixel tables for accented characters.
-- **`zx-pk.ru` Russian character set threads** — primary venue for documentation of Soviet-clone Cyrillic character sets (Pentagon's dual English/Cyrillic font, Profi's CP-866 mapping, Scorpion's `#00`–`#FF` font ROM).
+- [Complete Spectrum ROM Disassembly](https://worldofspectrum.org/ROMdisassembly.zip) — the canonical annotated source for the 48K ROM's character handling: the `PRINT CHR$` routine, the token-expansion table, the UDG / user font mechanism, and the character-pixel lookup table.
+- [Sinclair ZX Spectrum Manual](https://www.worldofspectrum.org/hardware.html) — the primary-source reference for the character set as documented for end users; covers UDGs, `CHR$`, `CODE`, and the character-pixel layouts of all 96 printable ASCII characters.
+- [Sinclair ZX Spectrum +2 / +3 Manual](https://www.worldofspectrum.org/hardware.html) — primary-source reference for the +2A/+3 extended character set, including the additional 128K glyphs and the modified token table.
+- [Spectrumpedia](https://speccy.wiki/) — cross-model print reference covering the Spanish, Italian, Russian, and Greek Spectrum variants; documents the modified character-pixel tables for accented characters.
+- [zx-pk.ru Russian character set threads](https://zx-pk.ru) — primary venue for documentation of Soviet-clone Cyrillic character sets (Pentagon's dual English/Cyrillic font, Profi's CP-866 mapping, Scorpion's `#00`–`#FF` font ROM).

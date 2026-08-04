@@ -634,10 +634,10 @@ Despite its current obscurity, IS-DOS is worth understanding for several reasons
 ### External references
 
 - **Дымиров А. (Aleksey Dmyrov) — IS-DOS original documentation** (1993 and later) — the primary-source reference for the IS-DOS filesystem layout, the 32-byte directory entry format, and the jump-table API; Russian-language, distributed with the IS-DOS distribution disks.
-- **`zx-pk.ru` IS-DOS threads** — primary Russian-language venue for ongoing discussion of IS-DOS internals, the Soviet clone hardware it runs on, and the IS-DOS-specific memory banking requirements.
-- **`ZX-Review` magazine archive** (`zxpress.ru`) — primary-source Soviet-era articles on IS-DOS, including the original review coverage from 1993–1994.
+- [zx-pk.ru IS-DOS threads](https://zx-pk.ru) — primary Russian-language venue for ongoing discussion of IS-DOS internals, the Soviet clone hardware it runs on, and the IS-DOS-specific memory banking requirements.
+- [`ZX-Review` magazine archive](https://zxpress.ru) — primary-source Soviet-era articles on IS-DOS, including the original review coverage from 1993–1994.
 - **`cpmtools` documentation** — Unix manual pages and disk definitions for working with CP/M-style filesystems; useful for cross-referencing IS-DOS's MS-DOS-compatible hierarchical layout with its contemporaries.
-- **Spectrumpedia** (Grussu) — cross-model print reference covering IS-DOS as part of the broader Russian DOS ecosystem (TR-DOS, ESXDOS, NedoDOS, IS-DOS).
+- [Spectrumpedia](https://speccy.wiki/) — cross-model print reference covering IS-DOS as part of the broader Russian DOS ecosystem (TR-DOS, ESXDOS, NedoDOS, IS-DOS).
 
 ---
 

@@ -464,6 +464,6 @@ main_loop:
 - Ivan Roshchin, *TR-DOS: the disk included with the interrupt* (Adventurer #9, zxpress.ru) — canonical derivation of disk-interrupt math, empirical Pentagon drift measurements
 - Gasman, *Compatibility: An open letter to the Russian scene* (Subliminal Extacy #3, zxpress.ru) — context on why some demos fail on original Spectrums
 - *Beta Disk Interface Manual V4* — Technology Research official TR-DOS documentation
-- *ESXDOS manual* — DivIDE/DivMMC API reference
+- *[ESXDOS](https://github.com/joneiricon/ESXDOS) manual* — DivIDE/DivMMC API reference
 - *+3DOS Technical Reference* — UPD765 FDC behavior and RSX hook list
 ---

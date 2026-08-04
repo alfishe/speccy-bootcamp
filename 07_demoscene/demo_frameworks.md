@@ -885,7 +885,7 @@ This article sits within the ZX Spectrum demoscene knowledge base and connects t
 ### 10.3 External Resources
 
 - **"How to Write a ZX Spectrum Demo"** (various community tutorials) — beginner-level introductions to framework construction.
-- **Pouet.net** — searchable archive of Next and stock-Spectrum demos with sources.
+- [Pouet.net](https://www.pouet.net/) — searchable archive of Next and stock-Spectrum demos with sources.
 - **ZX Spectrum Next Register Reference** — official documentation of the `next-reg` ports.
 - **Github** — modern open-source Spectrum frameworks are typically published here.
 

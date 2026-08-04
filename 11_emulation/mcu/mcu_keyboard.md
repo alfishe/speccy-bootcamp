@@ -606,7 +606,7 @@ For most users, an expansion port adapter with USB keyboard support and Kempston
 
 ## References
 
-- **The ZX Spectrum ULA: How to Design a Microcomputer** by Chris Smith — definitive reference on the ULA including the keyboard scan logic
+- [The ZX Spectrum ULA: How to Design a Microcomputer](http://www.zxdesign.info/) by Chris Smith — definitive reference on the ULA including the keyboard scan logic
 - **Spectrum 48K Service Manual** — keyboard matrix schematic and connector pinouts
 - **PS/2 Keyboard Protocol** — Adam Chapweske's documentation, widely mirrored
 - **USB HID Usage Tables** — official specification of HID keycodes

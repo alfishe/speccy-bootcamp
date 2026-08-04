@@ -523,7 +523,7 @@ No. The only interrupt is the ULA's frame `/INT`; keyboard state must be polled.
 
 ## References
 
-- Sinclair ZX Spectrum Service Manual — keyboard connector pinouts, membrane replacement procedure
+- [Sinclair ZX Spectrum Service Manual](https://www.worldofspectrum.org/hardware.html) — keyboard connector pinouts, membrane replacement procedure
 - Dr. Ian Logan & Dr. Frank O'Hara, [*The Complete Spectrum ROM Disassembly*](https://archive.org/details/CompleteSpectrumROMDisassemblyThe) — the `KEYBOARD` routine at `#02BF` and its key tables (also available as a [modern HTML adaptation via SkoolKit](https://skoolkid.github.io/rom/index.html))
 - [I/O Port Map](../../10_references/io_port_map.md) — `#FE` decoding, Scorpion `#7E`, Kempston `#1F`
 - [ZX Spectrum clone identification (atw.hu)](http://users.atw.hu/zxspectrum/zx_clone_identification_en.htm) — extended 8×6/8×7 matrix circuits, EPROM key encoders

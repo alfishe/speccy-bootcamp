@@ -703,9 +703,9 @@ For a 2024 hobbyist:
 
 ### 9.4 Resources
 
-- **The Official Sinclair BASIC Manual** (Steven Vickers, 1982) — the canonical reference. Available as a free PDF from World of Spectrum.
-- **The Spectrum ROM Disassembly** (Dr. Ian Logan & Dr. Frank O'Hara, 1983) — the famous full disassembly of the 48K ROM with commentary. The standard reference for ROM hackers.
-- **The Complete Spectrum ROM Disassembly** (also Logan & O'Hara) — covers the 128K ROM as well.
+- [The Official Sinclair BASIC Manual](https://worldofspectrum.org/) — the canonical reference. Available as a free PDF from World of Spectrum.
+- [The Spectrum ROM Disassembly](https://worldofspectrum.org/ROMdisassembly.zip) — the famous full disassembly of the 48K ROM with commentary. The standard reference for ROM hackers.
+- [The Complete Spectrum ROM Disassembly](https://worldofspectrum.org/ROMdisassembly.zip) — covers the 128K ROM as well.
 - **NextBASIC Manual** — the Next team's official documentation, available as a free PDF from the ZX Spectrum Next website.
 - **SE BASIC documentation** — in the OpenSE BASIC GitHub repository.
 

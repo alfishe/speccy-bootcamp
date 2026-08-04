@@ -309,8 +309,8 @@ Where a term has multiple meanings or is used differently across the three track
 - [hardware_models.md](hardware_models.md) — Hardware model catalog.
 - [AGENTS.md](../AGENTS.md) — Repository conventions, three-track awareness, port decoding rules.
 - [10_references/README.md](../10_references/README.md) — Canonical reference data (port maps, memory maps, opcode tables, palette, ROM routines).
-- Chris Smith, *The ZX Spectrum ULA: How to Design a Microcomputer* (2010) — The definitive reference on the Ferranti ULA and the source of much ULA-related terminology.
-- The Complete Spectrum ROM Disassembly ( Logan & O'Hara, 1983) — Source for ROM routine names and entry points.
+- [Chris Smith, *The ZX Spectrum ULA](http://www.zxdesign.info/): How to Design a Microcomputer* (2010) — The definitive reference on the Ferranti ULA and the source of much ULA-related terminology.
+- The [Complete Spectrum ROM Disassembly](https://worldofspectrum.org/ROMdisassembly.zip) ( Logan & O'Hara, 1983) — Source for ROM routine names and entry points.
 - [zx-pk.ru](https://zx-pk.ru) — The primary Russian-language forum for clone terminology and discussion.
 - [speccy.info](https://speccy.info) — Russian-language wiki, especially useful for clone-specific jargon.
 - [Demozoo](https://demozoo.org) — Cross-platform demoscene terminology reference.

@@ -390,8 +390,8 @@ INC  HL            ; Next — 6T
 
 - **Zilog Z80 CPU User Manual (UM0080)** — Official ISA and architecture reference
 - **Ken Shirriff, "Reverse-engineering the Z80"** ([righto.com](http://www.righto.com/2014/10/reverse-engineering-z80.html)) — Die-level analysis of Z80 internals
-- **Rodnay Zaks, "Programming the Z80"** — Classic textbook comparing Z80 to 8080/6502
-- **Various community comparisons** (`comp.sys.sinclair`, `zx-pk.ru`) — Thread-level cross-references for Z80 vs. modern CPUs; the canonical discussion venues for benchmarking Z80 against ARM, RISC-V, and other modern ISAs.
+- [Rodnay Zaks, "Programming the Z80"](https://en.wikipedia.org/wiki/Rodnay_Zaks) — Classic textbook comparing Z80 to 8080/6502
+- [Various community comparisons](https://zx-pk.ru) — Thread-level cross-references for Z80 vs. modern CPUs; the canonical discussion venues for benchmarking Z80 against ARM, RISC-V, and other modern ISAs.
 - **ZX Spectrum Next Documentation** ([zxnext.io](https://zxnext.io/)) — Z80N extended ISA
 
 ### Cross-References

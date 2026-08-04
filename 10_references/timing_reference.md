@@ -359,7 +359,7 @@ Quick reference for the most-used frame-relative T-state counts:
 
 - Zilog — *Z80 CPU Product Specification*, 1998 (last rev) — T-state counts for every instruction
 - Sean Young — *Z80 Undocumented Instructions* — T-states for undocumented instructions and quirks
-- Chris Smith — *The ZX Spectrum ULA*, 2010 — ULA timing, contention scheme, and floating bus
+- [Chris Smith — *The ZX Spectrum ULA](http://www.zxdesign.info/)*, 2010 — ULA timing, contention scheme, and floating bus
 - Ramsoft — *ZX Spectrum 48K/128K Timing FAQ*, 1998 — the canonical community reference for cycle-exact timing
 - World of Spectrum — [Reference FAQ](https://worldofspectrum.org/faq/reference/reference.htm)
 - Patrik Rak — *Arkanoid Timing Tables* — exact T-state delays for emulation

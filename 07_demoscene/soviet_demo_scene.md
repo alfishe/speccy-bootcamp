@@ -696,12 +696,12 @@ Demographically, the modern Russian scene skews older than at its peak (most act
 ### 10.3 External archives and primary sources
 
 - **zx-art.ru** — Russian-language canonical archive of demos, music, graphics.
-- **zxart.ee** — Estonian comprehensive archive.
+- **[zxart.ee](https://zxart.ee)** — Estonian comprehensive archive.
 - **bbb.retroscene.org** — Russian-curated demo archive.
-- **Demozoo.org** — cross-platform English-language archive.
-- **zx-pk.ru** — largest Russian-language Spectrum forum; FidoNet archives also accessible.
+- [Demozoo.org](https://demozoo.org/) — cross-platform English-language archive.
+- **[zx-pk.ru](https://zx-pk.ru)** — largest Russian-language Spectrum forum; FidoNet archives also accessible.
 - **nedoPC.ru** — Russian forum and file archive.
-- **zxdemo.org** — Gasman's long-running archive, now powered by Demozoo.
+- [zxdemo.org](https://demozoo.org/) — Gasman's long-running archive, now powered by Demozoo.
 - **Scene.org** — mirror service.
 - **Mustekala magazine** (2008 article by Elfh/Inward) — primary source quoted in §3 and §4. Available at [http://mustekala.org/archive/](http://mustekala.org/archive/) (or via the Wayback Machine).
 
@@ -711,7 +711,7 @@ Demographically, the modern Russian scene skews older than at its peak (most act
 - **Gleb Albert Ichtmann (2017)**, PhD dissertation on the demoscene (German; international scope, Soviet material in §4).
 - **Marek Trescak et al.**, various papers on demoscene cultural impact.
 - **UNESCO Intangible Cultural Heritage** citation (2021, Germany) — formal recognition; relevant material in [demoscene_history.md](demoscene_history.md) §10.
-- **Demozoo / Pouët** party results — primary factual reference for individual demo releases and competition outcomes.
+- [Demozoo / Pouët](https://demozoo.org/) party results — primary factual reference for individual demo releases and competition outcomes.
 
 ---
 

@@ -354,7 +354,7 @@ For day-to-day use (running software, distributing disk images, sharing demoscen
 ### 5.4 External references
 
 - **The official SuperCard Pro website** (store.cbm8bit.com) — the canonical reference for the .SCP format and the SuperCard Pro hardware.
-- **GreaseWeazle GitHub** (github.com/keirf/Greaseweazle) — the open-source GreaseWeazle firmware and tools.
+- [GreaseWeazle GitHub](https://github.com/keirf/Greaseweazle) — the open-source GreaseWeazle firmware and tools.
 - **HxCFloppyEmulatorTool** (hxc2001.com) — the de facto cross-format disk-image conversion tool.
 - **MAME floptool documentation** — the MAME project's flux-analysis tools and format converters.
 - **"Disc Preservation"** (various archival projects) — the Internet Archive, the Software Preservation Society, and the Amiga Preservation Foundation all use .SCP as their primary imaging format.

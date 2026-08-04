@@ -660,8 +660,8 @@ When in doubt, test your .Z80 file against multiple emulators.
 
 ### 10.3 External resources
 
-- **World of Spectrum** (worldofspectrum.org) — The format documentation by Martijn van der Heide.
-- **The Fuse emulator source code** — A clean reference implementation of the .Z80 loader.
+- [World of Spectrum](https://worldofspectrum.org) — The format documentation by Martijn van der Heide.
+- [The Fuse emulator source code](https://fuse-emulator.sourceforge.net/) — A clean reference implementation of the .Z80 loader.
 
 ---
 

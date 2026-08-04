@@ -373,12 +373,12 @@ Yes. The Pentagon's video logic never leaves the data bus floating — the bus i
 
 ## References
 
-- Mikhalchenkov, D., *Pentagon Schematics* (originally published in *Radio* and *ZX-Review*, 1989–1991; various re-publications online)
-- *ZX-Review* magazine archives (1991–1996) — Pentagon documentation, software listings, hardware variants
+- Mikhalchenkov, D., *Pentagon Schematics* (originally published in *Radio* and *[ZX-Review](https://zxpress.ru/library/)*, 1989–1991; various re-publications online)
+- *[ZX-Review](https://zxpress.ru/library/)* magazine archives (1991–1996) — Pentagon documentation, software listings, hardware variants
 - [ZX Spectrum Pentagon article — Wikipedia](https://en.wikipedia.org/wiki/Pentagon_(computer)) — overview
 - [Pentagon-1024 SL documentation (Russian)](http://pentagon-1024.narod.ru/) — Lemekhov's expanded Pentagon reference
 - Boris Kuznetsov, *TR-DOS Manual* — TR-DOS 5.04 API reference
-- Chris Smith, *The ZX Spectrum ULA* — Appendix on Soviet clone TTL reimplementation strategies
+- [Chris Smith, *The ZX Spectrum ULA](http://www.zxdesign.info/)* — Appendix on Soviet clone TTL reimplementation strategies
 
 ### Cross-References
 

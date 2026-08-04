@@ -386,8 +386,8 @@ GetData:
 
 ### External references
 
-- **Sinclair ZX Specifications** (Martin Korth, `problemkaputt.de/zxdocs.htm`) — the canonical hardware reference for 128K/+2/+2A/+3 paging ports (`#7FFD`, `#1FFD`) and the partial address-decoding theory that makes them work.
-- **Spectrumpedia** (Alessandro Grussu) — cross-model print reference covering Soviet clone paging: Pentagon `#DFFD`/`#DFFF` for 512K/1024K expansions, Scorpion's `#1FFD`-compatible extension, ATM Turbo's memory modes.
+- [Sinclair ZX Specifications](http://problemkaputt.de/zxdocs.htm) — the canonical hardware reference for 128K/+2/+2A/+3 paging ports (`#7FFD`, `#1FFD`) and the partial address-decoding theory that makes them work.
+- [Spectrumpedia](https://speccy.wiki/) — cross-model print reference covering Soviet clone paging: Pentagon `#DFFD`/`#DFFF` for 512K/1024K expansions, Scorpion's `#1FFD`-compatible extension, ATM Turbo's memory modes.
 - **`tslabs/zx-evo` repository** (GitHub) — the ZX Evolution FPGA implementation; documents the full `#7FFD` / `#DFFD` / `#1FFD` / `#EFFD` paging hierarchy that modern hardware uses.
-- **`zx-pk.ru` memory expansion threads** — primary venue for Soviet-era paging modifications (Profi 1024, Kay 1024, Pentagon 1024SL); documents the divergent banking schemes that emulator authors must model.
-- **ZX Spectrum Next Weekend Assembly documentation** (`zxnext.io`) — the Next's layer-2 / bank-expansion / ROM-slot paging model that builds on the 128K foundation and extends it to 2 MB.
+- [zx-pk.ru memory expansion threads](https://zx-pk.ru) — primary venue for Soviet-era paging modifications (Profi 1024, Kay 1024, Pentagon 1024SL); documents the divergent banking schemes that emulator authors must model.
+- [ZX Spectrum Next Weekend Assembly documentation](https://zxnext.io) — the Next's layer-2 / bank-expansion / ROM-slot paging model that builds on the 128K foundation and extends it to 2 MB.

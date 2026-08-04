@@ -328,16 +328,16 @@ The modern emulator scene is the result of 30+ years of accumulated refinement, 
 ### Per-Emulator Documentation
 
 - **Fuse** — source code, manual, and release notes at the official Fuse site
-- **ZEsarUX** — documentation and tutorials at the ZEsarUX website
+- [ZEsarUX](https://github.com/chernandezba/zesarux) — documentation and tutorials at the ZEsarUX website
 - **CSpect** — release notes at the CSpect download site
 - **Spectaculator** — official website with feature list
-- **UnrealSpeccy** — documentation in Russian and English at the UnrealSpeccy project pages
+- [UnrealSpeccy](https://sdkcad.free.fr/) — documentation in Russian and English at the UnrealSpeccy project pages
 - **Klive** — source and docs at the Klive GitHub repository
 
 ### Comparison Resources
 
-- **World of Spectrum** forums — emulator comparison discussions
-- **comp.sys.sinclair** Usenet archives — historical emulator comparisons (1990s–2000s)
+- [World of Spectrum](https://worldofspectrum.org/) forums — emulator comparison discussions
+- [comp.sys.sinclair](https://groups.google.com/g/comp.sys.sinclair) Usenet archives — historical emulator comparisons (1990s–2000s)
 - **Retro Gamer magazine** — periodic emulator reviews
 - **ZX Spectrum Discord / Telegram groups** — community advice on emulator choice
 
@@ -348,7 +348,7 @@ The modern emulator scene is the result of 30+ years of accumulated refinement, 
 ### Cross-References
 
 - [Fuse](fuse.md) — the cross-platform accuracy-focused standard
-- [ZEsarUX](zesarux.md) — broadest hardware coverage, reverse engineering tools
+- [[ZEsarUX](https://github.com/chernandezba/zesarux)](zesarux.md) — broadest hardware coverage, reverse engineering tools
 - [CSpect](cspect.md) — ZX Spectrum Next reference emulator
 - [Cycle-Exact Accuracy](cycle_exact_accuracy.md) — the technical challenges of faithful Spectrum emulation
 - [Test Suites](test_suites.md) — validation ROMs and test software

@@ -555,9 +555,9 @@ As a collector's item, yes. For practical use, no — almost all interesting Spe
 
 ## References
 
-- Sinclair Research, *ZX Spectrum 14/48 Service Manual* — official schematic, BOM, ULA issue compatibility
+- [Sinclair Research, *ZX Spectrum 14/48 Service Manual](https://www.worldofspectrum.org/hardware.html)* — official schematic, BOM, ULA issue compatibility
 - Chris Smith, [*The ZX Spectrum ULA: How to Design a Microcomputer*](https://www.amazon.com/dp/0956507107) — the definitive hardware reference
-- Dr. Ian Logan & Dr. Frank O'Hara, *The Complete Spectrum ROM Disassembly* (Melbourne House, 1983) — routine-by-routine ROM analysis
+- Dr. Ian Logan & Dr. Frank O'Hara, *The [Complete Spectrum ROM Disassembly](https://worldofspectrum.org/ROMdisassembly.zip)* (Melbourne House, 1983) — routine-by-routine ROM analysis
 - [ZX Spectrum for Everyone](https://www.spectrumforeveryone.com/) — ULA revisions, board issues, repair guides
 - [The Cliff Lawson Spectrum page (archived)](https://www-users.cs.york.ac.uk/~susan/spectrum/refs.htm) — historical material
 
@@ -578,5 +578,5 @@ As a collector's item, yes. For practical use, no — almost all interesting Spe
 - [System Variables](../../04_operating_systems/system_variables.md) — `CHARS`, `P_RAMT`, `FRAMES`, and the rest
 - [Beeper Synthesis](../../06_sound/synthesis/beeper_synthesis.md) — what bit 4 of `#FE` can do
 - [Tape Programming](../../05_development/08_dos_tape/tape_programming.md) — ROM LOAD/SAVE, turbo loaders, custom formats
-- [Protection Techniques](../../08_reverse_engineering/protection_techniques.md) — Speedlock, Alkatraz, Bleepload
+- [Protection Techniques](../../08_reverse_engineering/protection_techniques.md) — [Speedlock](https://worldofspectrum.org/forums/discussion/52570/), Alkatraz, Bleepload
 - [128K Memory & I/O](../../05_development/03_memory_and_io/memory_and_io_128k.md) — what changed from 48K to 128K

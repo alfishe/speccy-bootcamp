@@ -135,9 +135,9 @@ SARCASM occasionally appears in forum threads comparing Z80 cross-assemblers, us
 
 For any new development, **do not use SARCASM**. Use:
 
-- **[SjASMPlus](sjasmplus.md)** — the modern de facto standard
-- **[Pasmo](pasmo.md)** — minimalist alternative
-- **[z88dk z80asm](z88dk_z80asm.md)** — for z88dk-integrated work
+- [[SjASMPlus](sjasmplus.md)](https://github.com/z00m128/sjasmplus) — the modern de facto standard
+- [[Pasmo](pasmo.md)](https://www.naslag.info/pasmo/) — minimalist alternative
+- [[z88dk z80asm](z88dk_z80asm.md)](https://github.com/z88dk/z88dk) — for z88dk-integrated work
 
 ---
 
@@ -195,5 +195,5 @@ A: Almost certainly not. The tool predates the Spectrum Next by over a decade.
 ## References
 
 - Retro-computing software download archives (file listings and README fragments)
-- Historical comparison with Pasmo, z88dk z80asm, and SjASMPlus
+- Historical comparison with Pasmo, [z88dk](https://github.com/z88dk/z88dk) z80asm, and SjASMPlus
 - **Caveat**: This article is necessarily speculative due to the absence of comprehensive documentation. Specific feature claims should be verified against any SARCASM distribution you may find before relying on them.

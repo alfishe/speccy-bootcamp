@@ -498,7 +498,7 @@ resume_music:
 - **Arkos Tracker 3 GitHub repository** — [github.com/ArkosTracker/arkestracker](https://github.com/ArkosTracker/arkestracker). Source for the player routines; the `player/` directory contains the AKG, AKM, AKY sources and a `tester/` folder with per-platform buildable examples.
 - **ZX Spectrum 48K Technical Reference** — [worldofspectrum.org/faq/reference/48kreference.htm](https://worldofspectrum.org/faq/reference/48kreference.htm). The frame T-state count (69,888), contention timing, and the `OUT (C), reg` instruction timing.
 - **Sinclair Wiki: AY-3-8912** — [sinclair.wiki.zxnet.co.uk/wiki/AY-3-8912](https://sinclair.wiki.zxnet.co.uk/wiki/AY-3-8912). The two-port register-access idiom (`#FFFD` address latch, `#BFFD` data write); per-model AY clock frequencies; the +2A/+3 read-port quirk.
-- **z88dk forum threads on AY music integration** — community discussion of IM2 setup, register preservation, and the practicalities of running PT3 and Arkos players in real games. Several working code examples are linked from the forum FAQ.
+- [z88dk forum threads on AY music integration](https://github.com/z88dk/z88dk) — community discussion of IM2 setup, register preservation, and the practicalities of running PT3 and Arkos players in real games. Several working code examples are linked from the forum FAQ.
 - **Shiru's AY music tutorials** — [shiru.untergrund.net](http://shiru.untergrund.net/). Shiru's write-ups on AY player architecture and the practical timing budget for NES-style games on the Spectrum.
 - **sizecoding.org: ZX Spectrum** — [sizecoding.org/wiki/ZX_Spectrum](http://sizecoding.org/wiki/ZX_Spectrum). Notes on minimal player routines for 1K/4K intros, including the AKM-vs-handcrafted trade-off.
 

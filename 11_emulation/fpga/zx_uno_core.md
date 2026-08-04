@@ -311,7 +311,7 @@ For Spanish-scene enthusiasts, demoscene producers using ULAplus, or anyone who 
 
 ### Community Resources
 - **zorlac.es / speccy.org Spanish forums**: the primary ZX-Uno community discussion
-- **World of Spectrum forums**: English-language ZX-Uno discussion threads
+- **[World of Spectrum](https://worldofspectrum.org/) forums**: English-language ZX-Uno discussion threads
 - **ULAplus specification** by Andrew Owen: technical documentation of the ULAplus palette extension
 
 ### Cross-References

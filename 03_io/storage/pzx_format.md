@@ -541,8 +541,8 @@ These live in the sibling [../snapshots/](../snapshots/README.md) directory.
 
 ### 10.4 External resources
 
-- **Unreal Speccy** — the reference implementation of .PZX (Fredrik Öhrström).
-- **The .PZX documentation** — documented in the Unreal Speccy source code.
+- [Unreal Speccy](https://sdkcad.free.fr/) — the reference implementation of .PZX (Fredrik Öhrström).
+- [The .PZX documentation](https://sdkcad.free.fr/) — documented in the Unreal Speccy source code.
 
 ### 10.5 Where to go next
 

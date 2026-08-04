@@ -281,9 +281,9 @@ The Pentagon's `#EFF7` paging is the most widely supported extended paging schem
 
 ## References
 
-- **ZX-Review magazine** (1993–1998) — primary source for Pentagon 1024 modification schematics and the original `#EFF7` specification
-- **zx-pk.ru forum** — *Пентагон 1024* subforum contains hardware variants, repair threads, and modern reproduction PCB files
+- [ZX-Review magazine](https://zxpress.ru/library/) — primary source for Pentagon 1024 modification schematics and the original `#EFF7` specification
+- **[zx-pk.ru](https://zx-pk.ru) forum** — *Пентагон 1024* subforum contains hardware variants, repair threads, and modern reproduction PCB files
 - **SpeccyWiki (speccy.info)** — Pentagon 1024SL article with PCB photos and schematic scans
-- **Unreal Speccy emulator source** — reference implementation of `#EFF7` paging in `machine_pentagon.cpp`
-- **Pentagon 2.666 Lite project** (zx-pk.ru) — modern FPGA recreation with open Verilog source, documents the exact `#EFF7` decode logic
+- [Unreal Speccy emulator source](https://sdkcad.free.fr/) — reference implementation of `#EFF7` paging in `machine_pentagon.cpp`
+- [Pentagon 2.666 Lite project](https://zx-pk.ru) — modern FPGA recreation with open Verilog source, documents the exact `#EFF7` decode logic
 - **Demoscene productions** — *Eternity* (XBazing, 1999), *Eclipse* (MGS, 1998), and other 1024K-targeted demos demonstrate real-world `#EFF7` usage patterns

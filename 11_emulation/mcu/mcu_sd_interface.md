@@ -453,11 +453,11 @@ The most popular approach is **DivMMC** — an expansion port adapter with micro
 
 ## References
 
-- **SD Physical Layer Simplified Specification** — SD Association, free download
+- [SD Physical Layer Simplified Specification](https://www.sdcard.org/downloads/) — SD Association, free download
 - **FatFs by Elm-Chan** — the standard FAT library for MCU (elm-chan.org)
 - **DivMMC documentation** — community wiki and ESXOS documentation
 - **ZXMMC project** — Zaxos's original design and community developments
-- **TAP file format specification** — on the World of Spectrum archive
+- [TAP file format specification](https://worldofspectrum.org/) — on the World of Spectrum archive
 - **TZX file format specification** — by Tomaz Kac, comprehensive
 - **SNA and Z80 file format specifications** — widely documented
 - **RP2040 SPI examples** — in the RP2040 SDK

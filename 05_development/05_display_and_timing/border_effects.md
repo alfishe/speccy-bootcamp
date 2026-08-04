@@ -279,8 +279,8 @@ This means:
 
 ### External references
 
-- **Chris Smith — *The ZX Spectrum ULA*** (book) — definitive reference for the Ferranti ULA 5C/6C, including the `#FE` border/beeper/MIC/EAR port decoding and the contention timing that constrains border-effect loops.
-- **Sinclair ZX Specifications** (Martin Korth, `problemkaputt.de/zxdocs.htm`) — hardware specs, port maps, and the canonical 48K/128K border-line counts (64 top / 48 bottom / 48 left / 48 right).
-- **Spectrumpedia** (Alessandro Grussu) — cross-model reference covering the +2A/+3 64-tap border register layout and the Pentagon's divergent border-line counts.
-- **`zx-pk.ru` demoscene forum** — primary discussion venue for raster-bar and multicolor border techniques on Soviet clones (where border timing differs from the Sinclair original).
-- **WoS archive** — historic Border-trick demos (e.g., *Epic 128*, *Shock*) that established the standard border-effect idioms.
+- [Chris Smith — The ZX Spectrum ULA](http://www.zxdesign.info/) — definitive reference for the Ferranti ULA 5C/6C, including the `#FE` border/beeper/MIC/EAR port decoding and the contention timing that constrains border-effect loops.
+- [Sinclair ZX Specifications](http://problemkaputt.de/zxdocs.htm) — hardware specs, port maps, and the canonical 48K/128K border-line counts (64 top / 48 bottom / 48 left / 48 right).
+- [Spectrumpedia](https://speccy.wiki/) — cross-model reference covering the +2A/+3 64-tap border register layout and the Pentagon's divergent border-line counts.
+- [zx-pk.ru demoscene forum](https://zx-pk.ru) — primary discussion venue for raster-bar and multicolor border techniques on Soviet clones (where border timing differs from the Sinclair original).
+- [WoS archive](https://worldofspectrum.org/) — historic Border-trick demos (e.g., *Epic 128*, *Shock*) that established the standard border-effect idioms.

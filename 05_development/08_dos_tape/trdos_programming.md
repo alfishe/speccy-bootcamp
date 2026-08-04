@@ -813,5 +813,5 @@ TR-DOS uses system variables at `#5CF6`-`#5CFB` for its own state (drive selecti
 - *TR-DOS 5.03 Disassembly* by programandala.net — annotated source code on GitHub
 - *Beta Disk Interface Manual V4* — Technology Research official documentation
 - [TR-DOS Wikipedia](https://en.wikipedia.org/wiki/TR-DOS) — version history and feature summary
-- Pentagon and Scorpion clone documentation on zx-pk.ru forums
+- Pentagon and Scorpion clone documentation on [zx-pk.ru](https://zx-pk.ru) forums
 - [trdos.md](../../04_operating_systems/trdos.md) — canonical in-repo TR-DOS reference (885 lines)

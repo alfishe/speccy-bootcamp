@@ -401,10 +401,10 @@ For detailed per-clone frame timing and how it affects software, see [Clone Timi
 
 ## Primary Sources
 
-- **ZX Spectrum 128K Service Manual** (Amstrad PLC, 1986) — the canonical reference for the 8-pin DIN monitor socket pinout, the TEA2000 encoder, and the RGB signal levels on the 128K "Toastrack"
-- **ZX Spectrum +2 Service Manual** (Amstrad PLC, 1987) — link-jumper table LK1–LK8, the variant SCART pinouts
-- **ZX Spectrum +2A/+3 Service Manual** (Amstrad PLC, 1987–1990) — the +2A/+3 8-pin DIN pinout, the 150 Ω series resistor values, and the calculation that leads to the 330 Ω external resistor recommendation
-- **Chris Smith, *The ZX Spectrum ULA: How to Design a Microcomputer*** (Eye on Books, 2010) — definitive reverse-engineering of the Ferranti ULA, including the analog Y/U/V output cells and the LM1889 interface
+- [ZX Spectrum 128K Service Manual](https://www.worldofspectrum.org/hardware.html) — the canonical reference for the 8-pin DIN monitor socket pinout, the TEA2000 encoder, and the RGB signal levels on the 128K "Toastrack"
+- [ZX Spectrum +2 Service Manual](https://www.worldofspectrum.org/hardware.html) — link-jumper table LK1–LK8, the variant SCART pinouts
+- [ZX Spectrum +2A/+3 Service Manual](https://www.worldofspectrum.org/hardware.html) — the +2A/+3 8-pin DIN pinout, the 150 Ω series resistor values, and the calculation that leads to the 330 Ω external resistor recommendation
+- [Chris Smith, The ZX Spectrum ULA: How to Design a Microcomputer](http://www.zxdesign.info/) — definitive reverse-engineering of the Ferranti ULA, including the analog Y/U/V output cells and the LM1889 interface
 - **fruitcake.plus.com SCART Cable Guide** (http://www.fruitcake.plus.com/Sinclair/Spectrum128/SCARTCable/) — the most thorough online reference for SCART cable wiring for every Spectrum model, including the link-jumper configurations and the calculated resistor values
 - **allpinouts.org — ZX Spectrum 128 RGB** (https://allpinouts.org/pinouts/connectors/computer_video/zx-spectrum-128-rgb/) — concise pinout table for the 8-pin DIN 45326 socket, with signal directions and notes on the alternative 9-pin D-type
 - **"RGB for ZX Spectrum 128, +2, +2A, +3"** (https://mts.speccy.cz/doc/128_rgb.pdf) — detailed PDF on RGB output, signal levels, and SCART cable construction for all four RGB-capable Spectrum models

@@ -354,10 +354,10 @@ The Karabas family occupies the **budget and experimenter** segment of the moder
 ## References
 
 - **Karabas project** ([GitHub: karabas](https://github.com/karabas)) — official repository with schematics, PCB layouts, and CPLD firmware for all three models
-- **Karabas forum** (zx-pk.ru) — primary community hub (Russian-language), with build guides, compatibility reports, and firmware releases
+- [Karabas forum](https://zx-pk.ru) — primary community hub (Russian-language), with build guides, compatibility reports, and firmware releases
 - **Aleksey Makarov's pages** ("asy") — design notes, build guides, compatibility reports
 - **Peridot project** ([GitHub: peridot](https://github.com/peridot)) — Peridot-specific repository with GPIO expansion examples
 - **SpeccyWiki (speccy.info)** — Karabas Pro, Karabas 128, and Peridot articles with photos and specifications
-- **Unreal Speccy emulator** — implements Karabas Pro extensions for development testing
+- [Unreal Speccy emulator](https://sdkcad.free.fr/) — implements Karabas Pro extensions for development testing
 - **ESP-12 WiFi documentation** (Espressif) — the WiFi module's AT command reference (for Peridot networking)
 - **Altera MAX II CPLD family datasheet** (Intel/Altera) — hardware reference for the EPM240/EPM570/EPM1270 used across the family

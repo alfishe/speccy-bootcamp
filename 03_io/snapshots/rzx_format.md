@@ -606,9 +606,9 @@ For very long playthroughs, some archivists insert "checkpoint snapshots" at int
 
 ### 10.3 External resources
 
-- **RZX Archive** on World of Spectrum — the canonical library of verified .RZX recordings.
+- [RZX Archive](https://worldofspectrum.org/) on World of Spectrum — the canonical library of verified .RZX recordings.
 - **RZX format specification** — the original specification document by the RZX Working Group (2001).
-- **Fuse emulator** — the reference implementation of .RZX recording and playback.
+- [Fuse emulator](https://fuse-emulator.sourceforge.net/) — the reference implementation of .RZX recording and playback.
 - **speedrun.net** and other speedrun communities — accept .RZX recordings as proof of completion.
 
 ### 10.4 Where to go next

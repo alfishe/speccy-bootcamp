@@ -672,7 +672,7 @@ These live in the sibling [../snapshots/](../snapshots/README.md) directory.
 ### 10.4 External resources
 
 - **The Spectrum ROM disassembly** — the canonical commented disassembly, including the `LD-BYTES`, `SA-BYTES`, `LD-BLOCK`, and related routines.
-- **World of Spectrum** — the largest archive of Spectrum tape images.
+- [World of Spectrum](https://worldofspectrum.org/) — the largest archive of Spectrum tape images.
 - **The .TAP specification** — the canonical document for the .TAP file format, which is based on the logical format described here.
 - **The .TZX specification** — the canonical document for the .TZX file format, which extends .TAP with support for non-standard blocks and timings.
 

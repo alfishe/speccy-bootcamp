@@ -283,5 +283,5 @@ A: Partially. The Delphi/Pascal source has been shared in various forms over the
 - Mark Woodmass ("Dunny") — ZX Spin releases and documentation
 - ZX Spin home — [zxspectrum4.net](http://www.zxspectrum4.net/)
 - BASin project — separate but related, by the same author
-- Forum threads on World of Spectrum (now archived) documenting ZX Spin's development
+- Forum threads on [World of Spectrum](https://worldofspectrum.org/) (now archived) documenting ZX Spin's development
 - Comparison articles in retro-computing magazines covering ZX Spin vs Spectaculator vs Fuse

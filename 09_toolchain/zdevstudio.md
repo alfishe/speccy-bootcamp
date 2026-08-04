@@ -364,5 +364,5 @@ A: The canonical source repository is on SourceForge, accessible from the [proje
 - **Operating systems**: Linux (GTK+), Windows (Win32 / Aero)
 - **User reviews on SourceForge**: [zDevStudio reviews page](https://sourceforge.net/projects/zdevstudio/reviews/) — two reviews as of 2025 (4.0/5 average)
 - **User review (taylorjpt, 2025-05-12)**: notes good error trapping, easy to use, missing list generation option
-- **User review (quitarzaan, 2016-03-25)**: confirms Pasmo listing option is not exposed
+- **User review (quitarzaan, 2016-03-25)**: confirms [Pasmo](https://www.naslag.info/pasmo/) listing option is not exposed
 - **Registered on SourceForge**: 22 February 2011

@@ -660,7 +660,7 @@ This table is intentionally selective. The full historical record is preserved a
 ### Background on the broader demoscene
 
 - **Demoscene — Wikipedia**: [en.wikipedia.org/wiki/Demoscene](https://en.wikipedia.org/wiki/Demoscene) — general history and cross-platform context
-- **The Demo Scene Database (Demozoo)**: cross-platform complement to zxdemo.org
+- **The Demo Scene Database ([Demozoo](https://demozoo.org/))**: cross-platform complement to zxdemo.org
 - **Revision demoparty** (Germany): the largest currently-running multi-platform demoparty, occasionally hosts Spectrum-related entries
 - **pixelings/ascii art scenes**: the wider pixel-art and text-art communities, with which the Spectrum scene has overlapping membership
 

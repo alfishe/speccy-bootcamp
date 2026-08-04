@@ -563,7 +563,7 @@ Modern recreations of IF1 hardware exist for collectors — the "ZX-Uno" FPGA co
 - [Z80 Snapshot Format .Z80](../snapshots/z80_format.md) — preserves IF1 hardware state (hardware ID 1 = 48K + IF1).
 - [SZX Snapshot Format](../snapshots/szx_format.md) — the `IF1 ` chunk stores microdrive, serial, and network state.
 - [DivIDE / DivMMC](../storage/divide_divmmc.md) — the modern "spiritual successor" providing IDE/SD storage.
-- [NextZXOS](../../04_operating_systems/nextzxos.md) — the ZX Spectrum Next's modern successor to the IF1/ESXDOS storage model.
+- [[NextZXOS](https://gitlab.com/thesmog358/tbblue)](../../04_operating_systems/nextzxos.md) — the ZX Spectrum Next's modern successor to the IF1/ESXDOS storage model.
 
 ---
 

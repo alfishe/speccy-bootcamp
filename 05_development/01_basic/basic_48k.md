@@ -1007,11 +1007,11 @@ The general rule: if a task takes fewer than ~50 lines of BASIC, write it in BAS
 
 ## References
 
-- **The Complete Spectrum ROM Disassembly** (Dr. Ian Logan & Dr. Frank O'Hara, 1983) — the definitive source for every routine in the 48K ROM, including the parser, tokenizer, calculator, `BEEP` at `#03F8`, and the `USR` handling code at calculator operation byte `#36`
+- [The Complete Spectrum ROM Disassembly](https://worldofspectrum.org/ROMdisassembly.zip) — the definitive source for every routine in the 48K ROM, including the parser, tokenizer, calculator, `BEEP` at `#03F8`, and the `USR` handling code at calculator operation byte `#36`
 - **Sinclair ZX Spectrum Basic Programming** (Steven Vickers, 1982) — the official manual by the ROM's co-author; chapters 1–9 cover the language, chapters 14–17 cover PLOT/DRAW/CIRCLE/POINT/ATTR, chapter 16 covers `BEEP`, chapter 26 covers `PEEK`/`POKE`/`USR`
 - **The ZX Spectrum ROM** — disassembly on Wearmouth.org: https://www.wearmouth.demon.co.uk/zxsp2.htm
-- **World of Spectrum — ZX BASIC Manual** (chapters online): https://worldofspectrum.org/ZXBasicManual/
-- **Alessandro Grussu's Spectrumpedia** — comprehensive encyclopedia of all ZX models and their BASIC dialects
-- **Sinclair User Issue 29 — Helpline** (February 1984): https://sinclairuser.com/029/helplne.htm — semitone-to-frequency conversion table used by the ROM
+- [World of Spectrum — ZX BASIC Manual](https://worldofspectrum.org/) : https://worldofspectrum.org/ZXBasicManual/
+- [Alessandro Grussu's Spectrumpedia](https://speccy.wiki/) — comprehensive encyclopedia of all ZX models and their BASIC dialects
+- [Sinclair User Issue 29 — Helpline](https://archive.org/details/sinclair-user-magazine) : https://sinclairuser.com/029/helplne.htm — semitone-to-frequency conversion table used by the ROM
 - **Soft Spectrum 48 — Timing and the Beeper**: https://softspectrum48.weebly.com/notes/timing-and-the-beeper — timing analysis of the BEEP routine
 - **Your Spectrum Issue 03 — Extending BASIC**: http://www.users.globalnet.co.uk/~jg27paw4/yr03/yr03_43.htm — conventions for `USR` return values and parameter passing

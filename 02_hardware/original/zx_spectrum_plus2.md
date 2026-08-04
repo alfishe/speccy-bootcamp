@@ -259,14 +259,14 @@ The +2's keyboard matrix does not have isolation diodes, so pressing three keys 
 
 ## References
 
-- **Amstrad Consumer Electronics plc** — *ZX Spectrum +2 User Manual* (1986)
+- [Amstrad Consumer Electronics plc](https://www.worldofspectrum.org/hardware.html) — *ZX Spectrum +2 User Manual* (1986)
 - **Amstrad PLC** — ZX Spectrum +2 launch press release (14 August 1986)
-- **Crash magazine, Issue 33** (September 1986) — launch review of the +2
-- **Your Sinclair magazine, Issue 13** (September 1986) — +2 review and benchmark
-- **Sinclair User magazine, Issue 56** (September 1986) — +2 launch coverage
+- [Crash magazine, Issue 33](https://archive.org/details/crash-magazine) — launch review of the +2
+- [Your Sinclair magazine, Issue 13](https://archive.org/details/yoursinclair-magazine) — +2 review and benchmark
+- [Sinclair User magazine, Issue 56](https://archive.org/details/sinclair-user-magazine) — +2 launch coverage
 - **Alan Sugar** — *What You See Is What You Get* (autobiography, 2010) — accounts of the Amstrad acquisition of Sinclair and the +2 product strategy
-- **World of Spectrum** — hardware reference photos for the +2 grey
+- [World of Spectrum](https://worldofspectrum.org/) — hardware reference photos for the +2 grey
 - **The Centre for Computing History** — +2 technical documentation
-- **ZX Spectrum Service Manual** (+2 issue 1 through issue 6 variants)
+- [ZX Spectrum Service Manual](https://www.worldofspectrum.org/hardware.html)
 
 ---

@@ -271,7 +271,7 @@ A: Neither was strictly better. They had similar feature sets and similar perfor
 
 ## References
 
-- Russian Spectrum scene archives — zx-pk.ru forum and TR-DOS software collections
+- Russian Spectrum scene archives — [zx-pk.ru](https://zx-pk.ru) forum and TR-DOS software collections
 - ALASM and STS documentation (ZXASM's primary integration partners)
 - Discussions on Russian retro-computing forums clarifying the relationship between ZXASM, ALASM, and XAS
 - Comparison with contemporaries based on the documented feature sets of ALASM, XAS, and TNI ASM

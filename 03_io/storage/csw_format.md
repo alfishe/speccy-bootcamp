@@ -534,7 +534,7 @@ These live in the sibling [../snapshots/](../snapshots/README.md) directory.
 
 - **The .CSW specification** — the canonical document for the .CSW format.
 - **Disk Image Manager** — Simon Owen's tools, including .CSW support.
-- **World of Spectrum** — has a small number of .CSW files for tapes with analog protections.
+- [World of Spectrum](https://worldofspectrum.org/) — has a small number of .CSW files for tapes with analog protections.
 
 ### 10.5 Where to go next
 

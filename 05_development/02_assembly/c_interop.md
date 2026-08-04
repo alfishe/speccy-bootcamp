@@ -1308,4 +1308,4 @@ C's `char` may be signed or unsigned depending on the compiler. If your assembly
 - [SDCC Manual — Z80 Port](https://sdcc.sourceforge.net/doc/sdccman.pdf) — official SDCC Z80 documentation
 - [chibiakumas.com — C on Z80](https://www.chibiakumas.com/z80/) — modern C+asm tutorials
 - *ZX Spectrum Next Programming* — mixed-language patterns for Next hardware
-- z88dk GitHub repository — example projects in `examples/` directory
+- [z88dk](https://github.com/z88dk/z88dk) GitHub repository — example projects in `examples/` directory

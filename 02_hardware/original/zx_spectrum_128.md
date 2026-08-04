@@ -387,13 +387,13 @@ The 128K's integrated keyboard uses a membrane that degrades over time. Replacem
 
 ## References
 
-- **Sinclair Research Ltd.** — *ZX Spectrum 128K User Manual* (1986)
-- **Investrónica / Sinclair Research** — *ZX Spectrum 128K (versión española) Manual* (1985)
+- [Sinclair Research Ltd.](https://www.worldofspectrum.org/hardware.html) — *ZX Spectrum 128K User Manual* (1986)
+- [Investrónica / Sinclair Research](https://www.worldofspectrum.org/hardware.html) — *ZX Spectrum 128K (versión española) Manual* (1985)
 - **Andrew Owen** — Sinclair ZX Spectrum 128K Technical Information (Sinclair Wiki)
-- **World of Spectrum** — hardware documentation and reference photos
-- **Chris Smith** — *The ZX Spectrum ULA: How to Design a Microcomputer* (2010) — although focused on the 48K ULA, the 128K gate array differences are documented in appendices
-- **ZX Spectrum Service Manual** — board schematics for issues 1, 2, and 3
-- **Crash magazine, Issue 26** (February 1986) — launch coverage of the UK 128K release
+- [World of Spectrum](https://worldofspectrum.org/) — hardware documentation and reference photos
+- [Chris Smith](http://www.zxdesign.info/) — *The ZX Spectrum ULA: How to Design a Microcomputer* (2010) — although focused on the 48K ULA, the 128K gate array differences are documented in appendices
+- [ZX Spectrum Service Manual](https://www.worldofspectrum.org/hardware.html) — board schematics for issues 1, 2, and 3
+- [Crash magazine, Issue 26](https://archive.org/details/crash-magazine) — launch coverage of the UK 128K release
 - **Microhobby magazine** (Spanish, 1985–1986) — extensive coverage of the Spanish launch and software library
 - **The History of the ZX Spectrum** — various sources including the Centre for Computing History and the Science Museum archive
 - **Amstrad PLC** — acquisition press release (April 1986)

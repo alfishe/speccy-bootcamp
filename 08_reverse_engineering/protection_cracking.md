@@ -370,8 +370,8 @@ The end goal of most cracking work is a **clean snapshot** — a .SNA or .Z80 fi
 
 ### External references
 
-- **Speedlock / Alkatraz / Power Load documentation** — community-maintained analyses of the three most widespread Western Spectrum protection schemes; Speedlock alone was used on over 300 commercial titles.
-- **`zx-pk.ru` protection cracking forum** — primary Russian-language venue for documented analyses of Soviet-era custom loaders (Star Sky, 5B Group, Mafia Corporation); the source of most published decryption tables.
-- **UnrealSpeccy / ZEsarUX source code** — emulator-side references for the exact timing / pulse patterns used by Speedlock and Laserload; emulators must reproduce these bit-for-bit to load protected images.
-- **Magazine archives on `zxpress.ru`** — primary-source articles from *Spectrofon*, *ZX-Format*, *Adventurer*, and *ZX-Review* on disk protection schemes and the Russian custom-loader ecosystem.
-- **Andrew Broad's *Speedlock Disassembly* (WoS archive)** — the canonical English-language worked example of cracking a Speedlock-protected title, originally distributed as a commented .z80 disassembly.
+- [Speedlock / Alkatraz / Power Load documentation](https://worldofspectrum.org/forums/discussion/52570/) — community-maintained analyses of the three most widespread Western Spectrum protection schemes; Speedlock alone was used on over 300 commercial titles.
+- [zx-pk.ru protection cracking forum](https://zx-pk.ru) — primary Russian-language venue for documented analyses of Soviet-era custom loaders (Star Sky, 5B Group, Mafia Corporation); the source of most published decryption tables.
+- [ZEsarUX source code](https://github.com/chernandezba/zesarux) — emulator-side references for the exact timing / pulse patterns used by Speedlock and Laserload; emulators must reproduce these bit-for-bit to load protected images. Also documented in the [UnrealSpeccy](https://sdkcad.free.fr/) source.
+- [Magazine archives on `zxpress.ru`](https://zxpress.ru/library/categories.php?id=2) — primary-source articles from *Spectrofon*, *ZX-Format*, *Adventurer*, and *ZX-Review* on disk protection schemes and the Russian custom-loader ecosystem.
+- [Andrew Broad's *Speedlock Disassembly* (WoS archive)](https://worldofspectrum.org/forums/discussion/52570/) — the canonical English-language worked example of cracking a Speedlock-protected title, originally distributed as a commented .z80 disassembly.

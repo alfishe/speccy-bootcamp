@@ -697,9 +697,9 @@ Any code that runs in the address range `#4000`–`#7FFF` on the 48K (or `#C000`
 
 ## References
 
-- *The Complete Spectrum ROM Disassembly* by Ian Logan and Frank O'Hara — the canonical 48K ROM reference
-- *Programming the Z80* by Rodnay Zaks — the canonical Z80 programming tutorial
-- *The ZX Spectrum ULA: How to Design a Microcomputer* by Chris Smith — definitive ULA reference
+- *The [Complete Spectrum ROM Disassembly](https://worldofspectrum.org/ROMdisassembly.zip)* by Ian Logan and Frank O'Hara — the canonical 48K ROM reference
+- *Programming the Z80* by [Rodnay Zaks](https://en.wikipedia.org/wiki/Rodnay_Zaks) — the canonical Z80 programming tutorial
+- *The [ZX Spectrum ULA: How to Design](http://www.zxdesign.info/) a Microcomputer* by Chris Smith — definitive ULA reference
 - [SjASMPlus documentation](https://github.com/z00m128/sjasmplus/wiki)
 - [World of Spectrum](https://spectrumcomputing.co.uk/) — software archive, hardware reference
 - [breakintoprogram.co.uk](http://www.breakintoprogram.co.uk/hardware/computers/zx-spectrum/assembly-language) — modern assembly tutorial series

@@ -294,11 +294,11 @@ An SD card in SPI mode draws **~1 mA idle and ~25 mA peak during reads**, with b
 
 ### 7.3 External references
 
-- **SD Association — SD Simplified Specification** (sdcard.org, public) — the canonical reference for SD card SPI mode: command set (`CMD0`, `CMD8`, `CMD17`, `CMD24`, `CMD55`/`ACMD41`), CSR/CSD register layouts, and timing requirements.
+- [SD Association — SD Simplified Specification](https://www.sdcard.org/downloads/) — the canonical reference for SD card SPI mode: command set (`CMD0`, `CMD8`, `CMD17`, `CMD24`, `CMD55`/`ACMD41`), CSR/CSD register layouts, and timing requirements.
 - **DivMMC documentation** (Zoran "Zoxon" Mačković, 2013) — the canonical hardware reference for the DivMMC's `#E3`–`#E7` SPI-on-ZX-bus port map.
-- **ZX Spectrum Next SD API documentation** (`zxnext.io`) — the public reference for the Next's dual-slot SD implementation, including the layer-2 paging interaction.
+- [ZX Spectrum Next SD API documentation](https://zxnext.io) — the public reference for the Next's dual-slot SD implementation, including the layer-2 paging interaction.
 - **`marcov-twi/ZXMMC` GitHub repository** — the original ZXMMC project source, documenting the SPI bit-bang sequence and port decode.
-- **zx-pk.ru SD interface threads** — the primary discussion venue for Russian SD hardware mods (Z-Controller, ATM Turbo SD, Pentagon SD expansions).
+- **[zx-pk.ru](https://zx-pk.ru) SD interface threads** — the primary discussion venue for Russian SD hardware mods (Z-Controller, ATM Turbo SD, Pentagon SD expansions).
 
 ### 7.4 License
 

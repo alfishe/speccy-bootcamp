@@ -466,7 +466,7 @@ Using `IN r,(C)` / `OUT (C),r` gives you **full 16-bit control** over the port a
 ## References
 
 - **Z80 CPU User Manual (UM0080)**, Section "Addressing Modes" — the canonical reference
-- **World of Spectrum Ports Reference** — worldofspectrum.org/faq/reference/ports.htm
+- [World of Spectrum Ports Reference](https://worldofspectrum.org/) — worldofspectrum.org/faq/reference/ports.htm
 - **Black_Cat's ZX Ports Full Table** — github.com/tslabs/zx-evo/blob/master/pentevo/docs/ZX/zx-ports-full-table.txt
 
 ### Cross-References

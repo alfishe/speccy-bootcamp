@@ -275,5 +275,5 @@ The ZX-Uno and the ZX Spectrum Next are **complementary** — the Next is the mo
 ### Community
 
 - **Speccy.santo forum** — primary Spanish-language ZX-Uno community hub
-- **World of Spectrum forum threads** — English-language discussion of the ZX-Uno
+- [World of Spectrum forum threads](https://worldofspectrum.org/) — English-language discussion of the ZX-Uno
 - **Retro Wiki ES** ([retrowiki.es](https://retrowiki.es/)) — broader Spanish retro-computing community

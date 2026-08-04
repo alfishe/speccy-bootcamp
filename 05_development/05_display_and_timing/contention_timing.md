@@ -396,10 +396,10 @@ Real-world contention probes (e.g., the ones used by emulator authors to validat
 
 ## Primary Sources
 
-- **Chris Smith, *The ZX Spectrum ULA: How to Design a Microcomputer*** (2010) — the definitive hardware reference for Ferranti ULA contention. Documents the exact delay mechanism and the 6-5-4-3-2-1-0-0 pattern.
+- [Chris Smith, The ZX Spectrum ULA: How to Design a Microcomputer](http://www.zxdesign.info/) — the definitive hardware reference for Ferranti ULA contention. Documents the exact delay mechanism and the 6-5-4-3-2-1-0-0 pattern.
 - ** Fuse emulator source** ([github.com/fuse-emulator/fuse](https://github.com/fuse-emulator/fuse)) — `peripherals/ula.c` contains the contention model implementation. The reference for Ferranti timing.
 - **ZEsarUX emulator source** ([github.com/chernandezba/zesarux](https://github.com/chernandezba/zesarux)) — implements both Ferranti and Amstrad contention with detailed per-cycle accuracy.
 - **Unreal Speccy emulator** ([github.com/mkoloberdin/unrealspeccy](https://github.com/mkoloberdin/unrealspeccy)) — `unreal.ini` defines `CONTENTION=` per model preset (0 for Pentagon, 1 for 48K, 2 for +2A/+3).
 - **ZXMAK2 emulator source** — documents per-revision Scorpion contention and the differences between Ferranti revisions (5C/6C/7C/8C).
 - **Ramsoft ZX Spectrum FAQ** — original community documentation of contention timing, the basis for all emulator implementations.
-- **zx-pk.ru forum threads** — real-hardware measurements confirming contention patterns on specific machine revisions. Notable: "Ferranti ULA contention probe results", "+2A gate array timing measurements".
+- **[zx-pk.ru](https://zx-pk.ru) forum threads** — real-hardware measurements confirming contention patterns on specific machine revisions. Notable: "Ferranti ULA contention probe results", "+2A gate array timing measurements".

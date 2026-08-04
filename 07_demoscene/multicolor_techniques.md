@@ -780,11 +780,11 @@ The likely future: multicolor will continue to be developed for as long as there
 
 ### External references
 
-- **`zx-pk.ru` multicolor / multitekst threads** — primary Russian-language forum for multicolor technique discussions; documents the Pentagon-specific scanline counts and the demoscene idioms for synchronizing to the raster without floating-bus reads.
-- **ZXArt (`zxart.ee`)** — the canonical archive of Spectrum demos; search for "multicolor" to find the canonical reference demos (e.g., *Extasy*, *Epic 128*, *Reanimation*, *Shock*, *Crystal Dream*).
-- **Gerton Lunter's *Multicolor demonstration* routines** — early worked examples of the timing-safe inner loops that make `8x8` and `8x4` color modes possible at 50 Hz on the 48K.
-- **Andrew Owen's *Multicolor Tutorial*** (community-maintained, on WoS archive) — the canonical English-language introduction to multicolor timing for newcomers.
-- **`z88dk` and `sjasmplus` documentation** — modern toolchain references for assembling multicolor code with macros that generate the timing tables automatically.
+- [zx-pk.ru multicolor / multitekst threads](https://zx-pk.ru) — primary Russian-language forum for multicolor technique discussions; documents the Pentagon-specific scanline counts and the demoscene idioms for synchronizing to the raster without floating-bus reads.
+- [ZXArt](https://zxart.ee) — the canonical archive of Spectrum demos; search for "multicolor" to find the canonical reference demos (e.g., *Extasy*, *Epic 128*, *Reanimation*, *Shock*, *Crystal Dream*).
+- [Gerton Lunter's *Multicolor demonstration* routines](https://worldofspectrum.org/) — early worked examples of the timing-safe inner loops that make `8x8` and `8x4` color modes possible at 50 Hz on the 48K; originally distributed with the ZXMak emulator.
+- [Andrew Owen's *Multicolor Tutorial*](https://worldofspectrum.org/forums/) — the canonical English-language introduction to multicolor timing for newcomers; community-maintained on the WoS forums.
+- [`z88dk` and `sjasmplus` documentation](https://github.com/z88dk/z88dk) — modern toolchain references for assembling multicolor code with macros that generate the timing tables automatically.
 
 ---
 

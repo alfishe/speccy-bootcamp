@@ -299,5 +299,5 @@ This is **reliable** because the machine ID register exists only on real Next ha
 - **ZX Spectrum Next Register Reference** — the canonical list of all Next-specific I/O ports (`#243B`/`#253B` register-indexed access) and their effects.
 - **NextBASIC Manual** — chapter on copper programming and the WAIT/MOVE instruction format.
 - **CSpect emulator** ([cspect.org](https://cspect.org)) — primary development emulator for the Next, implements all timing modes and the copper.
-- **ZEsarUX** — full Next timing emulation including 48K/128K/+2A/Pentagon mode switching.
+- [ZEsarUX](https://github.com/chernandezba/zesarux) — full Next timing emulation including 48K/128K/+2A/Pentagon mode switching.
 - **The "Definitive ZX Spectrum Next Tester" ROM** — community test suite that verifies copper timing, CPU speed switching, and per-mode contention behavior on real hardware.

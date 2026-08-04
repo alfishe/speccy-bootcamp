@@ -832,7 +832,7 @@ This article is the canonical reference for the **asset pipeline**. Related deep
 - **ZX-Modules** (Simon Owen; multi-format editor for Windows) — <https://worldofspectrum.net/zx-modules/>
 
 ### Sprites
-- **SevenUp** / **SevenUp Plus** — widely distributed via World of Spectrum and the Spectrum Computing archive
+- [SevenUp](https://worldofspectrum.org/) / **SevenUp Plus** — widely distributed via World of Spectrum and the Spectrum Computing archive
 - **ZX PearPixel** (modern cross-platform sprite editor) — search Spectrum developer community groups
 - **Remy Sharp's sprite and tilemap editors** (ZX Spectrum Next) — <https://zx.remysharp.com/>
 - **olbrichattila/zx-spectrum-sprite-editor** — <https://github.com/olbrichattila/zx-spectrum-sprite-editor>
@@ -842,7 +842,7 @@ This article is the canonical reference for the **asset pipeline**. Related deep
 - **FZX format specification** — <https://sinclair.wiki.zxnet.co.uk/wiki/FZX_format>
 - **FZX Editor (ZX-Modules)** — <https://worldofspectrum.net/zx-modules/100>
 - **Fony** (Windows font editor) — <https://hukka.ncn.fi/?fony>
-- **z88dk FZX font library** — <https://github.com/z88dk/z88dk/tree/master/libsrc/_DEVELOPMENT/font>
+- [z88dk FZX font library](https://github.com/z88dk/z88dk) — <https://github.com/z88dk/z88dk/tree/master/libsrc/_DEVELOPMENT/font>
 
 ### Music and SFX
 - **Vortex Tracker II** — <http://bulba.untergrund.net/vortex_e.htm>
@@ -850,7 +850,7 @@ This article is the canonical reference for the **asset pipeline**. Related deep
 - **Beepola** (1-bit beeper tracker) — <https://shiru.untergrund.net/software.shtml>
 - **BeepFX** (1-bit SFX generator) — <https://shiru.untergrund.net/software.shtml>
 - **ayFX** (AY SFX) — <https://shiru.untergrund.net/software.shtml>
-- **World of Spectrum AY music archive** — <https://worldofspectrum.net/archive/>
+- [World of Spectrum AY music archive](https://worldofspectrum.org/) — <https://worldofspectrum.net/archive/>
 
 ### Compression / crunchers
 - **ZX0** (Einar Saukas) — <https://github.com/einar-saukas/ZX0>
@@ -866,11 +866,11 @@ This article is the canonical reference for the **asset pipeline**. Related deep
 - **ZX Spectrum Next tilemap programming** — <https://specnext.dev/~tilemap/>
 
 ### Toolchains (where assets integrate)
-- **SjASMPlus** — <https://github.com/z00m128/sjasmplus>
-- **z88dk** — <https://github.com/z88dk/z88dk>
-- **DeZog** (debugger with asset inspection) — <https://github.com/maziac/DeZog>
+- [SjASMPlus](https://github.com/z00m128/sjasmplus) — <https://github.com/z00m128/sjasmplus>
+- [z88dk](https://github.com/z88dk/z88dk) — <https://github.com/z88dk/z88dk>
+- [DeZog](https://github.com/maziac/DeZog) — <https://github.com/maziac/DeZog>
 
 ### Community archives
-- **World of Spectrum** — <https://worldofspectrum.net/>
+- [World of Spectrum](https://worldofspectrum.org/) — <https://worldofspectrum.net/>
 - **Spectrum Computing** — <https://spectrumcomputing.co.uk/>
 - **ZX ART** (Spectrum art and music archive) — <https://zxart.ee/>

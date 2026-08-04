@@ -630,18 +630,18 @@ The 2020s have seen a general revival of retro-demoscene activity, partly driven
 
 ### 13.3 External primary sources
 
-- **Demozoo.org** — cross-platform archive; primary source for party results and demo release dates.
+- [Demozoo.org](https://demozoo.org/) — cross-platform archive; primary source for party results and demo release dates.
 - **Pouët.net** — cross-platform demo archive; especially strong on C64, Amiga, ST.
 - **CSDb.dk** — Commodore 64 Scene Database; the canonical C64-scene archive.
 - **Hall of Light** (hol.abime.net) — Amiga game/demo archive.
 - **AtariLegend**, **atarimania.com** — Atari ST archives.
 - **Generation-MSX** (generation-msx.nl) — MSX database.
 - **CPC-Wiki** (cpc-wiki.eu) — Amstrad CPC archive.
-- **zxdemo.org**, **zxart.ee**, **zx-pk.ru**, **bbb.retroscene.org** — Spectrum archives (see [soviet_demo_scene.md](soviet_demo_scene.md) §10.3).
+- **zxdemo.org**, **[zxart.ee](https://zxart.ee)**, **zx-pk.ru**, **bbb.retroscene.org** — Spectrum archives (see [soviet_demo_scene.md](soviet_demo_scene.md) §10.3).
 
 ### 13.4 Key reference works
 
-- **Andrew Owen / Raahir Ahmad**, "ZX Spectrum Hardware Manual" — primary reference for ULA timing.
+- **Andrew Owen / Raahir Ahmad**, "[ZX Spectrum Hardware Manual](https://www.worldofspectrum.org/hardware.html)" — primary reference for ULA timing.
 - **Christian Bauer**, "The Secret of the Amiga Hardware" — primary reference for Amiga OCS chipset.
 - **Rob nack/dKT**, "Commodore 64 Programmer's Reference Guide" — primary reference for VIC-II/SID.
 - **Don French**, "Atari ST Profibuch" — primary reference for ST hardware.

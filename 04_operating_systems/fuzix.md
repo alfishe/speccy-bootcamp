@@ -1072,10 +1072,10 @@ Among 8-bit Z80 Unix-like systems, FUZIX is the most capable, most actively deve
 
 ### External references
 
-- **FUZIX project repository** (Alan Cox, `github.com/EtchedPixels/FUZIX`) — the canonical source for the FUZIX kernel, the Z80 port, and the Spectrum-specific device drivers; the primary reference for behavior under all edge cases.
+- [FUZIX project repository](https://github.com/EtchedPixels/FUZIX) — the canonical source for the FUZIX kernel, the Z80 port, and the Spectrum-specific device drivers; the primary reference for behavior under all edge cases.
 - **Unix V6 / V7 documentation** (Bell Labs, 1979) — the historical reference for the UNIX ancestry that FUZIX inherits; documents the process model, the inode filesystem, and the system-call API that FUZIX faithfully replicates on 8-bit hardware.
-- **`z88dk` FUZIX build instructions** (`github.com/z88dk/z88dk/wiki`) — the canonical reference for cross-compiling C programs against the FUZIX userland on a modern host.
-- **`zx-pk.ru` / `smol.viziv` Russian FUZIX threads** — Russian-language forum discussions of FUZIX ports to Soviet clone hardware (Pentagon 1024, Scorpion ZS-256, ATM Turbo, ZX Evolution).
+- [`z88dk` FUZIX build instructions](https://github.com/z88dk/z88dk) — the canonical reference for cross-compiling C programs against the FUZIX userland on a modern host.
+- [zx-pk.ru / `smol.viziv` Russian FUZIX threads](https://zx-pk.ru) — Russian-language forum discussions of FUZIX ports to Soviet clone hardware (Pentagon 1024, Scorpion ZS-256, ATM Turbo, ZX Evolution).
 - **FUZIX on the Spectrum — community blog posts** — practical user experiences and installation walkthroughs documenting the supported hardware configurations (DivIDE, DivMMC, ZX Spectrum Next, inner-side SD on clones).
 
 ---

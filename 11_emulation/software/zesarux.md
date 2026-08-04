@@ -342,26 +342,26 @@ Combined with Fuse (general-purpose emulation), CSpect (Next reference), and Spe
 
 ### Primary Sources
 
-- **ZEsarUX website** — `https://github.com/chernandezba/zesarux`
-- **ZEsarUX documentation** — extensive wiki and help files
-- **ZEsarUX releases** — prebuilt binaries for Linux, macOS, Windows
+- [ZEsarUX website](https://github.com/chernandezba/zesarux) — `https://github.com/chernandezba/zesarux`
+- [ZEsarUX documentation](https://github.com/chernandezba/zesarux) — extensive wiki and help files
+- [ZEsarUX releases](https://github.com/chernandezba/zesarux) — prebuilt binaries for Linux, macOS, Windows
 - **Cesar Hernandez Nuñez's blog and tutorial videos** — many reverse engineering walkthroughs
 
 ### Community Resources
 
-- **ZEsarUX GitHub issues** — bug reports, feature requests, community discussion
-- **World of Spectrum forums** — ZEsarUX discussions
+- [ZEsarUX GitHub issues](https://github.com/chernandezba/zesarux) — bug reports, feature requests, community discussion
+- [World of Spectrum forums](https://worldofspectrum.org/) — ZEsarUX discussions
 - **ZX Spectrum Discord / Telegram groups** — community support
 
 ### Reverse Engineering Resources
 
-- Various tutorials and write-ups that use ZEsarUX for specific analysis tasks
-- Demoscene productions that document ZEsarUX-specific behaviors
+- Various tutorials and write-ups that use [ZEsarUX](https://github.com/chernandezba/zesarux) for specific analysis tasks
+- Demoscene productions that document [ZEsarUX](https://github.com/chernandezba/zesarux)-specific behaviors
 
 ### Cross-References
 
-- [Emulator Comparison](emulator_comparison.md) — ZEsarUX vs other emulators
-- [Cycle-Exact Accuracy](cycle_exact_accuracy.md) — accuracy challenges ZEsarUX addresses
-- [Test Suites](test_suites.md) — tests ZEsarUX passes
+- [Emulator Comparison](emulator_comparison.md) — [ZEsarUX](https://github.com/chernandezba/zesarux) vs other emulators
+- [Cycle-Exact Accuracy](cycle_exact_accuracy.md) — accuracy challenges [ZEsarUX](https://github.com/chernandezba/zesarux) addresses
+- [Test Suites](test_suites.md) — tests [ZEsarUX](https://github.com/chernandezba/zesarux) passes
 - [Fuse](fuse.md) — the workhorse alternative
 - [CSpect](cspect.md) — the Next reference emulator

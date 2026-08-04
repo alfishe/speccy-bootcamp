@@ -275,13 +275,13 @@ For modern retro-computing, the Spectranet is the choice for users who want maxi
 ### Software and Documentation
 
 - **SpeccyTelnet, SpeccyIRC** — Andrew Owen's reference client implementations
-- **z88dk Spectranet wrapper** — C-callable Spectranet API for z88dk C programs
+- [z88dk Spectranet wrapper](https://github.com/z88dk/z88dk) — C-callable Spectranet API for z88dk C programs
 - **Telnet BBS Guide** (tbbs.net) — modern listing of telnet-accessible BBSes
 
 ### Community
 
 - **Spectranet wiki and forums** — active community documentation and Q&A
-- **World of Spectrum forums** — discussion of Spectranet hardware, firmware, and software
+- [World of Spectrum forums](https://worldofspectrum.org/) — discussion of Spectranet hardware, firmware, and software
 - **ZX Spectrum Next forum** — comparisons between Spectranet and the Next's built-in WiFi
 
 ### Related Articles in This Knowledge Base
@@ -291,4 +291,4 @@ For modern retro-computing, the Spectranet is the choice for users who want maxi
 - [ZiFi](zifi.md) — WiFi alternative to Spectranet
 - [ESP WiFi](esp_wifi.md) — DIY ESP-based WiFi modules
 - [ZX Spectrum Next WiFi](zx_next_wifi.md) — the Next's built-in WiFi
-- [Cross-Platform Toolchain](../../09_toolchain/cross_platform_toolchain.md) — z88dk's Spectranet C wrapper
+- [Cross-Platform Toolchain](../../09_toolchain/cross_platform_toolchain.md) — [z88dk](https://github.com/z88dk/z88dk)'s Spectranet C wrapper

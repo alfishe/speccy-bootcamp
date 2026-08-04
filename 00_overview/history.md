@@ -348,17 +348,17 @@ The Pentagon is often described in Western histories as a "Sinclair Spectrum clo
 
 - **Sinclair Wiki — [Timeline of Events](https://sinclair.wiki.zxnet.co.uk/wiki/Timeline_of_events)** — Canonical date reference for Sinclair-era launches, with primary-source citations.
 - **World of Spectrum — [spectrumcomputing.co.uk](https://spectrumcomputing.co.uk)** — Software archive, magazine scans, hardware reference photos.
-- **Crash magazine archive** (1984–1992) — Contemporary reviews of Spectrum hardware and software as they launched.
-- **Your Sinclair magazine archive** (1986–1993) — Later-period Spectrum coverage.
-- **Sinclair User magazine archive** (1982–1993) — The longest-running UK Spectrum magazine.
-- **Chris Smith — *The ZX Spectrum ULA*** (2010) — The definitive technical reference on the Ferranti ULA, including detailed history of its development.
-- **Rodnay Zaks — *Programming the Z80*** (1979) — The contemporary Z80 reference used by Spectrum developers.
+- [Crash magazine archive](https://archive.org/details/crash-magazine) — Contemporary reviews of Spectrum hardware and software as they launched.
+- [Your Sinclair magazine archive](https://archive.org/details/yoursinclair-magazine) — Later-period Spectrum coverage.
+- [Sinclair User magazine archive](https://archive.org/details/sinclair-user-magazine) — The longest-running UK Spectrum magazine.
+- [Chris Smith — The ZX Spectrum ULA](http://www.zxdesign.info/) — The definitive technical reference on the Ferranti ULA, including detailed history of its development.
+- [Rodnay Zaks — Programming the Z80](https://en.wikipedia.org/wiki/Rodnay_Zaks) — The contemporary Z80 reference used by Spectrum developers.
 - **Adam Adelman, *The Spectrum Compendium*** (1985) — Early-era software catalog and platform reference.
-- **Tony Stratton, *The Spectrum ROM Disassembly*** (1983) — Annotated 48K ROM source, used as a primary reference by ROM hackers.
+- [Tony Stratton, The Spectrum ROM Disassembly](https://worldofspectrum.org/ROMdisassembly.zip) — Annotated 48K ROM source, used as a primary reference by ROM hackers.
 - **Andrew Owen — [*The ZX Spectrum ROMs*](https://www.users.globalnet.co.uk/~jg27paw4/)** — Disassembly references for the 48K, 128K, +2, +2A, and +3 ROMs.
 - **Alessandro Grussu — [Spectrumpedia](https://www.alessandrogrussu.it/zx/)** — Comprehensive historical and technical encyclopedia of all ZX Spectrum models, including Spanish variants.
-- **zx-pk.ru** — The primary knowledge base for Soviet clone history and current post-Soviet scene activity.
-- **zxpress.ru** — Scanned archive of Soviet/post-Soviet disk magazines (*Spectrofon*, *ZX-Format*, *Body*, *Echo*, *Futuris*, *ZX-Review*) — primary-source magazine articles on clone history.
-- **Demozoo and Pouet** — Cross-platform demoscene archives, including decades of Spectrum demos with party results.
+- **[zx-pk.ru](https://zx-pk.ru)** — The primary knowledge base for Soviet clone history and current post-Soviet scene activity.
+- [zxpress.ru](https://zxpress.ru/library/categories.php?id=2) — Scanned archive of Soviet/post-Soviet disk magazines (*Spectrofon*, *ZX-Format*, *Body*, *Echo*, *Futuris*, *ZX-Review*) — primary-source magazine articles on clone history.
+- [Demozoo and Pouet](https://demozoo.org/) — Cross-platform demoscene archives, including decades of Spectrum demos with party results.
 - **ZX Spectrum Next — [zxnext.io](https://zxnext.io)** — Official documentation for the modern revival's flagship machine.
 - **Lord Sugar's account of the 1986 acquisition** — [Facebook post, 7 April 2026 (40th anniversary)](https://www.facebook.com/LordSugar/posts/1480977253384608/) — primary-source commentary on the acquisition.

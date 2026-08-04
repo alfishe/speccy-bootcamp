@@ -285,7 +285,7 @@ The 128K ROM adds routines for AY-3-8912 sound, RAM banking, and the menu system
 
 ## References
 
-- Ian Logan, Frank O'Hara — *The Complete Spectrum ROM Disassembly*, Melbourne House, 1983 — canonical disassembly with all entry points and calling conventions
+- Ian Logan, Frank O'Hara — *The [Complete Spectrum ROM Disassembly](https://worldofspectrum.org/ROMdisassembly.zip)*, Melbourne House, 1983 — canonical disassembly with all entry points and calling conventions
 - Dr. Ian Logan — *ZX Spectrum 128 ROM Disassembly*, 1986 — 128K ROM reference
 - Geoff Wearmouth — *48K ROM Disassembly*, [wearmouth.demon.co.uk](https://www.wearmouth.demon.co.uk/zxsp2.htm) — online hypertext disassembly
 - Steven Vickers — *ZX Spectrum BASIC Programming*, Sinclair Research, 1982 — official documentation of `BEEP`, `SAVE`, `LOAD` and other statements

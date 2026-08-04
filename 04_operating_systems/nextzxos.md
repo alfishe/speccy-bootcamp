@@ -767,13 +767,13 @@ The Next is not a static platform. It continues to grow.
 
 ### 10.3 External resources
 
-- **Official NextZXOS documentation**: https://specnext.dev/
-- **NextZXOS source code (GitHub)**: https://github.com/Threetwosevensix/NextZXOS
+- **Official [NextZXOS](https://gitlab.com/thesmog358/tbblue) documentation**: https://specnext.dev/
+- **[NextZXOS](https://gitlab.com/thesmog358/tbblue) source code (GitHub)**: https://github.com/Threetwosevensix/NextZXOS
 - **ZX Spectrum Next forum**: https://spectrum-next.net/
 - **The Next's official site**: https://www.specnext.com/
 - **Outline party**: https://outline-party.org/
-- **z88dk Next target**: https://github.com/z88dk/z88dk/wiki/Platform-ZX-Next
-- **SJASMPlus Next support**: https://github.com/z00m128/sjasmplus/blob/master/docs/Next.htm
+- **[z88dk](https://github.com/z88dk/z88dk) Next target**: https://github.com/z88dk/z88dk/wiki/Platform-ZX-Next
+- **SJASMPlus Next support**: https://github.com/z00m128/[sjasmplus](https://github.com/z00m128/sjasmplus)/blob/master/docs/Next.htm
 
 ---
 

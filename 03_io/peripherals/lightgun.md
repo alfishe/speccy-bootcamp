@@ -298,10 +298,10 @@ The Magnum is, in a sense, the ZX Spectrum equivalent of an early light-pen peri
 - **Janderogee.com** — [C64 Light Gun Pinout](https://janderogee.com/projects/c64_lightgun/c64_lightgun.htm). C64 user-port pinout; the 4011 NAND amplifier schematic; trigger-sense wiring.
 - **Grokipedia** — [Magnum Light Phaser](https://grokipedia.com/wiki/Magnum_Light_Phaser). Independent summary; cross-check of release dates and bundle contents.
 - **Crash Magazine** issue 51 (1988) — review of the Magnum's launch titles (*Rookie* 90%, *Operation Wolf* 79%, *Missile: Ground Zero* 56%, *Robot Attack* 35%). Contemporary critical reception.
-- **Sinclair User** issue 76 (1988) — Amstrad's launch advertising for the Magnum and the James Bond 007 Action Pack.
-- **Your Sinclair** issue 32 (1988) — round-up of light-gun games, including the Cheetah Defender comparison.
+- [Sinclair User](https://archive.org/details/sinclair-user-magazine) issue 76 (1988) — Amstrad's launch advertising for the Magnum and the James Bond 007 Action Pack.
+- [Your Sinclair](https://archive.org/details/yoursinclair-magazine) issue 32 (1988) — round-up of light-gun games, including the Cheetah Defender comparison.
 - **Spectrum Computing archive** — [spectrumcomputing.co.uk](https://spectrumcomputing.co.uk). Searchable database of all known Magnum-compatible titles; TAP and TZX images for software preservation.
-- **World of Spectrum** (archived at the Internet Archive) — historical magazine archive; per-title review scores; bundle contents.
+- [World of Spectrum](https://worldofspectrum.org/) — historical magazine archive; per-title review scores; bundle contents.
 
 ---
 

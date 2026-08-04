@@ -1127,8 +1127,8 @@ A fully bank-aware ISR must either:
 
 ### External references
 
-- **128K ROM Disassembly** (community-maintained, on WoS archive) — the canonical annotated 128K editor ROM source; covers ROM 0 (48K BASIC, identical to the standalone 48K ROM), ROM 1 (128K editor + 48K BASIC + tape editor), and the editor's menu system.
-- **Complete Spectrum ROM Disassembly** (Logan / O'Hara, 1982) — the canonical reference for the underlying 48K ROM routines that ROM 0 wraps; every routine inherited from the 48K is documented here.
-- **Sinclair 128K Service Manual** (Sinclair Research, 1986) — the canonical hardware reference covering ROM chip select, the `#7FFD` paging port, and the AY-3-8912 audio chip ports that the 128K ROM drives.
-- **Sinclair ZX Specifications** (Martin Korth, `problemkaputt.de/zxdocs.htm`) — cross-model hardware reference; documents the 128K ROM's relationship to the +2 (grey), +2A, +3 ROMs and the regional variants.
-- **Spectrumpedia** (Grussu) — print reference for the Spanish / Italian / Russian / French 128K ROM variants; documents the modified editor menu text and the locale-specific BASIC keywords.
+- [128K ROM Disassembly](https://worldofspectrum.org/) — the canonical annotated 128K editor ROM source; covers ROM 0 (48K BASIC, identical to the standalone 48K ROM), ROM 1 (128K editor + 48K BASIC + tape editor), and the editor's menu system.
+- [Complete Spectrum ROM Disassembly](https://worldofspectrum.org/ROMdisassembly.zip) — the canonical reference for the underlying 48K ROM routines that ROM 0 wraps; every routine inherited from the 48K is documented here.
+- [Sinclair 128K Service Manual](https://www.worldofspectrum.org/hardware.html) — the canonical hardware reference covering ROM chip select, the `#7FFD` paging port, and the AY-3-8912 audio chip ports that the 128K ROM drives.
+- [Sinclair ZX Specifications](http://problemkaputt.de/zxdocs.htm) — cross-model hardware reference; documents the 128K ROM's relationship to the +2 (grey), +2A, +3 ROMs and the regional variants.
+- [Spectrumpedia](https://speccy.wiki/) — print reference for the Spanish / Italian / Russian / French 128K ROM variants; documents the modified editor menu text and the locale-specific BASIC keywords.

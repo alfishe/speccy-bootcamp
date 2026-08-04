@@ -323,8 +323,8 @@ For the inverse — raising an error from machine code:
 ## References
 
 - Steven Vickers — *ZX Spectrum BASIC Programming*, Sinclair Research, 1982 — original list of 10 Sinclair BASIC error codes
-- Ian Logan, Frank O'Hara — *The Complete Spectrum ROM Disassembly*, Melbourne House, 1983 — error reporting mechanism with disassembly
-- Amstrad — *ZX Spectrum +3 DOS Manual*, 1987 — +3 DOS error table
+- Ian Logan, Frank O'Hara — *The [Complete Spectrum ROM Disassembly](https://worldofspectrum.org/ROMdisassembly.zip)*, Melbourne House, 1983 — error reporting mechanism with disassembly
+- Amstrad — *[ZX Spectrum +3 DOS Manual](https://www.worldofspectrum.org/hardware.html)*, 1987 — +3 DOS error table
 - Mikhail Shumakov — *TR-DOS User Manual*, original Russian documentation
 - ESXDOS Documentation, Espter Software, [community-maintained mirror](https://github.com/z-esxdos/esxdos-manual)
 - NextZXOS Manual, ZX Spectrum Next team, [gitlab mirror](https://gitlab.com/thesmog358/tbblue/-/tree/master/docs/nextos)

@@ -629,8 +629,8 @@ In practice, .SZX is most useful when both you and your target audience are usin
 
 ### 10.3 External resources
 
-- **The ZEsarUX source code** (`zesarux/src`) — The canonical reference for the .SZX format, including all standard chunk types.
-- **The Fuse emulator source code** — A clean reference loader for the common .SZX chunks.
+- [The ZEsarUX source code](https://github.com/chernandezba/zesarux) — The canonical reference for the .SZX format, including all standard chunk types.
+- [The Fuse emulator source code](https://fuse-emulator.sourceforge.net/) — A clean reference loader for the common .SZX chunks.
 
 ---
 

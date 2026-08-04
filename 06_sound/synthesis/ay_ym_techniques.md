@@ -968,8 +968,8 @@ For longer phrases, **delta modulation** is essential. Instead of storing the ab
 - **YM2149 Data Sheet** (Yamaha) — the Yamaha-rebranded AY variant with the envelope-divide-by-2 select pin (BC1); documents the clock-domain differences exploited by Sync-Square and Phase Interference.
 - **Chris Cowley — Phaezo tutorial series** — the foundational community reference for AY/YM synthesis techniques on the Spectrum, originally distributed as a series of disk-magazine articles in the 1990s.
 - **Standard Spectrum tracker formats (Sound Tracker, Pro Tracker, VTII, ASC Sound Master)** — community-maintained documentation for each module format; shows how each effect column maps to the register-write patterns this article describes.
-- **ZXArt (`zxart.ee`)** — the canonical archive of AY-tracked Spectrum music; the technique index above maps directly to the effects used in archived modules.
-- **Atari ST, Amstrad CPC, MSX AY demo scene** — the same YM2149 chip was used on multiple platforms; cross-platform demoscene research (Pouet, Demozoo) reveals techniques that the Russian Spectrum scene later adopted and extended.
+- [ZXArt](https://zxart.ee) — the canonical archive of AY-tracked Spectrum music; the technique index above maps directly to the effects used in archived modules.
+- [Atari ST, Amstrad CPC, MSX AY demo scene](https://demozoo.org/) — the same YM2149 chip was used on multiple platforms; cross-platform demoscene research (Pouet, Demozoo) reveals techniques that the Russian Spectrum scene later adopted and extended.
 
 ### License
 

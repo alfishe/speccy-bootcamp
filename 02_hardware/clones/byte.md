@@ -246,7 +246,7 @@ The Byte's main distinction is being the **only mass-produced Soviet Spectrum cl
 - **Old Computer Museum** (old-computers.com) — Byte hardware reference with component photographs
 - **MCbx Old Computer Collection** — Bajt variant documentation with PCB scans and schematic analysis
 - **zxbyte.ru** — active collector community forum with repair guides, ROM dumps, and software archives
-- **Spectrumpedia III** (Alessandro Grussu) — English-language reference covering Byte variants and Moldovan clones
+- [Spectrumpedia III](https://speccy.wiki/) — English-language reference covering Byte variants and Moldovan clones
 - **ZXMak2 emulator** — reference implementation of Byte timing and ROM behavior
-- **zx-pk.ru forum** — *Байт* subforum contains build guides, repair threads, and variant documentation
+- **[zx-pk.ru](https://zx-pk.ru) forum** — *Байт* subforum contains build guides, repair threads, and variant documentation
 - **VC.ru** ("С паяльником и напильником") — Belarusian DIY computing history, includes Byte factory context

@@ -323,8 +323,8 @@ The Sprinter was largely superseded by the ZX Evolution after 2007, which had be
 - **Sprinter FAQ** by Alex Goryachev / Peters Plus, Ltd. (created 17 December 2001) — the canonical hardware, software, and support reference; reprinted via ZXPRESS as "Iron — Sprinter? Questions and answers!" in Sinclair Club #05
 - **Sprinter technical manual** (Peters Plus, ~1999–2001, Russian) — original hardware reference with port maps and BIOS entry points
 - **Peters Plus archive** ([nedopc.org](http://nedopc.org)) — Sprinter schematics, BIOS source, software archive
-- **ZX-Format magazine** issues covering the Sprinter launch and ongoing development
+- [ZX-Format magazine](https://zxpress.ru/library/categories.php?id=2) issues covering the Sprinter launch and ongoing development
 - **ZX-Forum #2** (ZXF02.pdf) — interview with Alex Goryachev on the Sprinter's design and goals
-- **zx-pk.ru forum** — *Sprinter* subforum with BIOS documentation and repair threads
+- **[zx-pk.ru](https://zx-pk.ru) forum** — *Sprinter* subforum with BIOS documentation and repair threads
 - **SpeccyWiki (speccy.info)** — Sprinter article with photos and specification tables
-- **World of Spectrum** — Sprinter file archive with software, documentation, and interviews
+- [World of Spectrum](https://worldofspectrum.org/) — Sprinter file archive with software, documentation, and interviews

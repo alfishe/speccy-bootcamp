@@ -304,14 +304,14 @@ For modern exploration, **Fuse and ZEsarUX** provide complete ZX Net simulation.
 ### Contemporary Coverage
 
 - **CRASH magazine Interface 1 review** (Issue 6, 1984) — contemporary assessment of ZX Net's classroom potential
-- **Sinclair User** and **Your Spectrum** articles (1983–1985) — coverage of Interface 1 hardware, microdrive reliability, and educational deployments
+- [Sinclair User](https://archive.org/details/sinclair-user-magazine) and **Your Spectrum** articles (1983–1985) — coverage of Interface 1 hardware, microdrive reliability, and educational deployments
 - **Comparative reviews of ZX Net vs Econet** (1984–1985) — contemporary discussion of the classroom-networking market
 
 ### Modern Sources
 
-- **World of Spectrum Interface 1 documentation** — modern HTML transcription of the original Sinclair manuals
-- **Fuse emulator documentation** — ZX Net simulation between Fuse instances
-- **ZEsarUX documentation** — ZX Net simulation with debugger access to the protocol state
+- [World of Spectrum Interface 1 documentation](https://worldofspectrum.org/) — modern HTML transcription of the original Sinclair manuals
+- [Fuse emulator documentation](https://fuse-emulator.sourceforge.net/) — ZX Net simulation between Fuse instances
+- [ZEsarUX documentation](https://github.com/chernandezba/zesarux) — ZX Net simulation with debugger access to the protocol state
 
 ### Related Articles in This Knowledge Base
 

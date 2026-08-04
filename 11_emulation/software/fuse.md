@@ -339,16 +339,16 @@ For further reading, see the other emulator deep-dives: [zesarux.md](zesarux.md)
 
 ### Primary Sources
 
-- **Fuse website** — `http://fuse-emulator.sourceforge.net/`
-- **Fuse source code on SourceForge** — `https://sourceforge.net/projects/fuse-emulator/`
+- [Fuse website](https://fuse-emulator.sourceforge.net/) — `http://fuse-emulator.sourceforge.net/`
+- [Fuse source code on SourceForge](https://fuse-emulator.sourceforge.net/) — `https://sourceforge.net/projects/fuse-emulator/`
 - **`libspectrum` documentation** — file format support and library API
 - **Fuse manual** — comprehensive user documentation
 
 ### Community
 
-- **Fuse mailing list** — `fuse-emulator-discuss@lists.sourceforge.net`
-- **World of Spectrum forums** — community discussion of Fuse and other emulators
-- **comp.sys.sinclair** Usenet archives — historical discussions of Fuse development
+- [Fuse mailing list](https://fuse-emulator.sourceforge.net/) — `fuse-emulator-discuss@lists.sourceforge.net`
+- [World of Spectrum forums](https://worldofspectrum.org/) — community discussion of Fuse and other emulators
+- [comp.sys.sinclair](https://groups.google.com/g/comp.sys.sinclair) Usenet archives — historical discussions of Fuse development
 
 ### Test Results and Validation
 
@@ -357,8 +357,8 @@ For further reading, see the other emulator deep-dives: [zesarux.md](zesarux.md)
 
 ### Cross-References
 
-- [Emulator Comparison](emulator_comparison.md) — Fuse vs other emulators
+- [Emulator Comparison](emulator_comparison.md) — [Fuse vs other emulator](https://fuse-emulator.sourceforge.net/)s
 - [Cycle-Exact Accuracy](cycle_exact_accuracy.md) — technical challenges Fuse solves
 - [Test Suites](test_suites.md) — validation programs Fuse passes
-- [ZEsarUX](zesarux.md) — alternative emulator with broader clone coverage
+- [[ZEsarUX](https://github.com/chernandezba/zesarux)](zesarux.md) — alternative emulator with broader clone coverage
 - [CSpect](cspect.md) — alternative emulator with ZX Spectrum Next support

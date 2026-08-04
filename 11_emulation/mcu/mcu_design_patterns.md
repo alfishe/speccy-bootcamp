@@ -714,7 +714,7 @@ These patterns appear repeatedly in the [Z80](mcu_z80.md), [ULA](mcu_ula.md), [F
 - **ARM Cortex-M0+ Generic User Guide** — interrupt latency, BASEPRI, NVIC priorities
 - **Jack Ganssle's "A Guide to Debouncing"** — practical input handling
 - **Eli Hughes's embedded systems talks** — patterns for real-time firmware on ARM Cortex-M
-- **Chris Smith's *The ZX Spectrum ULA*** — bus timing details, contention pattern, refresh cycles
+- [Chris Smith's The ZX Spectrum ULA](http://www.zxdesign.info/) — bus timing details, contention pattern, refresh cycles
 - **Retro-computing community wikis** — SpecNext, ZX-Uno, MiSTer, Harlequin, all apply these patterns
 - **SparkFun and Adafruit level shifting tutorials** — beginner-friendly explanations of 3.3V/5V interfacing
 

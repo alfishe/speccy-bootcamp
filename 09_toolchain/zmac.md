@@ -326,4 +326,4 @@ A: No. zmac is Z80 + 8080 only. The Game Boy's LR35902 has different instruction
 - AGZ community fork — [github.com/agz-zx/zmac](https://github.com/agz-zx/zmac)
 - Linux distribution packages — `zmac` in Debian, Ubuntu
 - GPL-2.0-or-later license — see `gpl.txt` in the zmac distribution
-- World of Spectrum — disassembly listings that commonly use zmac syntax
+- [World of Spectrum](https://worldofspectrum.org/) — disassembly listings that commonly use zmac syntax

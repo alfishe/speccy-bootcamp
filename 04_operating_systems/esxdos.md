@@ -873,14 +873,14 @@ The result is that ESXDOS — or one of its derivatives — is what runs on esse
 
 ### 10.3 External resources
 
-- **Official ESXDOS site**: https://www.esxdos.org/
+- **Official [ESXDOS](https://github.com/joneiricon/ESXDOS) site**: https://www.esxdos.org/
 - **DivMMC project page**: https://divmmc.com/
-- **z88dk ESXDOS documentation**: https://github.com/z88dk/z88dk/wiki/ESXDOS
-- **SJASMPlus**: https://github.com/z00m128/sjasmplus
-- **ZX Spectrum Next documentation** (NextZXOS): https://specnext.dev/
-- **World of Spectrum forums**: https://worldofspectrum.org/forums/
+- **[z88dk](https://github.com/z88dk/z88dk) ESXDOS documentation**: https://github.com/z88dk/z88dk/wiki/ESXDOS
+- **SJASMPlus**: https://github.com/z00m128/[sjasmplus](https://github.com/z00m128/sjasmplus)
+- [ZX Spectrum Next documentation](https://gitlab.com/thesmog358/tbblue) : https://specnext.dev/
+- **[World of Spectrum](https://worldofspectrum.org/) forums**: https://worldofspectrum.org/forums/
 - **ZX-PK.ru (Russian)**: https://zx-pk.ru/
-- **ZX Spectrum Wiki on ESXDOS**: https://sinclair.wiki.zx/esxdos
+- **ZX Spectrum Wiki on [ESXDOS](https://github.com/joneiricon/ESXDOS)**: https://sinclair.wiki.zx/esxdos
 
 ---
 

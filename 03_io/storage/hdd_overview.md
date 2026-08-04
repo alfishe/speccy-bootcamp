@@ -174,11 +174,11 @@ For software distribution, the **FAT-formatted SD card** has completely replaced
 
 ### 6.3 External references
 
-- **World of Spectrum** (`worldofspectrum.org`) — the central Western Spectrum archive; scans of the original DivIDE/DivMMC documentation and the ESXDOS manual.
-- **Spectrumpedia (Alessandro Grussu)** — English/Italian encyclopedia covering the Sinclair/Amstrad line and the Russian clone ecosystem; the most authoritative cross-track print reference.
-- **zx-pk.ru** — the Russian-language Spectrum forum; the origin of most Pentagon/Scorpion mass-storage modifications and the primary discussion venue for Nemo IDE, SMUC, and Z-Controller.
-- **ZX Spectrum Next official docs** (`zxnext.io`) — the layer-2 / expansion-bus reference that defines the Next's dual SD slot and the NextZXOS FAT access API.
-- **The ESXDOS documentation** (Dylan Smith, 2008 and later) — the canonical reference for the FAT16/32 API, dot command system, and `#E3`–`#E7` port layout that defined the DivIDE era.
+- [World of Spectrum](https://worldofspectrum.org) — the central Western Spectrum archive; scans of the original DivIDE/DivMMC documentation and the ESXDOS manual.
+- [Spectrumpedia (Alessandro Grussu)](https://speccy.wiki/) — English/Italian encyclopedia covering the Sinclair/Amstrad line and the Russian clone ecosystem; the most authoritative cross-track print reference.
+- **[zx-pk.ru](https://zx-pk.ru)** — the Russian-language Spectrum forum; the origin of most Pentagon/Scorpion mass-storage modifications and the primary discussion venue for Nemo IDE, SMUC, and Z-Controller.
+- [ZX Spectrum Next official docs](https://zxnext.io) — the layer-2 / expansion-bus reference that defines the Next's dual SD slot and the NextZXOS FAT access API.
+- [The ESXDOS documentation](https://github.com/joneiricon/ESXDOS) — the canonical reference for the FAT16/32 API, dot command system, and `#E3`–`#E7` port layout that defined the DivIDE era.
 
 ### 6.4 License
 

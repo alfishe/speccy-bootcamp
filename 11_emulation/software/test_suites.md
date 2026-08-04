@@ -269,19 +269,19 @@ For users, the test suites provide a way to evaluate emulator claims. An emulato
 ### Emulator Documentation
 
 - **Fuse release notes** — document which tests pass in each version
-- **ZEsarUX documentation** — describes the test results for various clone emulations
+- [ZEsarUX documentation](https://github.com/chernandezba/zesarux) — describes the test results for various clone emulations
 - **CSpect release notes** — describes test results for ZX Spectrum Next emulation
 
 ### Community Resources
 
-- **World of Spectrum forums** — discussions of test suite results for various emulators
+- [World of Spectrum forums](https://worldofspectrum.org/) — discussions of test suite results for various emulators
 - **ZX Spectrum Discord / Telegram groups** — community knowledge about specific test failures and their causes
-- **comp.sys.sinclair** Usenet archives — historical discussions of test suite development (1990s–2000s)
+- [comp.sys.sinclair](https://groups.google.com/g/comp.sys.sinclair) Usenet archives — historical discussions of test suite development (1990s–2000s)
 
 ### Cross-References
 
 - [Emulator Comparison](emulator_comparison.md) — which emulators pass which tests
 - [Cycle-Exact Accuracy](cycle_exact_accuracy.md) — the technical challenges test suites try to catch
-- [Fuse](fuse.md) — the reference emulator and test suite source
-- [ZEsarUX](zesarux.md) — broadest test coverage for clones
+- [[Fuse](fuse.md) — the reference emulator](https://fuse-emulator.sourceforge.net/) and test suite source
+- [[ZEsarUX](https://github.com/chernandezba/zesarux)](zesarux.md) — broadest test coverage for clones
 - [CSpect](cspect.md) — Next-specific test programs

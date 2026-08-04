@@ -455,8 +455,8 @@ This is the mechanism by which .EDSK preserves disks with deliberately corrupted
 
 - **Marat Fayzullin's .DSK documentation** — the canonical reference for the .DSK / .EDSK format, including the per-track size table and the ST1/ST2 conventions.
 - **Vincent Joguin's .FDI specification** — the canonical reference for the .FDI format, available at the Disk2FDI website.
-- **Simon Owen's ZX-Blockeditor** — the de facto cross-format disk-image editor, supporting .DSK / .EDSK / .FDI / .TRD / .SCL and many other formats.
-- **libdsk** — a Unix library for reading non-standard floppy formats; useful for converting between .DSK / .EDSK and other formats.
+- [Simon Owen's ZX-Blockeditor](https://www.raxoft.de/) — the de facto cross-format disk-image editor, supporting .DSK / .EDSK / .FDI / .TRD / .SCL and many other formats.
+- [libdsk](https://www.danceswithferrets.org/gnu/libdsk/) — a Unix library for reading non-standard floppy formats; useful for converting between .DSK / .EDSK and other formats.
 - **"CPC Wiki"** (the Amstrad CPC community wiki) — extensive documentation on .DSK / .EDSK / .FDI, including the history of each format and the various extensions in use.
 
 ### 6.5 License

@@ -600,8 +600,8 @@ Code that runs in an interrupt service routine (ISR) is invisible to normal step
 
 ### External references
 
-- **IDA Pro and Ghidra documentation** — the two leading disassemblers used for ZX Spectrum reverse engineering; both support Z80 mode and the ZX Spectrum Next's Z80N extended ISA.
-- **`z88dk-appmake`** — the z88dk tool for unpacking and repacking ZX Spectrum binary formats (`.tap`, `.tzx`, `.z80`, `.sna`); essential for splitting a release into analyzable code + data sections.
-- **Complete Spectrum ROM Disassembly** (Logan / O'Hara, 1982) — the canonical worked example of reverse-engineering a complex Spectrum binary; every routine annotated and cross-referenced.
-- **`zx-pk.ru` reversing forum** — primary Russian-language venue for Soviet-era game intros / loaders / protections; the source of most documented custom-loader analyses.
-- **`chibiakumas.com` (Keith S. of CPU shack)** — English-language archive of translated Russian reversing articles, magazine scans, and disassembly listings for famous Soviet-era intros.
+- [IDA Pro and Ghidra documentation](https://hex-rays.com/ida-pro/) — the two leading disassemblers used for ZX Spectrum reverse engineering; both support Z80 mode and the ZX Spectrum Next's Z80N extended ISA.
+- [`z88dk-appmake`](https://github.com/z88dk/z88dk/wiki/appmake) — the z88dk tool for unpacking and repacking ZX Spectrum binary formats (`.tap`, `.tzx`, `.z80`, `.sna`); essential for splitting a release into analyzable code + data sections.
+- [Complete Spectrum ROM Disassembly](https://worldofspectrum.org/ROMdisassembly.zip) — the canonical worked example of reverse-engineering a complex Spectrum binary; every routine annotated and cross-referenced.
+- [zx-pk.ru reversing forum](https://zx-pk.ru) — primary Russian-language venue for Soviet-era game intros / loaders / protections; the source of most documented custom-loader analyses.
+- [chibiakumas.com (Keith S. of CPU shack)](https://chibiakumas.com) — English-language archive of translated Russian reversing articles, magazine scans, and disassembly listings for famous Soviet-era intros.

@@ -217,10 +217,10 @@ For archival, **gzip the `.IMG`**; for active emulator use, use a **sparse file*
 ### 8.3 External references
 
 - **Microsoft Virtual Hard Disk Image Format Specification** (public, 2006) — the canonical reference for the `.VHD` format cited in §6.1; defines the 512-byte footer structure used by `.HDF` files.
-- **ESXDOS `.HDF` documentation** — community-maintained documentation for the sparse `.HDF` format used by the DivIDE/DivMMC emulator workflows.
-- **`samdisk`** (Simon Owen, `simcoupe.org/samdisk`) — modern open-source multi-format disk-image converter; the reference implementation for reading/writing `.IMG`, `.HDF`, `.TRD`, `.DSK` interchangeably.
-- **ZX-Blockeditor** (Simon Owen) — the de facto cross-format disk-image editor; supports direct inspection of `.HDF` and `.IMG` partition tables and FAT structures.
-- **`libdsk`** — Unix library for reading non-standard floppy and hard-disk image formats; documents the on-disk layout conventions used by Spectrum emulators.
+- [ESXDOS `.HDF` documentation](https://github.com/joneiricon/ESXDOS) — community-maintained documentation for the sparse `.HDF` format used by the DivIDE/DivMMC emulator workflows.
+- [`samdisk`](https://github.com/samdisk71/samdisk) — modern open-source multi-format disk-image converter; the reference implementation for reading/writing `.IMG`, `.HDF`, `.TRD`, `.DSK` interchangeably.
+- [ZX-Blockeditor](https://www.raxoft.de/) — the de facto cross-format disk-image editor; supports direct inspection of `.HDF` and `.IMG` partition tables and FAT structures.
+- [`libdsk`](https://www.danceswithferrets.org/gnu/libdsk/) — Unix library for reading non-standard floppy and hard-disk image formats; documents the on-disk layout conventions used by Spectrum emulators.
 
 ### 8.4 License
 

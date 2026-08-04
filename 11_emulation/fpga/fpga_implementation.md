@@ -428,7 +428,7 @@ The open-source Spectrum FPGA community provides extensive reference material: t
 ## References
 
 ### Primary Sources
-- **Chris Smith, *The ZX Spectrum ULA: How to Design a Microcomputer*** — the definitive technical reference on the ULA's internal design
+- [Chris Smith, The ZX Spectrum ULA: How to Design a Microcomputer](http://www.zxdesign.info/) — the definitive technical reference on the ULA's internal design
 - **Daniel Wallner's T80 Z80 core** — open-source Verilog Z80, hosted on OpenCores and various GitHub mirrors
 - **Zilog Z80 CPU Product Specification** — official Z80 datasheet with instruction timing tables
 - **Sinclair ZX Spectrum service manual** — original hardware schematics

@@ -339,7 +339,7 @@ For 99% of users who just want to telnet to a BBS from their Spectrum, an ESP-01
 - ZiFi project documentation (Polish/Russian community sources)
 - ZX Spectrum Next technical reference — built-in ESP-12 WiFi
 - Paradise WiFi product documentation
-- World of Spectrum forums — ESP8266 and ZiFi discussion threads
+- [World of Spectrum](https://worldofspectrum.org/) forums — ESP8266 and ZiFi discussion threads
 
 ### Cross-Platform Sources
 

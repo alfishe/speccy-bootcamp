@@ -387,7 +387,7 @@ The FDC conflict — Pitfall 3. Your reads are landing on WD1793 registers durin
 - [Retro Isle — Sinclair ZX Spectrum Joysticks Explained](https://www.retroisle.com/general/spectrum_joysticks.php) — interface history, Fuller `F--RLDU` format, Timex register-14 joysticks, +2/+3 SJS1
 - [Sinclair ZX Specifications (no$zx docs)](https://problemkaputt.de/zxdocs.htm) — exhaustive joystick port/bit tables including AGF second-stick mappings
 - [I/O Port Map](../../10_references/io_port_map.md#joystick-ports-world-of-spectrum-reference) — Black_Cat decode variants, Beta 128 conflict, mouse ports
-- World of Spectrum (spectrumcomputing.co.uk) — interface hardware archive, game support lists
+- [World of Spectrum](https://worldofspectrum.org/) (spectrumcomputing.co.uk) — interface hardware archive, game support lists
 
 ### Cross-References
 

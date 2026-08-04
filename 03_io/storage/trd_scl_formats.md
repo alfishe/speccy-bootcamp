@@ -459,10 +459,10 @@ The corresponding .TRD reader is slightly more complex because it must parse the
 ### 6.4 External references
 
 - **`trd.speccy.info`** — a large online archive of TR-DOS disk software, distributed as .TRD and .SCL files.
-- **World of Spectrum (`worldofspectrum.org`)** — the canonical Western Spectrum archive; many disk titles are available as .TRD files.
-- **`zx-pk.ru`** — the Russian Spectrum community forum; the origin of many .TRD / .SCL conventions and tools.
-- **`zxevo.ru`** — the ZX Evolution community; documentation for the .TRD / .SCL formats and their extensions.
-- **ZX-Blockeditor** (Simon Owen) — the de facto .TRD/.SCL editor; useful for examining the byte-level structure of any .TRD or .SCL file.
+- [World of Spectrum](https://worldofspectrum.org) — the canonical Western Spectrum archive; many disk titles are available as .TRD files.
+- [zx-pk.ru](https://zx-pk.ru) — the Russian Spectrum community forum; the origin of many .TRD / .SCL conventions and tools.
+- [zxevo.ru](https://zxevo.ru) — the ZX Evolution community; documentation for the .TRD / .SCL formats and their extensions.
+- [ZX-Blockeditor](https://www.raxoft.de/) — the de facto .TRD/.SCL editor; useful for examining the byte-level structure of any .TRD or .SCL file.
 
 ### 6.5 License
 

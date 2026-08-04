@@ -408,7 +408,7 @@ The result is a complete Spectrum that costs under £10, fits in the palm of you
 - **z80ex** — cycle-accurate Z80 emulator
 - **Pico Spectrum projects on GitHub** — various open-source implementations
 - **SpecHMI project** — STM32-based complete Spectrum (Russian community)
-- **Chris Smith's *The ZX Spectrum ULA*** — for the ULA's behavior
+- [Chris Smith's The ZX Spectrum ULA](http://www.zxdesign.info/) — for the ULA's behavior
 - **FatFs by Elm-Chan** — FAT file system library
 - **PicoVGA** by Miroslav Nemecek — VGA output library
 - **Pico DVI** by Luke Wren — DVI output library

@@ -350,7 +350,7 @@ Modern high-quality cores — MiSTer, ZX-Uno, Harlequin, Sizif-512, ZX Evolution
 
 ## References
 
-- **Chris Smith**, *The ZX Spectrum ULA: How to Design a Microcomputer* (2010) — the definitive reference on ULA timing, contention patterns, and video signal generation
+- **[Chris Smith**, *The ZX Spectrum ULA](http://www.zxdesign.info/): How to Design a Microcomputer* (2010) — the definitive reference on ULA timing, contention patterns, and video signal generation
 - **T80 Verilog Z80 core** — OpenCores / GitHub (Daniel Wallner and contributors)
 - **Zilog Z84C00 Z80 CPU Product Specification** — official datasheet with instruction timing
 - **MiSTer Spectrum core** — GitHub (sorgelig) — reference T-state-precise implementation
@@ -359,7 +359,7 @@ Modern high-quality cores — MiSTer, ZX-Uno, Harlequin, Sizif-512, ZX Evolution
 - **Sizif-512** — GitHub (Victor Trucco) — open-source drop-in core
 - **FUSE emulator test suite** — the standard test ROMs for Z80 and ULA timing verification
 - **Sensible tests** — Andrew Owen's floating bus / contention tests
-- **World of Spectrum forums** — discussions of timing edge cases and software compatibility
+- [World of Spectrum forums](https://worldofspectrum.org/) — discussions of timing edge cases and software compatibility
 - **The Demoscene timing tests** — Float Spell, BIFTRO, and other multicolor demos used as integration tests
 
 ## Cross-references

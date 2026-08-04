@@ -487,9 +487,9 @@ Paging bank 7 into the screen area (`#4000`–`#7FFF`) via #7FFD bit 3 selects t
 ## References
 
 - **Sinclair ZX Spectrum 128 Introduction** (1986) — the official manual covering the boot menu, 128 BASIC editor, and PLAY command syntax
-- **Sinclair ZX Spectrum +2 Manual** (1986) — same content as the 128 manual with +2-specific hardware notes
-- **Sinclair ZX Spectrum +3 Manual** (1987) — adds the +3 DOS commands and disk operation details. Available online: https://zxspectrumvault.github.io/Manuals/Hardware/SpectrumPlus3Manual.html
+- [Sinclair ZX Spectrum +2 Manual](https://www.worldofspectrum.org/hardware.html) — same content as the 128 manual with +2-specific hardware notes
+- [Sinclair ZX Spectrum +3 Manual](https://www.worldofspectrum.org/hardware.html) — adds the +3 DOS commands and disk operation details. Available online: https://zxspectrumvault.github.io/Manuals/Hardware/SpectrumPlus3Manual.html
 - **The Complete SPECTRUM 128 ROM Disassembly** (Matthew Wilson) — the definitive reference for the 128K ROM 0 internals, including the PLAY handler routines. Available online: http://www.matthew-wilson.net/spectrum/rom/128_ROM0.pdf
 - **ZX Forum #04 — "World of Sound: The PLAY operator for AY-3-8910"** — detailed coverage of the PLAY mini-language with worked examples. Available online: https://www.zxpress.ru/eng/ezines/zx-forum/04/play-operator-for-ay-3-8910-sound-processor-in-zx-spectrum-128-syntax-commands-for-note-playback
-- **World of Spectrum — ZX Spectrum 128 Manual Page 10** — the canonical PLAY command summary table. Available online: https://worldofspectrum.org/ZXSpectrum128Manual/sp128p10.html
-- **Alessandro Grussu's Spectrumpedia** — comprehensive coverage of all 128K-family BASIC dialects and their differences
+- [World of Spectrum — ZX Spectrum 128 Manual Page 10](https://worldofspectrum.org/) — the canonical PLAY command summary table. Available online: https://worldofspectrum.org/ZXSpectrum128Manual/sp128p10.html
+- [Alessandro Grussu's Spectrumpedia](https://speccy.wiki/) — comprehensive coverage of all 128K-family BASIC dialects and their differences

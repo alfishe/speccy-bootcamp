@@ -631,9 +631,9 @@ The pixel buffer and attribute file use **different addressing schemes**. Pixel 
 
 ## References
 
-- **The Complete Spectrum ROM Disassembly** (Geoff Wearme / Russell Goring) — documents the `RST 0x10` print routine and the CHARS/DF_CC system variables used by custom font installation.
+- [The Complete Spectrum ROM Disassembly](https://worldofspectrum.org/ROMdisassembly.zip) — documents the `RST 0x10` print routine and the CHARS/DF_CC system variables used by custom font installation.
 - **ZX Spectrum Screen Memory** (multiple community references) — the standard non-linear address formula and precomputed tables.
-- **`sprite_lib` documentation** (z88dk community) — early reference for the stack-push block copy pattern.
+- [`sprite_lib` documentation](https://github.com/z88dk/z88dk) — early reference for the stack-push block copy pattern.
 - **Dean Belfield's "Smooth Scrolling" articles** ([breakintoprogram.co.uk](http://www.breakintoprogram.co.uk/software_development/smooth-scrolling-on-the-zx-spectrum-intro)) — modern worked examples of stack-push rendering.
 - ** Jonathan Cauldwell's "How to Write ZX Spectrum Games"** — chapter 13 covers the stack-push scroll technique used in many shipping games.
 - **Tero Heikkinen's "ZX Sprites"** (Old Machinery blog, 2014) — practical sprite engine using three-screen buffered drawing, complementing the techniques here.

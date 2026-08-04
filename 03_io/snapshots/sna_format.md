@@ -538,8 +538,8 @@ For new snapshots, .Z80 or .SZX is recommended. But the .SNA format is not going
 
 ### 10.3 External resources
 
-- **World of Spectrum** (worldofspectrum.org) — The largest archive of .SNA files.
-- **The .SNA format specification** — Various community-documented versions; the canonical reference is the format documentation included with the Fuse emulator source.
+- [World of Spectrum](https://worldofspectrum.org) — The largest archive of .SNA files.
+- [The .SNA format specification](https://fuse-emulator.sourceforge.net/) — Various community-documented versions; the canonical reference is the format documentation included with the Fuse emulator source.
 
 ---
 

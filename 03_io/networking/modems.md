@@ -243,15 +243,15 @@ Modems are now obsolete for Spectrum use. Modern alternatives — [Spectranet](s
 
 ### Contemporary Coverage
 
-- **Micronet 800 documentation** — service guides and software downloads, archived at World of Spectrum and other retro-computing sites
+- [Micronet 800 documentation](https://worldofspectrum.org/) — service guides and software downloads, archived at World of Spectrum and other retro-computing sites
 - **CRASH magazine modem reviews** (1984–1988) — contemporary assessments of Prism, RCP, and other Spectrum modems
-- *Your Spectrum* and *Sinclair User* articles on BBSing and online services (1984–1989)
+- *Your Spectrum* and *[Sinclair User](https://archive.org/details/sinclair-user-magazine)* articles on BBSing and online services (1984–1989)
 - *Radio* magazine (Russian, 1988–1995) — Russian-language modem schematics and FidoNet tutorials
 
 ### Modern Sources
 
 - **Telnet BBS Guide** (tbbs.net) — modern listing of telnet-accessible BBSes for retro modem experimentation
-- **World of Spectrum modem archive** — documentation of Spectrum-specific modem hardware
+- [World of Spectrum modem archive](https://worldofspectrum.org/) — documentation of Spectrum-specific modem hardware
 - **Spectranet project** — modern TCP/IP alternative that replaced modems for Spectrum use
 
 ### Related Articles in This Knowledge Base

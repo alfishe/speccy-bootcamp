@@ -239,7 +239,7 @@ The Harlequin and Sizif-512 have become **standard reference platforms** for ZX 
 
 ## References
 
-- **Chris Smith — *"The ZX Spectrum ULA"*** (2010) — the definitive ULA reference that underpins the Harlequin design
+- [Chris Smith — "The ZX Spectrum ULA"](http://www.zxdesign.info/) — the definitive ULA reference that underpins the Harlequin design
 - **Harlequin project page** (zxhardware.net / zxdesign.info) — schematics, PCB layouts, and build guides for all Harlequin revisions
 - **Tynemouth Software build guide** — practical assembly notes for the Harlequin v4 (Superfo) board
 - **Sizif-512 GitHub repo** ([`UzixLS/zx-sizif-512`](https://github.com/UzixLS/zx-sizif-512)) — CPLD source, schematics, machine modes, revision changelog, and tested-addon list
@@ -248,5 +248,5 @@ The Harlequin and Sizif-512 have become **standard reference platforms** for ZX 
 - **The Retro Shack YouTube review** — hands-on video demonstration of the Sizif-512 across all four machine modes
 - **ZX Spectrum Neo documentation** (mumio.dev) — derived-platform docs confirming Lozovoy's authorship and Sizif lineage
 - **Chris Smith's Harlequin documentation** — design rationale, ULA verification methodology, and compatibility testing results
-- **zx-pk.ru forum** — *Harlequin* and *Sizif* subforums contain compatibility reports, modifications, and software testing threads
+- **[zx-pk.ru](https://zx-pk.ru) forum** — *Harlequin* and *Sizif* subforums contain compatibility reports, modifications, and software testing threads
 - **ZX Spectrum Next forums** — comparative discussions of Harlequin/Sizif vs the Next's hardware compatibility modes

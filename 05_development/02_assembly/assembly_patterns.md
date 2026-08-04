@@ -1010,7 +1010,7 @@ If `subroutine` is called and `helper` returns normally, execution falls through
 ## References
 
 - *Game Programming Patterns* by Robert Nystrom — the patterns in this article are language-agnostic; this book covers them in a higher-level context
-- *Programming the Z80* by Rodnay Zaks — practical examples of state machines and tables in Z80 assembly
-- *The Complete Spectrum ROM Disassembly* — the ROM itself uses dispatch tables extensively; studying it is a masterclass in assembly patterns
+- *Programming the Z80* by [Rodnay Zaks](https://en.wikipedia.org/wiki/Rodnay_Zaks) — practical examples of state machines and tables in Z80 assembly
+- *The [Complete Spectrum ROM Disassembly](https://worldofspectrum.org/ROMdisassembly.zip)* — the ROM itself uses dispatch tables extensively; studying it is a masterclass in assembly patterns
 - [chibiakumas.com Z80 tutorials](https://www.chibiakumas.com/z80/) — modern assembly tutorials covering patterns
 - [breakintoprogram.co.uk](http://www.breakintoprogram.co.uk/hardware/computers/zx-spectrum/assembly-language) — assembly routine library

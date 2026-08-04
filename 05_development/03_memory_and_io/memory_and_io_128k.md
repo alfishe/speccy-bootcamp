@@ -354,8 +354,8 @@ For complete bank-switching patterns, see [bank_switching_patterns.md](bank_swit
 
 ### External references
 
-- **Chris Smith — *The ZX Spectrum ULA*** (book) — definitive reference for the 128K's modified gate array / ASIC and the `#7FFD` paging port that selects ROM bank, RAM bank, and shadow screen.
-- **Sinclair ZX Specifications** (Martin Korth, `problemkaputt.de/zxdocs.htm`) — the canonical 128K / +2 / +2A / +3 hardware reference; documents the partial address decoding on `#7FFD`, `#1FFD` (on +2A/+3), and the AY-3-8912 ports `#FFFD` / `#BFFD`.
+- [Chris Smith — The ZX Spectrum ULA](http://www.zxdesign.info/) — definitive reference for the 128K's modified gate array / ASIC and the `#7FFD` paging port that selects ROM bank, RAM bank, and shadow screen.
+- [Sinclair ZX Specifications](http://problemkaputt.de/zxdocs.htm) — the canonical 128K / +2 / +2A / +3 hardware reference; documents the partial address decoding on `#7FFD`, `#1FFD` (on +2A/+3), and the AY-3-8912 ports `#FFFD` / `#BFFD`.
 - **Amstrad +2 / +3 Service Manuals** — full schematics including the gate array's address-decode equations and the DRAM control signals.
-- **Spectrumpedia** (Grussu) — cross-model reference covering the Soviet clones' divergent paging ports (Pentagon's `#7FFD` plus `#DFFD`/`#DFFF` for extended banks, ATM Turbo's `#FDF2`/`#FDF6`, etc.).
+- [Spectrumpedia](https://speccy.wiki/) — cross-model reference covering the Soviet clones' divergent paging ports (Pentagon's `#7FFD` plus `#DFFD`/`#DFFF` for extended banks, ATM Turbo's `#FDF2`/`#FDF6`, etc.).
 - **`tslabs/zx-evo` repository on GitHub** — the ZX Evolution's FPGA implementation; the most authoritative reference for how modern hardware replicates the 128K paging behavior and extends it.

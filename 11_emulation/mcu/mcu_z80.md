@@ -351,7 +351,7 @@ With these in place, an MCU-based Z80 can be indistinguishable from the original
 - **PicoROM project** — RP2040-based ROM/RAM/IO emulator, open-source
 - **libz80** — C Z80 emulator library by Lin Ke-Fong (used in FUSE and others)
 - **z80ex** — C Z80 emulator library, cycle-accurate
-- **"The ZX Spectrum ULA: How to Design a Microcomputer"** by Chris Smith — background on ULA timing that constrains Z80 emulation
+- ["The ZX Spectrum ULA: How to Design a Microcomputer"](http://www.zxdesign.info/) by Chris Smith — background on ULA timing that constrains Z80 emulation
 - **Pico Spectrum projects on GitHub** — various open-source implementations
 - **74HCT245 / 74HCT541 datasheets** — TTL-compatible buffers for level shifting
 

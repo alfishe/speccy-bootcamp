@@ -576,7 +576,7 @@ For reverse-engineering +3 software distributed on +3DOS disks (see [05_reversin
 ### 9.2 External references
 
 - **The +3 Manual Set** (Sinclair / Amstrad, 1987) — the original hardware and DOS reference, including the +3DOS ROM disassembly.
-- **"Spectrum +3 DOS"** — the canonical +3DOS reference in the World of Spectrum archive (originally published as part of the +3 user manual).
+- ["Spectrum +3 DOS"](https://worldofspectrum.org/) — the canonical +3DOS reference in the World of Spectrum archive (originally published as part of the +3 user manual).
 - **"CP/M 2.2 Interface Guide"** (Digital Research) — the original CP/M BDOS / BIOS specification that +3DOS is based on.
 - **"LocoScript PCW disk format"** (LocoScript Software) — the Amstrad PCW CF2 disk format that inspired +3DOS.
 - **The `cpmtools` documentation** — Unix manual pages and disk definitions for working with CP/M-compatible disks.

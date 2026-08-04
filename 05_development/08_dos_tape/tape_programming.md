@@ -697,7 +697,7 @@ Each data pulse on tape consists of **two edges** (one rising, one falling). If 
 
 ## References
 
-- *The Complete Spectrum ROM Disassembly* by Dr. Ian Logan and Dr. Frank O'Hara — LD-BYTES and SA-BYTES internals
+- *The [Complete Spectrum ROM Disassembly](https://worldofspectrum.org/ROMdisassembly.zip)* by Dr. Ian Logan and Dr. Frank O'Hara — LD-BYTES and SA-BYTES internals
 - [smloader](http://sebastianmihai.com/smloader-minimalist-ZX-Spectrum-custom-tape-loader.html) — minimalist 161-byte custom loader (source code)
 - [zqloader](https://github.com/oxidaan/zqloader) — modern turbo loader for 48K games
 - [How Tape Loading Works](https://lemmings.info/how-tape-loading-works/) — visual explanation of pulse timing

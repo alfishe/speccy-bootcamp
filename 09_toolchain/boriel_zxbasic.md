@@ -1288,8 +1288,8 @@ Most non-trivial Boriel projects end up as hybrids: the high-level game logic in
 ### Standards and References
 
 - **Sinclair ZX Spectrum ROM Disassembly** — [the ROM at full disassembly level](https://zxnet.co.uk/spectrum/rom/) — Dr. Ian Logan & Dr. Frank O'Hara's canonical reference. Essential for understanding the routines that Boriel's `PRINT`/`PLOT`/`DRAW`/`CIRCLE`/`BEEP` wrap.
-- **The Complete Spectrum ROM Disassembly** — book by Logan & O'Hara (1983). Online at the above URL.
-- **ZX Spectrum Hardware Manual** — for the memory map, I/O port layout, and interrupt timing constraints that compiled programs must respect.
+- [The Complete Spectrum ROM Disassembly](https://worldofspectrum.org/ROMdisassembly.zip) — book by Logan & O'Hara (1983). Online at the above URL.
+- [ZX Spectrum Hardware Manual](https://www.worldofspectrum.org/hardware.html) — for the memory map, I/O port layout, and interrupt timing constraints that compiled programs must respect.
 
 ### Related Articles in This Knowledge Base
 

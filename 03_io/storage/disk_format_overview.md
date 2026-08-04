@@ -449,11 +449,11 @@ This overview is one of 13 articles covering the Spectrum's floppy-disk storage.
 
 ### 7.2 External references
 
-- **World of Spectrum** (`https://worldofspectrum.org/`) — the central Spectrum software archive; many disk images in all formats.
-- **The Sinclair Wiki** (`https://sinclair.wiki.zxnet.co.uk/`) — authoritative reference for MGT, TR-DOS, and CP/M formats.
-- **Speccy Wiki** (`https://speccy.info/`) — Russian-language wiki with extensive TR-DOS documentation.
-- **samdisk** (`https://simcoupe.org/samdisk/`) — modern open-source multi-format disk-image converter.
-- **SuperCard Pro** (`http://www.cbmstuff.com/proddetail.php?prod=SCP`) — hardware for flux-level disk imaging.
+- [World of Spectrum](https://worldofspectrum.org/) — the central Spectrum software archive; many disk images in all formats.
+- [The Sinclair Wiki](https://sinclair.wiki.zxnet.co.uk/) — authoritative reference for MGT, TR-DOS, and CP/M formats.
+- [Speccy Wiki](https://speccy.info/) — Russian-language wiki with extensive TR-DOS documentation.
+- [samdisk](https://simcoupe.org/samdisk/) — modern open-source multi-format disk-image converter.
+- [SuperCard Pro](http://www.cbmstuff.com/proddetail.php?prod=SCP) — hardware for flux-level disk imaging.
 
 ### 7.3 License
 

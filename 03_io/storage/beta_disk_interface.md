@@ -913,20 +913,20 @@ A non-exhaustive list of historically important Soviet custom loaders:
 - For custom loaders, protection schemes, and disk-based DRM that run on a Beta Disk Interface: see §11 of this article for the overview, and the [Reverse Engineering section](../../08_reverse_engineering/README.md) for the full catalog.
 - For unpacking / decrunching custom loaders: see [05_reversing/unpacking_and_decrunching.md](../../08_reverse_engineering/README.md) and [05_reversing/patching_techniques.md](../../08_reverse_engineering/README.md).
 - For cycle-exact Beta Disk Interface emulation in modern emulators: see [11_emulation/](../../11_emulation/).
-- For TR-DOS extensions and modern disk operating systems that build on the Beta Disk Interface (ESXDOS, FatFS, etc.): see [04_operating_systems/](../../04_operating_systems/). The TR-DOS version matrix is in §10 of this article.
+- For TR-DOS extensions and modern disk operating systems that build on the Beta Disk Interface ([ESXDOS](https://github.com/joneiricon/ESXDOS), FatFS, etc.): see [04_operating_systems/](../../04_operating_systems/). The TR-DOS version matrix is in §10 of this article.
 
 ### 12.4 External references
 
-- **Pomortzev, A. — *TR-DOS for professionals and amateurs* (1994)** — the standard Russian-language reference for TR-DOS internals. Covers 5.03 vs 5.04 differences, command-level behavior, and the entry-point table. Available as a digitised PDF on chibiakumas.com and several Russian Spectrum archives.
-- **Larchenko, V. & Rodionov, A. — *TR-DOS disk controller programming* (ZX-Review 1994, no. 3–4)** — the canonical Russian-language article on the WD1793 / Beta Disk port map. Available in English translation on zxpress.ru.
-- **The Sinclair ZX Specifications (problemkaputt.de)** — Martin Korth's reference pages on the Spectrum hardware, including the Beta Disk Interface port map, the `#FF` bit assignment, and the MAGIC button `/NMI` semantics.
+- **Pomortzev, A. — *TR-DOS for professionals and amateurs* (1994)** — the standard Russian-language reference for TR-DOS internals. Covers 5.03 vs 5.04 differences, command-level behavior, and the entry-point table. Available as a digitised PDF on [chibiakumas.com](https://chibiakumas.com) and several Russian Spectrum archives.
+- [Larchenko, V. & Rodionov, A. — *TR-DOS disk controller programming* (ZX-Review 1994, no. 3–4)](https://zxpress.ru/library/) — the canonical Russian-language article on the WD1793 / Beta Disk port map. Available in English translation on zxpress.ru.
+- [The Sinclair ZX Specifications (problemkaputt.de)](http://problemkaputt.de/zxdocs.htm) — Martin Korth's reference pages on the Spectrum hardware, including the Beta Disk Interface port map, the `#FF` bit assignment, and the MAGIC button `/NMI` semantics.
 - **Mac Buster's Pentagon FAQ v1.0.2 (2001)** — the standard reference for Pentagon-specific hardware, including the onboard FDC. Archived at <https://web.archive.org/web/20160318222622/http://zxspectrum.hal.varese.it/static/documenti/pentagon.txt>; live mirror at <https://zxspectrum.hal.varese.it/static/documenti/pentagon.txt>.
-- **Spectrumpedia (Grussu, A.)** — English-, Italian- and Spanish-language encyclopedia of the ZX Spectrum, including articles on the Soviet clone ecosystem and the Mr Gluk Reset Service. Italian first edition archived at <https://web.archive.org/web/20240121061245/https://worldofspectrum.net/pub/sinclair/books/s/Spectrumpedia.pdf>; author's site with revised editions at <https://www.alessandrogrussu.it/zx/>.
+- [Spectrumpedia (Grussu, A.)](https://speccy.wiki/) — English-, Italian- and Spanish-language encyclopedia of the ZX Spectrum, including articles on the Soviet clone ecosystem and the Mr Gluk Reset Service. Italian first edition archived at <https://web.archive.org/web/20240121061245/https://worldofspectrum.net/pub/sinclair/books/s/Spectrumpedia.pdf>; author's site with revised editions at <https://www.alessandrogrussu.it/zx/>.
 - **The TR-DOS 5.03 ROM source code** — disassemblies are widely available (e.g. on the WoS archive, zxevo.ru, and [programandala.net/tr-dos](https://github.com/programandala-net/tr-dos)). Reading the TR-DOS source is the best way to understand how the Beta Disk Interface ports are used in practice.
 - **The Beta Disk Interface schematic** — original schematics are rare, but several reverse-engineered schematics circulate in the Spectrum community. The Pentagon and Scorpion motherboard schematics are also useful because they include the onboard FDC circuitry.
 - **Andrew Owen's "ZX Spectrum Hardware" pages** — original documentation on the Beta Disk Interface, with pinouts and address-decoder details.
-- **The comp.sys.sinclair FAQ** — historical context on the Beta Disk Interface and its competitors (Opus Discovery, Plus D, Rotronics Wafadrive, Microdrive).
-- **The "Beta 128 Disk Interface" entry on the World of Spectrum archive** — software compatibility lists and historical information.
+- [The comp.sys.sinclair FAQ](https://groups.google.com/g/comp.sys.sinclair) — historical context on the Beta Disk Interface and its competitors (Opus Discovery, Plus D, Rotronics Wafadrive, Microdrive).
+- [The "Beta 128 Disk Interface" entry on the World of Spectrum archive](https://worldofspectrum.org/) — software compatibility lists and historical information.
 
 ---
 

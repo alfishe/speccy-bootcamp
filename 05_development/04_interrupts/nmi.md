@@ -382,4 +382,4 @@ All of these share the same design requirement: the NMI handler must follow the 
 - *Multiface 128 Manual* (Romantic Robot) — official usage and NMI reliability notes
 - *ZX Spectrum interrupt handling: maskable and NMI* (retrocomputing.stackexchange.com) — community Q&A on NMI skeleton handlers
 - *Did any ZX Spectrum clones use the Z80's interrupt mode 0?* (retrocomputing.stackexchange.com) — context on which interrupt modes see real use
-- *ESXDOS manual* (Garry Lancaster et al.) — DivIDE/DivMMC NMI behavior during disk I/O
+- *[ESXDOS](https://github.com/joneiricon/ESXDOS) manual* (Garry Lancaster et al.) — DivIDE/DivMMC NMI behavior during disk I/O

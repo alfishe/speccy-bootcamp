@@ -398,7 +398,7 @@ For most users, VGA via resistor DAC is the cheapest option (~£1) and works wit
 - **DVI specification** — for TMDS encoding details
 - **RP2040 datasheet** — for PIO programming
 - **Retroleum SMARTi, ZX-HD, Spectra** — Spectrum-specific video adapters
-- **Chris Smith's *The ZX Spectrum ULA*** — for the Spectrum's video timing
+- [Chris Smith's The ZX Spectrum ULA](http://www.zxdesign.info/) — for the Spectrum's video timing
 
 ## Cross-References
 

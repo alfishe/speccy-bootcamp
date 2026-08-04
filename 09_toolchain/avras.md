@@ -214,6 +214,6 @@ A: Because the underlying documentation is essentially non-existent. The article
 ## References
 
 - 1980s UK software catalogs from mail-order houses (Silversoft, Bugs-Byte, Quicksilva)
-- Retro-computing forum discussions on World of Spectrum (mirrored) and associated mailing lists
+- Retro-computing forum discussions on [World of Spectrum](https://worldofspectrum.org/) (mirrored) and associated mailing lists
 - Contextual reconstruction based on the documented feature sets of contemporary budget-tier assemblers
 - **Caveat**: This article is necessarily speculative due to the absence of primary documentation. Any specific claim about AVA/AVRA should be treated as plausible reconstruction rather than verified fact.

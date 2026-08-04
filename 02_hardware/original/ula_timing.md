@@ -362,7 +362,7 @@ wire [7:0] vram_col_addr = ula_vaddr[14:7]; // Column address remains uncorrupte
 - **ZX Design Info, "The ZX Spectrum Dynamic Memory Control"** ([zxdesign.info/dynamicRam2.shtml](http://www.zxdesign.info/dynamicRam2.shtml)) — Detailed RAS/CAS timing analysis from hardware traces
 - **ZX Design Info, "Let it Snow..."** ([zxdesign.info/harlequinSnow.shtml](http://www.zxdesign.info/harlequinSnow.shtml)) — Harlequin clone snow effect implementation notes
 - **Sinclair Wiki, "ZX Spectrum ULA"** ([sinclair.wiki.zxnet.co.uk](https://sinclair.wiki.zxnet.co.uk/wiki/ZX_Spectrum_ULA)) — ULA behavior including RFSH handling
-- **Chris Smith, "The ZX Spectrum ULA: How to Design a Microcomputer"** — Definitive hardware reference with die photographs
+- [Chris Smith, "The ZX Spectrum ULA: How to Design a Microcomputer"](http://www.zxdesign.info/) — Definitive hardware reference with die photographs
 
 ---
 
@@ -652,7 +652,7 @@ The Commodore 64 had **no CPU contention** for screen memory (separate RAM), but
 
 - **Sinclair Wiki, "Contended Memory"** ([sinclair.wiki.zxnet.co.uk](https://sinclair.wiki.zxnet.co.uk/wiki/Contended_memory)) — Definitive contention reference with per-instruction breakdown
 - **World of Spectrum, "48K Technical Reference"** ([worldofspectrum.org](https://worldofspectrum.org/faq/reference/48kreference.htm)) — Frame timing, memory map, ULA behavior
-- **Chris Smith, "The ZX Spectrum ULA: How to design a microcomputer"** — Hardware-level explanation of ULA bus arbitration
+- [Chris Smith, "The ZX Spectrum ULA: How to design a microcomputer"](http://www.zxdesign.info/) — Hardware-level explanation of ULA bus arbitration
 - **Ramsoft, "The Complete ZX Spectrum Fault-Logging ROM Test"** — Real hardware timing measurements
 - **Bedazzle, "SpectraLab — ZX Spectrum Graphics Guide"** ([github.com/Bedazzle/SpectraLab](https://github.com/Bedazzle/SpectraLab)) — Snow effect per-machine behavior, DRAM refresh bus collision details
 - **Einar Saukas, "Bifrost² Multicolor Engine"** — Practical multicolor implementation with T-state counting
