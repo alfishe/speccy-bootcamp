@@ -72,7 +72,7 @@ If you are even a few T-states late on any one write, the color on that cell wil
 
 ### 2.3 The first discovery (1985–1986)
 
-The discovery of multicolor is usually credited to **independent realisations** by several early Spectrum hackers around 1985–1986, working on games rather than demos. The technique was originally called **"interrupt-driven color"** or **"raster color"**; the term **"multicolor"** (sometimes written "multicolour") became standard in the early 1990s and is now universal in the demoscene.
+The discovery of multicolor is usually credited to **independent realizations** by several early Spectrum hackers around 1985–1986, working on games rather than demos. The technique was originally called **"interrupt-driven color"** or **"raster color"**; the term **"multicolor"** (sometimes written "multicolour") became standard in the early 1990s and is now universal in the demoscene.
 
 The earliest widely-cited commercial use was in the game **Zynaps** (Hewson Consultants, 1987), which used per-scanline color changes in the border area and limited interior cells to produce ground/sky gradients. However, the technique was understood in the Spectrum hacking community before then — it appears in several 1986 tape-traded demos and in the boundaries of certain copy-protection schemes.
 
@@ -173,11 +173,11 @@ Real 8×2 multicolor engines do **not rewrite every cell every pair of scanlines
 2. **The visible artefact for one missed rewrite is small.** A single scanline of wrong color is barely visible at TV resolution.
 3. **Only the cells where the color changes between scanline pairs need rewriting.** For a typical image, this is 20–40% of cells, not 100%.
 
-So the engine stores, for each scanline pair, **only the cells whose color differs from the previous pair**. The rewrite code walks a list of `(address, new_colour)` pairs and writes only those. This typically brings the rewrite pass down to ~150–250 T-states per pair — within the scanline budget.
+So the engine stores, for each scanline pair, **only the cells whose color differs from the previous pair**. The rewrite code walks a list of `(address, new_color)` pairs and writes only those. This typically brings the rewrite pass down to ~150–250 T-states per pair — within the scanline budget.
 
 ### 3.5 The precomputed attribute stream
 
-For a static multicolor image, the list of `(address, new_colour)` writes is computed **offline** (by a Python script, or by a tool like *BMP2SCR* or *XVD*). The tool takes a 256×192 RGB image, downsamples it to the Spectrum palette, and emits:
+For a static multicolor image, the list of `(address, new_color)` writes is computed **offline** (by a Python script, or by a tool like *BMP2SCR* or *XVD*). The tool takes a 256×192 RGB image, downsamples it to the Spectrum palette, and emits:
 
 - A fixed pixel buffer (6144 bytes) loaded into `#4000`.
 - A fixed attribute baseline (768 bytes) loaded into `#5800`.
@@ -194,7 +194,7 @@ next_pair:
     LD    B,(IX+)                 ; count of writes for this pair
     JR    Z, done_pair
 write_loop:
-    LD    A,(IX+)                 ; new colour
+    LD    A,(IX+)                 ; new color
     LD    L,(IX+)                 ; low byte of attribute address
     LD    H,(IX+)                 ; high byte
     LD    (HL),A                  ; apply the write
@@ -212,7 +212,7 @@ A well-executed 8×2 multicolor image is recognisably "better" than an 8×8 imag
 
 ---
 
-## 4. 8×1 Multicolor — True Per-Scanline Colour
+## 4. 8×1 Multicolor — True Per-Scanline Color
 
 8×1 multicolor is the **visual gold standard** for non-interlaced multicolor work. It gives you eight distinct color pairs per cell — one per scanline — and the visible result is, on a good monitor, indistinguishable from a true per-scanline-color display. It is also where the timing budget becomes truly murderous.
 
@@ -528,7 +528,7 @@ The cost: each frame's `write_stream` takes 4–6 KB, so two buffers cost 8–12
 
 Storing 50 Hz of unique frame data for a 10-second effect is **5 KB × 500 frames = 2.5 MB** — far beyond what fits in any Spectrum's RAM. Two solutions are common:
 
-1. **Algorithmic generation**: the per-frame `write_stream` is computed from a small algorithm (e.g. plasma: `colour(x,y,t) = sin(x+t) + sin(y+t) + sin((x+y)/2)`). The math runs during vertical blank. This is what most "real-time" multicolor effects do. The constraint is that the algorithm must run in <14 ms (one frame at 50 Hz minus the display time).
+1. **Algorithmic generation**: the per-frame `write_stream` is computed from a small algorithm (e.g. plasma: `color(x,y,t) = sin(x+t) + sin(y+t) + sin((x+y)/2)`). The math runs during vertical blank. This is what most "real-time" multicolor effects do. The constraint is that the algorithm must run in <14 ms (one frame at 50 Hz minus the display time).
 2. **Disk streaming via TS-Config**: the per-frame data is precomputed on a PC, compressed (often with ZX0 or LZSA; see [compression_packing.md](compression_packing.md)), and streamed from disk in real time. This is how modern Russian demos achieve full-screen 25 Hz multicolor video. See §7.5.
 
 ### 7.5 TS-Config and disk-streamed multicolor
@@ -564,7 +564,7 @@ Modern Russian demos typically use: **8×1 interlaced, Pentagon target, disk-str
 
 ---
 
-## 8. Gigascreen — Interlace as a Colour-Mixing Technique
+## 8. Gigascreen — Interlace as a Color-Mixing Technique
 
 Multicolor (§3, §4) achieves high color resolution by **changing attributes faster than the hardware expects**. **Gigascreen** (also called *interlace*, *flicker*, or *attr-attr*) achieves higher **color depth** by exploiting the CRT's phosphor persistence: alternate two attribute values on successive frames (or successive scanlines), and the eye averages them to a perceived intermediate color. The two techniques are independent and frequently combined.
 
@@ -781,7 +781,7 @@ The likely future: multicolor will continue to be developed for as long as there
 ### External references
 
 - [zx-pk.ru multicolor / multitekst threads](https://zx-pk.ru) — primary Russian-language forum for multicolor technique discussions; documents the Pentagon-specific scanline counts and the demoscene idioms for synchronizing to the raster without floating-bus reads.
-- [ZXArt](https://zxart.ee) — the canonical archive of Spectrum demos; search for "multicolor" to find the canonical reference demos (e.g., *Extasy*, *Epic 128*, *Reanimation*, *Shock*, *Crystal Dream*).
+- [ZXArt](https://zxart.ee) — the canonical archive of Spectrum demos; search for "multicolor" to find the canonical reference demos (e.g., *Extasy*, *Epic 128*, *Reanimation*, *Shock*, *Crystal Dream*). 8×4 images with border are archived as `.bmc4` files — see [asset_tools.md § Border-extended images](../09_toolchain/asset_tools.md) for the storage format.
 - [Gerton Lunter's *Multicolor demonstration* routines](https://worldofspectrum.org/) — early worked examples of the timing-safe inner loops that make `8x8` and `8x4` color modes possible at 50 Hz on the 48K; originally distributed with the ZXMak emulator.
 - [Andrew Owen's *Multicolor Tutorial*](https://worldofspectrum.org/forums/) — the canonical English-language introduction to multicolor timing for newcomers; community-maintained on the WoS forums.
 - [`z88dk` and `sjasmplus` documentation](https://github.com/z88dk/z88dk) — modern toolchain references for assembling multicolor code with macros that generate the timing tables automatically.

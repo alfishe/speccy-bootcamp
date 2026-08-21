@@ -2,7 +2,7 @@
 
 # Asset Tools — Graphics, Sprites, Fonts, Music, and Compression
 
-Every non-trivial ZX Spectrum program loads data that was not written by hand: a title screen, font glyphs, sprite patterns, a music module, a level map. On a real Spectrum these assets live in memory as raw bytes in formats dictated by the hardware (the `.scr` display file at `0x4000`, the attribute file at `0x5800`, the system font at `0x3D00`, sprite patterns wherever the programmer chooses). The **asset pipeline** is the work that turns a PNG drawn in Aseprite, a tune composed in Vortex Tracker II, or a font designed in FZX Editor into those bytes.
+Every non-trivial ZX Spectrum program loads data that was not written by hand: a title screen, font glyphs, sprite patterns, a music module, a level map. On a real Spectrum these assets live in memory as raw bytes in formats dictated by the hardware (the `.scr` display file at `#4000`, the attribute file at `#5800`, the system font at `#3D00`, sprite patterns wherever the programmer chooses). The **asset pipeline** is the work that turns a PNG drawn in Aseprite, a tune composed in Vortex Tracker II, or a font designed in FZX Editor into those bytes.
 
 This article is the canonical reference for that pipeline. It covers the modern (cross-platform, PC-based) tools — the native 1980s sprite editors and font editors are documented in [native_toolchain.md](native_toolchain.md). Music trackers are surveyed here for the runtime-format side of the pipeline; the full tracker reference is in [06_sound/trackers_and_formats/](../06_sound/trackers_and_formats/README.md).
 
@@ -44,23 +44,23 @@ The integration point is where the asset pipeline meets the [sjasmplus.md](sjasm
 
 ## Screen Graphics — the `.scr` Format and Converters
 
-The single most common asset in any Spectrum project is a **full-screen image** in the `.scr` ("screen") format. The 48K Spectrum's display file is exactly **6912 bytes**: 6144 bytes of pixel bitmap (256×192 pixels, 1 bit per pixel, stored in the notorious non-linear layout) plus 768 bytes of attributes (32×24 grid of 8×8 cells, each byte encoding `FLASH BRIGHT PAPER[2:0] INK[2:0]`). A `.scr` file is those 6912 bytes verbatim — loading one at address `0x4000` instantly displays the image.
+The single most common asset in any Spectrum project is a **full-screen image** in the `.scr` ("screen") format. The 48K Spectrum's display file is exactly **6912 bytes**: 6144 bytes of pixel bitmap (256×192 pixels, 1 bit per pixel, stored in the notorious non-linear layout) plus 768 bytes of attributes (32×24 grid of 8×8 cells, each byte encoding `FLASH BRIGHT PAPER[2:0] INK[2:0]`). A `.scr` file is those 6912 bytes verbatim — loading one at address `#4000` instantly displays the image.
 
 ### Memory layout of a `.scr`
 
 ```
 Address   Content
-0x4000    +--------------------+
+#4000    +--------------------+
           |  Pixel bitmap      |  6144 bytes
           |  256×192 pixels    |  (non-linear: each byte = 8 vertical pixels)
           |  1 bit per pixel   |
-0x5800    +--------------------+
+#5800    +--------------------+
           |  Attributes        |  768 bytes
           |  32×24 grid        |  (FLASH/BRIGHT/PAPER/INK per 8×8 cell)
-0x5B00    +--------------------+
+#5B00    +--------------------+
 ```
 
-The non-linear bitmap layout is the source of endless headaches for tool authors: pixel (x, y) lives at byte address `0x4000 + (y & 0xC0) << 5 + (y & 0x07) << 8 + (y & 0x38) << 2 + (x >> 3)`, bit `(x & 7)`. Every converter must implement this transform; getting it wrong produces a sheared or diagonal image.
+The non-linear bitmap layout is the source of endless headaches for tool authors: pixel (x, y) lives at byte address `#4000 + (y & #C0) << 5 + (y & #07) << 8 + (y & #38) << 2 + (x >> 3)`, bit `(x & 7)`. Every converter must implement this transform; getting it wrong produces a sheared or diagonal image.
 
 ### Authoring tools for full-screen images
 
@@ -98,7 +98,7 @@ build/game.sna: code/main.asm assets/title.scr
 
 ### Loading and displaying a `.scr` at runtime
 
-Once you have `title.scr`, integration is trivial — load the bytes at `0x4000`:
+Once you have `title.scr`, integration is trivial — load the bytes at `#4000`:
 
 ```z80
 ; SjASMPlus: include the screen directly in the binary
@@ -107,7 +107,7 @@ title_screen:
 
 ; Or load it to the screen at startup:
         ld hl, title_screen
-        ld de, 0x4000
+        ld de, #4000
         ld bc, 6912
         ldir                            ; copy to video RAM
 ```
@@ -125,7 +125,7 @@ asm(
 
 ### Beyond `.scr` — extended Spectrum formats
 
-The 48K `.scr` is only the beginning. Modern targets add more bits per pixel:
+The 48K `.scr` is only the beginning. Modern targets add more bits per pixel or extend the image past the paper area into the border:
 
 | Format | Target | Size | Notes |
 |---|---|---|---|
@@ -136,8 +136,71 @@ The 48K `.scr` is only the beginning. Modern targets add more bits per pixel:
 | `.nxt` | ZX Spectrum Next (tilemap) | variable | 80×64 tilemap with 8×8 pixel tiles, 4-bpp or 8-bpp. |
 | `.chk` / `.csh` | Pentagon + TS-Config | 49152 B | 16-color chunky modes used by Russian demoscene. |
 | `.mg1` / `.mg2` / `.mg4` | Pentagon + GS / MK98 | varies | Multicolor graphics modes. |
+| `.bsc` | any (border playback) | 11136 B | Standard screen + border data — see below. |
+| `.bmc4` | any (border playback) | 11904 B | 8×4 multicolor (two attribute files) + border data. |
+| `.bsp` | any | variable | Screen or gigascreen, with or without border, behind a 70-byte header. |
 
-For these extended formats, use **zx-modules** (Windows, by Simon Owen) or the platform-specific tools documented in each machine's reference. The `.nic` (layer-2) format for the ZX Spectrum Next is natively supported by **ZX Paintbrush** and by SjASMPlus's `SAVENEX` directive.
+For these extended formats, use **zx-modules** (Windows, by Simon Owen) or the platform-specific tools documented in each machine's reference. The `.nic` (layer-2) format for the ZX Spectrum Next is natively supported by **ZX Paintbrush** and by SjASMPlus's `SAVENEX` directive. The border-extended family (`.bsc` / `.bmc4` / `.bsp`) is handled by **SpectraLab** instead — see the next section.
+
+### Border-extended images — `.bsc`, `.bmc4`, `.bsp`
+
+A family of raw formats stores images that cover the **border area** as well as the screen — the demoscene discipline of drawing the frame around the 256×192 paper area, one scanline at a time. The border is not memory-mapped (there is no border RAM: the ULA keeps outputting the color last written to port `#FE` bits 0–2 — see [border_effects.md](../05_development/05_display_and_timing/border_effects.md)), so these files store the *intended* border colors; displaying them on real hardware is a **playback problem**, not a load-and-forget one.
+
+By design, the raw members of the family carry **no identifiers and no metadata** — a file can only be recognized by its extension and its exact length:
+
+| Format | Length | Contents |
+|---|---|---|
+| `.bsc` | 11136 B | standard screen (`.scr`) + border data |
+| `.bmc4` | 11904 B | screen + **two** attribute files (8×4 multicolor) + border data |
+| `.bsp` | variable | screen or gigascreen, with or without border, behind a 70-byte header (title/author metadata, RLE-compressed border) — the only member with a header |
+
+#### The `.bsc` layout
+
+```
+Offset   Length  Content
+0        6144    Standard pixel bitmap (as `.scr`)
+6144      768    Standard attributes
+6912     4224    Border image data
+```
+
+The border image is aligned to the standard character grid and stored as a sequence of colors of **8×1 border "pixels"** — a full image is **48 × 304** of them, spanning an effective resolution of **384 × 304**. Every byte of border data stores two border pixels:
+
+| Bits | Meaning |
+|---|---|
+| 0–2 | color of the left pixel |
+| 3–5 | color of the right pixel |
+| 6–7 | unused |
+
+Storing the border image underneath the screen would be wasteful, so the data is split into three sections:
+
+```
+64 × [24]       64 border lines above the screen (48 pixels = 24 bytes per line)
+192 × [4 + 4]   for each of the 192 screen lines: 8 pixels left + 8 pixels right
+48 × [24]       48 border lines below the screen
+```
+
+which totals 64×24 + 192×8 + 48×24 = **4224 bytes**.
+
+One border "pixel" spans the same time as a screen character column (~4 T-states), while a single `OUT (#FE),A` costs 11 T-states — a color change therefore eats roughly three cells. Typical viewer software can only display **stripes of three or more same-color border pixels in a row**. The requirement is relaxed near the edges of the visible area and around the horizontal screen boundaries (the outermost border pixels — about 16 per side of the full canvas — are typically lost to CRT overscan anyway), so the format does not explicitly forbid shorter stripes: dealing with combinations a given viewer cannot display is the viewer's responsibility. Viewers are likewise free to truncate as many border lines as their target model requires — the 48K, 128K, and Pentagon frames differ in line count and INT position ([video_frame_48k.md](../05_development/05_display_and_timing/video_frame_48k.md)).
+
+#### The `.bmc4` layout
+
+`.bmc4` stores an **8×4 multicolor** image — attributes changing every 4 scanlines, the raster-synchronized technique covered in [race_the_beam.md](../05_development/04_interrupts/race_the_beam.md) — extended with the same border data:
+
+```
+Offset   Length  Content
+0        6144    Standard pixel bitmap
+6144      768    Attributes for even lines (upper halves of the characters)
+6912      768    Attributes for odd lines (lower halves)
+7680     4224    Border image data (same layout as `.bsc`)
+```
+
+#### Tooling and archive use
+
+- **[SpectraLab](https://github.com/Bedazzle/SpectraLab)** — browser-based viewer/editor with full border editing for all three formats, `SCR ↔ BSC ↔ BSP` conversion, and **ASM export**: a SjASMPlus Pentagon-128K source that replays the border cycle-exactly (224 T per line, 71680 T per frame, `OUT (#FE)` only when the color changes, padded with `NOP`s otherwise).
+- **[ZX ART](https://zxart.ee/)** — the graphics archive catalogs border-format pictures from party graphics compos; BMC4 entries are tagged "multicolor 8×4 with border".
+
+Whatever the storage format, a border image destined for real hardware needs a playback engine — the timing techniques are covered in [border_effects.md](../05_development/05_display_and_timing/border_effects.md) (border raster timing) and [race_the_beam.md](../05_development/04_interrupts/race_the_beam.md) (cycle-exact ISR practice).
 
 ---
 
@@ -176,12 +239,12 @@ Most sprite editors emit either a binary blob or Z80 assembly source:
 ; SevenUp-style output: pre-shifted masked sprite, 16x16 pixels, 8 shifts
 player_sprite_shifted:
     ; shift 0 (no horizontal offset)
-    DEFB 0xFF, 0x00, 0xFF, 0x00   ; mask row 0
-    DEFB 0x00, 0x3C, 0x00, 0x3C   ; pattern row 0
+    DEFB #FF, #00, #FF, #00   ; mask row 0
+    DEFB #00, #3C, #00, #3C   ; pattern row 0
     ; ... 16 rows total ...
     ; shift 1 (1 pixel right)
-    DEFB 0xFE, 0x01, 0xFE, 0x01
-    DEFB 0x00, 0x1E, 0x80, 0x1E
+    DEFB #FE, #01, #FE, #01
+    DEFB #00, #1E, #80, #1E
     ; ... and so on for shifts 2-7
 ```
 
@@ -219,21 +282,22 @@ Each sprite pattern is a 256-byte block (for 16×16 4-bpp) or 1024 bytes (for 32
 
 #### Loading sprites at runtime (Next)
 
-The Next exposes sprite pattern memory at `0x4000–0x7FFF` when layer 2 is paged in, or via the sprite-specific MMU banks. SjASMPlus's `SAVENEX` directive and the Next's `SPRITEMIRROR` mechanism handle this automatically for `.nex` programs. In assembly, the standard idiom is:
+The Next exposes sprite pattern memory at `#4000–#7FFF` when layer 2 is paged in, or via the sprite-specific MMU banks. SjASMPlus's `SAVENEX` directive and the Next's `SPRITEMIRROR` mechanism handle this automatically for `.nex` programs. In assembly, the standard idiom is:
 
 ```z80
 ; Copy sprite pattern data into sprite pattern memory
-        nextreg 0x4C, 0           ; select sprite pattern bank 0
+        nextreg #4C, 0           ; select sprite pattern bank 0
         ld hl, sprite_data         ; source: asset in main RAM
-        ld de, 0x4000              ; destination: paged sprite pattern slot
+        ld de, #4000              ; destination: paged sprite pattern slot
         ld bc, 256 * 4             ; four 16x16 4-bpp patterns
         ldir
+```
 
 ---
 
 ## Fonts
 
-Almost every Spectrum program displays text, which means it needs a **font**: a binary blob mapping character codes to pixel patterns. The standard Spectrum ROM font lives at `0x3D00` and is 768 bytes (96 characters × 8 bytes, ASCII 32 " " through 127). Most games and applications replace this with a custom font.
+Almost every Spectrum program displays text, which means it needs a **font**: a binary blob mapping character codes to pixel patterns. The standard Spectrum ROM font lives at `#3D00` and is 768 bytes (96 characters × 8 bytes, ASCII 32 " " through 127). Most games and applications replace this with a custom font.
 
 There are two dominant font formats in the modern community: the simple **8×8 fixed-width format** (compatible with the ROM font layout) and the more powerful **FZX proportional format**.
 
@@ -253,7 +317,7 @@ Character 'A' (ASCII 65) in standard Spectrum ROM font (8 bytes):
 #00   ........
 ```
 
-To point the ROM's `RST 0x10` (print char) routine at a custom font, you write the address into the `CHARS` system variable at `0x5C36`. To use the font with z88dk's `<stdio.h>` functions, set `typedef struct _font` — see the z88dk docs.
+To point the ROM's `RST #10` (print char) routine at a custom font, you write the address into the `CHARS` system variable at `#5C36`. To use the font with z88dk's `<stdio.h>` functions, set `typedef struct _font` — see the z88dk docs.
 
 ### The FZX format
 
@@ -333,7 +397,7 @@ void main(void) {
 
 The Spectrum has two distinct audio paths, and each has its own tooling:
 
-- **The 1-bit beeper** (48K / 128K) — driven by toggling the speaker bit at port `0xFE`. Polyphonic music is possible but CPU-intensive.
+- **The 1-bit beeper** (48K / 128K) — driven by toggling the speaker bit at port `#FE`. Polyphonic music is possible but CPU-intensive.
 - **The AY-3-8910 / YM2149F PSG** (128K / +2 / +3 / Pentagon / Next) — a 3-channel programmable sound generator with envelope, noise, and per-channel frequency/volume control.
 
 Music trackers produce **module files** (small data blobs describing notes and effects) plus a **player routine** (Z80 code that reads the module and writes to the sound chip every frame). The module + player combination is the standard Spectrum music asset pipeline.
@@ -421,7 +485,7 @@ Einar Saukas's compression tools are the de facto standard. They form a small fa
 | Tool | Author | Strategy | Typical ratio | Depacker size | Notes |
 |---|---|---|---|---|---|
 | **ZX0** | Einar Saukas | Optimal LZ77/LZSS | **35–50%** | 68–673 B | The current standard. Four depacker variants (Standard, Turbo, Fast, Mega) trade size for speed. Optimal compression takes seconds; `-q` quick mode is near-instant and produces only slightly larger output. |
-| **ZX1** | Einar Saukas | Simpler variant of ZX0 | 35–50% (≈1.5% worse than ZX0) | ~60 B | 15% faster depack than ZX0; simpler format. Use when ZX0's optimisation time is too slow. |
+| **ZX1** | Einar Saukas | Simpler variant of ZX0 | 35–50% (≈1.5% worse than ZX0) | ~60 B | 15% faster depack than ZX0; simpler format. Use when ZX0's optimization time is too slow. |
 | **ZX2** | Einar Saukas | Newer experimental variant | similar to ZX1 | small | Not yet widely adopted; experimentation ongoing. |
 | **ZX7** | Einar Saukas + Antonio Villena | Older LZ77 | 40–55% (worse than ZX0) | ~250 B | The pre-ZX0 standard. Fast compressor, fast depacker, still seen in many existing codebases. |
 
@@ -438,7 +502,7 @@ The ZX0 v2 file format is slightly smaller and faster than v1; use `-c` on the c
 | Tool | Author | Strategy | Use case |
 |---|---|---|---|
 | **LZ4** | Yann Collet (z80 port by lainz) | Standard LZ4 | When interoperability with non-Spectrum tools matters. Worse ratio than ZX0/MegaLZ for Spectrum data. |
-| **LZSA** | Emmanuel Marty | LZ-style, optimised for 8-bit | Modern alternative to LZ4. Three compression levels (1, 2, 3). |
+| **LZSA** | Emmanuel Marty | LZ-style, optimized for 8-bit | Modern alternative to LZ4. Three compression levels (1, 2, 3). |
 | **RCS** (Resource Compression System) | Einar Saukas | Reorder bytes by column | Used in combination with another packer on screen-format data (`.scr` files compress better after RCS). |
 | **APLIB** (ApLib) | Jørgen Ibsen (z80 port) | LZ + arithmetic coding | Best ratio of any pure-packers, but slow depacker (and patents historically clouded its use; now public domain). |
 | **HRUM** / **HR** | Romanenko family | Old Soviet cruncher | Legacy Russian scene. |
@@ -577,6 +641,7 @@ The table below summarizes the recommended tool for each asset type at each pipe
 |---|---|---|---|
 | **Full-screen image (48K)** | ZX Paintbrush (direct) or Aseprite (indirect) | `png2scr` (CLI) or built-in | `.scr` (6912 B) |
 | **Full-screen image (Next layer 2)** | ZX Paintbrush or Aseprite | `png2nic` / built-in | `.nic` (49152 B) |
+| **Border-extended image (demoscene)** | SpectraLab (browser) | built-in | `.bsc` / `.bmc4` / `.bsp` |
 | **Software sprite** | SevenUp (Win) or ZX PearPixel | built-in | raw binary / `.defb` |
 | **Next hardware sprite** | ZX Paintbrush or Remy Sharp editor | built-in | `.nxs` / Next sprite pattern memory |
 | **Font (8×8)** | Fony (Win) or ZX Paintbrush | built-in | `.fnt` (768 B per 96 chars) |
@@ -789,15 +854,15 @@ This pipeline is fully reproducible from sources: an artist edits PNGs in Asepri
 
 ### Conversion pitfalls
 
-- **Non-linear screen layout** — getting the screen-address calculation wrong (the `(y & 0xC0) << 5 + (y & 0x07) << 8 + ...` formula) produces a sheared image. Test your converter on a known-good `.scr` first.
+- **Non-linear screen layout** — getting the screen-address calculation wrong (the `(y & #C0) << 5 + (y & #07) << 8 + ...` formula) produces a sheared image. Test your converter on a known-good `.scr` first.
 - **BGR vs RGB in PNG headers** — some PNG exporters (older ones) write BGR pixel data. Modern converters usually handle this, but it's a classic source of red/blue swapped screens.
-- **FZX kern bits** — the high 2 bits of the FZX offset word encode the kern. Mask them off when computing the address: `offset & 0x3FFF`.
+- **FZX kern bits** — the high 2 bits of the FZX offset word encode the kern. Mask them off when computing the address: `offset & #3FFF`.
 
 ### Compression pitfalls
 
 - **Compressing before RCS** — screen-format data compresses much better with RCS preprocessing (column reorder) *before* the LZ packer. Skipping RCS costs ~5–10% ratio.
 - **Overlapping decompression** — ZX0 can decompress in place if the source ends *after* the destination, but only by a specific delta reported at compression time. Ignoring the delta corrupts data.
-- **Depacker size not counted** — a 68-byte ZX0 depacker looks tiny until you realise your 1K demo only has 1000 bytes of code space. Always count depacker + compressed size, not just compressed size.
+- **Depacker size not counted** — a 68-byte ZX0 depacker looks tiny until you realize your 1K demo only has 1000 bytes of code space. Always count depacker + compressed size, not just compressed size.
 - **Compressing already-compressed data** — don't crunch an `.pt3` or `.akg` module; they're already compressed internally. Re-compressing them usually makes them *larger*.
 
 ### Integration pitfalls
@@ -819,6 +884,7 @@ This article is the canonical reference for the **asset pipeline**. Related deep
 - [cross_platform_toolchain.md](cross_platform_toolchain.md) — the brief survey of asset tools in § Asset Tools; this article is the deep dive.
 - [debugging.md](debugging.md) — debugging the runtime side of the asset pipeline (wrong sprite data, garbled screen, corrupted music). DeZog's sprite viewer and memory inspector are essential for diagnosing asset integration bugs.
 - [../06_sound/trackers_and_formats/](../06_sound/trackers_and_formats/README.md) — the full music tracker reference (Vortex Tracker II, Arkos Tracker, beeper engines). This article covers only the asset-pipeline integration side.
+- [border_effects.md](../05_development/05_display_and_timing/border_effects.md) — the raster-timing techniques that play back `.bsc` / `.bmc4` border art on real hardware.
 
 ---
 
@@ -829,6 +895,7 @@ This article is the canonical reference for the **asset pipeline**. Related deep
 - [png2scr](https://github.com/reidrac/png2scr) — <https://github.com/reidrac/png2scr>
 - [zx-tools](https://github.com/anton-bulanov/zx-tools) — <https://github.com/anton-bulanov/zx-tools>
 - **ZX Spectrumizer** (browser-based) — <https://atornblad.github.io/zx-spectrumizer/>
+- [SpectraLab](https://github.com/Bedazzle/SpectraLab) — browser-based viewer/editor for `.bsc` / `.bmc4` / `.bsp` border formats and 30+ other ZX graphics formats, with border editing and cycle-exact ASM export — <https://github.com/Bedazzle/SpectraLab>
 - [ZX-Modules](https://worldofspectrum.net/zx-modules/) — <https://worldofspectrum.net/zx-modules/>
 
 ### Sprites
