@@ -270,6 +270,25 @@ The IM2 interrupt acknowledge sequence takes **19 T-states**:
 - **Custom IM2 handlers**: Many games and demos switch to IM2 for their own interrupt handling
 - **Peripheral cards**: Interface 1, Multiface, and other expansions may use IM2
 
+### One Interrupt Source — Why the Undefined Vector Is Harmless
+
+The ULA's frame interrupt is the stock machine's **only maskable interrupt source**, and it never drives a vector byte onto the bus. IM2's actual selling point — a distinct vector per device — therefore buys nothing on a bare Spectrum: with one source there is only ever one handler to run, and the single-value 257-byte table delivers it no matter what the undriven bus supplies. Filling the whole table with one byte is not a workaround; it is the correct idiom for the hardware as shipped.
+
+The undriven data bus is also the root of the **"port #FF" phenomenon**: passive pull-up resistors on the bus lines pull an idle bus toward `#FF`, and an `IN` from an undecoded port simply samples whatever the bus holds — the same quirk demoscene code exploits for raster synchronization. See [floating_bus.md](../05_development/05_display_and_timing/floating_bus.md). On most clones the roulette disappears along with the unstable bus: the Pentagon's interrupt acknowledge, for instance, reads a deterministic `#FF`.
+
+### Multiple Interrupt Sources and the External Controller
+
+The single-value idiom collapses the moment a second interrupt source appears. If an add-on asserts INT alongside the ULA and still leaves the bus undriven during acknowledge, the CPU reads the same floating-bus `#FF` for **both** devices — the vector table cannot tell them apart, and the handler must fall back to polling status registers. True vectored interrupts on classic Z80 hardware presume daisy-chained Z80-family peripherals (PIO, CTC, SIO) that place their vector on the bus during the acknowledge cycle — support the Spectrum never shipped with.
+
+An expansion that wants genuine multi-source IM2 must therefore carry **external interrupt controller logic** that drives the data bus during every acknowledge cycle:
+
+| Acknowledge for | Controller must put on the bus |
+|---|---|
+| Its own device | That device's vector byte, selecting a dedicated 2-byte entry in the table |
+| The ULA's frame interrupt | A **synthesized `#FF`** — the ULA never drives the bus, so the controller must actively drive `#FF` for acknowledges it does not own, keeping the frame interrupt on a known vector |
+
+Modern FPGA platforms move this function into silicon: the ZX Spectrum Next's hardware IM2 mode and TS-Conf's separate vectors give every source a guaranteed vector with no bus trickery — see [im2_advanced.md](../05_development/04_interrupts/im2_advanced.md).
+
 ### Setting Up IM2
 
 ```z80
@@ -290,6 +309,9 @@ EI                 ; Enable interrupts
 
 > [!WARNING]
 > On the ZX Spectrum, the data bus is **not reliably driven** during interrupt acknowledge — the ULA doesn't place a known vector on the bus. The vector byte is typically `#FF` due to pull-up resistors, but can be any value depending on the last bus cycle. The 257-byte table filled with a single value guarantees all 256 possible vectors resolve to the same handler. See [interrupt_programming.md](../05_development/04_interrupts/interrupt_programming.md) for a detailed walkthrough.
+
+> [!WARNING]
+> The I register must never select a page in `#40`–`#7F` (contended RAM `#4000`–`#7FFF`): the ULA misreads the refresh addresses the CPU places on the bus, misses screen bytes, and fills the display with visible "snow" — and the two vector fetches themselves contend with screen fetches. Keep `I ≤ #3F` or `I ≥ #80`. See [interrupt_programming.md → The I Register and the Snow Bug](../05_development/04_interrupts/interrupt_programming.md#the-i-register-and-the-snow-bug) and [im2_effects.md](../05_development/04_interrupts/im2_effects.md) for placement rules.
 
 ---
 
@@ -315,7 +337,9 @@ Depends on the instruction supplied:
 
 ### IM0 on the ZX Spectrum
 
-**IM0 is not used on the ZX Spectrum.** The ULA does not place an instruction on the data bus during interrupt acknowledge. IM0 is primarily used in Z80-based systems with dedicated interrupt controllers (like the Z80 PIO, CTC, or SIO in daisy-chain configurations).
+**IM0 is not used on the ZX Spectrum — but it is the mode the machine powers up in.** A Z80 reset clears IFF1/IFF2, zeroes the I and R registers, and selects IM0. The 48K ROM's first instruction at `#0000` is `DI`, and the whole initialization sequence (RAM test, system variable setup) runs with interrupts disabled; the ROM switches to IM1 during boot, before it finally executes `EI`. The window in which the machine is actually in IM0 is therefore never exposed to an interrupt — no acknowledge cycle can occur while IFF1=0.
+
+Should an IM0 acknowledge ever occur on a bare Spectrum, the ULA does not place an instruction on the data bus: the CPU would read the floating bus byte (typically `#FF`) and execute it as an instruction — and `#FF` happens to decode as `RST #38`, which is exactly what IM1 does. IM0 is primarily used in Z80-based systems with dedicated interrupt controllers (like the Z80 PIO, CTC, or SIO in daisy-chain configurations).
 
 ---
 
@@ -387,6 +411,12 @@ Because NMI **cannot be masked by software**, it is a powerful tool for breaking
 > [!WARNING]
 > The Z80 NMI pushes the return address (2 bytes) onto the **current stack** before jumping to `#0066`. These 2 bytes are **permanently overwritten** — no NMI handler can recover them. If the protected program stored critical data at that stack location, correct resumption after NMI is impossible. This is a hardware limitation, not a software bug.
 
+### BUSRQ Is Not an Interrupt
+
+Some tutorials — including [Adrian Brown's interrupt primer](https://luckyredfish.com/interrupts-on-the-zx-spectrum/) — describe the Z80 as having "two non-maskable interrupts: NMI and BUSRQ". The label is worth correcting: `/BUSRQ` is a **bus arbitration input, not an interrupt**. When an external device (classically a DMA controller) pulls `/BUSRQ` low, the CPU completes the current machine cycle, floats the address/data/control buses, and acknowledges with `/BUSAK`; no PC is pushed and no handler runs — the CPU simply resumes where it left off once the bus is released.
+
+On the ZX Spectrum, `/BUSRQ` is wired to the expansion bus but unused by the ULA, which throttles the CPU with `/WAIT` instead. For the bus-cycle detail and priority rules (`/BUSRQ` outranks INT, NMI, and WAIT), see [z80_timing.md → Bus Request and Acknowledge](z80_timing.md#bus-request-and-acknowledge).
+
 ---
 
 ## EI/DI Timing and the One-Instruction Delay
@@ -432,6 +462,13 @@ RETI               ; Return — interrupt handler complete
 ; If IFF1=0: NO, interrupt is ignored
 ; The INT pin must remain active until it is eventually acknowledged
 ```
+
+### Interrupts Are Not Queued While Disabled
+
+`DI` does not stop the ULA — the 50 Hz interrupt pulse keeps arriving every frame; the CPU just ignores it, and the Z80's maskable interrupt request is **level-sensitive, not latched**. A request that is not acknowledged before the INT line goes inactive is gone. Because the ULA holds INT for only ~32 T-states per frame, an interrupt that lands inside a long `DI` section is not delayed — it is **lost**. `FRAMES` undercounts real time, and interrupt-driven counters lose ticks. (If `EI` executes while INT is still low, the pending request is serviced after the mandatory one-instruction delay.)
+
+> [!WARNING]
+> `DI` followed by `HALT` deadlocks the machine. A halted Z80 is released only by an interrupt, and with IFF1=0 the maskable interrupt is ignored — on a stock 48K nothing else can pull the CPU out. The machine hangs until reset.
 
 ---
 
@@ -697,6 +734,9 @@ The Z80's interrupt system was one of its major selling points for embedded and 
 - **Sinclair Wiki, "Contended Memory"** — Interrupt contention timing
 - [Sean Young, "The Undocumented Z80 Documented"](http://www.myquest.nl/z80undocumented/) — IFF1/IFF2 bug details
 - **stardot.org.uk, "New discovery on Z80 interrupts"** — IFF2→IFF1 copy timing during RETI/RETN
+- [Adrian Brown — Interrupts on the ZX Spectrum (Lucky Red Fish mirror)](https://luckyredfish.com/interrupts-on-the-zx-spectrum/) — IM0/IM1/IM2 primer with worked vector-table examples; the follow-up comment by Peter "Ped" Helcmanovsky documents the IY/IM1 contract and the vector-table contention rule
+- [Adrian Brown — original article, Coders Bucket (2015)](https://codersbucket.blogspot.com/2015/04/interrupts-on-zx-spectrum-what-are.html) — source of the Lucky Red Fish mirror
+- [Break Into Program — ZX Spectrum Interrupts](http://www.breakintoprogram.co.uk/hardware/computers/zx-spectrum/interrupts) — ROM IM1 boot setup, the IY caveat, and the 48K ROM `#3900` vector-table trick
 
 ### Cross-References
 

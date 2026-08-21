@@ -91,6 +91,17 @@ The 48K ROM ISR does two things every frame:
 
 The ROM handler costs approximately **700 T-states** per frame — about 1% of the 69,888 T-state budget on 48K.
 
+### The IY Register Contract
+
+The ROM ISR addresses system variables through **IY, which the ROM holds fixed at `#5C3A`** — `INC (IY+#40)` updates the high byte of FRAMES, and ROM code as a whole uses IY-relative offsets for every system variable (see [system_variables.md](../../04_operating_systems/system_variables.md)). This creates a contract your code must honor whenever the ROM handler is active (IM1, unmodified `#0038`):
+
+> [!WARNING]
+> If your program changes IY and an interrupt fires while the ROM handler is still installed, the ISR increments and writes through **your** IY — a three-byte-per-frame scribble through whatever memory it now points at, typically ending in a crash. Note the direction of the hazard: the ROM never *changes* IY, it *requires* it. Your options: keep IY at `#5C3A` at all times, restore it before returning to ROM context, or switch to IM2 / disable interrupts entirely.
+
+The contract cuts the other way too: while the ROM ISR runs, the system variable area is live RAM that changes **every frame** — `FRAMES` (`#5C78`–`#5C7A`), `KSTATE` (`#5C00`–`#5C07`), and `LAST_K` (`#5C08`) are all written 50 times a second. Don't park your own data inside system variables while the IM1 ROM handler is active, or expect "random" value changes in code that never touches those bytes itself.
+
+Both hazards were flagged by Peter "Ped" Helcmanovsky in his follow-up to [Adrian Brown's interrupt primer](https://luckyredfish.com/interrupts-on-the-zx-spectrum/).
+
 ### Hooking the ROM Handler
 
 Since `#0038` is in ROM, you cannot directly overwrite it on a standard Spectrum. There are three strategies for installing a custom IM1 handler:
@@ -177,9 +188,7 @@ IM2 is the preferred mode for custom interrupt handlers on the Spectrum. Instead
 
 In IM2, the Z80 expects the interrupting device to place a **vector byte** on the data bus during the interrupt acknowledge cycle. The Z80 then forms a 16-bit table address from `I × 256 + vector_byte` and reads two bytes from that address to find the handler.
 
-On the ZX Spectrum, **no device drives the data bus during interrupt acknowledge**. The ULA asserts the INT line but has no mechanism to place a vector byte on the bus. The byte the Z80 reads is whatever residual charge was left on the bus from the previous memory or I/O cycle.
-
-In practice, this value is **usually `#FF`** due to passive pull-up resistors on the data bus. However, this is not guaranteed:
+On the ZX Spectrum, **no device drives the data bus during interrupt acknowledge**. The ULA asserts the INT line but has no mechanism to place a vector byte on the bus. The byte the Z80 reads is whatever the undriven bus settles at: **passive pull-up resistors on the data bus pull an idle bus toward `#FF`**, and residual charge from the previous memory or I/O cycle can override that. In practice the value is **usually `#FF`** — but this is not guaranteed:
 
 - After a `LD A,(HL)` that read `#3E` from address `#FFFF`, the bus may still hold `#3E` when the interrupt fires a few T-states later
 - After an `OUT (#FE),A` that wrote border color `#02`, the bus may hold `#02`
@@ -188,6 +197,13 @@ In practice, this value is **usually `#FF`** due to passive pull-up resistors on
 On **real hardware**, the floating bus value tends to correlate with the last byte that was on the data bus before the interrupt acknowledge. Emulators that hardcode `#FF` may mask bugs that would crash on real machines.
 
 **Conclusion**: the vector byte is **unreliable** — your vector table must handle **all 256 possible values** (`#00`–`#FF`).
+
+One root cause, two phenomena: this undriven data bus — pull-ups pulling an idle bus toward `#FF` — is also what makes the **"port #FF" floating-bus reads** work for raster sync (`IN A,(#FF)` samples the bus because no device decodes the port). See [floating_bus.md](../05_display_and_timing/floating_bus.md).
+
+> [!NOTE]
+> **Clones calm the bus down.** On the original Ferranti-ULA machines the residual-charge roulette above applies; most clones do not reproduce the unstable bus. The Pentagon's interrupt acknowledge, for example, reads a deterministic `#FF` — the vector is fully predictable there. See the per-model table in [floating_bus.md](../05_display_and_timing/floating_bus.md).
+
+A single maskable interrupt source is what makes the undefined vector harmless — the one-value fill is not a workaround but the correct idiom for the hardware as shipped. The moment a **second** interrupt source appears, this changes fundamentally: both sources read the same `#FF`, become indistinguishable, and an **external interrupt controller** becomes necessary — hardware that must drive both its own vector and a synthesized `#FF` for the ULA's frame interrupt. See [z80_interrupts.md → Multiple Interrupt Sources and the External Controller](../../01_cpu/z80_interrupts.md#multiple-interrupt-sources-and-the-external-controller).
 
 ### Why 257 Bytes — Not 256
 
@@ -314,8 +330,8 @@ The handler address is fixed by the fill byte. If you fill with `#FD`, the handl
 
 | Fill byte | Handler address | Contended on 48K? | Notes |
 |-----------|----------------|-------------------|-------|
-| `#FD` | `#FDFD` | Yes (`#4000`–`#7FFF`) | Handler runs slower during paper display |
-| `#80` | `#8080` | No (`#8000`–`#FFFF`) | Preferred — full speed in uncontended RAM |
+| `#FD` | `#FDFD` | No — `#FDFD` is in `#C000`–`#FFFF` | Classic layout; handler must fit in the ~260 bytes below the table at `#FE00` |
+| `#80` | `#8080` | No (`#8000`–`#FFFF`) | Preferred — full speed in uncontended RAM, handler far from the table |
 | `#90` | `#9090` | No | Same, different address |
 | Any `#xx` | `#xxxx` | Depends on address | `#8000`–`#FFFF` = uncontended |
 
@@ -343,6 +359,32 @@ The table itself always occupies `#FE00`–`#FF00` (257 bytes) when `I = #FE`. T
 
 > [!NOTE]
 > On the Pentagon and some clones, the floating bus value is deterministic (always `#FF`). In theory you only need one vector table entry. However, for portability, always fill all 257 bytes — it costs only 257 bytes of RAM and guarantees correct behavior on all hardware.
+
+### The I Register and the Snow Bug
+
+The table's page (the I register value) has one constraint that outranks convenience: **I must not be in `#40`–`#7F`**. Two documented reasons:
+
+1. **The refresh-cycle snow bug.** During the refresh half of every M1 cycle, the Z80 puts `I × 256 + R` on the address bus (see [z80_timing.md → DRAM Refresh](../../01_cpu/z80_timing.md#dram-refresh)). With I in `#40`–`#7F` those refresh addresses land in `#4000`–`#7FFF`, and the ULA mistakes them for a flood of lower-RAM reads it must honor. It falls behind on its screen fetches and displays the previously fetched byte instead — the screen fills with **"snow"**. Execution continues normally; only the picture is corrupted. The [World of Spectrum 16K/48K Reference](https://fizyka.umk.pl/~jacek/zx/faq/reference/48kreference.htm) documents this as a ULA bug, and it applies in **any interrupt mode** — even IM1 code that merely loads I with a `#40`–`#7F` value will snow. It is also why the 48K ROM's initialization deliberately sets `I = #3F` during boot: a ROM page, safely below the danger zone.
+2. **Contention on the vector fetches.** In IM2, the two table reads at `I × 256 + V` from a contended page collide with the ULA's screen-byte fetches — at best adding contention delay inside every interrupt acknowledge, at worst (per Gasman's open letter to the demoscene) crashing real machines.
+
+The rule: `I ≤ #3F` (ROM pages) or `I ≥ #80` (upper RAM). `I = #FE` (table at `#FE00`) satisfies it and keeps the table clear of BASIC's UDG area. The `I ≤ #3F` half is not merely theoretical — on the 48K the ROM's own `#FF` block at `#3900` can serve as a ready-made, zero-RAM vector table; see [im2_effects.md → The ROM #3900 Trick](im2_effects.md#the-rom-3900-trick-48k-only). Many emulators do not model the snow bug — code that looks clean in an emulator can show interference on real hardware. See [im2_effects.md](im2_effects.md) for the placement survey and [ula_contention.md](../../02_hardware/original/ula_contention.md) for the contention model.
+
+### Guarding the Handler with an Assembler Assert
+
+When the handler sits directly below its vector table (the classic `#FDFD`-below-`#FE00` layout), a growing handler silently eats the table. Peter "Ped" Helcmanovsky's idiom turns this into a build error — sjasmplus fails the assembly the moment the handler reaches the table:
+
+```z80
+    ORG  #FDFD
+im2_handler:
+    ; ... handler code ...
+    EI
+    RETI
+    ASSERT $ <= im2_table   ; Build-time guard: handler must not reach the table
+
+    ORG  #FE00
+im2_table:
+    DEFS 257, #FD
+```
 
 ---
 
@@ -507,7 +549,7 @@ precise_isr:
 
 The ISR runs in whatever T-state window the interrupt fires — on 48K, this is the top border (T-states 0–14,335), which is **uncontended**. This means your ISR code runs at full speed during top border.
 
-However, if your ISR is long enough to run into the paper area (T-state 14,336+), any access to `#4000`–`#7FFF` (screen memory and system variables) will be contended. Code executing from contended ROM (`#0000`–`#3FFF`) is also affected.
+However, if your ISR is long enough to run into the paper area (T-state 14,336+), any access to `#4000`–`#7FFF` (screen memory and system variables) will be contended. ROM (`#0000`–`#3FFF`) itself is **uncontended** — see [contention_model.md](../03_memory_and_io/contention_model.md) — so the ROM ISR at `#0038` runs at full speed even during paper display.
 
 ```z80
 ; Safe: ISR runs during top border — no contention
@@ -759,7 +801,7 @@ Use the deferred processing pattern instead — the ISR sets a flag, the main lo
 
 ### The Contended ISR
 
-Code executing from ROM (`#0000`–`#3FFF`) during the paper area is subject to contention. On 48K, the ROM ISR at `#0038` is already in this region. If you place your ISR code in contended memory and it runs during the paper display, it will be slower than expected:
+Contrary to a persistent myth, ROM (`#0000`–`#3FFF`) is **not** contended on the 48K — the ROM ISR at `#0038` runs at full speed even during paper display. The real hazard is placing your own ISR code in the contended range `#4000`–`#7FFF`: during the paper area it runs slower than expected, and if that page is also your IM2 vector table's page, the machine shows "snow" (see [The I Register and the Snow Bug](#the-i-register-and-the-snow-bug)):
 
 ```z80
 ; BAD: ISR code at #5000 — contended during paper display
@@ -767,7 +809,7 @@ Code executing from ROM (`#0000`–`#3FFF`) during the paper area is subject to 
 my_isr:                     ; Runs slower during paper display!
 ```
 
-Place ISR code in uncontended memory (`#8000`–`#FFFF` on 48K) or accept the timing variability.
+Place ISR code in uncontended memory (`#8000`–`#FFFF` on 48K) or accept the timing variability. See [contention_model.md](../03_memory_and_io/contention_model.md).
 
 ### The Unprotected Bank Switch
 
@@ -817,5 +859,9 @@ This article is the foundational reference. Five companion articles cover specia
 - [Chris Smith — *The ZX Spectrum ULA: How to Design a Microcomputer* (2010)](http://www.zxdesign.info/) — the definitive hardware reference for the ULA's `INT` output, the 50/60 Hz vertical-sync pulse that drives IM1 and IM2, and the `HALT` instruction's interaction with the interrupt acknowledge cycle.
 - [Zilog — *Z80 CPU User Manual* (PDF)](https://www.zilog.com/docs/z80/um0080.pdf) — the primary reference for IM0 / IM1 / IM2 bus-cycle timing, the `IFF1` / `IFF2` enable flip-flops, the `R` register's refresh behavior during interrupt acknowledge, and the `RETI` / `RETN` return-from-interrupt opcodes.
 - [Sinclair ZX Specifications (Martin Korth)](http://problemkaputt.de/zxdocs.htm) — canonical cross-model hardware reference covering the 128K / +2 / +2A / +3 interrupt generation and the AY-3-8912's Timed I/O as an alternate interrupt source.
-- [World of Spectrum — Interrupts and IM2 FAQ](https://worldofspectrum.org/faq/reference/rampages.htm) — community-verified reference for IM2 vector-table placement, the 257-byte `0xFD` table pattern, and the historical software conventions for ISR-safe bank switching.
-- [Complete Spectrum ROM Disassembly (Logan & O'Hara, 1983)](https://worldofspectrum.org/ROMdisassembly.zip) — primary-source documentation of the 48K ROM's interrupt handler at `#0038` (the keyboard scanner, the `FRAMES` counter increment, and the one-second beep ticker).
+- [World of Spectrum — Interrupts and IM2 FAQ](https://worldofspectrum.org/faq/reference/rampages.htm) — community-verified reference for IM2 vector-table placement, the 257-byte `#FD` table pattern, and the historical software conventions for ISR-safe bank switching.
+- [Complete Spectrum ROM Disassembly (Logan & O'Hara, 1983)](https://worldofspectrum.org/ROMdisassembly.zip) — primary-source documentation of the 48K ROM's interrupt handler at `#0038` (the keyboard scanner, the `FRAMES` counter increment, and the one-second beep ticker)
+- [Adrian Brown — Interrupts on the ZX Spectrum (Lucky Red Fish mirror)](https://luckyredfish.com/interrupts-on-the-zx-spectrum/) — tutorial behind this article's IY-contract and snow-bug additions; the follow-up comment by Peter "Ped" Helcmanovsky is the primary source for the vector-table contention rule and the `ASSERT $ <= table` idiom
+- [Adrian Brown — original article, Coders Bucket (2015)](https://codersbucket.blogspot.com/2015/04/interrupts-on-zx-spectrum-what-are.html) — source of the Lucky Red Fish mirror
+- [Break Into Program — ZX Spectrum Interrupts](http://www.breakintoprogram.co.uk/hardware/computers/zx-spectrum/interrupts) — the IY/IM1 caveat and the 48K ROM `#3900` vector-table trick
+- [World of Spectrum FAQ — 16K/48K Spectrum Reference (mirror)](https://fizyka.umk.pl/~jacek/zx/faq/reference/48kreference.htm) — the ULA "snow" bug when I is in `#40`–`#7F` (refresh-cycle address confusion).

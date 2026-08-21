@@ -15,9 +15,9 @@ This technique, called **race the beam** (or **multicolor**, or **color-per-line
 
 ### The 8×8 Constraint, Reframed
 
-Hardware reality: the ULA reads one attribute byte per 8-pixel column per 8 scanlines. Whatever byte sits at `#5800 + (row * 32) + col` when the beam crosses scanline `64 + row * 8` is what gets displayed for the entire 8-row cell.
+Hardware reality: the ULA re-reads every attribute byte **once per scanline** — the byte at `#5800 + (row * 32) + col` is fetched at the same offset within each of the 8 scanlines of character row `row`. Leave it unchanged, and the same value colors the entire 8-row cell.
 
-Software loophole: the ULA reads that attribute byte **once**, at a specific T-state, then reuses it for the next 7 scanlines. If the CPU **overwrites the byte after the ULA's read but before the next cell's read**, the next 8-row strip will use the new value. Push this to the extreme — change the attribute **every scanline** — and you have 8×1 color.
+Software loophole: the attribute fetch **repeats every scanline** at the same T-state. If the CPU **overwrites the byte after one scanline's fetch but before the next**, the next scanline's 8-pixel strip uses the new value — while the strips above keep the old one. Push this to the extreme — change the attribute **every scanline** — and you have 8×1 color.
 
 The constraint is not "the hardware can't do it." The constraint is "the CPU must hit a specific T-state window, every scanline, for 192 scanlines, without drift."
 
@@ -116,20 +116,20 @@ This is what most simple raster-bar and border-effect demos use. It works in the
 
 ### Strategy 2: Floating-Bus Sync
 
-The 48K's floating bus returns the byte the ULA just fetched from screen memory. The ULA fetches one attribute byte per scanline at a predictable T-state. By polling `IN A,(#FF)` in a tight loop, you can detect when the ULA has just read a specific attribute value — and thus which scanline the beam is on.
+The 48K's floating bus returns the byte the ULA just fetched from screen memory. Each cell's attribute byte appears on the bus once per scanline, at a predictable T-state (two cells' bitmap+attribute bytes transit the bus in every 8 T-state slot — see [floating_bus.md](../05_display_and_timing/floating_bus.md)). By polling `IN A,(#FF)` in a tight loop, you can detect when the ULA has just read a specific attribute value — and thus which character row the beam is on.
 
 ```z80
 ; Wait for the ULA to fetch a specific attribute (e.g. #47 = white-on-red bright)
 WaitForAttr:
     IN   A,(#FF)          ; 11T
-    CP   #47              ; 7T  -- total 18T per poll iteration
-    JR   NZ,WaitForAttr   ; 12/7T
+    CP   #47              ; 7T
+    JR   NZ,WaitForAttr   ; 12T taken -- loop = 30T steady state
     ; When we exit, the ULA just read #47 from screen
-    ; Beam is on the scanline that contains that attribute byte
+    ; Beam is on a scanline of the character row holding that attribute
     RET
 ```
 
-**Precision**: ±1 T-state. Each poll iteration is 18 T-states; if the byte appears mid-iteration, you catch it on the next poll, which is at most 18 T-states later. With careful code, you can pin the beam to a 4-T-state window.
+**Precision**: the loop runs at a steady **30 T-states per iteration** (11 + 7 + 12 taken). Each attribute byte sits on the bus for a single T-state, so the match itself pins the beam to that exact fetch — but detection granularity is one loop period: a byte that appears mid-iteration is caught on the next poll, up to 30 T-states later. For tighter anchoring, use this as the coarse lock and switch to cycle-counted delays inside the ISR. Also mind the self-contention pitfall: `IN A,(n)` puts A on the address-bus high byte, so a freshly read A in `#40`–`#7F` silently slows the loop (see [floating_bus.md](../05_display_and_timing/floating_bus.md)).
 
 **Caveat — +2A/+3**: the floating bus behaves differently on the Amstrad gate array. Some T-states return `#FF` instead of the ULA's fetched byte. The classic floating-bus sync loop **does not work**. The workaround discovered by Ast A. Moore around 2015 (about 30 years after the +2A shipped) uses a different attribute value with bit 0 set and reads from a different port — see the code in the cross-references.
 

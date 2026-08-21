@@ -17,7 +17,7 @@ The IM2 vector table is 257 bytes, located at `I × 256`. The `I` register deter
 
 | `I` value range | Table location | Behavior on real hardware | Notes |
 |---|---|---|---|
-| `#00`–`#3F` | `#0000`–`#3FFF` | **ROM area** — table reads return ROM bytes, not your table | Cannot use |
+| `#00`–`#3F` | `#0000`–`#3FFF` | **ROM area** — table reads return ROM bytes, not your table | Cannot write your own table — except the read-only `#3900` trick below |
 | `#40`–`#7F` | `#4000`–`#7FFF` | **Contended memory** — crashes on real Spectrums | See Gasman's letter below |
 | `#80`–`#BE` | `#8000`–`#BEFF` | **Uncontended RAM** — safe | Recommended |
 | `#BF` | `#BF00` | Crosses `#BFFF`/`#C000` bank boundary on 128K | Avoid |
@@ -31,6 +31,8 @@ Gasman's open letter to the Russian demoscene (Subliminal Extacy #3, 2002) makes
 > "When the I register is set between 40 and 7F, the computer crashes. Please think of this while you're coding, and arrange your code so that there's space to put it higher in memory."
 
 The crash is caused by **memory contention timing violations** during the Z80's interrupt acknowledge cycle. The Z80 reads two bytes from the vector table in `I × 256 + vector_byte`, and during these reads the ULA is also fetching screen bytes from the same DRAM chip range. On real 48K Spectrums the contention pattern corrupts the vector table lookup, causing the Z80 to jump to a garbage address.
+
+The [World of Spectrum 16K/48K Reference](https://fizyka.umk.pl/~jacek/zx/faq/reference/48kreference.htm) documents the same `#40`–`#7F` range through a related ULA quirk: during every refresh cycle the CPU places `I × 256 + R` on the address bus, and if those addresses fall in `#4000`–`#7FFF` the ULA mistakes them for a flood of lower-RAM reads, misses screen bytes, and fills the display with **"snow"** — corrupted picture, but per the FAQ the program itself keeps running. Refresh-cycle snow and acknowledge-cycle contention are two faces of the same constraint: the ULA must not see extra traffic in the lower-RAM window. Either way, the fix is identical — keep `I` at `#80` or above. See [interrupt_programming.md → The I Register and the Snow Bug](interrupt_programming.md#the-i-register-and-the-snow-bug).
 
 ### Recommended Safe Range
 
@@ -51,6 +53,31 @@ The crash is caused by **memory contention timing violations** during the Z80's 
 ```
 
 The handler at `#9090` lives in uncontended RAM and runs at full speed during paper display.
+
+### The ROM #3900 Trick (48K Only)
+
+There is exactly one way to use a ROM page for the vector table: don't write one — find one already there. The 48K ROM contains a block of over 256 `#FF` bytes at `#3900` (space reserved for features that never shipped). Setting `I = #39` makes every possible vector byte resolve to the handler address `#FFFF`, spending no RAM on a table:
+
+```z80
+; 48K-only: vector "table" borrowed from the ROM's #FF block at #3900
+    DI
+    LD   HL,my_isr
+    LD   IX,#FFF0
+    LD   (IX+#04),#C3        ; JP opcode at #FFF4 ...
+    LD   (IX+#05),L          ; ... jumping to my_isr
+    LD   (IX+#06),H
+    LD   (IX+#0F),#18        ; JR opcode at #FFFF (top byte of RAM)
+    LD   A,#39               ; I := #39 → every vector reads ROM #FF bytes
+    LD   I,A                 ; → handler address #FFFF
+    IM   2
+    EI
+    RET
+```
+
+The elegance is in the `JR` at `#FFFF`: its displacement byte is fetched from `#0000` (PC wraps past the top of memory), which holds `#F3` — the opcode byte of the ROM's opening `DI`. `JR #F3` is a 13-byte backward jump to `#FFF4`, landing exactly on the `JP my_isr` stub the setup code wrote. Documented in [Break Into Program — ZX Spectrum Interrupts](http://www.breakintoprogram.co.uk/hardware/computers/zx-spectrum/interrupts).
+
+> [!WARNING]
+> The trick is 48K-only: the 16K machine has no RAM at `#FFxx` for the `JR`/`JP` stub, and the 128K ROMs contain real code at `#3900` instead of the `#FF` block.
 
 ---
 
@@ -85,7 +112,7 @@ In practice, a survey of 13 commercial Spectrum 128K games shows the rule is rou
 - The Addams Family and Chase HQ 2 are **identical** down to every address — Jonathan Dunn is credited in both, and clearly wrote a shared IM2 manager
 - 8 of 15 use a `JP` trampoline at the handler address (e.g. `#FDFD: JP #BA6E`)
 - 7 of 15 jump directly to the manager at the handler address
-- All games place the table at `#80` or higher (avoiding the `#40`–`#7F` crash range)
+- 13 of 15 place the table at `#80` or higher, avoiding the `#40`–`#7F` danger zone; the exceptions are 7th Reality (`I = #63`) and Robocop 3 (`I = #77`), both sitting inside it
 
 ### Why 256 Bytes "Works" on Most Hardware
 
@@ -505,6 +532,8 @@ After IM2 setup, verify the table by reading two adjacent bytes:
 
 If the 257th byte is wrong, the program will crash the first time the floating bus returns `#FF` as the vector byte.
 
+For handler-below-table layouts, add Peter "Ped" Helcmanovsky's build-time guard after the handler's `RETI`: `ASSERT $ <= im2_table` (sjasmplus) fails the assembly the moment handler growth reaches the table — see [interrupt_programming.md → Guarding the Handler with an Assembler Assert](interrupt_programming.md#guarding-the-handler-with-an-assembler-assert).
+
 ---
 
 ## Cross-References
@@ -520,8 +549,11 @@ If the 257th byte is wrong, the program will crash the first time the floating b
 
 ## Sources
 
-- *Disassemble Interrupt Mode on some popular ZX Spectrum 128k Games* (andydansby, zxspectrumcoding.wordpress.com, 2021) — 13-game IM2 disassembly survey with addresses, I register values, and table sizes
+- *Disassemble Interrupt Mode on some popular ZX Spectrum 128k Games* (andydansby, [zxspectrumcoding.wordpress.com](https://zxspectrumcoding.wordpress.com/), 2021) — 13-game IM2 disassembly survey with addresses, I register values, and table sizes
 - *Compatibility: An open letter to the Russian scene* (Gasman, [Subliminal Extacy](https://zxart.ee/) #3, zxpress.ru) — canonical statement on `#40`–`#7F` IM2 table crash and the cross-platform portability plea
 - *Jim Bagley comment on Hudson Hawk IM2 manager* (via zxspectrumcoding.wordpress.com, 2021) — first-person description of the `#70D4` bank-shadow technique
 - *Interrupts - SpecNext Wiki* (wiki.specnext.dev) — Next hardware IM2 mode reference
 - *[Arkos Tracker](https://www.julien-nevo.com/arkostracker/) — Using interruption player on ZX Spectrum* (julien-nevo.com) — Arkos AKG IM2 setup code by Gusman
+- [Adrian Brown — Interrupts on the ZX Spectrum (Lucky Red Fish mirror)](https://luckyredfish.com/interrupts-on-the-zx-spectrum/) — tutorial whose Peter "Ped" Helcmanovsky follow-up comment flags the vector-table contention rule and the IY/IM1 contract
+- [World of Spectrum FAQ — 16K/48K Spectrum Reference (mirror)](https://fizyka.umk.pl/~jacek/zx/faq/reference/48kreference.htm) — the ULA "snow" bug for I in `#40`–`#7F` (refresh-cycle address confusion)
+- [Break Into Program — ZX Spectrum Interrupts](http://www.breakintoprogram.co.uk/hardware/computers/zx-spectrum/interrupts) — the 48K ROM `#3900` vector-table trick and the IY/IM1 caveat

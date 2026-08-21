@@ -166,7 +166,7 @@ The Byte's combination of 48K timing and zero contention makes it one of the **c
 
 ### Floating Bus
 
-Like all discrete-TTL Soviet clones, the Byte does **not** implement the floating bus. Software that reads contended memory during screen display to detect beam position or steal cycles will not work. This is the same limitation as the Pentagon — see [floating_bus.md](../../05_development/05_display_and_timing/floating_bus.md) for the impact on multicolor effects.
+Like all discrete-TTL Soviet clones, the Byte does **not** implement the floating bus. Software that polls the floating bus — `IN` from undecoded ports — to detect the beam position will not work, and with zero contention there are no contended cycles to steal. This is the same limitation as the Pentagon — see [floating_bus.md](../../05_development/05_display_and_timing/floating_bus.md) for the impact on multicolor effects.
 
 ### Disk Support
 

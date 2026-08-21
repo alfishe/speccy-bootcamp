@@ -644,7 +644,7 @@ The Commodore 64 had **no CPU contention** for screen memory (separate RAM), but
 
 5. **Pentagon emulation needs zero contention** — many emulators default to Pentagon with contention disabled, which is correct.
 
-6. **The floating bus** — when the CPU reads from uncontended memory while the ULA is reading screen memory, the CPU may receive the byte the ULA just read. This "floating bus" behavior is yet another timing-dependent feature used by some programs for synchronization.
+6. **The floating bus** — an `IN` from an I/O port that no device decodes returns the byte the ULA is currently fetching for the display (or `#FF` when idle), because nothing else drives the data bus. Memory reads always return correct data. This timing-dependent effect is used by some programs for synchronization — see [floating_bus.md](../../05_development/05_display_and_timing/floating_bus.md).
 
 ---
 
