@@ -351,6 +351,7 @@ zx/
 ├── 10_references/
 │   ├── z80_opcode_table.md
 │   ├── io_port_map.md
+│   ├── zx_ports_full_table.md
 │   ├── memory_maps.md
 │   ├── character_set.md
 │   ├── basic_token_table.md
@@ -950,7 +951,8 @@ All 11 articles are ✅ Complete (CC BY-SA 4.0). Cross-references verified. See 
 | File | Topic |
 |---|---|
 | `z80_opcode_table.md` | Complete Z80 opcode matrix with T-states and byte counts |
-| `io_port_map.md` | **Complete I/O port map** — every port across all models with decoding bitmasks. Sections: System (ULA #FE, 128K #7FFD, +2A/+3 #1FFD), Memory Paging, AY Audio (#BFFD/#FFFD), Disk Controllers (Beta 128 WD1793 #1F-#FF, +3 FDC, D80, JLO), IDE (ATM, SMUC, DivIDE), Joysticks (Kempston #1F, Sinclair #EFFE/#F7FE), Mouse (Kempston), Printers, Shadow Ports (Pentagon #77), SMUC ISA, Peripherals — with per-model decoding differences annotated |
+| `io_port_map.md` | **Complete I/O port map** — every port across all models with decoding bitmasks. Sections: System (ULA #FE, 128K #7FFD, +2A/+3 #1FFD), Memory Paging, AY Audio (#BFFD/#FFFD), Disk Controllers (Beta 128 WD1793 #1F-#FF, +3 FDC, D80, JLO), IDE (ATM, SMUC, DivIDE), Joysticks (Kempston #1F, Sinclair #EFFE/#F7FE), Mouse (Kempston), Printers, Shadow Ports (ATM Turbo #77), SMUC ISA, Peripherals — with per-model decoding differences annotated |
+| `zx_ports_full_table.md` | **Complete English translation of Black_Cat's ZX Ports Full Table** (BC Info Guide #4, 2008) — all 32 sections verbatim: System/Peripherals/Shadow ports, SMUC, Beta 128, ATM IDE, peripheral devices, MB-02+, NemoIDE, SoundDrive 1.02/1.05, ZXMMC+, Kempston mouse Turbo, Pera Putnik IDE, ZX LPRINT-III, D40/80, divIDE, General Sound, +D, Interface 1, ZXMC-1/2, Keyboard Proface, SAA1099, DMA USC, COM by VIC, GLUK RTC, Profi COM, Interface 2, ISA COM1, both Kempston mouse variants — with the original's model-code (1–D) and function-code legends and INFO footnotes |
 | `memory_maps.md` | Consolidated memory maps: 48K/128K/+2A/+3/Pentagon/Scorpion/Next/Evo |
 | `character_set.md` | ZX Spectrum character set: ASCII mapping, token table, UDG |
 | `basic_token_table.md` | Sinclair BASIC token table: keyword → token number |
@@ -1024,7 +1026,7 @@ Articles are written in priority order. README.md is synthesized AFTER articles 
 | 03_io/networking | 6/6 | ✅ **COMPLETE** (Jul 2026) — zx_net, modems, spectranet, zifi, esp_wifi, zx_next_wifi all done |
 | 09 Toolchain | **27/27** | ✅ **Complete** (Jul 2026) — 8 surveys/overviews + 19 per-tool deep dives (native + cross-platform + IDEs). All planned articles done across F4 batches 1–4; `zxdstudio.md` descoped (actually ZX Disk Studio Russian disk utility, not an IDE). |
 | 08 Reverse Engineering | **7/7** | ✅ **F5 COMPLETE** — consolidated from 10 planned into **7 comprehensive articles** (3,256 lines total): methodology.md (528), protection_techniques.md (492) [both pre-existing], analysis_techniques.md (597), protection_cracking.md (367), game_reversing.md (384), code_crunching.md (432), snapshot_repair.md (456). Merges: static_analysis+dynamic_analysis+tool_setup → analysis_techniques; speedlock_alkatraz → protection_cracking; decompilation → game_reversing |
-| 10 References | **10/10** | ✅ **COMPLETE** (Jul 2026) — z80_opcode_table, io_port_map, character_set, color_palette, memory_maps, basic_token_table, error_codes, timing_reference, pinouts, rom_routines |
+| 10 References | **11/11** | ✅ **COMPLETE** (Jul 2026; +Black_Cat translation Aug 2026) — z80_opcode_table, io_port_map, zx_ports_full_table (full EN translation of Black_Cat's ports table), character_set, color_palette, memory_maps, basic_token_table, error_codes, timing_reference, pinouts, rom_routines |
 | 02 Hardware (all 3 streams) | 26/~28 | ✅ **F1/F2/F3 Largely DONE** — original 8/8 (16K/48K, 128K, +2, +2A/+3, ULA architecture/timing/contention, keyboard), clones 11/11 (Pentagon, Scorpion, ATM Turbo, Kay, Profi, Byte, Sizif/Harlequin, + others), newgen 7/8 (Next, Sprinter, Evo, TS-Conf, BaseConf, ZX Uno, Karabas). Descoped: power_supply, edge_connector, rom_contents (pure hardware, duplicative) |
 | 05_dev/04_interrupts | **6/6** | ✅ **F11 COMPLETE** — consolidated from ~7 planned into **6 articles** (3,235 lines total): interrupt_programming.md (799, pre-existing foundational), race_the_beam.md (559 — raster sync, 5 strategies, BIFROST*), nmi.md (385 — Multiface 74LS74 hardware, 4 NMI-safe rules), im2_effects.md (527 — 15-game disassembly survey, 3 manager patterns), im2_disk_music.md (469 — WD1793 byte budget, Ivan Roshchin concurrency math), im2_advanced.md (477 — Next/TS-Conf IM2, copper vs ISR, Hudson Hawk bank-switching ISR). User feedback: "F11 is not a small one. Do full research how IM1, IM2 works… and how demo and game makers abuse IM2 for effects, timing sync, and even disk load with AY music" |
 | 05_dev/01_basic | 2/2 | ✅ F7 COMPLETE — consolidated to 2 comprehensive articles: basic_48k.md (1019 lines, merges intro/graphics/sound/peek_poke) + basic_128k.md (496 lines, PLAY/AY-3-8912/+2A+3 DOS). User feedback: "one for 48K comprehensive, one addon for 128K" |

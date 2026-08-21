@@ -2,7 +2,7 @@
 
 # I/O Port Map — Complete ZX Spectrum Port Reference
 
-Every I/O port across all ZX Spectrum models and clones, with decoding bitmasks and per-model applicability. The port tables are reproduced from **Black_Cat's ZX Ports Full Table** (BC Info Guide #4, 2008), preserved in the [tslabs/zx-evo repository](https://github.com/tslabs/zx-evo/blob/master/pentevo/docs/ZX/zx-ports-full-table.txt). Annotations and supplementary data (joystick, mouse, DivIDE, sound cards, ZX Spectrum Next) are from the [World of Spectrum ports reference](https://worldofspectrum.org/faq/reference/ports.htm) and community documentation.
+Every I/O port across all ZX Spectrum models and clones, with decoding bitmasks and per-model applicability. The port tables are reproduced from **Black_Cat's ZX Ports Full Table** (BC Info Guide #4, 2008) — the complete English translation of that table now lives in [zx_ports_full_table.md](zx_ports_full_table.md), and this article adds annotations on top of it. Supplementary data (joystick, mouse, DivIDE, sound cards, ZX Spectrum Next) is from the [World of Spectrum ports reference](https://worldofspectrum.org/faq/reference/ports.htm) and community documentation.
 
 > [!NOTE]
 > For the *concepts* of partial address decoding (how mirrors work, why they matter), see [io_port_decoding.md](../05_development/03_memory_and_io/io_port_decoding.md). This article is the **lookup reference** — you come here to find which port does what on which machine.
@@ -25,26 +25,26 @@ Port     Address (A15–A0)  Decoding (A15–A0)  READ          WRITE
 
 ### Model Codes
 
-The parenthesized codes after each function indicate **which models** implement that particular decoding variant:
+The parenthesized codes after each function indicate **which models** implement that particular decoding variant. These are the original author's own codes — clone-centric, **not** Sinclair model numbering (`7` is KAY, `8` is Pentagon):
 
 | Code | Model |
 |------|-------|
-| 1 | Sinclair ZX Spectrum 16K / 48K |
-| 2 | Sinclair ZX Spectrum 128K "Toastrack" |
-| 3 | Amstrad ZX Spectrum +2 (grey) |
-| 4 | Amstrad ZX Spectrum +2A |
-| 5 | Amstrad ZX Spectrum +3 |
-| 6 | Scorpion ZS-256 |
-| 7 | Pentagon 128K |
-| 8 | Pentagon 512K / 1024K |
-| 9 | Kay 1024 |
-| A | ATM Turbo |
-| B | Byte |
-| C | Profi |
-| D | Pentagon with EFF7 extension (ProfiScorp compatibility) |
+| `1` / `+1` | ZX Spectrum (issue 1–2 / issue 3–6) |
+| `2` | ZX Spectrum +128, +2 |
+| `3` / `+3` | ZX Spectrum +2a, +2b / +3 |
+| `4` | Timex Computer 2048 |
+| `5` | Didaktik Gama |
+| `6` | Scorpion ZS-256 Turbo+ |
+| `7` | KAY-1024SL / Beta Turbo |
+| `8` | Pentagon 128 (1991) |
+| `9` | Profi-1 (v3.x) |
+| `A` | ATM Turbo-2+ |
+| `B` | Scorpion GMX |
+| `C` | Quorum 128/+ |
+| `D` | Pentagon-1024SL (ver. 28.09.2006) |
 
 > [!WARNING]
-> The same port number can have **completely different functions** on different models. For example, `#1FFD` controls extended paging on the +2A/+3, but controls the Beta 128 FDC on the Pentagon/Scorpion. Always check model codes before using a port.
+> The same port number can have **completely different functions** on different models. For example, `#1FFD` controls extended paging plus the floppy motor on the +2a/+2b/+3, but plain memory paging (with turbo control on the Scorpion) on Soviet clones. Always check model codes before using a port.
 
 ### Abbreviations
 
@@ -72,7 +72,7 @@ The parenthesized codes after each function indicate **which models** implement 
 
 ## Black_Cat's ZX Spectrum Ports — Complete Table
 
-Source: Black_Cat, BC Info Guide #4, 2008 ([original](https://github.com/tslabs/zx-evo/blob/master/pentevo/docs/ZX/zx-ports-full-table.txt)). Model codes: 1=48K, 2=128K, 3=+2, 4=+2A, 5=+3, 6=Scorpion, 7=Pentagon, 8=Pentagon 512K, 9=Kay, A=ATM Turbo, B=Byte, C=Profi, D=Pentagon EFF7.
+Source: Black_Cat, BC Info Guide #4, 2008 ([original](https://github.com/tslabs/zx-evo/blob/master/pentevo/docs/ZX/zx-ports-full-table.txt)); full English translation in [zx_ports_full_table.md](zx_ports_full_table.md). Model codes: 1/+1=ZX Spectrum issue 1–2/3–6, 2=+128/+2, 3/+3=+2a/+2b/+3, 4=Timex 2048, 5=Didaktik Gama, 6=Scorpion ZS-256 Turbo+, 7=KAY-1024SL, 8=Pentagon 128, 9=Profi-1, A=ATM Turbo-2+, B=Scorpion GMX, C=Quorum, D=Pentagon-1024SL.
 
 ### System Ports
 
@@ -82,9 +82,9 @@ Source: Black_Cat, BC Info Guide #4, 2008 ([original](https://github.com/tslabs/
 | | | `xxxxxxxx0xx0xxx0` | — | Pag(C) |
 | `#7E` | `xxxxxxxx01111110` | `xxxxxxxx0xx11xx0` | Key(C) | — |
 | `#F6` | `xxxxxxxx11110110` | `xxxxxxxxxxxx0110` | — | Brd(A) |
-| `#FE` | `xxxxxxxx11111110` | `xxxxxxxxxxxxxxxx0` | KeyTp(1,7-9) Prn(7) | BrdTpSpk(1,7-9) |
-| | | `xxxxxxxxxxxxxxxx0` | Key(D) | BrdSpk(D) |
-| | | `xxxxxxxxxxxxxx110` | KeyTp(A) | BrdTpSpk(A) |
+| `#FE` | `xxxxxxxx11111110` | `xxxxxxxxxxxxxxx0` | KeyTp(1,7-9) Prn(7) | BrdTpSpk(1,7-9) |
+| | | `xxxxxxxxxxxxxxx0` | Key(D) | BrdSpk(D) |
+| | | `xxxxxxxxxxxxx110` | KeyTp(A) | BrdTpSpk(A) |
 | | | `xxxxxxxxxx1xxx10` | KeyTpPrn(6) | BrdTpSpk(6) |
 | | | `xxxxxxxx1xxxxxx0` | KeyTp(+1) | BrdTpSpk(+1) |
 | | | `xxxxxxxx1xx11xx0` | KeyTp(C) | BrdTpSpk(C) |
@@ -244,14 +244,14 @@ Port     Address (A15–A0)  Decoding (A15–A0)       READ              WRITE
 
 | Model | Decoding | R | W | Notes |
 |-------|----------|---|---|-------|
-| 48K (1) | A0=0 only | Keyboard + EAR | Border + Beeper + MIC | Ferranti ULA TR6 inverts A0 |
-| 128K/+2 (2,3) | A0=0 only | Same + `?` | Same | Same ULA core |
-| +2A/+3 (4,5) | A0=0 only | Same | Same | Amstrad gate array |
-| Scorpion (6) | `xxxxxxxx1xx11xx0` — checks A4,A3,A0 | KeyTpPrn | BrdTpSpk | More selective decode via EPLD |
-| Pentagon (7) | A0=0 only | Key(D) | BrdSpk(D) | Discrete TTL, simplest decode |
-| ATM Turbo (A) | `xxxxxxxx1xx11xx0` | KeyTp | BrdTpSpk | Checks additional lines |
-| Profi (C) | `xxxxxxxx1xx11xx0` | KeyTp | BrdTpSpk | Same as ATM pattern |
-| +2 (3) | `xxxxxxxx1xxxxxx0` | KeyTp(+1) | BrdTpSpk(+1) | Checks A6 line |
+| ZX Spectrum issue 1–2 (1) | A0=0 only | Keyboard + EAR | Border + Beeper + MIC | Ferranti ULA TR6 inverts A0 |
+| ZX Spectrum issue 3–6 (+1) | `xxxxxxxx1xxxxxx0` — checks A6, A0 | Key + tape | Border + Spk | 6C001E-7 ULA adds the A6 check |
+| +128/+2 (2), +2a/+2b/+3 (3/+3) | A0=0 only | Same as 48K | Same as 48K | Standard decode retained on Amstrad machines |
+| Scorpion ZS-256 (6) | `xxxxxxxxxx1xxx10` — checks A5, A1, A0 | Key + tape + printer | Border + Spk | Printer strobe shares the port |
+| ATM Turbo-2+ (A) | `xxxxxxxxxxxxx110` — checks A2, A1, A0 | Key + tape | Border + Spk | |
+| Quorum (C) | `xxxxxxxx1xx11xx0` — checks A6, A3, A2, A0 | Key + tape | Border + Spk | |
+| KAY (7), Pentagon 128 (8), Profi-1 (9) | A0=0 only | Key + tape (+ printer lines on KAY) | Border + Spk | KAY's #FE read also returns printer status |
+| Pentagon-1024SL (D) | A0=0 only | Key (no tape) | Border + Spk | No tape port |
 
 **Write data byte (OUT (#FE), A):**
 
@@ -320,13 +320,13 @@ Port     Address (A15–A0)  Decoding (A15–A0)       READ        WRITE
 
 | Model | Decoding | Notes |
 |-------|----------|-------|
-| 128K/+2 (2,3) | `0xxxxxxxxxxxxx0x` — 6 lines via 74HC138 | Standard 128K paging |
-| Pentagon (8,9,A) | Same as 128K | Compatible decoding |
-| Pentagon EFF7 (D) | `0xxxxxxxxxxxxx01` | Slightly different mask for extended mode |
-| Profi (C) | `0xxxxxxxxxx11x0x` | Different decoding for Profi's paging scheme |
-| +2A/+3 (3) | `01xxxxxxxxxxxx0x` | Amstrad gate array checks more lines |
-| Scorpion (6) | `01xxxxxxxx1xxx01` with Trb-ON | Scorpion adds turbo control to same port |
-| Byte (?B) | `0x1xx111xx1xxx01` | Unique extended decode |
+| 128K/+2 (2), Pentagon 128 (8), Profi-1 (9), ATM Turbo-2+ (A) | `0xxxxxxxxxxxxx0x` — 6 lines via 74HC138-class decode | Standard 128K paging |
+| +2a/+2b (3), +3 (+3), Didaktik Gama unconfirmed (?5) | `01xxxxxxxxxxxx0x` | Amstrad gate array checks A14, A13 |
+| KAY-1024SL (7) | `01xxxxxxxxxxxx01` | Stricter decode than the 128K |
+| Scorpion ZS-256 (6) | `01xxxxxxxx1xxx01` — read = Trb-ON | Turbo status shares the paging port |
+| Quorum (C) | `0xxxxxxxxxx11x0x` | Quorum's own paging scheme |
+| Scorpion GMX (?B) | `0x1xx111xx1xxx01` | Unconfirmed decoding |
+| Pentagon-1024SL (D) | `0xxxxxxxxxxxxx01` | Extended paging mode |
 
 **Write data byte (OUT (#7FFD), A):**
 
@@ -348,32 +348,32 @@ Lock   ?    ?   ROM  Scr  Bank bits
 
 ### #1FFD — Extended Paging / FDC Control
 
-This is the most **dangerous port** for cross-model compatibility. On the +2A/+3 it controls extended paging modes and the floppy disk motor. On Soviet clones it controls the Beta 128 FDC — a completely different function with the same port address.
+This is the most **dangerous port** for cross-model compatibility. On the +2a/+2b/+3 it controls extended paging modes, the printer, and the floppy disk motor. On Soviet clones it selects memory paging — with turbo control on the Scorpion — a completely different function with the same port address.
 
 ```
 Port     Address (A15–A0)  Decoding (A15–A0)     READ        WRITE
 
 #1FFD    0001111111111101  0001xxxxxxxxxx0x     -           PagPrn/FD(3/+3)
-                           A15=0,A14=0,A13=0               Pag(7)
-                           A12=1,A1=0                       Pag(6)
-                           10+ lines checked
+                           00xxxxxxxxxxxx01                 Pag(7)
+                           00xxxxxxxx1xxx01  Trb-OFF(6)     Pag(6)
+                           0x0xx111xx1xxx01                 Pag(?B)
 ```
 
 **Per-model — completely different functions:**
 
 | Model | Function | Decoding | Notes |
 |-------|----------|----------|-------|
-| +2/+2A/+3 (3,+3) | Extended paging + floppy disk motor + printer | `0001xxxxxxxxxx0x` | 4 paging modes combined with #7FFD bit 5 |
-| Pentagon (7) | Memory paging extension | `00xxxxxxxxxxxx01` | Different mask, paging only |
-| Scorpion (6) | Memory paging + Turbo OFF | `00xxxxxxxx1xxx01` | Turbo control via same port |
-| Byte (?B) | Memory paging | `0x0xx111xx1xxx01` | Unique extended decode |
+| +2a/+2b/+3 (3/+3) | Extended paging + floppy disk motor + printer | `0001xxxxxxxxxx0x` | 4 paging modes combined with #7FFD |
+| KAY-1024SL (7) | Memory paging | `00xxxxxxxxxxxx01` | Different mask, paging only |
+| Scorpion ZS-256 (6) | Memory paging + Turbo OFF | `00xxxxxxxx1xxx01` | Read = turbo-OFF status |
+| Scorpion GMX (?B) | Memory paging | `0x0xx111xx1xxx01` | Unconfirmed decoding |
 
 > [!WARNING]
-> **Port collision!** Writing `#1FFD` on a +3 controls paging and disk. Writing `#1FFD` on a Pentagon/Scorpion controls the Beta 128 FDC. Code that works on one machine **will corrupt data** on the other. Always detect the machine type before using this port. See [memory_and_io_plus3.md](../05_development/03_memory_and_io/memory_and_io_plus3.md) and [memory_and_io_pentagon.md](../05_development/03_memory_and_io/memory_and_io_pentagon.md).
+> **Port collision!** Writing `#1FFD` on a +3 controls paging and disk. Writing `#1FFD` on a Scorpion or KAY remaps memory (and touches turbo on the Scorpion). Code tuned for one machine derails the other. Always detect the machine type before using this port. See [memory_and_io_plus3.md](../05_development/03_memory_and_io/memory_and_io_plus3.md) and [memory_and_io_pentagon.md](../05_development/03_memory_and_io/memory_and_io_pentagon.md).
 
 ### #EFF7 — Pentagon Extended Memory
 
-Exclusive to the Pentagon 512K/1024K. Decoded via a **74HC688 8-bit identity comparator** for an almost-exact match — very few mirrors.
+Exclusive to the Pentagon family — code `8` in Black_Cat's table (Pentagon 128, 1991) and the Pentagon-1024SL (D). Decoded via a **74HC688 8-bit identity comparator** for an almost-exact match — very few mirrors.
 
 ```
 Port     Address (A15–A0)  Decoding (A15–A0)    READ        WRITE
@@ -384,8 +384,8 @@ Port     Address (A15–A0)  Decoding (A15–A0)    READ        WRITE
 
 | Model | Function | Notes |
 |-------|----------|-------|
-| Pentagon 512K+ (8) | Extended paging + video + turbo + config register | Decoded by 74688 comparator |
-| Pentagon EFF7 (D) | Same functions, slightly different mask variant | `1110xxxxxxxx0xx1` |
+| Pentagon 128 (8) | Extended paging + video + turbo + config register | Decoded by 74688 comparator |
+| Pentagon-1024SL, ver. 28.09.2006 (D) | Same functions, slightly different mask variant | `1110xxxxxxxx0xx1` |
 
 This port does **not exist** on any Sinclair/Amstrad machine. Writing to it on a 48K or 128K has no effect (the address is simply not decoded by any hardware).
 
@@ -904,11 +904,11 @@ Uses keyboard matrix ports — no dedicated hardware port. Reads from specific h
 Three ports for buttons, X position, and Y position:
 
 ```
-Port     Decoding                    R/W   Function
+Port     Decoding (A15–A0)     R/W   Function
 
-#FADF    ---- ---0 --0- ----        R     Buttons
-#FBDF    ---- -0-1 --0- ----        R     X position
-#FFDF    ---- -1-1 --0- ----        R     Y position
+#FADF    xxxxxx10xx0xxxxx      R     Buttons
+#FBDF    xxxxx011xx0xxxxx      R     X position
+#FFDF    xxxxx111xx0xxxxx      R     Y position
 ```
 
 **Button byte (#FADF):**
@@ -921,6 +921,8 @@ Bit 7  6   5   4   3   2   1   0
 
 Active **low** — bit cleared means button pressed. X and Y ports return position counters (8-bit, wrapping).
 
+The source lists a second variant (its heading: "USSR Kempston mouse") at the same three ports with a different — actually **stricter** — decode (`#FADF` = `xxxxx0x01x0xxxx1`, `#FBDF` = `xxxxx0x11x0xxxx1`, `#FFDF` = `xxxxx1x11x0xxxx1`): five checked lines uniformly, including A0=1, so it answers only on odd addresses (2,048 mirrors per port vs 8,192/4,096 above) and never overlaps the ULA's A0=0 decode space. Velesoft's "Kempston mouse Turbo" extends the protocol at `#7ADF`–`#FFDF` with master/slave selection on an address bit. All variants are tabulated in [zx_ports_full_table.md](zx_ports_full_table.md).
+
 ### AMX Mouse — #FADF / #FBDF / #FFDF
 
 Same port addresses as Kempston mouse but different decoding and protocol. The AMX mouse is less common and uses a different initialization sequence.
@@ -932,18 +934,13 @@ Same port addresses as Kempston mouse but different decoding and protocol. The A
 The DivIDE and DivMMC are compact IDE interfaces that attach to the Spectrum expansion bus. They provide IDE hard disk or CompactFlash access plus a FAT filesystem via ESXDOS.
 
 ```
-Port     Decoding                R/W   Function
+Port     Address (A15–A0)   Decoding (A15–A0)   R/W   Function
 
-#E3      ---- ---- 1110 0011     R/W   IDE command/status (+D compatible)
-#E7      ---- ---- 1110 0111     W     Memory paging (+D compatible)
-#EB      ---- ---- 1110 1011     R/W   IDE track register
-#EF      ---- ---- 1110 1111     R/W   IDE system register / control
-#F3      ---- ---- 1111 0011     R/W   IDE sector register
-#F7      ---- ---- 1111 0111     R/W   IDE data / printer
-#FB      ---- ---- 1111 1011     R/W   IDE data port
+#A3-#BF  xxxxxxxx101CBA11   xxxxxxxx101CBA11    R/W   IDE registers (ISA #1Fx block, 8-bit)
+#E3      xxxxxxxx11100011   xxxxxxxx11100011    W     divIDE control
 ```
 
-The DivIDE uses a +D-compatible port mapping, which itself borrows from the Beta 128 style but at different addresses. DivMMC uses the same ports with slightly different paging behavior.
+The C/B/A address lines inside `#A3`–`#BF` select the IDE register — the interface maps the ISA `#1Fx` register file into ZX port space. `#E3` is the control register (ROM/RAM paging and interface enable). DivMMC uses the same ports with slightly different paging behavior.
 
 > [!NOTE]
 > For programming details, see [divide_divmmc.md](../03_io/storage/divide_divmmc.md) (planned) and [esxdos.md](../04_operating_systems/esxdos.md) (planned).
@@ -961,11 +958,11 @@ A dedicated Z80-based sound card with 4-channel sample playback. Has its own Z80
 ```
 Port     Address (A15–A0)  Decoding (A15–A0)    READ        WRITE
 
-#B3      xxxxxxxx10110011  xxxxxxxx10110011    GS status   GS command
-#BB      xxxxxxxx10111011  xxxxxxxx10111011    GS data     GS data
+#B3      xxxxxxxx10110011  xxxxxxxx10110011    GS data     GS data
+#BB      xxxxxxxx10111011  xxxxxxxx10111011    GS status   GS command
 ```
 
-Full 8-bit low-byte decode on both ports. The GS is a self-contained subsystem — you send commands and sample data, and the card's internal Z80 handles mixing and playback.
+Full 8-bit low-byte decode on both ports: `#B3` is the data FIFO, `#BB` reads status and writes commands. The GS is a self-contained subsystem — you send commands and sample data, and the card's internal Z80 handles mixing and playback.
 
 ### TurboSound — #FF
 
@@ -998,14 +995,14 @@ Simple 8-bit DAC (digital-to-analog converter) ports for direct sample playback:
 
 Covox is the simplest sound output — write a byte and it appears as an analog voltage on the output. No register protocol, no chip, just a resistor ladder.
 
-### SAA1099 — #FF / #FE
+### SAA1099 — #00FF / #01FF
 
-Philips SAA1099 PSG with 6 stereo channels:
+Philips SAA1099 PSG with 6 stereo channels — the SAM Coupe's sound chip, also used by ZX Spectrum SAA1099 interfaces:
 
 ```
 Port     Function
-#FF      SAA1099 address select
-#FE      SAA1099 data write
+#00FF    SAA1099 data write
+#01FF    SAA1099 address select
 ```
 
 Present on some Soviet clone sound cards (ZXM Soundcard) combined with TurboSound FM.

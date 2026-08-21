@@ -454,6 +454,7 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 |---------|-------------|
 | [z80_opcode_table.md](10_references/z80_opcode_table.md) | One-page Z80 opcode lookup: every documented instruction by group with byte count, T-states, and flag effects |
 | [io_port_map.md](10_references/io_port_map.md) | Complete I/O port reference: every port across all models, Black_Cat table with annotations, decoding bitmasks, per-model differences |
+| [zx_ports_full_table.md](10_references/zx_ports_full_table.md) | Complete English translation of Black_Cat's ZX Ports Full Table (BC Info Guide #4, 2008) — all 32 sections verbatim with the original's model-code and function-code legends |
 | [character_set.md](10_references/character_set.md) | ZX Spectrum character set: code ranges, ROM font layout, UDG system, CHARS redirection |
 | [color_palette.md](10_references/color_palette.md) | Standard 15-color palette (FUSE/Skoolkid/ZEsarUX variants), ULAplus 64-color, ZX Spectrum Next 256-color |
 | [memory_maps.md](10_references/memory_maps.md) | Consolidated memory maps for every model (16K/48K, 128K/+2, +2A/+3, Pentagon, Scorpion, ATM Turbo, Next) — contended regions, banking registers, RAMTOP defaults, compatibility cheat sheet |
