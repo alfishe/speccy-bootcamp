@@ -161,6 +161,8 @@ Soft-port matrix — the `L`/`K`/`J` address bits select the function:
 | `#FD77`/`#FF77` (#4177) | `x1xxxxK10xx10111` | 1 | 0 | 1 | K=0 → shadow on |
 | `#FE77`/`#FF77` | `x1xxxx1J0xx10111` | 1 | 1 | 0 | J=0 → paging off, CP/M ROM mapped to CPU banks 0–3 |
 
+The `L`/`K`/`J` positions are concrete in the patterns above: **L = A14, K = A9, J = A8**. The `#3FF7`–`#FFF7` row covers only one of the two `RAMPag(A)` write encodings: the same decode mask with A11 = 0 (`#37F7`–`#F7F7`) forces the ATM RAM window type instead of taking it from data bits 7:6 — the only route to RAM pages 64–127. Page numbers are written inverted in both encodings. See [atm_turbo.md](../02_hardware/clones/atm_turbo.md) for the full window-register mechanism, the `#BF` "Savelij" DOS latch, and the `#57` SD port convention.
+
 ## SMUC — Scorpion & MOA Universal Controller
 
 | Port | Address (A15–A0) | Decoding (A15–A0) | READ | WRITE |

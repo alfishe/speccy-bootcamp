@@ -326,7 +326,7 @@ The hardware does not require (or accept) any explicit "page-out" instruction. T
 
 #### 4.2.4 Note on Soviet clones
 
-The M1-fetch-triggered banking mechanism described above applies identically to every Soviet clone (Pentagon, Scorpion, ATM Turbo, Profi, Kay, Leningrad, ZX Evolution). No verified Soviet implementation adds a software override to the banking flip-flop; the mechanism is purely hardware address-decode in every documented case.
+The M1-fetch-triggered banking mechanism described above applies identically to every Soviet clone (Pentagon, Scorpion, Profi, Kay, Leningrad, ZX Evolution) — with **one verified exception on the ATM Turbo**: its exit path is gated by software. Port `#BF` bit 0 (the "Savelij" latch) can pin TR-DOS on so that a fetch from `#4000+` does not page it out, and the CP/M persona selected through an `#xx77` address bit re-enables the non-DOS ROMs. The activation trigger itself (`#3D00`–`#3DFF` instruction fetch) is the same on the ATM as everywhere else. This gating is documented from a silicon-proven FPGA re-creation of the Turbo 2 personality — see [atm_turbo.md](../../02_hardware/clones/atm_turbo.md) for the full logic.
 
 ### 4.3 How the TR-DOS ROM hooks BASIC
 
@@ -799,9 +799,9 @@ vTR-DOS ships as a TSR (terminate-and-stay-resident) utility that hooks into TR-
 
 From BASIC, type `PRINT PEEK 15619`. The byte at address `#3D03` (the warm-entry point) encodes the TR-DOS version family:
 
-- `0xF3` (`#F3`) → TR-DOS 5.03
-- `0xF4` (`#F4`) → TR-DOS 5.04
-- `0x06` followed by a minor-version byte → TR-DOS 6.x
+- `#F3` → TR-DOS 5.03
+- `#F4` → TR-DOS 5.04
+- `#06` followed by a minor-version byte → TR-DOS 6.x
 
 This is the standard detection used by installers and launcher menus. For Mr Gluk Reset Service, the version string is at a fixed offset in its ROM and can be read with `PEEK 0` after the Mr Gluk ROM is paged in.
 
@@ -870,7 +870,7 @@ The Mr Gluk Reset Service (§10.6) repurposes the MAGIC button: pressing it duri
 The Soviet scene invented and refined dozens of floppy-disk protection schemes. Most exploit specific WD1793 behavior that is difficult to replicate with a generic `*COPY`. See [protection_techniques.md §2](../../08_reverse_engineering/protection_techniques.md#2-disk-based-protection) for the full protection-and-bypass catalog; the most common ones encountered on Beta Disk software:
 
 - **Weak-bit protection.** The original disk has a track where the magnetic flux is written at a level that is on the edge of the drive's read amplifier threshold. Each read produces a slightly different bit pattern. The protection check reads the track twice and compares; if they match (because a copier wrote deterministic bits), the software refuses to run. READ TRACK (Type III) is the command used to capture the raw bytes.
-- **Non-standard sector IDs.** Sectors are numbered, e.g., `0x01, 0x02, 0x80, 0x81, 0x82, ...` instead of `1, 2, 3, 4, ...`. TR-DOS's READ SECTOR will fail to find them; only a custom loader that issues READ SECTOR with the right sector number will succeed.
+- **Non-standard sector IDs.** Sectors are numbered, e.g., `#01, #02, #80, #81, #82, ...` instead of `1, 2, 3, 4, ...`. TR-DOS's READ SECTOR will fail to find them; only a custom loader that issues READ SECTOR with the right sector number will succeed.
 - **Extra-long tracks.** The disk is written with 11 or 12 sectors per track instead of the standard 10. TR-DOS 5.03's `*COPY` assumes 10 sectors per track and misses the extras.
 - **Cross-track sectors.** A single logical "sector" spans the gap between two physical tracks. The FDC's READ SECTOR command alone cannot read this; only a custom loader that issues READ TRACK and stitches the data together can.
 - **Spurious CRC errors.** The disk is written with intentional CRC errors in some sectors. The WD1793 normally rejects such sectors; the custom loader uses READ TRACK and accepts the bad-CRC data anyway.

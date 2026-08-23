@@ -158,7 +158,8 @@ Source: Black_Cat, BC Info Guide #4, 2008 ([original](https://github.com/tslabs/
 | `#BF77`/`#FF77` | | `xLxxxx110xx10111` | L=0 → Pal,PLLFC on | L\\K\\J = 0,1,1 |
 | `#FD77`/`#FF77` | (soft port #4177) | `x1xxxxK10xx10111` | K=0 → Shdw-on | L\\K\\J = 1,0,1 |
 | `#FE77`/`#FF77` | | `x1xxxx1J0xx10111` | J=0 → Pag-off, CP/M ROM > CPU 0-3 | L\\K\\J = 1,1,0 |
-| `#3FF7`–`#FFF7` | `BA11111111110111` | `BAxxxx111xx10111` | — | RAMPag(A) |
+| `#3FF7`–`#FFF7` | `BA11111111110111` | `BAxxxx111xx10111` | — | RAMPag(A) — window 0–3, type = D7:6 |
+| `#37F7`–`#F7F7` | `BA11011111110111` | `BAxxxx111xx10111` | — | RAMPag(A) — window 0–3, forced ATM RAM (pages 64–127) |
 | `#FEE7`/`#FFE7` | `1111111A11100111` | `xxxxxxxAxxx00111` | Reserved(A) | Reserved(A) |
 
 ### SMUC (Scorpion & MOA Universal Controller)
@@ -605,15 +606,21 @@ Port            Decoding                    WRITE effect
 
 #3FF7–#FFF7     BA11111111110111    RAMPag(A)
                 BAxxxx111xx10111    RAM-based paging (ATM Turbo)
+#37F7–#F7F7     BA11011111110111    RAMPag(A), forced ATM RAM type
+                                    (only route to RAM pages 64-127)
 ```
 
 **L / K / J bit positions** — these are specific address lines that the ATM's glue logic checks beyond the standard shadow port decode:
 
 | Bit | Address Line | Effect when 0 | Effect when 1 |
 |-----|-------------|---------------|---------------|
-| L | Specific high address line | Enable palette + PLL FDC | Normal operation |
-| K | Specific high address line | Enable shadow screen | Shadow off |
-| J | Specific high address line | Disable paging, CP/M ROM to CPU banks 0–3 | Normal paging |
+| L | A14 | Enable palette + PLL FDC | Normal operation |
+| K | A9 | Enable shadow screen | Shadow off |
+| J | A8 | Disable paging, CP/M ROM to CPU banks 0–3 | Normal paging |
+
+The pattern `%xLxxxxKJ 0nn10111` pins the positions (L = A14, K = A9, J = A8); a silicon-proven FPGA re-creation of the Turbo 2 personality confirms two of them as live side channels — A14 (L) arms the PEN2 palette unlock for shadow port `#FF`, and A9 (K) selects the CP/M persona that gates the TR-DOS exit.
+
+Two further ATM-family write ports: `#BF` (the "Savelij" TR-DOS latch — data bit 0 pins the DOS latch on) and, on modern NedoOS-convention machines, `#57`/`#77` for SD SPI data and configuration. See [atm_turbo.md](../02_hardware/clones/atm_turbo.md) for the full window-register and DOS-latch mechanics.
 
 > [!NOTE]
 > Shadow ports are **write-only**. Reading them returns undefined data. This is by design — they control hardware state that cannot be read back.

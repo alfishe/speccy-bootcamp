@@ -249,7 +249,7 @@ Key differences from the 128K and Pentagon:
 
 - **Turbo mode is standard** — unlike the Pentagon where 7 MHz requires aftermarket modification, every ATM Turbo has turbo built in from the factory
 - **Turbo 1**: physical front-panel "TURBO" button on the case
-- **Turbo 2+**: turbo is software-controlled via port writes, no physical button needed. The turbo state can be toggled at runtime
+- **Turbo 2+**: turbo is software-controlled — bit 3 of the `#FF77` system port — no physical button needed. The turbo state can be toggled at runtime
 - **At 7 MHz, memory access timing changes** — the CPU runs twice as fast but DRAM access speed remains the same. The ATM Turbo handles this by using the turbo mode only when the video circuit is not accessing RAM, or by using wait states for incompatible timing windows
 - **I/O timing at 7 MHz** — port accesses complete faster, which affects any software with cycle-counted I/O loops
 
@@ -333,6 +333,31 @@ ROM select     ROM2=0          ROM2=1          ROM2=0(!)       ROM2=1          R
 In CP/M "user" mode, the ATM Turbo maps **RAM page 0 at `#0000`–`#3FFF`** instead of ROM. This is essential for CP/M operation — CP/M needs writable low memory for its BIOS page zero vectors and BDOS entry points. This is a feature the Sinclair 128K and Pentagon do not have.
 
 The CP/M "system" mode keeps ROM at `#0000` for boot, then switches to user mode after CP/M initialization.
+
+### Window Registers — Flexible Paging Mechanism (Turbo 2)
+
+The "any page in any quarter" capability introduced with the Turbo 2 is implemented by eight **window registers** — two per 16 KB quarter. `#7FFD` bit 4 (the ZX ROM-select bit) chooses which set is active: the `_0` set while bit 4 = 0, the `_1` set while bit 4 = 1. The active register's type field then decides where each quarter's memory comes from:
+
+| Window register bits | Meaning |
+|---|---|
+| `[7:6]` = `01` | **ATM RAM window** — the quarter shows a RAM page selected by this register |
+| `[7:6]` = `1x` | **7FFD-compatible** — the quarter follows the ZX 128K map (see below) |
+| `[7:6]` = `00` | ROM window |
+| `[8]`, `[5:0]` | RAM page number, **inverted**: `page[6:0] = ~{w[8], w[5:0]}` |
+| `[9]` | Unused |
+
+In 7FFD-compatible mode (`1x`) the quarters fall back to ZX-128 semantics: window 0 shows ROM, window 1 is hard-wired to RAM page 5, window 2 to RAM page 2, and window 3 takes its page from `#7FFD` bits 0–2 (plus the Pentagon-1024-style extension bits 5–7 on machines so equipped). Only window 3 honors the `_0`/`_1` set switch; windows 1 and 2 ignore it.
+
+After reset every window register loads a "7FFD-on" value, so the MMU comes up **transparent** — a plain ZX 128K memory map. Flexible paging exists only after software deliberately programs the windows.
+
+Window registers are written through the `#xxF7` port family — see [the I/O reference below](#port-xxf7-family--window-register-writes) for the two write encodings. Three rules govern these writes:
+
+1. **Page numbers are written inverted** — `page[6:0] = ~{w[8], w[5:0]}`. Writing `#00` through the forced-encoding port selects page 127, not page 0. This is a hardware habit of the original ATM that real software depends on.
+2. **The register set written follows the same rule as the active set** — with `#7FFD` bit 4 = 0 the write lands in the `_0` register, with bit 4 = 1 in the `_1` register.
+3. **Writes are accepted only while TR-DOS is inactive** (DOS latch off). The DOS latch itself is the `#3Dxx` instruction-fetch trigger described in [beta_disk_interface.md](../../03_io/storage/beta_disk_interface.md); its ATM-specific exit gating and the "Savelij" lock are covered under [Port `#BF`](#port-bf--tr-dos-latch-savelij) below.
+
+> [!NOTE]
+> The register format and write encodings above are as implemented in a modern, silicon-proven FPGA re-creation of the Turbo 2 personality (the DE2-115 ZX project — see [Emulation & Modern Relevance](#emulation--modern-relevance)); the port family itself is recorded in Black_Cat's ZX Ports Full Table as `RAMPag(A)`.
 
 ---
 ## Video Modes — Detailed
@@ -596,6 +621,7 @@ The ATM Turbo uses a complex I/O port scheme that evolved significantly between 
 | `#FA` | N/A | N/A | **PROM programmer** | Same |
 | `#FDFD` | N/A | N/A | **512K memory extension** | Extended paging (2 bits) |
 | `#FF77` | N/A | N/A | N/A | **System: video mode, turbo, paging** |
+| `#xxF7` family | N/A | N/A | N/A | **Window register writes** (flexible paging) |
 | `#7DFD` | N/A | N/A | **Palette write / ADC data read** | Palette / ADC data |
 | `#FFE7` | N/A | N/A | N/A | XT keyboard controller (v6.40 only) |
 | `#EF` family | N/A | N/A | N/A | **IDE interface** (v6.40+) |
@@ -707,6 +733,9 @@ OUT (#7FFD), A — paging register:
 | Lock bit 5 | Bit 5 on some, bit 7 on others | Bit 7 | **Bit 5** — locks `#7FFD` for 48K mode |
 | Read back | Write-only | Write-only | **Readable** — returns status (IDE, ADC) |
 
+> [!NOTE]
+> Pentagon-1024-style 1024K machines co-opt `#7FFD` bit 5 as a page-number extension bit (the ZX lock meaning is suspended), with the real lock moved to `#EFF7` bit 2 — the Pentagon family's combined paging/video/turbo register (`PagVidTrbReg(D)` in Black_Cat's table). On such machines `#EFF7` also carries the 16-color video variant bit (bit 0) and a Pentagon-style turbo bit (bit 4). See [memory_and_io_pentagon.md](../../05_development/03_memory_and_io/memory_and_io_pentagon.md).
+
 #### Read (ATM Turbo 2+ only)
 
 ```
@@ -766,7 +795,7 @@ OUT (#FF77), A — system register:
     D0 (RG0) ─┐ Video mode select (see Video Modes section above)
     D1 (RG1) ─┤
     D2 (RG2) ─┘
-    D3:        RAM/ROM select for #0000-#3FFF (0 = ROM, 1 = RAM-0)
+    D3:        Turbo mode (1 = 7 MHz, 0 = 3.5 MHz)
     D4:        ROM page bit (0-3 main, 4-7 localized variants)
     D5:        Extended RAM page (for 1024K — selects above 512K)
     D6:        RAM/ROM banking mode (1 = ROM, 0 = RAM at #0000-#3FFF)
@@ -783,6 +812,38 @@ The `#FF77` port family has **multiple aliases** based on the L, K, J address bi
 | `#0177` / `#BF77` / `#FF77` | | 0 1 1 | Palette + PLL FDC on |
 | `#4177` / `#FD77` / `#FF77` | | 1 0 1 | Shadow screen on |
 | `#4277` / `#FE77` / `#FF77` | | 1 1 0 | Paging off + CP/M ROM mapping |
+
+Beyond the L/K/J aliasing, two address bits of an `#xx77` write act as side channels (in the pattern `%xLxxxxKJ 0nn10111`, L = A14, K = A9, J = A8):
+
+- **A14 (L)** arms the palette — PEN2 becomes active when A14 = 0, which is what lets the shadow port `#FF` accept palette data. The L=0 rows of the alias table are exactly the palette-on aliases.
+- **A9 (K)** selects the CP/M persona — the gate that lets the machine leave TR-DOS through an instruction fetch and re-enable the non-DOS ROMs (see [Port `#BF`](#port-bf--tr-dos-latch-savelij)).
+
+> [!NOTE]
+> The PEN2/CP/M side-channel assignments are documented from a silicon-proven FPGA re-creation of the Turbo 2 personality; the alias table itself is original ATM documentation.
+
+---
+
+### Port `#xxF7` Family — Window Register Writes
+
+The two write encodings for the window registers described in the [Memory Architecture section](#window-registers--flexible-paging-mechanism-turbo-2). Address bits 15:14 select the window; the low byte is `#F7`:
+
+| Ports (windows 3 → 0) | Register value written | Effective type |
+|---|---|---|
+| `#FFF7` / `#BFF7` / `#7FF7` / `#3FF7` | `{11, D7–D0}` — data bits 7:6 land in the type field | whatever `D7:D6` says (`01` = ATM RAM, `1x` = 7FFD-compatible) |
+| `#F7F7` / `#B7F7` / `#77F7` / `#37F7` | `{D7–D6, 01, D5–D0}` — type forced to `01` | ATM RAM window |
+
+Consequences of the two encodings:
+
+- In the first encoding the page is `~D5–D0`, so only pages 0–63 are reachable (bit 6 of the page number is forced to 0 by the `11` prefix).
+- In the second encoding the page is `~D6–D0`, so pages 0–127 are reachable — **this is the only route to RAM pages 64–127**. `D7` is unused (parked in register bit 9).
+- Writes are accepted only while TR-DOS is inactive, and the `_0`/`_1` register set written follows `#7FFD` bit 4.
+
+```z80
+; Map RAM page 7 into window 1 (#4000-#7FFF), active register set:
+    LD   A,#F8          ; ~%1111000 = %0000111 = page 7
+    LD   BC,#77F7       ; window 1, forced ATM RAM encoding
+    OUT  (C),A
+```
 
 ---
 
@@ -837,6 +898,26 @@ IN/OUT (#FA), A — PROM programmer interface:
 ```
 
 This port is unique to the ATM Turbo — no other ZX Spectrum clone has a built-in PROM programmer. It was intended for users to burn their own ROM chips with custom firmware or game cartridges.
+
+---
+
+### Port `#BF` — TR-DOS Latch ("Savelij")
+
+A narrow, write-only port that participates in the TR-DOS ROM switching described in [beta_disk_interface.md](../../03_io/storage/beta_disk_interface.md). On the ATM Turbo the DOS latch does not simply follow the `#3Dxx` fetch trigger — its **exit path is gated**:
+
+```
+TR-DOS activation:   opcode fetch from #3Dxx with #7FFD bit 4 set
+TR-DOS exit:         opcode fetch from #4000 or above, but only if
+                     exit-enabled = CP/M persona AND NOT Savelij-lock
+                       - Savelij lock = bit 0 written to port #BF (1 = DOS pinned on)
+                       - CP/M persona = address bit 9 of an #xx77 write
+                         (e.g. OUT (#377), A selects the persona)
+```
+
+While the Savelij bit is set, an opcode fetch from `#4000+` does **not** switch TR-DOS out — code can execute from RAM with the TR-DOS ROM still mapped. Selecting the CP/M persona through the `#xx77` address bit re-enables the non-DOS ROMs.
+
+> [!NOTE]
+> The exit gating and the "Savelij" nickname are documented from a silicon-proven FPGA re-creation of the Turbo 2 personality; the `#3Dxx` activation trigger itself is original Beta 128/ATM behavior common to most Soviet clones.
 
 ---
 
@@ -1017,9 +1098,9 @@ The Covox is an **8-bit digital-to-analog converter** connected to the printer p
 
 ```
 OUT (#FB), A — Covox DAC output (8-bit unsigned):
-  A = 0x00 → silence (0V)
-  A = 0x80 → midpoint
-  A = 0xFF → maximum output
+  A = #00 → silence (0V)
+  A = #80 → midpoint
+  A = #FF → maximum output
 ```
 
 | Feature | Pentagon 128K | ATM Turbo |
@@ -1090,6 +1171,19 @@ The IDE ports are documented in the [I/O Ports section](#ide-interface-ports-tur
 
 > [!NOTE]
 > The IDE interface was so advanced for its era that when CD-ROMs became widespread in the late 1990s, the ATM Turbo could play CD video — a remarkable feat for a ZX Spectrum derivative. The game *Time Gal* (2006) used CD video playback via this interface.
+
+### SD Card Storage — the `#57` Port Convention
+
+Original 1990s ATM Turbo hardware has no SD card support, but modern ATM-class machines and FPGA re-creations adopted a port convention from the NedoOS family for SPI-attached SD cards:
+
+```
+OUT (#57), A — SD data byte (parked; the SPI shift starts when /WR releases)
+IN  A,(#57) — returns the previously received byte and auto-triggers the
+              fetch of the next one (a read-pipelined stream)
+OUT (#xx77 family) — SD configuration (chip select etc.)
+```
+
+The two destinations are steered by the DOS-latch state and A15: a `#57` write feeds the SPI shifter while TR-DOS is active or A15 = 0; while TR-DOS is inactive and A15 = 1, a `#57` write lands in the configuration register instead, and `#xx77`-family writes feed the configuration register whenever TR-DOS is active. This is the convention NedoOS-family software uses on ATM-class machines — the reason NedoOS boots from SD on such hardware with no floppy disk at all. See [nedo_dos.md](../../04_operating_systems/nedo_dos.md) for the operating system itself.
 
 ---
 
@@ -1311,6 +1405,12 @@ The **ZX Evolution** (PentEvo, 2008+) is a modern FPGA-based computer that provi
 > [!NOTE]
 > FPGA emulators can recreate the ATM Turbo 2+ from a Pentagon base by changing approximately **200 lines of Verilog code**. The two architectures are closely related — the ATM Turbo extends the Pentagon's design with video modes, IDE, and flexible paging.
 
+### DE2-115 ZX — a Silicon-Proven Turbo 2 Re-Creation
+
+A second FPGA implementation worth knowing: the **DE2-115 ZX** project re-creates the Turbo 2 personality (blended with Pentagon-1024 extensions) on a Terasic DE2-115 board — Cyclone IV EP4CE115, 2 MB SRAM, TV80 CPU core (a Verilog descendant of the T80). It implements the full personality: the eight window registers with both `#xxF7` write encodings, the M1-triggered DOS latch with the Savelij exit gate, EGA/640-wide/hardware-text video modes, the 16-entry shadow palette, and NedoOS booting from SD through the `#57` port. Its engineering documentation is the source for the window-register format, the Savelij latch, and the `#xx77` address-bit side channels described in this article.
+
+Notably, the official **MiSTer** `ZX-Spectrum_MISTer` core — despite supporting Pentagon 1024K, Profi 1024K, turbo up to 56 MHz, ULA+ palettes, and Timex modes — has **no ATM Turbo model at all**: no window MMU, no `#xxF7` paging, no M1 DOS latch, none of the ATM video modes. As of the 2020s, ATM Turbo 2 hardware emulation exists only in ZX Evolution/PentEvo, in software emulators, and in standalone re-creations like the DE2-115 project.
+
 ### Impact on FPGA/Emulation
 
 Several implementation concerns for hardware reproduction:
@@ -1318,7 +1418,7 @@ Several implementation concerns for hardware reproduction:
 1. **Video mode switching** — the Turbo 1's address-bit encoding on `#FE` (A5/A6) is non-obvious and easy to get wrong. FPGA implementations must decode these address bits during writes to `#FE`.
 2. **Palette port overlap** — the palette ports on the Turbo 1 overlap with Beta 128 disk ports. Emulators must handle this priority correctly — disk operations take precedence.
 3. **Meander pixel pattern** — the `%RLRRRLLL` encoding for 320×200 mode requires careful implementation of the video address counter and pixel serializer.
-4. **Memory manager flexibility** — the Turbo 2+'s ability to map any page into any quarter is more complex than the 128K/Pentagon's fixed-bank-at-`#4000`/`#8000` scheme. FPGA implementations need a 4-entry page table for the four 16K windows.
+4. **Memory manager flexibility** — the Turbo 2's ability to map any page into any quarter is more complex than the 128K/Pentagon's fixed-bank-at-`#4000`/`#8000` scheme. FPGA implementations need **eight window registers** — two sets of four, selected by `#7FFD` bit 4 — plus the type and inverted-page rules of the [Window Registers](#window-registers--flexible-paging-mechanism-turbo-2) mechanism, not a simple 4-entry page table.
 5. **`#7FFD` readability** — the ATM Turbo returns status from `#7FFD` reads, unlike the 128K/Pentagon. Emulators must implement this read path.
 6. **IDE timing** — the 8-bit/16-bit data access via A8 toggling requires precise bus timing simulation.
 
@@ -1350,6 +1450,7 @@ Several implementation concerns for hardware reproduction:
 - **ATM Turbo description (Russian)** — [atmturbo.nedopc.com/atmdscr.htm](http://atmturbo.nedopc.com/atmdscr.htm) — Original hardware specification document (MicroART/NedoPC)
 - **Black_Cat's ZX Ports Full Table** — BC Info Guide #4, 2008, preserved in [tslabs/zx-evo repository](https://github.com/tslabs/zx-evo/blob/master/pentevo/docs/ZX/zx-ports-full-table.txt)
 - **ZX Evolution user manual** — [nedopc.com/zxevo](http://nedopc.com/zxevo/zxevo_user_manual_revc_eng.pdf) — FPGA-based ATM Turbo 2+ successor
+- **DE2-115 ZX project documentation** — silicon-proven FPGA re-creation of the ATM Turbo 2 personality (TV80-based, Cyclone IV); source for the window-register format, the Savelij latch, and the `#xx77` address-bit side channels
 - **List of ZX Spectrum clones** — [en.wikipedia.org](https://en.wikipedia.org/wiki/List_of_ZX_Spectrum_clones)
 - **Demoozoo ATM Turbo tag** — [demozoo.org](https://demozoo.org/productions/tagged/atm-turbo/) — Software catalog
 - **Alone Coder software list** — [alonecoder.nedopc.com](http://alonecoder.nedopc.com/atmsoft.txt) — ~300 ATM Turbo titles cataloged
