@@ -14,7 +14,7 @@ This directory covers Soviet ZX Spectrum clones: Pentagon, Scorpion, Kay, ATM Tu
 | 2 | [clone_timing.md](clone_timing.md) | Clone video timing — Pentagon, Scorpion, Kay, ATM Turbo, FPGA implementations, detection techniques |
 | 3 | [clone_joysticks.md](clone_joysticks.md) | Clone joysticks: built-in Kempston on Pentagon/Scorpion/ATM, Beta 128 coexistence, two-player conventions, single-standard software culture |
 | 4 | [atm_turbo.md](atm_turbo.md) | ATM Turbo: CP/M mode, 7 MHz turbo, 4 video modes (320×200 16-color, 640×200, 80×25 text), IDE controller, flexible memory paging, 64-color RGBI palette |
-| 5 | [scorpion.md](scorpion.md) | Scorpion ZS-256: Serge Zonov / Leningrad lineage, true 48K timing (69,888 T-states), Shadow Service Monitor, port #1FFD turbo+extended paging, #FF floating bus (correct), SMUC ISA bridge, GMX 2 MB / 640×200×16, ProfROM |
+| 5 | [scorpion.md](scorpion.md) | Scorpion ZS-256: Serge Zonov / Leningrad lineage, true 48K timing (69,888 T-states), Shadow Service Monitor, port #1FFD turbo+extended paging, #FF floating bus (correct), SMUC ISA bridge, GMX 2 MB / 640×200×16, ProfROM read-triggered plane switching, Turbo+ GAL fuse maps decoded (turbo/profrom/fapch.jed) |
 | 6 | [pentagon_1024.md](pentagon_1024.md) | Pentagon 1024: EFF7 extended paging (74HC688 full decode, 64 banks), 1024SL integrated variant, port #77 turbo/SVGA/PS-2, detection routine |
 | 7 | [kay.md](kay.md) | Kay 1024: Nemo 60-pin bus with digital RGB, #DFFD extended paging, 8-bit IDE controller (#A0-#B7), Kay 2006 NB CPLD video modes (GigaScreen, multicolor, 512×192) |
 | 8 | [profi.md](profi.md) | Profi 5.03/1024: #DFFD multi-function register (banking + turbo + VGA + ROM bank), ISA bus, VGA output, paper-offset quirk (T=12,580 vs 14,335) |

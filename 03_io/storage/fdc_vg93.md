@@ -19,13 +19,13 @@ The WD179x series was introduced by **Western Digital Corporation** in 1977 as t
 - **MFM support** in addition to FM (the FD1771 was FM-only).
 - **Double-density recording** at up to 500 kbit/s (the FD1771 was limited to single-density FM).
 - **Simplified host interface** with a smaller register file.
-- **Built-in write precompensation** and PLL data separator (the FD1771 required external circuitry).
+- **Built-in write precompensation** (the FD1771 required external circuitry for this). The data separator, however, stays external in the whole WD179x family — the chip expects a phase-locked `RCLK` alongside `RAW READ`.
 
-The WD179x series consists of several variants. The key differences are in **data-bus polarity** (true vs inverted) and **density support** (FM+MFM vs FM-only). All members with the same density support share the same data separator (internal monolithic PLL on the -3/-4/-5/-7, identical to the -1/-2 except for the bus polarity):
+The WD179x series consists of several variants. The key differences are in **data-bus polarity** (true vs inverted) and **density support** (FM+MFM vs FM-only). The family does **not** integrate a data separator: every 179x board carries external separator circuitry that generates the phase-locked `RCLK`:
 
 | Part | Data bus | Density | Used in |
 |------|----------|---------|---------|
-| **WD1791** | Inverted (`/DAL`) | FM + MFM | Rare; requires external data separator on some boards. |
+| **WD1791** | Inverted (`/DAL`) | FM + MFM | Rare; like the rest of the family, requires an external data separator. |
 | **WD1792** | Inverted (`/DAL`) | FM only (single density) | Rare; FD1771-compatible. |
 | **WD1793** | **True (non-inverted DAL)** | FM + MFM | **The standard for Spectrum floppy systems.** |
 | **WD1794** | True | FM only (single density) | Not used on Spectrum. |
@@ -33,7 +33,7 @@ The WD179x series consists of several variants. The key differences are in **dat
 
 Per the WD1793 datasheet (reproduced on MSX Info Pages): "The 1793 is identical to the 1791 except the Data Access Lines are TRUE (for systems that utilize true data buses). The 1792 and 1794 are 'single density only' versions of the 1791 and 1793 respectively. The 1795/7 has a side select output for controlling double sided drives."
 
-The WD1793 is the variant used in the Spectrum ecosystem because it has an internal PLL (no external data separator required) and supports both FM and MFM. The Beta Disk Interface, the original TR-DOS cartridge, the Kay interface, the Scorpion interface, the Pentagon's onboard FDC, and many Soviet clones all use the WD1793 (or its KR1818VG93 clone).
+The WD1793 is the variant used in the Spectrum ecosystem because of its **true (non-inverted) data bus** and **FM + MFM support** — the Beta Disk Interface, the original TR-DOS cartridge, the Kay interface, the Scorpion interface, the Pentagon's onboard FDC, and many Soviet clones all use the WD1793 (or its KR1818VG93 clone). Like every WD179x it has no on-chip data separator: the board must supply a phase-locked `RCLK` (pin 26) alongside `RAW READ` (pin 27). The original Beta Disk Interface used a VCO-based separator around a 74LS124; the Scorpion ZS-256 Turbo+ replaced that with an all-digital PLL in a GAL16V8 — see [scorpion.md — The Digital PLL Data Separator](../../02_hardware/clones/scorpion.md).
 
 A closely related chip, the **WD1772**, is used in the Amstrad +2A/+3 internal floppy controller. The WD1772 is functionally similar to the WD1793 but integrates additional logic for the +3's specific bus interface. It is described briefly in §10.
 
@@ -90,73 +90,80 @@ These functions are provided by the surrounding interface circuitry, which diffe
 
 ## §2. Pinout and Hardware Interface
 
-The WD1793 is a 40-pin DIP (Dual Inline Package) chip. This section covers its pinout and how it connects to the host and drive.
+The WD1793 is a 40-pin DIP (Dual Inline Package) chip. This section covers its pinout and how it connects to the host and drive. On Spectrum-era Soviet hardware the chip is almost always the second source КР1818ВГ93 — a *functional*, **not** pin-compatible, equivalent of the FD1793 — so the diagram and tables below document the КР1818ВГ93 pin assignment, taken from its official datasheet and cross-checked pin-for-pin against the decoded Scorpion ZS-256 Turbo+ schematic. Where the Western WD1793 differs, the text says so.
 
 ### 2.1 Pinout
 
 ```
-                  +-----+--+-----+
-        RESET --->|1  +-+--+   40|<--- VCC (+5V)
-          RTN --->|2           39|<--- /WE
-          /MR --->|3           38|<--- /RE
-         /ENP --->|4   WD1793  37|<--- A0
-         /IW --->|5            36|<--- A1
-          /CS --->|6           35|<--- /DAL7
-          INTRQ ->|7           34|<-> DAL6
-       /CLK488 -->|8           33|<-> DAL5
-          DIR --->|9           32|<-> DAL4
-          STEP -->|10          31|<-> DAL3
-        /WDATA -->|11          30|<-> DAL2
-         /WGATE -->|12         29|<-> DAL1
-       /TRK00 <---|13          28|<-> DAL0
-         /IP <----|14          27|---> /MR
-         WPRT <---|15          26|---> /ENP
-         /DD <----|16          25|---> RCLK
-         /DS0 --->|17          24|---> VFOC
-         /DS1 --->|18          23|---> TG43
-         HLD --->|19           22|---> READY
-         HLT <---|20           21|---> GND
-                 +---------------+
+              +-----------------+
+        BS    | 1             40 |      +12 V (Ucc2)
+       /WR --->| 2             39 |---> INTRQ
+       /CS --->| 3             38 |---> DRQ
+       /RD --->| 4             37 |<--- /DDEN
+        A0 --->| 5             36 |<--- /WPRT
+        A1 --->| 6             35 |<--- /IP
+       DB0 <-->| 7             34 |<--- /TR00
+       DB1 <-->| 8             33 |<--> WF/DE
+       DB2 <-->| 9             32 |<--- CPRDY
+       DB3 <-->|10  КР1818ВГ93  31 |---> WD
+       DB4 <-->|11   (FD1793)   30 |---> /WSTB
+       DB5 <-->|12             29 |---> TR43
+       DB6 <-->|13             28 |---> HLD
+       DB7 <-->|14             27 |<--- /RAWR
+      STEP <---|15             26 |<--- S (RCLK)
+      DIRC <---|16             25 |---> /RSTB
+        SL <---|17             24 |<--- CLC
+        SR <---|18             23 |<--- HRDY
+       /CLR --->|19             22 |<--- TEST
+       GND    |20             21 |      +5 V (Ucc1)
+              +-----------------+
 ```
 
-(Schematic representation. Pin assignments may vary slightly between manufacturers; the above is the canonical WD1793 layout.)
+(КР1818ВГ93 pin assignment per its official datasheet — identical to the DD60 position on the decoded Scorpion ZS-256 Turbo+ schematic. Arrows show signal direction relative to the chip: an arrow pointing at the chip is an input, pointing away is an output, `<-->` is bidirectional. The Soviet part is a *functional* equivalent of the FD1793, so for Western WD1793 pin numbers consult the WD179X-02 datasheet; its data-separator inputs do land on the same two pins — `RCLK` = 26 (`S`) and `RAW READ` = 27 (`/RAWR`) — which is why the Scorpion PLL documentation and the Western datasheet agree on those numbers. Two КР1818ВГ93 specifics worth noting: `DRQ` and `INTRQ` require 10 kΩ pull-ups to +5 V, and the chip takes both +5 V (pin 21) and +12 V (pin 40).)
 
 ### 2.2 Host interface signals
 
-The WD1793 connects to the host via these signals:
+The controller connects to the host via these signals (КР1818ВГ93 pin numbers):
 
 | Pin(s) | Signal | Direction | Purpose |
 |--------|--------|-----------|---------|
-| 26–33 | DAL0–DAL7 | bidirectional | 8-bit data/address bus. Used to read/write registers. |
-| 35, 36 | A0, A1 | input | Register select. Together with /RE and /WE, selects which register is accessed. |
-| 36 (note) | /CS | input | Chip select. The FDC responds only when /CS is asserted. |
-| 38 | /WE | input | Write enable. When asserted with /CS, the FDC latches data from DAL into the selected register. |
-| 37 | /RE | input | Read enable. When asserted with /CS, the FDC drives the selected register onto DAL. |
-| 7 | INTRQ | output | Interrupt request. Asserted when a command completes (or when a forced interrupt is triggered). |
-| 1 | /RESET | input | Reset. When asserted, the FDC enters the idle state and clears its internal logic. |
-| 3 | /MR | input | Master reset (alternate function on some variants). |
+| 2 | /WR | input | Write enable. With /CS low, latches the selected register from DB0–DB7. |
+| 3 | /CS | input | Chip select. The FDC responds only while /CS is asserted. |
+| 4 | /RD | input | Read enable. With /CS low, drives the selected register onto DB0–DB7. |
+| 5, 6 | A0, A1 | input | Register select — see the select matrix in §3.2. |
+| 7–14 | DB0–DB7 | bidirectional | 8-bit data bus, shared by all five registers. |
+| 19 | /CLR | input | Master reset (named /MR on the Western part). Behavior detailed in §8.7. |
+| 22 | TEST | input | Test mode — a high level makes the chip emit STEP pulses at an increased rate; production testing only, never asserted in a working system. |
+| 24 | CLC | input | Master clock: 1 MHz ±1% for 133 mm (5.25-inch) media, 2 MHz for 203 mm (8-inch) media — see §2.5. |
+| 38 | DRQ | output | Data request. Needs a 10 kΩ pull-up to +5 V. |
+| 39 | INTRQ | output | Interrupt request. Asserted when a command completes (or when a forced-interrupt condition fires); needs a 10 kΩ pull-up to +5 V. |
+| 1, 20, 21, 40 | BS, GND, Ucc1, Ucc2 | power | Pin 1 (BS) is a substrate-bias monitor and is left unconnected; supplies are +5 V (21), +12 V (40), ground (20). |
 
 ### 2.3 Drive interface signals
 
-The WD1793 connects to the floppy drive via these signals:
+The controller connects to the floppy drive via these signals (КР1818ВГ93 pin numbers; Western names in brackets where they differ):
 
 | Pin | Signal | Direction | Purpose |
 |-----|--------|-----------|---------|
-| 9 | DIR | output | Direction for the next STEP pulse. 0 = inward (toward higher tracks), 1 = outward (toward track 0). |
-| 10 | STEP | output | Step pulse. One pulse moves the head one track in the direction set by DIR. |
-| 13 | /TRK00 | input | Track 0 sensor. Asserted by the drive when the head is at track 0. |
-| 14 | /IP | input | Index pulse. Asserted by the drive once per revolution (when the index hole passes the sensor). |
-| 15 | WPRT | input | Write protect. Asserted by the drive when the disk is write-protected. |
-| 16 | /DD | input | Double density select. 0 = MFM (double density), 1 = FM (single density). |
-| 24 | RCLK | output | Raw read clock. The PLL's recovered clock signal. (Sometimes used as an output to external PLL circuitry.) |
-| 11 | /WDATA | output | Write data. The MFM-encoded bit stream to be written. |
-| 12 | /WGATE | output | Write gate. Asserted when the FDC is actively writing. |
-| 22 | READY | input | Drive ready. Asserted by the drive when a disk is inserted and the motor is up to speed. |
-| 23 | TG43 | output | Track greater than 43. Asserted when the head is on a track > 43, indicating that write current reduction should be applied. |
-| 25 | VFOC | output | VFO control. A signal for external PLL circuitry (not used in the WD1793's internal PLL). |
-| 17, 18 | /DS0, /DS1 | output | Drive select. Indicates which of up to 4 drives is selected (in combination with /DS0 and /DS1). |
-| 19 | HLD | output | Head load. Asserted to engage the read/write head against the disk. |
-| 20 | HLT | input | Head load timing. Asserted by the drive when the head is fully loaded. |
+| 15 | STEP | output | Step pulse. One pulse moves the head one track in the direction set by DIRC. |
+| 16 | DIRC | output | Direction for the next STEP pulse: high = toward the disk centre (higher tracks), low = outward (toward track 0). |
+| 34 | /TR00 | input | Track 0 sensor. Asserted by the drive when the head is at track 0. |
+| 35 | /IP | input | Index pulse. Asserted by the drive once per revolution (when the index hole passes the sensor). |
+| 36 | /WPRT | input | Write protect. Asserted by the drive when the disk is write-protected. |
+| 37 | /DDEN | input | Density select. 0 = MFM (double density), 1 = FM (single density). |
+| 26 | S [RCLK] | input | Read clock — the data separator's recovered slot clock (500 kHz for 250 kbit/s MFM). Must be phase-locked to RAW READ; per the WD179X-02 datasheet, "Phasing (i.e. RCLK transitions) relative to RAW READ is important but polarity is not." |
+| 27 | /RAWR [RAW READ] | input | Raw read data — one narrow active-low pulse per flux transition from the drive's read amplifier. |
+| 31 | WD [/WDATA] | output | Write data. The MFM-encoded bit stream to be written; pulse width 500 ns (FM) / 300 ns (MFM) at CLC = 2 MHz per the datasheet. |
+| 30 | /WSTB [/WGATE] | output | Write gate. Asserted when the FDC is actively writing. |
+| 32 | CPRDY [READY] | input | Drive ready. Type II/III commands do not execute while it is low (INTRQ fires instead); the inverted level feeds Status bit 7. |
+| 29 | TR43 [TG43] | output | Track greater than 43. Asserted during Read/Write commands when the head is on tracks 44–76, indicating that write current reduction should be applied. |
+| 33 | WF/DE | bidirectional | Write-fault / data-enable. While /WSTB = 1 it is the WF input — a low level aborts any write command immediately. While /WSTB = 0 it is the DE output — goes low during reads once the head is loaded. Needs a 10 kΩ pull-up to +5 V. |
+| 25 | /RSTB | output | Read strobe for the external read path: goes high after two zero bytes (FM) or four zero/one bytes (MFM) have been received — used to qualify the external data separator. |
+| 28 | HLD | output | Head load. Asserted to engage the read/write head against the disk. |
+| 23 | HRDY [HLT] | input | Head-load timing. Asserted by the drive when the head is settled; Status bit 5 reports HLD **and** HRDY. |
+| 17, 18 | SL, SR | output | Write-precompensation hints: SL = shift the current WD pulse earlier, SR = later. |
+
+There are no drive-select outputs — selecting between drives is the interface logic's job (on the Beta Disk Interface it is the port `#FF` latch; see [beta_disk_interface.md](beta_disk_interface.md) §3). The 179x design never included DS pins.
 
 ### 2.4 The Shugart bus
 
@@ -166,9 +173,7 @@ The WD1793's drive signals are buffered through open-collector drivers on the in
 
 ### 2.5 The clock input
 
-The WD1793 requires an external **clock** signal, typically at **8 MHz** (for 4" and 5.25" drives) or **16 MHz** (for 3.5" drives at 500 kbit/s). The internal logic divides this clock down to produce the various timing signals used by the FDC (the 250 kHz data rate, the 500 kHz PLL frequency, the step rate, etc.).
-
-Some WD1793 variants (and most KR1818VG93 clones) have a built-in clock oscillator, but the original WD1793 requires an external clock.
+The controller has no on-chip oscillator: CLC (pin 24) must be driven with an external square-wave clock of **1 MHz ±1%** for 133 mm (5.25-inch) media or **2 MHz ±1%** for 203 mm (8-inch) media, per the КР1818ВГ93 datasheet — the Western WD179X-02 specifies the same two rates. Every internal timing scales directly from CLC: the 250/500 kbit/s data rate, the 6/12/20/30 ms step rates, and the byte-transfer windows. This is what the "clock-doubling" turbo mod of §9.1 exploits, and why the Scorpion ZS-256 Turbo+ derives the ВГ93's 1 MHz clock on-board, independent of the CPU turbo mode (see [scorpion.md](../../02_hardware/clones/scorpion.md)).
 
 ---
 
@@ -205,8 +210,8 @@ This means the WD1793 occupies **four I/O port addresses** in the host's I/O spa
 
 A register read or write is a single I/O cycle:
 
-- **Read**: The host asserts /CS, A0, A1, and /RE. After a short access time (typically 350 ns on the WD1793), the FDC drives the selected register's contents onto DAL0–DAL7. The host reads the byte and deasserts /CS and /RE.
-- **Write**: The host asserts /CS, A0, A1, drives the byte onto DAL0–DAL7, and asserts /WE. The FDC latches the byte into the selected register on the rising edge of /WE (or /CS — the exact edge differs between WD1793 variants).
+- **Read**: The host asserts /CS, A0, A1, and /RE. After a short access time (typically 350 ns on the WD1793), the FDC drives the selected register's contents onto DB0–DB7. The host reads the byte and deasserts /CS and /RE.
+- **Write**: The host asserts /CS, A0, A1, drives the byte onto DB0–DB7, and asserts /WE. The FDC latches the byte into the selected register on the rising edge of /WE (or /CS — the exact edge differs between WD1793 variants).
 
 These are standard Z80 I/O cycles. From the Z80's perspective, accessing the FDC is the same as accessing any other I/O device: an `IN A,(#1F)` reads the Status register; an `OUT (#1F),A` writes the Command register.
 
@@ -865,20 +870,20 @@ The KR1818VG93 is the part most commonly encountered on Soviet Spectrum clones (
 
 ### 7.2 Physical differences
 
-The KR1818VG93 is a 40-pin DIP, identical in pinout to the WD1793. There are a few physical differences:
+The KR1818VG93 is a 40-pin DIP in the same package form factor, but it is a *functional* second source of the FD1793, not a certified pin-alike: its own datasheet defines the full 40-pin assignment reproduced in §2.1, with +5 V/+12 V supplies and a TEST pin among the Soviet part's specifics. Beyond that there are a few physical differences:
 
 - **Package material**: WD1793 is plastic DIP; KR1818VG93 is typically ceramic DIP (more robust, but more expensive to produce).
 - **Marking**: Soviet chips use Cyrillic markings (КР1818ВГ93) and a date code in the format "WW YY" (week and year). The plant logo (Angstrem's stylised "A") is also present.
 - **Operating temperature range**: KR1818VG93 is rated for the military-grade temperature range (−40°C to +85°C), reflecting its origins in Soviet military-industrial production. The WD1793 consumer part is rated 0°C to +70°C.
 
-These physical differences do not affect the chip's behavior in a Spectrum clone. The KR1818VG93 is a drop-in replacement for the WD1793 in any Spectrum floppy interface.
+These differences do not affect the chip's behavior in a Spectrum clone. Soviet boards are laid out to the KR1818VG93 pin table of §2.1, and the usual socket substitute is the Fujitsu MB8877 (see [beta_disk_interface.md](beta_disk_interface.md) §7.7).
 
 ### 7.3 Functional differences
 
 The KR1818VG93 was reverse-engineered from the WD1793-02 die mask, so its behavior matches the WD1793-02 for all documented features. The differences observed on real hardware are in undocumented behavior and analog characteristics, not in the documented command set:
 
 - **Step rate accuracy**: The KR1818VG93's step rate generator is less precise than the WD1793's. The 6 ms setting is typically 6.0 ms on the WD1793 but can be 6.2–6.5 ms on the KR1818VG93. This is rarely a problem because most drives tolerate ±10% step rate variation.
-- **PLL lock time**: The internal PLL on the KR1818VG93 takes slightly longer to lock to the MFM bit clock than the WD1793's PLL. On marginal disks (with weak signals or off-speed motors), the KR1818VG93 may produce more read errors.
+- **Read margins**: neither chip contains a data separator (see §9.2), so read reliability on marginal disks is decided by the board's external separator design — e.g. the Scorpion Turbo+'s digital PLL versus the Beta Disk cartridge's 74LS124 VCO — rather than by which controller mask is fitted.
 - **NOT READY bit latency**: Status bit 7 (NOT READY) is documented as a combinational copy of the inverted `/READY` input. On some KR1818VG93 lots, the bit's response to a `/READY` transition can be delayed by a few hundred nanoseconds relative to the WD1793-02. This is invisible to polling software but matters for cycle-exact emulator implementation.
 
 None of these differences cause incompatibility with normal software. They become relevant only when emulating the FDC precisely (e.g., for cycle-exact emulator implementation) or when running software that depends on specific undocumented timing.
@@ -925,15 +930,14 @@ This is rarely a problem in practice (the host usually reads the Status register
 
 ### 8.4 Multiple-step rates from a single bit combination
 
-The official step rates are 6, 12, 20, and 30 ms (for bit combinations 00, 01, 10, 11). However, the actual step rate depends on the FDC's master clock frequency. On interfaces that clock the FDC at a non-standard rate (e.g., 7 MHz instead of 8 MHz), the step rates scale proportionally:
+The official step rates are 6, 12, 20, and 30 ms (for bit combinations 00, 01, 10, 11) — quoted for the standard 1 MHz clock. The actual step rate depends on the FDC's master clock frequency: on boards that clock the FDC at a non-standard rate, the step rates scale proportionally:
 
 | Clock | Step rate for `00` | Step rate for `01` |
 |-------|---------------------|---------------------|
-| 8 MHz (standard) | 6 ms | 12 ms |
-| 7 MHz | ~6.86 ms | ~13.7 ms |
-| 16 MHz | 3 ms | 6 ms |
+| 1 MHz (standard) | 6 ms | 12 ms |
+| 2 MHz | 3 ms | 6 ms |
 
-The 16 MHz case is the basis of the "turbo" floppy modification (see §9): by clocking the FDC faster, both the data rate and the step rate double, halving access time.
+The 2 MHz case is the basis of the "turbo" floppy modification (see §9): by clocking the FDC faster, both the data rate and the step rate double, halving access time.
 
 ### 8.5 The READ TRACK byte count
 
@@ -950,27 +954,26 @@ Type III commands also assert DRQ, but the timing differs from Type II. During W
 
 During READ TRACK, DRQ is similarly continuous, but the FDC will silently skip bytes if the host doesn't read fast enough (no LOST DATA error is flagged for Type III reads on some variants — the FDC just keeps streaming).
 
-### 8.7 The /MR (Master Reset) pin behavior
+### 8.7 The /CLR (Master Reset) pin behavior
 
-The /MR pin (pin 3, also called /MR or "Master Reset" on some variants) is documented as a hardware reset. But the actual behavior depends on the variant:
+On the КР1818ВГ93 the reset input is **/CLR, pin 19** (named /MR on the Western WD179X). Per the Soviet datasheet the behavior is fully specified:
 
-- **WD1793 original**: /MR resets the FDC's internal logic but does NOT clear the Track, Sector, or Data registers.
-- **WD1793-02**: /MR clears all registers and restores the chip to a known state.
-- **KR1818VG93**: /MR behaves like the WD1793-02 (clears all registers).
+- While /CLR is low, Status bit 7 reports not-ready.
+- On release, the chip loads `0000.0011` into the Command register (a RESTORE with default flags) and `0000.0001` into the Sector register, then executes that RESTORE regardless of drive readiness — the Track register ends up re-zeroed via the /TR00 search.
 
-Software that uses /MR must account for this: on the original WD1793, the Track register retains its value across /MR, so the host must issue a RESTORE after reset. On the -02 and KR1818VG93, the Track register is undefined and must be initialised.
+Software should still treat the chip as "position unknown" after any reset: issue RESTORE (or an explicit SEEK) to each drive before relying on the Track register, and re-initialise the Sector register if it matters.
 
 ---
 
 ## §9. Turbo Mods and Speed Improvements
 
-The standard WD1793 setup on the Spectrum (8 MHz clock, 250 kbit/s MFM, single-density sectors) is reliable but slow. A standard TR-DOS disk holds about 80 KB of data per side and takes about 4 seconds to load fully. As the Spectrum clone scene matured in the 1990s, various "turbo" modifications emerged to push the FDC faster.
+The standard WD1793/ВГ93 setup on the Spectrum (1 MHz FDC clock, 250 kbit/s MFM) is reliable but slow. A standard TR-DOS disk holds about 80 KB of data per side and takes about 4 seconds to load fully. As the Spectrum clone scene matured in the 1990s, various "turbo" modifications emerged to push the FDC faster.
 
 ### 9.1 The clock-doubling mod
 
-The simplest and most common turbo mod is to **double the FDC's master clock** from 8 MHz to 16 MHz. As described in §8.4, this halves the step rate and doubles the data rate:
+The simplest and most common turbo mod is to **double the FDC's master clock** from 1 MHz to 2 MHz. As described in §8.4, this halves the step rate and doubles the data rate:
 
-| Parameter | 8 MHz clock (standard) | 16 MHz clock (turbo) |
+| Parameter | 1 MHz clock (standard) | 2 MHz clock (turbo) |
 |-----------|------------------------|----------------------|
 | Data rate | 250 kbit/s MFM | 500 kbit/s MFM |
 | Bit cell | 4 µs | 2 µs |
@@ -978,17 +981,19 @@ The simplest and most common turbo mod is to **double the FDC's master clock** f
 | Step rate (00) | 6 ms | 3 ms |
 | Bytes per track | ~6250 | ~12500 |
 
-A 16 MHz clock lets the FDC read and write at "high density" (HD) rates — the same rate used by PC 5.25" HD and 3.5" HD floppies. With HD-capable disks and drives, a Spectrum can store ~160 KB per side (twice the standard density).
+A 2 MHz clock lets the FDC read and write at "high density" (HD) rates — the same rate used by PC 5.25" HD and 3.5" HD floppies. With HD-capable disks and drives, a Spectrum can store ~160 KB per side (twice the standard density).
 
-The mod is purely a hardware change: replace the 8 MHz crystal on the FDC interface with a 16 MHz crystal. No software change is required for the FDC itself, though software that depends on specific timing (e.g., copy protection) will need updates. Most modern TR-DOS versions (e.g., TR-DOS 6.10+ for the Pentagon) detect the clock speed automatically and adjust their timing loops accordingly.
+The mod is purely a hardware change: feed the FDC's CLC input 2 MHz instead of 1 MHz — a crystal swap on interfaces with their own FDC crystal, a different clock tap where the board derives it. No software change is required for the FDC itself, though software that depends on specific timing (e.g., copy protection) will need updates. Most modern TR-DOS versions (e.g., TR-DOS 6.10+ for the Pentagon) detect the clock speed automatically and adjust their timing loops accordingly.
 
 The downside: HD floppies are physically different from DD floppies (different magnetic coating, different coercivity). Writing HD data to a DD floppy produces unreliable results. The mod requires HD disks (marked "2D" or "HD") and an HD drive.
 
-### 9.2 The custom PLL mod
+### 9.2 The external data-separator PLL
 
-The WD1793's internal PLL is adequate for standard MFM at 250 kbit/s but limits performance at higher densities. Some clone manufacturers (notably Scorpion with the Scorpion ZS 256 Turbo) replaced the WD1793's internal PLL with an external, higher-performance PLL connected to a WD1791 (which has no internal PLL).
+Feeding `RCLK` from a fixed crystal divider does not work: with a 1 % spindle-speed error the pulse train slips a full 2 µs slot against the fixed window roughly every 100 slots, and peak shift alone pushes pulses across window boundaries. Every 179x design therefore carries *some* form of data separator between the drive and the controller — the original Beta Disk Interface used a free-running VCO around a 74LS124, and later clones moved to digital phase-locked loops.
 
-The external PLL can lock to weaker signals and tolerate more motor speed variation, allowing reliable reads of marginal disks. The downside is complexity: the external PLL is several extra chips, and the WD1791 has slightly different register behavior than the WD1793 (the side-select bit is in a different place, for example).
+The most thoroughly documented example is the **Scorpion ZS-256 Turbo+**: it keeps the КР1818ВГ93 (WD1793 clone, DD60) and adds an all-digital PLL — a GAL16V8 (`fapch.jed`, DD59) holding the next-state logic of a 16-state phase counter, and a К1533ТМ9 register stepping it at 8 MHz (125 ns phase resolution). The counter free-runs 16 steps per MFM slot; each data pulse nudges it by −2…+3 steps depending on the phase error, so slow spindle drift is tracked within a few pulses while peak-shift jitter is averaged out instead of being copied into the window. The recovered clock feeds the controller's `RCLK` (pin 26), and the re-registered pulse feeds `RAW READ` (pin 27) through identical pipeline delay.
+
+The decoded fuse map, equations and the full state table are in [scorpion.md — The Digital PLL Data Separator](../../02_hardware/clones/scorpion.md). The approach generalizes: any design that can spare a small GAL or CPLD gets a separator that needs no trimming (unlike the analogue VCO circuits) and no rare parts.
 
 ### 9.3 Software turbo loaders
 
@@ -1009,7 +1014,7 @@ For modern Spectrum hardware (ZX Evolution, ZX Next, Karabas, etc.), the origina
 - **Microcontroller-based FDC**: a small microcontroller (AVR, STM32) emulates the WD1793's register interface and handles the floppy drive via GPIO. This approach is used by some modern floppy emulators (e.g., HxC, Gotek with FlashFloppy firmware).
 - **Cycle-exact WD1793 emulator in software**: for FPGA-based Spectrum clones (Next, Uno, Evolution), the FDC is just a piece of HDL running on the same FPGA as the Z80 core. This allows perfect WD1793 emulation with the option of "turbo" modes that don't correspond to any real hardware.
 
-The ZX Spectrum Next, for example, implements a cycle-exact WD1793 model in its FPGA, with an optional "turbo" mode that doubles the data rate (effectively the 16 MHz mod). Software can detect this mode via a NextReg port and enable it for faster disk access.
+The ZX Spectrum Next, for example, implements a cycle-exact WD1793 model in its FPGA, with an optional "turbo" mode that doubles the data rate (effectively the doubled-clock mod of §9.1). Software can detect this mode via a NextReg port and enable it for faster disk access.
 
 ### 9.5 The Nemo IDE / SMUC alternative
 

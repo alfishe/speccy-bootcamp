@@ -49,7 +49,7 @@ MFM is also **not** specific to floppy disk. It was used on early hard disks (ST
 
 MFM matters because:
 
-- **It is what the FDC chip does**. The [WD1793 / KR1818VG93](fdc_vg93.md) takes a byte from the data bus and serialises it into an MFM bit stream on the write-data pin. Reading is the reverse: the raw read-data pin carries an MFM bit stream that the FDC's internal data separator decodes back into bytes. Understanding MFM is essential for understanding the FDC's behavior.
+- **It is what the FDC chip does**. The [WD1793 / KR1818VG93](fdc_vg93.md) takes a byte from the data bus and serialises it into an MFM bit stream on the write-data pin. Reading is the reverse: the raw read-data pin carries an MFM bit stream that the board's external data separator retimes before the FDC decodes it back into bytes (see [fdc_vg93.md](fdc_vg93.md) §9.2). Understanding MFM is essential for understanding the FDC's behavior.
 
 - **It explains the format parameters**. Why does a standard TR-DOS disk have 10 sectors of 512 bytes per track? Because at 250 kbit/s MFM with the standard sector overhead (sync marks, ID field, data field, gaps), a track holds exactly 10 sectors of 512 bytes in 6250 bytes of raw MFM data. Change the encoding (e.g., to RLL) and you would get more sectors per track.
 

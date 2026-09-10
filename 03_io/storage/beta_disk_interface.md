@@ -235,7 +235,7 @@ Software that wants to remain compatible with the entire Soviet software library
 
 Bit 2 of port `#FF` is routed to the WD1793's `/MR` (Master Reset) input. Writing `0` to this bit holds the FDC in reset; writing `1` releases it. TR-DOS performs a reset sequence at startup: it writes a byte with `bit 2 = 0`, waits briefly, then writes the normal-operating byte with `bit 2 = 1`. This guarantees a known initial state regardless of what the FDC was doing before.
 
-The reset behavior of the WD1793 itself differs between the original WD1793 and the WD1793-02 / KR1818VG93 — see [fdc_vg93.md §8.7](fdc_vg93.md) for details.
+What the reset actually does to the FDC's internal state is covered in [fdc_vg93.md §8.7](fdc_vg93.md).
 
 #### 3.3.4 Note on bits 6 and 7
 
@@ -580,6 +580,8 @@ On Pentagon and Scorpion hardware, the Beta Disk Interface port map is **wired d
 
 Both machines also have an **onboard TR-DOS ROM** (typically version 5.03 or 5.04) banked in using the same M1-fetch-triggered mechanism as the original Beta Disk Interface (see §4.2) — an instruction fetch from `#3D00–#3DFF` activates the TR-DOS ROM in place of the machine's main ROM. The TR-DOS ROM is soldered to the motherboard (often as part of a larger "BIOS" / system ROM that also contains a BASIC ROM and CP/M loader).
 
+The Scorpion Turbo+ also upgrades the **read path**: its on-board digital PLL data separator (GAL16V8 `fapch.jed` DD59 + a К1533ТМ9 register stepped at 8 MHz) replaces the free-running 74LS124-class VCO of the original cartridge with a 16-state phase-locked counter that recovers `RCLK` for the КР1818ВГ93 — the decoded fuse map and state table are in [scorpion.md — The Digital PLL Data Separator](../../02_hardware/clones/scorpion.md).
+
 ### 7.5 Western variants and uncommon drives
 
 A few Western companies produced Beta Disk Interface variants:
@@ -603,9 +605,9 @@ The WD1793 was a popular chip and was second-sourced by several manufacturers un
 | Manufacturer | Part number | Notes |
 |---|---|---|
 | **Western Digital** | WD1793, WD1793-02 | The original. 40-pin DIP, requires +5 V and +12 V supplies, external 1 MHz / 2 MHz clock on the `CLK` input. The -02 revision fixed bugs in the original WD1793 and is the part cloned by the Soviets. |
-| **Fujitsu** | **MB8877, MB8877A** | Second-source of the **WD1793** (FM + MFM, internal data separator). Pin- and register-compatible. The major hardware difference from the WD1793 is that the MB8877 requires **only a +5 V supply** (the WD1793's +12 V pin is no-connect on the Fujitsu part). The MB8877A is a later revision with marginally tighter PLL timing. Modern Spectrum repair hobbyists routinely substitute MB8877 / MB8877A for an original WD1793 (or KR1818VG93) by leaving the +12 V pin unconnected; this is the cheapest commonly-available FDC chip on the surplus market today. |
+| **Fujitsu** | **MB8877, MB8877A** | Second source of the **WD1793** family (FM + MFM; register-compatible). Like every 179x it has no on-chip data separator — `RCLK` comes from the board's external separator/VFO. It requires **only a +5 V supply**: when substituting it for a КР1818ВГ93 (which also takes +12 V on pin 40), the +12 V feed is simply left unconnected. The MB8877A is a later revision. Modern Spectrum repair hobbyists routinely substitute MB8877 / MB8877A for a КР1818ВГ93 this way; this is the cheapest commonly-available FDC chip on the surplus market today. |
 | **SGS-Thomson** (later STMicroelectronics) | TS9206 | A late (mid-1990s) European second-source. Electrically similar to the MB8877. Rarely encountered in Spectrum hardware. |
-| **Soviet — Angstrem (Zelenograd)** | **KR1818VG93** (КР1818ВГ93) | The standard Soviet clone of the WD1793-02. Produced from the late 1980s onward. Pin- and register-compatible. Some revisions include minor bug-for-bug reproductions of WD1793-02 quirks, while others have quirks of their own (notably in `/MR` behavior and step-rate timing — see [fdc_vg93.md §7 and §8](fdc_vg93.md) for the full comparison). Used in virtually every Soviet-made Beta Disk clone. |
+| **Soviet — Angstrem (Zelenograd)** | **KR1818VG93** (КР1818ВГ93) | The standard Soviet clone of the WD1793-02. Produced from the late 1980s onward. Register-compatible; Soviet boards are laid out to its own 40-pin assignment (see [fdc_vg93.md §2.1](fdc_vg93.md)). Some revisions include minor bug-for-bug reproductions of WD1793-02 quirks, while others have quirks of their own (notably in step-rate timing — see [fdc_vg93.md §7 and §8](fdc_vg93.md) for the full comparison). Used in virtually every Soviet-made Beta Disk clone. |
 | **Modern — Western Digital Center** | **WDC1793** | A modern reissue (sometimes packaged as PLCC rather than DIP) sold by some Western Digital licensees in the 2000s. Used on the ZX Evolution's floppy module. Functional equivalent of WD1793-02. |
 
 **Why second-sources mattered for the ex-USSR scene.** The Soviet Union's microelectronics program operated on a strict "second-source everything strategic" principle, and the WD1793 was classified as strategically important because it was used in military and industrial computers (the Corvette educational machine, the Elektronika 85 workstation, several industrial process-control PCs). By the time the Beta 128 circuit was reverse-engineered in 1988, the KR1818VG93 was already in mass production at Angstrem and freely available on the grey market. Without a domestic FDC source, the Soviet Beta Disk clone ecosystem could not have happened; with it, the entire Soviet disk-based software market emerged within two years.
