@@ -4,6 +4,9 @@
 
 The complete English translation of **"Guide to the ZX Spectrum ports"** by Black_Cat (BC Info Guide #4, 2008, © Black_Cat, zx.clan.su) — the most exhaustive raw port table ever published for the ZX Spectrum family, covering every original Sinclair/Amstrad machine, the major Soviet clones, and more than thirty add-on interfaces. Each entry lists the canonical port address, the actual decoding mask, and the read/write function per machine. This is the lookup companion to [io_port_map.md](io_port_map.md), which adds annotations, register layouts, and conflict warnings; the concepts of partial address decoding are covered in [io_port_decoding.md](../05_development/03_memory_and_io/io_port_decoding.md).
 
+> [!TIP]
+> **Interactive Port Decoding Map**: An interactive, single-file browser version with real-time 16-bit address line filters, model/peripheral tagging, 256-port collision heatmap, and live bus conflict simulator is available at [zx_ports_full_table.html](zx_ports_full_table.html).
+
 > [!NOTE]
 > **Translation fidelity.** Every port address, binary mask, model code, and function assignment is reproduced verbatim from the original. Russian-only comments are translated; spelling in function names is normalized ("Adress" → "Address", "managetment" → management); the original's typos in data values are preserved and flagged in [Translator's Notes](#translators-notes). The original file is preserved in the [tslabs/zx-evo repository](https://github.com/tslabs/zx-evo/blob/master/pentevo/docs/ZX/zx-ports-full-table.txt).
 
@@ -128,13 +131,36 @@ The parenthesized codes after each function name identify **which machines** imp
 | `#3FFD` (16381) | `0011111111111101` | `0011xxxxxxxxxx0x` | 8272data(?+3) | 8272data(?+3) |
 | `#7DFD` (32253) | `0111110111111101` | `0xxxxx0xxxxxxx0x` | ADC(A) | — |
 | `#7FFD` (32765) | `0111111111111101` | `0xxxxx1xxxxxxx0x` | IDE,ADC(A) | — |
+| `#FFDD` (65501) | `1111111111011101` | `xxxxxxxxxx0xxx01` | — | Prn(6) |
+
+## Audio, AY, TurboSound, TurboSound FM
+
+Programmable Sound Generator ports for the AY-3-8912 (and Yamaha YM2149F clone) introduced with the ZX Spectrum 128K and adopted across all standard 128K clones and expansion sound cards (TurboSound, TurboSound FM). Any ZX Spectrum or clone (including 16K/48K, Timex, and Didaktik) can connect an AY, TurboSound, or TurboSound FM interface via the expansion bus using these ports. Port `#FFFD` selects the active internal sound register (0–15), reads register data, or serves as the TurboSound chip selector; port `#BFFD` writes register data.
+
+### Clone Decoding Variances
+
+Clone designers implemented differing degrees of address qualification to balance chip count against bus collision hazards:
+
+- **Simplified 3-Bit Decode (`10xxxxxxxxxxxx0x` / `11xxxxxxxxxxxx0x`)**: Sinclair +128, +2, +2A, +3, Didaktik, ATM Turbo, and universal external 48K peripheral interfaces (Melodik, ZX-AY, CHRV TurboSound). Checks only $A_{15}, A_{14}, A_1=0$. Because $A_0$ is ignored, 8,192 addresses alias to this port across both even and odd addresses.
+- **A0-Qualified Odd-Address Decode (`10xxxxxxxxxxxx01` / `11xxxxxxxxxxxx01`)**: KAY-1024SL. Nemo added $A_0=1$ qualification, restricting the port to odd addresses (4,096 mirrors) to prevent any contention with Ferranti ULA border/keyboard decoding on even addresses.
+- **A13-Qualified Decode (`101xxxxxxxxxxx0x` / `111xxxxxxxxxxx0x`)**: Pentagon 128 and Profi. Adds $A_{13}=1$ (4 lines checked, 4,096 mirrors) to avoid overlap with add-on cards using $A_{13}=0$.
+- **Asymmetric Write Decode (`1x1xxxxxxxxxxx0x`)**: Pentagon-1024SL. Data writes to `#BFFD` ignore $A_{14}$ completely, creating 8,192 mirrors where writes to `#FFFD` also reach `#BFFD` if $A_{13}=1$.
+- **Gate Array Qualified (`101xxxxxxxx1xx0x` / `111xxxxxxxx1xx0x`)**: Quorum 128/+. Custom gate array checks 6 lines ($A_{15}, A_{14}, A_{13}, A_5=1, A_4=1, A_1=0$), dropping mirrors to 2,048.
+- **Strict 6-Bit Decode (`101xxxxxxx1xxx01` / `111xxxxxxx1xxx01`)**: Scorpion ZS-256 and Scorpion GMX. Compares 6 lines ($A_{15}, A_{14}, A_{13}, A_5=1, A_1=0, A_0=1$), limiting mirrors to 1,024 and preventing conflicts with SMUC bus (IDE/RTC) and the ULA.
+
+### TurboSound & TurboSound FM Protocol
+
+- **TurboSound (Dual PSG)**: Port `#FFFD` serves as the chip selector. Writing `%11111111` (255) activates AY0; writing `%11111110` (254) activates AY1. Subsequent `#FFFD` and `#BFFD` accesses target the selected chip.
+- **TurboSound FM (TSFM)**: Writing `%11111100`..`%11111111` to `#FFFD` selects between 2× YM2203 chips and toggles between standard SSG registers (0–15) and FM operator registers (`#20`–`#B0`).
+
+| Port | Address (A15–A0) | Decoding (A15–A0) | READ | WRITE |
+|------|------------------|--------------------|------|-------|
 | `#BFFD` (49149) | `1011111111111101` | `10xxxxxxxxxxxx0x` | — | AYdat(2,3,?5,A) |
 | | | `10xxxxxxxxxxxx01` | — | AYdat(7) |
 | | | `1x1xxxxxxxxxxx0x` | — | AYdat(D) |
 | | | `101xxxxxxxxxxx0x` | — | AYdat(8,9) |
 | | | `101xxxxxxxx1xx0x` | — | AYdat(C) |
 | | | `101xxxxxxx1xxx01` | — | AYdat(6) |
-| `#FFDD` (65501) | `1111111111011101` | `xxxxxxxxxx0xxx01` | — | Prn(6) |
 | `#FFFD` (65533) | `1111111111111101` | `11xxxxxxxxxxxx0x` | AYdat(2,3,?5,A) | AYadr(2,3,?5,A) |
 | | | `11xxxxxxxxxxxx01` | AYdat(7) | AYadr(7) |
 | | | `111xxxxxxxxxxx0x` | AYdat(8,9,D) | AYadr(8,9,D) |
@@ -313,10 +339,47 @@ Address line A selects master (A=0) or slave (A=1) mouse.
 
 ## General Sound
 
+Original X-Trade design. Command/data ports conflict with divIDE.
+
 | Port | Address (A15–A0) | Decoding (A15–A0) | READ | WRITE |
 |------|------------------|--------------------|------|-------|
-| `#B3` (179) | `xxxxxxxx10110011` | `xxxxxxxx10110011` | Data | Data |
-| `#BB` (187) | `xxxxxxxx10111011` | `xxxxxxxx10111011` | Status | Comnd |
+| `#B3` (179) | `xxxxxxxx10110011` | `xxxxxxxx10110011` | GS Status | GS Command |
+| `#BB` (187) | `xxxxxxxx10111011` | `xxxxxxxx10111011` | GS Data | GS Data |
+
+## ZXM-GeneralSound
+
+Mick's implementation with control port to avoid divIDE conflict.
+
+| Port | Address (A15–A0) | Decoding (A15–A0) | READ | WRITE |
+|------|------------------|--------------------|------|-------|
+| `#B3` (179) | `xxxxxxxx10110011` | `xxxxxxxx10110011` | GS Status | GS Command |
+| `#BB` (187) | `xxxxxxxx10111011` | `xxxxxxxx10111011` | GS Data | GS Data |
+| `#33` (51) | `xxxxxxxx00110011` | `xxxxxxxx00110011` | — | GS Control |
+
+Control port `#33` bit 4 (EnGS): 0 = card enabled (default after reset), 1 = card disabled.
+
+## NeoGS
+
+Enhanced General Sound with DSP capabilities.
+
+| Port | Address (A15–A0) | Decoding (A15–A0) | READ | WRITE |
+|------|------------------|--------------------|------|-------|
+| `#B3` (179) | `xxxxxxxx10110011` | `xxxxxxxx10110011` | NeoGS Status | NeoGS Command |
+| `#BB` (187) | `xxxxxxxx10111011` | `xxxxxxxx10111011` | NeoGS Data | NeoGS Data |
+| `#33` (51) | `xxxxxxxx00110011` | `xxxxxxxx00110011` | — | NeoGS Control |
+
+## MoonSound (ZXM-MoonSound)
+
+YMF278 (OPL4) based sound card with FM synthesis and wavetable.
+
+| Port | Address (A15–A0) | Decoding (A15–A0) | READ | WRITE |
+|------|------------------|--------------------|------|-------|
+| `#C4` (196) | `xxxxxxxx11000100` | `xxxxxxxx110001xx` | OPL4 FM Status | OPL4 FM Addr |
+| `#C5` (197) | `xxxxxxxx11000101` | `xxxxxxxx110001xx` | — | OPL4 FM Data |
+| `#C6` (198) | `xxxxxxxx11000110` | `xxxxxxxx110001xx` | — | OPL4 Wave Addr |
+| `#C7` (199) | `xxxxxxxx11000111` | `xxxxxxxx110001xx` | — | OPL4 Wave Data |
+
+OPL4 supports 18 channels of 2-operator FM synthesis and 24 channels of 12/16-bit wavetable PCM.
 
 ## +D (Issue 4)
 
@@ -491,6 +554,7 @@ Section markers `*1`–`*5` refer to the original's own information sources (sev
 
 ## Cross-References
 
+- [zx_ports_full_table.html](zx_ports_full_table.html) — interactive single-file browser application with 16-bit decoding map and bus simulator
 - [io_port_map.md](io_port_map.md) — annotated port reference built on this table: per-model deep-dives, register layouts, conflict warnings
 - [io_port_decoding.md](../05_development/03_memory_and_io/io_port_decoding.md) — why partial decoding exists and how mirrors arise
 - [memory_maps.md](memory_maps.md) — what the `Pag` ports actually switch, per machine

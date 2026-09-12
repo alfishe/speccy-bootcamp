@@ -103,11 +103,11 @@ The **Kay 2006 NB** is a late revision (2006) that adds an **Altera EPM7064 CPLD
 |---|---|---|---|
 | **Standard** | 256×192 | 15 (attribute) | Sinclair-compatible — default mode |
 | **Multicolor** | 256×192 ×2 | 15 (8×1 attribute) | Shadow attribute buffer in alternate RAM bank — per-scanline attribute changes without CPU contention |
-| **GigaScreen** | 256×192 interlaced | ~102 (simulated) | Alternates two attribute sets on even/odd frames; exploits PAL chroma bleed to simulate higher color resolution |
+| **GigaScreen** | 256×192 alternating frames | ~102 (perceived) | Alternates two attribute sets on even/odd frames; the perceived blend comes from temporal mixing in the viewer's eye |
 | **512×192** | 512×192 | 2 (monochrome) | Double horizontal resolution for static title screens and high-res artwork |
 
 > [!NOTE]
-> These modes are **Kay 2006 NB-specific** and not portable to other clones. The GigaScreen effect depends on PAL encoding artifacts and does not reproduce correctly on VGA monitors or in emulators that skip the PAL simulation. See [video_frame_other_soviet.md](../../05_development/05_display_and_timing/video_frame_other_soviet.md) for details.
+> These modes are **Kay 2006 NB-specific** and not portable to other clones. The GigaScreen blend is a temporal effect — frame alternation averaged by the viewer's visual system, not a PAL encoding artifact — so it works on any 50 Hz display, but flickers on sample-and-hold LCDs unless the emulator mixes the two source frames. See [interlace_and_flicker.md](../../05_development/05_display_and_timing/interlace_and_flicker.md) and [video_frame_other_soviet.md](../../05_development/05_display_and_timing/video_frame_other_soviet.md) for details.
 
 ### Programming the CPLD Modes
 

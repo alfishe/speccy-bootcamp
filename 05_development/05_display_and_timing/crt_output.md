@@ -146,7 +146,7 @@ The original target hardware. Properties:
 - **Pixel aspect**: 1:1 after PAL compensation
 - **Colour reproduction**: accurate within PAL gamut; bright/dim distinction visible
 - **Border color**: visible around paper, but the outermost 1-2 cm may be cropped
-- **Phosphor decay**: ~5-15 ms, providing natural motion smoothing
+- **Phosphor decay**: channel-dependent — red effectively gone in ~1–2 ms, green/blue heavy-tailed (~8% of frame-average luminance remains when the next 50 Hz refresh arrives); see [interlace_and_flicker.md](interlace_and_flicker.md)
 - **Flicker**: minimal at 50 Hz, mild at 25 Hz (GigaScreen)
 
 This is what Spectrum software was designed for. If it looks right on a 1985-era PAL CRT, it looks "correct".
@@ -283,5 +283,6 @@ All other display types introduce some deviation from this reference. Emulators 
 - **Poynton, *Digital Video and HD: Algorithms and Interfaces*** — pixel aspect ratio mathematics for PAL and other broadcast standards.
 - **OSSC documentation** ([videogameperfection.com](https://www.videogameperfection.com)) — line multiplication modes and display compatibility.
 - **RGB-to-HDMI project** ([github.com/hoglet67/RGBtoHDMI](https://github.com/hoglet67/RGBtoHDMI)) — documents Spectrum-specific display handling, including aspect ratio correction and scanline simulation.
+- **Markus G. Kuhn, "Optical Time-Domain Eavesdropping Risks of CRT Displays"** ([cl.cam.ac.uk](https://www.cl.cam.ac.uk/~mgk25/ieee02-optical.pdf)) — measured per-channel P22 phosphor decay; source of the persistence figures in the display table above.
 - [World of Spectrum forums — "Monitor recommendations" threads](https://worldofspectrum.org/) — community-collected data on which CRT models work best with Spectrums, including visible-area measurements.
 - [RetroGFX / CRT emulation shader documentation](https://github.com/) — software recreation of CRT visual properties for modern displays.

@@ -50,7 +50,7 @@ The Kay is **the cleanest Soviet clone to target** if you want 48K-compatible ti
 The 2006 revision's CPLD adds three video modes that **don't change base timing** but affect how the video circuit reads RAM:
 
 - **Multicolor mode** — per-scanline attribute changes via a shadow attribute buffer in alternate RAM bank; no CPU contention because the video circuit reads from a separate buffer
-- **GigaScreen** — alternates two attribute sets on even/odd frames to simulate 8×1 color resolution via PAL chroma bleed; works on stock CRTs but produces visible flicker
+- **GigaScreen** — alternates two attribute sets on even/odd frames to extend the perceived palette through temporal color mixing (the blend happens in the viewer's eye, aided slightly by phosphor persistence); works on stock CRTs, though high-contrast pairs flicker visibly
 - **512×192 pixel mode** — double horizontal resolution in 2 colors, useful for static title screens
 
 These modes are Kay-specific and not portable. See [clone_video_modes.md](clone_video_modes.md) for the cross-clone survey.

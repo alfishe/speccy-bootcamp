@@ -85,19 +85,60 @@ In 1995, a Russian demoscene group called **Flash Inc.** realized that if softwa
 
 They designed the **SounDrive** interface. Instead of one Covox, SounDrive put **four independent Covox DACs** on a single expansion board. Each DAC was wired to a different I/O port. The outputs of these four DACs were then sent into an analog op-amp mixer (two for the left ear, two for the right).
 
-### SounDrive v1.05 Port Map
+### SounDrive Version History
 
-SounDrive uses incomplete address decoding, checking only the low byte (`A7–A0`).
+Two major SounDrive revisions exist, with slightly different port mappings. Software targeting broad compatibility should detect which version is present (typically by probing for the card's presence via a simple read-back test or configuration register).
 
-| Channel | Port | Decoding | Pan | Notes |
-|---------|------|----------|-----|-------|
-| **A** | `#0F` | `xxxxxxxx00001111` | Left | |
-| **B** | `#1F` | `xxxxxxxx00011111` | Right | *Conflicts with Kempston Joystick!* |
-| **C** | `#4F` | `xxxxxxxx01001111` | Right | |
-| **D** | `#5F` | `xxxxxxxx01011111` | Left | |
+### SounDrive v1.02 Port Map
+
+The original Flash Inc. design uses six ports — four DAC channels plus two control ports.
+
+| Channel | Port | Address (A15–A0) | Decoding (A15–A0) | Mirrors | R/W | Stereo Pan |
+|---------|------|------------------|-------------------|---------|-----|------------|
+| **A** | `#0F` (15) | `xxxxxxxx00001111` | `xxxxxxxxx0001111` | 512 | W | Left |
+| **B** | `#1F` (31) | `xxxxxxxx00011111` | `xxxxxxxxx0011111` | 512 | W | Right |
+| **Control** | `#3F` (63) | `xxxxxxxx00111111` | `xxxxxxxxx0111111` | 512 | W | — |
+| **C** | `#4F` (79) | `xxxxxxxx01001111` | `xxxxxxxxx1001111` | 512 | W | Right |
+| **D** | `#5F` (95) | `xxxxxxxx01011111` | `xxxxxxxxx1011111` | 512 | W | Left |
+| **Control 2** | `#7F` (127) | `xxxxxxxx01111111` | `xxxxxxxxx1111111` | 512 | W | — |
+
+### SounDrive v1.05 Port Map (Covox Compatible)
+
+Version 1.05 simplifies to four DAC ports with different decoding and adds an alternative high-byte port range for Covox compatibility:
+
+**Primary Ports (Low Range):**
+
+| Channel | Port | Address (A15–A0) | Decoding (A15–A0) | R/W | Stereo Pan |
+|---------|------|------------------|-------------------|-----|------------|
+| **Left A** | `#0F` (15) | `xxxxxxxx00001111` | `xxxxxxxxxB0Axxx1` | W | Left |
+| **Left B** | `#1F` (31) | `xxxxxxxx00011111` | `xxxxxxxxxB0Axxx1` | W | Left |
+| **Right A** | `#4F` (79) | `xxxxxxxx01001111` | `xxxxxxxxxB0Axxx1` | W | Right |
+| **Right B** | `#5F` (95) | `xxxxxxxx01011111` | `xxxxxxxxxB0Axxx1` | W | Right |
+
+**Alternative Ports (High Range — Covox Compatible):**
+
+| Channel | Port | Address (A15–A0) | Decoding (A15–A0) | R/W | Stereo Pan |
+|---------|------|------------------|-------------------|-----|------------|
+| **Left A** | `#F1` (241) | `xxxxxxxx11110001` | `xxxxxxxxxxB0A1` | W | Left |
+| **Left B** | `#F3` (243) | `xxxxxxxx11110011` | `xxxxxxxxxxB0A1` | W | Left |
+| **Right A** | `#F9` (249) | `xxxxxxxx11111001` | `xxxxxxxxxxB0A1` | W | Right |
+| **Right B** | `#FB` (251) | `xxxxxxxx11111011` | `xxxxxxxxxxB0A1` | W | Right |
+
+The high-range ports (`#F1`–`#FB`) provide compatibility with existing Covox software that used the `#FB` port on ATM Turbo and Pentagon machines.
+
+### Stereo Channel Layout
+
+Both versions use the same stereo mixing topology — two channels summed to each ear:
+
+```
+Left Ear:   Channel A (#0F) + Channel D (#5F)  →  Left DAC  →  Left Speaker
+Right Ear:  Channel B (#1F) + Channel C (#4F)  →  Right DAC →  Right Speaker
+```
+
+This arrangement allows for several stereo effects. See [Stereo Audio Techniques](stereo_audio.md) for detailed panning strategies.
 
 > [!WARNING]
-> **The Kempston Collision:** Port `#1F` is the canonical address for the Kempston Joystick. If a user has a cheap Kempston interface with poor address decoding plugged in alongside a SounDrive, writing a sample to channel B will cause a bus collision.
+> **The Kempston Collision:** Port `#1F` is the canonical address for the Kempston Joystick. If a user has a cheap Kempston interface with poor address decoding plugged in alongside a SounDrive, writing a sample to channel B will cause a bus collision. Modern SounDrive implementations (like ZXM-SoundCard) include a configuration bit to disable the `#1F` channel when a Kempston is detected.
 
 ### Why This Changed Everything
 
@@ -199,6 +240,54 @@ The SounDrive part appears only in the **Middle** and **Extreme** board revision
 
 To get high-quality audio, the sample output loop must be as tight as physically possible. Every wasted T-state drops the sample rate and muddies the treble frequencies.
 
+### Single-Channel Covox Output
+
+The simplest case: playing a sample through a single Covox port. This is the foundation of all PCM playback on the Spectrum.
+
+```z80
+; Single-channel Covox playback (ATM/Pentagon port #FB)
+; Input: HL = sample data address, DE = sample length
+; Destroys: A, BC, DE, HL
+
+PlaySampleCovox:
+    ld c, #FB           ; Covox port
+.loop:
+    ld a, (hl)          ; 7 T: fetch sample byte
+    out (c), a          ; 12 T: output to DAC
+    inc hl              ; 6 T: next sample
+    
+    ; Timing padding — adjust NOPs for target sample rate
+    ; At 3.5 MHz: 25 T/sample = 140 kHz (way too fast)
+    ; We need ~180 T/sample for 19.4 kHz
+    
+    ; Simple delay loop (coarse timing)
+    ld b, 8             ; 7 T
+.delay:
+    djnz .delay         ; 13 T × 8 = 104 T (first 7 are 13T, last is 8T)
+                        ; Actually: 13×7 + 8 = 99 T
+    
+    dec de              ; 6 T
+    ld a, d             ; 4 T
+    or e                ; 4 T
+    jr nz, .loop        ; 12 T (taken) / 7 T (not taken)
+    ret
+```
+
+For a more precise sample rate, use a lookup table of delay values or unroll the loop entirely with calculated padding.
+
+### Profi Covox Output
+
+The Profi uses port `#DF` instead of `#FB`:
+
+```z80
+; Profi Covox — same as above but different port
+PlaySampleProfi:
+    ld c, #DF           ; Profi Covox port
+    ; ... rest identical to PlaySampleCovox
+```
+
+### SounDrive 4-Channel Playback
+
 Here is a highly optimized 4-channel SounDrive playback loop. Note that we don't use `OUT (C), A`. We use the `OUTI` (Output, Increment, and Decrement) instruction, which is heavily abused here to fetch from `(HL)`, write to port `(C)`, and increment `HL` all in a single 16-T-state sweep.
 
 ```z80
@@ -238,6 +327,92 @@ If our 4-channel loop (fetching, outputting, advancing pointers, and checking lo
 $$ 3,500,000 \div 180 = 19,444 \text{ Hz} $$
 
 A 19.4 kHz sample rate is excellent for 8-bit audio, producing crisp drums and clear vocals. (For comparison, the Amiga's Paula chip typically maxed out around 28 kHz for most MODs).
+
+### Stereo Panning Techniques
+
+SounDrive's dual-channel-per-ear design enables several stereo effects. These techniques are also covered in detail in [Stereo Audio Techniques](stereo_audio.md).
+
+#### Hard Panning (MOD-Style)
+
+Traditional Amiga MOD files hard-pan channels: 1 and 4 to the left, 2 and 3 to the right. SounDrive maps naturally to this:
+
+```z80
+; Hard-panned 4-channel playback (MOD channel order)
+; Channel 1 (Left):  port #0F
+; Channel 2 (Right): port #1F  
+; Channel 3 (Right): port #4F
+; Channel 4 (Left):  port #5F
+
+HardPanFrame:
+    ld hl, (Chan1Ptr)   ; MOD channel 1 → Left
+    ld c, #0F
+    outi
+    
+    ld hl, (Chan2Ptr)   ; MOD channel 2 → Right
+    ld c, #1F
+    outi
+    
+    ld hl, (Chan3Ptr)   ; MOD channel 3 → Right
+    ld c, #4F
+    outi
+    
+    ld hl, (Chan4Ptr)   ; MOD channel 4 → Left
+    ld c, #5F
+    outi
+    ret
+```
+
+#### Center Panning (Mono Mix)
+
+To place a sound in the center, output the same sample to both a left and right channel:
+
+```z80
+; Center-panned voice using channels A (left) and B (right)
+CenterPan:
+    ld a, (hl)          ; fetch sample
+    ld c, #0F           ; Left channel A
+    out (c), a
+    ld c, #1F           ; Right channel B
+    out (c), a          ; same sample to both ears = center
+    inc hl
+    ret
+```
+
+This "wastes" a channel but creates a solid center image. For full 4-channel MOD playback with center-panned bass, software-mix the bass into channels A and B before output.
+
+#### Dynamic Stereo Width
+
+By varying the balance between left and right outputs, you can create a sense of stereo width:
+
+```z80
+; Pseudo-stereo: same sample, different volumes for left/right
+; Input: A = sample, B = pan position (0=left, 128=center, 255=right)
+DynamicPan:
+    push af
+    
+    ; Calculate left volume: sample × (255 - pan) / 256
+    ld c, a             ; C = sample
+    ld a, 255
+    sub b               ; A = 255 - pan
+    call MultiplyCA     ; A = C × A / 256 (needs mul routine)
+    ld e, a             ; E = left sample
+    
+    pop af
+    ; Calculate right volume: sample × pan / 256
+    ld c, a             ; C = sample
+    ld a, b             ; A = pan
+    call MultiplyCA     ; A = C × A / 256
+    ld d, a             ; D = right sample
+    
+    ; Output
+    ld a, e
+    out (#0F), a        ; Left
+    ld a, d
+    out (#1F), a        ; Right
+    ret
+```
+
+This requires a fast 8×8→8 multiply routine, which consumes significant CPU. For production code, use a pre-calculated panning table.
 
 ---
 
@@ -286,10 +461,71 @@ SounDrive transformed the Soviet demoscene. Trackers like **FlashTracker** and *
 
 ---
 
+## 8. Comparison With Other PCM Solutions
+
+How does Covox/SounDrive compare to other sample playback options on the ZX Spectrum?
+
+| Feature | Covox (Single) | SounDrive (4-ch) | [General Sound](gs_general_sound.md) | [ZX Next DMA](zx_next_audio.md) |
+|---------|----------------|------------------|--------------------------------------|----------------------------------|
+| **Channels** | 1 | 4 | 4 | 1 (DMA) + 3×AY |
+| **Resolution** | 8-bit | 8-bit | 8-bit | 8-bit |
+| **Max Sample Rate** | ~22 kHz | ~19 kHz | 22 kHz | 27.7 kHz |
+| **CPU Load** | 100% | 100% | **0%** | **0%** |
+| **Stereo** | Mono | True stereo | True stereo | True stereo |
+| **Hardware Mixing** | No | Yes | Yes | Yes |
+| **Availability** | Common | Soviet clones | Soviet clones | Next only |
+| **Year Introduced** | 1987 | 1995 | 1994 | 2017 |
+
+Key observations:
+
+1. **CPU load is the critical differentiator.** Covox and SounDrive require the CPU to be dedicated to playback. General Sound and ZX Next DMA free the CPU entirely.
+
+2. **SounDrive's advantage over single Covox is hardware mixing**, not CPU savings. The Z80 still runs a tight loop, but it doesn't need to do any arithmetic — just fetch-and-output.
+
+3. **General Sound is the "best" Soviet-era solution** if available, but SounDrive is far more common and works on any clone with a spare I/O port.
+
+4. **ZX Next DMA supersedes all of the above** for Next-exclusive projects. See [ZX Spectrum Next Audio](zx_next_audio.md).
+
+---
+
+## 9. Detection and Runtime Probing
+
+Unlike chips with readable status registers, DAC ports are write-only. Detection typically relies on:
+
+1. **Configuration assumptions** — The user tells the software which hardware is present via a setup menu.
+2. **Read-back test** — Some SounDrive implementations include a shadow latch that can be read back. Write a known value, read it back, verify.
+3. **Probing side effects** — Writing to a non-existent port may cause bus noise or floating values. Not reliable.
+
+For production software, **option 1 (user configuration)** is recommended. The scene convention is a setup utility that stores hardware flags to disk or NVRAM.
+
+```z80
+; Simple SounDrive presence check (unreliable — for reference only)
+; Many SounDrive implementations don't support read-back
+DetectSounDrive:
+    ld a, #AA           ; test pattern
+    out (#0F), a        ; write to channel A
+    in a, (#0F)         ; attempt read-back (may return garbage)
+    cp #AA              ; did we get it back?
+    ret z               ; Z = probably present
+    ; Note: This WILL give false negatives on most implementations
+    ret
+```
+
+---
+
 ## References & Further Reading
 
+### Related Articles in This Knowledge Base
+
+- [Sound Hardware Ecosystem Overview](sound_overview.md) — Decision matrix for choosing between beeper, AY, Covox, SounDrive, General Sound, and Next DMA.
+- [General Sound (GS)](gs_general_sound.md) — The coprocessor approach: a dedicated Z80 handles all mixing, freeing the main CPU.
+- [ZX Spectrum Next Audio](zx_next_audio.md) — DMA-driven sample playback on the Next — the modern successor to SounDrive.
+- [Stereo Audio Techniques](stereo_audio.md) — Panning, stereo width, and mixing strategies applicable to SounDrive.
+- [AY/YM Synthesis Techniques](../synthesis/ay_ym_techniques.md) — Why the AY chip is bad at playing samples (and the hacks people tried).
 - [I/O Port Map](../../10_references/io_port_map.md) — Complete port decoding for all clones, including SounDrive and Kempston conflicts.
-- [AY/YM Hardware Synthesis](../synthesis/ay_ym_synthesis.md) — Why the AY chip is bad at playing samples.
-- [General Sound (GS)](gs_general_sound.md) — The ultimate solution: putting a second Z80 entirely in charge of the audio.
+
+### External References
+
 - [Texas Instruments TLC7226 Datasheet (PDF)](https://www.ti.com/lit/gpn/TLC7226) — Official datasheet for the TLC7226 quad 8-bit DAC used in modern single-chip SounDrive implementations.
 - [Mick Laboratory: ZXM-SoundCard](http://micklab.ru/My%20Soundcard/ZXMSoundCard.htm) *(in Russian)* — The best-documented TLC7226-based SounDrive reference. Full schematics, CPLD firmware source, and bill of materials for every board revision (00 through Extreme). The SounDrive part appears in the Middle and Extreme revisions alongside TSFM and SAA1099 sections.
+- [Flash Inc. — Original SounDrive Authors](http://flash-inc.net/) *(archived)* — The Russian demoscene group that invented the SounDrive in 1995.

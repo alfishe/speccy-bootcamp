@@ -17,7 +17,7 @@ The MoonSound was developed for the MSX community by **Sunrise** (Netherlands), 
 > [!IMPORTANT]
 > **MoonSound is two sound engines in one chip.** The OPL4 contains a complete OPL3 FM synthesizer (18 channels of 2-op FM, or 6 channels of 4-op FM) and an independent wavetable synthesizer (24 channels of sample playback). The two engines run in parallel, share the same output mixer, and are addressed through separate register banks.
 
-This article covers the OPL4's architecture, the two synthesis engines, port decoding, programming model, and the trade-offs versus other ZX Spectrum sound hardware. For comparison with the simpler TurboSound FM (YM2203 OPN), see [TurboSound FM — YM2203 OPN FM Synthesis](turbosound_fm.md). For the broader sound ecosystem, see [Sound Hardware Ecosystem Overview](sound_overview.md).
+This article covers the OPL4's architecture, the two synthesis engines, port decoding, programming model, and the trade-offs versus other ZX Spectrum sound hardware. For comparison with the simpler TurboSound FM (YM2203 OPN), see [TurboSound FM — YM2203 OPN FM Synthesis](turbosound_fm.md). For another multi-channel synthesis chip (the SAM Coupé's PSG), see [SAA1099 — Philips 6-Channel Stereo PSG](saa1099.md). For the broader sound ecosystem, see [Sound Hardware Ecosystem Overview](sound_overview.md).
 
 ### Naming Convention
 
@@ -150,6 +150,57 @@ The Wave ROM contains the **Yamaha 4 MB GM/GS-compatible instrument bank**, comp
 - 47 percussion sounds
 - 58 sound effects and vocal samples
 
+### Sample RAM Layout and Custom Samples
+
+The optional Wave RAM (256 KB–512 KB on most boards) sits at address `#100000` and above. Custom samples must be formatted as **Yamaha ADPCM** or **8-bit/16-bit linear PCM** and uploaded via the OPL4's memory interface registers.
+
+**Wave RAM Structure** (512 KB configuration):
+
+| Address Range | Size | Purpose |
+|---|---|---|
+| `#100000`–`#13FFFF` | 256 KB | User sample bank 1 |
+| `#140000`–`#17FFFF` | 256 KB | User sample bank 2 |
+
+**Sample Header Format** (per custom sample):
+
+```
+Offset  Size   Field
++0      2      Sample start address (21-bit, low 16 bits)
++2      1      Sample start address (high 5 bits) + format flags
++3      2      Loop start offset
++5      2      Loop end offset
++7      1      LFO / vibrato depth
++8      1      Attack rate
++9      1      Decay / sustain
++10     1      Release rate
++11     1      Reserved
+```
+
+Uploading custom samples requires setting the memory access registers (`#02`–`#06` in the wavetable bank) and streaming data through the data port. Most ZX MoonSound software uses pre-built sample banks rather than runtime upload due to the complexity and RAM constraints.
+
+### Voice Allocation Strategies
+
+With 42 total voices (24 wavetable + 18 FM), voice allocation becomes a design decision. Common strategies:
+
+**Strategy 1: Wavetable-Primary (Recommended)**
+- Use wavetable voices 0–15 for melodic lines (piano, strings, brass, etc.)
+- Use wavetable voices 16–23 for drums and percussion
+- Reserve FM voices 0–5 for texture layers (pads, bells, organs)
+- Leave FM voices 6–17 unused or for sound effects
+
+**Strategy 2: FM-Primary (Chiptune aesthetic)**
+- Use FM voices 0–5 in 4-op mode for lead melodies
+- Use FM voices 6–17 in 2-op mode for harmony
+- Use wavetable voices 0–7 for drums only
+- Leave wavetable voices 8–23 unused
+
+**Strategy 3: Hybrid Player (Maximum polyphony)**
+- Dynamically allocate from both pools based on instrument type
+- Maintain separate LRU (least-recently-used) lists for wavetable and FM
+- Steal from the pool with the oldest silent voice
+
+Voice stealing priority: silence > release phase > sustain phase > attack phase. Never steal a voice in attack phase unless all 42 voices are active.
+
 ### Clock and Output
 
 The OPL4 runs from a **33.8688 MHz** master clock (derived from a separate crystal on the MoonSound board, not the ZX clock). This is divided internally to:
@@ -187,15 +238,30 @@ The OPL4 occupies **four port addresses** on the ZX bus — two for the FM side 
 
 ### Port Map
 
-| Port | Function | Direction |
-|---|---|---|
-| `#C2` | **FM register index** — write register number (`#00`..`#F5`) | W |
-| `#C3` | **FM register data** — read or write the value at the selected register | R/W |
-| `#7E` | **Wave register index** — write register number (`#00`..`#F7`) | W |
-| `#F4` (or `#F6` on some boards) | **Wave register data** — write the value at the selected register | W |
+Two port schemes exist for MoonSound on ZX Spectrum hardware:
+
+**MSX-Compatible Scheme** (used by ZEsarUX and some FPGA cores):
+
+| Port | Address (A15–A0) | Decoding | Function | Direction |
+|---|---|---|---|---|
+| `#C2` | `xxxxxxxx11000010` | `xxxxxxxx110000x0` | FM register index | W |
+| `#C3` | `xxxxxxxx11000011` | `xxxxxxxx110000x1` | FM register data | R/W |
+| `#7E` | `xxxxxxxx01111110` | varies | Wave register index | W |
+| `#F4` | `xxxxxxxx11110100` | varies | Wave register data | W |
+
+**ZXM-MoonSound Scheme** (Mick Lab implementation):
+
+| Port | Address (A15–A0) | Decoding (A15–A0) | Function | Direction |
+|---|---|---|---|---|
+| `#C4` (196) | `xxxxxxxx11000100` | `xxxxxxxx110001xx` | OPL4 FM status / FM addr | R/W |
+| `#C5` (197) | `xxxxxxxx11000101` | `xxxxxxxx110001xx` | OPL4 FM data | W |
+| `#C6` (198) | `xxxxxxxx11000110` | `xxxxxxxx110001xx` | OPL4 Wave addr | W |
+| `#C7` (199) | `xxxxxxxx11000111` | `xxxxxxxx110001xx` | OPL4 Wave data | W |
+
+The ZXM-MoonSound scheme decodes only bits 7–2 of the low byte, giving 4 mirror addresses per port (1024 mirrors total across the 16-bit address space).
 
 > [!WARNING]
-> **MoonSound port decoding is partial.** The MSX MoonSound standard places FM at `#C2`/`#C3` and wavetable at `#7E`/`#F4`. ZX-adapted MoonSound boards may use slightly different addresses — check the specific board's documentation. Emulators typically accept the MSX standard addresses plus several ZX-clone variants.
+> **Check your target platform's port scheme.** ZEsarUX uses MSX-compatible ports (`#C2`/`#C3` + `#7E`/`#F4`). ZXM-MoonSound hardware uses `#C4`–`#C7`. Software targeting both should probe both schemes during detection, or ship with a compile-time port selection option.
 
 ### FM Register Map (OPL3 subset)
 
@@ -622,10 +688,12 @@ Most modern MoonSound-targeting software is developed and tested on emulator fir
 
 ## References and Further Reading
 
-- [AY-3-8910 / 8912 / 8913 / YM2149F — PSG Silicon](ay_3_8912.md) — The baseline sound chip that [MoonSound](https://www.msx.org/wiki/MoonSound) does not replace but supplements.
+- [AY-3-8910 / 8912 / 8913 / YM2149F — PSG Silicon](ay_3_8912.md) — The baseline sound chip that MoonSound does not replace but supplements.
 - [TurboSound FM — YM2203 OPN FM Synthesis](turbosound_fm.md) — The smaller FM-only sibling. Covers FM synthesis fundamentals in more depth.
+- [SAA1099 — Philips 6-Channel Stereo PSG](saa1099.md) — Another multi-channel synthesis chip (SAM Coupé), useful for comparison of PSG architectures.
 - [General Sound](gs_general_sound.md) — The Soviet alternative for sample-based audio, using a coprocessor instead of a wavetable chip.
-- [Sound Hardware Ecosystem Overview](sound_overview.md) — Where [MoonSound](https://www.msx.org/wiki/MoonSound) fits in the broader sound hardware decision tree.
+- [Covox & SounDrive](covox_sounDrive.md) — Simple DAC-based sample playback, useful for understanding the MoonSound's wavetable advantage.
+- [Sound Hardware Ecosystem Overview](sound_overview.md) — Where MoonSound fits in the broader sound hardware decision tree.
 - [Yamaha YMF278B (OPL4) Datasheet](https://www.msx.org/wiki/MoonSound) — The primary source for register semantics and electrical characteristics. Available in scanned form from multiple retro-computing archives.
 - [MSX MoonSound Wiki](https://www.msx.org/wiki/MoonSound) — The MSX community maintains the most complete documentation of real-world MoonSound behavior, including firmware revisions and known incompatibilities.
 - [Vortex Tracker II](http://bulba.unterground.net) — The standard AY/MoonSound tracker for Windows. Source code includes a complete MoonSound player reference implementation.

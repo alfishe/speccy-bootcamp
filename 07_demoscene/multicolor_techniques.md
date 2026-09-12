@@ -604,7 +604,7 @@ Frame 3:  display image B again
 ...
 ```
 
-Each individual frame's effective resolution is 8×1; the gigascreen averaging happens in the viewer's eye. This technique works well on CRTs with short phosphor persistence (where the previous frame has just faded when the next is drawn) and is the standard gigascreen format in modern Russian demos.
+Each individual frame's effective resolution is 8×1; the gigascreen averaging happens mostly in the viewer's eye ([Talbot–Plateau](https://en.wikipedia.org/wiki/Talbot-Plateau_law) temporal integration), with the CRT's phosphor decay tail adding a few percent of direct cross-blending — see [interlace_and_flicker.md](../05_development/05_display_and_timing/interlace_and_flicker.md) for the measured decay numbers. Frame-based gigascreen is the standard format in modern Russian demos.
 
 The cost: you must compute **two** attribute streams per frame instead of one. With algorithmic generation, this is twice the math cost; with disk streaming, this is twice the disk bandwidth.
 

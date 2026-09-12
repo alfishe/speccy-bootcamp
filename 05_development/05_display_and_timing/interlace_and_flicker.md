@@ -2,7 +2,7 @@
 
 # Interlace and Flicker — Why the Spectrum Picture Stays Still, Mostly
 
-The ZX Spectrum is unusual among 1980s home computers: its video output is **non-interlaced**. Where broadcast PAL alternates two 312½-line fields at 25 Hz each to build a 625-line frame at 50 Hz, the Spectrum outputs the **same 312-line field 50 times per second**. This single design choice shapes everything about how Spectrum graphics flicker (or don't), how monitors react, and why modern LCD displays require special handling.
+The ZX Spectrum is unusual among 1980s home computers: its video output is **non-interlaced**. Where broadcast PAL alternates two 312½-line fields at 25 Hz each to build a 625-line frame at 50 Hz, the Spectrum outputs the **same 312-line field 50 times per second**. This single design choice shapes everything about how Spectrum graphics flicker (or don't), and why modern LCDs handle flicker-based effects differently than CRTs.
 
 This article covers the perception physics and the practical coding implications. For the underlying frame timing, see [video_frame_overview.md](video_frame_overview.md). For GigaScreen as a video mode (alternating two attribute sets), see [clone_video_modes.md](clone_video_modes.md). For color clash and the 8×8 attribute cell, see [color_system.md](color_system.md).
 
@@ -44,7 +44,7 @@ The Pentagon generates **320 lines per frame** at 48.83 Hz — still non-interla
 The human eye's flicker sensitivity depends on **three factors**:
 
 1. **Refresh rate** — 50 Hz is just above the threshold for most viewers in bright ambient light, but borderline in dim rooms
-2. **Brightness** — brighter images flicker more visibly (the Ferry-Porter law: critical flicker frequency rises ~10 Hz per decade of luminance)
+2. **Brightness** — brighter images flicker more visibly (the [Ferry-Porter law](https://en.wikipedia.org/wiki/Flicker_fusion_threshold): critical flicker frequency rises ~10 Hz per decade of luminance)
 3. **Display technology** — CRT phosphor decay and LCD sample-and-hold behave very differently
 
 ### Ferry-Porter and the 50 Hz Borderline
@@ -64,21 +64,37 @@ This is why the Spectrum's 50 Hz refresh has historically been described as "acc
 
 ### Phosphor Persistence
 
-The P22 phosphor used in most European color CRTs has a decay time of approximately 5–15 ms to 10% brightness. At a 20 ms frame period (50 Hz), this means each scanline is still glowing at **~30–50% of its peak brightness** when the next refresh arrives — the eye perceives a continuous image.
+"P22" is not one phosphor. It is the standard **set of three** coatings used in color CRTs, and they decay very differently — which is why single-number "P22 decay time" figures vary wildly between datasheets and forum posts.
+
+| Channel | Chemistry | Decay shape | Behavior |
+|---|---|---|---|
+| Red | Rare-earth (Y₂O₂S:Eu / Y₂O₃:Eu) | Near-exponential | Nearly all stored energy released within **1–2 ms**; dark long before the next frame |
+| Green | Zinc sulfide (ZnS:Cu,Al) | Power law ≈ `t^(-1.1)` | Fast initial drop, then a heavy tail that persists far beyond one frame |
+| Blue | Zinc sulfide (ZnS:Ag) | Power law ≈ `t^(-1.1)` | Same heavy-tailed behavior as green |
+
+The best public measurement is Markus Kuhn's [photomultiplier characterization of a P22 tube](https://www.cl.cam.ac.uk/~mgk25/ieee02-optical.pdf) (University of Cambridge, 2002), which produced closed-form impulse-response fits for all three channels. Evaluating the green-channel fit over a 50 Hz frame, expressed as a percentage of the **frame-average luminance** — the level the eye adapts to, and the only meaningful yardstick for flicker:
 
 ```
-CRT phosphor decay (typical P22 green channel):
-  T=0 ms:   100% brightness (just refreshed)
-  T=5 ms:    50% brightness
-  T=10 ms:   20% brightness
-  T=15 ms:    8% brightness
-  T=20 ms:    3% brightness  ← next refresh arrives
-  
-Average perceived brightness: ~35% of peak
-Flicker: visible only to sensitive viewers
+Green channel decay, % of frame-average luminance (Kuhn 2002 fit):
+  T=1 ms:    ~200%   ← spike phase, beam has just passed
+  T=5 ms:     ~35%
+  T=10 ms:    ~17%
+  T=15 ms:    ~11%
+  T=20 ms:     ~8%   ← next 50 Hz refresh arrives
+  T=40 ms:     ~3.6% ← one GigaScreen alternation period later
+  T=100 ms:    ~1.3%
+  ... the tail has no cutoff: afterglow remains visible for minutes
+      in a completely dark room (scotopic vision)
+
+Red channel: <0.1% beyond 5 ms — effectively no persistence.
 ```
 
-This is why **CRT displays hide flicker that LCDs reveal**: the CRT's phosphor decay provides natural temporal smoothing. LCDs use sample-and-hold, where each pixel is held at full brightness for the entire frame period — this eliminates phosphor decay but introduces motion blur and makes flicker effects look different.
+Exact numbers vary between tube generations and beam currents (the EIA registry TEP116-C classes the sulfide channels only coarsely, "medium short" to "medium", spanning 10 µs–100 ms), but the shape is universal. Two corrections to folk wisdom follow:
+
+- **"% of peak" is the wrong unit.** The excitation spike lasts microseconds and reaches hundreds of times the frame average — the eye never perceives the peak. Relative to the mean, the green/blue glow at the moment of the next refresh is a few percent, not the tens of percent sometimes quoted.
+- **The afterglow really does outlast the frame.** The sulfide power-law tail never fully ends: at 40 ms it is still ~3.6% of the mean, and it is measurable minutes later. This is genuine physical temporal blending — but at normal viewing brightness it is a modest contribution, not a 50/50 mix.
+
+So a 50 Hz CRT picture is **not** steady light with the phosphor "bridging" the gap between frames. Green/blue modulation depth at 50 Hz remains large, and the picture reads as stable because 50 Hz sits at the edge of the critical flicker frequency for typical living-room brightness — consistent with the market producing 100 Hz TVs for the flicker-sensitive minority. What the phosphor does provide is **partial smoothing**: it softens each refresh into a decaying pulse and leaves a few percent of residual glow that cross-blends into the following frame. LCDs are sample-and-hold displays — each pixel is held at full brightness for the entire frame with no decay — so temporal effects reach the eye at full modulation. This difference is what makes flicker-based techniques such as GigaScreen look far better on CRTs (see below).
 
 ---
 
@@ -114,7 +130,7 @@ The ROM's standard cursor blink is **once every 32 frames (~0.64 seconds)** — 
 
 ## GigaScreen Flicker — The Math
 
-GigaScreen ([clone_video_modes.md](clone_video_modes.md)) alternates two attribute sets on even and odd frames to simulate 8×1 color resolution via temporal mixing. Each attribute set is displayed at 25 Hz — half the standard refresh rate.
+GigaScreen ([clone_video_modes.md](clone_video_modes.md)) alternates two attribute sets on even and odd frames to extend the perceived palette through temporal color mixing. Each attribute set is displayed at 25 Hz — half the standard refresh rate.
 
 The flicker visibility depends entirely on the **contrast between the two attribute sets**:
 
@@ -148,6 +164,17 @@ Attribute B:  INK=1 (blue)    on PAPER=0 (black)
 | Blue ↔ Magenta | Low | Safe |
 
 **Rule of thumb**: choose two colors with similar perceived brightness (luminance) on a monochrome display. Colours close on a Y of YUV axis flicker less.
+
+### Why GigaScreen Looks Blended on a Real CRT
+
+If only ~8% of the previous frame's glow survives into the next, why does a well-paired GigaScreen image on a CRT look like a stable blended picture rather than 25 Hz strobing? Because the mixing happens mostly **in the eye, not on the phosphor**:
+
+1. **[Talbot–Plateau law](https://en.wikipedia.org/wiki/Talbot-Plateau_law)** — when an alternating light is above the viewer's flicker-fusion threshold for its modulation depth, it is perceived as a steady light of the **time-averaged** color and brightness. The blend is computed by the visual system; the screen only has to alternate fast enough.
+2. **Modulation depth is the free parameter** — the designer cannot raise the 25 Hz alternation rate, but can shrink the luminance swing of the pair (the tables above). Low-swing pairs fall below the fusion threshold and blend cleanly; black↔white stays far above it and strobes.
+3. **The phosphor adds a little real mixing** — each refresh lands on a screen still carrying ~8% of the previous frame's color (green/blue), and the spike-plus-decay waveform is temporally softer than an LCD's flat sample-and-hold plateau. This is why GigaScreen is reported as looking "warmer" and more integrated on a CRT than a hard digital alternation.
+4. **Pentagon runs it slightly slower** — at the Pentagon's 48.83 Hz frame rate ([video_frame_pentagon.md](video_frame_pentagon.md)), each attribute set is displayed at **~24.4 Hz** instead of 25 Hz, marginally increasing visible flicker relative to a 128K.
+
+The reason GigaScreen looks *worse* on LCDs and emulators is the mirror image: sample-and-hold delivers the alternation as a full-modulation square wave, and on a 60 Hz host display the 25 Hz color flips land irregularly (one color held two host frames, the other three), producing low-frequency beats that read as harsh strobing. Emulator "mix"/"blend" modes sidestep the problem by displaying the mathematical Talbot average — `(A + B) / 2` — as a single frame, reproducing what a CRT viewer perceives without asking the viewer's visual system to do the fusion. See [multicolor_techniques.md §8.6](../../07_demoscene/multicolor_techniques.md) for the emulator-side view.
 
 ---
 
@@ -195,48 +222,7 @@ LCD (sample-and-hold):
 
 For static Spectrum images, LCDs are fine. For moving objects (scrolling, sprites), LCDs add motion blur that the original CRT didn't have. This is why some emulators offer a "CRT shader" or "phosphor emulation" — to recreate the CRT's temporal smoothing.
 
-### Frame-Rate Mismatch
-
-Most modern LCDs run at **60 Hz** (or 120 Hz, 144 Hz). The Spectrum's 50.08 Hz output requires the display to either:
-
-1. **Drop frames** — every 6th frame is dropped, producing visible judder on motion
-2. **Duplicate frames** — every 5th frame is shown twice, producing visible stutter
-3. **Adaptive sync (G-Sync/FreeSync)** — the display matches the source rate; requires a VRR-capable monitor
-
-For 48.83 Hz Pentagon output on a 60 Hz LCD, the mismatch is worse: ~16.7% of frames must be dropped or duplicated.
-
-### Modern Solutions
-
-- **OSSC (Open Source Scan Converter)** — line-multiplies the Spectrum's signal to a higher resolution and feeds it to a VGA/HDMI display at the original refresh rate
-- **RetroTINK upscalers** — similar function with additional frame-rate conversion options
-- **GigaDEF / CRT emulation shaders** — software filters in emulators that simulate phosphor decay
-- **FreeSync/G-Sync over HDMI** — modern monitors with VRR can lock to the Spectrum's 50.08 Hz natively
-
----
-
-## VSYNC and HSYNC Tolerances
-
-The Spectrum's sync signals are within broadcast PAL tolerances, but barely:
-
-```
-Standard PAL:
-  HSYNC frequency:    15,625 Hz  (64.000 µs per line)
-  VSYNC frequency:     50.000 Hz  (20.000 ms per frame)
-  
-ZX Spectrum 48K:
-  HSYNC frequency:    15,625 Hz  (64.000 µs per line)  ← matches
-  VSYNC frequency:     50.080 Hz  (19.968 ms per frame) ← 0.16% off
-
-ZX Spectrum 128K / +2 / +2A:
-  HSYNC frequency:    15,652 Hz  (~63.89 µs per line)
-  VSYNC frequency:     50.020 Hz  (~19.99 ms per frame)
-
-Pentagon:
-  HSYNC frequency:    15,625 Hz  (matches 48K)
-  VSYNC frequency:     48.830 Hz  (20.478 ms per frame) ← 2.3% off, marginal
-```
-
-Most CRTs tolerate ±2% deviation without issue. Some modern LCDs are stricter and may refuse to sync to the Pentagon's 48.83 Hz output entirely, requiring an upscaler.
+Frame pacing on a fixed-refresh panel — what a 50.08 Hz (or 48.83 Hz Pentagon) signal does when the display insists on 60 Hz: dropped and duplicated frames, judder, sync capture ranges, and the upscalers and VRR displays that solve them — is a timing topic rather than a perception one; see [cycle_exact_accuracy.md](../../11_emulation/software/cycle_exact_accuracy.md), [crt_output.md](crt_output.md), and [video_frame_pentagon.md](video_frame_pentagon.md).
 
 ---
 
@@ -244,7 +230,7 @@ Most CRTs tolerate ±2% deviation without issue. Some modern LCDs are stricter a
 
 If you're writing software that targets both CRT and LCD displays:
 
-1. **Avoid GigaScreen for moving images** — temporal mixing only works on impulse displays; on sample-and-hold LCDs it produces visible strobing without the smoothing benefit.
+1. **Avoid GigaScreen for moving images** — the eye's temporal averaging works best on stationary content; moving edges shimmer as they are sampled alternately in both colors, and on sample-and-hold LCDs the alternation arrives at full modulation with no phosphor softening (see § Why GigaScreen Looks Blended on a Real CRT).
 2. **Don't flash attributes faster than ~3 Hz** — anything above this risks triggering photosensitive epilepsy in susceptible viewers and produces visible flicker in everyone else.
 3. **Use bright/bright attribute pairs carefully** — the "bright" flag doubles luminance, which doubles flicker visibility. Bright-on-bright GigaScreen is rarely acceptable.
 4. **Test on real hardware** — CRT vs LCD will look different. What looks great on an emulator may flicker unbearably on a real CRT, and vice versa.
@@ -259,6 +245,7 @@ If you're writing software that targets both CRT and LCD displays:
 - [Clone video modes](clone_video_modes.md) — GigaScreen, multicolor, hires modes
 - [Contention timing](contention_timing.md) — why mistimed multicolor effects flicker
 - [CRT output](crt_output.md) — video output hardware (RF, composite, RGB, SCART, VGA)
+- [Cycle-exact accuracy](../../11_emulation/software/cycle_exact_accuracy.md) — frame pacing, drops/duplicates, and judder on modern displays
 - [Border effects](border_effects.md) — timing-safe border writes
 - [Raster timing](raster_timing.md) — beam position calculation
 - [Video frame comparison](video_frame_comparison.md) — all models side-by-side
@@ -270,7 +257,7 @@ If you're writing software that targets both CRT and LCD displays:
 - [Chris Smith, The ZX Spectrum ULA: How to Design a Microcomputer](http://www.zxdesign.info/) — documents the ULA's non-interlaced output and its rationale.
 - **IEEE Ferry-Porter law literature** — the canonical reference for human flicker perception thresholds, basis for the 50 Hz design choice.
 - **Poynton, *Digital Video and HD: Algorithms and Interfaces*** — covers CRT vs LCD temporal response, sample-and-hold vs impulse display.
-- **OSSC documentation** ([github.com/marqs85/ossc](https://github.com/marqs85/ossc)) — documents the frame-rate mismatch issues between 50.08 Hz Spectrum output and 60 Hz LCD displays.
-- [RetroGFX CRT Shader documentation](https://github.com/) — software emulation of phosphor decay for modern displays.
 - [ZX Spectrum +2 / +3 Service Manual](https://www.worldofspectrum.org/hardware.html) — Amstrad documentation of the gate array's slightly non-standard sync timing.
 - **[zx-pk.ru](https://zx-pk.ru) GigaScreen threads** — real-hardware reports of which GigaScreen color pairs flicker most visibly on Soviet CRT TVs.
+- **Markus G. Kuhn, "Optical Time-Domain Eavesdropping Risks of CRT Displays"** ([cl.cam.ac.uk](https://www.cl.cam.ac.uk/~mgk25/ieee02-optical.pdf)) — photomultiplier-measured impulse responses of the three P22 phosphor channels; source of the decay figures in this article.
+- **EIA TEP116-C, "Optical Characteristics of Cathode-Ray Tube Screens"** (1993) — the registry standard behind single-number phosphor persistence ratings.

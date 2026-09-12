@@ -14,9 +14,9 @@ Every I/O port across all ZX Spectrum models and clones, with decoding bitmasks 
 Each entry shows the **canonical port address**, the **binary address pattern** (A15–A0), and the **decoding mask** — which address lines the hardware actually checks. Lines marked `x` are don't-care; the peripheral ignores them.
 
 ```
-Port     Address (A15–A0)  Decoding (A15–A0)  READ          WRITE
-#FE      xxxxxxxx11111110  xxxxxxxxxxxxxxxx0  Key(Brd(Spk(
-                            only A0 checked     keyboard)     border/speaker)
+Port     Address (A15–A0)  Decoding (A15–A0)  READ                   WRITE
+#FE      xxxxxxxx11111110  xxxxxxxxxxxxxxx0  Key(keyboard), Tp(tape) Brd(border), Spk(speaker)
+                            only A0 checked
 ```
 
 - **Address column**: the full 16-bit value on the bus for the canonical port.
@@ -960,16 +960,72 @@ The ZX Spectrum ecosystem accumulated a remarkable variety of sound hardware. Ea
 
 ### General Sound (GS) — #B3 / #BB
 
-A dedicated Z80-based sound card with 4-channel sample playback. Has its own Z80 CPU, RAM, and DAC.
+A dedicated Z80-based sound card with 4-channel sample playback. Has its own Z80 CPU, RAM, and DAC. Original X-Trade design.
 
 ```
 Port     Address (A15–A0)  Decoding (A15–A0)    READ        WRITE
 
-#B3      xxxxxxxx10110011  xxxxxxxx10110011    GS data     GS data
-#BB      xxxxxxxx10111011  xxxxxxxx10111011    GS status   GS command
+#B3      xxxxxxxx10110011  xxxxxxxx10110011    GS status   GS command
+#BB      xxxxxxxx10111011  xxxxxxxx10111011    GS data     GS data
 ```
 
-Full 8-bit low-byte decode on both ports: `#B3` is the data FIFO, `#BB` reads status and writes commands. The GS is a self-contained subsystem — you send commands and sample data, and the card's internal Z80 handles mixing and playback.
+Full 8-bit low-byte decode on both ports: `#BB` is the data FIFO, `#B3` reads status and writes commands. The GS is a self-contained subsystem — you send commands and sample data, and the card's internal Z80 handles mixing and playback.
+
+> [!WARNING]
+> Ports `#B3` and `#BB` conflict with divIDE. See ZXM-GeneralSound for solution.
+
+### ZXM-GeneralSound — #B3 / #BB / #33
+
+Mick's implementation of General Sound with additional control port to avoid divIDE conflict.
+
+```
+Port     Address (A15–A0)  Decoding (A15–A0)    READ        WRITE
+
+#B3      xxxxxxxx10110011  xxxxxxxx10110011    GS status   GS command
+#BB      xxxxxxxx10111011  xxxxxxxx10111011    GS data     GS data
+#33      xxxxxxxx00110011  xxxxxxxx00110011    —           GS control
+```
+
+Control port `#33` bit layout:
+- Bit 4 (EnGS): `0` = card enabled (default after reset), `1` = card disabled
+
+To disable the card (avoiding divIDE conflict):
+```z80
+    ld a, #10       ; bit 4 = 1
+    out (#33), a
+```
+
+### NeoGS — #B3 / #BB / #33
+
+Enhanced General Sound with DSP capabilities. Uses the same port layout as ZXM-GeneralSound but with extended command set and more memory.
+
+```
+Port     Address (A15–A0)  Decoding (A15–A0)    READ        WRITE
+
+#B3      xxxxxxxx10110011  xxxxxxxx10110011    NeoGS status  NeoGS command
+#BB      xxxxxxxx10111011  xxxxxxxx10111011    NeoGS data    NeoGS data
+#33      xxxxxxxx00110011  xxxxxxxx00110011    —             NeoGS control
+```
+
+### MoonSound (ZXM-MoonSound) — #C4–#C7
+
+YMF278 (OPL4) based sound card providing both FM synthesis and wavetable playback. MSX MoonSound compatible.
+
+```
+Port     Address (A15–A0)  Decoding (A15–A0)    READ            WRITE
+
+#C4      xxxxxxxx11000100  xxxxxxxx110001xx    OPL4 FM status  OPL4 FM addr
+#C5      xxxxxxxx11000101  xxxxxxxx110001xx    —               OPL4 FM data
+#C6      xxxxxxxx11000110  xxxxxxxx110001xx    —               OPL4 Wave addr
+#C7      xxxxxxxx11000111  xxxxxxxx110001xx    —               OPL4 Wave data
+```
+
+The YMF278/OPL4 provides:
+- 18 channels of 2-operator FM synthesis (OPL3 compatible)
+- 24 channels of 12/16-bit wavetable PCM playback
+- Up to 1MB sample RAM
+
+Ports decode only bits 7–2 of the low byte, giving 4 mirrors per port.
 
 ### TurboSound — #FF
 
