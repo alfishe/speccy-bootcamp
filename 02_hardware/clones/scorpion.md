@@ -403,11 +403,11 @@ The Scorpion's memory system provides **256 KB of RAM** organized as 16 pages of
 | **Total RAM** | 128 KB (8 banks) | 128–1024 KB | **256 KB** (16 pages) | 128–1024 KB |
 | **Total ROM** | 32 KB (2 banks) | 32 KB + TR-DOS | **64 KB** (4 pages) + ProfROM | 128 KB (4 pages) |
 | **Page size** | 16 KB | 16 KB | 16 KB | 16 KB |
-| **`#C000` paging** | `#7FFD` bits 0–2 | `#7FFD` bits 0–2 + `#EFF7` | `#7FFD` bits 0–2 + **`#1FFD` bit 4** | `#7FFD` + `#FDFD`/`#FF77` |
+| **`#C000` paging** | `#7FFD` bits 0–2 | `#7FFD` bits 0–2 + **bits 5–7** (gate: `#EFF7`) | `#7FFD` bits 0–2 + **`#1FFD` bit 4** | `#7FFD` + `#FDFD`/`#FF77` |
 | **`#4000` paging** | **Fixed** (Bank 5) | **Fixed** (Bank 5) | **Fixed** (Bank 5) | **Switchable** |
 | **`#8000` paging** | **Fixed** (Bank 2) | **Fixed** (Bank 2) | **Fixed** (Bank 2) | **Switchable** |
 | **`#0000` paging** | ROM 0/1 or TR-DOS | ROM 0/1 or TR-DOS | ROM 0–3 or RAM-0 | ROM or RAM — any page |
-| **Extended paging** | N/A | `#EFF7` | **`#1FFD`** (banks 8–15) | `#FDFD` / `#FF77` |
+| **Extended paging** | N/A | `#7FFD` bits 6–7–5 (banks 8–63) | **`#1FFD`** (banks 8–15) | `#FDFD` / `#FF77` |
 | **Contention** | Banks 1, 3, 5, 7 | **None** | **Implementation-dependent** | **None** |
 
 ### Memory Map — Operating Modes
@@ -578,7 +578,7 @@ The Scorpion's port scheme is notable for its **clean decode design** — the `#
 |------|-----------------|---------------|-----------------|--------------|
 | `#FE` | Border, beeper, MIC, keyboard (A0=0) | Same (A0=0) | Border, beeper, MIC, keyboard, **printer** (`A4,A3,A1,A0` checked) | Border, beeper (A2,A1,A0 checked) |
 | `#FF` | Floating bus (A0=0... any odd) | Different/absent | **Attribute read** (`A4,A3,A1,A0`) | Attribute read (`A2,A1,A0`) |
-| `#7FFD` | Paging (write-only) | Same + `#EFF7` | Same (write-only) | Same (read/write on Turbo 2+) |
+| `#7FFD` | Paging (write-only) | Same + ext bits 5–7 (gate: `#EFF7`) | Same (write-only) | Same (read/write on Turbo 2+) |
 | `#1FFD` | +2A/+3: ROM paging | Beta 128 FDC | **Turbo + extended RAM + ROM/RAM** (read/write) | Beta 128 FDC |
 | `#1F` | N/A | Kempston joystick | **Kempston joystick** (`A0,A1,A3,A4`) | N/A |
 | `#FFDD` | N/A | N/A | **Centronics printer** | N/A |
@@ -586,7 +586,7 @@ The Scorpion's port scheme is notable for its **clean decode design** — the `#
 | `#BFFD` | AY data write | Same | Same | Same |
 | `#1F`/`#3F`/`#5F`/`#7F` | N/A | Beta 128 FDC | **Beta 128 FDC** | Beta 128 FDC |
 | `#DFFD` | N/A | N/A | **GMX extended paging** (GMX only) | N/A |
-| `#EFF7` | N/A | Extended mem (512K+) | N/A | N/A |
+| `#EFF7` | N/A | Control register (ext-RAM gate) | N/A | N/A |
 
 ---
 

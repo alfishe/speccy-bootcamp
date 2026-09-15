@@ -296,7 +296,7 @@ This creates a **port mirroring** effect. Code that writes to `#01FE` will also 
 | 128K | `#7FFD` | A15=0, A1=0 | Any address with A15=0 and A1=0 |
 | 128K | `#BFFD`/`#FFFD` | A15,A14,A1,A0 | Depends on exact gate array |
 | Pentagon | `#7FFD` | Similar to 128K | Similar mirroring |
-| Pentagon | `#77` (shadow) | Different decoding | Pentagon-specific shadow port |
+| ATM Turbo | `#77` (shadow) | Partial, A7-A0 pattern | ATM-specific video/turbo register (not a Pentagon port!) |
 | ZX Spectrum Next | Many ports | Full decoding on most | Minimal mirroring |
 
 > [!WARNING]
@@ -444,7 +444,7 @@ On the 48K ZX Spectrum, the ULA decodes only **A0** for port `#FE`. Any address 
 On machines that decode more address lines, `#01FE` is **not** the ULA port — it may be unmapped or may map to a completely different peripheral:
 
 - **128K/+2**: the gate array decodes A15 and A1 for port `#7FFD`. Address `#01FE` has A15=0, which means it could collide with the `#7FFD` paging register decode logic.
-- **Pentagon**: some Pentagon models decode additional lines for their shadow port `#77`. Non-canonical addresses may trigger unintended register writes.
+- **ATM Turbo**: its `#77` shadow-port family decodes an A7–A0 pattern, so stray addresses can hit the ATM video/turbo register. (The Pentagon itself has no `#77` port — that register belongs to the ATM family.)
 - **ZX Spectrum Next**: most ports are **fully decoded**. `#01FE` is simply not port `#FE` — it does nothing at all. Your border change silently fails.
 - **+2A/+3**: the Amstrad gate array uses different decoding than the Ferranti ULA. Mirrored addresses that worked on the 48K may activate the wrong peripheral.
 

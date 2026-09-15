@@ -65,7 +65,7 @@ Address range    Contents               Control
 
 ### Port #DFFD — Kay Extended Paging
 
-The Kay uses port `#DFFD` (not `#EFF7` like the Pentagon) for extended bank selection:
+The Kay uses port `#DFFD` for extended bank selection (unlike the Pentagon, which keeps its bank bits inside `#7FFD` and uses `#EFF7` only as a control/gate register):
 
 ```
 Port #DFFD (Kay extended paging, write-only):
@@ -217,7 +217,7 @@ This is the basic pattern; production code adds error handling (check the error 
 |---|---|---|
 | **Timing compatibility** | 48K-exact (69,888 T/frame, 312 lines) | Non-standard (71,680 T/frame, 320 lines) |
 | **Contention** | None | None |
-| **Extended paging port** | `#DFFD` | `#EFF7` |
+| **Extended paging port** | `#DFFD` (separate port) | `#7FFD` bits 5–7 (gate: `#EFF7`) |
 | **Expansion bus** | Nemo bus (60-pin) | Standard edge connector (56-pin) |
 | **Hard disk support** | Built-in IDE controller | Requires expansion |
 | **Video modes** | Standard + GigaScreen (2006 NB) | Standard only |
@@ -232,7 +232,7 @@ This is the basic pattern; production code adds error handling (check the error 
 
 ## Cross-References
 
-- [Pentagon 128K](pentagon.md) — the dominant Soviet clone, with different timing and `#EFF7` paging
+- [Pentagon 128K](pentagon.md) — the dominant Soviet clone, with different timing and single-port `#7FFD` extended paging
 - [Pentagon 1024](pentagon_1024.md) — the Pentagon's 1 MB variant, Kay's main competitor
 - [Scorpion](scorpion.md) — another high-end clone with Nemo bus compatibility (SMUC)
 - [ATM Turbo](atm_turbo.md) — CP/M-capable clone with extended graphics

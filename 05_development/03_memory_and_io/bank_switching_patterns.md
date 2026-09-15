@@ -265,39 +265,41 @@ Plus3DoubleBuffer:
 
 ## Pentagon — Extended Memory
 
-The Pentagon 128K uses the same `#7FFD` port as the 128K, but expanded models (512K, 1024K) add port `#EFF7` for extended bank selection.
+The Pentagon 128K uses the same `#7FFD` port as the 128K. Expanded models (512K, 1024K) keep that single port: the unused high bits become bank bits, enabled by the `#EFF7` control register's extension gate (bit 2).
 
 ### 512K / 1024K Paging
 
 ```
-Port #EFF7 (write-only):
-  Bits 0-3: Extended bank bits (bank 8-127)
-  Combined with #7FFD bits 0-2:
-    Total: 7 bits → 128 banks of 16K = 2048K maximum
+#7FFD (write-only) on a Pentagon 512K/1024K:
+  Bits 0-2:  Bank bits 0-2   (standard 128K)
+  Bit  3:    Screen select
+  Bit  4:    ROM select
+  Bit  5:    Bank bit 5 — only while #EFF7 bit 2 = 0 (gate open);
+             otherwise the standard 48K lock
+  Bit  6:    Bank bit 3   (banks 8-15)
+  Bit  7:    Bank bit 4   (banks 16-31)
+  Total: 6 bits -> 64 banks of 16K = 1024 KB
 ```
 
 ```z80
-; Pentagon 1024K: Page in bank 32 (beyond the base 8)
+; Pentagon 1024K: page in bank 32 at #C000 — single port
 PentagonPageExtended:
-    ; #7FFD bits 0-2 select banks 0-7
-    ; For banks 8+, use #EFF7 for high bits
-
-    LD   A,BankNumber     ; Bank 0-127
-    RRCA                  ; Rotate bit 0 into carry
-    RRCA
-    RRCA                  ; Bits 0-2 now in position for #EFF7 low bits
-    ; ... exact encoding depends on Pentagon revision
+    ; Bank 32 = bit 5 (#20); screen 5 and ROM 0 stay clear
+    XOR  A
     LD   BC,#EFF7
+    OUT  (C),A            ; open the extension gate (bit 2 = 0)
+
+    LD   A,(#5CC5)        ; BANK_M: current #7FFD shadow
+    AND  #18              ; keep screen + ROM bits from the shadow
+    OR   #20              ; bank bit 5 -> bank 32
+    LD   BC,#7FFD
     OUT  (C),A
-    ; Then also set #7FFD for the low 3 bits
-    LD   A,BankNumber
-    AND #07
-    ; ... merge with screen/ROM bits as normal
+    LD   (#5CC5),A
     RET
 ```
 
 > [!NOTE]
-> Extended memory paging on the Pentagon requires a CPLD or modified address decoding. The base Pentagon 128K (discrete TTL) cannot address beyond 128K. See [clone_timing.md](../../02_hardware/clones/clone_timing.md) for details.
+> The extension is a hand-built modification of the base board: added DRAM plus latch bits wired into `#7FFD`, gated via `#EFF7`. The unmodified Pentagon 128K (discrete TTL) cannot address beyond 128K. Full hardware story and a safe RAM-detection routine: [pentagon_1024.md](../../02_hardware/clones/pentagon_1024.md).
 
 ---
 

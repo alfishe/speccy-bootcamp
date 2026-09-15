@@ -83,7 +83,7 @@ OUT (#7FFD), A — 128K paging register (write-only):
 
 ### Decoding
 
-Port `#7FFD` checks 6 address lines (relatively well-decoded for the Spectrum): A15=0, A14–A11=`0111`, A1=0. This gives 64 mirror addresses. Always use the canonical `#7FFD`. See [io_port_decoding.md](io_port_decoding.md) for the full decoding mask.
+Port `#7FFD` checks only **2 address lines** — A15=0 and A1=0 — giving 16,384 mirror addresses (mask `0xxxxxxxxxxxxx0x`; this is why the famous `#FFD` mirror pages RAM on every 128K machine). The +2A/+3 later tightened this to 3 lines by adding A14=1. Always use the canonical `#7FFD`. See [io_port_decoding.md](io_port_decoding.md) for the full decoding mask.
 
 ### Paging Examples
 

@@ -100,7 +100,7 @@ Because peripherals share the I/O space with minimal decoding, some ports **over
 
 ```
 #FE (ULA, A0=0):     32,768 mirrors → overlaps with almost everything
-#7FFD (paging):        64 mirrors → relatively well-decoded
+#7FFD (128K paging): 16,384 mirrors → A15=0, A1=0 only
 #FFFD/#BFFD (AY):   32K/16K mirrors → can conflict with other A0/A1 devices
 #1F (Kempston):     varies widely → cheap interfaces may conflict with #FE
 #1FFD (Beta 128):     depends on clone → may conflict with +3 #1FFD
@@ -115,11 +115,11 @@ The same port number can decode differently on different machines:
 | Port | 48K | 128K/+2 | +2A/+3 | Pentagon |
 |------|-----|---------|--------|----------|
 | `#FE` | ULA (border/EAR/keyboard) | Same | Same | Same |
-| `#7FFD` | Not present | Paging (bank/ROM/screen) | Same + lock bit | Same + EFF7 extension |
+| `#7FFD` | Not present | Paging (bank/ROM/screen) | Same + lock bit | Same + extension bank bits 5-7 (gated by `#EFF7`) |
 | `#1FFD` | Not present | Not present | Extended paging + disk | Beta 128 FDC (different!) |
 | `#FFFD`/`#BFFD` | Not present (no AY) | AY register select/data | Same | Same |
 | `#1F` | Kempston (if interface) | Same | Same | Built-in |
-| `#EFF7` | Not present | Not present | Not present | Extended memory (512K+) |
+| `#EFF7` | Not present | Not present | Not present | Control register (ext-RAM gate, video, turbo) |
 
 > [!WARNING]
 > Port `#1FFD` on the +2A/+3 controls **paging and disk motor**, but on the Pentagon/Scorpion it controls the **Beta 128 FDC** — completely different function, same port number. Software must detect the machine before using model-specific ports.
@@ -144,7 +144,7 @@ On real hardware this decoding is built from:
 
 - **Discrete gates** — NOT, AND, NAND, OR, NOR (74HC00 series or Soviet KR1533 series)
 - **Decoder chips** — 74HC138 (3-to-8 decoder) for multi-line address matching
-- **Comparators** — 74HC688 (8-bit identity comparator) for exact port matching
+- **Comparators** — 74HC688 (8-bit identity comparator) for narrow port matching (exact, or partial when only some pairs are wired)
 - **Custom ASICs** — Ferranti ULA (48K), Amstrad gate array (+2A/+3), EPLD (Scorpion)
 - **FPGAs** — ZX Spectrum Next, MiSTer core — behavioral Verilog
 
@@ -154,9 +154,9 @@ The **number of address lines checked** directly determines how many mirror addr
 Lines checked   Mirror count   Example
 ─────────────   ────────────   ──────────────────
 1               32,768         ULA #FE (A0 only)
-3               8,192          Kempston #1F (A0-A2)
-6               64             128K #7FFD (6 lines via 74138)
-8+              2-4            Pentagon #EFF7 (74688 comparator)
+2               16,384         128K/+2 #7FFD (A15=0, A1=0)
+3               8,192          +2A/+3 and Pentagon-1024 #7FFD (+ A14=1)
+5               2,048          Pentagon #EFF7 (A15-A12=1110, A3=0)
 16              1              Full decode (FPGA only)
 ```
 
@@ -241,34 +241,36 @@ wire [1:0] paging_mode = {reg_1ffd[0], reg_7ffd[5]};
 
 > Full details: [memory_and_io_plus3.md](memory_and_io_plus3.md)
 
-### Pentagon: #7FFD + #EFF7 — Two-Stage Extended Decoding
+### Pentagon: #7FFD + #EFF7 — Paging Latch + Control Register
 
 <img src="./assets/pentagon_port_decoding.svg" width="720" alt="Pentagon #7FFD + #EFF7 decoding schematic" />
 
-The Pentagon uses **two separate decoding circuits** to support extended memory (512K and 1024K):
+The Pentagon uses **two separate decoding circuits**, but only one of them pages memory:
 
-1. **74HC138** (KR1533ID7) — decodes **#7FFD** identically to the 128K (6 lines, 64 mirrors)
-2. **74HC688** (KR1533SP1) — 8-bit **identity comparator** decodes **#EFF7** with an exact match
+1. **74HC138** (KR1533ID7) — decodes **#7FFD**, the paging latch: bits 0-4 are the standard 128K register, and on 512K/1024K machines bits 5-7 become extra bank bits. The decode checks A15=0 and A1=0 on the Pentagon 128 (16,384 mirrors — the same partial decode as the Sinclair 128K); the 1024K upgrades and the 1024SL tighten it with A14=1 (8,192 mirrors).
+2. **74HC688** (KR1533SP1) — 8-bit **identity comparator** decodes **#EFF7**, the control register (extended-memory gate, video modes, turbo) — **not** a bank-select port.
 
-The 74688 compares 8 address lines (P inputs) against hardwired Q inputs (tied to Vcc/GND to match the pattern #EFF7 = `1110_1111_1111_0111`). When all 8 lines match and `IORQ` is asserted, the output goes low, selecting the extended memory register.
+The 74688 compares five address lines (P0-P4 = A3, A12, A13, A14, A15) against hardwired Q inputs (0,0,1,1,1); the remaining three P/Q pairs are bridged (neutralized), so 11 address lines never reach the comparator. Strobed by `IORQ`·`WR`, the match output clocks the `#EFF7` latch.
 
-Because **8 lines are checked**, #EFF7 has essentially **one unique address** — no mirrors. This allows clean extended paging without aliasing issues.
+Because only **5 lines are checked**, `#EFF7` has **2048 mirror addresses** — harmless in practice, because the checked lines (A12=0, A3=0) were chosen so canonical `#7FFD` writes (A12=1 and A3=1 in `#7FFD` = `0111_1111_1111_1101`) can never strobe it. Hand-built 1990s machines decoded even less: the Born Dead #10 minimum is A3=0 and A12=0 plus the I/O write strobe.
 
 ```verilog
-// Pentagon two-stage decode (Verilog behavioral equivalent)
-// Stage 1: standard #7FFD (same as 128K)
-assign port_7ffd_cs = ~iorq & ~a15 & a14 & a13 & a12 & a11 & ~a1;
+// Pentagon decode (Verilog behavioral equivalent)
+// Stage 1: #7FFD paging latch — 2-line decode as on the 128K;
+//          1024K machines tighten it with A14=1
+assign port_7ffd_cs     = ~iorq & ~wr & ~a15 & ~a1;        // Pentagon 128
+assign port_7ffd_cs_1mb = ~iorq & ~wr & ~a15 & a14 & ~a1;  // 1024 / 1024SL
 
-// Stage 2: exact match #EFF7 via comparator
-wire [7:0] cmp_p = {1'b1, a15, a12, a11, a10, a9, a5, a0};
-wire [7:0] cmp_q = 8'b1111_0111;  // hardwired jumper pattern
-assign port_eff7_cs = ~iorq & (cmp_p == cmp_q);
+// Stage 2: #EFF7 control register — 5-line partial decode (2048 mirrors)
+assign port_eff7_cs = ~iorq & ~wr & a15 & a14 & a13 & ~a12 & ~a3;
 
-// Extended bank register
-reg [7:0] ext_bank_reg;
+reg [7:0] eff7_reg;                 // write-only, cleared by RESET
 always @(posedge clk)
-    if (port_eff7_cs & ~wr)
-        ext_bank_reg <= cpu_data;
+    if (port_eff7_cs)
+        eff7_reg <= cpu_data;
+
+// Paging latch bits 5-7 only reach the DRAM while the gate is open:
+wire ext_ram_enabled = ~eff7_reg[2]; // bit 2: 0 = memory above 128K present
 ```
 
 > Full details: [memory_and_io_pentagon.md](memory_and_io_pentagon.md)
@@ -286,8 +288,10 @@ The EPLD is functionally equivalent to a large PAL/GAL — the decode logic is d
 
 ```verilog
 // Scorpion EPLD decode (Verilog behavioral equivalent)
-assign port_7ffd_cs = ~iorq & (addr & 16'h8002 == 16'h0000) & (addr & 16'h7800 == 16'h7000);
-assign port_eff7_cs = ~iorq & (addr == 16'hEFF7);  // exact match
+// #7FFD: mask 01xxxxxxxx1xxx01 (A15=0, A14=1, A6=1, A1=0, A0=1 — Black_Cat model 6)
+assign port_7ffd_cs = ~iorq & ((addr & 16'hC043) == 16'h4041);
+// Extension paging: #1FFD bit 4 selects banks 8-15 (no #EFF7 on the Scorpion)
+assign port_1ffd_cs = ~iorq & ((addr & 16'hC043) == 16'h0041);
 assign smuc_cs      = ~iorq & (addr[7:0] == 8'hBE) & addr[15];
 ```
 
@@ -330,23 +334,25 @@ assign ula_cs = ~iorq & ~a0;  // A0 = 0 -> ULA selected
 
 ### Pattern 2: Masked Decode
 
-Check specific bits using a bitmask. Used by #7FFD on 128K machines.
+Check specific bits using a bitmask. Used by #7FFD on 128K machines — famously only 2 bits:
 
 ```verilog
-// Port #7FFD: check 6 bits, don't-care about the rest
-assign port_7ffd_cs = ~iorq & ((addr & 16'hF802) == 16'h7000);
-// Mask:  1111_1000_0000_0010 (check A15,A14-A11,A1)
-// Match: 0111_0000_0000_0000 (A15=0, A14-A11=0111, A1=0)
+// Port #7FFD (128K/+2): check 2 bits, don't-care about the rest
+assign port_7ffd_cs = ~iorq & ((addr & 16'h8002) == 16'h0000);
+// Mask:  1000_0000_0000_0010 (check A15, A1)
+// Match: 0000_0000_0000_0000 (A15=0, A1=0) -> 16,384 mirrors
 ```
 
-### Pattern 3: Comparator-Based Exact Match
+### Pattern 3: Comparator-Based Narrow Decode
 
-Use an equality check for the full address. Used by Pentagon #EFF7.
+Check only the bits that matter and ignore the rest — either a few lines (comparator or gates) or all 16 (FPGA). The Pentagon's `#EFF7` uses a 74688-style comparator but checks just 5 lines, leaving 2048 mirrors — still narrow enough to avoid the ports that matter:
 
 ```verilog
-// Port #EFF7: exact 16-bit match
-assign port_eff7_cs = ~iorq & (addr == 16'hEFF7);
-// Only 1 address decodes -> no mirrors
+// Port #EFF7: 5-line partial decode via comparator (2048 mirrors)
+assign port_eff7_cs = ~iorq & ((addr & 16'hF008) == 16'hE000);
+// Mask:  1111_0000_0000_1000 (check A15-A12, A3)
+// Match: 1110_0000_0000_0000 (A15-A12=1110, A3=0)
+// True full decode (FPGA only): assign port_cs = ~iorq & (addr == 16'hEFF7);
 ```
 
 ### Pattern 4: Registered Output (Latching)

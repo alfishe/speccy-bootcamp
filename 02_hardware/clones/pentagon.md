@@ -87,7 +87,7 @@ flowchart TB
     BUS <-->|"#0000-#3FFF"| ROM["ROM 0 / ROM 1 / TR-DOS<br/>27C256 EPROM(s)"]
     BUS <-->|"#4000-#FFFF (banks)"| RAMALL["All RAM<br/>128K-1024K total<br/>K565РУ5 (4164) family"]
     VIDLOGIC -->|"RGB TTL + CSYNC"| VIDOUT["Video output<br/>(RGB via SCART or<br/>composite via LM1889-equivalent)"]
-    CPU -->|"#7FFD / #EFF7 / #FADF"| PAGING["Paging logic<br/>(К555ИД7 decoders<br/>+ latches)"]
+    CPU -->|"#7FFD / #EFF7 gate"| PAGING["Paging logic<br/>(К555ИД7 decoders<br/>+ latches)"]
     PAGING -->|"controls RAM banks"| RAMALL
     DIV --> INTLOGIC["INT generator<br/>(separate counter,<br/>triggers at line 0)"]
     INTLOGIC -->|"/INT"| CPU
@@ -187,7 +187,7 @@ For the full per-T-state Pentagon frame layout, INT timing, and cross-platform s
 
 ## Memory Map — 128K to 1024K
 
-The Pentagon's memory map is built on the Sinclair 128K's `#7FFD` paging scheme and is **fully register-compatible** with the original 128K. Extended models (512K, 1024K) add the Pentagon-specific `#EFF7` port for high bank bits.
+The Pentagon's memory map is built on the Sinclair 128K's `#7FFD` paging scheme and is **fully register-compatible** with the original 128K. Extended models (512K, 1024K) keep the same port — unused high bits of `#7FFD` (bits 5–7) become extra bank bits — enabled by the Pentagon-specific `#EFF7` control register.
 
 ### Default Memory Map (128K, `#7FFD` only)
 
@@ -210,21 +210,25 @@ This is byte-for-byte identical to the Sinclair 128K's `#7FFD` paging scheme. So
 
 ### Extended Memory Map (512K and 1024K)
 
-The Pentagon 128K's EFF7 extension (later standardized on the Pentagon 1024) adds an extra port for high bank bits:
+Extended machines put the extra bank bits **inside the standard `#7FFD` port** — one `OUT` selects any of the 64 banks — and use the Pentagon-specific `#EFF7` register only as a control port:
 
 ```
-OUT (#EFF7), A   Pentagon extended memory control:
+#7FFD on a Pentagon 512K/1024K (write-only):
 
-  Bits 0–2:  High bank bits
-  Bit 3:     ROM page select (rarely used)
-  Bit 4:     Additional select on 1024K boards
+  Bits 0–2:  RAM bank at #C000, bits 0–2     (standard 128K)
+  Bit  3:    Screen select (0 = Bank 5, 1 = Bank 7)
+  Bit  4:    ROM select (0 = ROM 0, 1 = ROM 1)
+  Bit  5:    Bank bit 5 (banks 32–63) — only while extended RAM
+             is enabled; otherwise the standard 48K lock
+  Bit  6:    Bank bit 3 (banks 8–15)
+  Bit  7:    Bank bit 4 (banks 16–31)
 
-Effective bank at #C000 = (#EFF7 bits 0-2) × 8 + (#7FFD bits 0-2)
-  Pentagon   512K:  32 banks of 16K = 512 KB
-  Pentagon  1024K:  64 banks of 16K = 1024 KB
+  Effective bank = (#7FFD & 7) | ((#7FFD & #C0) >> 3) | (#7FFD & #20)
+  Pentagon  512K:  32 banks of 16K = 512 KB   (bits 6–7)
+  Pentagon 1024K:  64 banks of 16K = 1024 KB  (bits 6–7–5)
 ```
 
-This `#EFF7` port is **Pentagon-specific** — it does not exist on the Sinclair 128K, +2, +2A, or +3. Software that uses it is Pentagon-family-only (though some emulators and FPGA cores replicate it for compatibility).
+The key `#EFF7` bit is **bit 2, the extended-memory gate**: 0 = memory above 128K present (bits 5–7 of `#7FFD` act as bank bits), 1 = plain 128K (`#7FFD` bit 5 reverts to the standard 48K lock). The port is **Pentagon-specific** — it does not exist on the Sinclair 128K, +2, +2A, or +3. Software that uses it is Pentagon-family-only (emulators and FPGA cores replicate it for compatibility). Full bit tables and a safe RAM-detection routine: [pentagon_1024.md](pentagon_1024.md).
 
 ### Screen Location
 
@@ -241,7 +245,7 @@ The Pentagon supports all the standard Spectrum I/O ports plus a few Pentagon-sp
 | `#FE` (A0=0) | Border/beeper/MIC (write), keyboard/EAR (read) | Sinclair-compatible |
 | `#FF` | Floating-bus read | Returns `#FF` (no usable floating bus) — see [Contention Model](../../05_development/03_memory_and_io/contention_model.md) |
 | `#7FFD` | Paging register | Sinclair 128K-compatible |
-| `#EFF7` | Extended memory (Pentagon-specific) | High bank bits for 512K/1024K |
+| `#EFF7` | Control register (Pentagon-specific) | Ext-RAM gate (bit 2), video modes, turbo |
 | `#1FFD` | Beta 128 disk interface control | Different function from +2A/+3's `#1FFD`! |
 | `#1F` | Kempston joystick | Standard Soviet clone convention — built in |
 | `#FADF` / `#FBDF` / `#FFDF` | AY-3-8912 (or YM2149F) registers | Sinclair 128K-compatible |
@@ -275,11 +279,11 @@ The "Pentagon" name covers a family of related machines, all sharing the same ba
 |---|---|---|---|
 | **Pentagon 48K** | 1989 | 48 KB | Original Mikhalchenkov design; minimal, ~50 ICs |
 | **Pentagon 128K** | 1990 | 128 KB | Most common; `#7FFD` paging, Beta 128 FDC, Kempston built in |
-| **Pentagon 128K + EFF7** | 1992 | 512 KB | Extended memory via `#EFF7` port (32 banks of 16K) |
-| **Pentagon 1024 / 1024SL** | 1995 | 1024 KB | 64 banks of 16K; some added IDE and GS sound |
+| **Pentagon 512K** | 1993+ | 512 KB | Bank bits 6–7 added inside `#7FFD`; `#EFF7` gate (hand-built upgrades) |
+| **Pentagon 1024 / 1024SL** | 1993+ / 2004+ | 1024 KB | Third bank bit (5); 1024SL = factory consolidation by NedoPC |
 | **Pentagon "Turbo"** | various | varies | 7 MHz turbo mode (rare, not standardized) |
 
-The **Pentagon 1024SL** (Сергей Лемехов / Sergei Lemekhov) became the high-end standard in the late 1990s, adding IDE hard disk support and (optionally) a General Sound card. It is the standard target for "maximum Pentagon" software and is the model most often emulated by modern FPGA cores (Pentay, MiSTer, ZX-Uno).
+The **Pentagon-1024SL** (designed by Alexey Zhabin, produced by NedoPC — v1.x in 2004–2005, v2.x in 2006) consolidated the hand-built standard into a factory board with 1 MB RAM, 7 MHz turbo on `#EFF7` bit 4 and extended video modes; the later 2.666 line remains a popular DIY and FPGA target (MiSTer, ZX-Uno, Pentagon-4096). See [pentagon_1024.md](pentagon_1024.md) for the full history.
 
 ### Pentagon-Compatible Variants
 
@@ -376,7 +380,8 @@ Yes. The Pentagon's video logic never leaves the data bus floating — the bus i
 - Mikhalchenkov, D., *Pentagon Schematics* (originally published in *Radio* and *[ZX-Review](https://zxpress.ru/library/)*, 1989–1991; various re-publications online)
 - *[ZX-Review](https://zxpress.ru/library/)* magazine archives (1991–1996) — Pentagon documentation, software listings, hardware variants
 - [ZX Spectrum Pentagon article — Wikipedia](https://en.wikipedia.org/wiki/Pentagon_(computer)) — overview
-- [Pentagon-1024 SL documentation (Russian)](http://pentagon-1024.narod.ru/) — Lemekhov's expanded Pentagon reference
+- [Pentagon-1024SL documentation (Russian)](http://pentagon-1024.narod.ru/) — factory SL v2.x reference (Alexey Zhabin / NedoPC)
+- [Alone Coder — Born Dead #10 (zxpress.ru)](https://zxpress.ru/ru/ezines/born-dead/10/tehnicheskie-podrobnosti-kompyuterov-semeystva-pentagon-osobennosti-pentagon-1024-upravlenie) — the hand-built Pentagon 512/1024 hardware standard
 - Boris Kuznetsov, *TR-DOS Manual* — TR-DOS 5.04 API reference
 - [Chris Smith, *The ZX Spectrum ULA](http://www.zxdesign.info/)* — Appendix on Soviet clone TTL reimplementation strategies
 
@@ -392,6 +397,6 @@ Yes. The Pentagon's video logic never leaves the data bus floating — the bus i
 - [Soviet Demo Scene](../../07_demoscene/soviet_demo_scene.md) — Pentagon-centric scene, FidoNet era
 - [PT3 Format](../../06_sound/trackers_and_formats/pt3_format.md) — Russian AY music format born on the Pentagon
 - [Tracker History](../../06_sound/trackers_and_formats/tracker_history.md) — Sound Tracker → Pro Tracker → [Vortex Tracker](http://bulba.unterground.net/) lineage
-- [Pentagon 1024](pentagon_1024.md) — expanded-memory successor (planned)
+- [Pentagon 1024](pentagon_1024.md) — the 1 MB maximum configuration: paging model, `#EFF7` control register, 1024SL
 - [Scorpion ZS-256](scorpion.md) — the developer's clone with correct 48K timing
 - [ATM Turbo](atm_turbo.md) — Pentagon-timing-compatible with extended graphics modes

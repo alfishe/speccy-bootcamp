@@ -306,46 +306,46 @@ The primary paging port on all 128K-compatible machines. Introduced with the Sin
 ```
 Port     Address (A15–A0)  Decoding (A15–A0)       READ        WRITE
 
-#7FFD    0111111111111101  0xxxxxxxxxxxxx0x       -           Pag(2,8,9,A)
-                           A15=0,A14-A11=0111                 Pag(D)
-                           A1=0                    -           Pag(C)
-                           6 lines checked         -           Pag(3,?5)
-                                                              Pag(7)
-                           01xxxxxxxxxxxx0x       -           Pag(3,?5)
-                           01xxxxxxxxxxxx01       -           Pag(7)
-                           01xxxxxxxx1xxx01  Trb-ON(6)       Pag(6)
-                           0x1xx111xx1xxx01       -           Pag(?B)
+#7FFD    0111111111111101  0xxxxxxxxxxxxx0x        -          Pag(2,8,9,A)
+                           0xxxxxxxxxxxxx01                   Pag(D)
+                           0xxxxxxxxxx11x0x                   Pag(C)
+                           01xxxxxxxxxxxx0x                   Pag(3,?5)
+                           01xxxxxxxxxxxx01                   Pag(7)
+                           01xxxxxxxx1xxx01  Trb-ON(6)        Pag(6)
+                           0x1xx111xx1xxx01                   Pag(?B)
 ```
 
 **Per-model decoding:**
 
 | Model | Decoding | Notes |
 |-------|----------|-------|
-| 128K/+2 (2), Pentagon 128 (8), Profi-1 (9), ATM Turbo-2+ (A) | `0xxxxxxxxxxxxx0x` — 6 lines via 74HC138-class decode | Standard 128K paging |
-| +2a/+2b (3), +3 (+3), Didaktik Gama unconfirmed (?5) | `01xxxxxxxxxxxx0x` | Amstrad gate array checks A14, A13 |
+| 128K/+2 (2), Pentagon 128 (8), Profi-1 (9), ATM Turbo-2+ (A) | `0xxxxxxxxxxxxx0x` — 2 lines (A15=0, A1=0), 16,384 mirrors | Standard 128K paging |
+| +2a/+2b (3), +3 (+3), Didaktik Gama unconfirmed (?5) | `01xxxxxxxxxxxx0x` — 3 lines (adds A14=1) | Amstrad gate array tightened the decode |
 | KAY-1024SL (7) | `01xxxxxxxxxxxx01` | Stricter decode than the 128K |
 | Scorpion ZS-256 (6) | `01xxxxxxxx1xxx01` — read = Trb-ON | Turbo status shares the paging port |
 | Quorum (C) | `0xxxxxxxxxx11x0x` | Quorum's own paging scheme |
 | Scorpion GMX (?B) | `0x1xx111xx1xxx01` | Unconfirmed decoding |
-| Pentagon-1024SL (D) | `0xxxxxxxxxxxxx01` | Extended paging mode |
+| Pentagon-1024SL (D) | `0xxxxxxxxxxxxx01` | Black_Cat checks A0=1; the official v2.2 doc gives `01xxxxxxxxxxxx0x` (A14=1) — 3 lines either way |
 
 **Write data byte (OUT (#7FFD), A):**
 
 ```
 Bit 7    6    5    4    3    2    1    0
-Lock   ?    ?   ROM  Scr  Bank bits
+  ?      ?  Lock  ROM  Scr  Bank bits
                 Sel  Sel  (0-7)
 ```
 
 - Bits 0–2: RAM bank mapped at `#C000` (banks 0–7)
 - Bit 3: Screen select (0=Bank 5 / normal, 1=Bank 7 / shadow)
 - Bit 4: ROM select (0=ROM 0 / 128K editor, 1=ROM 1 / 48K BASIC)
-- Bit 5: Reserved on Sinclair, used differently on some clones
-- Bit 6: Unused on most models
-- Bit 7: **Lock bit** — when set to 1, prevents further writes to `#7FFD` until reset
+- Bit 5: **Lock bit** — when set to 1, prevents further writes to `#7FFD` until reset
+- Bits 6–7: Unused on all Sinclair machines
 
 > [!IMPORTANT]
-> The lock bit is a one-shot fuse. Once bit 7 is written as 1, the paging register is frozen until the machine is reset. The 128K ROM sets this bit during initialization. Software that needs to page RAM must either disable the lock or use it carefully.
+> The lock bit is a one-shot fuse. Once bit 5 is written as 1, the paging register is frozen until the machine is reset. The 128K ROM sets this bit during initialization. Software that needs to page RAM must either disable the lock or use it carefully.
+
+> [!NOTE]
+> Pentagon 512K/1024K machines turn bits 6–7 (and bit 5, while the `#EFF7` extension gate is open) into bank bits 3–5 — one `OUT (#7FFD), A` selects any of the 64 banks. The 48K lock only engages when the gate is closed. See [pentagon_1024.md](../02_hardware/clones/pentagon_1024.md).
 
 ### #1FFD — Extended Paging / FDC Control
 
@@ -372,38 +372,45 @@ Port     Address (A15–A0)  Decoding (A15–A0)     READ        WRITE
 > [!WARNING]
 > **Port collision!** Writing `#1FFD` on a +3 controls paging and disk. Writing `#1FFD` on a Scorpion or KAY remaps memory (and touches turbo on the Scorpion). Code tuned for one machine derails the other. Always detect the machine type before using this port. See [memory_and_io_plus3.md](../05_development/03_memory_and_io/memory_and_io_plus3.md) and [memory_and_io_pentagon.md](../05_development/03_memory_and_io/memory_and_io_pentagon.md).
 
-### #EFF7 — Pentagon Extended Memory
+### #EFF7 — Pentagon Control Register
 
-Exclusive to the Pentagon family — code `8` in Black_Cat's table (Pentagon 128, 1991) and the Pentagon-1024SL (D). Decoded via a **74HC688 8-bit identity comparator** for an almost-exact match — very few mirrors.
+Exclusive to the Pentagon family — code `8` in Black_Cat's table (the Pentagon-128-based 512K/1024K machines) and the Pentagon-1024SL (D). Despite its "extended memory" reputation, **the bank bits live in `#7FFD` (bits 5–7)**; `#EFF7` is a control register — Black_Cat's mnemonic `PagVidTrbReg` says it: paging **gate**, video, turbo.
 
 ```
 Port     Address (A15–A0)  Decoding (A15–A0)    READ        WRITE
 
 #EFF7    1110111111110111  1110xxxxxxxx0xxx    -           PagVidTrbReg(8)
-                           8+ lines checked                PagVidTrbReg(D)
+                           1110xxxxxxxx0xx1                PagVidTrbReg(D)
+                           5 lines checked
 ```
 
 | Model | Function | Notes |
 |-------|----------|-------|
-| Pentagon 128 (8) | Extended paging + video + turbo + config register | Decoded by 74688 comparator |
-| Pentagon-1024SL, ver. 28.09.2006 (D) | Same functions, slightly different mask variant | `1110xxxxxxxx0xx1` |
+| Pentagon 512K/1024K (8) | Control register: bit 2 = extended-RAM gate, bit 7 = Gluk CMOS (hand-built standard); video/turbo bits vary by generation | Partial decode — 2,048 mirrors |
+| Pentagon-1024SL, ver. 28.09.2006 (D) | 16-colour (bit 0), gate (bit 2), ROM disable (bit 3), turbo (bit 4), 384×304 (bit 6) | Black_Cat adds A0=1 to the mask; the official v2.2 doc gives `1110xxxxxxxx0xxx` |
 
-This port does **not exist** on any Sinclair/Amstrad machine. Writing to it on a 48K or 128K has no effect (the address is simply not decoded by any hardware).
+Key bit: **bit 2** — 0 = memory above 128K present (`#7FFD` bits 5–7 act as bank bits), 1 = plain 128K (`#7FFD` bit 5 reverts to the 48K lock). The register is write-only on all original hardware — shadow it in RAM.
 
-### #DFFD — Alternative Pentagon Paging
+This port does **not exist** on any Sinclair/Amstrad machine. Writing to it on a 48K or 128K has no effect (the address is simply not decoded by any hardware). Both bit-layout generations and a safe RAM-detection routine: [pentagon_1024.md](../02_hardware/clones/pentagon_1024.md).
 
-Used on some Pentagon configurations as an alternative to `#EFF7` for extended memory paging.
+### #DFFD — Profi Extension Register / Pentagon Parallel Wiring
+
+The Profi-1 (9) owns the canonical `#DFFD` extension register: banking bits plus turbo, VGA and ROM-bank control (see [profi.md](../02_hardware/clones/profi.md)). Two other families touch the same address:
+
+- **Pentagon 1024** — bits 0–2 are **wired in parallel** with bits 7/6/5 of `#7FFD` (the same latch lines), so Profi-1024-targeted software pages the same banks unmodified. It is not an "alternative" paging port: `#7FFD` alone already selects all 64 banks.
+- **Kay 1024** — its own `#DFFD` extension bits combined with `#7FFD` (see [kay.md](../02_hardware/clones/kay.md)).
 
 ```
 Port     Address (A15–A0)  Decoding (A15–A0)    READ        WRITE
 
 #DFFD    1101111111111101  xx0xxxxxxxxxxx0x    -           Pag(9)
+                           1x0xx111xx1xxx01                Pag(?B)
 ```
 
 | Model | Function | Notes |
 |-------|----------|-------|
-| Kay 1024 (9) | Memory paging extension | Checks fewer lines than #EFF7 |
-| Byte (?B) | Memory paging | `1x0xx111xx1xxx01` |
+| Profi-1 (9) | Multi-function: banking + turbo + VGA + ROM bank | Black_Cat mask: 2 lines |
+| Scorpion GMX (?B) | Extended paging | Unconfirmed decoding |
 
 ### #00 — Reset / Configuration Register
 
@@ -503,10 +510,10 @@ Port     Address (A15–A0)  Decoding (A15–A0)     READ          WRITE
 |-------|---------------|----------------|-------|
 | 128K/+2 (2,3) | `11xxxxxxxxxxxx0x` | `10xxxxxxxxxxxx0x` | Standard — A15, A14, A1 checked |
 | +2A/+3 (4,5) | Same | Same | Compatible |
-| Pentagon (7) | `11xxxxxxxxxxxx01` | `10xxxxxxxxxxxx01` | Slightly different mask |
-| Pentagon EFF7 (D) | `1x1xxxxxxxxxxx0x` | `1x1xxxxxxxxxxx0x` | Checks A13 instead of A14 |
+| KAY-1024SL (7) | `11xxxxxxxxxxxx01` | `10xxxxxxxxxxxx01` | Slightly different mask |
+| Pentagon-1024SL (D) | `1x1xxxxxxxxxxx0x` | `1x1xxxxxxxxxxx0x` | Checks A13 instead of A14 |
 | Scorpion (6) | `111xxxxxxx1xxx01` | `101xxxxxxx1xxx01` | More lines checked |
-| Kay (9) | `101xxxxxxxxxxx0x` | `101xxxxxxxxxxx0x` | Same as Scorpion pattern |
+| Profi (9) | `101xxxxxxxxxxx0x` | `101xxxxxxxxxxx0x` | Same as Scorpion pattern |
 | ATM Turbo (A) | `101xxxxxxxx1xx0x` | `101xxxxxxxx1xx0x` | Checks A10 additionally |
 | Profi (C) | `111xxxxxxxx1xx0x` | `101xxxxxxxx1xx0x` | Similar to ATM |
 

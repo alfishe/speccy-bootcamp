@@ -112,7 +112,7 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [memory_and_io_48k.md](05_development/03_memory_and_io/memory_and_io_48k.md) | 16K/48K: memory map + #FE port (border, EAR, keyboard, beeper) |
 | [memory_and_io_128k.md](05_development/03_memory_and_io/memory_and_io_128k.md) | 128K/+2: 8 banks, #7FFD paging, shadow screen, AY ports |
 | [memory_and_io_plus3.md](05_development/03_memory_and_io/memory_and_io_plus3.md) | +2A/+3: #1FFD, 4 paging modes, true double buffering, +3 FDC |
-| [memory_and_io_pentagon.md](05_development/03_memory_and_io/memory_and_io_pentagon.md) | Pentagon: #EFF7 extended paging, Beta 128 FDC/TR-DOS, zero contention |
+| [memory_and_io_pentagon.md](05_development/03_memory_and_io/memory_and_io_pentagon.md) | Pentagon: #7FFD extended bank bits + #EFF7 control gate, Beta 128 FDC/TR-DOS, zero contention |
 | [memory_and_io_next.md](05_development/03_memory_and_io/memory_and_io_next.md) | ZX Spectrum Next: 2MB MMU, 8 KB pages, Layer 2/sprite/copper/DMA ports |
 | [screen_layout.md](05_development/03_memory_and_io/screen_layout.md) | Nonlinear framebuffer: three-thirds structure, address calculation, attribute file |
 | [contention_model.md](05_development/03_memory_and_io/contention_model.md) | Unified contention reference: per-model timing, Ferranti vs gate array patterns, I/O contention |

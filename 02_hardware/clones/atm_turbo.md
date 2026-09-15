@@ -268,7 +268,7 @@ The ATM Turbo's memory system is its most significant architectural departure fr
 | **Total RAM** | 128 KB (8 banks) | 128–1024 KB (8–64 pages) | 128–512 KB | 128–1024 KB |
 | **Total ROM** | 32 KB (2 banks) | 32 KB (2 banks) + TR-DOS | 64 KB (4 ROM pages) | 128 KB (4 ROM pages) |
 | **Page size** | 16 KB | 16 KB | 16 KB | 16 KB |
-| **`#C000` paging** | `#7FFD` bits 0–2 (8 banks) | `#7FFD` bits 0–2 + `#EFF7` ext bits | `#7FFD` + `#FDFD` | `#7FFD` + `#FDFD`/`#FF77` system |
+| **`#C000` paging** | `#7FFD` bits 0–2 (8 banks) | `#7FFD` bits 0–2 + **bits 5–7** (gate: `#EFF7`) | `#7FFD` + `#FDFD` | `#7FFD` + `#FDFD`/`#FF77` system |
 | **`#4000` paging** | **Fixed** (always Bank 5) | **Fixed** (always Bank 5) | **Fixed** (always Bank 5) | **Switchable** — any page |
 | **`#8000` paging** | **Fixed** (always Bank 2) | **Fixed** (always Bank 2) | **Fixed** (always Bank 2) | **Switchable** — any page |
 | **`#0000` paging** | ROM 0/1 (bit 4) or TR-DOS | ROM 0/1 or TR-DOS | ROM 0–3 or RAM-0 (CP/M user mode) | ROM or RAM — any page |
@@ -322,8 +322,8 @@ ROM select     ROM2=0          ROM2=1          ROM2=0(!)       ROM2=1          R
 
 | Port | ZX Spectrum 128K | Pentagon 128K | ATM Turbo 1 | ATM Turbo 2/2+ |
 |------|-----------------|---------------|-------------|----------------|
-| `#7FFD` | Bank 0–2, screen, ROM, lock | Same + `#EFF7` for ext | Same + `#FDFD` for ext | Same, but also used for paging upper quarters |
-| `#EFF7` | N/A | Extended bank bits (512K/1024K) | N/A | N/A |
+| `#7FFD` | Bank 0–2, screen, ROM, lock | Same + ext bits 5–7 (gate: `#EFF7`) | Same + `#FDFD` for ext | Same, but also used for paging upper quarters |
+| `#EFF7` | N/A | Control register: ext-RAM gate (512K/1024K) | N/A | N/A |
 | `#FDFD` | N/A | N/A | **512K extension** — 2 extra bank bits | **Extended paging** (2 bits for 512K/1024K) |
 | `#FF77` | N/A | N/A | N/A | **System port** — video mode, turbo, RAM/ROM page in all quarters |
 | `#1FFD` | N/A | Beta 128 FDC | Beta 128 FDC | Beta 128 FDC (overlaps with +2A/+3 — different function!) |
@@ -614,7 +614,7 @@ The ATM Turbo uses a complex I/O port scheme that evolved significantly between 
 |------|-----------------|---------------|---------------------|----------------------|
 | `#FE` | Border, beeper, MIC, keyboard | Same | Border, beeper, MIC, keyboard **+ video mode via A5/A6** | Standard (mode moved to `#FF77`) |
 | `#FF` | Floating bus | Different / absent | Not used | **Attribute read** (floating bus equivalent) |
-| `#7FFD` | Paging: bank, ROM, screen, lock | Same + `#EFF7` ext | Same + `#FDFD` ext | Same (write), **IDE/ADC status** (read) |
+| `#7FFD` | Paging: bank, ROM, screen, lock | Same + ext bits 5–7 (gate `#EFF7`) | Same + `#FDFD` ext | Same (write), **IDE/ADC status** (read) |
 | `#BFFD` | AY data write | Same | Same | Same |
 | `#FFFD` | AY register select | Same (overlaps FDC!) | Same (overlaps FDC!) | Same |
 | `#FB` | N/A | N/A | **Printer, Covox DAC, CP/M sys** | Same |
@@ -626,7 +626,7 @@ The ATM Turbo uses a complex I/O port scheme that evolved significantly between 
 | `#FFE7` | N/A | N/A | N/A | XT keyboard controller (v6.40 only) |
 | `#EF` family | N/A | N/A | N/A | **IDE interface** (v6.40+) |
 | `#1F`/`#3F`/`#5F`/`#7F`/`#FF` | N/A | Beta 128 FDC | Beta 128 FDC | Beta 128 FDC + `#FF` palette |
-| `#EFF7` | N/A | Extended mem (512K+) | N/A | N/A |
+| `#EFF7` | N/A | Control register (ext-RAM gate) | N/A | N/A |
 | `#1FFD` | N/A | Beta 128 ROM page | Beta 128 ROM page | Beta 128 ROM page |
 
 ---
@@ -727,14 +727,14 @@ OUT (#7FFD), A — paging register:
 
 | Feature | ZX Spectrum 128K | Pentagon 128K | ATM Turbo |
 |---------|-----------------|---------------|-----------|
-| Bank bits 0–2 | 8 banks | 8 banks (+ `#EFF7` ext) | 8 banks (+ `#FDFD` ext) |
+| Bank bits 0–2 | 8 banks | 8 banks (+ bits 5–7 ext) | 8 banks (+ `#FDFD` ext) |
 | Screen bit 3 | Yes | Yes | Yes |
 | ROM bit 4 | Yes (2 ROMs) | Yes | Yes (4 ROM pages via CPSYS) |
-| Lock bit 5 | Bit 5 on some, bit 7 on others | Bit 7 | **Bit 5** — locks `#7FFD` for 48K mode |
+| Lock bit 5 | Bit 5 on some, bit 7 on others | **Bit 5** — bank bit 5 while `#EFF7` gate is open | **Bit 5** — locks `#7FFD` for 48K mode |
 | Read back | Write-only | Write-only | **Readable** — returns status (IDE, ADC) |
 
 > [!NOTE]
-> Pentagon-1024-style 1024K machines co-opt `#7FFD` bit 5 as a page-number extension bit (the ZX lock meaning is suspended), with the real lock moved to `#EFF7` bit 2 — the Pentagon family's combined paging/video/turbo register (`PagVidTrbReg(D)` in Black_Cat's table). On such machines `#EFF7` also carries the 16-color video variant bit (bit 0) and a Pentagon-style turbo bit (bit 4). See [memory_and_io_pentagon.md](../../05_development/03_memory_and_io/memory_and_io_pentagon.md).
+> Pentagon-1024-style 1024K machines co-opt `#7FFD` bit 5 as a page-number extension bit **while the extended-memory gate is open** (`#EFF7` bit 2 = 0). When the gate closes (`#EFF7` bit 2 = 1), the machine acts as a plain 128K and bit 5 reverts to the standard 48K lock — the lock is suspended, not relocated. `#EFF7` itself is the Pentagon family's combined control register (`PagVidTrbReg(D)` in Black_Cat's table), also carrying the 16-colour video bit (bit 0) and the turbo bit (bit 4). See [memory_and_io_pentagon.md](../../05_development/03_memory_and_io/memory_and_io_pentagon.md).
 
 #### Read (ATM Turbo 2+ only)
 
@@ -757,7 +757,7 @@ IN A,(#7FFD) — returns status register:
 | Model | Function |
 |-------|----------|
 | ZX Spectrum 128K | **N/A** |
-| Pentagon 128K | **N/A** (uses `#EFF7` instead) |
+| Pentagon 128K | **N/A** (bank bits live in `#7FFD`, gated by `#EFF7`) |
 | ATM Turbo 1 | **512K extension** — provides 2 additional bank select bits |
 | ATM Turbo 2+ | Extended paging — 2 bits for 512K/1024K |
 
