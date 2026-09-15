@@ -1,0 +1,2315 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZX Spectrum Family — Interactive Port Decoding Map</title>
+<style>
+/* ==========================================================================
+   CSS Custom Properties: Light (Default) & Dark Themes
+   ========================================================================== */
+:root, [data-theme="light"] {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f1f5f9;
+  --bg-card: rgba(255, 255, 255, 0.95);
+  --header-bg: rgba(255, 255, 255, 0.92);
+  --table-header-bg: #f8fafc;
+  --border-color: #e2e8f0;
+  --border-hover: #0284c7;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  
+  --cyan: #0284c7;
+  --cyan-glow: rgba(2, 132, 199, 0.15);
+  --emerald: #059669;
+  --emerald-glow: rgba(5, 150, 105, 0.15);
+  --rose: #e11d48;
+  --rose-glow: rgba(225, 29, 72, 0.15);
+  --amber: #d97706;
+  --amber-glow: rgba(217, 119, 6, 0.15);
+  --purple: #7c3aed;
+  --purple-glow: rgba(124, 58, 237, 0.15);
+  --indigo: #4f46e5;
+  --indigo-glow: rgba(79, 70, 229, 0.15);
+  --blue: #0284c7;
+
+  --bit-0: #e11d48;
+  --bit-1: #059669;
+  --bit-x: #e2e8f0;
+  --bit-x-text: #475569;
+  --bit-var: #d97706;
+  --bit-unk: #7c3aed;
+  --mini-bit-bar-bg: #f1f5f9;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.05);
+
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Source Code Pro", Menlo, Monaco, Consolas, "JetBrains Mono", monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+[data-theme="dark"] {
+  --bg-primary: #080c14;
+  --bg-secondary: #0f172a;
+  --bg-tertiary: #162036;
+  --bg-card: rgba(15, 23, 42, 0.75);
+  --header-bg: rgba(15, 23, 42, 0.85);
+  --table-header-bg: rgba(15, 23, 42, 0.95);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(56, 189, 248, 0.35);
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --cyan: #38bdf8;
+  --cyan-glow: rgba(56, 189, 248, 0.25);
+  --emerald: #10b981;
+  --emerald-glow: rgba(16, 185, 129, 0.25);
+  --rose: #f43f5e;
+  --rose-glow: rgba(244, 63, 94, 0.25);
+  --amber: #f59e0b;
+  --amber-glow: rgba(245, 158, 11, 0.25);
+  --purple: #a855f7;
+  --purple-glow: rgba(168, 85, 247, 0.25);
+  --indigo: #6366f1;
+  --indigo-glow: rgba(99, 102, 241, 0.25);
+  --blue: #0284c7;
+
+  --bit-0: #f43f5e;
+  --bit-1: #10b981;
+  --bit-x: #334155;
+  --bit-x-text: #94a3b8;
+  --bit-var: #f59e0b;
+  --bit-unk: #8b5cf6;
+  --mini-bit-bar-bg: rgba(0, 0, 0, 0.4);
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+body {
+  background-color: var(--bg-primary);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(2, 132, 199, 0.04) 0px, transparent 45%),
+    radial-gradient(at 100% 0%, rgba(124, 58, 237, 0.03) 0px, transparent 45%),
+    radial-gradient(at 50% 100%, rgba(5, 150, 105, 0.03) 0px, transparent 50%);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  line-height: 1.5;
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+
+[data-theme="dark"] body {
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.08) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
+}
+
+/* Header */
+header {
+  background: var(--header-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 12px 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.header-container {
+  max-width: 1720px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #0284c7, #8b5cf6);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 900;
+  font-size: 17px;
+  color: #fff;
+  letter-spacing: -1px;
+  box-shadow: 0 0 16px rgba(2, 132, 199, 0.3);
+}
+
+.brand-title h1 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-title h1 .badge-sub {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  background: rgba(2, 132, 199, 0.1);
+  color: var(--cyan);
+  border: 1px solid rgba(2, 132, 199, 0.25);
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+[data-theme="dark"] .brand-title h1 .badge-sub {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.brand-title p {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Theme Toggle Button */
+.theme-toggle-btn {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  user-select: none;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--border-hover);
+  background: var(--bg-secondary);
+}
+
+.theme-toggle-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Stats Ribbon */
+.stats-ribbon {
+  display: flex;
+  gap: 14px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.stat-label {
+  color: var(--text-muted);
+}
+
+.stat-val {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--cyan);
+}
+
+/* Action Buttons */
+.btn {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn:hover {
+  border-color: var(--border-hover);
+  background: var(--bg-secondary);
+}
+
+.btn-sm {
+  padding: 4px 8px;
+  font-size: 11px;
+}
+
+/* Main Layout */
+.app-layout {
+  max-width: 1720px;
+  margin: 18px auto;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 16-Bit Bus Decoding Map / Bit Filter Card */
+.bus-filter-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 16px 20px;
+  box-shadow: var(--shadow-card);
+}
+
+.bus-filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.bus-title h2 {
+  font-size: 13.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--cyan);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bus-title p {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.bus-presets {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* 16-Bit Pin Matrix */
+.bit-matrix {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  gap: 6px;
+}
+
+@media (max-width: 1100px) {
+  .bit-matrix { grid-template-columns: repeat(8, 1fr); }
+}
+@media (max-width: 600px) {
+  .bit-matrix { grid-template-columns: repeat(4, 1fr); }
+}
+
+.bit-cell {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 6px 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  box-shadow: var(--shadow-sm);
+}
+
+.bit-cell:hover {
+  border-color: var(--cyan);
+}
+
+.bit-cell .bit-name {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 3px;
+}
+
+.bit-cell .bit-state {
+  width: 28px;
+  height: 28px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 800;
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+}
+
+.bit-cell.state-0 {
+  border-color: var(--rose);
+  background: rgba(225, 29, 72, 0.08);
+}
+.bit-cell.state-0 .bit-name { color: var(--rose); }
+.bit-cell.state-0 .bit-state {
+  background: var(--rose);
+  color: #fff;
+  box-shadow: 0 0 10px var(--rose-glow);
+}
+
+.bit-cell.state-1 {
+  border-color: var(--emerald);
+  background: rgba(5, 150, 105, 0.08);
+}
+.bit-cell.state-1 .bit-name { color: var(--emerald); }
+.bit-cell.state-1 .bit-state {
+  background: var(--emerald);
+  color: #fff;
+  box-shadow: 0 0 10px var(--emerald-glow);
+}
+
+/* Filter Control Panel */
+.filter-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: var(--shadow-card);
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filter-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  min-width: 100px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex: 1;
+}
+
+.search-input-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 260px;
+}
+
+.search-input {
+  width: 100%;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 8px 12px 8px 34px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--text-primary);
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 10px var(--cyan-glow);
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+/* Fancy Tags */
+.tag-pill {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 3px 9px;
+  border-radius: 5px;
+  font-size: 11.5px;
+  cursor: pointer;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: var(--shadow-sm);
+}
+
+.tag-pill:hover {
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+}
+
+.tag-pill.active {
+  background: rgba(2, 132, 199, 0.12);
+  border-color: var(--cyan);
+  color: var(--cyan);
+  font-weight: 600;
+}
+
+[data-theme="dark"] .tag-pill.active {
+  background: rgba(56, 189, 248, 0.15);
+}
+
+.tag-pill .tag-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-muted);
+}
+
+.tag-pill.active .tag-dot {
+  background: var(--cyan);
+}
+
+/* Model Fancy Badges */
+.model-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  border: 1px solid transparent;
+}
+
+.model-badge-1, .model-badge-+1 {
+  background: rgba(2, 132, 199, 0.12);
+  color: #0284c7;
+  border-color: rgba(2, 132, 199, 0.3);
+}
+[data-theme="dark"] .model-badge-1, [data-theme="dark"] .model-badge-+1 {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+}
+
+.model-badge-2 {
+  background: rgba(79, 70, 229, 0.12);
+  color: #4f46e5;
+  border-color: rgba(79, 70, 229, 0.3);
+}
+[data-theme="dark"] .model-badge-2 {
+  background: rgba(99, 102, 241, 0.15);
+  color: #818cf8;
+}
+
+.model-badge-3, .model-badge-+3 {
+  background: rgba(124, 58, 237, 0.12);
+  color: #7c3aed;
+  border-color: rgba(124, 58, 237, 0.3);
+}
+[data-theme="dark"] .model-badge-3, [data-theme="dark"] .model-badge-+3 {
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
+}
+
+.model-badge-4, .model-badge-5 {
+  background: rgba(225, 29, 72, 0.12);
+  color: #e11d48;
+  border-color: rgba(225, 29, 72, 0.3);
+}
+[data-theme="dark"] .model-badge-4, [data-theme="dark"] .model-badge-5 {
+  background: rgba(244, 63, 94, 0.15);
+  color: #fb7185;
+}
+
+.model-badge-6, .model-badge-B {
+  background: rgba(5, 150, 105, 0.12);
+  color: #059669;
+  border-color: rgba(5, 150, 105, 0.3);
+}
+[data-theme="dark"] .model-badge-6, [data-theme="dark"] .model-badge-B {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+}
+
+.model-badge-7 {
+  background: rgba(13, 148, 136, 0.12);
+  color: #0d9488;
+  border-color: rgba(13, 148, 136, 0.3);
+}
+[data-theme="dark"] .model-badge-7 {
+  background: rgba(20, 184, 166, 0.15);
+  color: #2dd4bf;
+}
+
+.model-badge-8, .model-badge-D {
+  background: rgba(217, 119, 6, 0.12);
+  color: #d97706;
+  border-color: rgba(217, 119, 6, 0.3);
+}
+[data-theme="dark"] .model-badge-8, [data-theme="dark"] .model-badge-D {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+}
+
+.model-badge-9 {
+  background: rgba(202, 138, 4, 0.12);
+  color: #ca8a04;
+  border-color: rgba(202, 138, 4, 0.3);
+}
+[data-theme="dark"] .model-badge-9 {
+  background: rgba(234, 179, 8, 0.15);
+  color: #facc15;
+}
+
+.model-badge-A {
+  background: rgba(8, 145, 178, 0.12);
+  color: #0891b2;
+  border-color: rgba(8, 145, 178, 0.3);
+}
+[data-theme="dark"] .model-badge-A {
+  background: rgba(6, 182, 212, 0.15);
+  color: #22d3ee;
+}
+
+.model-badge-C {
+  background: rgba(192, 38, 211, 0.12);
+  color: #c026d3;
+  border-color: rgba(192, 38, 211, 0.3);
+}
+[data-theme="dark"] .model-badge-C {
+  background: rgba(217, 70, 239, 0.15);
+  color: #e879f9;
+}
+
+
+/* Models Column with Full Name & Color Tag */
+.models-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 220px;
+  padding: 2px 0;
+}
+
+.model-tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  padding: 2px 8px 2px 3px;
+  border-radius: 5px;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.model-full-name {
+  font-size: 11px;
+  color: var(--text-primary);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Mini 16-Bit Pin Bar for Table (+10% Scaled) */
+.mini-bit-bar {
+  display: inline-flex;
+  gap: 2.2px;
+  background: var(--mini-bit-bar-bg);
+  padding: 3.5px 5.5px;
+  border-radius: 5.5px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  user-select: none;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.08);
+}
+
+.mini-bit {
+  width: 16px;
+  height: 22.6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  font-weight: 700;
+  transition: transform 0.12s ease;
+  line-height: 1;
+}
+
+.mini-bit:hover {
+  transform: scale(1.25);
+  z-index: 10;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.mini-bit.bit-0 {
+  background: var(--rose);
+  color: #fff;
+}
+
+.mini-bit.bit-1 {
+  background: var(--emerald);
+  color: #fff;
+}
+
+.mini-bit.bit-x {
+  background: var(--bit-x);
+  color: var(--bit-x-text);
+}
+
+.mini-bit.bit-var {
+  background: var(--amber);
+  color: #000;
+}
+
+.mini-bit.bit-unk {
+  background: var(--bit-unk);
+  color: #fff;
+}
+
+/* Data Table Styling */
+.table-container {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  overflow-x: auto;
+  box-shadow: var(--shadow-card);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  min-width: 950px;
+}
+
+.data-table th {
+  background: var(--table-header-bg);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.data-table th:hover {
+  color: var(--cyan);
+}
+
+.data-table td {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+}
+
+.data-table tr {
+  cursor: pointer;
+}
+
+.data-table tr:hover td {
+  background: rgba(2, 132, 199, 0.04);
+}
+
+[data-theme="dark"] .data-table tr:hover td {
+  background: rgba(56, 189, 248, 0.05);
+}
+
+.port-hex-col {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--cyan);
+  white-space: nowrap;
+}
+
+.port-hex-col .port-dec {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+.section-pill {
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  padding: 2px 7px;
+  border-radius: 4px;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.subsystem-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 300px;
+}
+
+.subsystem-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3.5px;
+  align-items: center;
+}
+
+.base-section-pill {
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.12s ease;
+  user-select: none;
+}
+
+.base-section-pill:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  background: var(--bg-secondary);
+}
+
+.purpose-tag-pill {
+  font-size: 10px;
+  padding: 1.5px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.12s ease;
+  white-space: nowrap;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.purpose-tag-pill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.purpose-tag-pill.active {
+  box-shadow: 0 0 0 1.5px var(--cyan), 0 2px 5px rgba(2, 132, 199, 0.3);
+  font-weight: 700;
+}
+
+/* Specific Purpose Tag Color Coding */
+.tag-tape {
+  background: rgba(236, 72, 153, 0.12);
+  color: #db2777;
+  border-color: rgba(236, 72, 153, 0.3);
+}
+[data-theme="dark"] .tag-tape {
+  background: rgba(244, 114, 182, 0.15);
+  color: #f472b6;
+}
+
+.tag-keyboard {
+  background: rgba(14, 165, 233, 0.12);
+  color: #0284c7;
+  border-color: rgba(14, 165, 233, 0.3);
+}
+[data-theme="dark"] .tag-keyboard {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+}
+
+.tag-border {
+  background: rgba(245, 158, 11, 0.12);
+  color: #d97706;
+  border-color: rgba(245, 158, 11, 0.3);
+}
+[data-theme="dark"] .tag-border {
+  background: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
+}
+
+.tag-audio, .tag-ay, .tag-turbosound, .tag-turbosound-fm {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+[data-theme="dark"] .tag-audio, [data-theme="dark"] .tag-ay, [data-theme="dark"] .tag-turbosound, [data-theme="dark"] .tag-turbosound-fm {
+  background: rgba(52, 211, 153, 0.15);
+  color: #34d399;
+}
+
+.tag-memory-paging {
+  background: rgba(99, 102, 241, 0.12);
+  color: #4f46e5;
+  border-color: rgba(99, 102, 241, 0.3);
+}
+[data-theme="dark"] .tag-memory-paging {
+  background: rgba(129, 140, 248, 0.15);
+  color: #818cf8;
+}
+
+.tag-video {
+  background: rgba(168, 85, 247, 0.12);
+  color: #9333ea;
+  border-color: rgba(168, 85, 247, 0.3);
+}
+[data-theme="dark"] .tag-video {
+  background: rgba(192, 132, 252, 0.15);
+  color: #c084fc;
+}
+
+.tag-printer {
+  background: rgba(100, 116, 139, 0.12);
+  color: #475569;
+  border-color: rgba(100, 116, 139, 0.3);
+}
+[data-theme="dark"] .tag-printer {
+  background: rgba(148, 163, 184, 0.15);
+  color: #94a3b8;
+}
+
+.tag-turbo {
+  background: rgba(225, 29, 72, 0.12);
+  color: #e11d48;
+  border-color: rgba(225, 29, 72, 0.3);
+}
+[data-theme="dark"] .tag-turbo {
+  background: rgba(244, 63, 94, 0.15);
+  color: #fb7185;
+}
+
+.tag-joystick, .tag-mouse {
+  background: rgba(13, 148, 136, 0.12);
+  color: #0d9488;
+  border-color: rgba(13, 148, 136, 0.3);
+}
+[data-theme="dark"] .tag-joystick, [data-theme="dark"] .tag-mouse {
+  background: rgba(45, 212, 191, 0.15);
+  color: #2dd4bf;
+}
+
+.tag-floppy---fdc {
+  background: rgba(6, 182, 212, 0.12);
+  color: #0891b2;
+  border-color: rgba(6, 182, 212, 0.3);
+}
+[data-theme="dark"] .tag-floppy---fdc {
+  background: rgba(34, 211, 238, 0.15);
+  color: #22d3ee;
+}
+
+.tag-ide---storage {
+  background: rgba(249, 115, 22, 0.12);
+  color: #ea580c;
+  border-color: rgba(249, 115, 22, 0.3);
+}
+[data-theme="dark"] .tag-ide---storage {
+  background: rgba(251, 146, 60, 0.15);
+  color: #fb923c;
+}
+
+.tag-system---config, .tag-real-time-clock, .tag-serial---modem, .tag-sd-card, .tag-dma {
+  background: rgba(100, 116, 139, 0.10);
+  color: var(--text-secondary);
+  border-color: rgba(100, 116, 139, 0.25);
+}
+
+
+/* Selectivity & Aliasing Cell */
+.selectivity-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  cursor: help;
+  padding: 2px 0;
+}
+
+.selectivity-metrics {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.depth-badge {
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 10.5px;
+  line-height: 1.2;
+}
+
+.depth-low {
+  background: rgba(225, 29, 72, 0.12);
+  color: var(--rose);
+  border: 1px solid rgba(225, 29, 72, 0.25);
+}
+
+.depth-mid {
+  background: rgba(217, 119, 6, 0.12);
+  color: var(--amber);
+  border: 1px solid rgba(217, 119, 6, 0.25);
+}
+
+.depth-high {
+  background: rgba(5, 150, 105, 0.12);
+  color: var(--emerald);
+  border: 1px solid rgba(5, 150, 105, 0.25);
+}
+
+.footprint-badge {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.hazard-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  width: fit-content;
+  white-space: nowrap;
+}
+
+.hazard-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.hazard-critical {
+  background: rgba(225, 29, 72, 0.14);
+  color: var(--rose);
+  border: 1px solid rgba(225, 29, 72, 0.3);
+}
+.hazard-critical .hazard-dot { background: var(--rose); box-shadow: 0 0 5px var(--rose); }
+
+.hazard-high {
+  background: rgba(249, 115, 22, 0.14);
+  color: #ea580c;
+  border: 1px solid rgba(249, 115, 22, 0.3);
+}
+.hazard-high .hazard-dot { background: #ea580c; }
+
+.hazard-mod {
+  background: rgba(217, 119, 6, 0.12);
+  color: var(--amber);
+  border: 1px solid rgba(217, 119, 6, 0.25);
+}
+.hazard-mod .hazard-dot { background: var(--amber); }
+
+.hazard-strict {
+  background: rgba(5, 150, 105, 0.12);
+  color: var(--emerald);
+  border: 1px solid rgba(5, 150, 105, 0.25);
+}
+.hazard-strict .hazard-dot { background: var(--emerald); }
+
+/* Global Floating Tooltip */
+#global-tooltip {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  background: var(--bg-secondary);
+  border: 1px solid var(--cyan);
+  border-radius: 8px;
+  padding: 13px 15px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22), 0 0 12px rgba(2, 132, 199, 0.18);
+  max-width: 380px;
+  display: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+  color: var(--text-primary);
+  font-size: 12px;
+}
+
+#global-tooltip.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* Modal / Hardware Inspector */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 20px;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-content {
+  background: var(--bg-secondary);
+  border: 1px solid var(--cyan);
+  border-radius: 12px;
+  max-width: 860px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  color: var(--cyan);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+.modal-close:hover {
+  color: var(--rose);
+}
+
+.modal-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pinout-diagram {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  gap: 4px;
+  background: var(--bg-tertiary);
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+}
+
+.pin-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.pin-name {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: var(--text-muted);
+}
+
+.pin-box {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.code-box {
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #38bdf8;
+  white-space: pre-wrap;
+  position: relative;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #1e293b;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #94a3b8;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.copy-btn:hover {
+  color: #fff;
+  border-color: var(--cyan);
+}
+
+.footer {
+  margin-top: 30px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 11.5px;
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <div class="header-container">
+    <div class="brand">
+      <div class="brand-icon">ZX</div>
+      <div class="brand-title">
+        <h1>ZX Spectrum Ports Decoding Map <span class="badge-sub">BC INFO #4</span></h1>
+        <p>Interactive hardware decoding reference for Sinclair, Soviet Clones &amp; Peripherals</p>
+      </div>
+    </div>
+
+    <!-- Quick Stats & Actions -->
+    <div class="header-actions">
+      <div class="stats-ribbon">
+        <div class="stat-item">
+          <span class="stat-label">Active:</span>
+          <span class="stat-val" id="stat-active-rules">212</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Total:</span>
+          <span class="stat-val">212</span>
+        </div>
+      </div>
+
+      <!-- Dark / Light Theme Toggle -->
+      <button class="theme-toggle-btn" id="theme-toggle-btn" onclick="toggleTheme()" title="Switch between Light and Dark theme">
+        <span id="theme-icon">
+          <!-- Moon icon for light mode (click to switch to dark) -->
+          <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/></svg>
+        </span>
+        <span id="theme-text">Dark Mode</span>
+      </button>
+
+      <button class="btn btn-sm" onclick="resetAllFilters()">Reset Filters</button>
+      <button class="btn btn-sm" onclick="exportData('json')">Export JSON</button>
+      <button class="btn btn-sm" onclick="exportData('csv')">Export CSV</button>
+    </div>
+  </div>
+</header>
+
+<div class="app-layout">
+
+  <!-- Interactive 16-Bit Bus Decoding Map / Bit Filter -->
+  <div class="bus-filter-card">
+    <div class="bus-filter-header">
+      <div class="bus-title">
+        <h2>
+          <svg width="15" height="15" fill="currentColor" viewBox="0 0 16 16"><path d="M1 11.5a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 0-1h-11a.5.5 0 0 0-.5.5zm-1-4A.5.5 0 0 1 .5 7h15a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5zm1-4a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 0-1h-11a.5.5 0 0 0-.5.5z"/></svg>
+          Interactive 16-Bit Bus Decoding Map
+        </h2>
+        <p>Click address pins (A15 &rarr; A0) to filter: <strong>* (Any)</strong> &rarr; <span style="color:var(--rose)">0 (Active Low)</span> &rarr; <span style="color:var(--emerald)">1 (Active High)</span></p>
+      </div>
+
+      <div class="bus-presets">
+        <span style="font-size:11px; color:var(--text-muted); font-weight:600;">Presets:</span>
+        <button class="btn btn-sm" onclick="applyBitPreset('ula')">ULA (A0=0)</button>
+        <button class="btn btn-sm" onclick="applyBitPreset('peripheral')">Odd Ports (A0=1)</button>
+        <button class="btn btn-sm" onclick="applyBitPreset('paging128')">128K Paging (A15=0, A1=0)</button>
+        <button class="btn btn-sm" onclick="applyBitPreset('ay')">AY Sound (A15=1, A14=1, A1=0)</button>
+        <button class="btn btn-sm" onclick="applyBitPreset('clear')">Clear Pins</button>
+      </div>
+    </div>
+
+    <!-- 16 Address Pins (A15 down to A0) -->
+    <div class="bit-matrix" id="bit-matrix">
+      <!-- Generated via JS -->
+    </div>
+  </div>
+
+  <!-- Multi-Faceted Filters & Fancy Tags -->
+  <div class="filter-panel">
+    
+    <!-- Search and Ecosystem / Track Filter -->
+    <div class="filter-row">
+      <div class="search-input-wrapper">
+        <svg class="search-icon" width="15" height="15" fill="currentColor" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>
+        <input type="text" id="global-search" class="search-input" placeholder="Search hex (#7FFD, #FE), decimal (32765), mask (0xxxxxxx), function (WD1793, AYdat, Kempston)..." oninput="handleSearchInput(this.value)">
+      </div>
+
+      <div class="filter-label">Ecosystem:</div>
+      <div class="filter-group">
+        <button class="tag-pill active" data-track="all" onclick="setTrackFilter('all')"><span class="tag-dot"></span>All Tracks</button>
+        <button class="tag-pill" data-track="Original" onclick="setTrackFilter('Original')"><span class="tag-dot"></span>Sinclair / Amstrad</button>
+        <button class="tag-pill" data-track="Soviet Clone" onclick="setTrackFilter('Soviet Clone')"><span class="tag-dot"></span>Soviet Clones</button>
+        <button class="tag-pill" data-track="Eastern Europe" onclick="setTrackFilter('Eastern Europe')"><span class="tag-dot"></span>Eastern Europe</button>
+      </div>
+    </div>
+
+    <!-- Computer Models Filter (Fancy Badges) -->
+    <div class="filter-row">
+      <div class="filter-label">Target Model:</div>
+      <div class="filter-group" id="model-filter-group">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+
+    <!-- Subsystems & Refinements -->
+    <div class="filter-row">
+      <div class="filter-label">Subsystem:</div>
+      <div class="filter-group">
+        <select id="section-select" class="search-input" style="max-width:320px; padding-left:12px;" onchange="handleSectionChange(this.value)">
+          <option value="all">All Subsystems &amp; Interfaces (32 total)</option>
+          <!-- Populated via JS -->
+        </select>
+        
+        <div style="display:flex; align-items:center; gap:6px; margin-left:12px;">
+          <span class="filter-label" style="min-width:auto;">I/O Mode:</span>
+          <button class="tag-pill active" data-rw="all" onclick="setRWFilter('all')">All</button>
+          <button class="tag-pill" data-rw="read" onclick="setRWFilter('read')">Read</button>
+          <button class="tag-pill" data-rw="write" onclick="setRWFilter('write')">Write</button>
+          <button class="tag-pill" data-rw="both" onclick="setRWFilter('both')">Bidirectional</button>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:6px; margin-left:12px; flex-wrap:wrap;">
+          <span class="filter-label" style="min-width:auto;" title="Filter by Address Space Selectivity and Bus Hazard">Selectivity:</span>
+          <button class="tag-pill active" data-hazard="all" onclick="setHazardFilter('all')">All</button>
+          <button class="tag-pill" data-hazard="strict" onclick="setHazardFilter('strict')">&le; 64 (Strict)</button>
+          <button class="tag-pill" data-hazard="moderate" onclick="setHazardFilter('moderate')">128&ndash;2048 (8-Bit Mod)</button>
+          <button class="tag-pill" data-hazard="hazard" onclick="setHazardFilter('hazard')">&gt; 2048 (High Hazard)</button>
+          <button class="tag-pill" data-hazard="legacy8" onclick="setHazardFilter('legacy8')">8-Bit Legacy (A15-A8 Ignored)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Functional Tags -->
+    <div class="filter-row">
+      <div class="filter-label">Functions:</div>
+      <div class="filter-group" id="tags-filter-group">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Full Master Interactive Table (Rendered By Default) -->
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th onclick="sortTable('canonical_hex')">Port (Hex / Dec) &#x25B4;&#x25BE;</th>
+          <th onclick="sortTable('section')" style="min-width:260px;" title="Hardware Subsystem and Functional Purpose Tags">Subsystem &amp; Purpose Tags &#x25B4;&#x25BE;</th>
+          <th style="min-width:320px;">16-Bit Decoding Mask (A15 &rarr; A0)</th>
+          <th onclick="sortTable('selectivity')" style="min-width:180px;" title="Decode Depth (bits checked), 64KB I/O Address Space Footprint (%), and Bus Collision Hazard">Selectivity &amp; Aliasing &#x25B4;&#x25BE;</th>
+          <th>READ Function</th>
+          <th>WRITE Function</th>
+          <th style="min-width:240px;">Models</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        <!-- Full table rendered immediately via JS -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div>Guide to the ZX Spectrum ports by Black_Cat (BC Info Guide #4, 2008 &copy; Black_Cat) &bull; Complete English Translation</div>
+  </footer>
+
+</div>
+
+<!-- Global Decoding Selectivity Tooltip -->
+<div id="global-tooltip"></div>
+
+<!-- Port Detail Modal / Hardware Inspector -->
+<div class="modal-overlay" id="detail-modal" onclick="closeDetailModal(event)">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h2 id="modal-title">Port Details</h2>
+      <button class="modal-close" onclick="closeDetailModal()">&times;</button>
+    </div>
+    <div class="modal-body" id="modal-body">
+      <!-- Rendered via JS -->
+    </div>
+  </div>
+</div>
+
+<!-- Embedded Data & Application Engine -->
+<script>
+const DATA = {"models": {"1": {"code": "1", "name": "ZX Spectrum 16K/48K (Issue 1–2)", "track": "Original", "color": "#38bdf8", "desc": "Sinclair 16K/48K early boards with partial A0 ULA decode"}, "+1": {"code": "+1", "name": "ZX Spectrum 48K (Issue 3–6)", "track": "Original", "color": "#0ea5e9", "desc": "Sinclair 48K revised boards (improved EAR/MIC circuitry)"}, "2": {"code": "2", "name": "ZX Spectrum +128 / +2", "track": "Original", "color": "#6366f1", "desc": "Sinclair 128K 'Toastrack' and Amstrad grey +2 with AY-3-8912 & paging"}, "3": {"code": "3", "name": "ZX Spectrum +2A / +2B", "track": "Original", "color": "#8b5cf6", "desc": "Amstrad redesigned ASIC-based +2A/+2B with #1FFD paging"}, "+3": {"code": "+3", "name": "ZX Spectrum +3", "track": "Original", "color": "#a855f7", "desc": "Amstrad +3 with built-in 3-inch FDC (uPD765) and CP/M paging modes"}, "4": {"code": "4", "name": "Timex Computer 2048", "track": "Eastern Europe", "color": "#ec4899", "desc": "Portuguese/Polish clone with high-res video mode on #FF"}, "5": {"code": "5", "name": "Didaktik Gama", "track": "Eastern Europe", "color": "#f43f5e", "desc": "Czechoslovakian 80K/128K clone with 8255 PPI and banking on #7FFD"}, "6": {"code": "6", "name": "Scorpion ZS-256 Turbo+", "track": "Soviet Clone", "color": "#10b981", "desc": "Petersburg 256K machine with ProfROM, SMUC bus, shadow monitor, turbo mode"}, "7": {"code": "7", "name": "KAY-1024SL / Beta Turbo", "track": "Soviet Clone", "color": "#14b8a6", "desc": "Nemo's 1024K workhorse with NemoIDE, NemoBus, Beta Turbo FDC"}, "8": {"code": "8", "name": "Pentagon 128 (1991)", "track": "Soviet Clone", "color": "#f59e0b", "desc": "The demoscene standard: zero-wait contended RAM, 71680 T-states, Beta 128"}, "9": {"code": "9", "name": "Profi-1 (v3.x)", "track": "Soviet Clone", "color": "#eab308", "desc": "Moscow high-performance machine with CP/M, 512K/1024K, 512x240 video, XT keyboard"}, "A": {"code": "A", "name": "ATM Turbo-2+", "track": "Soviet Clone", "color": "#06b6d4", "desc": "MicroArt flagship: EGA/text video, shadow ports, IDE, ADC, DAC, CP/M"}, "B": {"code": "B", "name": "Scorpion GMX", "track": "Soviet Clone", "color": "#84cc16", "desc": "Graphic Multi-eXtension upgrade for Scorpion ZS-256 with 2MB RAM"}, "C": {"code": "C", "name": "Quorum 128/+", "track": "Soviet Clone", "color": "#d946ef", "desc": "Urals clone with custom ULA/gate array, CP/M paging, and soft keyboard"}, "D": {"code": "D", "name": "Pentagon-1024SL (2006)", "track": "Soviet Clone", "color": "#f97316", "desc": "Modern Pentagon revision with 1024K RAM, turbo, expanded paging"}}, "functions": {"Atr": "Video Attributes (Floating Bus)", "Brd": "Border Color", "Key": "Keyboard Matrix", "Kjoy": "Kempston Joystick", "Kmou": "Kempston Mouse", "Pag": "Memory Paging", "Pal": "Video Palette", "PLLFC": "Phase-Locked Loop Frequency Control", "Prn": "Printer / Centronics", "Reg": "Config / Management Register", "Shdw": "Shadow Mode Control", "Tp": "Cassette Tape I/O", "Trb": "CPU Turbo Switch", "TRD": "TR-DOS Controller", "Vid": "Video Mode Select", "Spk": "Beeper Speaker / Audio", "WD1793": "WD1793 FDC Floppy Controller", "WD2797": "WD2797 FDC Floppy Controller", "WD1772": "WD1772 FDC Floppy Controller", "8272": "uPD765 / 8272 FDC Floppy Controller", "FDsys": "Floppy Drive System Register", "FDcontrol": "Floppy Controller Control", "IDE": "ATA / IDE Hard Disk Interface", "SDcard": "SD / MMC Card Interface", "AYdat": "AY-3-8912 Sound Chip Data", "AYadr": "AY-3-8912 Sound Chip Register Select", "SoundDrive": "SoundDrive 4-Channel DAC", "SAA1099": "Philips SAA1099 6-Channel Sound Chip", "General Sound": "General Sound Z80 Sound Board", "RTC": "Real-Time Clock", "DS1685": "Dallas DS1685 RTC Chip", "GLUK": "GLUK CMOS RTC Registers", "8255": "Intel 8255 Parallel Peripheral Interface", "8251": "Intel 8251 USART Serial Port", "8253": "Intel 8253 Programmable Interval Timer", "8259": "Intel 8259 Programmable Interrupt Controller", "8237": "Intel 8237 DMA Controller", "Z80DMA": "Z80 Direct Memory Access Controller", "RS232": "RS-232 Serial Interface", "Modem": "Hayes-compatible Modem", "ISA": "PC ISA Bus Interface", "AY": "AY-3-8912 / YM2149 Programmable Sound Generator", "TurboSound": "TurboSound Dual-PSG Sound Card (#FFFD/%1111111x)", "TurboSound FM": "TurboSound FM Dual-YM2203 6-FM + 6-SSG Sound Card"}, "ports": [{"id": 1, "section": "System Ports", "port": "#00 (0)", "canonical_hex": "#00", "canonical_dec": "0", "address": "xxxxxxxx00000000", "decoding": "xxxxxxxx00000000", "read": "—", "write": "Reg(B)", "note": "", "models": ["B"], "tags": ["System / Config"], "x_count": 8, "mirrors": 256}, {"id": 2, "section": "System Ports", "port": "#00 (0)", "canonical_hex": "#00", "canonical_dec": "0", "address": "xxxxxxxx00000000", "decoding": "xxxxxxxx0xx0xxx0", "read": "—", "write": "Pag(C)", "note": "", "models": ["C"], "tags": ["Memory Paging"], "x_count": 13, "mirrors": 8192}, {"id": 3, "section": "System Ports", "port": "#7E (126)", "canonical_hex": "#7E", "canonical_dec": "126", "address": "xxxxxxxx01111110", "decoding": "xxxxxxxx0xx11xx0", "read": "Key(C)", "write": "—", "note": "", "models": ["C"], "tags": ["Keyboard"], "x_count": 12, "mirrors": 4096}, {"id": 4, "section": "System Ports", "port": "#F6 (246)", "canonical_hex": "#F6", "canonical_dec": "246", "address": "xxxxxxxx11110110", "decoding": "xxxxxxxxxxxx0110", "read": "—", "write": "Brd(A)", "note": "", "models": ["A"], "tags": ["Border"], "x_count": 12, "mirrors": 4096}, {"id": 5, "section": "System Ports", "port": "#FE (254)", "canonical_hex": "#FE", "canonical_dec": "254", "address": "xxxxxxxx11111110", "decoding": "xxxxxxxxxxxxxxx0", "read": "KeyTp(1,7-9) Prn(7)", "write": "BrdTpSpk(1,7-9)", "note": "", "models": ["1", "7", "8", "9", "+1"], "tags": ["Audio", "Border", "Keyboard", "Printer", "Tape"], "x_count": 15, "mirrors": 32768}, {"id": 6, "section": "System Ports", "port": "#FE (254)", "canonical_hex": "#FE", "canonical_dec": "254", "address": "xxxxxxxx11111110", "decoding": "xxxxxxxxxxxxxxx0", "read": "Key(D)", "write": "BrdSpk(D)", "note": "", "models": ["D"], "tags": ["Audio", "Border", "Keyboard"], "x_count": 15, "mirrors": 32768}, {"id": 7, "section": "System Ports", "port": "#FE (254)", "canonical_hex": "#FE", "canonical_dec": "254", "address": "xxxxxxxx11111110", "decoding": "xxxxxxxxxxxxx110", "read": "KeyTp(A)", "write": "BrdTpSpk(A)", "note": "", "models": ["A"], "tags": ["Audio", "Border", "Keyboard", "Tape"], "x_count": 13, "mirrors": 8192}, {"id": 8, "section": "System Ports", "port": "#FE (254)", "canonical_hex": "#FE", "canonical_dec": "254", "address": "xxxxxxxx11111110", "decoding": "xxxxxxxxxx1xxx10", "read": "KeyTpPrn(6)", "write": "BrdTpSpk(6)", "note": "", "models": ["6"], "tags": ["Audio", "Border", "Keyboard", "Printer", "Tape"], "x_count": 13, "mirrors": 8192}, {"id": 9, "section": "System Ports", "port": "#FE (254)", "canonical_hex": "#FE", "canonical_dec": "254", "address": "xxxxxxxx11111110", "decoding": "xxxxxxxx1xxxxxx0", "read": "KeyTp(+1)", "write": "BrdTpSpk(+1)", "note": "", "models": ["+1"], "tags": ["Audio", "Border", "Keyboard", "Tape"], "x_count": 14, "mirrors": 16384}, {"id": 10, "section": "System Ports", "port": "#FE (254)", "canonical_hex": "#FE", "canonical_dec": "254", "address": "xxxxxxxx11111110", "decoding": "xxxxxxxx1xx11xx0", "read": "KeyTp(C)", "write": "BrdTpSpk(C)", "note": "", "models": ["C"], "tags": ["Audio", "Border", "Keyboard", "Tape"], "x_count": 12, "mirrors": 4096}, {"id": 11, "section": "System Ports", "port": "#FF (255)", "canonical_hex": "#FF", "canonical_dec": "255", "address": "xxxxxxxx11111111", "decoding": "xxxxxxxxxxxxxxxx", "read": "Atr(1-2)", "write": "—", "note": "", "models": ["1", "2", "+1"], "tags": ["Video"], "x_count": 16, "mirrors": 65536}, {"id": 12, "section": "System Ports", "port": "#FF (255)", "canonical_hex": "#FF", "canonical_dec": "255", "address": "xxxxxxxx11111111", "decoding": "xxxxxxxxxxxxx111", "read": "Atr(A)", "write": "—", "note": "", "models": ["A"], "tags": ["Video"], "x_count": 13, "mirrors": 8192}, {"id": 13, "section": "System Ports", "port": "#FF (255)", "canonical_hex": "#FF", "canonical_dec": "255", "address": "xxxxxxxx11111111", "decoding": "xxxxxxxxxx1xxx11", "read": "Atr(6)", "write": "—", "note": "", "models": ["6"], "tags": ["Video"], "x_count": 13, "mirrors": 8192}, {"id": 14, "section": "System Ports", "port": "#FF (255)", "canonical_hex": "#FF", "canonical_dec": "255", "address": "xxxxxxxx11111111", "decoding": "xxxxxxxx????????", "read": "Atr(4,5)", "write": "Vid/Pag(4/5)", "note": "", "models": ["4", "5"], "tags": ["Memory Paging", "Video"], "x_count": 8, "mirrors": 256}, {"id": 15, "section": "System Ports", "port": "#1FFD (8189)", "canonical_hex": "#1FFD", "canonical_dec": "8189", "address": "0001111111111101", "decoding": "0001xxxxxxxxxx0x", "read": "—", "write": "PagPrn/FD(3/+3)", "note": "", "models": ["3", "+3"], "tags": ["Memory Paging", "Printer"], "x_count": 11, "mirrors": 2048}, {"id": 16, "section": "System Ports", "port": "#1FFD (8189)", "canonical_hex": "#1FFD", "canonical_dec": "8189", "address": "0001111111111101", "decoding": "00xxxxxxxxxxxx01", "read": "—", "write": "Pag(7)", "note": "", "models": ["7"], "tags": ["Memory Paging"], "x_count": 12, "mirrors": 4096}, {"id": 17, "section": "System Ports", "port": "#1FFD (8189)", "canonical_hex": "#1FFD", "canonical_dec": "8189", "address": "0001111111111101", "decoding": "00xxxxxxxx1xxx01", "read": "Trb-OFF(6)", "write": "Pag(6)", "note": "", "models": ["6"], "tags": ["Memory Paging", "Turbo"], "x_count": 11, "mirrors": 2048}, {"id": 18, "section": "System Ports", "port": "#1FFD (8189)", "canonical_hex": "#1FFD", "canonical_dec": "8189", "address": "0001111111111101", "decoding": "0x0xx111xx1xxx01", "read": "—", "write": "Pag(?B)", "note": "", "models": ["B"], "tags": ["Memory Paging"], "x_count": 8, "mirrors": 256}, {"id": 19, "section": "System Ports", "port": "#78FD (30973)", "canonical_hex": "#78FD", "canonical_dec": "30973", "address": "0111100011111101", "decoding": "0x1xx000xx1xxx01", "read": "—", "write": "Pag(?B)", "note": "", "models": ["B"], "tags": ["Memory Paging"], "x_count": 8, "mirrors": 256}, {"id": 20, "section": "System Ports", "port": "#7AFD (31485)", "canonical_hex": "#7AFD", "canonical_dec": "31485", "address": "0111101011111101", "decoding": "0x1xx010xx1xxx01", "read": "—", "write": "Vid(?B)", "note": "", "models": ["B"], "tags": ["Video"], "x_count": 8, "mirrors": 256}, {"id": 21, "section": "System Ports", "port": "#7CFD (31997)", "canonical_hex": "#7CFD", "canonical_dec": "31997", "address": "0111110011111101", "decoding": "0x1xx100xx1xxx01", "read": "—", "write": "Vid(?B)", "note": "", "models": ["B"], "tags": ["Video"], "x_count": 8, "mirrors": 256}, {"id": 22, "section": "System Ports", "port": "#7EFD (32509)", "canonical_hex": "#7EFD", "canonical_dec": "32509", "address": "0111111011111101", "decoding": "0x1xx110xx1xxx01", "read": "—", "write": "Rag(?B) *(sic)*", "note": "", "models": ["B"], "tags": ["System / Config"], "x_count": 8, "mirrors": 256}, {"id": 23, "section": "System Ports", "port": "#7FFD (32765)", "canonical_hex": "#7FFD", "canonical_dec": "32765", "address": "0111111111111101", "decoding": "0xxxxxxxxxxxxx0x", "read": "—", "write": "Pag(2,8,9,A)", "note": "", "models": ["2", "8", "9", "A"], "tags": ["Memory Paging"], "x_count": 14, "mirrors": 16384}, {"id": 24, "section": "System Ports", "port": "#7FFD (32765)", "canonical_hex": "#7FFD", "canonical_dec": "32765", "address": "0111111111111101", "decoding": "0xxxxxxxxxxxxx01", "read": "—", "write": "Pag(D)", "note": "", "models": ["D"], "tags": ["Memory Paging"], "x_count": 13, "mirrors": 8192}, {"id": 25, "section": "System Ports", "port": "#7FFD (32765)", "canonical_hex": "#7FFD", "canonical_dec": "32765", "address": "0111111111111101", "decoding": "0xxxxxxxxxx11x0x", "read": "—", "write": "Pag(C)", "note": "", "models": ["C"], "tags": ["Memory Paging"], "x_count": 12, "mirrors": 4096}, {"id": 26, "section": "System Ports", "port": "#7FFD (32765)", "canonical_hex": "#7FFD", "canonical_dec": "32765", "address": "0111111111111101", "decoding": "01xxxxxxxxxxxx0x", "read": "—", "write": "Pag(3,?5)", "note": "", "models": ["3", "5", "+3"], "tags": ["Memory Paging"], "x_count": 13, "mirrors": 8192}, {"id": 27, "section": "System Ports", "port": "#7FFD (32765)", "canonical_hex": "#7FFD", "canonical_dec": "32765", "address": "0111111111111101", "decoding": "01xxxxxxxxxxxx01", "read": "—", "write": "Pag(7)", "note": "", "models": ["7"], "tags": ["Memory Paging"], "x_count": 12, "mirrors": 4096}, {"id": 28, "section": "System Ports", "port": "#7FFD (32765)", "canonical_hex": "#7FFD", "canonical_dec": "32765", "address": "0111111111111101", "decoding": "01xxxxxxxx1xxx01", "read": "Trb-ON(6)", "write": "Pag(6)", "note": "", "models": ["6"], "tags": ["Memory Paging", "Turbo"], "x_count": 11, "mirrors": 2048}, {"id": 29, "section": "System Ports", "port": "#7FFD (32765)", "canonical_hex": "#7FFD", "canonical_dec": "32765", "address": "0111111111111101", "decoding": "0x1xx111xx1xxx01", "read": "—", "write": "Pag(?B)", "note": "", "models": ["B"], "tags": ["Memory Paging"], "x_count": 8, "mirrors": 256}, {"id": 30, "section": "System Ports", "port": "#80FD (33021)", "canonical_hex": "#80FD", "canonical_dec": "33021", "address": "1000000011111101", "decoding": "1x0xxxxxxxx11x0x", "read": "—", "write": "CP/MPag(C)", "note": "", "models": ["C"], "tags": ["Memory Paging"], "x_count": 11, "mirrors": 2048}, {"id": 31, "section": "System Ports", "port": "#DFFD (57341)", "canonical_hex": "#DFFD", "canonical_dec": "57341", "address": "1101111111111101", "decoding": "xx0xxxxxxxxxxx0x", "read": "—", "write": "Pag(9)", "note": "", "models": ["9"], "tags": ["Memory Paging"], "x_count": 14, "mirrors": 16384}, {"id": 32, "section": "System Ports", "port": "#DFFD (57341)", "canonical_hex": "#DFFD", "canonical_dec": "57341", "address": "1101111111111101", "decoding": "1x0xx111xx1xxx01", "read": "—", "write": "Pag(?B)", "note": "", "models": ["B"], "tags": ["Memory Paging"], "x_count": 8, "mirrors": 256}, {"id": 33, "section": "System Ports", "port": "#EFF7 (61431)", "canonical_hex": "#EFF7", "canonical_dec": "61431", "address": "1110111111110111", "decoding": "1110xxxxxxxx0xxx", "read": "—", "write": "PagVidTrbReg(8)", "note": "", "models": ["8"], "tags": ["Memory Paging", "System / Config", "Turbo", "Video"], "x_count": 11, "mirrors": 2048}, {"id": 34, "section": "System Ports", "port": "#EFF7 (61431)", "canonical_hex": "#EFF7", "canonical_dec": "61431", "address": "1110111111110111", "decoding": "1110xxxxxxxx0xx1", "read": "—", "write": "PagVidTrbReg(D)", "note": "", "models": ["D"], "tags": ["Memory Paging", "System / Config", "Turbo", "Video"], "x_count": 10, "mirrors": 1024}, {"id": 35, "section": "Peripherals Ports", "port": "#1B (27)", "canonical_hex": "#1B", "canonical_dec": "27", "address": "xxxxxxxx00011x11", "decoding": "xxxxxxxx0xx11xx1", "read": "Prn(C)", "write": "—", "note": "", "models": ["C"], "tags": ["Printer"], "x_count": 12, "mirrors": 4096}, {"id": 36, "section": "Peripherals Ports", "port": "#1F (31)", "canonical_hex": "#1F", "canonical_dec": "31", "address": "xxxxxxxx00011111", "decoding": "xxxxxxxxxxxxxxx1", "read": "Kjoy(7)", "write": "—", "note": "", "models": ["7"], "tags": ["Joystick"], "x_count": 15, "mirrors": 32768}, {"id": 37, "section": "Peripherals Ports", "port": "#1F (31)", "canonical_hex": "#1F", "canonical_dec": "31", "address": "xxxxxxxx00011111", "decoding": "xxxxxxxxxx0xxxx1", "read": "Kjoy(D)", "write": "—", "note": "", "models": ["D"], "tags": ["Joystick"], "x_count": 14, "mirrors": 16384}, {"id": 38, "section": "Peripherals Ports", "port": "#1F (31)", "canonical_hex": "#1F", "canonical_dec": "31", "address": "xxxxxxxx00011111", "decoding": "xxxxxxxx0xx11xx1", "read": "KjoyPrn(C)", "write": "—", "note": "", "models": ["C"], "tags": ["Joystick", "Printer"], "x_count": 12, "mirrors": 4096}, {"id": 39, "section": "Peripherals Ports", "port": "#1F (31)", "canonical_hex": "#1F", "canonical_dec": "31", "address": "xxxxxxxx00011111", "decoding": "xxxxxxxx0x0xxx11", "read": "Kjoy(6)", "write": "—", "note": "", "models": ["6"], "tags": ["Joystick"], "x_count": 12, "mirrors": 4096}, {"id": 40, "section": "Peripherals Ports", "port": "#1F/#3F/#5F/#7F", "canonical_hex": "#1F", "canonical_dec": "", "address": "xxxxxxxx0BA11111", "decoding": "xxxxxxxx0xxxxxxx", "read": "8255(5)", "write": "8255(5)", "note": "", "models": ["5"], "tags": ["System / Config"], "x_count": 15, "mirrors": 32768}, {"id": 41, "section": "Peripherals Ports", "port": "#1F/#3F/#5F/#7F", "canonical_hex": "#1F", "canonical_dec": "", "address": "xxxxxxxx0BA11111", "decoding": "xxxxxxxx0xxxxx11", "read": "8255(9)", "write": "8255(9)", "note": "", "models": ["9"], "tags": ["System / Config"], "x_count": 13, "mirrors": 8192}, {"id": 42, "section": "Peripherals Ports", "port": "#7B (123)", "canonical_hex": "#7B", "canonical_dec": "123", "address": "xxxxxxxx01111011", "decoding": "xxxxxxxxxxxxx011", "read": "—", "write": "Prn(A)", "note": "", "models": ["A"], "tags": ["Printer"], "x_count": 13, "mirrors": 8192}, {"id": 43, "section": "Peripherals Ports", "port": "#7B (123)", "canonical_hex": "#7B", "canonical_dec": "123", "address": "xxxxxxxx01111011", "decoding": "xxxxxxxx0xx110x1", "read": "—", "write": "Prn(C)", "note": "", "models": ["C"], "tags": ["Printer"], "x_count": 11, "mirrors": 2048}, {"id": 44, "section": "Peripherals Ports", "port": "#FA (250)", "canonical_hex": "#FA", "canonical_dec": "250", "address": "xxxxxxxx11111010", "decoding": "xxxxxxxxxxxxx010", "read": "IO(A)", "write": "IO(A)", "note": "", "models": ["A"], "tags": ["System / Config"], "x_count": 13, "mirrors": 8192}, {"id": 45, "section": "Peripherals Ports", "port": "#FB (251)", "canonical_hex": "#FB", "canonical_dec": "251", "address": "xxxxxxxx11111011", "decoding": "xxxxxxxxxxxxx0xx", "read": "Prn(8,D)", "write": "Prn(8,D)", "note": "", "models": ["8", "D"], "tags": ["Printer"], "x_count": 15, "mirrors": 32768}, {"id": 46, "section": "Peripherals Ports", "port": "#FB (251)", "canonical_hex": "#FB", "canonical_dec": "251", "address": "xxxxxxxx11111011", "decoding": "xxxxxxxxxxxxx011", "read": "Prn(A)", "write": "PrnDAC(A)", "note": "", "models": ["A"], "tags": ["Audio", "Printer"], "x_count": 13, "mirrors": 8192}, {"id": 47, "section": "Peripherals Ports", "port": "#FB (251)", "canonical_hex": "#FB", "canonical_dec": "251", "address": "xxxxxxxx11111011", "decoding": "xxxxxxxx1xx110x1", "read": "—", "write": "Prn(C)", "note": "", "models": ["C"], "tags": ["Printer"], "x_count": 11, "mirrors": 2048}, {"id": 48, "section": "Peripherals Ports", "port": "#0FFD (4093)", "canonical_hex": "#0FFD", "canonical_dec": "4093", "address": "0000111111111101", "decoding": "0000xxxxxxxxxx0x", "read": "Prn(?3/+3)", "write": "Prn(?3/+3)", "note": "", "models": ["3", "+3"], "tags": ["Printer"], "x_count": 11, "mirrors": 2048}, {"id": 49, "section": "Peripherals Ports", "port": "#2FFD (12285)", "canonical_hex": "#2FFD", "canonical_dec": "12285", "address": "0010111111111101", "decoding": "0010xxxxxxxxxx0x", "read": "—", "write": "8272status(?+3)", "note": "", "models": ["+3"], "tags": ["Floppy / FDC"], "x_count": 11, "mirrors": 2048}, {"id": 50, "section": "Peripherals Ports", "port": "#3FFD (16381)", "canonical_hex": "#3FFD", "canonical_dec": "16381", "address": "0011111111111101", "decoding": "0011xxxxxxxxxx0x", "read": "8272data(?+3)", "write": "8272data(?+3)", "note": "", "models": ["+3"], "tags": ["Floppy / FDC"], "x_count": 11, "mirrors": 2048}, {"id": 51, "section": "Peripherals Ports", "port": "#7DFD (32253)", "canonical_hex": "#7DFD", "canonical_dec": "32253", "address": "0111110111111101", "decoding": "0xxxxx0xxxxxxx0x", "read": "ADC(A)", "write": "—", "note": "", "models": ["A"], "tags": ["Audio", "System / Config"], "x_count": 13, "mirrors": 8192}, {"id": 52, "section": "Peripherals Ports", "port": "#7FFD (32765)", "canonical_hex": "#7FFD", "canonical_dec": "32765", "address": "0111111111111101", "decoding": "0xxxxx1xxxxxxx0x", "read": "IDE,ADC(A)", "write": "—", "note": "", "models": ["A"], "tags": ["IDE / Storage"], "x_count": 13, "mirrors": 8192}, {"id": 53, "section": "Audio, AY, TurboSound, TurboSound FM", "port": "#BFFD (49149)", "canonical_hex": "#BFFD", "canonical_dec": "49149", "address": "1011111111111101", "decoding": "10xxxxxxxxxxxx0x", "read": "—", "write": "AYdat(2,3,?5,A)", "note": "Simplified 3-line decode (A15=1, A14=0, A1=0). Ignores A0 and A13..A2, creating 8,192 mirrors across even and odd addresses. Standard on Sinclair 128K/+2/+3, Didaktik, ATM, and all generic external AY/TurboSound/TSFM add-on interfaces for 48K/Timex.", "models": ["1", "+1", "2", "3", "+3", "4", "5", "A"], "tags": ["Audio", "AY", "TurboSound", "TurboSound FM"], "x_count": 13, "mirrors": 8192, "variance": "Simplified 3-Bit (Standard Sinclair / Universal Add-on)"}, {"id": 54, "section": "Audio, AY, TurboSound, TurboSound FM", "port": "#BFFD (49149)", "canonical_hex": "#BFFD", "canonical_dec": "49149", "address": "1011111111111101", "decoding": "10xxxxxxxxxxxx01", "read": "—", "write": "AYdat(7)", "note": "Nemo's ULA-safe decode: Adds A0=1 check to standard decode (4 lines: A15=1, A14=0, A1=0, A0=1). Enforces odd-only addresses (4,096 mirrors), preventing any bus contention with Ferranti ULA border/keyboard on even addresses.", "models": ["7"], "tags": ["Audio", "AY", "TurboSound", "TurboSound FM"], "x_count": 12, "mirrors": 4096, "variance": "A0-Qualified (KAY-1024SL ULA-Safe)"}, {"id": 55, "section": "Audio, AY, TurboSound, TurboSound FM", "port": "#BFFD (49149)", "canonical_hex": "#BFFD", "canonical_dec": "49149", "address": "1011111111111101", "decoding": "1x1xxxxxxxxxxx0x", "read": "—", "write": "AYdat(D)", "note": "Asymmetric write decode on Pentagon-1024SL: Checks A15=1 and A13=1, but ignores A14 on data writes (1x1...). Results in 8,192 mirrors where writes intended for #FFFD register latch also hit #BFFD if A13=1.", "models": ["D"], "tags": ["Audio", "AY", "TurboSound", "TurboSound FM"], "x_count": 13, "mirrors": 8192, "variance": "A14-Ignored Asymmetric Write (Pentagon-1024SL)"}, {"id": 56, "section": "Audio, AY, TurboSound, TurboSound FM", "port": "#BFFD (49149)", "canonical_hex": "#BFFD", "canonical_dec": "49149", "address": "1011111111111101", "decoding": "101xxxxxxxxxxx0x", "read": "—", "write": "AYdat(8,9)", "note": "Adds A13=1 check (4 lines: A15=1, A14=0, A13=1, A1=0). Halves mirror count to 4,096 to prevent address overlap with expansion interfaces decoding A13=0.", "models": ["8", "9"], "tags": ["Audio", "AY", "TurboSound", "TurboSound FM"], "x_count": 12, "mirrors": 4096, "variance": "A13-Qualified (Pentagon 128 / Profi)"}, {"id": 57, "section": "Audio, AY, TurboSound, TurboSound FM", "port": "#BFFD (49149)", "canonical_hex": "#BFFD", "canonical_dec": "49149", "address": "1011111111111101", "decoding": "101xxxxxxxx1xx0x", "read": "—", "write": "AYdat(C)", "note": "Quorum custom ULA/gate array decode: Compares 6 lines (A15=1, A14=0, A13=1, A5=1, A4=1, A1=0), restricting mirror footprint to 2,048 addresses.", "models": ["C"], "tags": ["Audio", "AY", "TurboSound", "TurboSound FM"], "x_count": 11, "mirrors": 2048, "variance": "A5/A4-Qualified (Quorum 128/+ Gate Array)"}, {"id": 58, "section": "Audio, AY, TurboSound, TurboSound FM", "port": "#BFFD (49149)", "canonical_hex": "#BFFD", "canonical_dec": "49149", "address": "1011111111111101", "decoding": "101xxxxxxx1xxx01", "read": "—", "write": "AYdat(6)", "note": "Strictest onboard clone decode: Compares 6 lines (A15=1, A14=0, A13=1, A5=1, A1=0, A0=1). Limits mirrors to 1,024 addresses (1.56% space) and prevents conflicts with SMUC bus (IDE/RTC) and ULA.", "models": ["6", "B"], "tags": ["Audio", "AY", "TurboSound", "TurboSound FM"], "x_count": 10, "mirrors": 1024, "variance": "Strict 6-Bit Multi-Line (Scorpion ZS-256 / GMX)"}, {"id": 59, "section": "Peripherals Ports", "port": "#FFDD (65501)", "canonical_hex": "#FFDD", "canonical_dec": "65501", "address": "1111111111011101", "decoding": "xxxxxxxxxx0xxx01", "read": "—", "write": "Prn(6)", "note": "", "models": ["6"], "tags": ["Printer"], "x_count": 13, "mirrors": 8192}, {"id": 60, "section": "Audio, AY, TurboSound, TurboSound FM", "port": "#FFFD (65533)", "canonical_hex": "#FFFD", "canonical_dec": "65533", "address": "1111111111111101", "decoding": "11xxxxxxxxxxxx0x", "read": "AYdat(2,3,?5,A)", "write": "AYadr(2,3,?5,A)", "note": "Simplified 3-line decode (A15=1, A14=1, A1=0). Ignores A0 and A13..A2, creating 8,192 mirrors across even and odd addresses. Standard on Sinclair 128K/+2/+3, Didaktik, ATM, and all generic external AY/TurboSound/TSFM add-on interfaces for 48K/Timex. Also used by TurboSound to switch chips via #FFFD (%11111111 vs %11111110) and TSFM for FM bank select.", "models": ["1", "+1", "2", "3", "+3", "4", "5", "A"], "tags": ["Audio", "AY", "TurboSound", "TurboSound FM"], "x_count": 13, "mirrors": 8192, "variance": "Simplified 3-Bit (Standard Sinclair / Universal Add-on)"}, {"id": 61, "section": "Audio, AY, TurboSound, TurboSound FM", "port": "#FFFD (65533)", "canonical_hex": "#FFFD", "canonical_dec": "65533", "address": "1111111111111101", "decoding": "11xxxxxxxxxxxx01", "read": "AYdat(7)", "write": "AYadr(7)", "note": "Nemo's ULA-safe decode: Adds A0=1 check to standard decode (4 lines: A15=1, A14=1, A1=0, A0=1). Enforces odd-only addresses (4,096 mirrors), preventing any bus contention with Ferranti ULA border/keyboard on even addresses.", "models": ["7"], "tags": ["Audio", "AY", "TurboSound", "TurboSound FM"], "x_count": 12, "mirrors": 4096, "variance": "A0-Qualified (KAY-1024SL ULA-Safe)"}, {"id": 62, "section": "Audio, AY, TurboSound, TurboSound FM", "port": "#FFFD (65533)", "canonical_hex": "#FFFD", "canonical_dec": "65533", "address": "1111111111111101", "decoding": "111xxxxxxxxxxx0x", "read": "AYdat(8,9,D)", "write": "AYadr(8,9,D)", "note": "Adds A13=1 check (4 lines: A15=1, A14=1, A13=1, A1=0). Halves mirror count to 4,096 to prevent address overlap with expansion interfaces decoding A13=0.", "models": ["8", "9", "D"], "tags": ["Audio", "AY", "TurboSound", "TurboSound FM"], "x_count": 12, "mirrors": 4096, "variance": "A13-Qualified (Pentagon 128 / Profi / Pentagon-1024SL)"}, {"id": 63, "section": "Audio, AY, TurboSound, TurboSound FM", "port": "#FFFD (65533)", "canonical_hex": "#FFFD", "canonical_dec": "65533", "address": "1111111111111101", "decoding": "111xxxxxxxx1xx0x", "read": "AYdat(C)", "write": "AYadr(C)", "note": "Quorum custom ULA/gate array decode: Compares 6 lines (A15=1, A14=1, A13=1, A5=1, A4=1, A1=0), restricting mirror footprint to 2,048 addresses.", "models": ["C"], "tags": ["Audio", "AY", "TurboSound", "TurboSound FM"], "x_count": 11, "mirrors": 2048, "variance": "A5/A4-Qualified (Quorum 128/+ Gate Array)"}, {"id": 64, "section": "Audio, AY, TurboSound, TurboSound FM", "port": "#FFFD (65533)", "canonical_hex": "#FFFD", "canonical_dec": "65533", "address": "1111111111111101", "decoding": "111xxxxxxx1xxx01", "read": "AYdat(6)", "write": "AYadr(6)", "note": "Strictest onboard clone decode: Compares 6 lines (A15=1, A14=1, A13=1, A5=1, A1=0, A0=1). Limits mirrors to 1,024 addresses (1.56% space) and prevents conflicts with SMUC bus (IDE/RTC) and ULA.", "models": ["6", "B"], "tags": ["Audio", "AY", "TurboSound", "TurboSound FM"], "x_count": 10, "mirrors": 1024, "variance": "Strict 6-Bit Multi-Line (Scorpion ZS-256 / GMX)"}, {"id": 65, "section": "Shadow Ports", "port": "#77", "canonical_hex": "#77", "canonical_dec": "", "address": "xxxxxxxx01110111", "decoding": "xxxxxxxx0xx10111", "read": "—", "write": "VidTrbReg(A)", "note": "", "models": ["A"], "tags": ["System / Config", "Turbo", "Video"], "x_count": 10, "mirrors": 1024}, {"id": 66, "section": "Shadow Ports", "port": "#xx77", "canonical_hex": "#xx77", "canonical_dec": "", "address": "xLxxxxKJ01110111", "decoding": "xLxxxxKJ0xx10111", "read": "— (write-only)", "write": "soft config (A)", "note": "", "models": ["A"], "tags": ["System / Config"], "x_count": 7, "mirrors": 128}, {"id": 67, "section": "Shadow Ports", "port": "#3FF7–#FFF7", "canonical_hex": "#3FF7", "canonical_dec": "", "address": "BA11111111110111", "decoding": "BAxxxx111xx10111", "read": "—", "write": "RAMPag(A)", "note": "", "models": ["A"], "tags": ["Memory Paging"], "x_count": 6, "mirrors": 64}, {"id": 68, "section": "Shadow Ports", "port": "#FEE7/#FFE7", "canonical_hex": "#FEE7", "canonical_dec": "", "address": "1111111A11100111", "decoding": "xxxxxxxAxxx00111", "read": "Reserved(A)", "write": "Reserved(A)", "note": "", "models": ["A"], "tags": ["System / Config"], "x_count": 10, "mirrors": 1024}, {"id": 69, "section": "SMUC — Scorpion & MOA Universal Controller", "port": "#18E6–#7FFE", "canonical_hex": "#18E6", "canonical_dec": "", "address": "0ED11CBA111GF110", "decoding": "ISA: xx1IHGFEDCBA", "read": "ISA:#200–#3FF", "write": "ISA:#200–#3FF", "note": "", "models": ["6"], "tags": ["System / Config"], "x_count": 2, "mirrors": 4}, {"id": 70, "section": "SMUC — Scorpion & MOA Universal Controller", "port": "#5FBA (24506)", "canonical_hex": "#5FBA", "canonical_dec": "24506", "address": "0101111110111010", "decoding": "0x011xxx101xx010", "read": "Version", "write": "—", "note": "", "models": ["6"], "tags": ["System / Config"], "x_count": 6, "mirrors": 64}, {"id": 71, "section": "SMUC — Scorpion & MOA Universal Controller", "port": "#5FBE (24510)", "canonical_hex": "#5FBE", "canonical_dec": "24510", "address": "0101111110111110", "decoding": "0x011xxx101xx110", "read": "Revision", "write": "—", "note": "", "models": ["6"], "tags": ["System / Config"], "x_count": 6, "mirrors": 64}, {"id": 72, "section": "SMUC — Scorpion & MOA Universal Controller", "port": "#7EBE (32446)", "canonical_hex": "#7EBE", "canonical_dec": "32446", "address": "0111111010111110", "decoding": "0x111xx0101xx110", "read": "8259", "write": "8259", "note": "", "models": ["6"], "tags": ["System / Config"], "x_count": 5, "mirrors": 32}, {"id": 73, "section": "SMUC — Scorpion & MOA Universal Controller", "port": "#7FBA (32698)", "canonical_hex": "#7FBA", "canonical_dec": "32698", "address": "0111111110111010", "decoding": "0x111xxx101xx010", "read": "VirtualFDD", "write": "VirtualFDD", "note": "", "models": ["6"], "tags": ["Floppy / FDC"], "x_count": 6, "mirrors": 64}, {"id": 74, "section": "SMUC — Scorpion & MOA Universal Controller", "port": "#7FBE (32702)", "canonical_hex": "#7FBE", "canonical_dec": "32702", "address": "0111111110111110", "decoding": "0x111xx1101xx110", "read": "8259", "write": "8259", "note": "", "models": ["6"], "tags": ["System / Config"], "x_count": 5, "mirrors": 32}, {"id": 75, "section": "SMUC — Scorpion & MOA Universal Controller", "port": "#D8BE (55486)", "canonical_hex": "#D8BE", "canonical_dec": "55486", "address": "1101100010111110", "decoding": "1x011xxx101xx110", "read": "IDE-Hi", "write": "IDE-Hi", "note": "", "models": ["6"], "tags": ["IDE / Storage"], "x_count": 6, "mirrors": 64}, {"id": 76, "section": "SMUC — Scorpion & MOA Universal Controller", "port": "#DFBA (57274)", "canonical_hex": "#DFBA", "canonical_dec": "57274", "address": "1101111110111010", "decoding": "1x011xxx101xx010", "read": "DS1685RTC", "write": "DS1685RTC", "note": "", "models": ["6"], "tags": ["Real-Time Clock"], "x_count": 6, "mirrors": 64}, {"id": 77, "section": "SMUC — Scorpion & MOA Universal Controller", "port": "#F8BE–#FFBE", "canonical_hex": "#F8BE", "canonical_dec": "", "address": "11111CBA10111110", "decoding": "1x111xxx101xx110", "read": "IDE#1Fx/#3F6", "write": "IDE#1Fx/#3F6", "note": "", "models": ["6"], "tags": ["IDE / Storage"], "x_count": 6, "mirrors": 64}, {"id": 78, "section": "SMUC — Scorpion & MOA Universal Controller", "port": "#FFBA (65466)", "canonical_hex": "#FFBA", "canonical_dec": "65466", "address": "1111111110111010", "decoding": "1x111xxx101xx010", "read": "SYS", "write": "SYS", "note": "", "models": ["6"], "tags": ["System / Config"], "x_count": 6, "mirrors": 64}, {"id": 79, "section": "Beta 128 Disk Interface", "port": "#1F/#3F/#5F/#7F", "canonical_hex": "#1F", "canonical_dec": "", "address": "xxxxxxxx0BA11111", "decoding": "xxxxxxxx0BAxxx11", "read": "WD1793(6,7,8,D)", "write": "WD1793(6,7,8,D)", "note": "", "models": ["6", "7", "8", "D"], "tags": ["Floppy / FDC"], "x_count": 11, "mirrors": 2048}, {"id": 80, "section": "Beta 128 Disk Interface", "port": "#1F/#3F/#5F/#7F", "canonical_hex": "#1F", "canonical_dec": "", "address": "xxxxxxxx0BA11111", "decoding": "xxxxxxxx0BAx11x1", "read": "WD1793(C)", "write": "WD1793(C)", "note": "", "models": ["C"], "tags": ["Floppy / FDC"], "x_count": 10, "mirrors": 1024}, {"id": 81, "section": "Beta 128 Disk Interface", "port": "#1F/#3F/#5F/#7F", "canonical_hex": "#1F", "canonical_dec": "", "address": "xxxxxxxx0BA11111", "decoding": "xxxxxxxx0BA11111", "read": "WD1793(A)", "write": "WD1793(A)", "note": "", "models": ["A"], "tags": ["Floppy / FDC"], "x_count": 8, "mirrors": 256}, {"id": 82, "section": "Beta 128 Disk Interface", "port": "#1F/#3F/#5F/#7F", "canonical_hex": "#1F", "canonical_dec": "", "address": "xxxxxxxx0BA11111", "decoding": "0xxxxxxx0BAxxx11", "read": "WD1793(9)", "write": "WD1793(9)", "note": "", "models": ["9"], "tags": ["Floppy / FDC"], "x_count": 10, "mirrors": 1024}, {"id": 83, "section": "Beta 128 Disk Interface", "port": "#FF (255)", "canonical_hex": "#FF", "canonical_dec": "255", "address": "xxxxxxxx11111111", "decoding": "xxxxxxxx1xxxxx11", "read": "FDsys(6,7,8,D)", "write": "FDsys(6,7,8,D)", "note": "", "models": ["6", "7", "8", "D"], "tags": ["Floppy / FDC"], "x_count": 13, "mirrors": 8192}, {"id": 84, "section": "Beta 128 Disk Interface", "port": "#FF (255)", "canonical_hex": "#FF", "canonical_dec": "255", "address": "xxxxxxxx11111111", "decoding": "xxxxxxxx1xxx11x1", "read": "FDsys(C)", "write": "FDsys(C)", "note": "", "models": ["C"], "tags": ["Floppy / FDC"], "x_count": 12, "mirrors": 4096}, {"id": 85, "section": "Beta 128 Disk Interface", "port": "#FF (255)", "canonical_hex": "#FF", "canonical_dec": "255", "address": "xxxxxxxx11111111", "decoding": "xxxxxxxx1xx11111", "read": "FDsys(A)", "write": "FDsysPLLFC(A)", "note": "", "models": ["A"], "tags": ["Floppy / FDC", "System / Config"], "x_count": 10, "mirrors": 1024}, {"id": 86, "section": "Beta 128 Disk Interface", "port": "#FF (255)", "canonical_hex": "#FF", "canonical_dec": "255", "address": "xxxxxxxx11111111", "decoding": "0xxxxxxx111xxx11", "read": "FDsys(9)", "write": "FDsys(9)", "note": "", "models": ["9"], "tags": ["Floppy / FDC"], "x_count": 10, "mirrors": 1024}, {"id": 87, "section": "ATM IDE", "port": "#FE0F/#FF0F", "canonical_hex": "#FE0F", "canonical_dec": "", "address": "1111111A00001111", "decoding": "xxxxxxxA00001111", "read": "IDEdat-Lo/Hi(A)", "write": "IDEdat-Lo/Hi(A)", "note": "", "models": ["A"], "tags": ["IDE / Storage"], "x_count": 7, "mirrors": 128}, {"id": 88, "section": "ATM IDE", "port": "#FF2F (65327)", "canonical_hex": "#FF2F", "canonical_dec": "65327", "address": "1111111100101111", "decoding": "xxxxxxxx00101111", "read": "IDEerror(A)", "write": "IDEparam(A)", "note": "", "models": ["A"], "tags": ["IDE / Storage"], "x_count": 8, "mirrors": 256}, {"id": 89, "section": "ATM IDE", "port": "#FF4F (65359)", "canonical_hex": "#FF4F", "canonical_dec": "65359", "address": "1111111101001111", "decoding": "xxxxxxxx01001111", "read": "IDEsect(A)", "write": "IDEsect(A)", "note": "", "models": ["A"], "tags": ["IDE / Storage"], "x_count": 8, "mirrors": 256}, {"id": 90, "section": "ATM IDE", "port": "#FF6F (65391)", "canonical_hex": "#FF6F", "canonical_dec": "65391", "address": "1111111101101111", "decoding": "xxxxxxxx01101111", "read": "IDEstartsect(A)", "write": "IDEstartsect(A)", "note": "", "models": ["A"], "tags": ["IDE / Storage"], "x_count": 8, "mirrors": 256}, {"id": 91, "section": "ATM IDE", "port": "#FF8F (65423)", "canonical_hex": "#FF8F", "canonical_dec": "65423", "address": "1111111110001111", "decoding": "xxxxxxxx10001111", "read": "IDEcyl-Lo(A)", "write": "IDEcyl-Lo(A)", "note": "", "models": ["A"], "tags": ["IDE / Storage"], "x_count": 8, "mirrors": 256}, {"id": 92, "section": "ATM IDE", "port": "#FFAF (65455)", "canonical_hex": "#FFAF", "canonical_dec": "65455", "address": "1111111110101111", "decoding": "xxxxxxxx10101111", "read": "IDEcyl-Hi(A)", "write": "IDEcyl-Hi(A)", "note": "", "models": ["A"], "tags": ["IDE / Storage"], "x_count": 8, "mirrors": 256}, {"id": 93, "section": "ATM IDE", "port": "#FFCF (65487)", "canonical_hex": "#FFCF", "canonical_dec": "65487", "address": "1111111111001111", "decoding": "xxxxxxxx11001111", "read": "IDEdevice(A)", "write": "IDEhead(A)", "note": "", "models": ["A"], "tags": ["IDE / Storage"], "x_count": 8, "mirrors": 256}, {"id": 94, "section": "ATM IDE", "port": "#FFEF (65519)", "canonical_hex": "#FFEF", "canonical_dec": "65519", "address": "1111111111101111", "decoding": "xxxxxxxx11101111", "read": "IDEcomnd(A)", "write": "IDEstatus(A)", "note": "", "models": ["A"], "tags": ["IDE / Storage"], "x_count": 8, "mirrors": 256}, {"id": 95, "section": "Peripheral Device Ports", "port": "#0B/#6B (11/107)", "canonical_hex": "#0B", "canonical_dec": "", "address": "xxxxxxxx0AA01011", "decoding": "xxxxxxxx0Ax01011", "read": "Z80DMA", "write": "Z80DMA", "note": "*1", "models": [], "tags": ["DMA"], "x_count": 9, "mirrors": 512}, {"id": 96, "section": "Peripheral Device Ports", "port": "#0E (14)", "canonical_hex": "#0E", "canonical_dec": "14", "address": "xxxxxxxx00001110", "decoding": "xxxxxxxx0000xxxx", "read": "PC<->ZXDrBeep", "write": "PC<->ZXDrBeep", "note": "*2", "models": [], "tags": ["Audio", "Serial / Modem"], "x_count": 12, "mirrors": 4096}, {"id": 97, "section": "Peripheral Device Ports", "port": "#1F (31)", "canonical_hex": "#1F", "canonical_dec": "31", "address": "xxxxxxxx00011111", "decoding": "xxxxxxxxxx0xxxxx", "read": "KempstonIF", "write": "—", "note": "*1", "models": [], "tags": ["Joystick"], "x_count": 15, "mirrors": 32768}, {"id": 98, "section": "Peripheral Device Ports", "port": "#1F (31)", "canonical_hex": "#1F", "canonical_dec": "31", "address": "xxxxxxxx00011111", "decoding": "xxxxxxxx0xxxxxx1", "read": "Kempston-M", "write": "—", "note": "*1", "models": [], "tags": ["Mouse"], "x_count": 14, "mirrors": 16384}, {"id": 99, "section": "Peripheral Device Ports", "port": "#1F (31)", "canonical_hex": "#1F", "canonical_dec": "31", "address": "xxxxxxxx00011111", "decoding": "xxxxxxxx00011111", "read": "AMIGA-MOUSE", "write": "—", "note": "*1", "models": [], "tags": ["Mouse"], "x_count": 8, "mirrors": 256}, {"id": 100, "section": "Peripheral Device Ports", "port": "#3F (63)", "canonical_hex": "#3F", "canonical_dec": "63", "address": "xxxxxxxx00111111", "decoding": "xxxxxxxxx0xxxxxx", "read": "LIGHT PEN", "write": "—", "note": "*1", "models": [], "tags": ["Video"], "x_count": 15, "mirrors": 32768}, {"id": 101, "section": "Peripheral Device Ports", "port": "#B7 (183)", "canonical_hex": "#B7", "canonical_dec": "183", "address": "xxxxxxxx10110111", "decoding": "xxxxxxxx10110111", "read": "XTR modem", "write": "XTR modem", "note": "", "models": [], "tags": ["Serial / Modem"], "x_count": 8, "mirrors": 256}, {"id": 102, "section": "Peripheral Device Ports", "port": "#EF (239)", "canonical_hex": "#EF", "canonical_dec": "239", "address": "xxxxxxxx11101111", "decoding": "xxxxxxxx1xx01xxx", "read": "C-DOS modem", "write": "C-DOS modem", "note": "", "models": [], "tags": ["Serial / Modem"], "x_count": 13, "mirrors": 8192}, {"id": 103, "section": "Peripheral Device Ports", "port": "#F7 (247)", "canonical_hex": "#F7", "canonical_dec": "247", "address": "xxxxxxxx11110111", "decoding": "xxxxxxxxxxxx0xxx", "read": "—", "write": "DIGITIZER(VMG)", "note": "", "models": [], "tags": ["Video"], "x_count": 15, "mirrors": 32768}, {"id": 104, "section": "MB-02+ (*3)", "port": "#0003–#0F03", "canonical_hex": "#0003", "canonical_dec": "", "address": "xxxxDCBA00000011", "decoding": "xxxxDCBA0xx00011", "read": "RTC-72421", "write": "RTC-72421", "note": "", "models": [], "tags": ["Real-Time Clock"], "x_count": 6, "mirrors": 64}, {"id": 105, "section": "MB-02+ (*3)", "port": "#07 (11) *(sic)*", "canonical_hex": "#07", "canonical_dec": "11", "address": "xxxxxxxx00000111", "decoding": "xxxxxxxx0xx00111", "read": "IDEcontrol", "write": "IDEcontrol", "note": "", "models": [], "tags": ["IDE / Storage"], "x_count": 10, "mirrors": 1024}, {"id": 106, "section": "MB-02+ (*3)", "port": "#0B (11)", "canonical_hex": "#0B", "canonical_dec": "11", "address": "xxxxxxxx00001011", "decoding": "xxxxxxxx0xx01011", "read": "Z80DMA", "write": "Z80DMA", "note": "", "models": [], "tags": ["DMA"], "x_count": 10, "mirrors": 1024}, {"id": 107, "section": "MB-02+ (*3)", "port": "#0F/#2F/#4F/#6F", "canonical_hex": "#0F", "canonical_dec": "", "address": "xxxxxxxx0BA01111", "decoding": "xxxxxxxx0BA01111", "read": "WD2797", "write": "WD2797", "note": "", "models": [], "tags": ["Floppy / FDC"], "x_count": 8, "mirrors": 256}, {"id": 108, "section": "MB-02+ (*3)", "port": "#13 (19)", "canonical_hex": "#13", "canonical_dec": "19", "address": "xxxxxxxx00010011", "decoding": "xxxxxxxx0xx10011", "read": "FDcontrol", "write": "—", "note": "", "models": [], "tags": ["Floppy / FDC"], "x_count": 10, "mirrors": 1024}, {"id": 109, "section": "MB-02+ (*3)", "port": "#13 (19)", "canonical_hex": "#13", "canonical_dec": "19", "address": "xxxxxxxx00010011", "decoding": "xxxxxxxx00010011", "read": "—", "write": "FDcontrol", "note": "", "models": [], "tags": ["Floppy / FDC"], "x_count": 8, "mirrors": 256}, {"id": 110, "section": "MB-02+ (*3)", "port": "#17 (23)", "canonical_hex": "#17", "canonical_dec": "23", "address": "xxxxxxxx00010111", "decoding": "xxxxxxxx0xx10111", "read": "memsel", "write": "memsel", "note": "", "models": [], "tags": ["Memory Paging"], "x_count": 10, "mirrors": 1024}, {"id": 111, "section": "MB-02+ (*3)", "port": "#1B/#3B/#5B/#7B", "canonical_hex": "#1B", "canonical_dec": "", "address": "xxxxxxxx0BA11011", "decoding": "xxxxxxxx0BA11011", "read": "8255-2", "write": "8255-2", "note": "", "models": [], "tags": ["System / Config"], "x_count": 8, "mirrors": 256}, {"id": 112, "section": "MB-02+ (*3)", "port": "#1F/#3F/#5F/#7F", "canonical_hex": "#1F", "canonical_dec": "", "address": "xxxxxxxx0BA11111", "decoding": "xxxxxxxx0BA11111", "read": "8255-1", "write": "8255-1", "note": "", "models": [], "tags": ["System / Config"], "x_count": 8, "mirrors": 256}, {"id": 113, "section": "MB-02+ (*3)", "port": "#A3–#BF", "canonical_hex": "#A3", "canonical_dec": "", "address": "xxxxxxxx101CBA11", "decoding": "xxxxxxxx101CBA11", "read": "IDE#1Fx", "write": "IDE#1Fx", "note": "", "models": [], "tags": ["IDE / Storage"], "x_count": 8, "mirrors": 256}, {"id": 114, "section": "NemoIDE", "port": "#10–#F0", "canonical_hex": "#10", "canonical_dec": "", "address": "xxxxxxxxCBA10000", "decoding": "xxxxxxxxCBA10000", "read": "IDE#1Fx", "write": "IDE#1Fx", "note": "", "models": [], "tags": ["IDE / Storage"], "x_count": 8, "mirrors": 256}, {"id": 115, "section": "NemoIDE", "port": "#11 (17)", "canonical_hex": "#11", "canonical_dec": "17", "address": "xxxxxxxx00010001", "decoding": "xxxxxxxxxxxxx001", "read": "IDE-hi", "write": "IDE-hi", "note": "", "models": [], "tags": ["IDE / Storage"], "x_count": 13, "mirrors": 8192}, {"id": 116, "section": "NemoIDE", "port": "#C8 (200)", "canonical_hex": "#C8", "canonical_dec": "200", "address": "xxxxxxxx11001000", "decoding": "xxxxxxxxCBA01000", "read": "IDE#3F6", "write": "IDE#3F6", "note": "", "models": [], "tags": ["IDE / Storage"], "x_count": 8, "mirrors": 256}, {"id": 117, "section": "SoundDrive v1.02", "port": "#0F (15)", "canonical_hex": "#0F", "canonical_dec": "15", "address": "xxxxxxxx00001111", "decoding": "xxxxxxxxx0001111", "read": "—", "write": "L channel A", "note": "", "models": [], "tags": ["Audio"], "x_count": 9, "mirrors": 512}, {"id": 118, "section": "SoundDrive v1.02", "port": "#1F (31)", "canonical_hex": "#1F", "canonical_dec": "31", "address": "xxxxxxxx00011111", "decoding": "xxxxxxxxx0011111", "read": "—", "write": "L channel B", "note": "", "models": [], "tags": ["Audio"], "x_count": 9, "mirrors": 512}, {"id": 119, "section": "SoundDrive v1.02", "port": "#3F (63)", "canonical_hex": "#3F", "canonical_dec": "63", "address": "xxxxxxxx00111111", "decoding": "xxxxxxxxx0111111", "read": "—", "write": "L Rg8255", "note": "", "models": [], "tags": ["Audio", "System / Config"], "x_count": 9, "mirrors": 512}, {"id": 120, "section": "SoundDrive v1.02", "port": "#4F (79)", "canonical_hex": "#4F", "canonical_dec": "79", "address": "xxxxxxxx01001111", "decoding": "xxxxxxxxx1001111", "read": "—", "write": "R channel C", "note": "", "models": [], "tags": ["Audio"], "x_count": 9, "mirrors": 512}, {"id": 121, "section": "SoundDrive v1.02", "port": "#5F (95)", "canonical_hex": "#5F", "canonical_dec": "95", "address": "xxxxxxxx01011111", "decoding": "xxxxxxxxx1011111", "read": "—", "write": "R channel D", "note": "", "models": [], "tags": ["Audio"], "x_count": 9, "mirrors": 512}, {"id": 122, "section": "SoundDrive v1.02", "port": "#7F (127)", "canonical_hex": "#7F", "canonical_dec": "127", "address": "xxxxxxxx01111111", "decoding": "xxxxxxxxx1111111", "read": "—", "write": "R Rg8255", "note": "", "models": [], "tags": ["Audio", "System / Config"], "x_count": 9, "mirrors": 512}, {"id": 123, "section": "SoundDrive v1.05 (SoundDrive/Covox)", "port": "#0F/#1F/#4F/#5F", "canonical_hex": "#0F", "canonical_dec": "", "address": "xxxxxxxx0B0A1111", "decoding": "xxxxxxxxxB0Axxx1", "read": "—", "write": "LA,LB,RA,RB", "note": "", "models": [], "tags": ["Audio"], "x_count": 12, "mirrors": 4096}, {"id": 124, "section": "SoundDrive v1.05 (SoundDrive/Covox)", "port": "#F1/#F3/#F9/#FB", "canonical_hex": "#F1", "canonical_dec": "", "address": "xxxxxxxx1111B0A1", "decoding": "xxxxxxxxxxB0A1", "read": "—", "write": "LA,LB,RA,RB", "note": "", "models": [], "tags": ["Audio"], "x_count": 10, "mirrors": 1024}, {"id": 125, "section": "ZXMMC+ (*4)", "port": "#1F (31)", "canonical_hex": "#1F", "canonical_dec": "31", "address": "xxxxxxxx00011111", "decoding": "xxxxxxxx00011111", "read": "KempstonIF", "write": "CScard", "note": "", "models": [], "tags": ["SD Card"], "x_count": 8, "mirrors": 256}, {"id": 126, "section": "ZXMMC+ (*4)", "port": "#3F (63)", "canonical_hex": "#3F", "canonical_dec": "63", "address": "xxxxxxxx00111111", "decoding": "xxxxxxxx00111111", "read": "SPIRegRX", "write": "SPIRegTX", "note": "", "models": [], "tags": ["SD Card", "System / Config"], "x_count": 8, "mirrors": 256}, {"id": 127, "section": "ZXMMC+ (*4)", "port": "#5F (95)", "canonical_hex": "#5F", "canonical_dec": "95", "address": "xxxxxxxx01011111", "decoding": "xxxxxxxx01011111", "read": "RS232status", "write": "—", "note": "", "models": [], "tags": ["SD Card", "Serial / Modem"], "x_count": 8, "mirrors": 256}, {"id": 128, "section": "ZXMMC+ (*4)", "port": "#7F (127)", "canonical_hex": "#7F", "canonical_dec": "127", "address": "xxxxxxxx01111111", "decoding": "xxxxxxxx01111111", "read": "RS232RegRX", "write": "RS232RegTX", "note": "", "models": [], "tags": ["SD Card", "Serial / Modem", "System / Config"], "x_count": 8, "mirrors": 256}, {"id": 129, "section": "Kempston Mouse Turbo by Velesoft (*1)", "port": "#1F/#7F", "canonical_hex": "#1F", "canonical_dec": "", "address": "xxxxxxxx00011111", "decoding": "xxxxxxxx0AA11111", "read": "AMIGAmou/FULLERjoy", "write": "—", "note": "", "models": [], "tags": ["Joystick", "Mouse", "Turbo"], "x_count": 8, "mirrors": 256}, {"id": 130, "section": "Kempston Mouse Turbo by Velesoft (*1)", "port": "#7ADF/#FADF", "canonical_hex": "#7ADF", "canonical_dec": "", "address": "1111101011011111", "decoding": "Axxxx0x011011111", "read": "KmouTrb_B", "write": "—", "note": "", "models": [], "tags": ["Mouse", "Turbo"], "x_count": 5, "mirrors": 32}, {"id": 131, "section": "Kempston Mouse Turbo by Velesoft (*1)", "port": "#7BDF/#FBDF", "canonical_hex": "#7BDF", "canonical_dec": "", "address": "1111101111011111", "decoding": "Axxxx0x111011111", "read": "KmouTrb_X", "write": "—", "note": "", "models": [], "tags": ["Mouse", "Turbo"], "x_count": 5, "mirrors": 32}, {"id": 132, "section": "Kempston Mouse Turbo by Velesoft (*1)", "port": "#7EDF/#FEDF", "canonical_hex": "#7EDF", "canonical_dec": "", "address": "1111111011011111", "decoding": "Axxxx1x011011111", "read": "KmouTrb_detect", "write": "—", "note": "", "models": [], "tags": ["Mouse", "Turbo"], "x_count": 5, "mirrors": 32}, {"id": 133, "section": "Kempston Mouse Turbo by Velesoft (*1)", "port": "#7FDF/#FFDF", "canonical_hex": "#7FDF", "canonical_dec": "", "address": "1111111111011111", "decoding": "Axxxx1x111011111", "read": "KmouTrb_Y", "write": "—", "note": "", "models": [], "tags": ["Mouse", "Turbo"], "x_count": 5, "mirrors": 32}, {"id": 134, "section": "8-bit IDE by Pera Putnik (*5)", "port": "#2B–#EF", "canonical_hex": "#2B", "canonical_dec": "", "address": "xxxxxxxxCB101A11", "decoding": "xxxxxxxxCBx0xAxx", "read": "IDE#1Fx", "write": "IDE#1Fx", "note": "", "models": [], "tags": ["IDE / Storage"], "x_count": 12, "mirrors": 4096}, {"id": 135, "section": "ZX LPRINT-III", "port": "#7B (123)", "canonical_hex": "#7B", "canonical_dec": "123", "address": "xxxxxxxx01111011", "decoding": "xxxxxxxx0xxxx0xx", "read": "ROMCS-off", "write": "/STROBE", "note": "", "models": [], "tags": ["Printer"], "x_count": 14, "mirrors": 16384}, {"id": 136, "section": "ZX LPRINT-III", "port": "#FB (251)", "canonical_hex": "#FB", "canonical_dec": "251", "address": "xxxxxxxx11111011", "decoding": "xxxxxxxx1xxxx0xx", "read": "—", "write": "DATA(/TxD)", "note": "", "models": [], "tags": ["IDE / Storage", "Serial / Modem"], "x_count": 14, "mirrors": 16384}, {"id": 137, "section": "ZX LPRINT-III", "port": "#FB (251)", "canonical_hex": "#FB", "canonical_dec": "251", "address": "xxxxxxxx11111011", "decoding": "00xxxxxx1xxxx0xx", "read": "ROMCS-on,BUSY,DSR", "write": "—", "note": "", "models": [], "tags": ["Printer"], "x_count": 12, "mirrors": 4096}, {"id": 138, "section": "D40/80 (Didaktik 40/80)", "port": "#81/#83/#85/#87", "canonical_hex": "#81", "canonical_dec": "", "address": "xxxxxxxx10000BA1", "decoding": "xxxxxxxx10000BA1", "read": "WD2797", "write": "WD2797", "note": "", "models": ["5"], "tags": ["Floppy / FDC"], "x_count": 8, "mirrors": 256}, {"id": 139, "section": "D40/80 (Didaktik 40/80)", "port": "#89/#8B/#8D/#8F", "canonical_hex": "#89", "canonical_dec": "", "address": "xxxxxxxx10001xx1", "decoding": "xxxxxxxx10001xx1", "read": "—", "write": "FDsys", "note": "", "models": ["5"], "tags": ["Floppy / FDC"], "x_count": 10, "mirrors": 1024}, {"id": 140, "section": "D40/80 (Didaktik 40/80)", "port": "#91 (145)", "canonical_hex": "#91", "canonical_dec": "145", "address": "xxxxxxxx10010001", "decoding": "xxxxxxxx10010xx1", "read": "—", "write": "8255off&reset", "note": "", "models": ["5"], "tags": ["Floppy / FDC", "System / Config"], "x_count": 10, "mirrors": 1024}, {"id": 141, "section": "D40/80 (Didaktik 40/80)", "port": "#99 (153)", "canonical_hex": "#99", "canonical_dec": "153", "address": "xxxxxxxx10011001", "decoding": "xxxxxxxx10011xx1", "read": "—", "write": "8255on", "note": "", "models": ["5"], "tags": ["Floppy / FDC", "System / Config"], "x_count": 10, "mirrors": 1024}, {"id": 142, "section": "D40/80 (Didaktik 40/80)", "port": "#1F/#3F/#5F/#7F", "canonical_hex": "#1F", "canonical_dec": "", "address": "xxxxxxxx0BA11111", "decoding": "xxxxxxxx0BAxxxxx", "read": "8255", "write": "8255", "note": "", "models": ["5"], "tags": ["Floppy / FDC", "System / Config"], "x_count": 13, "mirrors": 8192}, {"id": 143, "section": "divIDE (*1)", "port": "#A3–#BF", "canonical_hex": "#A3", "canonical_dec": "", "address": "xxxxxxxx101CBA11", "decoding": "xxxxxxxx101CBA11", "read": "IDE#1Fx", "write": "IDE#1Fx", "note": "", "models": [], "tags": ["IDE / Storage"], "x_count": 8, "mirrors": 256}, {"id": 144, "section": "divIDE (*1)", "port": "#E3 (227)", "canonical_hex": "#E3", "canonical_dec": "227", "address": "xxxxxxxx11100011", "decoding": "xxxxxxxx11100011", "read": "—", "write": "divIDEcontrol", "note": "", "models": [], "tags": ["IDE / Storage"], "x_count": 8, "mirrors": 256}, {"id": 145, "section": "General Sound", "port": "#B3 (179)", "canonical_hex": "#B3", "canonical_dec": "179", "address": "xxxxxxxx10110011", "decoding": "xxxxxxxx10110011", "read": "Data", "write": "Data", "note": "", "models": [], "tags": ["Audio"], "x_count": 8, "mirrors": 256}, {"id": 146, "section": "General Sound", "port": "#BB (187)", "canonical_hex": "#BB", "canonical_dec": "187", "address": "xxxxxxxx10111011", "decoding": "xxxxxxxx10111011", "read": "Status", "write": "Comnd", "note": "", "models": [], "tags": ["Audio"], "x_count": 8, "mirrors": 256}, {"id": 147, "section": "+D (Issue 4)", "port": "#E3/#EB/#F3/#FB", "canonical_hex": "#E3", "canonical_dec": "", "address": "xxxxxxxx111BA011", "decoding": "xxxxxxxxx11BA01x", "read": "WD1772", "write": "WD1772", "note": "", "models": [], "tags": ["Floppy / FDC"], "x_count": 10, "mirrors": 1024}, {"id": 148, "section": "+D (Issue 4)", "port": "#E7 (231)", "canonical_hex": "#E7", "canonical_dec": "231", "address": "xxxxxxxx11100111", "decoding": "xxxxxxxxx110011x", "read": "—", "write": "romsel", "note": "", "models": [], "tags": ["Memory Paging"], "x_count": 10, "mirrors": 1024}, {"id": 149, "section": "+D (Issue 4)", "port": "#EF (239)", "canonical_hex": "#EF", "canonical_dec": "239", "address": "xxxxxxxx11101111", "decoding": "xxxxxxxxx110111x", "read": "—", "write": "FDsysLPTstrobe", "note": "", "models": [], "tags": ["Floppy / FDC", "Printer"], "x_count": 10, "mirrors": 1024}, {"id": 150, "section": "+D (Issue 4)", "port": "#F7 (247)", "canonical_hex": "#F7", "canonical_dec": "247", "address": "xxxxxxxx11110111", "decoding": "xxxxxxxxx111011x", "read": "LPTdata", "write": "LPTbusy", "note": "", "models": [], "tags": ["Printer"], "x_count": 10, "mirrors": 1024}, {"id": 151, "section": "ZX Interface 1", "port": "#E7 (231)", "canonical_hex": "#E7", "canonical_dec": "231", "address": "xxxxxxxx11100111", "decoding": "xxxxxxxxxxx00xx1", "read": "MicrodriveData", "write": "MicrodriveData", "note": "", "models": ["1", "2", "+1"], "tags": ["Floppy / FDC"], "x_count": 13, "mirrors": 8192}, {"id": 152, "section": "ZX Interface 1", "port": "#EF (239)", "canonical_hex": "#EF", "canonical_dec": "239", "address": "xxxxxxxx11101111", "decoding": "xxxxxxxxxxx01xx1", "read": "Status", "write": "Comnd", "note": "", "models": ["1", "2", "+1"], "tags": ["Serial / Modem"], "x_count": 13, "mirrors": 8192}, {"id": 153, "section": "ZX Interface 1", "port": "#F7 (247)", "canonical_hex": "#F7", "canonical_dec": "247", "address": "xxxxxxxx11110111", "decoding": "xxxxxxxxxxx10xx1", "read": "NetRS232Data", "write": "NetRS232Data", "note": "", "models": ["1", "2", "+1"], "tags": ["Serial / Modem"], "x_count": 13, "mirrors": 8192}, {"id": 154, "section": "ZXMC-1 (ZX Multi Card-1 by Kamil Karimov, v1.2)", "port": "#00EF (239)", "canonical_hex": "#00EF", "canonical_dec": "239", "address": "0000000011101111", "decoding": "0000000011101111", "read": "Version", "write": "—", "note": "", "models": [], "tags": ["System / Config"], "x_count": 0, "mirrors": 1}, {"id": 155, "section": "ZXMC-1 (ZX Multi Card-1 by Kamil Karimov, v1.2)", "port": "#00DF (223)", "canonical_hex": "#00DF", "canonical_dec": "223", "address": "0000000011011111", "decoding": "0000000011011111", "read": "Version", "write": "—", "note": "", "models": [], "tags": ["System / Config"], "x_count": 0, "mirrors": 1}, {"id": 156, "section": "ZXMC-1 (ZX Multi Card-1 by Kamil Karimov, v1.2)", "port": "#FE (254)", "canonical_hex": "#FE", "canonical_dec": "254", "address": "xxxxxxxx11111110", "decoding": "xxxxxxxx11111110", "read": "Key", "write": "—", "note": "", "models": [], "tags": ["Keyboard"], "x_count": 8, "mirrors": 256}, {"id": 157, "section": "ZXMC-1 (ZX Multi Card-1 by Kamil Karimov, v1.2)", "port": "#08EF–#0FEF", "canonical_hex": "#08EF", "canonical_dec": "", "address": "00001CBA11101111", "decoding": "00001CBA11101111", "read": "SDcard", "write": "SDcard", "note": "", "models": [], "tags": ["SD Card"], "x_count": 0, "mirrors": 1}, {"id": 158, "section": "ZXMC-1 (ZX Multi Card-1 by Kamil Karimov, v1.2)", "port": "#80DF–#87DF", "canonical_hex": "#80DF", "canonical_dec": "", "address": "10000CBA11011111", "decoding": "10000CBA11011111", "read": "PCKey", "write": "—", "note": "", "models": [], "tags": ["Keyboard"], "x_count": 0, "mirrors": 1}, {"id": 159, "section": "ZXMC-1 (ZX Multi Card-1 by Kamil Karimov, v1.2)", "port": "#E0EF–#E7EF", "canonical_hex": "#E0EF", "canonical_dec": "", "address": "11100CBA11101111", "decoding": "11100CBA11101111", "read": "ZXMCRTC", "write": "ZXMCRTC", "note": "", "models": [], "tags": ["Real-Time Clock"], "x_count": 0, "mirrors": 1}, {"id": 160, "section": "ZXMC-1 (ZX Multi Card-1 by Kamil Karimov, v1.2)", "port": "#F8EF–#FFEF", "canonical_hex": "#F8EF", "canonical_dec": "", "address": "11111CBA11101111", "decoding": "11111CBA11101111", "read": "ISACOM1", "write": "ISACOM1", "note": "", "models": [], "tags": ["Serial / Modem"], "x_count": 0, "mirrors": 1}, {"id": 161, "section": "ZXMC-1 (ZX Multi Card-1 by Kamil Karimov, v1.2)", "port": "#FADF (64223)", "canonical_hex": "#FADF", "canonical_dec": "64223", "address": "1111101011011111", "decoding": "1111101011011111", "read": "Kmou_B", "write": "—", "note": "", "models": [], "tags": ["Mouse"], "x_count": 0, "mirrors": 1}, {"id": 162, "section": "ZXMC-1 (ZX Multi Card-1 by Kamil Karimov, v1.2)", "port": "#FBDF (64479)", "canonical_hex": "#FBDF", "canonical_dec": "64479", "address": "1111101111011111", "decoding": "1111101111011111", "read": "Kmou_X", "write": "—", "note": "", "models": [], "tags": ["Mouse"], "x_count": 0, "mirrors": 1}, {"id": 163, "section": "ZXMC-1 (ZX Multi Card-1 by Kamil Karimov, v1.2)", "port": "#FFDF (65503)", "canonical_hex": "#FFDF", "canonical_dec": "65503", "address": "1111111111011111", "decoding": "1111111111011111", "read": "Kmou_Y", "write": "—", "note": "", "models": [], "tags": ["Mouse"], "x_count": 0, "mirrors": 1}, {"id": 164, "section": "ZXMC-2 (ZX Multi Card-2 by Kamil Karimov)", "port": "#00F7 (247)", "canonical_hex": "#00F7", "canonical_dec": "247", "address": "0000000011110111", "decoding": "0000000011110111", "read": "Version", "write": "—", "note": "", "models": [], "tags": ["System / Config"], "x_count": 0, "mirrors": 1}, {"id": 165, "section": "ZXMC-2 (ZX Multi Card-2 by Kamil Karimov)", "port": "#FE (254)", "canonical_hex": "#FE", "canonical_dec": "254", "address": "xxxxxxxx11111110", "decoding": "xxxxxxxx11111110", "read": "Key", "write": "—", "note": "", "models": [], "tags": ["Keyboard"], "x_count": 8, "mirrors": 256}, {"id": 166, "section": "ZXMC-2 (ZX Multi Card-2 by Kamil Karimov)", "port": "#08EF–#0FEF", "canonical_hex": "#08EF", "canonical_dec": "", "address": "00001CBA11101111", "decoding": "00001CBA11101111", "read": "SDcard", "write": "SDcard", "note": "", "models": [], "tags": ["SD Card"], "x_count": 0, "mirrors": 1}, {"id": 167, "section": "ZXMC-2 (ZX Multi Card-2 by Kamil Karimov)", "port": "#80DF–#87DF", "canonical_hex": "#80DF", "canonical_dec": "", "address": "10000CBA11011111", "decoding": "10000CBA11011111", "read": "PCKey", "write": "—", "note": "", "models": [], "tags": ["Keyboard"], "x_count": 0, "mirrors": 1}, {"id": 168, "section": "ZXMC-2 (ZX Multi Card-2 by Kamil Karimov)", "port": "#BFF7 (49143)", "canonical_hex": "#BFF7", "canonical_dec": "49143", "address": "1011111111110111", "decoding": "1011111111110111", "read": "GLUKRTCData", "write": "GLUKRTCData", "note": "", "models": [], "tags": ["Real-Time Clock"], "x_count": 0, "mirrors": 1}, {"id": 169, "section": "ZXMC-2 (ZX Multi Card-2 by Kamil Karimov)", "port": "#DFF7 (57335)", "canonical_hex": "#DFF7", "canonical_dec": "57335", "address": "1101111111110111", "decoding": "1101111111110111", "read": "—", "write": "GLUKRTCAddress", "note": "", "models": [], "tags": ["Real-Time Clock"], "x_count": 0, "mirrors": 1}, {"id": 170, "section": "ZXMC-2 (ZX Multi Card-2 by Kamil Karimov)", "port": "#E0EF–#E7EF", "canonical_hex": "#E0EF", "canonical_dec": "", "address": "11100CBA11101111", "decoding": "11100CBA11101111", "read": "ZXMCRTC", "write": "ZXMCRTC", "note": "", "models": [], "tags": ["Real-Time Clock"], "x_count": 0, "mirrors": 1}, {"id": 171, "section": "ZXMC-2 (ZX Multi Card-2 by Kamil Karimov)", "port": "#EFF7 (61431)", "canonical_hex": "#EFF7", "canonical_dec": "61431", "address": "1110111111110111", "decoding": "1110111111110111", "read": "—", "write": "GLUKRTCon/off", "note": "", "models": [], "tags": ["Real-Time Clock"], "x_count": 0, "mirrors": 1}, {"id": 172, "section": "ZXMC-2 (ZX Multi Card-2 by Kamil Karimov)", "port": "#F8EF–#FFEF", "canonical_hex": "#F8EF", "canonical_dec": "", "address": "11111CBA11101111", "decoding": "11111CBA11101111", "read": "ISACOM1", "write": "ISACOM1", "note": "", "models": [], "tags": ["Serial / Modem"], "x_count": 0, "mirrors": 1}, {"id": 173, "section": "ZXMC-2 (ZX Multi Card-2 by Kamil Karimov)", "port": "#FADF (64223)", "canonical_hex": "#FADF", "canonical_dec": "64223", "address": "1111101011011111", "decoding": "1111101011011111", "read": "Kmou_B", "write": "—", "note": "", "models": [], "tags": ["Mouse"], "x_count": 0, "mirrors": 1}, {"id": 174, "section": "ZXMC-2 (ZX Multi Card-2 by Kamil Karimov)", "port": "#FBDF (64479)", "canonical_hex": "#FBDF", "canonical_dec": "64479", "address": "1111101111011111", "decoding": "1111101111011111", "read": "Kmou_X", "write": "—", "note": "", "models": [], "tags": ["Mouse"], "x_count": 0, "mirrors": 1}, {"id": 175, "section": "ZXMC-2 (ZX Multi Card-2 by Kamil Karimov)", "port": "#FFDF (65503)", "canonical_hex": "#FFDF", "canonical_dec": "65503", "address": "1111111111011111", "decoding": "1111111111011111", "read": "Kmou_Y", "write": "—", "note": "", "models": [], "tags": ["Mouse"], "x_count": 0, "mirrors": 1}, {"id": 176, "section": "Keyboard Proface (*1)", "port": "#FA (250)", "canonical_hex": "#FA", "canonical_dec": "250", "address": "xxxxxxxx11111010", "decoding": "xxxxxxxxxxxxx0x0", "read": "—", "write": "Pro/Keyface", "note": "", "models": [], "tags": ["Keyboard"], "x_count": 14, "mirrors": 16384}, {"id": 177, "section": "Keyboard Proface (*1)", "port": "#FE (254)", "canonical_hex": "#FE", "canonical_dec": "254", "address": "xxxxxxxx11111110", "decoding": "xxxxxxxxxxxxxxx0", "read": "Pro/Keyface", "write": "—", "note": "", "models": [], "tags": ["Keyboard"], "x_count": 15, "mirrors": 32768}, {"id": 178, "section": "SAM Coupe Sound SAA1099 (*1)", "port": "#00FF (255)", "canonical_hex": "#00FF", "canonical_dec": "255", "address": "0000000011111111", "decoding": "xxxxxxx011111111", "read": "—", "write": "Data", "note": "", "models": [], "tags": ["Audio"], "x_count": 7, "mirrors": 128}, {"id": 179, "section": "SAM Coupe Sound SAA1099 (*1)", "port": "#01FF (511)", "canonical_hex": "#01FF", "canonical_dec": "511", "address": "0000000111111111", "decoding": "xxxxxxx111111111", "read": "—", "write": "Address", "note": "", "models": [], "tags": ["Audio"], "x_count": 7, "mirrors": 128}, {"id": 180, "section": "DMA USC (DMA Ultra Sound Controller)", "port": "#0777–#3777", "canonical_hex": "#0777", "canonical_dec": "", "address": "00BA011101110111", "decoding": "00BA0x1101110xxx", "read": "—", "write": "Channel", "note": "", "models": [], "tags": ["Audio", "DMA"], "x_count": 4, "mirrors": 16}, {"id": 181, "section": "DMA USC (DMA Ultra Sound Controller)", "port": "#0C77–#FC77", "canonical_hex": "#0C77", "canonical_dec": "", "address": "DCBA110001110111", "decoding": "DCBAxx0001110xxx", "read": "8237", "write": "8237", "note": "", "models": [], "tags": ["Audio", "DMA"], "x_count": 5, "mirrors": 32}, {"id": 182, "section": "DMA USC (DMA Ultra Sound Controller)", "port": "#3D77–#FD77", "canonical_hex": "#3D77", "canonical_dec": "", "address": "BA11110101110111", "decoding": "BAxxxx0101110xxx", "read": "—", "write": "8253-1", "note": "", "models": [], "tags": ["Audio", "DMA", "System / Config"], "x_count": 7, "mirrors": 128}, {"id": 183, "section": "DMA USC (DMA Ultra Sound Controller)", "port": "#3E77–#FE77", "canonical_hex": "#3E77", "canonical_dec": "", "address": "BA11111001110111", "decoding": "BAxxxx1001110xxx", "read": "—", "write": "8253-2", "note": "", "models": [], "tags": ["Audio", "DMA", "System / Config"], "x_count": 7, "mirrors": 128}, {"id": 184, "section": "DMA USC (DMA Ultra Sound Controller)", "port": "#3F77–#FF77", "canonical_hex": "#3F77", "canonical_dec": "", "address": "BA11111101110111", "decoding": "BAxx1x1101110xxx", "read": "—", "write": "Volume", "note": "", "models": [], "tags": ["Audio", "DMA"], "x_count": 6, "mirrors": 64}, {"id": 185, "section": "DMA USC (DMA Ultra Sound Controller)", "port": "#F777 (63351)", "canonical_hex": "#F777", "canonical_dec": "63351", "address": "1111011101110111", "decoding": "11xx0x1101110xxx", "read": "—", "write": "DMAIntMask", "note": "", "models": [], "tags": ["Audio", "DMA"], "x_count": 6, "mirrors": 64}, {"id": 186, "section": "COM Ports by VIC", "port": "#80F7–#83F7", "canonical_hex": "#80F7", "canonical_dec": "", "address": "100000BA11110111", "decoding": "1000xxBAxxxx0xxx", "read": "—", "write": "8253", "note": "", "models": [], "tags": ["Serial / Modem", "System / Config"], "x_count": 9, "mirrors": 512}, {"id": 187, "section": "COM Ports by VIC", "port": "#90F7/#91F7", "canonical_hex": "#90F7", "canonical_dec": "", "address": "1001000A11110111", "decoding": "1001xxxAxxxx0xxx", "read": "8251-1", "write": "8251-1", "note": "", "models": [], "tags": ["Serial / Modem"], "x_count": 10, "mirrors": 1024}, {"id": 188, "section": "COM Ports by VIC", "port": "#A0F7/#A1F7", "canonical_hex": "#A0F7", "canonical_dec": "", "address": "1010000A11110111", "decoding": "1010xxxAxxxx0xxx", "read": "8251-2", "write": "8251-2", "note": "", "models": [], "tags": ["Serial / Modem"], "x_count": 10, "mirrors": 1024}, {"id": 189, "section": "COM Ports by VIC", "port": "#B0F7/#B1F7", "canonical_hex": "#B0F7", "canonical_dec": "", "address": "1011000A11110111", "decoding": "1011xxxAxxxx0xxx", "read": "8251-3", "write": "8251-3", "note": "", "models": [], "tags": ["Serial / Modem"], "x_count": 10, "mirrors": 1024}, {"id": 190, "section": "GLUK CMOS RTC", "port": "#BFF7 (49143)", "canonical_hex": "#BFF7", "canonical_dec": "49143", "address": "1011111111110111", "decoding": "1011xxxxxxxx0xxx", "read": "DS1685Data", "write": "DS1685Data", "note": "", "models": [], "tags": ["Real-Time Clock"], "x_count": 11, "mirrors": 2048}, {"id": 191, "section": "GLUK CMOS RTC", "port": "#DFF7 (57335)", "canonical_hex": "#DFF7", "canonical_dec": "57335", "address": "1101111111110111", "decoding": "1101xxxxxxxx0xxx", "read": "—", "write": "DS1685Address", "note": "", "models": [], "tags": ["Real-Time Clock"], "x_count": 11, "mirrors": 2048}, {"id": 192, "section": "GLUK CMOS RTC", "port": "#EFF7 (61431)", "canonical_hex": "#EFF7", "canonical_dec": "61431", "address": "1110111111110111", "decoding": "1110xxxxxxxx0xxx", "read": "—", "write": "on/off", "note": "", "models": [], "tags": ["Real-Time Clock"], "x_count": 11, "mirrors": 2048}, {"id": 193, "section": "Profi COM Port & Soft XT Keyboard", "port": "#E0FB (57595)", "canonical_hex": "#E0FB", "canonical_dec": "57595", "address": "1110000011111011", "decoding": "1110000x1xx1x011", "read": "—", "write": "XTKey", "note": "", "models": ["9"], "tags": ["Keyboard", "Serial / Modem"], "x_count": 4, "mirrors": 16}, {"id": 194, "section": "Profi COM Port & Soft XT Keyboard", "port": "#E8FB (59643)", "canonical_hex": "#E8FB", "canonical_dec": "59643", "address": "1110100011111011", "decoding": "1110100x1xx1x011", "read": "Reg", "write": "Reg", "note": "", "models": ["9"], "tags": ["Keyboard", "Serial / Modem", "System / Config"], "x_count": 4, "mirrors": 16}, {"id": 195, "section": "Profi COM Port & Soft XT Keyboard", "port": "#EAFB/#EBFB", "canonical_hex": "#EAFB", "canonical_dec": "", "address": "1110101A11111011", "decoding": "1110101A1xx1x011", "read": "8251", "write": "8251", "note": "", "models": ["9"], "tags": ["Keyboard", "Serial / Modem"], "x_count": 3, "mirrors": 8}, {"id": 196, "section": "Profi COM Port & Soft XT Keyboard", "port": "#ECFB–#EFFB", "canonical_hex": "#ECFB", "canonical_dec": "", "address": "111011BA11111011", "decoding": "111011BA1xx1x011", "read": "8253", "write": "8253", "note": "", "models": ["9"], "tags": ["Keyboard", "Serial / Modem", "System / Config"], "x_count": 3, "mirrors": 8}, {"id": 197, "section": "ZX Interface 2", "port": "#EFFE (61438)", "canonical_hex": "#EFFE", "canonical_dec": "61438", "address": "1110111111111110", "decoding": "xxx0xxxxxxxxxxx0", "read": "Right Joystick", "write": "—", "note": "", "models": ["1", "2", "+1"], "tags": ["Joystick"], "x_count": 14, "mirrors": 16384}, {"id": 198, "section": "ZX Interface 2", "port": "#F7FE (63486)", "canonical_hex": "#F7FE", "canonical_dec": "63486", "address": "1111011111111110", "decoding": "xxxx0xxxxxxxxxx0", "read": "Left Joystick", "write": "—", "note": "", "models": ["1", "2", "+1"], "tags": ["Joystick"], "x_count": 14, "mirrors": 16384}, {"id": 199, "section": "ISA COM1/Modem by Kondratyev (8250 / *82450 / *82550)", "port": "#F0EF/#F8EF", "canonical_hex": "#F0EF", "canonical_dec": "", "address": "1111A00011101111", "decoding": "xxxxA000xxx0xxxx", "read": "RBR/DivLchLSB", "write": "THR/DivLchLSB", "note": "", "models": [], "tags": ["Serial / Modem", "System / Config"], "x_count": 11, "mirrors": 2048}, {"id": 200, "section": "ISA COM1/Modem by Kondratyev (8250 / *82450 / *82550)", "port": "#F1EF/#F9EF", "canonical_hex": "#F1EF", "canonical_dec": "", "address": "1111A00111101111", "decoding": "xxxxA001xxx0xxxx", "read": "IER/DivLchMSB", "write": "IER/DivLchMSB", "note": "", "models": [], "tags": ["Serial / Modem", "System / Config"], "x_count": 11, "mirrors": 2048}, {"id": 201, "section": "ISA COM1/Modem by Kondratyev (8250 / *82450 / *82550)", "port": "#F2EF/#FAEF", "canonical_hex": "#F2EF", "canonical_dec": "", "address": "1111A01011101111", "decoding": "xxxxA010xxx0xxxx", "read": "IIR", "write": "—", "note": "", "models": [], "tags": ["Serial / Modem", "System / Config"], "x_count": 11, "mirrors": 2048}, {"id": 202, "section": "ISA COM1/Modem by Kondratyev (8250 / *82450 / *82550)", "port": "#F3EF/#FBEF", "canonical_hex": "#F3EF", "canonical_dec": "", "address": "1111A01111101111", "decoding": "xxxxA011xxx0xxxx", "read": "LCR", "write": "LCR", "note": "", "models": [], "tags": ["Serial / Modem", "System / Config"], "x_count": 11, "mirrors": 2048}, {"id": 203, "section": "ISA COM1/Modem by Kondratyev (8250 / *82450 / *82550)", "port": "#F4EF/#FCEF", "canonical_hex": "#F4EF", "canonical_dec": "", "address": "1111A10011101111", "decoding": "xxxxA100xxx0xxxx", "read": "MCR", "write": "MCR", "note": "", "models": [], "tags": ["Serial / Modem", "System / Config"], "x_count": 11, "mirrors": 2048}, {"id": 204, "section": "ISA COM1/Modem by Kondratyev (8250 / *82450 / *82550)", "port": "#F5EF/#FDEF", "canonical_hex": "#F5EF", "canonical_dec": "", "address": "1111A10111101111", "decoding": "xxxxA101xxx0xxxx", "read": "LSR", "write": "—", "note": "", "models": [], "tags": ["Serial / Modem", "System / Config"], "x_count": 11, "mirrors": 2048}, {"id": 205, "section": "ISA COM1/Modem by Kondratyev (8250 / *82450 / *82550)", "port": "#F6EF/#FEEF", "canonical_hex": "#F6EF", "canonical_dec": "", "address": "1111A11011101111", "decoding": "xxxxA110xxx0xxxx", "read": "MSR", "write": "—", "note": "", "models": [], "tags": ["Serial / Modem", "System / Config"], "x_count": 11, "mirrors": 2048}, {"id": 206, "section": "ISA COM1/Modem by Kondratyev (8250 / *82450 / *82550)", "port": "#F7EF/#FFEF", "canonical_hex": "#F7EF", "canonical_dec": "", "address": "1111A11111101111", "decoding": "xxxxA111xxx0xxxx", "read": "ScratchReg*", "write": "ScratchReg*", "note": "", "models": [], "tags": ["Serial / Modem", "System / Config"], "x_count": 11, "mirrors": 2048}, {"id": 207, "section": "Kempston Mouse (*1)", "port": "#FADF (64223)", "canonical_hex": "#FADF", "canonical_dec": "64223", "address": "1111101011011111", "decoding": "xxxxxx10xx0xxxxx", "read": "Kmou_B", "write": "—", "note": "", "models": [], "tags": ["Mouse"], "x_count": 13, "mirrors": 8192}, {"id": 208, "section": "Kempston Mouse (*1)", "port": "#FBDF (64479)", "canonical_hex": "#FBDF", "canonical_dec": "64479", "address": "1111101111011111", "decoding": "xxxxx011xx0xxxxx", "read": "Kmou_X", "write": "—", "note": "", "models": [], "tags": ["Mouse"], "x_count": 12, "mirrors": 4096}, {"id": 209, "section": "Kempston Mouse (*1)", "port": "#FFDF (65503)", "canonical_hex": "#FFDF", "canonical_dec": "65503", "address": "1111111111011111", "decoding": "xxxxx111xx0xxxxx", "read": "Kmou_Y", "write": "—", "note": "", "models": [], "tags": ["Mouse"], "x_count": 12, "mirrors": 4096}, {"id": 210, "section": "USSR Kempston Mouse", "port": "#FADF (64223)", "canonical_hex": "#FADF", "canonical_dec": "64223", "address": "1111101011011111", "decoding": "xxxxx0x01x0xxxx1", "read": "Kmou_B", "write": "—", "note": "", "models": [], "tags": ["Mouse"], "x_count": 11, "mirrors": 2048}, {"id": 211, "section": "USSR Kempston Mouse", "port": "#FBDF (64479)", "canonical_hex": "#FBDF", "canonical_dec": "64479", "address": "1111101111011111", "decoding": "xxxxx0x11x0xxxx1", "read": "Kmou_X", "write": "—", "note": "", "models": [], "tags": ["Mouse"], "x_count": 11, "mirrors": 2048}, {"id": 212, "section": "USSR Kempston Mouse", "port": "#FFDF (65503)", "canonical_hex": "#FFDF", "canonical_dec": "65503", "address": "1111111111011111", "decoding": "xxxxx1x11x0xxxx1", "read": "Kmou_Y", "write": "—", "note": "", "models": [], "tags": ["Mouse"], "x_count": 11, "mirrors": 2048}], "soft_ports": [{"port": "#BD77/#FF77 (#0177)", "decoding": "xLxxxxK10xx10111", "L": "0", "K": "0", "J": "1", "effect": "L,K=0 → Pal, PLLFC, shadow on"}, {"port": "#BF77/#FF77", "decoding": "xLxxxx110xx10111", "L": "0", "K": "1", "J": "1", "effect": "L=0 → Pal, PLLFC on"}, {"port": "#FD77/#FF77 (#4177)", "decoding": "x1xxxxK10xx10111", "L": "1", "K": "0", "J": "1", "effect": "K=0 → shadow on"}, {"port": "#FE77/#FF77", "decoding": "x1xxxx1J0xx10111", "L": "1", "K": "1", "J": "0", "effect": "J=0 → paging off, CP/M ROM mapped to CPU banks 0–3"}], "footnotes": [{"marker": "*1", "source": "velesoft.speccy.cz/zxporty-cz.htm", "desc": "Velesoft's ZX port list & hardware research"}, {"marker": "*2", "source": "zxspectrum.00freehost.com/zxpc.html", "desc": "ZX-PC interface specification"}, {"marker": "*3", "source": "8bc.com/sinclair/index.html", "desc": "MB-02+ disk system documentation"}, {"marker": "*4", "source": "zxbada.bbk.org/zxmmc/index.htm", "desc": "ZXMMC+ SD/MMC card interface documentation"}, {"marker": "*5", "source": "ppest.org/zx/simpif.htm", "desc": "Simple Interface (Pera Putnik 8-bit IDE)"}], "translator_notes": [{"num": 1, "topic": "#7EFD — Rag(?B)", "text": "Preserved verbatim from the original; presumed typo for Pag(?B), matching the #78FD/#7AFD/#7CFD paging series."}, {"num": 2, "topic": "MB-02+ #07 decimal label", "text": "The original prints #07/11; decimal value of #07 is 7, not 11. Preserved with a (sic) marker."}, {"num": 3, "topic": "ScratchReg* and *82450/*82550", "text": "Unexplained asterisks in ISA COM1; marks register behavior specific to 16450/16550-class enhanced UARTs."}, {"num": 4, "topic": "SoundDrive v1.05 mask length", "text": "The original decoding xxxxxxxxxxB0A1 is 14 characters (all others 16); preserved verbatim."}, {"num": 5, "topic": "Spelling normalization", "text": "Normalized 'Adress' → 'Address', 'managetment' → 'management', 'Kamil\\' Karimov' → 'Kamil Karimov'."}, {"num": 6, "topic": "Legend placement", "text": "The original places the COMPUTERS/CODES/INFO legends at the end; moved up front for lookup convenience."}]};
+
+// Global App State
+let appState = {
+  theme: 'light',
+  search: '',
+  selectedTrack: 'all',
+  selectedModels: new Set(),
+  selectedTags: new Set(),
+  selectedSection: 'all',
+  rwFilter: 'all',
+  hazardFilter: 'all',
+  bitFilters: Array(16).fill('*'), // A15 down to A0
+  sortCol: 'canonical_hex',
+  sortAsc: true
+};
+
+// Theme Management: Light by default with switch
+function initTheme() {
+  let savedTheme = 'light';
+  try {
+    savedTheme = localStorage.getItem('zx_interactive_theme') || 'light';
+  } catch(e) {
+    savedTheme = 'light';
+  }
+  setTheme(savedTheme, false);
+}
+
+function setTheme(theme, save = true) {
+  appState.theme = theme;
+  document.documentElement.setAttribute('data-theme', theme);
+  
+  const iconSpan = document.getElementById('theme-icon');
+  const textSpan = document.getElementById('theme-text');
+
+  if (theme === 'dark') {
+    // Moon becomes Sun (switch to light)
+    iconSpan.innerHTML = '<svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/></svg>';
+    textSpan.textContent = 'Light Mode';
+  } else {
+    // Sun becomes Moon (switch to dark)
+    iconSpan.innerHTML = '<svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/></svg>';
+    textSpan.textContent = 'Dark Mode';
+  }
+
+  if (save) {
+    try {
+      localStorage.setItem('zx_interactive_theme', theme);
+    } catch(e) {}
+  }
+}
+
+function toggleTheme() {
+  const nextTheme = appState.theme === 'light' ? 'dark' : 'light';
+  setTheme(nextTheme, true);
+}
+
+// Initialize Application
+function initApp() {
+  initTheme();
+  renderBitMatrix();
+  renderModelFilters();
+  renderTagFilters();
+  renderSectionSelect();
+  applyFilters(); // Renders full table immediately!
+}
+
+// 16-Bit Pin Display Generation
+function renderBitMatrix() {
+  const container = document.getElementById('bit-matrix');
+  let html = '';
+  for (let i = 15; i >= 0; i--) {
+    const state = appState.bitFilters[15 - i];
+    const stateClass = state === '0' ? 'state-0' : (state === '1' ? 'state-1' : 'state-any');
+    html += `
+      <div class="bit-cell ${stateClass}" onclick="toggleBitFilter(${15 - i})" title="Click to toggle pin A${i}">
+        <span class="bit-name">A${i}</span>
+        <div class="bit-state">${state}</div>
+      </div>
+    `;
+  }
+  container.innerHTML = html;
+}
+
+function toggleBitFilter(index) {
+  const current = appState.bitFilters[index];
+  if (current === '*') appState.bitFilters[index] = '0';
+  else if (current === '0') appState.bitFilters[index] = '1';
+  else appState.bitFilters[index] = '*';
+  
+  renderBitMatrix();
+  applyFilters();
+}
+
+function applyBitPreset(preset) {
+  appState.bitFilters = Array(16).fill('*');
+  if (preset === 'ula') {
+    appState.bitFilters[15] = '0'; // A0 = 0
+  } else if (preset === 'peripheral') {
+    appState.bitFilters[15] = '1'; // A0 = 1
+  } else if (preset === 'paging128') {
+    appState.bitFilters[0] = '0'; // A15 = 0
+    appState.bitFilters[14] = '0'; // A1 = 0
+  } else if (preset === 'ay') {
+    appState.bitFilters[0] = '1'; // A15 = 1
+    appState.bitFilters[1] = '1'; // A14 = 1
+    appState.bitFilters[14] = '0'; // A1 = 0
+  }
+  renderBitMatrix();
+  applyFilters();
+}
+
+// Render Model Filter Badges
+function renderModelFilters() {
+  const container = document.getElementById('model-filter-group');
+  let html = '';
+  for (const [code, info] of Object.entries(DATA.models)) {
+    const active = appState.selectedModels.has(code) ? 'active' : '';
+    html += `
+      <button class="tag-pill ${active}" onclick="toggleModelFilter('${code}')">
+        <span class="model-badge model-badge-${code}">${code}</span>
+        <span>${info.name}</span>
+      </button>
+    `;
+  }
+  container.innerHTML = html;
+}
+
+function toggleModelFilter(code) {
+  if (appState.selectedModels.has(code)) {
+    appState.selectedModels.delete(code);
+  } else {
+    appState.selectedModels.add(code);
+  }
+  renderModelFilters();
+  applyFilters();
+}
+
+// Render Functional Tags
+function renderTagFilters() {
+  const container = document.getElementById('tags-filter-group');
+  const allTags = new Set();
+  DATA.ports.forEach(p => p.tags.forEach(t => allTags.add(t)));
+  const sortedTags = Array.from(allTags).sort();
+
+  let html = '';
+  sortedTags.forEach(tag => {
+    const active = appState.selectedTags.has(tag) ? 'active' : '';
+    html += `
+      <button class="tag-pill ${active}" onclick="toggleTagFilter('${tag}')">
+        <span class="tag-dot"></span>
+        <span>${tag}</span>
+      </button>
+    `;
+  });
+  container.innerHTML = html;
+}
+
+function toggleTagFilter(tag) {
+  if (appState.selectedTags.has(tag)) {
+    appState.selectedTags.delete(tag);
+  } else {
+    appState.selectedTags.add(tag);
+  }
+  renderTagFilters();
+  applyFilters();
+}
+
+// Section Dropdown
+function renderSectionSelect() {
+  const select = document.getElementById('section-select');
+  const sections = new Set();
+  DATA.ports.forEach(p => sections.add(p.section));
+  const sortedSec = Array.from(sections).sort();
+  
+  sortedSec.forEach(sec => {
+    const opt = document.createElement('option');
+    opt.value = sec;
+    opt.textContent = sec;
+    select.appendChild(opt);
+  });
+}
+
+function handleSectionChange(val) {
+  appState.selectedSection = val;
+  applyFilters();
+}
+
+// Track Filter
+function setTrackFilter(track) {
+  appState.selectedTrack = track;
+  document.querySelectorAll('[data-track]').forEach(el => {
+    el.classList.toggle('active', el.getAttribute('data-track') === track);
+  });
+  applyFilters();
+}
+
+// RW Filter
+function setRWFilter(rw) {
+  appState.rwFilter = rw;
+  document.querySelectorAll('[data-rw]').forEach(el => {
+    el.classList.toggle('active', el.getAttribute('data-rw') === rw);
+  });
+  applyFilters();
+}
+
+// Selectivity & Hazard Filter
+function setHazardFilter(h) {
+  appState.hazardFilter = h;
+  document.querySelectorAll('[data-hazard]').forEach(el => {
+    el.classList.toggle('active', el.getAttribute('data-hazard') === h);
+  });
+  applyFilters();
+}
+
+// Search Filter
+function handleSearchInput(val) {
+  appState.search = val.trim().toLowerCase();
+  applyFilters();
+}
+
+// Reset Filters
+function resetAllFilters() {
+  appState.search = '';
+  document.getElementById('global-search').value = '';
+  appState.selectedTrack = 'all';
+  appState.selectedModels.clear();
+  appState.selectedTags.clear();
+  appState.selectedSection = 'all';
+  document.getElementById('section-select').value = 'all';
+  appState.rwFilter = 'all';
+  appState.hazardFilter = 'all';
+  appState.bitFilters = Array(16).fill('*');
+  
+  renderBitMatrix();
+  renderModelFilters();
+  renderTagFilters();
+  document.querySelectorAll('[data-track]').forEach(el => el.classList.toggle('active', el.getAttribute('data-track') === 'all'));
+  document.querySelectorAll('[data-rw]').forEach(el => el.classList.toggle('active', el.getAttribute('data-rw') === 'all'));
+  document.querySelectorAll('[data-hazard]').forEach(el => el.classList.toggle('active', el.getAttribute('data-hazard') === 'all'));
+  
+  applyFilters();
+}
+
+// Core Filtering Logic
+function getFilteredPorts() {
+  return DATA.ports.filter(port => {
+    // 1. Search Query
+    if (appState.search) {
+      const q = appState.search;
+      const haystack = (
+        port.port + ' ' +
+        port.canonical_hex + ' ' +
+        port.canonical_dec + ' ' +
+        port.address + ' ' +
+        port.decoding + ' ' +
+        port.read + ' ' +
+        port.write + ' ' +
+        port.section + ' ' +
+        port.note + ' ' +
+        port.tags.join(' ')
+      ).toLowerCase();
+      if (!haystack.includes(q)) return false;
+    }
+
+    // 2. Track Filter
+    if (appState.selectedTrack !== 'all') {
+      let hasTrack = false;
+      for (const mCode of port.models) {
+        const mInfo = DATA.models[mCode];
+        if (mInfo && mInfo.track === appState.selectedTrack) {
+          hasTrack = true;
+          break;
+        }
+      }
+      if (!hasTrack) return false;
+    }
+
+    // 3. Model Filter
+    if (appState.selectedModels.size > 0) {
+      const hasAnyModel = Array.from(appState.selectedModels).some(m => port.models.includes(m));
+      if (!hasAnyModel) return false;
+    }
+
+    // 4. Tags Filter
+    if (appState.selectedTags.size > 0) {
+      const hasAnyTag = Array.from(appState.selectedTags).some(t => port.tags.includes(t));
+      if (!hasAnyTag) return false;
+    }
+
+    // 5. Section Filter
+    if (appState.selectedSection !== 'all') {
+      if (port.section !== appState.selectedSection) return false;
+    }
+
+    // 6. R/W Filter
+    if (appState.rwFilter === 'read' && (!port.read || port.read === '—')) return false;
+    if (appState.rwFilter === 'write' && (!port.write || port.write === '—')) return false;
+    if (appState.rwFilter === 'both' && (port.read === '—' || port.write === '—')) return false;
+
+    // 7. Selectivity & Hazard Filter
+    if (appState.hazardFilter !== 'all') {
+      const m = getDecodingMetrics(port);
+      if (appState.hazardFilter === 'strict' && m.mirrors > 64) return false;
+      if (appState.hazardFilter === 'moderate' && (m.mirrors < 128 || m.mirrors > 2048)) return false;
+      if (appState.hazardFilter === 'hazard' && m.mirrors <= 2048) return false;
+      if (appState.hazardFilter === 'legacy8' && !m.highByteIgnored) return false;
+    }
+
+    // 8. Bitmask Pin Filters
+    let decStr = port.decoding;
+    if (decStr.length === 14 && decStr === 'xxxxxxxxxxB0A1') decStr = 'xxxxxxxxxxxxB0A1';
+    decStr = decStr.padStart(16, 'x');
+
+    for (let i = 0; i < 16; i++) {
+      const reqState = appState.bitFilters[i];
+      if (reqState !== '*') {
+        const maskChar = decStr[i];
+        if (maskChar !== reqState) return false;
+      }
+    }
+
+    return true;
+  });
+}
+
+// Apply Filters & Re-Render
+function applyFilters() {
+  const filtered = getFilteredPorts();
+  document.getElementById('stat-active-rules').textContent = filtered.length;
+
+  // Sort
+  filtered.sort((a, b) => {
+    let vA, vB;
+    if (appState.sortCol === 'selectivity') {
+      vA = a.mirrors;
+      vB = b.mirrors;
+    } else {
+      vA = a[appState.sortCol];
+      vB = b[appState.sortCol];
+      if (typeof vA === 'string') vA = vA.toLowerCase();
+      if (typeof vB === 'string') vB = vB.toLowerCase();
+    }
+    if (vA < vB) return appState.sortAsc ? -1 : 1;
+    if (vA > vB) return appState.sortAsc ? 1 : -1;
+    return 0;
+  });
+
+  renderTable(filtered);
+}
+
+
+// --- Hardware Decoding Selectivity & Hazard Metrics Engine ---
+function getDecodingMetrics(port) {
+  let d = port.decoding;
+  if (d.length === 14 && d === 'xxxxxxxxxxB0A1') d = 'xxxxxxxxxxxxB0A1';
+  d = d.padStart(16, 'x');
+
+  let checkedBits = 0;
+  let ignoredBits = 0;
+  let varBits = 0;
+  let highByteIgnored = true;
+  let lowByteA0State = 'x';
+
+  for (let i = 0; i < 16; i++) {
+    const bitNum = 15 - i;
+    const c = d[i];
+    if (c === 'x' || c === '?') {
+      ignoredBits++;
+    } else if (/[A-L]/.test(c)) {
+      varBits++;
+      checkedBits++;
+      if (bitNum >= 8) highByteIgnored = false;
+    } else if (c === '0' || c === '1') {
+      checkedBits++;
+      if (bitNum >= 8) highByteIgnored = false;
+    }
+    if (bitNum === 0) {
+      if (c === '0') lowByteA0State = '0';
+      else if (c === '1') lowByteA0State = '1';
+      else lowByteA0State = 'x';
+    }
+  }
+
+  const mirrors = Math.pow(2, ignoredBits);
+  const footprintPct = (mirrors / 65536.0) * 100.0;
+  let footprintStr = '';
+  if (footprintPct >= 1.0) {
+    footprintStr = footprintPct % 1 === 0 ? footprintPct.toFixed(0) + '% space' : footprintPct.toFixed(1) + '% space';
+  } else if (footprintPct >= 0.1) {
+    footprintStr = footprintPct.toFixed(2) + '% space';
+  } else {
+    footprintStr = footprintPct.toFixed(3) + '% space';
+  }
+
+  let hazardClass = 'hazard-mod';
+  let hazardLabel = '8-Bit Moderate';
+  let depthTier = 'mid';
+
+  if (mirrors >= 32768) {
+    hazardClass = 'hazard-critical';
+    hazardLabel = 'Critical Hazard';
+    depthTier = 'low';
+  } else if (mirrors >= 8192) {
+    hazardClass = 'hazard-high';
+    hazardLabel = 'High Hazard';
+    depthTier = 'low';
+  } else if (mirrors >= 256) {
+    hazardClass = 'hazard-mod';
+    hazardLabel = '8-Bit Moderate';
+    depthTier = 'mid';
+  } else if (mirrors <= 16) {
+    hazardClass = 'hazard-strict';
+    hazardLabel = 'Strict (≤16)';
+    depthTier = 'high';
+  } else {
+    hazardClass = 'hazard-strict';
+    hazardLabel = 'Semi-Strict';
+    depthTier = 'high';
+  }
+
+  // Bus impact explanation
+  let busImpact = '';
+  if (lowByteA0State === '0') {
+    busImpact += '<strong>ULA Collision Risk:</strong> Requires A0=0 (even address), directly intersecting 48K ULA border/beeper space. ';
+  } else if (lowByteA0State === '1') {
+    busImpact += '<strong>ULA-Safe:</strong> Decodes A0=1 (odd address), never triggering standard ULA registers. ';
+  }
+  if (highByteIgnored) {
+    busImpact += '<strong>High-Byte Invariant (8-bit bus):</strong> Hardware ignores A15–A8. Fluctuations in Z80 register B (e.g. loops with <code>IN A,(C)</code> or <code>INIR/OTIR</code>) are invisible and will hit this port on all 256 passes.';
+  } else {
+    busImpact += '<strong>16-Bit Bus Qualified:</strong> Hardware checks upper address lines (A15–A8). Software must set BC explicitly (e.g. <code>LD BC, ' + port.canonical_hex + '</code>).';
+  }
+
+  if (port.tags && (port.tags.includes('AY') || port.tags.includes('TurboSound'))) {
+    busImpact += '<br><br><strong>TurboSound / TSFM Programming Protocol:</strong> Port <code>#FFFD</code> acts as the TurboSound chip selector register. Writing <code>%11111111</code> (255) activates AY0, and <code>%11111110</code> (254) activates AY1. On TurboSound FM (TSFM), writing <code>%11111100</code>..<code>%11111111</code> selects between both YM2203 chips and switches between SSG and FM operator register banks. After chip selection, standard <code>#FFFD</code> (register select) and <code>#BFFD</code> (data read/write) address the selected sound generator.';
+  }
+
+  return {
+    checkedBits,
+    ignoredBits,
+    varBits,
+    mirrors,
+    footprintPct,
+    footprintStr,
+    highByteIgnored,
+    lowByteA0State,
+    hazardClass,
+    hazardLabel,
+    depthTier,
+    busImpact
+  };
+}
+
+// Tooltip UI management
+const tooltipEl = document.getElementById('global-tooltip');
+
+function showDecodingTooltip(e, portId) {
+  const port = DATA.ports.find(p => p.id === portId);
+  if (!port || !tooltipEl) return;
+  const m = getDecodingMetrics(port);
+
+  tooltipEl.innerHTML = `
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; border-bottom:1px solid var(--border-color); padding-bottom:6px;">
+      <div style="font-weight:700; font-family:var(--font-mono); color:var(--cyan); font-size:12.5px;">
+        ${port.port} &bull; Decoding Profile
+      </div>
+      <div class="hazard-badge ${m.hazardClass}" style="font-size:9.5px; padding:1px 5px;">
+        ${m.hazardLabel.toUpperCase()}
+      </div>
+    </div>
+    
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px 12px; margin-bottom:10px; font-family:var(--font-mono); font-size:11px;">
+      <div><span style="color:var(--text-muted);">Decode Depth:</span> <strong style="color:var(--text-primary);">${m.checkedBits}/16 lines</strong></div>
+      <div><span style="color:var(--text-muted);">Floating Lines:</span> <strong style="color:var(--text-primary);">${m.ignoredBits} don't-cares (x)</strong></div>
+      <div><span style="color:var(--text-muted);">Address Aliases:</span> <strong style="color:var(--amber);">${m.mirrors.toLocaleString()} ports</strong></div>
+      <div><span style="color:var(--text-muted);">64K Space Footprint:</span> <strong style="color:var(--rose);">${m.footprintStr}</strong></div>
+    </div>
+
+    <div style="margin-bottom:10px;">
+      <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--text-muted); margin-bottom:3px; font-family:var(--font-mono);">
+        <span>64 KiB Bus Occupancy (${m.mirrors.toLocaleString()} / 65,536)</span>
+        <span>${m.footprintStr}</span>
+      </div>
+      <div style="width:100%; height:6px; background:var(--bg-tertiary); border-radius:3px; overflow:hidden; border:1px solid var(--border-color);">
+        <div style="width:${Math.max(m.footprintPct, 0.5)}%; height:100%; background:${m.mirrors >= 8192 ? 'var(--rose)' : (m.mirrors >= 256 ? 'var(--amber)' : 'var(--emerald)')}; border-radius:3px;"></div>
+      </div>
+    </div>
+
+    <div style="background:var(--bg-tertiary); border:1px solid var(--border-color); border-radius:6px; padding:7px 9px; margin-bottom:8px; font-size:11px; line-height:1.4;">
+      <div style="color:var(--text-muted); font-size:9px; text-transform:uppercase; font-weight:700; margin-bottom:2px;">High-Byte Bus Invariance</div>
+      <div style="color:${m.highByteIgnored ? 'var(--amber)' : 'var(--cyan)'}; font-weight:600; font-family:var(--font-mono);">
+        ${m.highByteIgnored ? '⚡ 8-Bit Legacy Decode (A15–A8 Ignored)' : '🔒 16-Bit Bus Qualified (A15–A8 Checked)'}
+      </div>
+    </div>
+
+    <div style="font-size:11px; color:var(--text-secondary); line-height:1.45; border-top:1px solid var(--border-color); padding-top:6px;">
+      ${m.busImpact}
+    </div>
+  `;
+
+  tooltipEl.classList.add('active');
+  positionTooltip(e);
+}
+
+function positionTooltip(e) {
+  if (!tooltipEl) return;
+  const x = e.clientX;
+  const y = e.clientY;
+  const tooltipRect = tooltipEl.getBoundingClientRect();
+
+  let left = x + 16;
+  let top = y + 16;
+
+  if (left + tooltipRect.width > window.innerWidth - 12) {
+    left = x - tooltipRect.width - 12;
+  }
+  if (top + tooltipRect.height > window.innerHeight - 12) {
+    top = y - tooltipRect.height - 12;
+  }
+
+  tooltipEl.style.left = `${Math.max(8, left)}px`;
+  tooltipEl.style.top = `${Math.max(8, top)}px`;
+}
+
+function moveDecodingTooltip(e) {
+  positionTooltip(e);
+}
+
+function hideDecodingTooltip() {
+  if (tooltipEl) tooltipEl.classList.remove('active');
+}
+
+// Selectivity Cell HTML Generator
+function createSelectivityCell(port) {
+  const m = getDecodingMetrics(port);
+  return `
+    <div class="selectivity-cell" 
+         onmouseenter="showDecodingTooltip(event, ${port.id})" 
+         onmousemove="moveDecodingTooltip(event)" 
+         onmouseleave="hideDecodingTooltip()">
+      <div class="selectivity-metrics">
+        <span class="depth-badge depth-${m.depthTier}">${m.checkedBits}/16b</span>
+        <span class="footprint-badge">${m.footprintStr}</span>
+      </div>
+      <div class="hazard-badge ${m.hazardClass}">
+        <span class="hazard-dot"></span>
+        <span class="hazard-text">${m.mirrors.toLocaleString()} &bull; ${m.hazardLabel}</span>
+      </div>
+    </div>
+  `;
+}
+
+// Mini Bit-Bar Renderer
+function createMiniBitBar(maskStr) {
+  let d = maskStr;
+  if (d.length === 14 && d === 'xxxxxxxxxxB0A1') d = 'xxxxxxxxxxxxB0A1';
+  d = d.padStart(16, 'x');
+
+  let html = '<div class="mini-bit-bar">';
+  for (let i = 0; i < 16; i++) {
+    const char = d[i];
+    const bitNum = 15 - i;
+    let cls = 'bit-x';
+    if (char === '0') cls = 'bit-0';
+    else if (char === '1') cls = 'bit-1';
+    else if (char === '?') cls = 'bit-unk';
+    else if (/[A-L]/.test(char)) cls = 'bit-var';
+
+    html += `<span class="mini-bit ${cls}" title="A${bitNum}: ${char}">${char}</span>`;
+  }
+  html += '</div>';
+  return html;
+}
+
+
+
+// Model Badges Renderer (Shows Color Tag + Full Model Name)
+function createModelBadges(modelsList) {
+  if (!modelsList || modelsList.length === 0) {
+    return '<span style="color:var(--text-muted); font-size:11px; font-style:italic;">Generic / All Systems</span>';
+  }
+  return `
+    <div class="models-col">
+      ${modelsList.map(m => {
+        const info = DATA.models[m];
+        const fullName = info ? info.name : m;
+        return `
+          <div class="model-tag-chip">
+            <span class="model-badge model-badge-${m}">${m}</span>
+            <span class="model-full-name">${fullName}</span>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+// Subsystem & Purpose Tags Cell Renderer (Shows Subsystem + Functional Tags)
+function createSubsystemCell(port) {
+  let tagsHtml = '';
+
+  if (port.section === 'Audio, AY, TurboSound, TurboSound FM') {
+    const ayTags = ['Audio', 'AY', 'TurboSound', 'TurboSound FM'];
+    tagsHtml = ayTags.map(t => {
+      const tagCls = 'tag-' + t.toLowerCase().replace(/[^a-z0-9]/g, '-');
+      const activeCls = appState.selectedTags.has(t) ? 'active' : '';
+      return `<span class="purpose-tag-pill ${tagCls} ${activeCls}" onclick="event.stopPropagation(); toggleTagFilter('${t}')" title="Click to filter by ${t}">${t}</span>`;
+    }).join('');
+  } else {
+    // Render base subsystem pill
+    const sectionPill = `<span class="base-section-pill" onclick="event.stopPropagation(); handleSectionChange('${port.section}')" title="Click to filter by section: ${port.section}">${port.section}</span>`;
+    
+    // Render purpose tags (Tape, Keyboard, Border, Audio, Printer, etc.)
+    let purposePills = '';
+    if (port.tags && port.tags.length > 0) {
+      purposePills = port.tags.map(t => {
+        const tagCls = 'tag-' + t.toLowerCase().replace(/[^a-z0-9]/g, '-');
+        const activeCls = appState.selectedTags.has(t) ? 'active' : '';
+        return `<span class="purpose-tag-pill ${tagCls} ${activeCls}" onclick="event.stopPropagation(); toggleTagFilter('${t}')" title="Click to filter by tag: ${t}">${t}</span>`;
+      }).join('');
+    }
+    tagsHtml = sectionPill + purposePills;
+  }
+
+  const varianceHtml = port.variance ? `<div style="font-size:10px; color:var(--cyan); margin-top:4px; font-weight:600; font-family:var(--font-mono); line-height:1.2;">${port.variance}</div>` : '';
+
+  return `
+    <div class="subsystem-cell">
+      <div class="subsystem-cluster">
+        ${tagsHtml}
+      </div>
+      ${varianceHtml}
+    </div>
+  `;
+}
+
+// Table View Rendering (Full table rendered by default)
+function renderTable(ports) {
+  const tbody = document.getElementById('table-body');
+  if (ports.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:40px; color:var(--text-muted);">No matching ports found for active filters.</td></tr>`;
+    return;
+  }
+
+  let html = '';
+  ports.forEach(port => {
+    html += `
+      <tr onclick="openDetailModal(${port.id})">
+        <td class="port-hex-col">
+          ${port.port}
+        </td>
+        <td>
+          ${createSubsystemCell(port)}
+        </td>
+        <td>
+          ${createMiniBitBar(port.decoding)}
+        </td>
+        <td>
+          ${createSelectivityCell(port)}
+        </td>
+        <td style="font-size:12px; font-family:var(--font-mono); font-weight:600; color:${port.read && port.read !== '—' ? 'var(--cyan)' : 'var(--text-muted)'}">
+          ${port.read || '—'}
+        </td>
+        <td style="font-size:12px; font-family:var(--font-mono); font-weight:600; color:${port.write && port.write !== '—' ? 'var(--emerald)' : 'var(--text-muted)'}">
+          ${port.write || '—'}
+        </td>
+        <td>
+          ${createModelBadges(port.models)}
+        </td>
+      </tr>
+    `;
+  });
+  tbody.innerHTML = html;
+}
+
+// Detail Modal / Hardware Inspector
+function openDetailModal(portId) {
+  const port = DATA.ports.find(p => p.id === portId);
+  if (!port) return;
+
+  document.getElementById('modal-title').textContent = `${port.port} — Hardware Decoding Profile`;
+  const modalMetrics = getDecodingMetrics(port);
+
+  let d = port.decoding;
+  if (d.length === 14 && d === 'xxxxxxxxxxB0A1') d = 'xxxxxxxxxxxxB0A1';
+  d = d.padStart(16, 'x');
+
+  let pinoutHtml = '<div class="pinout-diagram">';
+  for (let i = 0; i < 16; i++) {
+    const char = d[i];
+    const bitNum = 15 - i;
+    let bg = 'var(--bit-x)';
+    let col = 'var(--bit-x-text)';
+    if (char === '0') { bg = 'var(--rose)'; col = '#fff'; }
+    else if (char === '1') { bg = 'var(--emerald)'; col = '#fff'; }
+    else if (char === '?') { bg = 'var(--bit-unk)'; col = '#fff'; }
+    else if (/[A-L]/.test(char)) { bg = 'var(--amber)'; col = '#000'; }
+
+    pinoutHtml += `
+      <div class="pin-col">
+        <span class="pin-name">A${bitNum}</span>
+        <div class="pin-box" style="background:${bg}; color:${col}">${char}</div>
+      </div>
+    `;
+  }
+  pinoutHtml += '</div>';
+
+  // Sample Mirrors
+  const sampleMirrors = [];
+  const hexNum = parseInt(port.canonical_hex.replace(/^#/, ''), 16) || 0;
+  sampleMirrors.push('#' + hexNum.toString(16).toUpperCase().padStart(4, '0'));
+  if (port.mirrors > 1) {
+    for (let k = 1; k <= 4; k++) {
+      let alt = hexNum;
+      for (let i = 0; i < 16; i++) {
+        if (d[i] === 'x' && (k & (1 << (i % 4)))) {
+          alt ^= (1 << (15 - i));
+        }
+      }
+      const altHex = '#' + (alt & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
+      if (!sampleMirrors.includes(altHex)) sampleMirrors.push(altHex);
+    }
+  }
+
+  // Assembly Snippet
+  const asmCode = `; --- Z80 Access Snippet for ${port.port} ---
+; Subsystem: ${port.section}
+; Decoding Mask: ${port.decoding}
+
+${port.canonical_hex.length <= 3 ? 
+`    ; 8-bit standard port access
+    IN A, (${port.canonical_hex})       ; Read
+    OUT (${port.canonical_hex}), A      ; Write` :
+`    ; 16-bit address line access via BC register
+    LD BC, ${port.canonical_hex}     ; Full 16-bit decode
+    ${port.read && port.read !== '—' ? 'IN A, (C)            ; Read: ' + port.read : '; (Read not implemented)'}
+    ${port.write && port.write !== '—' ? 'OUT (C), A           ; Write: ' + port.write : '; (Write not implemented)'}`}
+`;
+
+  let modelsDesc = '';
+  if (port.models.length > 0) {
+    modelsDesc = port.models.map(m => {
+      const info = DATA.models[m];
+      return `<li style="margin-bottom:4px;"><strong>[${m}] ${info ? info.name : m}:</strong> ${info ? info.desc : ''}</li>`;
+    }).join('');
+  } else {
+    modelsDesc = '<li>Generic Spectrum expansion bus peripheral</li>';
+  }
+
+  const bodyHtml = `
+    <div>
+      <h4 style="font-size:12px; color:var(--text-secondary); text-transform:uppercase; margin-bottom:8px;">16-Bit Pinout &amp; Address Decoding Map</h4>
+      ${pinoutHtml}
+      <div style="display:flex; justify-content:space-between; margin-top:5px; font-size:10px; color:var(--text-muted); font-family:var(--font-mono);">
+        <span>MSB (A15)</span>
+        <span>LSB (A0)</span>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
+      <div style="background:var(--bg-tertiary); padding:12px; border-radius:6px; border:1px solid var(--border-color);">
+        <div style="font-size:10.5px; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Subsystem &amp; Category</div>
+        <div style="font-size:14px; font-weight:700; color:var(--cyan); margin-top:2px;">${port.section}</div>
+        <div style="margin-top:4px; font-size:11.5px; color:var(--text-secondary);">${port.tags.join(' &bull; ')}</div>
+      </div>
+
+      <div style="background:var(--bg-tertiary); padding:12px; border-radius:6px; border:1px solid var(--border-color);">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div style="font-size:10.5px; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Selectivity &amp; Aliases</div>
+          <span class="hazard-badge ${modalMetrics.hazardClass}" style="font-size:9.5px; padding:1px 5px;">${modalMetrics.hazardLabel}</span>
+        </div>
+        <div style="display:flex; align-items:baseline; gap:8px; margin-top:3px;">
+          <span style="font-size:15px; font-weight:700; color:var(--amber); font-family:var(--font-mono);">${port.mirrors.toLocaleString()} aliases</span>
+          <span style="font-size:11.5px; color:var(--text-muted); font-family:var(--font-mono);">(${modalMetrics.footprintStr})</span>
+        </div>
+        <div style="margin-top:4px; font-size:11px; font-family:var(--font-mono); color:var(--text-secondary);">
+          <strong>Depth:</strong> ${modalMetrics.checkedBits}/16 lines &bull; <strong>Sample:</strong> ${sampleMirrors.slice(0, 3).join(', ')}...
+        </div>
+      </div>
+    </div>
+
+    ${port.variance ? `
+    <div style="background:rgba(2, 132, 199, 0.08); border:1px solid rgba(2, 132, 199, 0.3); border-radius:6px; padding:12px; margin-bottom:12px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+        <span style="font-size:10px; text-transform:uppercase; font-weight:700; color:var(--cyan); letter-spacing:0.5px;">Clone Hardware Decoding Variance</span>
+        <span style="font-size:10.5px; font-family:var(--font-mono); color:var(--text-muted);">${port.decoding}</span>
+      </div>
+      <div style="font-size:13px; font-weight:700; color:var(--text-primary); margin-bottom:4px;">${port.variance}</div>
+      <div style="font-size:11.5px; line-height:1.45; color:var(--text-secondary);">${port.note}</div>
+    </div>
+    ` : ''}
+
+    <div style="background:var(--bg-tertiary); padding:12px; border-radius:6px; border:1px solid var(--border-color);">
+      <div style="font-size:10.5px; color:var(--text-muted); text-transform:uppercase; font-weight:700; margin-bottom:6px;">Bus Conflict &amp; Programming Safety Analysis</div>
+      <div style="font-size:11.5px; line-height:1.5; color:var(--text-secondary);">
+        ${modalMetrics.busImpact}
+      </div>
+      <div style="margin-top:8px; display:flex; gap:16px; font-size:11px; font-family:var(--font-mono);">
+        <div><span style="color:var(--text-muted);">Upper Bus (A15–A8):</span> <strong style="color:${modalMetrics.highByteIgnored ? 'var(--amber)' : 'var(--cyan)'};">${modalMetrics.highByteIgnored ? 'Ignored (8-Bit Legacy)' : 'Decoded (16-Bit)'}</strong></div>
+        <div><span style="color:var(--text-muted);">Lower Bus (A7–A0):</span> <strong style="color:var(--text-primary);">${modalMetrics.lowByteA0State === '0' ? 'A0=0 (ULA Overlap)' : (modalMetrics.lowByteA0State === '1' ? 'A0=1 (Odd Address)' : 'A0=x (Any)')}</strong></div>
+      </div>
+    </div>
+
+    <div style="background:var(--bg-tertiary); padding:14px; border-radius:6px; border:1px solid var(--border-color);">
+      <h4 style="font-size:12px; color:var(--text-secondary); text-transform:uppercase; margin-bottom:6px;">Hardware Operations</h4>
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        <div><strong style="color:var(--cyan); font-family:var(--font-mono);">READ:</strong> ${port.read || 'No function'}</div>
+        <div><strong style="color:var(--emerald); font-family:var(--font-mono);">WRITE:</strong> ${port.write || 'No function'}</div>
+      </div>
+      ${port.note ? `<div style="margin-top:8px; font-size:11.5px; color:var(--amber);"><strong>Hardware Footnote:</strong> ${port.note}</div>` : ''}
+    </div>
+
+    <div style="background:var(--bg-tertiary); padding:14px; border-radius:6px; border:1px solid var(--border-color);">
+      <h4 style="font-size:12px; color:var(--text-secondary); text-transform:uppercase; margin-bottom:6px;">Applicable Models &amp; Clones</h4>
+      <ul style="padding-left:16px; font-size:11.5px; color:var(--text-secondary); line-height:1.5;">
+        ${modelsDesc}
+      </ul>
+    </div>
+
+    <div>
+      <h4 style="font-size:12px; color:var(--text-secondary); text-transform:uppercase; margin-bottom:4px;">Z80 Assembly Access Snippet</h4>
+      <div class="code-box">
+        <button class="copy-btn" onclick="copyAsmCode()">Copy Code</button>
+        <code id="asm-snippet">${asmCode}</code>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('modal-body').innerHTML = bodyHtml;
+  document.getElementById('detail-modal').classList.add('active');
+}
+
+function closeDetailModal(e) {
+  document.getElementById('detail-modal').classList.remove('active');
+}
+
+function copyAsmCode() {
+  const code = document.getElementById('asm-snippet').textContent;
+  navigator.clipboard.writeText(code);
+}
+
+// Sorting
+function sortTable(col) {
+  if (appState.sortCol === col) {
+    appState.sortAsc = !appState.sortAsc;
+  } else {
+    appState.sortCol = col;
+    appState.sortAsc = true;
+  }
+  applyFilters();
+}
+
+// Data Export
+function exportData(format) {
+  const filtered = getFilteredPorts();
+  if (format === 'json') {
+    const blob = new Blob([JSON.stringify(filtered, null, 2)], {type: 'application/json'});
+    downloadBlob(blob, 'zx_ports_filtered.json');
+  } else if (format === 'csv') {
+    let csv = 'Port,CanonicalHex,CanonicalDec,Subsystem,DecodingMask,Mirrors,ReadFunction,WriteFunction,Models,Tags\n';
+    filtered.forEach(p => {
+      csv += `"${p.port}","${p.canonical_hex}","${p.canonical_dec}","${p.section}","${p.decoding}",${p.mirrors},"${p.read}","${p.write}","${p.models.join(' ')}","${p.tags.join(' ')}"\n`;
+    });
+    const blob = new Blob([csv], {type: 'text/csv'});
+    downloadBlob(blob, 'zx_ports_filtered.csv');
+  }
+}
+
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// Keyboard Shortcuts
+window.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeDetailModal();
+});
+
+// Startup
+document.addEventListener('DOMContentLoaded', initApp);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZX Spectrum Port Map</title>
+<style>
+:root {
+  --bg: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-tag: #f1f5f9;
+  --border: #e2e8f0;
+  --text: #0f172a;
+  --text-dim: #94a3b8;
+  --text-muted: #64748b;
+  --accent: #0284c7;
+  --accent-bg: rgba(2, 132, 199, 0.12);
+  --bit-0: #e11d48;
+  --bit-1: #059669;
+  --bit-x: #e2e8f0;
+  --bit-var: #d97706;
+  --bit-unk: #7c3aed;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #070a12;
+    --bg-card: #0d1424;
+    --bg-tag: #1e293b;
+    --border: #334155;
+    --text: #f8fafc;
+    --text-dim: #64748b;
+    --text-muted: #94a3b8;
+    --accent: #38bdf8;
+    --accent-bg: rgba(56, 189, 248, 0.15);
+    --bit-x: #334155;
+  }
+}
+[data-theme="dark"] {
+  --bg: #070a12;
+  --bg-card: #0d1424;
+  --bg-tag: #1e293b;
+  --border: #334155;
+  --text: #f8fafc;
+  --text-dim: #64748b;
+  --text-muted: #94a3b8;
+  --accent: #38bdf8;
+  --accent-bg: rgba(56, 189, 248, 0.15);
+  --bit-x: #334155;
+}
+[data-theme="warm"] {
+  --bg: #faf5f0;
+  --bg-card: #ffffff;
+  --bg-tag: #f5ebe0;
+  --border: #e6d5c3;
+  --text: #1c1917;
+  --text-dim: #a8a29e;
+  --text-muted: #78716c;
+  --accent: #b45309;
+  --accent-bg: rgba(180, 83, 9, 0.1);
+  --bit-0: #dc2626;
+  --bit-1: #059669;
+  --bit-x: #e7e5e4;
+  --bit-var: #d97706;
+}
+[data-theme="midnight"] {
+  --bg: #0d1117;
+  --bg-card: #161b22;
+  --bg-tag: #21262d;
+  --border: #30363d;
+  --text: #c9d1d9;
+  --text-dim: #484f58;
+  --text-muted: #8b949e;
+  --accent: #58a6ff;
+  --accent-bg: rgba(88, 166, 255, 0.15);
+  --bit-0: #f85149;
+  --bit-1: #3fb950;
+  --bit-x: #30363d;
+  --bit-var: #d29922;
+  --bit-unk: #a371f7;
+}
+[data-theme="sinclair"] {
+  --bg: #000000;
+  --bg-card: #0a0a0a;
+  --bg-tag: #1a1a1a;
+  --border: #333;
+  --text: #00ffff;
+  --text-dim: #006666;
+  --text-muted: #00aaaa;
+  --accent: #ff00ff;
+  --accent-bg: rgba(255, 0, 255, 0.15);
+  --bit-0: #ff0000;
+  --bit-1: #00ff00;
+  --bit-x: #222;
+  --bit-var: #ffff00;
+  --bit-unk: #ff00ff;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.5px; }
+h1 span { color: var(--accent); }
+.header-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.stats { font-size: 13px; color: var(--text-muted); font-family: ui-monospace, monospace; }
+.stats b { color: var(--accent); }
+.theme-btns { display: flex; gap: 4px; }
+.theme-btn {
+  background: var(--bg-tag);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.theme-btn:hover, .theme-btn.active { border-color: var(--accent); color: var(--accent); }
+
+main { max-width: 1900px; margin: 0 auto; padding: 20px 24px 80px; }
+
+.filters {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.filter-section { display: flex; flex-direction: column; gap: 8px; }
+.filter-header {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-dim);
+}
+
+.model-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+  gap: 6px;
+}
+.model-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s;
+}
+.model-chip:hover { border-color: var(--accent); background: var(--bg-card); }
+.model-chip.active { background: var(--accent-bg); border-color: var(--accent); }
+.model-code {
+  font-family: ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  color: #fff;
+}
+.model-chip .name { font-size: 11px; color: var(--text-muted); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.model-chip.active .name { color: var(--text); font-weight: 500; }
+
+.section-wrap { display: flex; flex-wrap: wrap; gap: 5px; }
+.section-chip {
+  padding: 4px 9px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-size: 11px;
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s;
+}
+.section-chip:hover { border-color: var(--accent); color: var(--text); }
+.section-chip.active { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+
+.search-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.search {
+  flex: 1;
+  min-width: 200px;
+  max-width: 400px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--text);
+  outline: none;
+}
+.search:focus { border-color: var(--accent); }
+.search::placeholder { color: var(--text-dim); }
+.clear-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.clear-btn:hover { border-color: var(--accent); color: var(--text); }
+
+.table-wrap {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow-x: auto;
+}
+table { width: 100%; border-collapse: collapse; min-width: 1000px; table-layout: fixed; }
+th:nth-child(1) { width: 10%; }
+th:nth-child(2) { width: 12%; }
+th:nth-child(3) { width: 20%; }
+th:nth-child(4) { width: 14%; }
+th:nth-child(5) { width: 14%; }
+th:nth-child(6) { width: 30%; }
+th {
+  text-align: left;
+  padding: 12px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-dim);
+  background: var(--bg-tag);
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  white-space: nowrap;
+}
+th:hover { color: var(--accent); }
+td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+tr:hover td { background: var(--accent-bg); }
+
+.port { font-family: ui-monospace, monospace; font-weight: 700; color: var(--accent); white-space: nowrap; font-size: 13px; }
+
+.section-label {
+  display: inline-block;
+  background: var(--bg-tag);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--text-muted);
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.decode-table { border-collapse: collapse; font-family: ui-monospace, monospace; }
+.decode-table td { padding: 0; vertical-align: middle; }
+.decode-table .row-label { font-size: 8px; color: var(--text-dim); padding-right: 3px; text-align: right; white-space: nowrap; }
+.decode-table .bit-row td { padding-bottom: 1px; }
+.bit { display: inline-block; width: 12px; height: 12px; line-height: 12px; text-align: center; font-size: 9px; font-weight: 700; border-radius: 1px; }
+.bit-0 { background: var(--bit-0); color: #fff; }
+.bit-1 { background: var(--bit-1); color: #fff; }
+.bit-x { background: var(--bit-x); color: var(--text-dim); }
+.bit-v { background: var(--bit-var); color: #000; }
+.bit-u { background: var(--bit-unk); color: #fff; }
+.mask-char { display: inline-block; width: 12px; text-align: center; font-size: 9px; color: var(--text-muted); }
+
+.fn { font-family: ui-monospace, monospace; font-size: 12px; }
+.fn-r { color: var(--accent); }
+.fn-w { color: var(--bit-1); }
+.fn-none { color: var(--text-dim); }
+
+.models-cell { display: flex; flex-direction: column; gap: 3px; }
+.model-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  padding: 2px 6px;
+  background: var(--bg-tag);
+  border-radius: 3px;
+  white-space: nowrap;
+}
+.model-tag-code {
+  font-family: ui-monospace, monospace;
+  font-weight: 700;
+  color: #fff;
+  padding: 0 4px;
+  border-radius: 2px;
+  font-size: 9px;
+}
+.model-tag-name { color: var(--text-muted); }
+
+.empty { text-align: center; padding: 60px 20px; color: var(--text-dim); font-size: 15px; }
+
+.legend {
+  margin-top: 20px;
+  padding: 14px 18px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 12px;
+  color: var(--text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.legend-bit { width: 18px; height: 18px; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-family: ui-monospace, monospace; font-size: 12px; font-weight: 700; }
+</style>
+</head>
+<body>
+<header>
+  <h1>ZX Spectrum <span>Port Map</span></h1>
+  <div class="header-right">
+    <div class="stats">Showing <b id="count">0</b> of <b id="total">0</b> ports</div>
+    <div class="theme-btns">
+      <button class="theme-btn active" onclick="setTheme('light')">Light</button>
+      <button class="theme-btn" onclick="setTheme('dark')">Dark</button>
+      <button class="theme-btn" onclick="setTheme('warm')">Warm</button>
+      <button class="theme-btn" onclick="setTheme('midnight')">Midnight</button>
+      <button class="theme-btn" onclick="setTheme('sinclair')">Sinclair</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="filters">
+    <div class="filter-section">
+      <div class="filter-header">Computer Models</div>
+      <div class="model-grid" id="model-grid"></div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-header">Peripherals & Interfaces</div>
+      <div class="section-wrap" id="section-wrap"></div>
+    </div>
+    <div class="search-row">
+      <input type="text" class="search" id="search" placeholder="Search port address, function name...">
+      <button class="clear-btn" onclick="clearFilters()">Clear All</button>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th data-sort="port">Port</th>
+          <th data-sort="section">Section</th>
+          <th>Address / Decoding (A15–A0)</th>
+          <th data-sort="read">Read</th>
+          <th data-sort="write">Write</th>
+          <th>Models</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-bit bit-1">1</div> Must be HIGH</div>
+    <div class="legend-item"><div class="legend-bit bit-0">0</div> Must be LOW</div>
+    <div class="legend-item"><div class="legend-bit bit-x">x</div> Don't care (mirror)</div>
+    <div class="legend-item"><div class="legend-bit bit-v">A</div> Variable / register select</div>
+    <div class="legend-item"><div class="legend-bit bit-u">?</div> Unknown decoding</div>
+  </div>
+</main>
+
+<script>
+const MODELS = {
+  "1": { name: "ZX 48K (Issue 1-2)", color: "#0284c7" },
+  "+1": { name: "ZX 48K (Issue 3-6)", color: "#0ea5e9" },
+  "2": { name: "ZX +128 / +2", color: "#6366f1" },
+  "3": { name: "ZX +2A / +2B", color: "#8b5cf6" },
+  "+3": { name: "ZX +3", color: "#a855f7" },
+  "4": { name: "Timex 2048", color: "#ec4899" },
+  "5": { name: "Didaktik Gama", color: "#f43f5e" },
+  "6": { name: "Scorpion ZS-256", color: "#10b981" },
+  "7": { name: "KAY-1024SL", color: "#14b8a6" },
+  "8": { name: "Pentagon 128", color: "#f59e0b" },
+  "9": { name: "Profi-1", color: "#eab308" },
+  "A": { name: "ATM Turbo-2+", color: "#06b6d4" },
+  "B": { name: "Scorpion GMX", color: "#22c55e" },
+  "C": { name: "Quorum 128/+", color: "#d946ef" },
+  "D": { name: "Pentagon-1024SL", color: "#fb923c" }
+};
+
+const PORTS = [
+  {port:"#00",section:"System Ports",address:"xxxxxxxx00000000",decoding:"xxxxxxxx00000000",read:"—",write:"Reg(B)",models:["B"]},
+  {port:"#00",section:"System Ports",address:"xxxxxxxx00000000",decoding:"xxxxxxxx0xx0xxx0",read:"—",write:"Pag(C)",models:["C"]},
+  {port:"#7E",section:"System Ports",address:"xxxxxxxx01111110",decoding:"xxxxxxxx0xx11xx0",read:"Key(C)",write:"—",models:["C"]},
+  {port:"#F6",section:"System Ports",address:"xxxxxxxx11110110",decoding:"xxxxxxxxxxxx0110",read:"—",write:"Brd(A)",models:["A"]},
+  {port:"#FE",section:"System Ports",address:"xxxxxxxx11111110",decoding:"xxxxxxxxxxxxxxx0",read:"KeyTp(1,7-9)",write:"BrdTpSpk(1,7-9)",models:["1","7","8","9"]},
+  {port:"#FE",section:"System Ports",address:"xxxxxxxx11111110",decoding:"xxxxxxxxxxxxxxx0",read:"Key(D)",write:"BrdSpk(D)",models:["D"]},
+  {port:"#FE",section:"System Ports",address:"xxxxxxxx11111110",decoding:"xxxxxxxxxxxxx110",read:"KeyTp(A)",write:"BrdTpSpk(A)",models:["A"]},
+  {port:"#FE",section:"System Ports",address:"xxxxxxxx11111110",decoding:"xxxxxxxxxx1xxx10",read:"KeyTpPrn(6)",write:"BrdTpSpk(6)",models:["6"]},
+  {port:"#FE",section:"System Ports",address:"xxxxxxxx11111110",decoding:"xxxxxxxx1xxxxxx0",read:"KeyTp(+1)",write:"BrdTpSpk(+1)",models:["+1"]},
+  {port:"#FE",section:"System Ports",address:"xxxxxxxx11111110",decoding:"xxxxxxxx1xx11xx0",read:"KeyTp(C)",write:"BrdTpSpk(C)",models:["C"]},
+  {port:"#FF",section:"System Ports",address:"xxxxxxxx11111111",decoding:"xxxxxxxxxxxxxxxx",read:"Atr(1-2)",write:"—",models:["1","2"]},
+  {port:"#FF",section:"System Ports",address:"xxxxxxxx11111111",decoding:"xxxxxxxxxxxxx111",read:"Atr(A)",write:"—",models:["A"]},
+  {port:"#FF",section:"System Ports",address:"xxxxxxxx11111111",decoding:"xxxxxxxxxx1xxx11",read:"Atr(6)",write:"—",models:["6"]},
+  {port:"#FF",section:"System Ports",address:"xxxxxxxx11111111",decoding:"xxxxxxxx????????",read:"Atr(4,5)",write:"Vid/Pag(4/5)",models:["4","5"]},
+  {port:"#1FFD",section:"System Ports",address:"0001111111111101",decoding:"0001xxxxxxxxxx0x",read:"—",write:"PagPrn/FD(3/+3)",models:["3","+3"]},
+  {port:"#1FFD",section:"System Ports",address:"0001111111111101",decoding:"00xxxxxxxxxxxx01",read:"—",write:"Pag(7)",models:["7"]},
+  {port:"#1FFD",section:"System Ports",address:"0001111111111101",decoding:"00xxxxxxxx1xxx01",read:"Trb-OFF(6)",write:"Pag(6)",models:["6"]},
+  {port:"#1FFD",section:"System Ports",address:"0001111111111101",decoding:"0x0xx111xx1xxx01",read:"—",write:"Pag(?B)",models:["B"]},
+  {port:"#78FD",section:"System Ports",address:"0111100011111101",decoding:"0x1xx000xx1xxx01",read:"—",write:"Pag(?B)",models:["B"]},
+  {port:"#7AFD",section:"System Ports",address:"0111101011111101",decoding:"0x1xx010xx1xxx01",read:"—",write:"Vid(?B)",models:["B"]},
+  {port:"#7CFD",section:"System Ports",address:"0111110011111101",decoding:"0x1xx100xx1xxx01",read:"—",write:"Vid(?B)",models:["B"]},
+  {port:"#7EFD",section:"System Ports",address:"0111111011111101",decoding:"0x1xx110xx1xxx01",read:"—",write:"Rag(?B)",models:["B"]},
+  {port:"#7FFD",section:"System Ports",address:"0111111111111101",decoding:"0xxxxxxxxxxxxx0x",read:"—",write:"Pag(2,8,9,A)",models:["2","8","9","A"]},
+  {port:"#7FFD",section:"System Ports",address:"0111111111111101",decoding:"0xxxxxxxxxxxxx01",read:"—",write:"Pag(D)",models:["D"]},
+  {port:"#7FFD",section:"System Ports",address:"0111111111111101",decoding:"0xxxxxxxxxx11x0x",read:"—",write:"Pag(C)",models:["C"]},
+  {port:"#7FFD",section:"System Ports",address:"0111111111111101",decoding:"01xxxxxxxxxxxx0x",read:"—",write:"Pag(3,?5)",models:["3","5"]},
+  {port:"#7FFD",section:"System Ports",address:"0111111111111101",decoding:"01xxxxxxxxxxxx01",read:"—",write:"Pag(7)",models:["7"]},
+  {port:"#7FFD",section:"System Ports",address:"0111111111111101",decoding:"01xxxxxxxx1xxx01",read:"Trb-ON(6)",write:"Pag(6)",models:["6"]},
+  {port:"#7FFD",section:"System Ports",address:"0111111111111101",decoding:"0x1xx111xx1xxx01",read:"—",write:"Pag(?B)",models:["B"]},
+  {port:"#80FD",section:"System Ports",address:"1000000011111101",decoding:"1x0xxxxxxxx11x0x",read:"—",write:"CP/MPag(C)",models:["C"]},
+  {port:"#DFFD",section:"System Ports",address:"1101111111111101",decoding:"xx0xxxxxxxxxxx0x",read:"—",write:"Pag(9)",models:["9"]},
+  {port:"#DFFD",section:"System Ports",address:"1101111111111101",decoding:"1x0xx111xx1xxx01",read:"—",write:"Pag(?B)",models:["B"]},
+  {port:"#EFF7",section:"System Ports",address:"1110111111110111",decoding:"1110xxxxxxxx0xxx",read:"—",write:"PagVidTrbReg(8)",models:["8"]},
+  {port:"#EFF7",section:"System Ports",address:"1110111111110111",decoding:"1110xxxxxxxx0xx1",read:"—",write:"PagVidTrbReg(D)",models:["D"]},
+  {port:"#1B",section:"Peripherals",address:"xxxxxxxx00011x11",decoding:"xxxxxxxx0xx11xx1",read:"Prn(C)",write:"—",models:["C"]},
+  {port:"#1F",section:"Peripherals",address:"xxxxxxxx00011111",decoding:"xxxxxxxxxxxxxxx1",read:"Kjoy(7)",write:"—",models:["7"]},
+  {port:"#1F",section:"Peripherals",address:"xxxxxxxx00011111",decoding:"xxxxxxxxxx0xxxx1",read:"Kjoy(D)",write:"—",models:["D"]},
+  {port:"#1F",section:"Peripherals",address:"xxxxxxxx00011111",decoding:"xxxxxxxx0xx11xx1",read:"KjoyPrn(C)",write:"—",models:["C"]},
+  {port:"#1F",section:"Peripherals",address:"xxxxxxxx00011111",decoding:"xxxxxxxx0x0xxx11",read:"Kjoy(6)",write:"—",models:["6"]},
+  {port:"#1F/#3F/#5F/#7F",section:"Peripherals",address:"xxxxxxxx0BA11111",decoding:"xxxxxxxx0xxxxxxx",read:"8255(5)",write:"8255(5)",models:["5"]},
+  {port:"#1F/#3F/#5F/#7F",section:"Peripherals",address:"xxxxxxxx0BA11111",decoding:"xxxxxxxx0xxxxx11",read:"8255(9)",write:"8255(9)",models:["9"]},
+  {port:"#7B",section:"Peripherals",address:"xxxxxxxx01111011",decoding:"xxxxxxxxxxxxx011",read:"—",write:"Prn(A)",models:["A"]},
+  {port:"#7B",section:"Peripherals",address:"xxxxxxxx01111011",decoding:"xxxxxxxx0xx110x1",read:"—",write:"Prn(C)",models:["C"]},
+  {port:"#FA",section:"Peripherals",address:"xxxxxxxx11111010",decoding:"xxxxxxxxxxxxx010",read:"IO(A)",write:"IO(A)",models:["A"]},
+  {port:"#FB",section:"Peripherals",address:"xxxxxxxx11111011",decoding:"xxxxxxxxxxxxx0xx",read:"Prn(8,D)",write:"Prn(8,D)",models:["8","D"]},
+  {port:"#FB",section:"Peripherals",address:"xxxxxxxx11111011",decoding:"xxxxxxxxxxxxx011",read:"Prn(A)",write:"PrnDAC(A)",models:["A"]},
+  {port:"#FB",section:"Peripherals",address:"xxxxxxxx11111011",decoding:"xxxxxxxx1xx110x1",read:"—",write:"Prn(C)",models:["C"]},
+  {port:"#0FFD",section:"Peripherals",address:"0000111111111101",decoding:"0000xxxxxxxxxx0x",read:"Prn(?3/+3)",write:"Prn(?3/+3)",models:["3","+3"]},
+  {port:"#2FFD",section:"Peripherals",address:"0010111111111101",decoding:"0010xxxxxxxxxx0x",read:"—",write:"8272status(?+3)",models:["+3"]},
+  {port:"#3FFD",section:"Peripherals",address:"0011111111111101",decoding:"0011xxxxxxxxxx0x",read:"8272data(?+3)",write:"8272data(?+3)",models:["+3"]},
+  {port:"#7DFD",section:"Peripherals",address:"0111110111111101",decoding:"0xxxxx0xxxxxxx0x",read:"ADC(A)",write:"—",models:["A"]},
+  {port:"#7FFD",section:"Peripherals",address:"0111111111111101",decoding:"0xxxxx1xxxxxxx0x",read:"IDE,ADC(A)",write:"—",models:["A"]},
+  {port:"#BFFD",section:"Peripherals",address:"1011111111111101",decoding:"10xxxxxxxxxxxx0x",read:"—",write:"AYdat(2,3,?5,A)",models:["2","3","5","A"]},
+  {port:"#BFFD",section:"Peripherals",address:"1011111111111101",decoding:"10xxxxxxxxxxxx01",read:"—",write:"AYdat(7)",models:["7"]},
+  {port:"#BFFD",section:"Peripherals",address:"1011111111111101",decoding:"1x1xxxxxxxxxxx0x",read:"—",write:"AYdat(D)",models:["D"]},
+  {port:"#BFFD",section:"Peripherals",address:"1011111111111101",decoding:"101xxxxxxxxxxx0x",read:"—",write:"AYdat(8,9)",models:["8","9"]},
+  {port:"#BFFD",section:"Peripherals",address:"1011111111111101",decoding:"101xxxxxxxx1xx0x",read:"—",write:"AYdat(C)",models:["C"]},
+  {port:"#BFFD",section:"Peripherals",address:"1011111111111101",decoding:"101xxxxxxx1xxx01",read:"—",write:"AYdat(6)",models:["6"]},
+  {port:"#FFDD",section:"Peripherals",address:"1111111111011101",decoding:"xxxxxxxxxx0xxx01",read:"—",write:"Prn(6)",models:["6"]},
+  {port:"#FFFD",section:"Peripherals",address:"1111111111111101",decoding:"11xxxxxxxxxxxx0x",read:"AYdat(2,3,?5,A)",write:"AYadr(2,3,?5,A)",models:["2","3","5","A"]},
+  {port:"#FFFD",section:"Peripherals",address:"1111111111111101",decoding:"11xxxxxxxxxxxx01",read:"AYdat(7)",write:"AYadr(7)",models:["7"]},
+  {port:"#FFFD",section:"Peripherals",address:"1111111111111101",decoding:"111xxxxxxxxxxx0x",read:"AYdat(8,9,D)",write:"AYadr(8,9,D)",models:["8","9","D"]},
+  {port:"#FFFD",section:"Peripherals",address:"1111111111111101",decoding:"111xxxxxxxx1xx0x",read:"AYdat(C)",write:"AYadr(C)",models:["C"]},
+  {port:"#FFFD",section:"Peripherals",address:"1111111111111101",decoding:"111xxxxxxx1xxx01",read:"AYdat(6)",write:"AYadr(6)",models:["6"]},
+  {port:"#77",section:"Shadow Ports",address:"xxxxxxxx01110111",decoding:"xxxxxxxx0xx10111",read:"—",write:"VidTrbReg(A)",models:["A"]},
+  {port:"#xx77",section:"Shadow Ports",address:"xLxxxxKJ01110111",decoding:"xLxxxxKJ0xx10111",read:"—",write:"soft config(A)",models:["A"]},
+  {port:"#3FF7–#FFF7",section:"Shadow Ports",address:"BA11111111110111",decoding:"BAxxxx111xx10111",read:"—",write:"RAMPag(A)",models:["A"]},
+  {port:"#FEE7/#FFE7",section:"Shadow Ports",address:"1111111A11100111",decoding:"xxxxxxxAxxx00111",read:"Reserved(A)",write:"Reserved(A)",models:["A"]},
+  {port:"#18E6–#7FFE",section:"SMUC",address:"0ED11CBA111GF110",decoding:"xx1IHGFEDCBA",read:"ISA:#200–#3FF",write:"ISA:#200–#3FF",models:[]},
+  {port:"#5FBA",section:"SMUC",address:"0101111110111010",decoding:"0x011xxx101xx010",read:"Version",write:"—",models:[]},
+  {port:"#5FBE",section:"SMUC",address:"0101111110111110",decoding:"0x011xxx101xx110",read:"Revision",write:"—",models:[]},
+  {port:"#7EBE",section:"SMUC",address:"0111111010111110",decoding:"0x111xx0101xx110",read:"8259",write:"8259",models:[]},
+  {port:"#7FBA",section:"SMUC",address:"0111111110111010",decoding:"0x111xxx101xx010",read:"VirtualFDD",write:"VirtualFDD",models:[]},
+  {port:"#7FBE",section:"SMUC",address:"0111111110111110",decoding:"0x111xx1101xx110",read:"8259",write:"8259",models:[]},
+  {port:"#D8BE",section:"SMUC",address:"1101100010111110",decoding:"1x011xxx101xx110",read:"IDE-Hi",write:"IDE-Hi",models:[]},
+  {port:"#DFBA",section:"SMUC",address:"1101111110111010",decoding:"1x011xxx101xx010",read:"DS1685RTC",write:"DS1685RTC",models:[]},
+  {port:"#F8BE–#FFBE",section:"SMUC",address:"11111CBA10111110",decoding:"1x111xxx101xx110",read:"IDE#1Fx/#3F6",write:"IDE#1Fx/#3F6",models:[]},
+  {port:"#FFBA",section:"SMUC",address:"1111111110111010",decoding:"1x111xxx101xx010",read:"SYS",write:"SYS",models:[]},
+  {port:"#1F/#3F/#5F/#7F",section:"Beta 128",address:"xxxxxxxx0BA11111",decoding:"xxxxxxxx0BAxxx11",read:"WD1793(6,7,8,D)",write:"WD1793(6,7,8,D)",models:["6","7","8","D"]},
+  {port:"#1F/#3F/#5F/#7F",section:"Beta 128",address:"xxxxxxxx0BA11111",decoding:"xxxxxxxx0BAx11x1",read:"WD1793(C)",write:"WD1793(C)",models:["C"]},
+  {port:"#1F/#3F/#5F/#7F",section:"Beta 128",address:"xxxxxxxx0BA11111",decoding:"xxxxxxxx0BA11111",read:"WD1793(A)",write:"WD1793(A)",models:["A"]},
+  {port:"#1F/#3F/#5F/#7F",section:"Beta 128",address:"xxxxxxxx0BA11111",decoding:"0xxxxxxx0BAxxx11",read:"WD1793(9)",write:"WD1793(9)",models:["9"]},
+  {port:"#FF",section:"Beta 128",address:"xxxxxxxx11111111",decoding:"xxxxxxxx1xxxxx11",read:"FDsys(6,7,8,D)",write:"FDsys(6,7,8,D)",models:["6","7","8","D"]},
+  {port:"#FF",section:"Beta 128",address:"xxxxxxxx11111111",decoding:"xxxxxxxx1xxx11x1",read:"FDsys(C)",write:"FDsys(C)",models:["C"]},
+  {port:"#FF",section:"Beta 128",address:"xxxxxxxx11111111",decoding:"xxxxxxxx1xx11111",read:"FDsys(A)",write:"FDsysPLLFC(A)",models:["A"]},
+  {port:"#FF",section:"Beta 128",address:"xxxxxxxx11111111",decoding:"0xxxxxxx111xxx11",read:"FDsys(9)",write:"FDsys(9)",models:["9"]},
+  {port:"#FE0F/#FF0F",section:"ATM IDE",address:"1111111A00001111",decoding:"xxxxxxxA00001111",read:"IDEdat-Lo/Hi(A)",write:"IDEdat-Lo/Hi(A)",models:["A"]},
+  {port:"#FF2F",section:"ATM IDE",address:"1111111100101111",decoding:"xxxxxxxx00101111",read:"IDEerror(A)",write:"IDEparam(A)",models:["A"]},
+  {port:"#FF4F",section:"ATM IDE",address:"1111111101001111",decoding:"xxxxxxxx01001111",read:"IDEsect(A)",write:"IDEsect(A)",models:["A"]},
+  {port:"#FF6F",section:"ATM IDE",address:"1111111101101111",decoding:"xxxxxxxx01101111",read:"IDEstartsect(A)",write:"IDEstartsect(A)",models:["A"]},
+  {port:"#FF8F",section:"ATM IDE",address:"1111111110001111",decoding:"xxxxxxxx10001111",read:"IDEcyl-Lo(A)",write:"IDEcyl-Lo(A)",models:["A"]},
+  {port:"#FFAF",section:"ATM IDE",address:"1111111110101111",decoding:"xxxxxxxx10101111",read:"IDEcyl-Hi(A)",write:"IDEcyl-Hi(A)",models:["A"]},
+  {port:"#FFCF",section:"ATM IDE",address:"1111111111001111",decoding:"xxxxxxxx11001111",read:"IDEdevice(A)",write:"IDEhead(A)",models:["A"]},
+  {port:"#FFEF",section:"ATM IDE",address:"1111111111101111",decoding:"xxxxxxxx11101111",read:"IDEcomnd(A)",write:"IDEstatus(A)",models:["A"]},
+  {port:"#0B/#6B",section:"Misc Devices",address:"xxxxxxxx0AA01011",decoding:"xxxxxxxx0Ax01011",read:"Z80DMA",write:"Z80DMA",models:[]},
+  {port:"#0E",section:"Misc Devices",address:"xxxxxxxx00001110",decoding:"xxxxxxxx0000xxxx",read:"PC<->ZXDrBeep",write:"PC<->ZXDrBeep",models:[]},
+  {port:"#1F",section:"Kempston",address:"xxxxxxxx00011111",decoding:"xxxxxxxxxx0xxxxx",read:"KempstonIF",write:"—",models:[]},
+  {port:"#1F",section:"Kempston",address:"xxxxxxxx00011111",decoding:"xxxxxxxx0xxxxxx1",read:"Kempston-M",write:"—",models:[]},
+  {port:"#1F",section:"Kempston",address:"xxxxxxxx00011111",decoding:"xxxxxxxx00011111",read:"AMIGA-MOUSE",write:"—",models:[]},
+  {port:"#3F",section:"Misc Devices",address:"xxxxxxxx00111111",decoding:"xxxxxxxxx0xxxxxx",read:"LIGHT PEN",write:"—",models:[]},
+  {port:"#B7",section:"Misc Devices",address:"xxxxxxxx10110111",decoding:"xxxxxxxx10110111",read:"XTR modem",write:"XTR modem",models:[]},
+  {port:"#EF",section:"Misc Devices",address:"xxxxxxxx11101111",decoding:"xxxxxxxx1xx01xxx",read:"C-DOS modem",write:"C-DOS modem",models:[]},
+  {port:"#F7",section:"Misc Devices",address:"xxxxxxxx11110111",decoding:"xxxxxxxxxxxx0xxx",read:"—",write:"DIGITIZER(VMG)",models:[]},
+  {port:"#0003–#0F03",section:"MB-02+",address:"xxxxDCBA00000011",decoding:"xxxxDCBA0xx00011",read:"RTC-72421",write:"RTC-72421",models:[]},
+  {port:"#07",section:"MB-02+",address:"xxxxxxxx00000111",decoding:"xxxxxxxx0xx00111",read:"IDEcontrol",write:"IDEcontrol",models:[]},
+  {port:"#0B",section:"MB-02+",address:"xxxxxxxx00001011",decoding:"xxxxxxxx0xx01011",read:"Z80DMA",write:"Z80DMA",models:[]},
+  {port:"#0F/#2F/#4F/#6F",section:"MB-02+",address:"xxxxxxxx0BA01111",decoding:"xxxxxxxx0BA01111",read:"WD2797",write:"WD2797",models:[]},
+  {port:"#13",section:"MB-02+",address:"xxxxxxxx00010011",decoding:"xxxxxxxx0xx10011",read:"FDcontrol",write:"—",models:[]},
+  {port:"#13",section:"MB-02+",address:"xxxxxxxx00010011",decoding:"xxxxxxxx00010011",read:"—",write:"FDcontrol",models:[]},
+  {port:"#17",section:"MB-02+",address:"xxxxxxxx00010111",decoding:"xxxxxxxx0xx10111",read:"memsel",write:"memsel",models:[]},
+  {port:"#1B/#3B/#5B/#7B",section:"MB-02+",address:"xxxxxxxx0BA11011",decoding:"xxxxxxxx0BA11011",read:"8255-2",write:"8255-2",models:[]},
+  {port:"#1F/#3F/#5F/#7F",section:"MB-02+",address:"xxxxxxxx0BA11111",decoding:"xxxxxxxx0BA11111",read:"8255-1",write:"8255-1",models:[]},
+  {port:"#A3–#BF",section:"MB-02+",address:"xxxxxxxx101CBA11",decoding:"xxxxxxxx101CBA11",read:"IDE#1Fx",write:"IDE#1Fx",models:[]},
+  {port:"#10–#F0",section:"NemoIDE",address:"xxxxxxxxCBA10000",decoding:"xxxxxxxxCBA10000",read:"IDE#1Fx",write:"IDE#1Fx",models:[]},
+  {port:"#11",section:"NemoIDE",address:"xxxxxxxx00010001",decoding:"xxxxxxxxxxxxx001",read:"IDE-hi",write:"IDE-hi",models:[]},
+  {port:"#C8",section:"NemoIDE",address:"xxxxxxxx11001000",decoding:"xxxxxxxxCBA01000",read:"IDE#3F6",write:"IDE#3F6",models:[]},
+  {port:"#0F",section:"SoundDrive",address:"xxxxxxxx00001111",decoding:"xxxxxxxxx0001111",read:"—",write:"L channel A",models:[]},
+  {port:"#1F",section:"SoundDrive",address:"xxxxxxxx00011111",decoding:"xxxxxxxxx0011111",read:"—",write:"L channel B",models:[]},
+  {port:"#3F",section:"SoundDrive",address:"xxxxxxxx00111111",decoding:"xxxxxxxxx0111111",read:"—",write:"L Rg8255",models:[]},
+  {port:"#4F",section:"SoundDrive",address:"xxxxxxxx01001111",decoding:"xxxxxxxxx1001111",read:"—",write:"R channel C",models:[]},
+  {port:"#5F",section:"SoundDrive",address:"xxxxxxxx01011111",decoding:"xxxxxxxxx1011111",read:"—",write:"R channel D",models:[]},
+  {port:"#7F",section:"SoundDrive",address:"xxxxxxxx01111111",decoding:"xxxxxxxxx1111111",read:"—",write:"R Rg8255",models:[]},
+  {port:"#0F/#1F/#4F/#5F",section:"Covox",address:"xxxxxxxx0B0A1111",decoding:"xxxxxxxxxB0Axxx1",read:"—",write:"LA,LB,RA,RB",models:[]},
+  {port:"#F1/#F3/#F9/#FB",section:"Covox",address:"xxxxxxxx1111B0A1",decoding:"xxxxxxxxxxB0A1",read:"—",write:"LA,LB,RA,RB",models:[]},
+  {port:"#1F",section:"ZXMMC+",address:"xxxxxxxx00011111",decoding:"xxxxxxxx00011111",read:"KempstonIF",write:"CScard",models:[]},
+  {port:"#3F",section:"ZXMMC+",address:"xxxxxxxx00111111",decoding:"xxxxxxxx00111111",read:"SPIRegRX",write:"SPIRegTX",models:[]},
+  {port:"#5F",section:"ZXMMC+",address:"xxxxxxxx01011111",decoding:"xxxxxxxx01011111",read:"RS232status",write:"—",models:[]},
+  {port:"#7F",section:"ZXMMC+",address:"xxxxxxxx01111111",decoding:"xxxxxxxx01111111",read:"RS232RegRX",write:"RS232RegTX",models:[]},
+  {port:"#1F/#7F",section:"Kempston Mouse Turbo",address:"xxxxxxxx00011111",decoding:"xxxxxxxx0AA11111",read:"AMIGAmou/FULLERjoy",write:"—",models:[]},
+  {port:"#7ADF/#FADF",section:"Kempston Mouse Turbo",address:"1111101011011111",decoding:"Axxxx0x011011111",read:"KmouTrb_B",write:"—",models:[]},
+  {port:"#7BDF/#FBDF",section:"Kempston Mouse Turbo",address:"1111101111011111",decoding:"Axxxx0x111011111",read:"KmouTrb_X",write:"—",models:[]},
+  {port:"#7EDF/#FEDF",section:"Kempston Mouse Turbo",address:"1111111011011111",decoding:"Axxxx1x011011111",read:"KmouTrb_detect",write:"—",models:[]},
+  {port:"#7FDF/#FFDF",section:"Kempston Mouse Turbo",address:"1111111111011111",decoding:"Axxxx1x111011111",read:"KmouTrb_Y",write:"—",models:[]},
+  {port:"#2B–#EF",section:"IDE Pera Putnik",address:"xxxxxxxxCB101A11",decoding:"xxxxxxxxCBx0xAxx",read:"IDE#1Fx",write:"IDE#1Fx",models:[]},
+  {port:"#7B",section:"ZX LPRINT-III",address:"xxxxxxxx01111011",decoding:"xxxxxxxx0xxxx0xx",read:"ROMCS-off",write:"/STROBE",models:[]},
+  {port:"#FB",section:"ZX LPRINT-III",address:"xxxxxxxx11111011",decoding:"xxxxxxxx1xxxx0xx",read:"—",write:"DATA(/TxD)",models:[]},
+  {port:"#FB",section:"ZX LPRINT-III",address:"xxxxxxxx11111011",decoding:"00xxxxxx1xxxx0xx",read:"ROMCS-on,BUSY,DSR",write:"—",models:[]},
+  {port:"#81/#83/#85/#87",section:"Didaktik 40/80",address:"xxxxxxxx10000BA1",decoding:"xxxxxxxx10000BA1",read:"WD2797",write:"WD2797",models:[]},
+  {port:"#89/#8B/#8D/#8F",section:"Didaktik 40/80",address:"xxxxxxxx10001xx1",decoding:"xxxxxxxx10001xx1",read:"—",write:"FDsys",models:[]},
+  {port:"#91",section:"Didaktik 40/80",address:"xxxxxxxx10010001",decoding:"xxxxxxxx10010xx1",read:"—",write:"8255off&reset",models:[]},
+  {port:"#99",section:"Didaktik 40/80",address:"xxxxxxxx10011001",decoding:"xxxxxxxx10011xx1",read:"—",write:"8255on",models:[]},
+  {port:"#1F/#3F/#5F/#7F",section:"Didaktik 40/80",address:"xxxxxxxx0BA11111",decoding:"xxxxxxxx0BAxxxxx",read:"8255",write:"8255",models:[]},
+  {port:"#A3–#BF",section:"divIDE",address:"xxxxxxxx101CBA11",decoding:"xxxxxxxx101CBA11",read:"IDE#1Fx",write:"IDE#1Fx",models:[]},
+  {port:"#E3",section:"divIDE",address:"xxxxxxxx11100011",decoding:"xxxxxxxx11100011",read:"—",write:"divIDEcontrol",models:[]},
+  {port:"#B3",section:"General Sound",address:"xxxxxxxx10110011",decoding:"xxxxxxxx10110011",read:"Data",write:"Data",models:[]},
+  {port:"#BB",section:"General Sound",address:"xxxxxxxx10111011",decoding:"xxxxxxxx10111011",read:"Status",write:"Comnd",models:[]},
+  {port:"#E3/#EB/#F3/#FB",section:"+D Interface",address:"xxxxxxxx111BA011",decoding:"xxxxxxxxx11BA01x",read:"WD1772",write:"WD1772",models:[]},
+  {port:"#E7",section:"+D Interface",address:"xxxxxxxx11100111",decoding:"xxxxxxxxx110011x",read:"—",write:"romsel",models:[]},
+  {port:"#EF",section:"+D Interface",address:"xxxxxxxx11101111",decoding:"xxxxxxxxx110111x",read:"—",write:"FDsysLPTstrobe",models:[]},
+  {port:"#F7",section:"+D Interface",address:"xxxxxxxx11110111",decoding:"xxxxxxxxx111011x",read:"LPTdata",write:"LPTbusy",models:[]},
+  {port:"#E7",section:"ZX Interface 1",address:"xxxxxxxx11100111",decoding:"xxxxxxxxxxx00xx1",read:"MicrodriveData",write:"MicrodriveData",models:[]},
+  {port:"#EF",section:"ZX Interface 1",address:"xxxxxxxx11101111",decoding:"xxxxxxxxxxx01xx1",read:"Status",write:"Comnd",models:[]},
+  {port:"#F7",section:"ZX Interface 1",address:"xxxxxxxx11110111",decoding:"xxxxxxxxxxx10xx1",read:"NetRS232Data",write:"NetRS232Data",models:[]},
+  {port:"#00EF",section:"ZXMC-1",address:"0000000011101111",decoding:"0000000011101111",read:"Version",write:"—",models:[]},
+  {port:"#00DF",section:"ZXMC-1",address:"0000000011011111",decoding:"0000000011011111",read:"Version",write:"—",models:[]},
+  {port:"#FE",section:"ZXMC-1",address:"xxxxxxxx11111110",decoding:"xxxxxxxx11111110",read:"Key",write:"—",models:[]},
+  {port:"#08EF–#0FEF",section:"ZXMC-1",address:"00001CBA11101111",decoding:"00001CBA11101111",read:"SDcard",write:"SDcard",models:[]},
+  {port:"#80DF–#87DF",section:"ZXMC-1",address:"10000CBA11011111",decoding:"10000CBA11011111",read:"PCKey",write:"—",models:[]},
+  {port:"#E0EF–#E7EF",section:"ZXMC-1",address:"11100CBA11101111",decoding:"11100CBA11101111",read:"ZXMCRTC",write:"ZXMCRTC",models:[]},
+  {port:"#F8EF–#FFEF",section:"ZXMC-1",address:"11111CBA11101111",decoding:"11111CBA11101111",read:"ISACOM1",write:"ISACOM1",models:[]},
+  {port:"#FADF",section:"ZXMC-1",address:"1111101011011111",decoding:"1111101011011111",read:"Kmou_B",write:"—",models:[]},
+  {port:"#FBDF",section:"ZXMC-1",address:"1111101111011111",decoding:"1111101111011111",read:"Kmou_X",write:"—",models:[]},
+  {port:"#FFDF",section:"ZXMC-1",address:"1111111111011111",decoding:"1111111111011111",read:"Kmou_Y",write:"—",models:[]},
+  {port:"#00F7",section:"ZXMC-2",address:"0000000011110111",decoding:"0000000011110111",read:"Version",write:"—",models:[]},
+  {port:"#FE",section:"ZXMC-2",address:"xxxxxxxx11111110",decoding:"xxxxxxxx11111110",read:"Key",write:"—",models:[]},
+  {port:"#08EF–#0FEF",section:"ZXMC-2",address:"00001CBA11101111",decoding:"00001CBA11101111",read:"SDcard",write:"SDcard",models:[]},
+  {port:"#80DF–#87DF",section:"ZXMC-2",address:"10000CBA11011111",decoding:"10000CBA11011111",read:"PCKey",write:"—",models:[]},
+  {port:"#BFF7",section:"ZXMC-2",address:"1011111111110111",decoding:"1011111111110111",read:"GLUKRTCData",write:"GLUKRTCData",models:[]},
+  {port:"#DFF7",section:"ZXMC-2",address:"1101111111110111",decoding:"1101111111110111",read:"—",write:"GLUKRTCAddress",models:[]},
+  {port:"#E0EF–#E7EF",section:"ZXMC-2",address:"11100CBA11101111",decoding:"11100CBA11101111",read:"ZXMCRTC",write:"ZXMCRTC",models:[]},
+  {port:"#EFF7",section:"ZXMC-2",address:"1110111111110111",decoding:"1110111111110111",read:"—",write:"GLUKRTCon/off",models:[]},
+  {port:"#F8EF–#FFEF",section:"ZXMC-2",address:"11111CBA11101111",decoding:"11111CBA11101111",read:"ISACOM1",write:"ISACOM1",models:[]},
+  {port:"#FADF",section:"ZXMC-2",address:"1111101011011111",decoding:"1111101011011111",read:"Kmou_B",write:"—",models:[]},
+  {port:"#FBDF",section:"ZXMC-2",address:"1111101111011111",decoding:"1111101111011111",read:"Kmou_X",write:"—",models:[]},
+  {port:"#FFDF",section:"ZXMC-2",address:"1111111111011111",decoding:"1111111111011111",read:"Kmou_Y",write:"—",models:[]},
+  {port:"#FA",section:"Keyboard Proface",address:"xxxxxxxx11111010",decoding:"xxxxxxxxxxxxx0x0",read:"—",write:"Pro/Keyface",models:[]},
+  {port:"#FE",section:"Keyboard Proface",address:"xxxxxxxx11111110",decoding:"xxxxxxxxxxxxxxx0",read:"Pro/Keyface",write:"—",models:[]},
+  {port:"#00FF",section:"SAM Coupe SAA1099",address:"0000000011111111",decoding:"xxxxxxx011111111",read:"—",write:"Data",models:[]},
+  {port:"#01FF",section:"SAM Coupe SAA1099",address:"0000000111111111",decoding:"xxxxxxx111111111",read:"—",write:"Address",models:[]},
+  {port:"#0777–#3777",section:"DMA USC",address:"00BA011101110111",decoding:"00BA0x1101110xxx",read:"—",write:"Channel",models:[]},
+  {port:"#0C77–#FC77",section:"DMA USC",address:"DCBA110001110111",decoding:"DCBAxx0001110xxx",read:"8237",write:"8237",models:[]},
+  {port:"#3D77–#FD77",section:"DMA USC",address:"BA11110101110111",decoding:"BAxxxx0101110xxx",read:"—",write:"8253-1",models:[]},
+  {port:"#3E77–#FE77",section:"DMA USC",address:"BA11111001110111",decoding:"BAxxxx1001110xxx",read:"—",write:"8253-2",models:[]},
+  {port:"#3F77–#FF77",section:"DMA USC",address:"BA11111101110111",decoding:"BAxx1x1101110xxx",read:"—",write:"Volume",models:[]},
+  {port:"#F777",section:"DMA USC",address:"1111011101110111",decoding:"11xx0x1101110xxx",read:"—",write:"DMAIntMask",models:[]},
+  {port:"#80F7–#83F7",section:"COM VIC",address:"100000BA11110111",decoding:"1000xxBAxxxx0xxx",read:"—",write:"8253",models:[]},
+  {port:"#90F7/#91F7",section:"COM VIC",address:"1001000A11110111",decoding:"1001xxxAxxxx0xxx",read:"8251-1",write:"8251-1",models:[]},
+  {port:"#A0F7/#A1F7",section:"COM VIC",address:"1010000A11110111",decoding:"1010xxxAxxxx0xxx",read:"8251-2",write:"8251-2",models:[]},
+  {port:"#B0F7/#B1F7",section:"COM VIC",address:"1011000A11110111",decoding:"1011xxxAxxxx0xxx",read:"8251-3",write:"8251-3",models:[]},
+  {port:"#BFF7",section:"GLUK RTC",address:"1011111111110111",decoding:"1011xxxxxxxx0xxx",read:"DS1685Data",write:"DS1685Data",models:[]},
+  {port:"#DFF7",section:"GLUK RTC",address:"1101111111110111",decoding:"1101xxxxxxxx0xxx",read:"—",write:"DS1685Address",models:[]},
+  {port:"#EFF7",section:"GLUK RTC",address:"1110111111110111",decoding:"1110xxxxxxxx0xxx",read:"—",write:"on/off",models:[]},
+  {port:"#E0FB",section:"Profi COM/XT",address:"1110000011111011",decoding:"1110000x1xx1x011",read:"—",write:"XTKey",models:[]},
+  {port:"#E8FB",section:"Profi COM/XT",address:"1110100011111011",decoding:"1110100x1xx1x011",read:"Reg",write:"Reg",models:[]},
+  {port:"#EAFB/#EBFB",section:"Profi COM/XT",address:"1110101A11111011",decoding:"1110101A1xx1x011",read:"8251",write:"8251",models:[]},
+  {port:"#ECFB–#EFFB",section:"Profi COM/XT",address:"111011BA11111011",decoding:"111011BA1xx1x011",read:"8253",write:"8253",models:[]},
+  {port:"#EFFE",section:"ZX Interface 2",address:"1110111111111110",decoding:"xxx0xxxxxxxxxxx0",read:"Right Joystick",write:"—",models:[]},
+  {port:"#F7FE",section:"ZX Interface 2",address:"1111011111111110",decoding:"xxxx0xxxxxxxxxx0",read:"Left Joystick",write:"—",models:[]},
+  {port:"#F0EF/#F8EF",section:"ISA COM1",address:"1111A00011101111",decoding:"xxxxA000xxx0xxxx",read:"RBR/DivLchLSB",write:"THR/DivLchLSB",models:[]},
+  {port:"#F1EF/#F9EF",section:"ISA COM1",address:"1111A00111101111",decoding:"xxxxA001xxx0xxxx",read:"IER/DivLchMSB",write:"IER/DivLchMSB",models:[]},
+  {port:"#F2EF/#FAEF",section:"ISA COM1",address:"1111A01011101111",decoding:"xxxxA010xxx0xxxx",read:"IIR",write:"—",models:[]},
+  {port:"#F3EF/#FBEF",section:"ISA COM1",address:"1111A01111101111",decoding:"xxxxA011xxx0xxxx",read:"LCR",write:"LCR",models:[]},
+  {port:"#F4EF/#FCEF",section:"ISA COM1",address:"1111A10011101111",decoding:"xxxxA100xxx0xxxx",read:"MCR",write:"MCR",models:[]},
+  {port:"#F5EF/#FDEF",section:"ISA COM1",address:"1111A10111101111",decoding:"xxxxA101xxx0xxxx",read:"LSR",write:"—",models:[]},
+  {port:"#F6EF/#FEEF",section:"ISA COM1",address:"1111A11011101111",decoding:"xxxxA110xxx0xxxx",read:"MSR",write:"—",models:[]},
+  {port:"#F7EF/#FFEF",section:"ISA COM1",address:"1111A11111101111",decoding:"xxxxA111xxx0xxxx",read:"ScratchReg*",write:"ScratchReg*",models:[]},
+  {port:"#FADF",section:"Kempston Mouse",address:"1111101011011111",decoding:"xxxxxx10xx0xxxxx",read:"Kmou_B",write:"—",models:[]},
+  {port:"#FBDF",section:"Kempston Mouse",address:"1111101111011111",decoding:"xxxxx011xx0xxxxx",read:"Kmou_X",write:"—",models:[]},
+  {port:"#FFDF",section:"Kempston Mouse",address:"1111111111011111",decoding:"xxxxx111xx0xxxxx",read:"Kmou_Y",write:"—",models:[]},
+  {port:"#FADF",section:"USSR Kempston Mouse",address:"1111101011011111",decoding:"xxxxx0x01x0xxxx1",read:"Kmou_B",write:"—",models:[]},
+  {port:"#FBDF",section:"USSR Kempston Mouse",address:"1111101111011111",decoding:"xxxxx0x11x0xxxx1",read:"Kmou_X",write:"—",models:[]},
+  {port:"#FFDF",section:"USSR Kempston Mouse",address:"1111111111011111",decoding:"xxxxx1x11x0xxxx1",read:"Kmou_Y",write:"—",models:[]}
+];
+
+const state = { models: new Set(), sections: new Set(), search: '', sort: 'port', asc: true };
+
+function init() {
+  const modelGrid = document.getElementById('model-grid');
+  Object.entries(MODELS).forEach(([code, m]) => {
+    const chip = document.createElement('div');
+    chip.className = 'model-chip';
+    chip.dataset.model = code;
+    chip.innerHTML = `<span class="model-code" style="background:${m.color}">${code}</span><span class="name">${m.name}</span>`;
+    chip.onclick = () => toggleModel(code);
+    modelGrid.appendChild(chip);
+  });
+
+  const sections = [...new Set(PORTS.map(p => p.section))].sort();
+  const sectionWrap = document.getElementById('section-wrap');
+  sections.forEach(s => {
+    const chip = document.createElement('span');
+    chip.className = 'section-chip';
+    chip.dataset.section = s;
+    chip.textContent = s;
+    chip.onclick = () => toggleSection(s);
+    sectionWrap.appendChild(chip);
+  });
+
+  document.getElementById('search').oninput = e => { state.search = e.target.value.toLowerCase(); render(); };
+  document.querySelectorAll('th[data-sort]').forEach(th => {
+    th.onclick = () => {
+      if (state.sort === th.dataset.sort) state.asc = !state.asc;
+      else { state.sort = th.dataset.sort; state.asc = true; }
+      render();
+    };
+  });
+
+  document.getElementById('total').textContent = PORTS.length;
+  render();
+}
+
+function toggleModel(code) {
+  state.models.has(code) ? state.models.delete(code) : state.models.add(code);
+  document.querySelector(`[data-model="${code}"]`).classList.toggle('active');
+  render();
+}
+
+function toggleSection(s) {
+  state.sections.has(s) ? state.sections.delete(s) : state.sections.add(s);
+  document.querySelector(`[data-section="${s}"]`).classList.toggle('active');
+  render();
+}
+
+function clearFilters() {
+  state.models.clear();
+  state.sections.clear();
+  state.search = '';
+  document.getElementById('search').value = '';
+  document.querySelectorAll('.model-chip.active, .section-chip.active').forEach(el => el.classList.remove('active'));
+  render();
+}
+
+function setTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase() === t));
+}
+
+function filter(ports) {
+  return ports.filter(p => {
+    // Model filter: show if no filter, or port is universal (no models), or port matches selected models
+    if (state.models.size && p.models.length > 0 && !p.models.some(m => state.models.has(m))) return false;
+    if (state.sections.size && !state.sections.has(p.section)) return false;
+    if (state.search) {
+      const hay = `${p.port} ${p.section} ${p.read} ${p.write} ${p.decoding} ${p.address || ''}`.toLowerCase();
+      if (!hay.includes(state.search)) return false;
+    }
+    return true;
+  });
+}
+
+function sortPorts(ports) {
+  return [...ports].sort((a, b) => {
+    let va = a[state.sort] || '', vb = b[state.sort] || '';
+    if (state.sort === 'port') {
+      va = parseInt(a.port.replace(/[^0-9A-Fa-f]/g, '').substring(0, 4), 16) || 0;
+      vb = parseInt(b.port.replace(/[^0-9A-Fa-f]/g, '').substring(0, 4), 16) || 0;
+    }
+    if (va < vb) return state.asc ? -1 : 1;
+    if (va > vb) return state.asc ? 1 : -1;
+    return 0;
+  });
+}
+
+function pad16(s) {
+  let d = s.padStart(16, 'x');
+  return d.length > 16 ? d.slice(-16) : d;
+}
+
+function bitCells(dec) {
+  return pad16(dec).split('').map(c => {
+    if (c === '0') return '<td><span class="bit bit-0">0</span></td>';
+    if (c === '1') return '<td><span class="bit bit-1">1</span></td>';
+    if (c === '?') return '<td><span class="bit bit-u">?</span></td>';
+    if (/[A-L]/.test(c)) return `<td><span class="bit bit-v">${c}</span></td>`;
+    return '<td><span class="bit bit-x">x</span></td>';
+  }).join('');
+}
+
+function maskCells(s) {
+  return pad16(s).split('').map(c => `<td><span class="mask-char">${c}</span></td>`).join('');
+}
+
+function render() {
+  const filtered = sortPorts(filter(PORTS));
+  document.getElementById('count').textContent = filtered.length;
+
+  const tbody = document.getElementById('tbody');
+  if (!filtered.length) {
+    tbody.innerHTML = '<tr><td colspan="6" class="empty">No matching ports found</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(p => `
+    <tr>
+      <td class="port">${p.port}</td>
+      <td><span class="section-label" title="${p.section}">${p.section}</span></td>
+      <td>
+        <table class="decode-table">
+          <tr class="bit-row"><td class="row-label"></td>${bitCells(p.decoding)}</tr>
+          <tr><td class="row-label">Addr:</td>${maskCells(p.address || p.decoding)}</tr>
+          <tr><td class="row-label">Mask:</td>${maskCells(p.decoding)}</tr>
+        </table>
+      </td>
+      <td class="fn ${p.read === '—' ? 'fn-none' : 'fn-r'}">${p.read}</td>
+      <td class="fn ${p.write === '—' ? 'fn-none' : 'fn-w'}">${p.write}</td>
+      <td>
+        <div class="models-cell">${p.models.length ? p.models.map(m => `<span class="model-tag"><span class="model-tag-code" style="background:${MODELS[m]?.color || '#666'}">${m}</span><span class="model-tag-name">${MODELS[m]?.name || m}</span></span>`).join('') : '—'}</div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+init();
+</script>
+</body>
+</html>
