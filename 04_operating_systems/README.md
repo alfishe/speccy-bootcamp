@@ -38,6 +38,7 @@ The articles in this section are grouped into four thematic areas:
 | Article | Description |
 |---------|-------------|
 | [cpm.md](cpm.md) | CP/M 2.2 on the Spectrum: Amstrad +3 bootable CP/M, ATM Turbo CP/M, Sprinter CP/M mode. The CP/M BIOS/BDOS layer, file control blocks, CCP, the CP/M software library, why CP/M mattered on the Spectrum |
+| [atm_cpm_bios.md](atm_cpm_bios.md) | ATM Turbo CP/M BIOS & BDOS reference (translated from MicroART's 1993 manual): BDOS function set via `#0005`, BIOS jump vectors + ATM v1.01 extensions (`ASSIGN`/`GETCH`/`BMUXBIOS`), DPH/DPB disk tables, ROM monitor at `#F800`, full ESC screen-driver sequences (windows, palette, charset remap, mode switching), channel-based disk monitor with RAM-disk/FDD/HDD drivers, R/I/A/F error handling, MUX clock and keyboard scan codes |
 | [fuzix.md](fuzix.md) | FUZIX: Alan Cox's Unix-like OS for Z80 systems, including the Spectrum 128K/+2/+2A/+3, Pentagon, ATM Turbo, Sprinter, ZX Evolution, and ZX Spectrum Next. ~24 KB kernel, ~70 Unix V7-style syscalls, pre-emptive multitasking, FCC C compiler |
 
 ## BASIC Dialects

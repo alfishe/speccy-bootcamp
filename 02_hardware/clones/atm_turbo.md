@@ -1435,6 +1435,7 @@ Several implementation concerns for hardware reproduction:
 - [io_port_decoding.md](../../05_development/03_memory_and_io/io_port_decoding.md) — Partial address decoding concepts
 - [contention_model.md](../../05_development/03_memory_and_io/contention_model.md) — Unified contention reference (ATM Turbo: none)
 - [cpm.md](../../04_operating_systems/cpm.md) — CP/M 2.2 on Spectrum, including ATM Turbo
+- [atm_cpm_bios.md](../../04_operating_systems/atm_cpm_bios.md) — ATM Turbo CP/M BIOS & BDOS full API reference (MicroART manual, translated): BDOS functions, BIOS vectors, ROM monitor `#F800`, ESC screen sequences, disk channels
 - [trdos.md](../../04_operating_systems/trdos.md) — TR-DOS disk operating system
 - [evo_os.md](../../04_operating_systems/evo_os.md) — ZX Evolution BIOS/OS, ATM Turbo configuration
 - [rom_versions.md](../../04_operating_systems/rom_versions.md) — ROM catalog including ATM Turbo ROMs

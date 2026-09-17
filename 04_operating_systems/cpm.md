@@ -455,6 +455,8 @@ The ATM Turbo's CP/M provides:
 
 The ATM Turbo CP/M was popular in the early Russian hobbyist scene but is rare today. Few non-Russian users have ever encountered it.
 
+The complete API reference for the ATM Turbo's CP/M implementation — its BDOS function set, BIOS jump vectors with three ATM-specific extensions, the ROM monitor at `#F800`, the ESC-sequence screen driver, and the channel-based disk monitor — is documented (translated from MicroART's original 1993 manual) in [atm_cpm_bios.md](atm_cpm_bios.md).
+
 ### 6.3 The Sprinter
 
 The **Sprinter** (SPRINTER 2000, by Peters Plus Ltd.) is a late-1990s Russian Spectrum clone with an even more enhanced architecture: it includes a 21 MHz Z80-compatible CPU, a Super VGA video controller, IDE hard disk support, and PS/2 keyboard and mouse ports. The Sprinter can run CP/M via a custom BIOS that takes advantage of its powerful hardware.

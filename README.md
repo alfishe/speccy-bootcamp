@@ -76,6 +76,7 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | Article | Description |
 |---------|------------|
 | [cpm.md](04_operating_systems/cpm.md) | CP/M 2.2 on Spectrum: +3 bootable CP/M, ATM Turbo, Sprinter, BIOS/BDOS layer, file control blocks, CCP, the CP/M software library |
+| [atm_cpm_bios.md](04_operating_systems/atm_cpm_bios.md) | ATM Turbo CP/M BIOS & BDOS reference (MicroART 1993, translated): BDOS functions via `#0005`, BIOS vectors + ATM extensions, DPH/DPB tables, ROM monitor at `#F800`, ESC screen-driver sequences, channel-based disk monitor (RAM disk/FDD/HDD), 20 ms MUX clock |
 | [fuzix.md](04_operating_systems/fuzix.md) | FUZIX: Alan Cox's Unix-like Z80 OS — ~24 KB kernel, ~70 Unix V7 syscalls, pre-emptive multitasking at 50 Hz VBLANK, FCC C compiler, targets 128K/+2A/+3/Pentagon/ATM/Sprinter/Evolution/Next |
 
 #### BASIC Dialects
