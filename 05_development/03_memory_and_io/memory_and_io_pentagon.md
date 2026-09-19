@@ -90,13 +90,15 @@ OUT (#EFF7), A — Pentagon control register (write-only):
             (plain 128K, #7FFD bit 5 = 48K lock)
   Bit  3:   1 = RAM page 0 at #0000-#3FFF instead of ROM (1024SL)
   Bit  4:   Turbo: 0 = 7 MHz ON, 1 = OFF (1024SL v2.x; inverted!)
-  Bit  0:   Video: 16 colour (1024SL) / a4b multicolor (hand-built)
+  Bit  0:   Video: 16 colour (1024SL + post-2005 hand-builts) /
+            a4b multicolor (pre-2005 hand-builts; superseded on
+            this bit in late 2005 — see pentagon_1024.md)
   Bit  1:   Video: 512×192 (hand-built standard; unused on 1024SL)
   Bit  6:   Video: 384×304 borderless mode
   Bit  7:   Gluk CMOS real-time clock enable (hand-built standard)
 ```
 
-The bit layout differs between the 1990s hand-built standard (Born Dead #10) and the factory Pentagon-1024SL v2.x — see [pentagon_1024.md](../../02_hardware/clones/pentagon_1024.md) for both tables and the decode masks.
+The bit layout differs between the 1990s hand-built standard (Born Dead #10) and the factory Pentagon-1024SL v2.x — see [pentagon_1024.md](../../02_hardware/clones/pentagon_1024.md) for both tables, the decode masks, and the full 16-Colour Video Mode (16c) section that bit 0 controls.
 
 ### Paging Extended Banks
 

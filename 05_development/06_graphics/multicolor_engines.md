@@ -2,7 +2,7 @@
 
 # Multicolor Engines — Game-Programmer Perspective
 
-This article is the **direct continuation of [race_the_beam.md](../04_interrupts/race_the_beam.md)** from the F11 Interrupt Programming series. That article covered the *foundations*: T-state budgets, ISR synchronization strategies, and the five race-the-beam patterns used in commercial 1980s games. This article covers what came next: **published multicolor engines** that game programmers can drop into their own code, plus the modern hardware-assisted extensions (ULAplus, Timex HiColor) that lift the constraint without requiring cycle-exact code.
+This article is the **direct continuation of [race_the_beam.md](../04_interrupts/race_the_beam.md)** from the F11 Interrupt Programming series. That article covered the *foundations*: T-state budgets, ISR synchronization strategies, and the five race-the-beam patterns used in commercial 1980s games. This article covers what came next: **published multicolor engines** that game programmers can drop into their own code, plus the hardware-assisted extensions (ULAplus, Timex HiColor, and the Soviet-clone hardware modes — Pentagon 16c and ATM Turbo 320×200) that lift the constraint without requiring cycle-exact code.
 
 The boundary between articles is sharp: raster timing theory lives in [race_the_beam.md](../04_interrupts/race_the_beam.md) and [07_demoscene/multicolor_techniques.md](../../07_demoscene/multicolor_techniques.md); here we focus on the **engines themselves** — what they offer, how to use them, which games shipped with them.
 
@@ -330,6 +330,17 @@ The Spectrum Next implements HiColor and HiRes in its legacy ULA layer for backw
 
 ---
 
+## Soviet-Clone Hardware Modes: Pentagon 16c and ATM 320×200
+
+The Soviet clone ecosystem built its own hardware answers to color clash — as TTL modifications, years before ULAplus:
+
+- **Pentagon 16c** (Alone Coder, October 2005): the four standard 6 KB screen areas reinterpreted as one 24 KB, 4-bit-per-pixel bitmap — every pixel its own color from the standard 15-color palette, full screen, zero CPU cost. Enabled by `#EFF7` bit 0 on Pentagon 1024 machines and factory-integrated into the Pentagon-1024SL v2.x (2006). Its byte layout is field-identical to ATM Turbo's 16-colour mode, which is why *Pang 16C* (2005) shipped as a single-source dual-target game. The mode is legacy today — supported by UnrealSpeccy, Speccy and ZEmu, with its software library later migrated to ATM Turbo 2. Full hardware story, address map, and software census: [pentagon_1024.md](../../02_hardware/clones/pentagon_1024.md).
+- **ATM Turbo 320×200×16** (video mode 3): EGA-style per-pixel color at *higher* resolution, plus hardware vertical scroll — in the ATM mode set since the Turbo 1 (1991). See [atm_turbo.md](../../02_hardware/clones/atm_turbo.md).
+
+Both are hardware fetch modes: no ISR work, no playfield limits — the same value proposition as Timex HiColor, on Soviet-track hardware. The cost is hardware availability: neither exists on any Sinclair-built machine, and 16c additionally requires the Pentagon 1024/1024SL class of machine.
+
+---
+
 ## Choosing an Engine
 
 The decision of which multicolor technique to use depends on three factors: **target hardware**, **playable area size**, and **color resolution requirements**.
@@ -344,6 +355,8 @@ The decision of which multicolor technique to use depends on three factors: **ta
 | FPGA clone or modern emulator, want to combine palette depth and clash elimination | **NIRVANA+ or BIFROST\*** with **ULAplus** for palette |
 | Timex TC2048 / TS2068 / Spectrum Next, want 8×1 without CPU cost | **Timex HiColor** (hardware mode) |
 | Timex TC2048 / TS2068 / Spectrum Next, want sharp monochrome detail | **Timex HiRes** (512×192 mono) |
+| Pentagon 1024/1024SL (Soviet track), full-screen per-pixel color, zero CPU cost | **Pentagon 16c** (hardware mode, `#EFF7` bit 0) |
+| ATM Turbo 2/2+ (Soviet track), 320×200 16-color with hardware scroll | **ATM video mode 3** |
 | Spectrum Next, want maximum color depth and resolution | **Layer 2** (256×192, 256 colors — see [next_graphics.md](next_graphics.md)) |
 | Stock 48K/128K Spectrum, demoscene-style freeform color effects | **ZXodus** (scanline palette model) |
 
@@ -404,6 +417,8 @@ A game that works on the standard Spectrum assumes 768 bytes of attribute file. 
 - [screen_layout.md](../03_memory_and_io/screen_layout.md) — non-linear pixel and attribute address math
 - [sprites_and_masking.md](sprites_and_masking.md) — sprite compositing modes that pair with these engines
 - [next_graphics.md](next_graphics.md) — the Spectrum Next's Layer 2 and hardware sprites (the modern alternative)
+- [pentagon_1024.md](../../02_hardware/clones/pentagon_1024.md) — Pentagon 16c: schematic history (Info Guide #8 v1.1), four-area address map, software census
+- [atm_turbo.md](../../02_hardware/clones/atm_turbo.md) — ATM Turbo's 320×200×16 mode, the Soviet-track successor to 16c software
 
 ---
 

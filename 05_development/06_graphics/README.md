@@ -13,7 +13,7 @@ The series is organized by **visual problem** rather than by hardware capability
 | 1 | [screen_access.md](screen_access.md) | Foundational primitives: address lookup tables (pixel + attribute), fast clear via stack push, block copy, custom font rendering, viewport clipping |
 | 2 | [sprites_and_masking.md](sprites_and_masking.md) | Software sprites: compositing modes (XOR/OR/LOAD/MASK), pre-shifted sprites, masked sprite layout, three-screen buffered drawing, sprite pools, engine surveys (SP1, AGD/MPAGD) |
 | 3 | [scrolling_and_buffering.md](scrolling_and_buffering.md) | Scrolling: character-cell scroll, pixel-smooth horizontal scroll (stack-push, 25 Hz two-frame cycle), 128K shadow screen double buffering, dirty rectangle, parallax, split-screen |
-| 4 | [multicolor_engines.md](multicolor_engines.md) | Engines that break the 8×8 attribute constraint: BIFROST* (8×1), NIRVANA+ (8×2), ZXodus, ULAplus (64-color hardware palette), Timex HiColor/HiRes, decision matrix |
+| 4 | [multicolor_engines.md](multicolor_engines.md) | Engines that break the 8×8 attribute constraint: BIFROST* (8×1), NIRVANA+ (8×2), ZXodus, ULAplus (64-color hardware palette), Timex HiColor/HiRes, Soviet-clone hardware modes (Pentagon 16c, ATM Turbo 320×200), decision matrix |
 | 5 | [3d_graphics.md](3d_graphics.md) | 3D on the Z80: fixed-point math, rotation matrices, Bresenham line drawing, wireframe (*Elite*), filled polygons (*Driller*/Freescape, 3D Construction Kit), isometric (Filmation/*Knight Lore*), raycasting, performance budgets |
 | 6 | [next_graphics.md](next_graphics.md) | ZX Spectrum Next: layer stack, Layer 2 (256-color framebuffer), hardware sprites, tilemap, copper coprocessor, mixing-layer architectures, CPU at 28 MHz |
 

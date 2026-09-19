@@ -123,7 +123,7 @@ The `#EFF7` layout evolved through two generations — the hand-built standard d
 
 | Bit | Function | Notes |
 |---|---|---|
-| 0 | **a4b** — "attribute per byte" hardware multicolor | Attributes read from `#6000`-`#77FF` instead of `#5800`-`#5AFF`, giving each 8×1 pixel stripe its own ink/paper. 1 = enabled. See [multicolor_engines.md](../../05_development/06_graphics/multicolor_engines.md). |
+| 0 | **a4b** — "attribute per byte" hardware multicolor | Attributes read from `#6000`-`#77FF` instead of `#5800`-`#5AFF`, giving each 8×1 pixel stripe its own ink/paper. 1 = enabled. See [multicolor_engines.md](../../05_development/06_graphics/multicolor_engines.md). Superseded on this bit in late 2005 by the 16-colour mode — see [The 16-Colour Video Mode (16c)](#the-16-colour-video-mode-16c--every-pixel-its-own-color). |
 | 1 | **512×192** monochrome mode | Doubles horizontal resolution; pixel data split between `#4000` and `#6000` areas (documented in Deja Vu #6). 1 = enabled. |
 | 2 | **Extended memory gate** | 0 = RAM above 128K present, 1 = disabled (see above). |
 | 3 | Unused (proposal: read-only cache control) | 0 = writable, 1 = write-protected — never widely adopted. |
@@ -135,7 +135,7 @@ The `#EFF7` layout evolved through two generations — the hand-built standard d
 
 | Bit | Function | Notes |
 |---|---|---|
-| 0 | **16 colour** mode | Every pixel gets its own color from a 16-color palette — four screen areas compose one 256×192 image. 0 = off, 1 = on. |
+| 0 | **16 colour** mode | Every pixel gets its own color (standard 15-color ULA palette with BRIGHT) — four 6 KB screen areas compose one 256×192 image. Direct factory adoption of Alone Coder's v1.1 schematic; see [The 16-Colour Video Mode (16c)](#the-16-colour-video-mode-16c--every-pixel-its-own-color). 0 = off, 1 = on. |
 | 1 | Unused | — |
 | 2 | **128K mode** | 1 = block memory above 128K; `#7FFD` bit 5 becomes the 48K lock. |
 | 3 | **ROM disable** | 1 = RAM page 0 projected at `#0000`-`#3FFF` instead of ROM. |
@@ -147,7 +147,7 @@ The `#EFF7` layout evolved through two generations — the hand-built standard d
 The official documentation adds that all other I/O ports (Kempston, ZX LPRINT III, border, AY, Beta 128 FDC) keep their standard ZX Spectrum configuration.
 
 > [!WARNING]
-> **The two layouts are not compatible.** Hand-built machines put multicolor at bit 0 and 512×192 at bit 1; the SL v2.x puts 16-colour at bit 0 and turbo at bit 4. Video-mode software must target the specific generation or probe. Modern recreations pick either layout — the Pentagon-4096 follows the SL convention (with bit 5 = multicolor), emulators generally implement the paging bits (2 and 3) only.
+> **The two layouts are not compatible.** Hand-built machines put multicolor at bit 0 and 512×192 at bit 1; the SL v2.x puts 16-colour at bit 0 and turbo at bit 4. The bit-0 story has a third wrinkle: on hand-builts, bit 0 itself *changed meaning* in late 2005 — from a4b multicolor to the 16-colour mode (per Info Guide #8; the a4b-only *Hexagonal Filler* moved to bit 5 in its second release). Video-mode software must target the specific generation or probe. Modern recreations pick either layout — the Pentagon-4096 follows the SL convention (with bit 5 = multicolor), emulators generally implement the paging bits (2 and 3) only.
 
 ### GigaScreen — Hardware Screen Interleaving
 
@@ -169,6 +169,207 @@ For builders, Alone Coder documented the order in which the video extensions mus
 ```
 
 If 384×304 is built on a multiplexer (`КП11`/`КП12`), `#EFF7` bit 6 must route either the existing A13V (bit = 1) or ground (bit = 0), and the resulting signal OR-ed into C35 — combining bit 6 with the 512×192 mode then yields **768×304**.
+
+---
+
+## The 16-Colour Video Mode (16c) — Every Pixel Its Own Color
+
+In October 2005, Alone Coder published a schematic that gave the Pentagon something Sinclair never built: **a full-screen video mode where every pixel has its own color**. The 16-colour mode (**16c**, Russian *16-цветный режим*; SpeccyWiki entry "16col") reinterprets the four standard screen areas as one 24 KB, 4-bit-per-pixel bitmap — 256×192 pixels, each selecting from the standard ULA palette with BRIGHT (15 distinct colors; the article's "16" counts bright black). It costs **zero per-frame CPU time** — no raster interrupts, no attribute races, no BIFROST-style playfield limits. The whole mode is switched by a single bit, `#EFF7` bit 0 — the exact bit the factory Pentagon-1024SL v2.x adopted as its "16 colour" control in 2006.
+
+> [!NOTE]
+> Sources: Alone Coder, *"16-цветный режим v1.1"* — worked out in the ZX.SPECTRUM echo conference (23 and 30 October 2005), published in **Info Guide #8** (30.10.2005; v1.1 corrects an error in v1.0's defect-fix schematic), with a video-viewing addendum in **Info Guide #9**. Software census and mode description: [SpeccyWiki, "16col"](https://speccy.info/16col).
+
+### History — How Bit 0 Changed Meaning
+
+The mode descends directly from the **hardware multicolor** modification (a4b — attribute per byte), documented in the hand-built `#EFF7` standard above: attributes are fetched from `#6000`-`#77FF` instead of `#5800`-`#5AFF`, so every 8×1 pixel stripe gets its own ink/paper pair. Alone Coder's v1.1 article states the 16c mode "is based on hardware multicolor — all 3 standard circuits are used, plus the optional separate-BRIGHT circuit." Nothing from the a4b schematic is thrown away; the 16c mode only adds video-controller address lines that turn the *attribute* read path into a second *pixel* read path.
+
+As a software platform, a4b went nowhere — SpeccyWiki records exactly **one** program supporting it, *Hexagonal Filler* (whose second release moved a4b to bit 5). The 16c mode replaced a4b on bit 0 in late 2005 and became the mode people actually used: within four years it had games, demos, visual novels, a video player, and an operating system (see [Software for 16c](#software-for-16c)). When Alexey Zhabin froze the factory standard in the Pentagon-1024SL v2.x (2006), bit 0 kept the 16c function — which is why the SL documentation and this article's factory table both read "bit 0 = 16 colour."
+
+> [!WARNING]
+> Early-1990s hand-builts (per Born Dead #10) expose **a4b** on `#EFF7` bit 0; post-2005 machines expose **16c**. Writing bit 0 without knowing which generation the board is produces a very different screen. See the compatibility warning in [The #EFF7 Control Register](#the-eff7-control-register).
+
+### Screen Organization — Four Areas, One 4-Bit Bitmap
+
+One 16c screen is four standard 6,144-byte screen areas, two DRAM banks deep:
+
+| Area | Address range | DRAM bank | Stripe bytes covered |
+|---|---|---|---|
+| 1 | `#C000`-`#D7FF` | bank 4 (paged at `#C000`) | pixels 0-1 of each 8-pixel stripe |
+| 2 | `#4000`-`#57FF` | bank 5 (standard) | pixels 2-3 |
+| 3 | `#E000`-`#F7FF` | bank 4 | pixels 4-5 |
+| 4 | `#6000`-`#77FF` | bank 5 | pixels 6-7 |
+
+The **second screen** (shadow) mirrors this exactly in banks 7 (`#4000`/`#6000`) and 6 (`#C000`/`#E000`) — so both Pentagon screens exist in 16c, and the standard `#7FFD` bit 3 selects between them as usual.
+
+Key properties:
+
+- **4 bits per pixel** — every byte holds **two horizontally adjacent pixels**, each `BRIGHT`+RGB.
+- **Standard Spectrum addressing** — the offset inside each 6 KB area is the ordinary interleaved screen layout (thirds of 64 lines, 8-pixel sub-rows); unlike the ATM Turbo's linear layout, no address translation is needed.
+- **One line of a character cell = four bytes at the same offset in four different areas** — in stripe order `#C000`, `#4000`, `#E000`, `#6000`.
+- Total: 4 × 6,144 = **24,576 bytes per screen** — 12 KB used of each 16 KB bank (each bank's `#5800`-`#5FFF` attribute window and last 2 KB are unused).
+
+#### The Addressing, Byte by Byte
+
+The v1.1 article's address map for screen 0 (one 8×8 cell boxed; each row is one scanline, column offsets `#00`-`#1F`):
+
+```
+#c000 #4000 #e000 #6000 ┃ #c001 ... #601f
+#c100 #4100 #e100 #6100 ┃ #c101 ... #611f
+........................┃...............
+#c700 #4700 #e700 #6700 ┃ #c701 ... #671f
+────────────────────────┘
+#c020 #4020 #e020 #6020   #c021 ... #603f
+........................................
+........................................
+#d7e0 #57e0 #f7e0 #77e0   #d7e1 ... #77ff
+```
+
+One byte = two pixels, packed in the same field order the **ATM Turbo uses for its EGA-style 320×200×16 mode** — which is exactly why one source can compile a game for both machines (see [atm_turbo.md](atm_turbo.md) and the [Software for 16c](#software-for-16c) section):
+
+| Bit | Field | Pixel | Meaning |
+|---|---|---|---|
+| D7 | `Yr` | right | BRIGHT |
+| D6 | `Yl` | left | BRIGHT |
+| D5 | `Gr` | right | Green |
+| D4 | `Rr` | right | Red |
+| D3 | `Br` | right | Blue |
+| D2 | `Gl` | left | Green |
+| D1 | `Rl` | left | Red |
+| D0 | `Bl` | left | Blue |
+
+The Info Guide notation for the same byte is `%IiGRBgrb`, where `IGRB` (intensity+RGB) is the *right* pixel. Each pixel selects one of 8 colors, times 2 for BRIGHT — 15 distinct colors, because bright black is still black.
+
+Since pixels come in pairs, a single odd pixel cannot be set in isolation — write both halves, or read-modify-write preserving the neighbor.
+
+#### Enabling the Mode and Writing a Stripe
+
+```z80
+; --- Enable 16c, paint one 8-pixel stripe (screen 0, line 0, cell 0) ---
+; Stripe byte order: #C000 (px 0-1), #4000 (px 2-3), #E000 (px 4-5), #6000 (px 6-7)
+; Left pixel = bright red (Y=1,R=1,G=0,B=0), right pixel = blue (Y=0,R=0,G=0,B=1)
+
+        LD   A,%00000001        ; bit 0 only — keep other #EFF7 bits as they were!
+        LD   BC,#EFF7
+        OUT  (C),A              ; 16c ON
+
+        LD   A,#04              ; ROM 0, screen 0, low bank bits = 4
+        LD   BC,#7FFD
+        OUT  (C),A              ; bank 4 at #C000-#FFFF (bank 5 already at #4000)
+
+        LD   L,#00              ; offset 0 = line 0, cell 0 (standard screen addr)
+        LD   H,#C0
+        LD   (HL),#4A           ; %01001010: px 0-1 = bright red | blue
+        LD   H,#40
+        LD   (HL),#4A           ; px 2-3
+        LD   H,#E0
+        LD   (HL),#4A           ; px 4-5
+        LD   H,#60
+        LD   (HL),#4A           ; px 6-7  — one full 8-pixel stripe painted
+
+        XOR  A                 ; restore: 16c OFF, bank 0 at #C000
+        LD   BC,#EFF7
+        OUT  (C),A
+        LD   BC,#7FFD
+        OUT  (C),A
+```
+
+> [!WARNING]
+> Half of every stripe lives in bank 4 (or 6 for the shadow screen). Code that assumes the whole 256×192 bitmap sits in one 16 KB bank will silently paint only the even stripes. Page the bank once at init and leave it — but note bank 4 at `#C000` is also where disk cache and demo parts often live; plan your bank allocation (see [Bank Allocation Strategy](#bank-allocation-strategy)).
+
+Note what is *gone* in this mode: the attribute file. The ULA's attribute fetch path now delivers pixel data (see the FLASH-mask circuit below), so `ATTR`-address math, FLASH and the ink/paper split have no meaning while bit 0 is set.
+
+### The Seven Circuits
+
+The v1.1 article specifies seven modifications to the Pentagon video section. Signal names are the standard Pentagon schematic designators (D10 — ТМ2 flip-flop, D17 — video address multiplexers, D3 — pixel-clock counter, КП11/КП12 multiplexers):
+
+| # | Signal | Formation | Purpose |
+|---|---|---|---|
+| 1 | `/BUSRQ` (CPU pin) | wired-OR of `D10/8` and `/eff7b0` | the mode joins the a4b bus-request line, letting the video controller run its doubled fetch pattern |
+| 2 | `A13V` (D17/11) | wired-AND of `eff7b0` and the 7/8 MHz tap (D3/2) | video-mux address line 13 — selects the `#4000` vs `#6000` half within the bank |
+| 3 | `A14V` aka `P0V` (D17/14) | wired-OR of `/eff7b0` and the 7/4 MHz tap (D3/3) | video-mux address line 14 — the *odd-page* select (bank 4 vs 5, 6 vs 7) |
+| 4 | FLASH mask (D6/11) | КП11 switches in 3.5 MHz (D1/8) | the FLASH mask becomes a constant phase — its old bit position now carries pixel data |
+| 5 | second BRIGHT (D47/11) | КП11 switches attribute bit 7 (D7/12) | the separate-BRIGHT circuit inherited from the multicolor scheme |
+| 6 | attribute read strobes | primary buffer D37/11 ← 3.5 MHz (D45/2); secondary buffer D40/11 ← 3.5 MHz delayed 90° (D1/9) | phases the two screen-buffer reads |
+| 7 | ATTR/MASK addressing select | unchanged from the a4b schematic (c29 → D8/3, c30 → D14/1, via `eff7b0` muxes) | routes the address latches between attribute and mask fetches |
+
+Build notes from the article:
+
+- Only **one new chip** is required — a **КР1533КП11** (74ALS157/74LS157-equivalent quad 2:1 multiplexer), which commutates circuits 4, 5 and 6. Everything else reuses the a4b ("attribute per byte") wiring — "nothing from the a4b schematic is thrown away."
+- If a **384×304** modification is fitted, circuits 2 and 3 must attach **upstream** of it — the 384×304 scheme already mixes in the old A13V, and circuit 3 must precede its C35 mixing.
+- The signals exist in similar form on many other ZX models, but the article documents Pentagon only.
+
+> [!WARNING]
+> The table above is a summary, not a build sheet. The gate-level wiring in v1.0's defect-fix schematic contained an error — **build from the v1.1 text only** (link in [References](#references)).
+
+### Known Defects and the v1.1 Fix
+
+On a Pentagon built to v1.0, two border-zone defects were observed:
+
+1. The **rightmost 8 pixels** of each line are fetched from start-of-line + 8 bytes (the doubled fetch wraps).
+2. The **leftmost 4 pixels** are affected by CPU activity (the bus is not yet quiet when the first fetch fires).
+
+The v1.1 fix is a small retime circuit: an additional **ТМ2** (7474-type) flip-flop — clocked by the border address signal (pin 12), D input gated with `eff7b0` — whose output feeds circuit 1 in place of `D10/8`. The bus request is then asserted at a defined point in the border window instead of racing the CPU. The cost of the fix is blanking: **3 pixels on the left and 5 on the right become invisible**, leaving a defect-free **248×192** working area — still more usable area than most multicolor-engine playfields, at zero CPU cost.
+
+> [!WARNING]
+> Requires bus-request timing awareness. While 16c is active, the doubled video fetch pattern runs through `/BUSRQ`, so the classic Pentagon property of *zero CPU stalls during screen fetch* no longer holds during the 192 visible lines. Naive T-state budgets computed for the unmodified machine will be optimistic in this mode (the v1.1 article does not quantify the loss; measure on target hardware or in UnrealSpeccy).
+
+### Software for 16c
+
+Despite a four-year run, the mode accumulated a real software library — games, Transman's visual-novel ports, and an entire video-player toolchain:
+
+| Title | Year | Author | Notes |
+|---|---|---|---|
+| **Pang 16C** | 2005 | Alone Coder | The demo piece: compiles from **one source** for Pentagon 16c *and* ATM Turbo 2's 16-colour mode (keys or auto-detect) |
+| **Time Gal** | 2006 | Alone Coder | Digitized-animation game port |
+| **Ball Quest** | 2006 | Alone Coder | — |
+| **Big L** (demo version) | — | Alone Coder | — |
+| **Season of the Sakura** | 2007 | Transman | Visual novel port |
+| **Book of the Dead: Lost Souls** (Книга мёртвых: Потерянные души) | 2009 | Transman | Visual novel port |
+| **Three Sisters' Story** | 2010 | Transman | Visual novel port |
+
+Demos and intros: *16Cbiver* (30.10.2005, Alone Coder — the mode's first release companion), *Borntro 2008* and *vD16F* (breeze, 2008), *NedoDemo* (27.06.2008, Alone Coder), *ASCiI'2008 Demoparty Invitation* (22.10.2008, breeze), *The Link* (28.08.2009, Alone Coder), *ART* (2009, DDp — with DDp-palette support).
+
+System software and tools:
+
+| Tool | Date | Author | Purpose |
+|---|---|---|---|
+| **view102** | 11.2005 (*Info Guide* #8) | Alone Coder | Viewer for 102-colour images using a palette computed by Diver; loads an unpacked 256-colour indexed BMP sharing the viewer's file name — many picture+viewer pairs fit on one TRD |
+| **16CCON** | 2005 | — | Screen converter for *Pang 16C* |
+| **SOUL** | 01.2006 (*Info Guide* #9) | Alone Coder | Video player — the reason *Info Guide* #9 carried a video-viewing addendum to the schematic |
+| **DNA OS** | 2007 | ZET-9 | Operating system using the mode |
+| **Little Viewer** | 2007 | SAM Style | Picture viewer |
+
+The portability trick is worth restating: the 16c byte layout is **field-identical to ATM Turbo's** 16-colour mode — the v1.1 article states the intra-byte bit order is the same (`%IiGRBgrb`) and calls the four-area addressing "analogous to ATM's" (`#C000+`, `#4000+`, `#E000+`, `#6000+`). The line ordering differs: ATM keeps rows linear, while the Pentagon version deliberately keeps the standard Spectrum row interleave — "standard linework, as in the ordinary Spectrum mode." A converter, compile-time keys, or runtime auto-detection bridges the two — which is exactly how *Pang 16C* shipped for both machines from one source.
+
+### Platform Support and Disposition
+
+| Implementation | 16c support |
+|---|---|
+| **Pentagon-1024SL v2.x** (factory, 2006) | `#EFF7` bit 0, documented in ver22 — the factory standard frozen by this machine |
+| Post-2005 hand-builts | Bit 0 per Info Guide #8 v1.1 |
+| Emulators | **UnrealSpeccy**, **Speccy**, **ZEmu** (per SpeccyWiki) |
+| Pentagon-4096 | Follows the SL register convention (see warning in [#EFF7 Control Register](#the-eff7-control-register)) |
+
+The mode is **historically closed**: hardware development stopped, and the surviving software was reworked for the ATM Turbo 2, whose own 16-colour mode (plus 320×200 resolution and hardware scroll) absorbed the niche. For new Soviet-track work targeting per-pixel color, ATM Turbo 2+ is the living target; 16c matters today for preservation, emulation accuracy, and running the existing library.
+
+### When to Use / When NOT to Use
+
+| Criterion | Pentagon 16c | ATM Turbo 320×200×16 | Software engines (BIFROST\*/NIRVANA+) | ULAplus |
+|---|---|---|---|---|
+| When to use | Pentagon 1024/1024SL target, full-screen per-pixel color, no CPU budget | ATM 2/2+ target; want 320×200 + scroll | Any stock Spectrum; active cross-platform tooling | Modern FPGA/emulator; palette depth on the stock attribute model |
+| Resolution / colors | 256×192, 15 colors per pixel | 320×200, 16 of 64 RGBI | 8×1 or 8×2 cells, 15 colors | 8×8 cells, 64 colors |
+| CPU cost | ~0 (hardware fetches; bus-shared) | ~0 | 30-50% of frame | ~0 |
+| Availability today | Legacy; emulated (UnrealSpeccy/Speccy/ZEmu) | Active Soviet-track standard | Active, mainstream | Active on modern hardware |
+
+**Modern analogies.** The 16c screen is a **4-bit packed framebuffer with 2-pixel granularity** — the same nibble-packing trick as PC VGA's mode 13h (which packed two 4-bit pixels per byte in Mode X variants) rather than EGA's four-bitplanes model. The four-area bank interleave is a banked-framebuffer layout; the two full 16c screens in banks 4-7 are effectively **hardware double buffering**, something the stock Spectrum never offered.
+
+### Pitfalls
+
+1. **The Wrong Generation** — writing `#EFF7` bit 0 on a pre-2005 hand-built switches *a4b multicolor*, not 16c; on the SL v2.x it switches 16c *and nothing else matches the hand-built bit map*. Detect the machine generation or target one explicitly.
+2. **The Half-Painted Screen** — drawing only through `#4000`/`#6000` and wondering why every other stripe pair is black: bank 4 (shadow: bank 6) must be paged at `#C000` first.
+3. **The Lone Pixel Write** — a byte always colors two adjacent pixels; preserving an odd pixel requires read-modify-write, and reads hit the same four-area interleave.
+4. **The Safe-Area Ignorer** — without the v1.1 fix circuit, the right 8 and left 4 pixel columns are corrupt; with it, 3+5 columns are blanked. Center the composition in 248×192 on hardware.
+5. **The Attribute Ghost** — ROM/BIOS attribute routines (ATTR-address math, FLASH toggling) corrupt the bitmap while bit 0 is set.
 
 ---
 
@@ -449,6 +650,7 @@ For software development, code that runs on one Pentagon 1024 implementation run
 - [Pentagon video frame](../../05_development/05_display_and_timing/video_frame_pentagon.md) — 320-line frame, 48.83 Hz, zero contention
 - [Clone timing](clone_timing.md) — cross-clone timing comparison and machine detection
 - [Multicolor graphics engines](../../05_development/06_graphics/multicolor_engines.md) — the software counterpart of the a4b hardware mode
+- [ATM Turbo](atm_turbo.md) — its EGA-style 320×200×16 mode shares the 16c byte layout, which is what made single-source Pentagon/ATM builds possible
 - [Kempston mouse](../../03_io/peripherals/mouse.md) — full protocol, wiring, and modern PS/2 descendants
 - [Kay 1024](kay.md) — alternative 1 MB clone with Nemo bus
 - [Profi](profi.md) — Ukrainian professional clone; source of the `#DFFD` convention
@@ -466,6 +668,8 @@ For software development, code that runs on one Pentagon 1024 implementation run
 ## References
 
 - **[Alone Coder — "IRON MADE IN", Born Dead #10 (1999)](https://zxpress.ru/ru/ezines/born-dead/10/tehnicheskie-podrobnosti-kompyuterov-semeystva-pentagon-osobennosti-pentagon-1024-upravlenie)** — the primary source for the hand-built Pentagon 1024 standard: `#EFF7` bit layout, `#DFFD` parallel wiring, lock nuance, cache, mouse detection, Gluk Reset Service
+- **[Alone Coder — "16-цветный режим v1.1 для пентагона" (Info Guide #08, 30.10.2005)](https://zxpress.ru/ru/ezines/info-guide/08/shema-16-cvetnogo-videorezhima-v1-1-dlya-pentagon-apparatnaya-realizaciya-multikolora-s-podderzhkoy)** — the primary source for the 16c mode: seven-circuit schematic, address map, `%IiGRBgrb` byte layout, the v1.1 defect-fix circuit, *Pang 16C* and the view102 workflow (video-viewing addendum in *Info Guide* #9)
+- **[SpeccyWiki — "16col"](https://speccy.info/16col)** — mode description and `YrYlGrRrBrGlRlBl` byte format, the games/demos/tools census, emulator support list, and the a4b-on-bit-0 history (*Hexagonal Filler*)
 - **[Pentagon-1024SL official project site (NedoPC)](http://pentagon.nedopc.com/)** — version history (SL 1.4 → 2.2 → 2.666), board files, ROMs
 - **[Pentagon-1024SL v2.2 official documentation (ver22.pdf, 2006)](https://github.com/koe1234/pentagon_2.2/blob/main/ver22.pdf)** — factory `#7FFD` / `#EFF7` register tables, schematic, BOM
 - [ZEsarUX emulator source (`mem128.c`)](https://github.com/chernandezba/zesarux) — reference implementation of `#7FFD` bits 5-7 paging and the `#EFF7` gate, quoting the zx-pk.ru Pentagon 1024 port layout
