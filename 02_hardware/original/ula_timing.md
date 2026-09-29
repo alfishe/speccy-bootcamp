@@ -71,7 +71,7 @@ graph LR
 | T-states per frame | **70,908** | +2,020 |
 | T-states per scanline | **228** | +4 |
 | Total scanlines | **311** | −1 |
-| Contended range | RAM banks 1, 3, 5, 7 | Bank-based, not address-based |
+| Contended range | RAM banks 1, 3, 5, 7 | Bank-based, not address-based: an odd bank is contended wherever it is mapped |
 | Contention start | T=14361 | T=14335 on 48K |
 
 ### ZX Spectrum +2A / +3 (PAL)
@@ -82,8 +82,10 @@ The +2A and +3 use an **Amstrad gate array** instead of the Ferranti ULA. The co
 |-----------|-------|-------|
 | T-states per frame | **70,908** | Same as 128K/+2 |
 | T-states per scanline | **228** | Same as 128K/+2 |
-| Contended pages | Banks 4, 5, 6, 7 | Different from 128K! |
-| Contention type | Gate array — **MREQ only** | Less contention than Ferranti ULA |
+| Contended pages | Banks 4, 5, 6, 7 (any slot, including `#0000` in the all-RAM modes) | Different from 128K! |
+| Contention type | Gate array pulls `/WAIT` — **MREQ only** | No I/O and no internal-cycle contention |
+| Contention start | T=14361 | Same as 128K/+2 |
+| Contended window per line | **129 T** | Real-hardware tests (Rak's Timing Test on a +3 and a +2A); emulators use 128 T |
 | Contention pattern | **1,0,7,6,5,4,3,2** | Completely different from Ferranti's 6,5,4,3,2,1,0,0 |
 
 The +2A/+3 contention pattern:
@@ -97,8 +99,8 @@ Contention delay: 1  0  7  6  5  4  3  2
 
 Key differences from the Ferranti ULA:
 
-1. **The pattern is shifted and inverted** — peak delay (7T) is at offset 2, not offset 0
-2. **MREQ-only contention** — the gate array only delays memory requests (when MREQ is active). The Ferranti ULA delays on any access to the contended range, even without MREQ
+1. **Different values, not a rotation** — peak delay is 7T (at offset 2), not 6T, and only one T-state per window is free. The Sinclair Wiki's table gives the same delays T-state by T-state (14361 → 1, 14362 → 0, 14363 → 7, …, 14369 → 1, 14370 → 0, …) and says the pattern "repeats until 14490 tstates" — consistent with a 129-T window (last delayed T-state 14489)
+2. **MREQ-only contention via `/WAIT`** — the gate array pulls the Z80 `/WAIT` pin, and only for memory requests (when MREQ is active). The Ferranti ULA stops the CPU clock whenever a contended address is on the bus — memory cycles, internal (no-MREQ) cycles and I/O cycles alike. So the +2A/+3 has **no I/O contention**
 3. **Different contended banks** — banks 4,5,6,7 instead of 1,3,5,7
 4. **No early/late timing drift** — the gate array doesn't exhibit the thermal drift of the Ferranti ULA
 
@@ -109,11 +111,10 @@ Key differences from the Ferranti ULA:
 
 | Parameter | Value | Notes |
 |-----------|-------|-------|
-| T-states per frame | **69,888** | Same as 48K |
+| T-states per frame | **71,680** | 48K: 69,888 |
 | T-states per scanline | **224** | Same as 48K |
-| Total scanlines | **312** | Same as 48K |
-| Contention | **None** | Pentagon has no ULA — no contention at all |
-| Interrupt timing | Same as 48K | |
+| Total scanlines | **320** | 48K: 312 |
+| Contention | **None** | Video and CPU use fixed, separate DRAM slots — no memory or I/O contention at all |
 
 > The Pentagon's lack of contention is a major difference. Code that relies on precise contention delays (multicolor effects) **will not work correctly on the Pentagon** — the timing will be off because there are no wait states. Conversely, the Pentagon is faster for CPU-intensive code that accesses `#4000`–`#7FFF`. For full clone timing details, see [clone_timing.md](../clones/clone_timing.md).
 
@@ -158,9 +159,9 @@ graph TD
 
 ### Why Contention Exists
 
-The ZX Spectrum shares its **upper 16K of RAM** (`#4000`–`#7FFF`) between the Z80 CPU and the Ferranti ULA. The ULA reads this RAM to generate the video display — it needs **16 bytes per scanline** (8 attribute bytes + 8 pixel bytes) to produce 256 pixels of display. The ULA reads these bytes during each scanline's active display period.
+The ZX Spectrum shares its **upper 16K of RAM** (`#4000`–`#7FFF`) between the Z80 CPU and the Ferranti ULA. The ULA reads this RAM to generate the video display — it needs **64 bytes per scanline** (32 pixel bytes + 32 attribute bytes) to produce 256 pixels of display. The ULA reads these bytes during each scanline's active display period.
 
-The problem: **a single DRAM chip cannot serve two masters simultaneously**. When both the ULA and CPU want to access RAM on the same T-state, one must wait. The ULA **always wins** — if it didn't, the screen would corrupt. The CPU is paused via its **WAIT pin** until the ULA finishes its read.
+The problem: **a single DRAM chip cannot serve two masters simultaneously**. When both the ULA and CPU want to access RAM on the same T-state, one must wait. The ULA **always wins** — if it didn't, the screen would corrupt. The ULA pauses the CPU by **stopping its clock** (holding it high) until the ULA finishes its read — the Ferranti ULA does not use the Z80 `/WAIT` pin (only the +2A/+3 gate array does).
 
 ### The Contention Pattern (48K)
 
@@ -174,8 +175,8 @@ Contention delay: 6  5  4  3  2  1  0  0
 ```
 
 - The pattern repeats every **8 T-states** within each scanline
-- After the 8-T-state contention window, there are **no delays** for the remainder of the scanline
-- The contention window starts at the beginning of each pixel display line
+- The 8-T pattern repeats **16 times** across the 128 T-states of each paper line; the remaining 96 T-states of the line (border, blanking) have **no delays**
+- On the 48K the first delayed T-state is **14335** after the interrupt (FUSE convention; 14336 in others — the same event), then every 224 T-states for 192 lines
 - Total: 128 T-states of potentially contended access per scanline, 96 T-states free
 
 ### What Gets Contended
@@ -186,18 +187,22 @@ Contention delay: 6  5  4  3  2  1  0  0
 | Memory read from `#4000`–`#7FFF` | **Yes** | Any read operation |
 | Memory write to `#4000`–`#7FFF` | **Yes** | Any write operation |
 | Opcode fetch from `#0000`–`#3FFF` (ROM) | No | ROM is not shared with ULA |
-| Memory access `#8000`–`#FFFF` | No | Lower 32K is uncontended |
+| Memory access `#8000`–`#FFFF` | No | Top 32K is uncontended |
+| Internal (no-MREQ) T-states with `#4000`–`#7FFF` on the address bus | **Yes** | e.g. the `(HL)` address during `INC (HL)`, `PC` during `JR`'s 5 extra T, `IR` during `INC BC` — the ULA looks at the address, not the cycle type |
 | I/O port access | **Special** | See Contended I/O below |
 
 ### Contended I/O
 
-I/O port access on the ZX Spectrum has special contention behavior. When accessing any port where **A0=0** (which includes the ULA port `#FE`), the ULA may insert wait states:
+I/O port access on the Ferranti-ULA machines has special contention behavior. Two independent conditions decide it: whether the port's **high byte is in `#40`–`#7F`** (it looks like a contended memory address), and whether **A0 = 0** (the ULA's own port, e.g. `#FE`). The high byte comes from the **A register** (`IN A,(n)` / `OUT (n),A`) or the **B register** (`IN r,(C)` / `OUT (C),r`) — never from the program counter.
 
-- The Z80's I/O instructions already have one built-in wait cycle (automatic Tw)
-- The ULA adds **additional contention** on top of this wait cycle
-- The exact contention depends on the T-state position within the scanline
+| High byte in `#40`–`#7F`? | A0 = 0? | Pattern |
+|---|---|---|
+| No | No | `N:4` (uncontended) |
+| No | Yes | `N:1, C:3` |
+| Yes | No | `C:1, C:1, C:1, C:1` |
+| Yes | Yes | `C:1, C:3` |
 
-For the 48K ULA: accessing port `#FE` (or any port with A0=0) during the display area adds the same contention pattern as memory access.
+`C:n` means "apply the memory contention delay for the current T-state, then n T-states"; `N:n` means n uncontended T-states. The 4 T-states include the Z80's automatic I/O wait state. On the 128K/+2 the high byte is also contended when it is in `#C0`–`#FF` and an odd page is mapped at `#C000`. On the +2A/+3 I/O is **never** contended. Source: Sinclair Wiki, *Contended I/O*.
 
 ### Contention Example (48K)
 
@@ -230,13 +235,13 @@ LD   (HL),A       ; If HL points to contended memory:
 ```
 
 > [!WARNING]
-> Contention depends on **both** the instruction address AND the data address. Code in ROM (`#0000`–`#3FFF`) is not contended on opcode fetch, but if it accesses screen memory (`#4000`–`#7FFF`), the data access IS contended. Code in screen memory is contended on both fetch and data access — potentially double contention.
+> **Requires contended memory timing.** Contention depends on **both** the instruction address AND the data address. Code in ROM (`#0000`–`#3FFF`) is not contended on opcode fetch, but if it accesses screen memory (`#4000`–`#7FFF`), the data access IS contended. Code in screen memory is contended on both fetch and data access — potentially double contention.
 
 ---
 
 ## Snow Effect — DRAM Refresh / ULA Bus Collision
 
-During the paper area, the ULA fetches screen bytes from RAM continuously — two memory accesses every 8 T-states (one pixel byte, one attribute byte). Most of the time the ULA wins the bus and the CPU is stalled by contention. But during the Z80's **DRAM refresh cycle**, the CPU drives the address bus with the current value of the **`I` (interrupt vector) and `R` (refresh) registers** (`I` as high byte, `R` as low byte). If that address lands in the ULA's display area, both chips drive the bus simultaneously.
+During the paper area, the ULA fetches screen bytes from RAM continuously — four memory accesses every 8 T-states (two pixel bytes, two attribute bytes). Most of the time the ULA wins the bus and the CPU is stalled by contention. But during the Z80's **DRAM refresh cycle**, the CPU drives the address bus with the current value of the **`I` (interrupt vector) and `R` (refresh) registers** (`I` as high byte, `R` as low byte). If that address lands in the ULA's display area, both chips drive the bus simultaneously.
 
 The visible result is **snow**: random single-byte corruption of the bitmap or attribute stream, appearing as bright speckles along the raster.
 
@@ -490,7 +495,7 @@ LD   A,#42         ; Color to write
 LD   B,#32         ; 32 columns
 fill:
 LD   (HL),A        ; Write attribute — contended! (7T + variable)
-INC  HL            ; Next position — 6T, no contention (HL not in screen range yet)
+INC  HL            ; Next position — 6T, no contention (fetched from uncontended RAM; its 2 internal T put IR, not HL, on the bus)
 DJNZ fill          ; 13T/8T — B decrement + conditional jump
 ```
 
@@ -636,9 +641,9 @@ The Commodore 64 had **no CPU contention** for screen memory (separate RAM), but
 
 1. **Contention must be modeled per-T-state, not per-instruction** — the delay depends on the exact T-state within the scanline, not just whether the instruction touches contended memory. An instruction that spans multiple T-states may be contended on some T-states but not others.
 
-2. **The instruction breakdown matters** — each Z80 instruction's internal M-cycle sequence determines which T-states perform memory accesses. `LD A,(HL)` is: fetch (4T, contended if PC in `#4000`+), then read (3T, contended if HL in `#4000`+). The contention applies to each memory-accessing T-state independently.
+2. **The instruction breakdown matters** — each Z80 instruction's internal M-cycle sequence determines which T-states perform memory accesses. `LD A,(HL)` is: fetch (4T, contended if PC in `#4000`–`#7FFF`), then read (3T, contended if HL in `#4000`–`#7FFF`). The contention applies to each bus cycle independently — on the Ferranti ULA this includes the internal (no-MREQ) T-states, which are contended by whatever address the Z80 leaves on the bus (e.g. `INC (HL)`'s extra T on HL). The +2A/+3 gate array contends only MREQ cycles.
 
-3. **I/O contention is different from memory contention** — the ULA contends I/O differently: the automatic wait cycle of I/O instructions interacts with ULA contention. See the Sinclair Wiki contended I/O reference.
+3. **I/O contention is different from memory contention** — on the Ferranti ULA it follows one of four patterns chosen by the port's high byte (from A or B, `#40`–`#7F` or not) and A0; see [Contended I/O](#contended-io) above and the Sinclair Wiki contended I/O reference. The +2A/+3 has no I/O contention.
 
 4. **Early/late timing must be configurable** — emulators should offer both modes for 48K/128K. The +2A/+3 gate array does not have this issue.
 

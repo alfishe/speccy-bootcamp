@@ -50,7 +50,7 @@ Bank    Address when paged    Physical RAM     Contended
 
 ### Contention on 128K
 
-On the 128K/+2, **odd-numbered banks** (1, 3, 5, 7) are contended — the ULA may delay CPU access during screen display. This is because these banks share the same physical DRAM chips as the screen bank.
+On the 128K/+2, **odd-numbered banks** (1, 3, 5, 7) are contended — the ULA may delay CPU access during screen display by stopping the CPU clock, with the 48K's 6-5-4-3-2-1-0-0 pattern starting at T=14,361 and repeating every 228 T-states. This is because these banks share the same physical DRAM chips as the screen bank. As on the 48K, internal (no-MREQ) T-states with a contended address on the bus and I/O are contended too; for I/O, the port's high byte is checked against the current mapping (`#40`–`#7F`, or `#C0`–`#FF` while an odd bank is at `#C000`).
 
 - **Bank 5** (always at `#4000`–`#7FFF`): contended because it contains the screen
 - **Banks 1, 3, 7**: contended even when paged into `#C000`–`#FFFF`
@@ -222,11 +222,11 @@ Key points:
 
 ### CPU and ULA Do Not Compete for the Same Bus
 
-The CPU and ULA share the same physical DRAM chips, but access them on **alternating clock phases** within each T-state:
+The CPU and ULA share the same physical DRAM chips (set B), and the ULA has priority. During the 128 T-states of each paper line the ULA fetches in 8-T groups; if a CPU bus cycle to set B arrives while the ULA needs the chips, the ULA stops the CPU clock until its fetch is done:
 
 ```
-Phase 1 (first half):  ULA reads DRAM for video → CPU blocked from contended banks
-Phase 2 (second half): CPU reads/writes DRAM → ULA idle (not fetching)
+Each 8-T group:  T-states 0-5  ULA may own set B → CPU access delayed 6,5,4,3,2,1 T
+                 T-states 6-7  ULA idle          → CPU access proceeds at once
 ```
 
 This is WHY contention exists — but only for ODD banks (DRAM set B). Even banks (set A) use different physical chips → no collision. This is true **regardless of which screen is active**.

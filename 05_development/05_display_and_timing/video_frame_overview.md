@@ -132,9 +132,10 @@ Per-scanline activity during paper area:
    → If CPU accesses #4000–#7FFF during a ULA fetch cycle,
      CPU is delayed (contention pattern: 6,5,4,3,2,1,0,0 T-states)
 
-Total bus cycles stolen per scanline: 64 (32 pixel + 32 attribute)
-Available bus cycles per scanline:    224 total - 64 stolen = 160 for CPU
-Effective CPU throughput reduction:   ~29% slower in contended area
+ULA fetch window per paper line:     128 T-states (16 × 8-T groups, 4 bytes each)
+CPU cost:  nothing, unless the CPU's own bus cycle carries a #4000–#7FFF
+           address (or a contended I/O port) inside that window; then
+           0–6 T per cycle, by position in the 8-T group
 ```
 
 During **border lines** (top border, bottom border, vertical blank):
@@ -150,17 +151,17 @@ All ULA-based models share the same fundamental structure but differ in details:
 
 | Parameter | 48K | 128K/+2 | +2A/+3 | Pentagon |
 |-----------|-----|---------|--------|----------|
-| T-states/line | 224 | 224 | 224 | 224 |
-| Total scanlines | 312 | 312 | 312 | **320** |
-| Total T-states | 69,888 | 69,888 | 69,888 | **71,680** |
-| Frame rate | ~50.08 Hz | ~50.08 Hz | ~50.08 Hz | **~48.83 Hz** |
-| Top border lines | 64 | 64 | 64 | **48** |
+| T-states/line | 224 | **228** | **228** | 224 |
+| Total scanlines | 312 | **311** | **311** | **320** |
+| Total T-states | 69,888 | **70,908** | **70,908** | **71,680** |
+| Frame rate | ~50.08 Hz | **~50.02 Hz** (3.5469 MHz clock) | **~50.02 Hz** | **~48.83 Hz** |
+| Top border lines | 64 | **63** | **63** | **48** |
 | Paper lines | 192 | 192 | 192 | **192** |
 | Bottom border lines | 56 | 56 | 56 | **48** |
 | Vertical blank | included in border | included | included | **32** |
 | INT position | T=0, line 0 | T=0, line 0 | T=0, line 0 | **T=0, line 0** |
 | INT duration | 32 T-states | 32 T-states | 32 T-states | 32 T-states |
-| Contention model | Ferranti 6-5-4-3-2-1-0-0 | Same as 48K | Amstrad 1-0-7-6-5-4-3-2 | **None** |
+| Contention model | Ferranti 6-5-4-3-2-1-0-0 from T=14,335, `#4000`–`#7FFF`, I/O contended | Same pattern from T=14,361, pages 1/3/5/7, I/O contended | Amstrad 1-0-7-6-5-4-3-2 from T=14,361, pages 4–7, MREQ only (no I/O), 129-T window | **None** |
 
 > [!IMPORTANT]
 > The Pentagon has **320 scanlines** (not 312) because its video counter is built from binary counters that naturally wrap at 320 (8-bit counter with specific bit positions). This gives a different frame rate of ~48.83 Hz, which is close enough for most PAL TVs to sync to but causes problems with modern fixed-rate displays. See [clone_timing.md](../../02_hardware/clones/clone_timing.md) for details.
@@ -188,7 +189,7 @@ This gives the programmer **14,336 T-states** of uncontended time after the inte
 T-state budget after INT:
   T=0:       INT fires
   T=0–14335: Top border (no contention) — 14,336 T-states of free time
-  T=14336:   Paper area begins — contention starts
+  T=14336:   Paper area begins — contention starts (first delay at T=14,335 in FUSE's count; same event)
   T=57343:   Paper area ends
   T=57344–69887: Bottom border (no contention) — 12,544 T-states of free time
   T=69888:   Frame wraps → new INT
@@ -204,12 +205,12 @@ The frame naturally divides into **contended** and **non-contended** windows:
 Available CPU T-states per frame (48K):
 
   Non-contended:   14,336 (top border) + 12,544 (bottom border) = 26,880 T-states
-  Contended:       192 lines × 224 T-states = 42,888 T-state positions
-                   But each line has ~64 stolen cycles → effective ~30,000 useful T-states
-  Total effective: ~57,000 useful T-states per frame (out of 69,888 total)
-  
+  Paper lines:     192 lines × 224 T-states = 43,008 T-states
+                   of which 192 × 128 = 24,576 lie in contended fetch windows
+  Code and data outside #4000–#7FFF: all 69,888 T-states usable
+  Accesses to #4000–#7FFF in a fetch window: +0–6 T each
+
   At 3.5 MHz: 69,888 / 3,500,000 = 19.968 ms per frame
-  Time available for code: ~57,000 / 3,500,000 = 16.3 ms per frame
 ```
 
 ### Strategy: What Goes Where
@@ -232,7 +233,7 @@ Available CPU T-states per frame (48K):
     
     CALL UpdateMusic
     
-    ; === PAPER AREA (42,888 T-states, contention) ===
+    ; === PAPER AREA (43,008 T-states, contention) ===
     ; Still usable for most code:
     ; - Code in #8000+ is NOT contended (only #4000-#7FFF)
     ; - Contended area: avoid time-critical loops in screen RAM

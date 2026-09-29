@@ -82,7 +82,7 @@ All 16 address lines are **tri-stated** during a `/BUSACK` cycle, so a DMA perip
 
 ### Data bus (D0–D7)
 
-The full 8-bit Z80 data bus (8 pins). Bidirectional, tri-state. Pulled up weakly inside the ULA so that an undriven bus reads as `#FF`. The data bus is shared with the ULA's video memory reads — every 8th CPU cycle during the active display is stolen by the ULA, which is the source of the Spectrum's "contended memory" timing. See [02_hardware/original/ula_timing.md](../../02_hardware/original/ula_timing.md) for the contention pattern.
+The full 8-bit Z80 data bus (8 pins). Bidirectional, tri-state. Pulled up weakly inside the ULA so that an undriven bus reads as `#FF`. The lower 16 KB of RAM (`#4000–#7FFF` on the 48K) is shared with the ULA's video memory reads — during the 128 T-states of each paper line the ULA fetches in 8-T groups, and a CPU bus cycle that needs that RAM (or, on the Ferranti ULA, merely has a contended address or port on the bus) is held for 0–6 T-states, which is the source of the Spectrum's "contended memory" timing. See [02_hardware/original/ula_timing.md](../../02_hardware/original/ula_timing.md) for the contention pattern.
 
 ### Memory / I/O control
 
@@ -103,7 +103,7 @@ The `/M1` + `/IORQ` combination is the **interrupt-acknowledge** signal: the CPU
 |--------|-----------|----------|
 | `/INT` | into CPU | Maskable interrupt — pulled low by ULA once per video frame (~50 Hz PAL, ~60 Hz TS2068) |
 | `/NMI` | into CPU | Non-maskable interrupt — pulled low by Multiface button, some other peripherals |
-| `/WAIT` | into CPU | Insert wait states — ULA pulls low during contended memory |
+| `/WAIT` | into CPU | Insert wait states — used by peripherals. The Ferranti ULA (16K/48K/128K/+2) never pulls it (it stops the CPU clock instead); the +2A/+3 gate array pulls the CPU's WAIT during contended memory cycles |
 | `/HALT` | from CPU | CPU has executed a HALT instruction and is idle |
 | `/RESET` | bidirectional | Reset — power-on reset pulse, can be driven by peripherals to force a reboot |
 | `/BUSRQ` | into CPU | Bus request — peripheral asks CPU to release the bus for DMA |
@@ -118,7 +118,7 @@ The `/INT` line is **open-collector**: multiple peripherals can pull it low simu
 | `/ROMCS` | ROM chip-select (active-low). On 16K/48K/128K/+2, pulling this high disables the internal 16K ROM, allowing external ROM or RAM to occupy `#0000-#3FFF`. **Not present on +2A/+3.** |
 | `/ROM1OE`, `/ROM2OE` | On +2A/+3 only — output-enable for the two physical ROM chips (32K total split as 2×16K). Replaces `/ROMCS`. A peripheral that wants to overlay ROM must drive both of these. |
 | `/IORQULA` | Composite signal: `IORQ & A0=0`. Set low when the CPU is doing an I/O cycle with A0 low — i.e., reading or writing a `#FE`-class port (keyboard, ULA, etc.). Useful for peripherals that want to override ULA port reads. |
-| `CK` | CPU clock — nominally 3.5 MHz on the 16K/48K (3.54690 MHz exact), derived from the ULA. **Interrupted during contended memory access** — peripherals that clock themselves from `CK` must tolerate the jitter. (Note: accidentally unconnected on the Spanish 128K.) |
+| `CK` | CPU clock — 3.5 MHz on the 16K/48K, 3.54690 MHz on the 128K/+2 and later, derived from the ULA. **Stopped (held high) during contention** on the Ferranti-ULA models — contended memory cycles, internal cycles with a contended address on the bus, and contended I/O — so peripherals that clock themselves from `CK` must tolerate the jitter. (Note: accidentally unconnected on the Spanish 128K.) |
 
 ### Video signals (16K/48K only)
 
@@ -255,7 +255,7 @@ Most disk interfaces (Beta 128, Opus Discovery, Interface 1's Microdrive) did **
 
 ### ULA contention
 
-The ULA steals cycles from the CPU during the active display to read video bytes from RAM. During these cycles, the ULA pulls `/WAIT` low, freezing the CPU. The contention pattern is documented in [02_hardware/original/ula_timing.md](../../02_hardware/original/ula_timing.md) and depends on which scanline is being drawn.
+The ULA steals cycles from the CPU during the active display to read video bytes from RAM. When a CPU bus cycle with a contended address (or a contended I/O port) collides with a fetch, the Ferranti ULA (16K/48K/128K/+2) **stops the CPU clock** — `CK` stays high and `/WAIT` is not used. The +2A/+3 gate array instead pulls the CPU's `/WAIT`, and only for memory (`/MREQ`) cycles. The contention pattern is documented in [02_hardware/original/ula_timing.md](../../02_hardware/original/ula_timing.md) and depends on the T-state within the paper line.
 
 For peripherals using DMA: the ULA still does its video reads during a DMA cycle. If the peripheral accesses contended memory (`#4000-#7FFF` on the 48K), the ULA may also be accessing the same memory — there is no arbitration. In practice, DMA peripherals should either avoid contended memory or accept the timing jitter.
 
@@ -316,13 +316,13 @@ Most commercially available peripherals include a pass-through female connector 
 
 4. **Long chains cause signal degradation.** The address and data buses are unbuffered. After 3-4 peripherals in a chain, the capacitance and the resistance of the edge connectors cause ringing and timing errors. Use a buffered expansion backplane for chains longer than 3 peripherals.
 
-5. **The `CK` signal is interrupted during contended memory.** Peripherals that clock themselves from `CK` must tolerate 1-3 cycle gaps. The issue 6A 48K and the Spanish 128K omit `CK` entirely — peripherals that depend on it won't work.
+5. **The `CK` signal is interrupted during contended memory.** Peripherals that clock themselves from `CK` must tolerate gaps of up to 6 T-states per contended cycle. The issue 6A 48K and the Spanish 128K omit `CK` entirely — peripherals that depend on it won't work.
 
 6. **The issue 6A 48K omits `/RFSH`.** Peripherals that use `/RFSH` to detect refresh cycles (e.g., some DRAM-based add-ons) will not work on issue 6A boards.
 
 7. **`/BUSRQ` halts the CPU but not the ULA.** During `/BUSACK`, the ULA still does video reads from RAM. A DMA peripheral accessing `#4000-#7FFF` will collide with the ULA and produce display corruption.
 
-8. **The data bus is shared with the ULA.** During a video read (every 8th cycle during active display), the ULA drives the address bus and reads the data bus. A peripheral that drives the data bus during a ULA video cycle will corrupt the display.
+8. **The data bus is shared with the ULA.** During a video read (the ULA fetches 4 bytes in the first 4 T-states of each 8-T group, across the 128 T-states of every paper line), the ULA drives the address bus and reads the data bus. A peripheral that drives the data bus during a ULA video cycle will corrupt the display.
 
 9. **`/ROMCS` only works for `#0000-#3FFF`.** There is no `/RAMCS`. Don't try to overlay the RAM region — it can't be done from the edge connector.
 

@@ -34,7 +34,7 @@ The 128K introduced four features that defined the rest of the Spectrum lineage:
 | **128 KB RAM bank-switched via `#7FFD`** | The paging layout (3-bit bank number, ROM select, shadow screen) was inherited by every later Sinclair model and by every clone. Soviet clones copied it verbatim. |
 | **AY-3-8912 sound chip** | Standardised Spectrum music. Every later model, every Russian clone, and the modern demoscene's `.pt3`/`.ay` file formats are direct descendants. |
 | **32 KB ROM (two switchable 16 KB banks)** | Bank 0: 128K editor + 48K BASIC API; Bank 1: the original 48K ROM. The "48K mode" accessed by `USR 0` and the ROM-disabling bit are 128K inventions. |
-| **228 T-states/scanline frame (vs 224 on 48K)** | The +2, +2A, +3, Pentagon, Scorpion, and ATM Turbo all use the 228-T-state scanline. The 4 extra T-states per scanline absorbed the bank-decode logic needed for the bank-switched 128 KB memory map (the 48K's ULA fetches from a fixed bank, the 128K's ULA must look up the active screen bank on each access). |
+| **228 T-states/scanline frame (vs 224 on 48K)** | The +2, +2A and +3 use the 228-T-state scanline. The Soviet clones did not follow it: the Pentagon and Scorpion keep 224 T-states per line. The paper fetch itself is still 128 T-states per line; the extra 4 T-states fall outside the contended window. |
 
 ---
 
@@ -161,10 +161,11 @@ The 128K editor ROM provides the **`USR 0`** entry point that flips to ROM bank 
 
 ## Memory Contention on the 128K
 
-The 128K's contention model is **fundamentally different from the 48K's**:
+The 128K's ULA contends the same way as the 48K's — it **stretches the CPU clock**, with the same `(6,5,4,3,2,1,0,0)` pattern, including internal (no-MREQ) cycles and I/O — but **which memory** is contended changes:
 
 - **48K**: any access to `#4000`–`#7FFF` may be delayed by the ULA's video fetches. The delay pattern is `(6,5,4,3,2,1,0,0)` repeated every 8 T-states.
-- **128K**: contention is **per-bank, not per-address**. The ULA contends only the banks that share DRAM with the screen: **banks 1, 3, 5, 7** (the odd-numbered banks). Banks 0, 2, 4, 6 are never contended.
+- **128K**: contention is **per-bank, not per-address**. The ULA contends only the banks that share DRAM with the screen: **banks 1, 3, 5, 7** (the odd-numbered banks), in whichever slot they are mapped. Banks 0, 2, 4, 6 are never contended.
+- **I/O on the 128K** follows the 48K's four patterns (port high byte from A or B in `#40`–`#7F`, and/or A0 = 0); in addition, a high byte in `#C0`–`#FF` counts as contended while an odd bank is paged at `#C000` (Sinclair Wiki, *Contended I/O*).
 
 The implication: code running from bank 3 paged at `#C000` is contended, even though `#C000` is outside the screen area. Conversely, code in bank 0 (also at `#C000`) is not contended. This is the **most common source of timing bugs when porting 48K software to the 128K**: a tight loop that runs in `#C000` works fine in 48K mode (which uses the 48K ROM bank 1 and the original contention), but stalls unpredictably when banked into a contended bank on the 128K.
 
@@ -177,10 +178,10 @@ The 128K's contention timing is also different from the 48K's:
 | **Delay pattern** | `(6,5,4,3,2,1,0,0)` | `(6,5,4,3,2,1,0,0)` (same as 48K) |
 | **Pattern starts at T-state** | 14335 | 14361 |
 | **Contention scanline range** | 64–255 | 63–254 |
-| **Frame length** | 69,888 T-states (312 lines × 224) | 70,932 T-states (311 lines × 228) |
+| **Frame length** | 69,888 T-states (312 lines × 224) | 70,908 T-states (311 lines × 228) |
 | **Frame rate** | 50.08 Hz | 49.89 Hz |
 
-The 228-T-state scanline (vs the 48K's 224) exists because the 128K's gate array performs **bank-aware addressing** during video fetch — it has to look up the bank number for each fetch, since the visible screen can be in bank 5 or bank 7 (selected by `#7FFD` bit 3). The 4 extra T-states per scanline absorb this extra decoding work. The contention pattern itself (the `(6,5,4,3,2,1,0,0)` delay table) is identical to the 48K's.
+The 228-T-state scanline (vs the 48K's 224) does not change the contended window: the ULA still fetches the paper in 128 T-states per line (16 windows of 8 T), and the 4 extra T-states are uncontended border/blanking time. The contention pattern itself (the `(6,5,4,3,2,1,0,0)` delay table) is identical to the 48K's; only the start (14361) and the 228-T line period differ (Sinclair Wiki, *Contended memory*).
 
 For the programmer-facing view of contention with T-state tables, see [contention_model.md](../../05_development/03_memory_and_io/contention_model.md) and [contention_timing.md](../../05_development/05_display_and_timing/contention_timing.md).
 
@@ -333,7 +334,7 @@ For a complete reference of the 128K's frame timing, see [video_frame_128k.md](.
 | **Paging port** | — | **`#7FFD`** | `#7FFD` | `#7FFD` + `#1FFD` |
 | **Scanline length** | 224 T-states | **228 T-states** | 228 T-states | 228 T-states |
 | **Frame rate** | 50.08 Hz | **49.89 Hz** | 49.89 Hz | 49.89 Hz |
-| **Contention model** | 8-cycle pattern | **per-bank (1,3,5,7 contended)** | per-bank (1,3,5,7) | per-bank (4,5,6,7), MREQ-gated |
+| **Contention model** | `#4000`–`#7FFF`, clock stretch, I/O contended | **per-bank (1,3,5,7 contended), clock stretch, I/O contended** | per-bank (1,3,5,7), as 128K | per-bank (4,5,6,7), `/WAIT`, MREQ only, no I/O contention |
 | **Power** | 9V DC @ 1.2A | **9V DC @ 2.0A** | 9V DC @ 2.0A | 9V DC @ 1.5A |
 | **Case design** | Rubber-key slab | **"Toast Rack" with heatsink** | Grey BBC-style slab | Black +2A / black +3 with disk drive |
 

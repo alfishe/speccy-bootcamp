@@ -232,7 +232,7 @@ The 16K/48K has **no software mechanism** to disable the ROM: there is no `#7FFD
 
 The lower 16 KB DRAM (`#4000`–`#7FFF`) is the most important bank on the machine, because it is **shared between the CPU and the ULA's video fetch**. The ULA is also this bank's DRAM controller: it multiplexes the 14-bit CPU address onto the 7 address pins of the `4116` chips and generates `/RAS` (row-address strobe) and `/CAS` (column-address strobe).
 
-Because the video fetch is hard-wired to read from this bank, the ULA must arbitrate every CPU access. The mechanism is **clock stretching**: the ULA generates the Z80's 3.5 MHz CPU clock and **stalls it when a CPU access to `#4000`–`#7FFF` collides with a video fetch cycle**. This is the physical basis of memory contention — see [ULA Architecture § Memory Arbitration](ula_architecture.md#memory-arbitration--how-the-ula-steals-the-bus) for the cycle-by-cycle detail and [Contention Model](../../05_development/03_memory_and_io/contention_model.md) for the per-address contention pattern.
+Because the video fetch is hard-wired to read from this bank, the ULA must arbitrate every CPU access. The mechanism is **clock stretching**: the ULA generates the Z80's 3.5 MHz CPU clock and **stalls it when a CPU bus cycle with an address in `#4000`–`#7FFF` collides with a video fetch cycle** — memory reads, writes and opcode fetches, but also internal (no-MREQ) T-states that leave such an address on the bus, and I/O cycles (by the port's high byte and A0). This is the physical basis of memory contention — see [ULA Architecture § Memory Arbitration](ula_architecture.md#memory-arbitration--how-the-ula-steals-the-bus) for the cycle-by-cycle detail and [Contention Model](../../05_development/03_memory_and_io/contention_model.md) for the per-address contention pattern.
 
 ### Upper 32 KB — The Uncontended Bank
 
@@ -428,7 +428,7 @@ The connector has two rows of 28 fingers each, conventionally labeled **A** (rea
 | 20A | A | `/HALT` | Z80 halt state |
 | 22A | A | `/BUSREQ` | Z80 bus request |
 | 23A | A | `/BUSACK` | Z80 bus acknowledge |
-| 24A | A | `/WAIT` | Z80 wait input (unused on most 16K/48K — see [ULA Architecture § Memory Arbitration](ula_architecture.md#memory-arbitration--how-the-ula-steals-the-bus)) |
+| 24A | A | `/WAIT` | Z80 wait input — never driven by the ULA, which stretches the CPU clock for contention instead; available to expansion devices (see [ULA Architecture § Memory Arbitration](ula_architecture.md#memory-arbitration--how-the-ula-steals-the-bus)) |
 | 25A | A | `/ROMCS` | ROM chip-select (pulled low by external device to disable internal ROM) |
 | 26A | A | `/RFSH` | Z80 refresh strobe |
 | 27A | A | `/INT` | Maskable interrupt (driven by ULA at frame rate) |

@@ -205,7 +205,7 @@ For the full frame timing reference, see [video_frame_128k.md](../../05_developm
 | **RS-232 / MIDI** | No | Yes | **No** | No |
 | **Disk drive** | No | No | **No** | +3: built-in 3" floppy; +2A: optional |
 | **Paging register** | — | `#7FFD` | **`#7FFD`** | `#7FFD` + `#1FFD` |
-| **Contention model** | per-address, 8-cycle | per-bank (1/3/5/7), 7-cycle | **per-bank (1/3/5/7), 7-cycle (same as 128K)** | per-bank (4/5/6/7), MREQ-gated |
+| **Contention model** | per-address, 8-T pattern, clock stretch | per-bank (1/3/5/7), 8-T pattern, clock stretch | **per-bank (1/3/5/7), 8-T pattern (same as 128K)** | per-bank (4/5/6/7), `/WAIT`, MREQ only |
 | **Gate array** | Ferranti ULA | Sinclair 8K5/7K0 | **Sinclair 8K5/7K0 (same as 128K)** | Amstrad 40084/40085 |
 | **Scanline** | 224 T-states | 228 T-states | **228 T-states** | 228 T-states |
 | **External case color** | Beige | Beige | **Grey** | Black (+2A) / Black with disk drive (+3) |

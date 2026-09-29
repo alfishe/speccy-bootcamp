@@ -179,16 +179,19 @@ The +2A/+3 has a **completely different contention model** from the 128K/+2:
 
 | Property | 128K/+2 (Ferranti) | +2A/+3 (Gate Array) |
 |---|---|---|
-| Contended banks | 1, 3, 5, 7 (odd) | **4, 5, 6, 7** (high banks) |
+| Contended banks | 1, 3, 5, 7 (odd), any slot | **4, 5, 6, 7** (high banks), any slot — including `#0000` in the all-RAM special modes |
+| How the CPU is held | Clock stopped | **Z80 `/WAIT` pulled** |
 | Delay pattern | 6-5-4-3-2-1-0-0 | **1-0-7-6-5-4-3-2** |
-| I/O contention | Yes (A0=0 ports) | **No** (MREQ only) |
+| Contended window per line | 128 T | **129 T** (Rak's Timing Test on a real +3 and +2A; emulators use 128) |
+| I/O contention | Yes (A0=0 ports or high byte `#40`–`#7F`) | **No** (MREQ only) |
+| Internal (no-MREQ) T-states | Contended | **Not contended** |
 | Peak delay | 6T | **7T** |
 
 > [!WARNING]
 > Code that relies on the exact Ferranti contention pattern (6-5-4-3-2-1-0-0) for timing will break on the +2A/+3. The peak delay is 7T at a different T-state offset. See [contention_model.md](contention_model.md) for details.
 
 Key differences:
-- **I/O is never contended** — `OUT (#FE), A` takes the same time during paper as during border
+- **I/O is never contended** — the I/O cycle of `OUT (#FE), A` takes the same time during paper as during border (its opcode fetch is still contended if the code runs from banks 4–7)
 - **Banks 4, 5, 6, 7** are contended (not 1, 3, 5, 7)
 - **No early/late timing drift** — the gate array doesn't have the thermal drift of the Ferranti ULA
 

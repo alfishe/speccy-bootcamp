@@ -2,7 +2,7 @@
 
 # ZX Spectrum +2A / +3 — Amstrad's ASIC Redesign
 
-The **ZX Spectrum +2A** (black case, launched April 1987, £149.99) and the **ZX Spectrum +3** (black case with built-in 3-inch floppy drive, launched December 1987, £199.99) are **the most internally-divergent models** in the Sinclair Spectrum lineage. Despite using the same case, keyboard, and most of the I/O as the +2 grey, the +2A and +3 are **not software-compatible with the 128K/+2** at the cycle-precise level — they use a **completely different gate array** (the Amstrad **40084** and **40085** ASICs, replacing Sinclair's 8K5/7K0), a **different contention model** (per-bank, MREQ-gated, on banks 4/5/6/7 instead of 1/3/5/7), an **additional paging register** (`#1FFD` for special paging modes and disk control), and an **enlarged ROM** (64 KB, four switchable 16 KB banks, adding the +3 DOS disk operating system).
+The **ZX Spectrum +2A** (black case, launched April 1987, £149.99) and the **ZX Spectrum +3** (black case with built-in 3-inch floppy drive, launched December 1987, £199.99) are **the most internally-divergent models** in the Sinclair Spectrum lineage. Despite using the same case, keyboard, and most of the I/O as the +2 grey, the +2A and +3 are **not software-compatible with the 128K/+2** at the cycle-precise level — they use a **completely different gate array** (the Amstrad **40084** and **40085** ASICs, replacing Sinclair's 8K5/7K0), a **different contention model** (per-bank, `/WAIT`-based and MREQ-gated, on banks 4/5/6/7 instead of 1/3/5/7), an **additional paging register** (`#1FFD` for special paging modes and disk control), and an **enlarged ROM** (64 KB, four switchable 16 KB banks, adding the +3 DOS disk operating system).
 
 The +2A was Amstrad's cost-reduction exercise on the +2 grey: replace the discrete logic and Sinclair gate array with a single custom ASIC, reduce the PCB complexity, and replace the 32 KB ROM with a 64 KB ROM to incorporate +3 DOS without requiring a separate floppy interface. The +3 is the same machine with the addition of an **internal 3-inch floppy drive** (using the same Hitachi HFD-305S mechanism as the Amstrad CPC 6128 and PCW 8256) and the **uPD765A** floppy disk controller chip.
 
@@ -67,21 +67,23 @@ The new ASIC's most consequential changes are:
 
 | Parameter | Sinclair 8K5/7K0 (128K/+2) | Amstrad 40084/40085 (+2A/+3) |
 |---|---|---|
-| **Contended banks** | 1, 3, 5, 7 (odd banks) | 4, 5, 6, 7 (high banks) |
-| **Contention gating** | On all bus cycles | **MREQ-gated** — only on real memory accesses |
-| **Delay pattern** | `(6, 5, 4, 3, 2, 1, 0, 0)` | `(1, 0, 7, 6, 5, 4, 3, 2)` (same values, rotated) |
+| **Contended banks** | 1, 3, 5, 7 (odd banks), any slot | 4, 5, 6, 7 (high banks), any slot — including `#0000` in the all-RAM modes |
+| **How the CPU is held** | CPU clock stopped | Z80 `/WAIT` pin pulled |
+| **Contention gating** | Address only: memory, internal (no-MREQ) and I/O cycles | **MREQ-gated** — only on real memory accesses |
+| **Delay pattern** | `(6, 5, 4, 3, 2, 1, 0, 0)` | `(1, 0, 7, 6, 5, 4, 3, 2)` (different values: max 7 T, one free T per window) |
 | **Pattern start T-state** | 14361 | 14361 |
-| **Free gap before resumption** | — | 100 T-states, resumes at T=14589 |
+| **Contended window per line** | 128 T | 129 T (Rak's Timing Test on a real +3 and +2A) |
 | **`#7FFD` bit 1 (DIS)** | Disables further `#7FFD` writes | Same behavior, preserved for compatibility |
 | **Additional paging register** | — | `#1FFD` (special modes, disk motor, ROM bank) |
 
-The most important change is **MREQ gating**. On the Sinclair gate array (128K/+2), the ULA contends **any access to a contended bank**, regardless of whether it is a memory access (MREQ) or an I/O access (IORQ). This means that on the 128K/+2, `OUT (#FE), A` or `OUT (#7FFD), A` will trigger contention if the address falls in a contended bank's range — even though no memory is being accessed.
+The most important change is **MREQ gating**. On the 128K/+2, the ULA contends **any bus cycle whose address looks contended**, whether it is a memory access (MREQ), an internal cycle, or an I/O access (IORQ). For I/O it follows four patterns chosen by the port address: A0 = 0 (the ULA's port, e.g. `#FE`) is always contended, and a port high byte in `#40`–`#7F` (or `#C0`–`#FF` with an odd bank at `#C000`) is contended too. The high byte comes from the A or B register, not from the program counter.
 
 On the +2A/+3, the ASIC only contends memory accesses (when MREQ is asserted). I/O accesses (IORQ) **never trigger contention**, even when the address bits match a contended bank. This means:
 
-- `OUT (#FE), A` is uncontended on the +2A/+3, but contended on the 128K/+2
-- `OUT (#7FFD), A` is uncontended on the +2A/+3, but contended on the 128K/+2
-- `OUT (#BFFD), A` (AY register writes) are uncontended on the +2A/+3, but contended on the 128K/+2
+- `OUT (#FE), A`: the I/O cycle is uncontended on the +2A/+3, but contended on the 128K/+2 (A0 = 0)
+- `OUT (C), A` with BC = `#7FFD`: uncontended on the +2A/+3, but contended on the 128K/+2 (high byte `#7F`: `C:1, C:1, C:1, C:1`)
+- `OUT (C), A` with BC = `#BFFD` (AY data): uncontended on both (on the 128K/+2 the high byte `#BF` maps page 2 and A0 = 1)
+- Internal (no-MREQ) T-states with a contended address on the bus (e.g. `INC (HL)`, `JR`, `LDIR` in contended memory) are contended on the 128K/+2 but not on the +2A/+3
 
 This is the source of many timing-sensitive incompatibilities. Demoscene productions that rely on the precise cycle count of `OUT (#FE), A` for multicolor effects will behave differently on the +2A/+3 vs the 128K/+2.
 
@@ -105,8 +107,10 @@ The reason for the change is in the ASIC's memory-decoder redesign: the Amstrad 
 | **Delay pattern** | `(6,5,4,3,2,1,0,0)` | `(6,5,4,3,2,1,0,0)` | **`(1,0,7,6,5,4,3,2)`** |
 | **Contended banks** | `#4000–#7FFF` (address) | 1, 3, 5, 7 (bank number) | **4, 5, 6, 7 (bank number)** |
 | **MREQ gating** | No (contends any cycle) | No (contends any cycle) | **Yes (only memory accesses)** |
+| **Mechanism** | Clock stopped | Clock stopped | **`/WAIT` pulled** |
+| **I/O contention** | Yes (4 patterns) | Yes (4 patterns) | **No** |
 | **Pattern starts** | T=14335 | T=14361 | **T=14361** |
-| **Free gap** | — | — | **100 T-states, resumes at T=14589** |
+| **Contended window per line** | 128 T | 128 T | **129 T** (real-hardware tests; emulators use 128) |
 | **Frame rate** | 50.08 Hz | 49.89 Hz | **49.89 Hz** |
 
 ### Practical Implications for Software
@@ -117,9 +121,9 @@ The +2A/+3's contention differences mean:
 
 2. **Software that runs entirely from uncontended banks is unaffected**. Code in bank 0 (at `#C000`) runs at the same speed on the 128K/+2 and the +2A/+3.
 
-3. **The +2A/+3's contention is more predictable for non-memory I/O** — `OUT (#FE), A` always runs in the same number of cycles on the +2A/+3, regardless of where the CPU is executing from. This is why some modern demoscene productions explicitly target the +2A/+3.
+3. **The +2A/+3's contention is more predictable for I/O** — the I/O cycle of `OUT (#FE), A` always takes 4 T-states on the +2A/+3, whatever the port address and beam position. The opcode fetches of the `OUT` itself are still contended if the code runs from banks 4–7.
 
-4. **Detecting a +2A/+3 from software** is possible by timing `OUT (#FE), A` from a contended bank and observing whether the cycle count matches the 128K/+2's contended pattern or the +2A/+3's uncontended pattern. The ROM does this on boot to detect the machine type.
+4. **Detecting a +2A/+3 from software** is possible by timing `OUT (#FE), A` during the paper area and observing whether the cycle count matches the 128K/+2's contended I/O pattern or the +2A/+3's uncontended one.
 
 For the programmer-facing view of contention with per-T-state tables, see [contention_model.md](../../05_development/03_memory_and_io/contention_model.md) and [contention_timing.md](../../05_development/05_display_and_timing/contention_timing.md).
 
@@ -251,6 +255,7 @@ For the canonical ROM dump reference and disassembly notes, see [rom_versions.md
 | **Frame rate** | 50.08 Hz | 49.89 Hz | 49.89 Hz | 49.89 Hz | 49.89 Hz |
 | **Contended banks** | `#4000–#7FFF` | 1, 3, 5, 7 | 1, 3, 5, 7 | **4, 5, 6, 7** | **4, 5, 6, 7** |
 | **MREQ-gated contention** | No | No | No | **Yes** | **Yes** |
+| **I/O contention** | Yes | Yes | Yes | **No** | **No** |
 | **Paging registers** | none | `#7FFD` | `#7FFD` | `#7FFD` + `#1FFD` | `#7FFD` + `#1FFD` |
 | **Special paging mode** | — | — | — | **Yes** | **Yes** |
 | **Disk drive** | External only | External only | External only | External connector | **Internal 3-inch** |

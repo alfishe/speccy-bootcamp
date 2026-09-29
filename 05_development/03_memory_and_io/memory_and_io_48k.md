@@ -206,7 +206,7 @@ For a complete explanation with lookup tables and fast access patterns, see [scr
 
 ### Contention Warning
 
-The pixel buffer falls within the **contended memory range** (`#4000`–`#7FFF`). During the visible screen area (scanlines 64–255), the ULA steals bus cycles. Code that accesses this region runs **slower** — each M-cycle may be delayed by up to 6 T-states. See [contention_model.md](contention_model.md) for details.
+The pixel buffer falls within the **contended memory range** (`#4000`–`#7FFF`). During the visible screen area (scanlines 64–255), the ULA steals bus cycles. Code that accesses this region runs **slower** — each bus cycle with an address in `#4000`–`#7FFF` may be delayed by up to 6 T-states (the ULA stops the CPU clock; this includes internal no-MREQ T-states that leave such an address on the bus). I/O is contended too, by port address: A0 = 0 (port `#FE`) and/or a high byte in `#40`–`#7F`. See [contention_model.md](contention_model.md) for details.
 
 ---
 

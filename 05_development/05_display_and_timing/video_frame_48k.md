@@ -76,14 +76,14 @@ first paper scanline — uncontended time for setup operations.
 
 ## Contention Pattern
 
-During the paper area (scanlines 64–255), the ULA reads pixel and attribute data from RAM. When the CPU accesses the contended range (`#4000`–`#7FFF`), the ULA may **delay the CPU** by inserting wait states.
+During the paper area (scanlines 64–255), the ULA reads pixel and attribute data from RAM. When the CPU puts an address in the contended range (`#4000`–`#7FFF`) on the bus, the ULA may **delay the CPU** by stopping its clock (the ULA does not use the Z80 `/WAIT` pin). This applies to opcode fetches, data reads and writes, and also to internal (no-MREQ) T-states that leave such an address on the bus; I/O is contended by port address (see [Contention Timing — I/O Port Contention](contention_timing.md#io-port-contention)).
 
 ### Per-Scanline Contention
 
-The contention pattern repeats every **8 T-states** within each paper scanline:
+The contention pattern repeats every **8 T-states** across the first **128 T-states** of each paper line's fetch window, which starts at **T=14,335 + n × 224** (FUSE convention; 14,336 in sources that count from 1 — the same event), n = 0–191. The other 96 T-states of each line are uncontended:
 
 ```
-T-state offset within scanline (during paper area):
+T-state offset from the line's contention onset (0-127):
 Offset:  0  1  2  3  4  5  6  7  8  9  10  11  12  13  14  15  ...
 Delay:   6  5  4  3  2  1  0  0  6  5   4   3   2   1   0   0  ...
 
@@ -92,7 +92,7 @@ Pattern repeats: 6, 5, 4, 3, 2, 1, 0, 0 (period = 8 T-states)
 
 This means:
 - At the start of each 8-T-state cycle, the ULA is accessing RAM and the CPU may be delayed by up to **6 T-states**
-- In the middle of each cycle, the ULA is not accessing RAM and there is **no delay**
+- In the last 2 T-states of each cycle, the ULA is not accessing RAM and there is **no delay**
 
 ### Practical Impact
 
@@ -116,18 +116,18 @@ Scanlines 64–255:  Contention active when accessing #4000–#7FFF
 Scanlines 256–311: No contention (bottom border + blanking)
 ```
 
-Code running in **non-contended RAM** (`#8000`–`#FFFF`) is never delayed, even during the paper area. Only accesses to `#4000`–`#7FFF` trigger contention.
+Code running in **non-contended RAM** (`#8000`–`#FFFF`) or ROM is never delayed by its own fetches, even during the paper area. Only bus cycles with `#4000`–`#7FFF` on the address bus — plus I/O to ports with A0 = 0 or a high byte of `#40`–`#7F` — trigger contention.
 
 ---
 
 ## The Floating Bus
 
-When the CPU reads from contended memory during a ULA fetch cycle, it may read **the data the ULA is currently fetching** rather than the actual memory contents. This is the **floating bus** — an unintended feature that became a programming tool.
+When the CPU reads an **I/O port that no device answers** (e.g. `IN A,(#FF)`) while the ULA is fetching, it reads **the byte the ULA is currently fetching**, because nothing else drives the data bus. Memory reads always return the addressed byte. This is the **floating bus** — an unintended feature that became a programming tool.
 
 ### What Value Appears
 
 ```
-During the paper area, reading from contended memory (#4000–#7FFF):
+During the paper area, reading an unattached port (A0 = 1, e.g. #FF):
 
 If the read occurs during a ULA pixel fetch:
   → Returns the pixel byte the ULA just read
@@ -135,19 +135,19 @@ If the read occurs during a ULA pixel fetch:
 If the read occurs during a ULA attribute fetch:
   → Returns the attribute byte the ULA just read
   
-If the read occurs during a non-fetch cycle:
-  → Returns the previous value on the data bus (unpredictable)
+If the read occurs during a non-fetch cycle (or outside the paper area):
+  → Returns #FF (the ULA is idle)
 ```
 
 ### Using the Floating Bus as Raster Sync
 
-The floating bus can be used to **detect the current scanline position** without any port access:
+The floating bus can be used to **detect the current scanline position** with a single port read:
 
 ```z80
 ; Wait for a specific attribute pattern on the floating bus
 ; This is used in some multicolor effects to synchronize to the raster
 WaitForRaster:
-    IN   A,(#FF)         ; Read floating bus (any even port works)
+    IN   A,(#FF)         ; Read floating bus (any odd port that no device decodes)
     CP   #47             ; Looking for specific attribute value
     JR   NZ,WaitForRaster
     ; We're now synchronized to a specific raster position
@@ -240,15 +240,14 @@ Available (uncontended):   26,880 T-states (top + bottom border)
   Top border:              14,336 T-states (64 lines × 224)
   Bottom border:           12,544 T-states (56 lines × 224)
   
-Available (contended):     ~32,000 effective T-states
-  Paper area:              42,888 T-states total
-  ULA steals:              ~12,288 T-states (192 × 64)
-  Net for CPU:             ~30,600 T-states (in non-contended code)
-  Code in screen area:     Even less due to contention delays
+Paper area:                43,008 T-states (192 lines × 224)
+  Contended windows:       24,576 T-states (192 × 128)
+  Free part of each line:  18,432 T-states (192 × 96)
 
-Total useful T-states:     ~57,000 per frame
-As percentage:             ~82% of frame time usable by CPU
-ULA overhead:              ~18% stolen for video generation
+Code in ROM or #8000–#FFFF touching only uncontended memory:
+  all 69,888 T-states usable — the ULA steals nothing
+Accesses to #4000–#7FFF inside a contended window:
+  0–6 T each (average 21/8 ≈ 2.6 T for an access at a random T-state)
 ```
 
 ---

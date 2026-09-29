@@ -43,7 +43,7 @@ Insert an expansion cartridge component-side **down** — the SIL/SIMM-style not
 | A9 | `GND` | — | Ground (0 V) |
 | A10 | `+5V` | PWR | +5 V regulated supply, max ~700 mA on 48K issue 2, ~1.5 A on issue 6+ |
 | A11 | `–5V` | PWR | –5 V (used only by DRAM, not on later models) |
-| A12 | `WAIT_n` | IN | Z80 WAIT input — used by ULA for memory contention and by peripherals to extend cycles |
+| A12 | `WAIT_n` | IN | Z80 WAIT input — used by peripherals to extend cycles. The Ferranti ULA (16K/48K/128K/+2) never drives it (it stops the CPU clock for contention instead); on the +2A/+3 the Amstrad gate array pulls the CPU's WAIT for memory contention |
 | A13 | `RFSH_n` | OUT | Z80 refresh signal — pulses during `RFSH` cycle of every opcode fetch |
 | A14 | `ROMCS_n` | OUT | ROM chip select (active low) — pulled low when ROM is addressed at `#0000–#3FFF` |
 | A15 | `A7` | OUT | Z80 address bus, bit 7 |
@@ -54,7 +54,7 @@ Insert an expansion cartridge component-side **down** — the SIL/SIMM-style not
 | A20 | `A2` | OUT | Z80 address bus, bit 2 |
 | A21 | `A1` | OUT | Z80 address bus, bit 1 |
 | A22 | `A0` | OUT | Z80 address bus, bit 0 (LSB) |
-| A23 | `CPU_CLK` | OUT | Z80 clock (3.5 MHz on 48K, 3.5469 MHz on 128K/+2) — derived from ULA crystal |
+| A23 | `CPU_CLK` | OUT | Z80 clock (3.5 MHz on 48K, 3.5469 MHz on 128K/+2) — derived from ULA crystal; on the Ferranti-ULA models it is **held high for up to 6 T-states** whenever the ULA contends a CPU bus cycle |
 | A24 | `BUSRQ_n` | IN | Bus request — asserted by a peripheral to take over the bus (DMA-style) |
 | A25 | `INT_n` | OUT | Interrupt request — driven low by the ULA every 20 ms (INT mode) |
 | A26 | `BUSACK_n` | OUT | Bus acknowledge — Z80 acknowledges `BUSRQ_n` |

@@ -20,9 +20,9 @@ The ZX Spectrum was designed in 1981–1982 to a **£50 BOM target** for the 16K
 
 The alternative — used by the Commodore 64 (VIC-II has its own dedicated SRAM) and BBC Micro (6845 CRTC with proper bus arbitration) — was significantly more expensive. Altwasser's cost-driven decision was:
 
-> *Let the ULA always win.* Whenever the ULA needs to read screen bytes, it asserts the CPU's `/WAIT` pin. The CPU stalls until the ULA finishes its read. The CPU is none the wiser — it just sees a slower memory access.
+> *Let the ULA always win.* Whenever the ULA needs to read screen bytes and the CPU puts a contended address on the bus, the ULA **stops the CPU's clock** (it holds the clock line high). The CPU stalls until the ULA finishes its read. The CPU is none the wiser — it just sees a slower bus cycle.
 
-This is the entire mechanism of contention: **the ULA asserts `/WAIT` to pause the CPU for a few T-states while the ULA takes its turn with the shared DRAM**. The complexity is not in the *mechanism* but in the *timing*: the ULA's video fetch cadence determines exactly when and for how long `/WAIT` is asserted, and that cadence is what every contention-aware program must model.
+This is the entire mechanism of contention on the Ferranti-ULA machines (16K/48K/128K/+2): **the ULA stretches the CPU clock for a few T-states while it takes its turn with the shared DRAM**. It does **not** use the Z80 `/WAIT` pin — the Sinclair Wiki's *Contended I/O* page states that "the ULA pauses the processor by stopping its clock". Only the Amstrad gate array of the +2A/+3 pulls `/WAIT` (see below). The complexity is not in the *mechanism* but in the *timing*: the ULA's video fetch cadence determines exactly when and for how long the clock is held, and that cadence is what every contention-aware program must model.
 
 ---
 
@@ -68,11 +68,11 @@ ULA action:                      RAS  CAS  ...  ...  RAS  CAS ...
                                  (pixel byte)         (attr byte)
 ```
 
-In each **8-T-state window**, the ULA fetches **2 bytes**: one pixel byte and one attribute byte (both for the same screen column). The pattern repeats 16 times per scanline, producing 32 pixel bytes + 32 attribute bytes = 64 bytes total per scanline.
+In each **8-T-state window**, the ULA fetches **4 bytes**: two pixel bytes and two attribute bytes (for two adjacent 8-pixel columns). The pattern repeats 16 times per scanline (16 × 8 = the 128 T-states of the paper line), producing 32 pixel bytes + 32 attribute bytes = 64 bytes total per scanline.
 
 ### Where the 6-5-4-3-2-1-0-0 Pattern Comes From
 
-The `/WAIT` pattern is the ULA's defense against the CPU disrupting its paged-mode read sequence. If the CPU initiates a memory access **while `/RAS` is being driven by the ULA**, the ULA must:
+The clock-stop pattern is the ULA's defense against the CPU disrupting its paged-mode read sequence. If the CPU starts a bus cycle with a contended address **while the ULA owns the DRAM**, the ULA must:
 
 1. Finish its current DRAM access (can't abort mid-RAS without corrupting video)
 2. Yield the address bus to the CPU
@@ -92,7 +92,7 @@ The worst case is a CPU access that arrives **just as the ULA is about to assert
 | 6 | ULA idle (between fetches) | **0T** |
 | 7 | ULA idle | **0T** |
 
-This is the famous `(6, 5, 4, 3, 2, 1, 0, 0)` pattern. It is **not arbitrary** — it is the minimum delay the ULA must impose to protect its video fetch, given the DRAM chip's electrical characteristics.
+This is the famous `(6, 5, 4, 3, 2, 1, 0, 0)` pattern: the delay is simply the number of T-states left until the ULA releases the bus at offset 6 of the 8-T window. It applies to the **128 T-states of each paper line** only; border and blanking T-states are never contended. On the 48K the first delayed T-state is **14335** after the interrupt in the FUSE convention (the Sinclair Wiki gives "14335 or 14336" — the same event counted from a different origin).
 
 ---
 
@@ -106,11 +106,21 @@ The 48K's screen memory is at `#4000–#5AFF` (pixel file `#4000–#57FF`, attri
 
 The reason is electrical: the **4116 DRAM chips that hold the screen also hold the upper RAM**. The 48K's upper 16 KB is built from **two banks of 8 × 4116 chips** — one bank for `#4000–#5FFF`, another for `#6000–#7FFF`. These banks share `/RAS` and `/CAS` lines with the ULA, because the ULA needs to address them when fetching screen bytes. Even though the ULA only reads `#4000–#5AFF`, the entire 16 KB of upper RAM is on the ULA's address bus, so any CPU access to any of it can collide with the ULA's RAS/CAS sequencing.
 
-### Why I/O Accesses Are Also Contended
+### Why I/O Accesses and Internal Cycles Are Also Contended
 
-The 48K's ULA contends **any access whose address bits fall in the contended range**, regardless of whether it is a memory access (`/MREQ`) or an I/O access (`/IORQ`). This means `OUT (#FE), A` — the border/sound port — is contended if the address bus happens to have bit 14 set (which it almost always does during the paper area, because the program counter is in screen memory).
+The Ferranti ULA looks only at the **address lines** and at `/MREQ`/`/IORQ` — not at what kind of machine cycle is running. Two consequences follow:
 
-This was a **simplification** in the ULA's design: rather than separately decode `/MREQ` vs `/IORQ`, the ULA keys on the address bits alone. It cost the platform a small amount of `OUT` instruction time but simplified the gate count. This decision has consequences decades later: every multicolor effect that uses `OUT (#FE), A` is implicitly contended on the 48K/128K/+2.
+- **Internal (no-MREQ) cycles are contended.** Many instructions spend extra T-states with an address still on the bus (the `(HL)` address during `INC (HL)`, the `PC` during `JR`'s 5 internal T-states, `IR` during `INC BC`). If that address is in `#4000–#7FFF`, each of those T-states is contended too.
+- **I/O is contended.** During an `IN`/`OUT`, the port address is on the bus. Its **high byte comes from the A or B register** (`OUT (n),A` puts A on A8–A15; `OUT (C),r` puts B there) — **not from the program counter**. The ULA contends the cycle according to whether that high byte lies in `#40–#7F` and whether A0 = 0 (the ULA's own port):
+
+| High byte in `#40–#7F`? | A0 = 0 (ULA port)? | Pattern |
+|---|---|---|
+| No | No | `N:4` (uncontended) |
+| No | Yes | `N:1, C:3` |
+| Yes | No | `C:1, C:1, C:1, C:1` |
+| Yes | Yes | `C:1, C:3` |
+
+(`C:n` = check contention at this T-state, then n T-states; `N:n` = n uncontended T-states. Source: Sinclair Wiki, *Contended I/O*.) So `OUT (#FE),A` always pays the ULA's contention on its I/O cycle during the paper area, because A0 = 0 — that is why every multicolor effect that uses it is contention-sensitive on the 48K/128K/+2. The fetch of the `OUT` opcode is contended separately, and only if the code itself runs from contended memory.
 
 ---
 
@@ -127,11 +137,11 @@ The 128K's 128 KB of DRAM is physically organized as **two 64 KB blocks**:
 
 Bank 5 (which holds the visible screen, paged at `#4000`–`#7FFF`) and bank 7 (the shadow screen) are by necessity in the contended block, because the ULA reads them for video. Banks 1 and 3 are in the contended block as a consequence of the chip organization: 4 banks × 16 KB = 64 KB per DRAM chip set, and Sinclair filled out the chip set with two extra banks rather than leave the silicon unused.
 
-The pattern is preserved in the +2 unchanged — the +2 uses the same Sinclair 8K5/7K0 gate array and the same DRAM organization, so its contention model is identical.
+The rule is **"contended page, wherever mapped"**: bank 5 at `#4000` and any odd bank paged in at `#C000` are contended. The pattern is preserved in the +2 unchanged — the +2 uses the same Sinclair 8K5/7K0 gate array and the same DRAM organization, so its contention model is identical.
 
 ### Why the 128K Pattern Starts at T=14361 (Not T=14335)
 
-The 128K's scanline is **228 T-states** long (vs 224 on the 48K). This 4-T-state difference exists because the 128K's ULA fetches screen bytes slightly more slowly than the 48K's ULA — a design choice that gives the 128K DRAM chips more recovery time between accesses (allowing cheaper, lower-spec chips to be used).
+The 128K's scanline is **228 T-states** long (vs 224 on the 48K). The paper fetch itself is unchanged — 128 T-states per line, 16 windows of 8 T — so the 4 extra T-states are spent outside the paper (border/blanking).
 
 The 128K has 311 scanlines per frame (vs 312 on the 48K), so the paper area starts one scanline earlier than the 48K. The net effect: contention starts at T=14361 on the 128K, vs T=14335 on the 48K — a shift of **+26 T-states** that breaks 48K→128K porting of cycle-exact effects.
 
@@ -139,7 +149,7 @@ The 128K has 311 scanlines per frame (vs 312 on the 48K), so the paper area star
 
 The 128K/+2 inherits the **same contention delay pattern** as the 48K: `(6, 5, 4, 3, 2, 1, 0, 0)` repeating every 8 T-states. The 7K0 gate array does not change the ULA's per-cell timing; it only adds the bank-decode logic that decides *whether* a given access is contended. From the CPU's perspective, an access to a contended bank on the 128K experiences the same delay progression as an access to `#4000`–`#7FFF` on the 48K.
 
-This is **important for emulator authors**: the contention delay lookup table is identical for all Ferranti-ULA Spectrums (48K, 128K, +2). Only the address-range check (which banks are contended) and the start-T-state value (T=14361 for 128K vs T=14335 for 48K) differ between the models.
+This is **important for emulator authors**: the contention delay lookup table is identical for all Ferranti-ULA Spectrums (48K, 128K, +2), and so are the internal-cycle and I/O rules. Only the address-range check (which pages are contended; for I/O the port's high byte is checked against the current mapping, so a high byte in `#C0–#FF` is contended when an odd page is at `#C000`), the line length and the start-T-state value (T=14361 for 128K vs T=14335 for 48K) differ between the models.
 
 The 4 extra T-states per scanline on the 128K (228 vs 224) are absorbed by **more non-contention time at the end of each scanline** — they do not affect the per-cell contention pattern. This is why 48K multicolor effects can in principle be ported to the 128K by adjusting only the start-of-frame T-state count, without recalculating per-instruction delay tables.
 
@@ -156,30 +166,31 @@ The +2A/+3 organizes its 128 KB of DRAM as **two 64 KB blocks**, but **different
 - **Low block** ("uncontended") = banks **0, 1, 2, 3** — own DRAM chip set
 - **High block** ("contended") = banks **4, 5, 6, 7** — own DRAM chip set, shared with the video circuitry
 
-This is the most natural grouping: the contended banks are the high-numbered banks (4–7), all in one DRAM chip set. The Amstrad ASIC's address decoder just looks at bit 14 of the bank number (banks ≥ 4 = high block = contended).
+This is the most natural grouping: the contended banks are the high-numbered banks (4–7), all in one DRAM chip set. The decision depends only on bit 2 of the page number (pages ≥ 4 = high block = contended), **not on the slot**: in the +2A/+3 all-RAM special paging modes (`#1FFD`), a page 4–7 mapped at `#0000` is contended there too.
 
 The Sinclair 128K's grouping (banks 1, 3, 5, 7) was a quirk of the Sinclair gate array's interleaved DRAM organization. Amstrad's redesign grouped the contended banks contiguously for simpler decoding — a side effect of integrating more logic into the ASIC.
 
 ### Why MREQ Gating?
 
-The most consequential Amstrad change is **MREQ gating**: contention is only applied when the CPU asserts `/MREQ` (memory request). I/O accesses (`/IORQ`) **never trigger contention**, even if the address bits match a contended bank.
+The most consequential Amstrad change is the mechanism itself: the gate array **pulls the Z80 `/WAIT` pin** instead of stopping the clock, and it does so only when the CPU asserts `/MREQ` (memory request). I/O cycles (`/IORQ`) and internal cycles (no `/MREQ`) **never trigger contention**, even if the address on the bus is in a contended page. The Sinclair Wiki: the gate array "applies memory contention only if the MREQ line is active".
 
-The Sinclair/Ferranti design applied contention based on **address bits alone** — it did not distinguish `/MREQ` from `/IORQ`. The Amstrad ASIC adds this distinction.
+The Ferranti ULA contended any cycle whose **address** matched, memory, I/O or internal. The Amstrad gate array contends only real memory reads, writes and opcode fetches.
 
-The effect:
+The effect (the I/O cycle only — opcode fetches from contended memory are contended on both):
 
 | Instruction | 48K / 128K / +2 | +2A / +3 |
 |---|---|---|
 | `LD A, (HL)` with HL in contended bank | Contended | Contended |
-| `OUT (#FE), A` from contended address | **Contended** (because PC bits match) | **Uncontended** (no MREQ) |
-| `OUT (#BFFD), A` (AY register write) | **Contended** if PC in contended bank | **Uncontended** |
-| `IN A, (#FE)` from contended address | Contended | Uncontended |
+| `INC (HL)` with HL in contended bank | Read, write **and** the internal T-state contended | Read and write contended; internal T-state not |
+| `OUT (#FE), A` | **Contended** I/O cycle (A0 = 0: `N:1, C:3` or `C:1, C:3`) | **Uncontended** (no MREQ) |
+| `OUT (C), A` with BC = `#BFFD` (AY data) | Uncontended (`N:4`: A0 = 1, high byte `#BF` maps page 2) | **Uncontended** |
+| `IN A, (#FE)` | Contended I/O cycle | Uncontended |
 
 This is the source of most 128K→+2A/+3 timing incompatibilities. Demoscene productions that depend on the cycle count of `OUT (#FE), A` (the standard multicolor instruction) for cycle-exact timing **must have separate code paths** for Sinclair vs Amstrad machines.
 
 ### Why the Pattern Shifted to `(1, 0, 7, 6, 5, 4, 3, 2)`
 
-The Amstrad ASIC's delay pattern is the same eight values as the Sinclair pattern, but **rotated** so that the worst-case delay is at T-state offset 2 instead of offset 0:
+The Amstrad ASIC's delay pattern is **not** a rotation of the Sinclair values — its worst case is 7 T instead of 6, and it has only one free T-state per window instead of two:
 
 ```
 Ferranti / Sinclair 8K5/7K0 (48K, 128K, +2):
@@ -195,17 +206,9 @@ Amstrad 40084 (+2A, +3):
         Free T-states   Worst-case (7T)
 ```
 
-The pattern is rotated because the Amstrad ASIC's video-fetch phase is shifted relative to the contention window's T-state 0. The Amstrad ASIC's internal RAS/CAS sequencing starts 2 T-states later in the window than the Sinclair ULA's — so the peak-delay T-state is offset 2 instead of offset 0.
+The Sinclair Wiki's table gives the same delays T-state by T-state (14361 → 1, 14362 → 0, 14363 → 7, …, 14369 → 1, 14370 → 0, …) and says the pattern "repeats until 14490 tstates" — consistent with a 129-T window (last delayed T-state 14489). The pattern starts at **T=14361**, as on the 128K. The window sums differ: 21 T of delay per 8-T window on the Ferranti ULA, 28 T on the gate array. Code that was hand-tuned for the Ferranti pattern will hit the worst-case delay at the wrong T-state on the +2A/+3.
 
-The total contention **budget** per window is the same (28 T-states of delay distributed across 8 cells), but the per-T-state distribution is different. Code that was hand-tuned for the Ferranti pattern will hit the worst-case delay at the wrong T-state on the +2A/+3.
-
-### The 100-T-state Free Gap at Frame Start
-
-The +2A/+3 has one more quirk: **contention does not start at the very first contended scanline**. There is a **100 T-state free gap** between the start of the contention period (T=14361) and the actual resumption of contention activity (T=14589).
-
-During this 100 T-state window, code can access contended banks with **zero contention delay**. This is a side effect of the Amstrad ASIC's startup sequence: it takes ~100 T-states for the video-fetch pipeline to stabilise after the paper area begins.
-
-This gap is not present on the 48K, 128K, or +2. Emulators must model it for cycle-exact +2A/+3 reproduction.
+**Window length: 129 T, not 128.** Emulators (Fuse, MAME, ZXMAK2, Xpeccy) reuse the Ferranti 128-T window per line. Photos of Rak's Timing Test v0.3 on a real +3 (2023) and a real +2A (2025), published on the redcode wiki "Timing-Test" page, show one more contended T-state at the end of each line (offset 128 still delays 1 T), matching the test's published expected screen.
 
 ---
 
@@ -214,15 +217,17 @@ This gap is not present on the 48K, 128K, or +2. Emulators must model it for cyc
 | Parameter | 16K/48K | 128K | +2 grey | **+2A** | **+3** |
 |---|---|---|---|---|---|
 | **Gate array** | Ferranti ULA (5C/6C/7C) | Sinclair 8K5/7K0 | Sinclair 8K5/7K0 | **Amstrad 40084/40085** | **Amstrad 40084/40085** |
-| **Contended range** | `#4000`–`#7FFF` (address) | Banks 1, 3, 5, 7 | Banks 1, 3, 5, 7 | **Banks 4, 5, 6, 7** | **Banks 4, 5, 6, 7** |
+| **How the CPU is held** | Clock stopped | Clock stopped | Clock stopped | **`/WAIT` pin** | **`/WAIT` pin** |
+| **Contended range** | `#4000`–`#7FFF` (address) | Banks 1, 3, 5, 7 (any slot) | Banks 1, 3, 5, 7 (any slot) | **Banks 4, 5, 6, 7 (any slot)** | **Banks 4, 5, 6, 7 (any slot)** |
 | **Contention cell** | 8 T-states | 8 T-states | 8 T-states | 8 T-states | 8 T-states |
 | **Delay pattern** | `(6,5,4,3,2,1,0,0)` | `(6,5,4,3,2,1,0,0)` | `(6,5,4,3,2,1,0,0)` | **`(1,0,7,6,5,4,3,2)`** | **`(1,0,7,6,5,4,3,2)`** |
 | **Worst-case delay** | 6T | 6T | 6T | **7T** | **7T** |
-| **Gating** | Address bits only | Address bits only | Address bits only | **MREQ only** | **MREQ only** |
-| **`OUT` contended?** | Yes (if A0=0 and PC in range) | Yes | Yes | **No** | **No** |
+| **Gating** | Address + MREQ or IORQ (any cycle) | Address + MREQ or IORQ | Address + MREQ or IORQ | **MREQ only** | **MREQ only** |
+| **Internal cycles contended?** | Yes | Yes | Yes | **No** | **No** |
+| **I/O contended?** | Yes: port high byte `#40–#7F` and/or A0=0 (4 patterns) | Yes (high byte checked against current mapping) | Yes | **No** | **No** |
+| **Contended window per line** | 128 T | 128 T | 128 T | **129 T** (real-hardware tests) | **129 T** (real-hardware tests) |
 | **Scanline** | 224 T-states | 228 T-states | 228 T-states | 228 T-states | 228 T-states |
 | **Pattern starts at T** | 14335 | 14361 | 14361 | 14361 | 14361 |
-| **Free gap at start** | — | — | — | **100 T (resumes 14589)** | **100 T (resumes 14589)** |
 | **Contention scanlines** | 64–255 | 63–254 | 63–254 | 63–254 | 63–254 |
 | **Frame rate** | 50.08 Hz | 49.89 Hz | 49.89 Hz | 49.89 Hz | 49.89 Hz |
 | **Early/late drift** | Yes (thermal) | Yes (thermal) | Yes (thermal) | **No** | **No** |
@@ -242,11 +247,11 @@ A cycle-exact emulator or FPGA core must implement:
 
 2. **Per-model contended-range check** — the same address can be contended on one model and uncontended on another. The bank-number-to-physical-DRAM mapping must be modeled correctly (especially for the 128K/+2's odd-bank scheme and the +2A/+3's high-bank scheme).
 
-3. **MREQ vs IORQ distinction on +2A/+3** — emulators that don't track the bus cycle type will incorrectly apply contention to `OUT` instructions on the +2A/+3.
+3. **Cycle-type rules** — on the Ferranti ULA, internal (no-MREQ) T-states with a contended address on the bus and I/O cycles (the four port patterns) are contended; on the +2A/+3 gate array only `/MREQ` cycles are. Emulators that don't track the bus cycle type get one or the other wrong.
 
-4. **The 100 T-state gap** on +2A/+3 — applies to the first scanline of contention only.
+4. **The 129-T window** on +2A/+3 — the last contended T-state of each line is one later than on the Ferranti ULA.
 
-5. **Early vs late timing on Ferranti models** — configurable toggle for the +1 T-state drift caused by thermal behavior. Defaults to "early" (cold machine) for compatibility.
+5. **Early vs late timing on Ferranti models** — configurable toggle for the up-to-1-T-state onset shift the Sinclair Wiki attributes to ULA temperature. It is not a difference between board issues. Defaults to "early" (cold machine) for compatibility.
 
 6. **The snow effect on 48K only** — `/RFSH` collision with `/RAS` corrupts the DRAM row address; see [ula_timing.md](ula_timing.md) for implementation notes.
 
@@ -254,7 +259,8 @@ A cycle-exact emulator or FPGA core must implement:
 
 - **Applying the Ferranti pattern to the +2A/+3** — produces subtly wrong timing for cycle-exact demos. Fixed in modern Fuse, ZEsarUX, and CSpect, but still present in some older emulators.
 - **Treating I/O as contended on +2A/+3** — results in `OUT (#FE), A` taking too long, breaking multicolor effects that depend on cycle counting.
-- **Missing the 100 T-state gap** — minor effect, but visible in cycle-exact demos that run during the first contended scanline.
+- **Not contending internal cycles on the Ferranti models** — instructions such as `INC (HL)`, `JR` or `LDIR` in contended memory come out a few T-states too fast.
+- **Using a 128-T window on the +2A/+3** — the real gate array contends one more T-state per line (129 T).
 - **Not modeling early/late timing** — demoscene productions may pass on emulator but fail on cold real hardware.
 
 For an in-depth treatment of accurate contention modeling, see [fpga_timing_accuracy.md](../../11_emulation/fpga/fpga_timing_accuracy.md) and [mcu_ula.md](../../11_emulation/mcu/mcu_ula.md).
@@ -315,7 +321,9 @@ For a canonical detection routine, see the World of Spectrum FAQ's "How to detec
 - [World of Spectrum](https://worldofspectrum.org/), "48K Technical Reference" and "128K Technical Reference" FAQs — frame timing, contention start T-states, and contended bank lists
 - [Ramsoft, *The Complete ZX Spectrum ROM Disassembly* and the fault-logging ROM](https://worldofspectrum.org/) test — real-hardware contention measurements used to verify emulator accuracy
 - [Fuse emulator](https://fuse-emulator.sourceforge.net/) source (`peripherals/ula.c`, `peripherals/dck.c`, `machines/plus3.c`) — open-source reference implementation of contention for all Sinclair and Amstrad models
-- [ZEsarUX](https://github.com/chernandezba/zesarux) source — cycle-exact contention for +2A/+3 including the 100 T-state gap
+- Sinclair Wiki, "Contended I/O" ([sinclair.wiki.zxnet.co.uk/wiki/Contended_I/O](https://sinclair.wiki.zxnet.co.uk/wiki/Contended_I/O)) — the four I/O contention patterns; the ULA "pauses the processor by stopping its clock"; no I/O contention on the +3
+- Rak, *Timing Test* v0.3 — redcode wiki "Timing-Test", "Results on real hardware": photos from a real +3 (2023) and +2A (2025) showing the 129-T gate array window
+- [ZEsarUX](https://github.com/chernandezba/zesarux) source — +2A/+3 contention model
 - [comp.sys.sinclair](https://groups.google.com/g/comp.sys.sinclair) FAQ — historical discussion of when the +2A/+3 contention differences were first documented (mid-1990s)
 - The +3E ROM project notes ([Andrew Owen](https://github.com/spectrum-pi/spectranet)) — discussion of how +3 DOS ROM code paths were adjusted for +2A/+3 timing
 

@@ -59,15 +59,17 @@ Contention delay: 1  0  7  6  5  4  3  2
 Key differences:
 
 1. **Peak delay is 7T, not 6T** — the Amstrad gate array can stall the CPU for one additional T-state compared to the Ferranti ULA
-2. **Peak is at offset 2, not offset 0** — the entire pattern is shifted and inverted
+2. **Peak is at offset 2, not offset 0** — and the values are not a rotation of the Ferranti ones: only one T-state per 8-T group is free (the Sinclair Wiki's table gives the same delays T-state by T-state (14361 → 1, 14362 → 0, 14363 → 7, …, 14369 → 1, 14370 → 0, …) and says the pattern "repeats until 14490 tstates" — consistent with a 129-T window (last delayed T-state 14489))
 3. **Minimum delay at offset 0 is 1T** — even at the start of the window, there's a 1T delay (vs 6T on Ferranti)
+4. **The window is 129 T, not 128** — photos of Rak's Timing Test on a real +3 (2023) and +2A (2025) (redcode wiki "Timing-Test") show offset 128 of each line still delaying 1 T; Fuse, MAME, ZXMAK2 and Xpeccy stop at 128
+5. **The CPU is held with `/WAIT`**, not by stopping its clock, and only during `/MREQ` cycles — internal (no-MREQ) T-states are never contended, unlike on the Ferranti ULA
 
 ### Contended Banks
 
 | Model | Contended banks |
 |-------|----------------|
 | 128K / +2 | Banks **1, 3, 5, 7** (odd banks / DRAM set B) |
-| +2A / +3 | Banks **4, 5, 6, 7** (high banks) |
+| +2A / +3 | Banks **4, 5, 6, 7** (high banks), in any slot — including `#0000` in the all-RAM special paging modes |
 
 This is a significant difference. On the 128K, bank 0 is uncontended. On the +2A/+3, **bank 4 and 6 are contended** even though they were safe on the 128K.
 
@@ -75,10 +77,10 @@ This is a significant difference. On the 128K, bank 0 is uncontended. On the +2A
 
 | Model | I/O contention | Root cause |
 |-------|---------------|------------|
-| Ferranti ULA | **Yes** — any port with A0=0 is contended during paper | ULA cannot distinguish memory vs I/O bus cycles |
+| Ferranti ULA | **Yes** — by port address: A0 = 0 and/or a high byte (from A or B) in `#40`–`#7F` (four patterns) | The ULA checks the address lines, not the cycle type |
 | Amstrad gate array | **No** — only `MREQ` (memory) is contended | Gate array keys off `MREQ` line; I/O accesses activate `IORQ` instead |
 
-This means `OUT (#FE),A` (border color), `OUT (#7FFD),A` (paging), and `OUT (#BFFD),A` (AY) all run at the **same speed during paper as during border** on +2A/+3. On the Ferranti ULA (48K/128K/+2), each of these pays up to 6T of contention delay per call during the paper area. This asymmetry is the most common cause of multicolor border effects running too fast when ported from +2A/+3 back to earlier machines — pad with NOPs to compensate.
+This means the I/O cycles of `OUT (#FE),A` (border color) and of an `OUT (C),A` to `#7FFD` (paging) run at the **same speed during paper as during border** on +2A/+3. On the Ferranti ULA (48K/128K/+2) both are contended during the paper area (`#FE` because A0 = 0, `#7FFD` because of its high byte `#7F`); an AY write to `#BFFD` is uncontended on both. So a multicolor border effect tuned on a +2A/+3 runs **slower** on the earlier machines, and needs less padding there.
 
 For the full per-T-state delay tables (both Ferranti and Amstrad), see [contention_timing.md](contention_timing.md).
 
@@ -175,6 +177,6 @@ See [bank_switching_patterns.md](../03_memory_and_io/bank_switching_patterns.md)
 
 - [Amstrad +2A / +3 Service Manual](https://www.worldofspectrum.org/hardware.html) — the canonical hardware reference for the +2A/+3's gate array (the "AMSTRAD 40040" or "40058" ASIC); documents the modified contention scanline range and the absence of floating-bus reads.
 - [Chris Smith — The ZX Spectrum ULA](http://www.zxdesign.info/) — while the book focuses on the Ferranti ULA, it also documents the gate array evolution in the 128K lineage and explains why the +2A/+3 breaks compatibility with 48K timing-sensitive code.
-- [Sinclair ZX Specifications](http://problemkaputt.de/zxdocs.htm) — the cross-model hardware reference covering the +2A/+3's paging port (`#1FFD`, the special MMU modes), the contention scanline range (64–255 vs the 128K's 64–191), and the 4-bank ROM layout.
+- [Sinclair ZX Specifications](http://problemkaputt.de/zxdocs.htm) — the cross-model hardware reference covering the +2A/+3's paging port (`#1FFD`, the special MMU modes), the contention differences from the 128K, and the 4-bank ROM layout.
 - [Spectrumpedia](https://speccy.wiki/) — cross-model print reference for the +2A/+3's special modes (ROM 0/1/2/3 selection, special RAM config, all-RAM mode for development).
 - [SpecEmu / ZEsarUX source code](https://sourceforge.net/projects/specemu/) — emulator references for the +2A/+3's exact scanline timing and the differences from the earlier +2 (grey) Z70830 mainboard.

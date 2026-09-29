@@ -2,7 +2,7 @@
 
 # 128K / +2 Video Frame — Contention Differences, Shadow Screen, and Timing Divergence
 
-The ZX Spectrum 128K (toastrack) and +2 (grey) use the **same Ferranti ULA core** as the 48K for video generation — but the frame is **311 scanlines at 70,908 T-states** (vs the 48K's 312 scanlines at 69,888 T-states), and the **contention behavior is different** because the 128K has 8 RAM banks instead of one contiguous block, and the ULA's screen fetches affect different banks depending on the paging configuration.
+The ZX Spectrum 128K (toastrack) and +2 (grey) use the **same Ferranti ULA core** as the 48K for video generation — but the frame is **311 scanlines at 70,908 T-states** (vs the 48K's 312 scanlines at 69,888 T-states), and the **contended memory is defined differently**: the 128K has 8 RAM banks instead of one contiguous block, and the ULA contends the odd banks (1, 3, 5, 7) wherever they are paged, whichever screen it is displaying. The mechanism (clock stretching, including internal cycles and I/O) and the delay pattern are the 48K's.
 
 > [!NOTE]
 > This article covers **only the differences** from the 48K frame. For the complete frame structure (PAL timing, scanline layout, INT position), see [video_frame_48k.md](video_frame_48k.md). For 128K memory paging, see [memory_and_io_128k.md](../03_memory_and_io/memory_and_io_128k.md).
@@ -108,7 +108,8 @@ When screen select bit = 1:
   ULA fetches pixels from bank 7's pixel area
   ULA fetches attributes from bank 7's attribute area
   Contention STILL applies to bank 7 (odd bank) when paged in
-  Bank 5's contention is reduced (ULA no longer fetching from it)
+  Bank 5 stays contended too: contention depends on the bank
+  number (1, 3, 5, 7), not on which screen is displayed
 ```
 
 ### Double Buffering Timing
@@ -144,16 +145,14 @@ DoubleBufferFlip:
 
 ## Early vs Late Timing
 
-The 128K/+2 has the same **early/late timing** issue as the 48K — the ULA's contention delay depends on the exact T-state offset within the scanline. However, there is a subtle difference:
+The 128K/+2 has the same **early/late timing** behavior as the 48K: on some machines the contention onset (and the related raster events) happens up to **1 T-state later** than the nominal value. The Sinclair Wiki attributes it to ULA temperature — a warm ULA drifts from "early" to "late" timing — not to a board issue or ULA revision:
 
 ```
-48K:   Contention delay starts at T-state 0 of each paper scanline
-128K:  Same contention delay pattern, but the exact T-state alignment
-       may differ by ±1 T-state depending on the 128K's ULA revision
+48K:   first contended T-state 14,335 (early) or 14,336 (late)
+128K:  first contended T-state 14,361 (early) or 14,362 (late)
 
-This means multicolor effects that are cycle-exact on 48K may be
-off by 1 T-state on some 128K machines — the effect may appear
-shifted by one pixel column.
+This means multicolor effects that are cycle-exact on one machine
+may be off by 1 T-state on another (or on the same machine once warm).
 ```
 
 For most practical purposes, this difference is negligible. Only the most demanding multicolor effects (8×1 attribute changes) are affected.
