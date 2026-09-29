@@ -728,7 +728,7 @@ zx/
 
 **Color System** | |
 | `color_system.md` | Attribute-based color, ULA hardware palette, reference palettes (FUSE/Skoolkid/ZEsarUX), attribute clash, ULAplus 64-color, Timex HiColor/HiRes modes | ✅ |
-| `clone_video_modes.md` | Clone video modes beyond standard ULA: GigaScreen, ATM Turbo hires, Profi 512×256, Kay CPLD modes, TS-Conf | ✅ |
+| `clone_video_modes.md` | Clone video modes beyond standard ULA: GigaScreen, ATM Turbo hires, Profi 512×240, Kay CPLD modes, TS-Conf | ✅ |
 | `crt_output.md` | Developer view of CRT/LCD output: pixel aspect ratio, overscan, composite artifacts, per-display-type behavior | ✅ |
 
 #### 05_development/06_graphics/ — Graphics Techniques ✅ COMPLETE

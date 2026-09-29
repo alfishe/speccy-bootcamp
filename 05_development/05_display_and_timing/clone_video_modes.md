@@ -13,9 +13,10 @@ For Timex TS/TC 2068 extended modes (HiColor, HiRes), see [color_system.md](colo
 | Mode | Machines | Resolution | Colors | Attribute Size | Memory |
 |------|----------|-----------|--------|---------------|--------|
 | GigaScreen | Pentagon, Kay, ZX Evo | 256×192 | 1024 (temporal mix) | 8×1 (temporal) | 2 × 768 attr |
-| ATM Turbo hires | ATM Turbo | 640×200 | 2 (mono) | N/A | 16,000 bytes |
-| ATM Turbo text | ATM Turbo | varies | configurable | per-char | varies |
-| Profi hires | Profi | 512×256 | 2 (mono) | N/A | 16,384 bytes |
+| ATM Turbo hires | ATM Turbo 2/2+ | 640×200 | 2 per 8×1 strip | 8×1 | 32,000 bytes (bitmap page 5 + attrs page 1) |
+| ATM Turbo EGA | ATM Turbo 2/2+ | 320×200 | 16 per pixel | per pixel | 32,000 bytes (pages 1+5, interleaved) |
+| ATM Turbo text | ATM Turbo 2/2+ | 80×25 chars | 16 per char | per-char | 4,000 bytes + font |
+| Profi extended screen | Profi 3.2/5.x | 512×240 | 16 (Profi 5: from 256) | 8×1 (per pixel byte) | 30,720 bytes |
 | Kay 512×192 | Kay 2006 NB | 512×192 | 2 (mono) | N/A | 12,288 bytes |
 | Kay multicolor | Kay 2006 NB | 256×192 | standard | 8×1 (per scanline) | 6,144 extra |
 | TS-Conf | ZX Evolution | up to 360×288 | 256 (8-bit) | per-pixel | up to 512 KB VRAM |
@@ -106,35 +107,39 @@ The ATM Turbo was designed as a dual-purpose machine: ZX Spectrum compatible and
 
 ### Video Modes
 
-| Mode | Resolution | Colors | Pixel Clock | Use Case |
-|------|-----------|--------|-------------|----------|
-| ZX Spectrum | 256×192 | 15 (standard) | 7 MHz (same as ULA) | Standard software |
-| 640×200 mono | 640×200 | 2 (foreground + background) | 14 MHz | CP/M 80-column text |
-| Text mode | configurable | configurable | varies | CP/M terminal |
+| RG code | Mode | Resolution | Colors | Framebuffer | Use Case |
+|---|---|-----------|--------|-------------|----------|
+| 3 | ZX Spectrum | 256×192 | 15 (standard) | page 5 + attrs page 1 | Standard software |
+| 2 | 640×200 hires | 640×200 | 2 per 8×1 strip | bitmap page 5 + attrs page 1 | CP/M 80-column display |
+| 0 | EGA | 320×200 | 16 per pixel | pages 1 + 5 (interleaved) | PC game ports, graphics |
+| 6 | Text | 80×25 chars | 16 per char | pages 1 + 5 + font RAM | CP/M terminal |
 
 ### 640×200 Monochrome Mode
 
-The hires mode runs the pixel clock at double frequency, producing 640 pixels across a standard PAL active area. Each pixel row is 80 bytes (640/8).
+The hires mode runs the pixel clock at double frequency, producing 640 pixels across a standard PAL active area. Each pixel row is 80 bytes; the bitmap lives in **RAM page 5** and the attributes in **RAM page 1** (or pages 7/3 while `#7FFD` bit 3 = 1), each split into two 8 KB half-planes scanned alternately every 8 pixels:
 
 ```
-Memory: 640 × 200 / 8 = 16,000 bytes (no attribute file)
-Address: Typically mapped into a dedicated VRAM page
+Memory:   16,000 bytes bitmap (page 5) + 16,000 bytes attributes (page 1)
+Address:  page + (x & 8 ? #2000 : #0000) + (x >> 4) + Y × 40
+          pixel bit 7-(x & 7); attr = ZX ink/paper byte per 8×1 strip
 ```
 
-There are no attribute bytes — the display is strictly 1-bit per pixel with a single foreground and background color, set via a dedicated port.
+The attribute byte per 8×1 strip gives every 8-pixel run its own foreground/background pair from the 16-entry palette — effectively a hardware-multicolor hires mode.
+
+### 320×200 EGA Mode (16 Colors Per Pixel)
+
+The signature ATM Turbo mode: **16 colors per pixel with no attribute clash**, sized to match the IBM PC EGA 320×200 mode for direct game ports (*Prince of Persia*, *Color Lines*, *Gobliiins*). The framebuffer occupies **two fixed physical RAM pages — 1 and 5** (3 and 7 while `#7FFD` bit 3 = 1), 16,000 bytes each, scanned linearly with pixel pairs interleaved across the two pages and their 8 KB half-planes. The byte format is a ZX-attribute look-alike (`%RLRRRLLL`): the left pixel takes D0-2 + D6, the right pixel D3-5 + D7. Complete addressing math, the CPU mapping recipe and plot code: [atm_turbo.md](../../02_hardware/clones/atm_turbo.md).
 
 ### Mode Switching
 
-ATM Turbo modes are controlled through its custom I/O port mapping. The exact port addresses vary between ATM Turbo v1 and v2 revisions:
+On the ATM Turbo 2/2+ (v6.40–7.10) the video mode lives in **bits 0-2 of the `#FF77` system register** (any port with low byte `#77`; the address bits A8/A9/A14 of the write additionally control the PEN/CPM/PEN2 flags). On the Turbo 1 the mode is selected by address bits A5/A6 of the `#FE` port write instead.
 
-```
-ATM Turbo video control (simplified):
-  Port #FF (some revisions) or dedicated ATM port
-  Selects between ZX Spectrum mode and hires/text modes
+```z80
+LD A,#20 \ OUT (#FF77),A   ; RG=0: 320×200 EGA mode (bit 5 = Z_I kept set)
+LD A,#23 \ OUT (#FF77),A   ; RG=3: back to standard ZX mode
 ```
 
-> [!WARNING]
-> ATM Turbo mode switching details are revision-specific. Consult the ATM Turbo hardware documentation for your specific board revision.
+The `#xx77`/`#xxF7` ports are gated by the DOS latch (active under TR-DOS/CP/M). Full decode tables, the EGA framebuffer interleave, the palette protocol and worked examples: [atm_turbo.md](../../02_hardware/clones/atm_turbo.md).
 
 ### CP/M Interoperability
 
@@ -142,30 +147,28 @@ The 640×200 mode makes the ATM Turbo one of the few ZX Spectrum clones that can
 
 ---
 
-## Profi — 512×256 Hires Mode
+## Profi — 512×240 Extended Screen (Hardware Multicolor)
 
-The Profi is a Russian ZX Spectrum clone with a unique 512×256 hires mode — the only common clone to extend the vertical resolution beyond 192 lines. This produces a more square pixel aspect ratio and denser text display.
+The Profi is a Moscow-built ZX Spectrum 128 descendant with CP/M ambitions. Its extended screen, enabled by the DS80 bit (bit 7) of the Profi control register `#DFFD`, doubles the horizontal resolution, adds 48 scanlines — and, unlike every other extended mode in this article, keeps color: one attribute byte per 8-pixel byte.
 
 ### Video Mode
 
 | Mode | Resolution | Colors | Memory |
 |------|-----------|--------|--------|
 | ZX Spectrum | 256×192 | 15 (standard) | Standard layout |
-| Profi hires | 512×256 | 2 (mono) | 16,384 bytes |
+| Extended (DS80) | 512×240 | 16 (Profi 5: from a 256-color palette) | 15,360 pixels + 15,360 attributes |
 
-The hires mode is strictly monochrome — no attribute bytes. The pixel buffer occupies a full 16 KB bank:
+The screen consists of two 15,360-byte areas — pixels and attributes — one per RAM page (screen 0: pages `#04`/`#38`; screen 1: pages `#06`/`#3A`). Attribute granularity is 8×1 pixels: **hardware multicolor** with zero CPU cost, eight times the vertical color resolution of the stock attribute cell. Screen 1 additionally supports simultaneous pixel+attribute access (pixels hard-mapped at `#8000`, attributes in the projection window), which is why CP/M uses it as the primary display.
 
-```
-512 × 256 / 8 = 16,384 bytes
-```
+The image is stored as two interleaved half-screens of 32 columns (odd columns in the first part, even in the second, switched by bit 13 of the address); within each half-screen the layout is ZX-Spectrum-like with four quarters of 64 lines, the last short at 48. Text resolution is 64×30 — the Profi's CP/M selling point. Full addressing math, the 16-color attribute byte, palette programming protocol, and a worked demo: [profi.md](../../02_hardware/clones/profi.md).
 
 ### Frame Timing
 
-The Profi's hires mode has different timing from the standard ZX Spectrum mode. The paper display area starts at a different T-state offset (approximately T=12,580 on some Profi revisions vs T=14,335 on the 48K). Software relying on precise raster timing must account for this when switching modes.
+Extended mode changes the frame itself: 59,904 T-states (312 lines × 192 T) instead of the ZX-mode 69,888 T, with the paper area starting at a different offset. Software relying on raster timing must keep separate tables per mode — see the timing section of [profi.md](../../02_hardware/clones/profi.md) and [video_frame_other_soviet.md](video_frame_other_soviet.md).
 
 ### Use Case
 
-The 512×256 mode supports 64-column text with comfortable line spacing. Combined with the Profi's 512K memory and CP/M support, it serves as a serious productivity machine — unusual for the ZX Spectrum ecosystem.
+64×30 text and hardware multicolor made the extended screen the centerpiece of the Profi's CP/M productivity pitch — word processing and programming tools, not games. Early boards shipped without the color circuit at all (a B/W variant), and 8-color + 2-brightness variants existed; the surviving 16-color and 16-of-256-palette (Profi 5) machines share one programming model.
 
 ---
 
@@ -265,6 +268,7 @@ For production software, the most reliable approach is to provide a **configurat
 - **Border effects** (multicolor borders, raster bars): [border_effects.md](border_effects.md)
 - **Screen layout** (standard pixel/attribute addressing): [screen_layout.md](../03_memory_and_io/screen_layout.md)
 - **ZX Evolution hardware**: [clone_timing.md#zx-evolution](../../02_hardware/clones/clone_timing.md)
+- **ATM Turbo hardware** (mode register decode, EGA framebuffer, palette): [atm_turbo.md](../../02_hardware/clones/atm_turbo.md)
 
 ## References
 
@@ -273,5 +277,5 @@ For production software, the most reliable approach is to provide a **configurat
 - [TS-Conf documentation](https://zxevo.ru) — the canonical reference for the ZX Evolution's FPGA-based video subsystem, including 640x200 / 320x200 / 256x192 modes, hardware tiles, and the layer sprite engine.
 - **ATM Turbo documentation** (`atmturbo.com`, archived) — the original HIRES and TEXT mode specifications for the ATM Turbo 1/2, the first widely deployed Soviet-clone video extensions.
 - [Kay 2006 NB CPLD documentation](https://zxpress.ru) — the CPLD-based video subsystem that brought 16-color mode and programmable palettes to the late Kay lineage.
-- **Profi 512x256 hires reference** — community-maintained documentation for the Profi's non-standard hires mode; rarely used in production software but historically important.
+- **[TAE & Vadim Chertkov — "Расширенный экран «Profi»" (Абзац #16 2003 / ЗаRulem #25 2019, on Habr)](https://habr.com/ru/articles/836836/)** — the extended-screen reference: half-screen structure, 16-color attribute byte, palette programming protocol
 - [GigaScreen documentation](https://zx-pk.ru) — the temporal-mixing technique that pairs two screens at 50 Hz to simulate 8x8 attribute resolution; documented extensively in the Brainwave/Eternity Industry demo archives.

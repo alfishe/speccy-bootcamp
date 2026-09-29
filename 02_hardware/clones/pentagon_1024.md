@@ -653,7 +653,7 @@ For software development, code that runs on one Pentagon 1024 implementation run
 - [ATM Turbo](atm_turbo.md) — its EGA-style 320×200×16 mode shares the 16c byte layout, which is what made single-source Pentagon/ATM builds possible
 - [Kempston mouse](../../03_io/peripherals/mouse.md) — full protocol, wiring, and modern PS/2 descendants
 - [Kay 1024](kay.md) — alternative 1 MB clone with Nemo bus
-- [Profi](profi.md) — Ukrainian professional clone; source of the `#DFFD` convention
+- [Profi](profi.md) — Russian professional clone; source of the `#DFFD` convention
 - [ATM Turbo](atm_turbo.md) — CP/M-capable clone with extended graphics
 - [Scorpion](scorpion.md) — true-48K-timing alternative with GMX expansion
 - [ZX Evolution](../newgen/zx_evo.md) — modern FPGA-based Pentagon successor

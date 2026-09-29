@@ -31,7 +31,7 @@ This was a deliberate simplification. The benefits:
 - **Simpler ULA logic** — only one field type to generate, no half-line offset, no field-switching logic.
 - **Stable vertical detail** — a single horizontal line drawn at scanline N stays there every frame.
 
-The cost: **half the vertical resolution** of broadcast PAL (312 vs 625 lines). For the Spectrum's 192-line paper area, this is irrelevant — there's no resolution to lose. For higher-resolution clones (ATM Turbo 640×200, Profi 512×256), it remains non-interlaced.
+The cost: **half the vertical resolution** of broadcast PAL (312 vs 625 lines). For the Spectrum's 192-line paper area, this is irrelevant — there's no resolution to lose. For higher-resolution clones (ATM Turbo 640×200, Profi 512×240), it remains non-interlaced.
 
 ### Pentagon Exception
 

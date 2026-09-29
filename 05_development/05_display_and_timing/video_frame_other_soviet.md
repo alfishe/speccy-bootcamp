@@ -102,7 +102,7 @@ These modes are documented in the ATM Turbo manual and rarely encountered in mod
 
 ## Profi 5.03 / 5.04
 
-The Profi (Профі, designed in Lviv, Ukraine, 1991) is a Russian/Ukrainian professional clone with ISA-like expansion and VGA output on later revisions.
+The Profi (Russian: **Профи**, designed and produced in Moscow, 1991) is a professional-class clone with an ISA-compatible expansion bus and VGA output on later revisions.
 
 ### Frame Timing
 
@@ -132,6 +132,9 @@ may still be running when paper begins.
 ### VGA Output
 
 Profi 5.04 added a VGA output option that runs from a separate pixel clock. The base frame rate remains 50.08 Hz (CGA-style 640×200 at 50 Hz, doubled scanlines to 400 visible). On modern VGA monitors this works but may require a VRR-capable display for clean sync.
+
+> [!NOTE]
+> The figures above describe the standard ZX-compatible video mode. The Profi's **extended screen** (512×240 hardware multicolor) runs its own timing — 59,904 T-states per frame at 192 T/line, paper line 72, tact 24 — see [profi.md](../../02_hardware/clones/profi.md).
 
 ---
 

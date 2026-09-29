@@ -161,7 +161,7 @@ The convergence is not superficial. An ATM Turbo 2+ user in 1994 could:
 - **Play EGA games** — *Prince of Persia*, *Color Lines*, *Gobliiins* — ported from the PC with graphics that closely matched the originals
 - **Switch to Spectrum mode** — and run the entire 48K/128K software library, including the thousands of Russian games and demos
 
-No other Spectrum clone offered this combination. The Pentagon was a gaming machine. The Scorpion was a developer's machine. The Profi was a competitor in the same "serious" niche, but it used its own graphics modes (512×256) rather than matching PC standards, and it lacked the IDE controller. The ATM Turbo was the **only Spectrum derivative that systematically replicated IBM PC hardware conventions**.
+No other Spectrum clone offered this combination. The Pentagon was a gaming machine. The Scorpion was a developer's machine. The Profi was a competitor in the same "serious" niche, but it used its own graphics modes (512×240) rather than matching PC standards, and it lacked the IDE controller. The ATM Turbo was the **only Spectrum derivative that systematically replicated IBM PC hardware conventions**.
 
 #### Why It Worked — and Why It Ultimately Didn't
 
@@ -250,7 +250,7 @@ Key differences from the 128K and Pentagon:
 - **Turbo mode is standard** — unlike the Pentagon where 7 MHz requires aftermarket modification, every ATM Turbo has turbo built in from the factory
 - **Turbo 1**: physical front-panel "TURBO" button on the case
 - **Turbo 2+**: turbo is software-controlled — bit 3 of the `#FF77` system port — no physical button needed. The turbo state can be toggled at runtime
-- **At 7 MHz, memory access timing changes** — the CPU runs twice as fast but DRAM access speed remains the same. The ATM Turbo handles this by using the turbo mode only when the video circuit is not accessing RAM, or by using wait states for incompatible timing windows
+- **No memory contention at either speed** — the ATM Turbo shares its DRAM between video and CPU with a discrete interleave (not described in detail in the documents found), and no memory wait is documented at 3.5 or 7 MHz. The one documented CPU wait is the keyboard: on `IN A,(#FE)` "the CPU is stopped by the WAIT signal" until the 8031 keyboard controller answers (ATM Turbo 2+ architecture document, port `#FE` section)
 - **I/O timing at 7 MHz** — port accesses complete faster, which affects any software with cycle-counted I/O loops
 
 > [!WARNING]
@@ -413,24 +413,33 @@ The Turbo 2+ moved mode switching to a dedicated system port `#FF77`, leaving `#
 ```
 OUT (#FF77), A — system configuration register (Turbo 2+):
 
-  Bit 0 (RG0) ─┐
-  Bit 1 (RG1) ─┤   Video mode select:
-  Bit 2 (RG2) ─┘
-                 RG0  RG1  RG2   Mode
+  Bits 0-2 (RG2..RG0) — video mode select:
+                 RG2  RG1  RG0   Mode
                  ─────────────────────────────────────────────
-                  1    1    0    Sinclair 256×192 standard
-                  0    1    0    640×200 monochrome
-                  0    0    0    320×200 EGA (16 colors per pixel)
-                  0    1    1    80×25 text mode (16 colors)
+                  0    0    0    320×200, 16 colors per pixel (EGA)
+                  0    1    0    640×200, 2 colors per 8×1 strip
+                  0    1    1    Sinclair 256×192 (reset default)
+                  1    1    0    80×25 text mode, 16 colors
+                  1    1    1    ZX screen in the 640-wide raster (rare)
+                 (codes 1, 4, 5 — unused on the Turbo 2+)
 
-  Bit 3   RAM page select for #0000-#3FFF (0 = ROM, 1 = RAM-0)
-  Bit 4   ROM page bit 0 (0-3 = main, 4-7 = localized)
-  Bit 5   Extended RAM page bit (for 1024K: pages above 512K)
-  Bit 6   = 1: ROM banking / = 0: RAM banking at #0000-#3FFF
-  Bit 7   Enable separate paging for #0000-#3FFF window
+  Bit 3   CPU clock: 0 = 3.5 MHz, 1 = 7 MHz (turbo)
+  Bit 5   Z_I — interrupt gate; keep 1 for the normal per-frame INT
+  Bits 4, 6, 7 — unused (write 0)
 ```
 
-The `#FF77` port is also known as the "soft port" because it can be accessed via multiple address aliases (`#BD77`, `#BF77`, `#FD77`, `#FE77`, `#FF77`), each controlling different subsystems (palette, PLL FDC, shadow screen, paging).
+Port decoding: only the **low address byte `#77`** is decoded — `#0077`, `#3F77`, `#7F77`, `#FF77`, … all select the register (canonical address: `#FF77`). The **address bits of the write carry side effects of their own**, which is the real meaning of the "alias" ports:
+
+| Address bit | Flag | Effect while the bit is 0 |
+|---|---|---|
+| A8 | PEN | Memory manager disabled — all four windows show ROM |
+| A9 | CPM | CP/M mode on — TR-DOS ROM stays paged, extended ports reachable |
+| A14 | PEN2 | Palette writes via `#FF` enabled (see [Palette System](#palette-system--64-color-rgbi)) |
+
+Every `OUT` to a `#xx77` address writes the data bits (mode, turbo, Z_I) **and** updates the PEN/CPM/PEN2 flags decoded from the address. The documented "aliases" are exactly these flag combinations: `#FE77` (A8=0 — PEN), `#FD77` (A9=0 — CP/M), `#BF77` (A14=0 — PEN2), `#BD77` (A9=0 + A14=0). The neutral write that changes only the data bits is `#FF77` itself. (Verified against MAME `atm.cpp` `atm_port_77_w`, ZXMAK2 `BusWritePortXX77_SYS` and the ATM 7.10 reference on nedopc.com.)
+
+> [!WARNING]
+> The `#xx77` and `#xxF7` port families are gated by the DOS latch: writes are honored only while TR-DOS is active or the CP/M flag is set. EGA/text-mode software normally runs from a DOS environment (TR-DOS, iS-DOS, NedoOS, CP/M) where the latch is already open; plain 48K BASIC cannot program these registers until it enters TR-DOS.
 
 ---
 
@@ -439,6 +448,7 @@ The `#FF77` port is also known as the "soft port" because it can be accessed via
 This mode is **100% compatible** with the ZX Spectrum 128K and Pentagon. The pixel bitmap lives at `#4000`–`#57FF` (6,144 bytes) and attributes at `#5800`–`#5AFF` (768 bytes). The nonlinear screen layout (three inter-leaved thirds) is preserved.
 
 ```
+RG code:         3 (default after reset)
 Pixel memory:    #4000–#57FF  (6,144 bytes) — 256×192 pixels, 1 bit per pixel
 Attribute memory: #5800–#5AFF  (768 bytes) — 32×24 grid, 8×8 pixel blocks
 Attribute byte:   INK(0-2) | PAPER(3-5) | BRIGHT(6) | FLASH(7)
@@ -463,10 +473,13 @@ Attribute byte:   INK(0-2) | PAPER(3-5) | BRIGHT(6) | FLASH(7)
 The 640×200 mode provides **80-column text** capability and crisp monochrome graphics. It was designed primarily for CP/M applications that need 80-character-wide terminals.
 
 ```
-Memory layout:    Linear — no ZX Spectrum nonlinear addressing
-Screen size:      640×200 pixels, 1 bit per pixel
-Memory required:  640 × 200 / 8 = 16,000 bytes
-Color:            2 colors per 8×1 pixel strip (INK + PAPER from palette)
+RG code:         2
+Memory layout:   Linear — bitmap in RAM page 5, attributes in RAM page 1
+                 (pages 7/3 while #7FFD bit 3 = 1); each page split into
+                 two 8 KB half-planes (#0000-#1FFF and #2000-#3FFF)
+Screen size:     640×200 pixels, 1 bit per pixel
+Memory required: 16,000 bytes bitmap + 16,000 bytes attributes = 32,000 bytes
+Color:           2 colors per 8×1 pixel strip (ZX INK/PAPER attribute byte)
 ```
 
 **How it works**: The video circuit reads pixel data at **double the standard frequency**, using both RAM banks simultaneously. Each byte represents 8 horizontal pixels. The attribute byte for each 8×1 cell determines INK and PAPER colors — effectively giving a 640×200 display with 2 colors per 8-pixel horizontal strip.
@@ -476,11 +489,21 @@ Color:            2 colors per 8×1 pixel strip (INK + PAPER from palette)
 | Resolution | 256×192 | Same | **640×200** (2.5× horizontal) |
 | Pixels per byte | 8 | Same | Same |
 | Color attributes | 8×8 blocks | Same | **8×1 strips** (8× finer vertical resolution) |
-| Total screen memory | 6,912 bytes | Same | **16,000 bytes** |
+| Total screen memory | 6,912 bytes | Same | **32,000 bytes** (16,000 bitmap + 16,000 attributes) |
 | Address layout | Nonlinear (thirds) | Same | **Linear** (sequential scan) |
 
 > [!NOTE]
-> The 640×200 mode's linear memory layout is **fundamentally different** from the ZX Spectrum's nonlinear screen. Screen position calculations used in standard Spectrum code will not work. Address = `base + (y × 80) + (x / 8)`, bit position = `7 - (x % 8)`.
+> The 640×200 mode's linear layout is **fundamentally different** from the ZX Spectrum's nonlinear screen — standard screen-address arithmetic will not work. Like the EGA mode, the video circuit scans two fixed pages: bitmap from **RAM page 5**, attributes from **RAM page 1** (pages 7 and 3 while `#7FFD` bit 3 = 1). Each byte covers 8 pixels, MSB first; fetches alternate between the two 8 KB half-planes of each page every 8 pixels:
+>
+> ```
+> half   = (x & 8) ? #2000 : #0000        ; half-plane selected by bit 3 of x
+> offset = (x >> 4) + y × 40              ; 40 bytes per row per half-plane
+> bitmap = page5 + half + offset          ; pixel bit = 7 - (x & 7)
+> attr   = page1 + half + offset          ; fg = (a&7) | ((a&0x40)>>3)
+>                                        ; bg = ((a&0x38)>>3) | ((a&0x80)>>4)
+> ```
+>
+> The hardware reads a bitmap byte and its attribute byte from the two pages **simultaneously** — that is the "both RAM lines at once" trick. 8,000 bytes are scanned per half-plane per page; the remaining 192 bytes per half (`#1F40`–`#1FFF`) are free for code or variables.
 
 ---
 
@@ -489,27 +512,19 @@ Color:            2 colors per 8×1 pixel strip (INK + PAPER from palette)
 This is the ATM Turbo's signature graphics mode — **16 colors per pixel with no attribute clash**. It was designed to match the IBM PC EGA 320×200 16-color mode, enabling direct porting of PC games like *Prince of Persia*, *Color Lines*, and *Gobliiins*.
 
 ```
+RG code:          0
 Screen size:      320×200 pixels
 Color depth:      16 colors per pixel (4 bits per pixel)
-Memory required:  320 × 200 / 2 = 32,000 bytes (2 pixels per byte)
-Color palette:    16 colors selected from 64-color RGBI palette
+Memory required:  32,000 bytes — 16,000 in RAM page 1 + 16,000 in RAM page 5
+Framebuffer:      fixed physical RAM pages (see below) — no fixed Z80 address
+Color palette:    16 colors selected from 64-color palette (2 bits per gun)
 ```
 
 **How it works** — this is the clever part:
 
 1. **Hardware multicolor via address multiplexing** — the video circuit reads attribute data at the same rate as pixel data, providing per-pixel color information
 2. **Doubled RAM access frequency** — the authors used both RAM lines simultaneously, reading from both banks at once. This doubles the effective video bandwidth without stopping the CPU
-3. **Meander pixel pattern** — instead of reading pixel data and attribute data separately, the circuit reads only the attribute register and substitutes a meander pattern (`%RLRRRLLL`) for pixel data:
-
-```
-Byte layout in memory: %RLRRRLLL
-  LLLL = left pixel (4-bit color index, 0-15)
-  RRRR = right pixel (4-bit color index, 0-15)
-
-Each byte encodes TWO adjacent horizontal pixels.
-The meander alternates which pixel pair is read on each access cycle.
-```
-
+3. **Meander pixel pattern** — the circuit substitutes a fixed meander (`%RLRRRLLL`) for the ULA's pixel data and routes the real byte through the attribute path. Each letter of the meander names the pixel that bit serves — the byte format below is the direct consequence
 4. **Separate geometry counter** — the higher address bits are detached from the Spectrum's screen geometry counters and fed by an independent counter, producing the 320×200 raster instead of the Spectrum's 256×192
 
 | Feature | ZX Spectrum 128K | Pentagon 128K | ATM Turbo 320×200 |
@@ -518,12 +533,174 @@ The meander alternates which pixel pair is read on each access cycle.
 | Colors per pixel | 2 (attribute-based) | Same | **16** (per pixel, no clash) |
 | Attribute clash | Yes (8×8 blocks) | Yes | **None** |
 | Color depth | Effectively ~8 colors per pixel | Same | **4 bits per pixel** |
-| Total screen memory | 6,912 bytes | Same | **32,000 bytes** |
+| Total screen memory | 6,912 bytes | Same | **32,000 bytes** (16 KB in page 1 + 16 KB in page 5) |
 | Address layout | Nonlinear (thirds) | Same | **Linear** |
 | Comparable to | N/A | N/A | IBM PC EGA 320×200 16-color |
 
+#### Framebuffer Location — Fixed RAM Pages 1 + 5
+
+So where is the framebuffer? **Not at any fixed Z80 address.** The video controller reads the EGA screen from two fixed *physical* RAM pages, no matter what the CPU's memory windows currently show:
+
+| `#7FFD` bit 3 | Pixel planes | Notes |
+|---|---|---|
+| 0 (main screen) | **RAM page 1 + RAM page 5** | the "shadow attribute" page 1 + the fixed page 5 |
+| 1 (shadow screen) | **RAM page 3 + RAM page 7** | same layout |
+
+Each page contributes two 8 KB half-planes. For row `Y` (0–199) and byte column `J` (0–39), one byte holds one adjacent pixel pair:
+
+| Pixels served | Byte address |
+|---|---|
+| `x` = 8J+0, 8J+1 | `page1 + 40×Y + J` |
+| `x` = 8J+2, 8J+3 | `page5 + 40×Y + J` |
+| `x` = 8J+4, 8J+5 | `page1 + #2000 + 40×Y + J` |
+| `x` = 8J+6, 8J+7 | `page5 + #2000 + 40×Y + J` |
+
+```
+Row Y (0-199), 40 byte-columns × 8 pixels = 320 pixels — fully linear:
+
+        J=0          J=1          J=2        ...  J=39
+p1 lo  [x0,x1]      [x8,x9]      [x16,x17]
+p5 lo  [x2,x3]      [x10,x11]    [x18,x19]
+p1 hi  [x4,x5]      [x12,x13]    [x20,x21]        (+#2000)
+p5 hi  [x6,x7]      [x14,x15]    [x22,x23]        (+#2000)
+```
+
+Arithmetic form (identical in MAME, Unreal Speccy, ZXMAK2 and Xpeccy):
+
+```
+page   = (x & 2) ? page5 : page1        ; bit 1 of x
+half   = (x & 4) ? #2000 : #0000        ; bit 2 of x
+offset = (x >> 3) + 40 * Y              ; byte column J = x>>3
+```
+
+Only 8,000 of each half-plane's 8,192 bytes are scanned; the last 192 bytes of each half (`#1F40`–`#1FFF`) are invisible — 384 free bytes per page for variables or code.
+
+> [!WARNING]
+> Do not confuse these pages with the **ZX Evolution "Alco 16 colors" mode**, whose framebuffer lives in RAM pages 4+6. The pages-4/6 layout is a different machine's variant (ZXMAK2 wires it for the Evo renderers); on the ATM Turbo 2+ the EGA planes are always 1+5 (or 3+7).
+
+#### Byte Format — `%RLRRRLLL`, Not Plain Nibbles
+
+The byte does **not** pack two plain 4-bit indices (that would be `%LLLLRRRR` or `%RRRRLLLL`). The MicroART meander string lists, for bits D7→D0, which pixel each bit serves — R or L:
+
+| Bit | Serves | Role |
+|---|---|---|
+| D0–D2 | Left pixel | color 0–7 (like ZX INK bits) |
+| D6 | Left pixel | bright (+8) |
+| D3–D5 | Right pixel | color 0–7 |
+| D7 | Right pixel | bright (+8) |
+
+```
+left  = (b & #07) | ((b & #40) >> 3)          ; 0-15
+right = ((b & #38) >> 3) | ((b & #80) >> 4)   ; 0-15
+```
+
+The layout is exactly a ZX attribute byte with INK repurposed as the left pixel and PAPER as the right — a direct consequence of feeding pixel-pair bytes through the ULA's attribute path.
+
+#### Mapping the Framebuffer into CPU Address Space
+
+The CPU reaches the two planes through the standard Turbo 2+ window registers (see [Window Registers](#window-registers--flexible-paging-mechanism-turbo-2)). Any `#xxF7` port selects the window by address bits A15:A14; the data byte encodes the source (page numbers **inverted**):
+
+```
+value bit 6 = 1 -> RAM window (0 = ROM)
+value bit 7 = 1 -> follow #7FFD (128K-compatible banking)
+value bits 5-0 = ~page          (RAM page 1 -> #7E, page 5 -> #7A)
+
+#3FF7 -> window #0000    #7FF7 -> window #4000
+#BFF7 -> window #8000    #FFF7 -> window #C000
+```
+
+The "`#FFF7` = window 0" claim found in some documentation is a legend — the window index is A15:A14 of the port address, so `#FFF7` is window 3. Real software (NedoOS) uses `#3FF7/#7FF7/#BFF7/#FFF7` for windows 0–3; the `#7DF7/#BDF7/#FDF7` family quoted elsewhere addresses windows 1/2/3 of the same registers.
+
+Complete setup — enter EGA mode, map page 1 to `#0000` and page 5 to `#4000`, clear the screen (sjasmplus syntax; assumes the DOS latch is open, e.g. running from TR-DOS — see the warning under [Video Mode Switching](#video-mode-switching)):
+
+```z80
+        LD      A,#20           ; RG=0 (EGA), Z_I=1 (normal INT)
+        OUT     (#FF77),A       ; neutral write: A8=A9=A14=1
+        LD      A,#7E           ; RAM page 1 (~1)
+        OUT     (#3FF7),A       ; window 0 (#0000-#3FFF)
+        LD      A,#7A           ; RAM page 5 (~5)
+        OUT     (#7FF7),A       ; window 1 (#4000-#7FFF)
+        ; framebuffer from the CPU's point of view:
+        ;   x=8J+0,1 -> (#0000 + 40*Y + J)     x=8J+2,3 -> (#4000 + ...)
+        ;   x=8J+4,5 -> (#2000 + ...)          x=8J+6,7 -> (#6000 + ...)
+        LD      HL,#0000        ; clear page-1 window (both halves)
+        LD      DE,#0001
+        LD      BC,#3FFF
+        LD      (HL),#00        ; both pixels color 0
+        LDIR
+        LD      HL,#4000        ; clear page-5 window
+        LD      DE,#4001
+        LD      BC,#3FFF
+        LD      (HL),#00
+        LDIR
+```
+
+Plotting one pixel — the byte format reduces left/right selection to a mask problem:
+
+```z80
+; PLOT: DE = X (0-319), B = Y (0-199), C = color (0-15)
+; Requires page 1 at #0000 and page 5 at #4000. Trashes AF,BC,HL.
+PLOT    PUSH    BC              ; save color
+        LD      L,B
+        LD      H,0             ; HL = Y
+        ADD     HL,HL
+        ADD     HL,HL
+        ADD     HL,HL           ; HL = 8*Y
+        LD      C,L
+        LD      B,H             ; BC = 8*Y
+        ADD     HL,HL
+        ADD     HL,HL           ; HL = 32*Y
+        ADD     HL,BC           ; HL = 40*Y
+        LD      A,E
+        RRCA
+        RRCA
+        RRCA
+        AND     #1F             ; low 5 bits of column X/8
+        BIT     0,D             ; X >= 256?
+        JR      Z,PLOT0
+        ADD     A,#20           ; +32
+PLOT0   ADD     A,L
+        LD      L,A
+        JR      NC,PLOT1
+        INC     H               ; HL = 40*Y + X/8 (max #1F8D)
+PLOT1   LD      A,E
+        AND     #04             ; half-plane from bit 2 of X
+        JR      Z,PLOT2
+        SET     5,H             ; +#2000 (H was <= #1F)
+PLOT2   LD      A,E
+        AND     #02             ; page-5 window from bit 1 of X
+        JR      Z,PLOT3
+        SET     6,H             ; +#4000 window base
+PLOT3   POP     BC              ; color back
+        LD      A,(HL)
+        BIT     0,E             ; 0 = left pixel, 1 = right pixel
+        JR      NZ,PLOTR
+        AND     #B8             ; clear left pixel (D0-2, D6)
+        LD      B,A
+        LD      A,C
+        AND     7
+        OR      B
+        BIT     3,C
+        JR      Z,PLOTW
+        OR      #40             ; left bright -> D6
+        JR      PLOTW
+PLOTR   AND     #47             ; clear right pixel (D3-5, D7)
+        LD      B,A
+        LD      A,C
+        RLCA
+        RLCA
+        RLCA
+        AND     #38             ; color -> D3-5
+        OR      B
+        BIT     3,C
+        JR      Z,PLOTW
+        OR      #80             ; right bright -> D7
+PLOTW   LD      (HL),A
+        RET
+```
+
 > [!NOTE]
-> The 320×200 mode requires 32 KB of contiguous screen memory — nearly half the Z80's address space. The ATM Turbo handles this by using its memory paging system to make screen memory span multiple RAM pages. The video circuit reads directly from physical RAM, bypassing the CPU's paged view.
+> The EGA framebuffer is 32 KB spread across two physical pages — but the CPU never needs it "contiguous". The video circuit scans physical RAM directly; the Z80 sees only the two 16 KB windows it has mapped. Because fetches interleave across the two pages and the two half-planes, a full-screen redraw touches each mapped window in four separate 8 KB strips.
 
 ---
 
@@ -532,6 +709,7 @@ The meander alternates which pixel pair is read on each access cycle.
 Added in the ATM Turbo 2, this mode provides a true **hardware text console** with 80 columns and 25 rows — exactly matching the CP/M standard terminal dimensions.
 
 ```
+RG code:          6
 Screen size:      80×25 characters
 Character cell:   8×8 pixels (same as Spectrum font)
 Total pixels:     640×200
@@ -557,37 +735,47 @@ The text mode uses a character generator that maps ASCII/character codes to 8×8
 
 ### Palette System — 64-Color RGBI
 
-The ATM Turbo's color palette is a **64-color RGBI (Red, Green, Blue, Intensity)** system, identical to the IBM EGA standard. Up to 16 colors can be active simultaneously, selected from the 64-color space.
+The ATM Turbo's color palette is a **64-color RGB** system — the same 2-bits-per-gun color space as the IBM EGA (4 levels × 3 guns), but with a scattered, active-low byte format. Up to 16 colors are active simultaneously: palette RAM has 16 entries indexed by the 4-bit color index of the ZX attribute byte, the EGA pixel format and the text mode.
+
+The palette data byte is **active-low**, with the six gun bits scattered rather than packed (format confirmed bit-for-bit in MAME `atm_port_ff_w` and ZXMAK2 `SetPaletteAtm2`):
 
 ```
-RGBI encoding (6 bits per color, 2 bits per channel):
-  R1 R0 G1 G0 B1 B0  →  64 possible colors
+Bit:    D7    D6    D5    D4    D3    D2    D1    D0
+Gun:    g     r     b     G     -     -     R     B
+        green red   blue  green unused  red   blue
 
-Standard Spectrum colors mapped to RGBI:
-  Black:      000000
-  Blue:       000001
-  Red:        100000
-  Magenta:    100001
-  Green:      001000
-  Cyan:       001001
-  Yellow:     101000
-  White:      111111
-  (Bright variants use the I bit or higher R/G/B bits)
+Weight when the bit is 0:  D1/D4/D0 = 170 (#AA), D6/D7/D5 = 85 (#55)
+gun level = sum of weights of the bits that read 0  (0/85/170/255)
+
+Examples: #FF = black, #FE = blue, #00 = white, #BD = bright red
 ```
 
-**Palette programming**: The palette is accessed through the "disk controller" ports — when the CPU accesses certain ports in the `#xFF` range, the data bus value is latched as a palette entry:
+**Palette programming (Turbo 2+)** — a three-step protocol:
 
-| Port | Address (A15–A0) | Function |
-|------|-------------------|----------|
-| `#FF` | `xxxxxxxx1xxxxx11` | Palette write (Turbo 1: `#7DFD`) — D0-D5 = BRGbrg color value |
-| `#FF77` | soft port | Palette + PLL + shadow screen control (Turbo 2+) |
+1. **Select the index** — write to `#FE` (the border port). The palette index is the border value: bits 0-2 from the data byte; bit 3 comes from address line A3 of the `#FE` write (A3=0 sets it, selecting indices 8-15 — the "bright border" mechanism; MAME models it this way, ZXMAK2 takes all four bits from the data). In the EGA and text modes the border itself is painted with `palette[border value]`.
+2. **Arm the latch** — the `#FF` write must be preceded by a `#xx77` write with A14=0 (PEN2), e.g. `OUT (#BF77)`. While PEN2 is inactive, a `#FF` write reaches the Beta disk parameter latch instead of the palette.
+3. **Write the color** — `OUT (#FF), A` with the byte described above.
 
-On the Turbo 1, palette is set via `OUT (#7DFD), A` where A contains the 6-bit color value. The color index being set is determined by the current attribute output from the video circuit — you write the color data, and the hardware latches it into whichever palette slot corresponds to the current display position.
+| Port | Decoding | R/W | Function |
+|------|----------|-----|----------|
+| `#FE` | A0=0 (standard ULA port) | W | Border value = palette index |
+| `#FF` | low byte `#FF` (Turbo 1: `#7DFD`) | W | Palette data byte (gated by PEN2) |
+| `#xx77` | low byte `#77` | W | PEN2 flag (A14=0) arms the `#FF` latch |
 
-On the Turbo 2+, palette control moved to the `#FF77` system port family, with more precise address decoding.
+```z80
+; In EGA mode: set palette index 2 to bright red (Turbo 2+)
+        LD      A,#20           ; RG=0 (EGA) + Z_I=1 - mode bits unchanged
+        OUT     (#BF77),A       ; A14=0 arms the palette latch
+        LD      A,#02           ; index 2 (doubles as border color 0-15)
+        OUT     (#FE),A
+        LD      A,#BD           ; bright red: D1=0, D6=0, other gun bits 1
+        OUT     (#FF),A
+```
+
+On the Turbo 1, palette data is written via `OUT (#7DFD), A`; the index follows the currently displayed attribute/border value rather than a separately latched `#FE` nibble. Power-on defaults approximate the standard 16 Spectrum colors.
 
 > [!WARNING]
-> The palette ports **overlap with Beta 128 disk interface ports** on the Turbo 1. Writing palette values while a disk operation is in progress can corrupt both the palette and the disk access. Always disable interrupts and verify disk controller state before writing palette entries on the Turbo 1.
+> The `#FF` write destination depends on PEN2: palette when the last `#xx77` write had A14=0, Beta disk parameter latch otherwise. After any plain `OUT (#FF77)` (A14=1) palette writes are silently disabled — re-arm PEN2 with `OUT (#BF77)` before writing colors. Palette writes are also gated by the DOS latch like all `#xx`-family ports (see [Video Mode Switching](#video-mode-switching)).
 
 ---
 

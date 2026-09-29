@@ -349,7 +349,7 @@ Romania was the first Eastern Bloc country to clone the Spectrum, and produced t
 - [Scorpion](scorpion.md) — the "correct timing" alternative (Leningrad successor)
 - [Kay 1024](kay.md) — professional clone with Nemo bus
 - [ATM Turbo](atm_turbo.md) — CP/M-capable clone
-- [Profi](profi.md) — Ukrainian professional clone with ISA/VGA
+- [Profi](profi.md) — Russian professional clone with ISA/VGA
 - [Byte](byte.md) — compact Ukrainian clone
 - [Clone timing](clone_timing.md) — cross-clone timing comparison and detection
 - [Section README](README.md) — notes on Soviet-made gate arrays (Т34ВГ1, etc.) — dedicated `ula_replacements.md` article is planned

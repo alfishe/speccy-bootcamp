@@ -290,7 +290,7 @@ Soviet engineers could not buy Ferranti ULAs, so they rebuilt the *function* fro
 - **Different counter geometry** — the Pentagon line/frame counters produce 320 lines and a 48.83 Hz frame rate; the Profi offsets the paper start; the ATM Turbo runs a second 7 MHz mode. Numbers per clone: [Clone Timing](../clones/clone_timing.md) and [Pentagon Video Frame](../../05_development/05_display_and_timing/video_frame_pentagon.md).
 - **No clock stretching** — most clones gave the CPU an unimpeded clock and used separate video RAM arbitration, so **contention simply doesn't exist** on a Pentagon. Code relying on 48K contention delays runs fast and mistimed.
 - **No floating bus** — nothing left undriven on the data bus in the same way.
-- **New video modes** — freed from the Ferranti design, clones added what the ULA never could: GigaScreen (frame-interleaved dual attributes), ATM 640×200 hires, Profi 512×256, and CPLD-based modes on the Kay. Catalog: [Clone Video Modes](../../05_development/05_display_and_timing/clone_video_modes.md).
+- **New video modes** — freed from the Ferranti design, clones added what the ULA never could: GigaScreen (frame-interleaved dual attributes), ATM 640×200 hires, Profi 512×240, and CPLD-based modes on the Kay. Catalog: [Clone Video Modes](../../05_development/05_display_and_timing/clone_video_modes.md).
 
 The architectural lesson: the ULA's limitations were *one company's cost optimization*, not laws of physics. The moment the design was reimplemented with 1989-era TTL budgets, contention and the fixed geometry evaporated — at the cost of fragmenting the timing model across the clone ecosystem.
 

@@ -236,7 +236,7 @@ This is the basic pattern; production code adds error handling (check the error 
 - [Pentagon 1024](pentagon_1024.md) — the Pentagon's 1 MB variant, Kay's main competitor
 - [Scorpion](scorpion.md) — another high-end clone with Nemo bus compatibility (SMUC)
 - [ATM Turbo](atm_turbo.md) — CP/M-capable clone with extended graphics
-- [Profi](profi.md) — Ukrainian professional clone with VGA output
+- [Profi](profi.md) — Russian professional clone with VGA output
 - [Clone timing](clone_timing.md) — Kay vs Pentagon vs Scorpion timing comparison
 - [Kay video frame](../../05_development/05_display_and_timing/video_frame_other_soviet.md) — detailed Kay frame timing and 2006 NB modes
 - [IDE interface](../../03_io/storage/ide_interface.md) — general IDE/ATA programming (Kay-specific patterns above)
