@@ -21,4 +21,4 @@ Memory maps, I/O port decoding, contention, screen layout, and bank switching. A
 | [io_port_decoding.md](io_port_decoding.md) | **I/O port concepts**: partial decoding, decoding masks, port mirrors, conflicts, cross-model port differences |
 | [bank_switching_patterns.md](bank_switching_patterns.md) | **Practical patterns**: save/restore bank, cross-bank copy, double buffering, +2A/+3 special modes, Pentagon extended, antipatterns |
 | [screen_layout.md](screen_layout.md) | **Pixel framebuffer**: nonlinear three-thirds layout, address calculation, lookup tables, attribute file |
-| [contention_model.md](contention_model.md) | **Unified contention**: per-model timing, Ferranti vs gate array delay patterns, I/O contention, cross-platform strategy |
+| [contention_model.md](contention_model.md) | **Unified contention**: why shared DRAM slows the CPU, per-model table (Sinclair, Soviet, New Gen), Ferranti vs gate array delay patterns, I/O contention, Scorpion Even M1, cross-platform strategy |

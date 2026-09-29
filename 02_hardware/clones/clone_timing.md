@@ -29,18 +29,18 @@ graph TD
     DISCRETE --> LEN[Leningrad<br/>early Soviet clones]
     CPLD --> SIZIF[Sizif-512<br/>Karabas-128]
     CPLD --> KAY2[Kay 2006 NB<br/>Altera EPM7064]
-    CPLD --> EVE[ZX Evolution<br/>Altera EPM7128 + EPM3032]
+    FPGA --> EVE[ZX Evolution<br/>Altera EP1K50 + CPLDs]
     FPGA --> NEXT[ZX Spectrum Next]
     FPGA --> MISTER[MiSTer FPGA core]
 ```
 
 | Implementation | Contention | Frame timing | Turbo modes | Video enhancements |
 |---------------|-----------|-------------|-------------|-------------------|
-| **Discrete logic** (Pentagon, Scorpion, Kay, ATM Turbo, Profi) | Usually **none** — no bus arbitration | Often matches 48K exactly | Rare (some 7 MHz) | Minimal |
-| **CPLD** (Sizif-512, Karabas-128, Kay 2006 NB, **ZX Evolution**) | Varies — some implement contention | Often matches 48K base | Common (7 MHz) | Some (extra colors, modes) |
-| **FPGA** (Next, MiSTer) | **Configurable** — can emulate any model | **Configurable** per target model | Multiple speeds (3.5–28 MHz) | Extensive (extra resolutions, colors) |
+| **Discrete logic** (Pentagon, Scorpion, Kay, ATM Turbo, Profi) | **None** at 3.5 MHz — video and CPU get fixed memory slots (the Scorpion adds "Even M1") | Often matches 48K exactly | Common (7 MHz) | Minimal |
+| **CPLD** (Sizif-512, Karabas-128, Kay 2006 NB) | Varies — some emulate contention | Often matches 48K base | Common (7 MHz) | Some (extra colors, modes) |
+| **FPGA** (Next, ZX Evolution, Karabas-Pro, MiSTer) | Emulated **by rule**, only in Sinclair timing modes at 3.5 MHz | **Configurable** per target model | Multiple speeds (3.5–28 MHz), with waits at the top speeds | Extensive (extra resolutions, colors) |
 
-The most important difference for programmers: **most discrete-logic clones have no memory contention**. Code in the upper 16K runs at full speed at all times. This is because the 74-series counters used for video address generation run independently of the CPU bus — there is no ULA-style bus arbitration circuit. This means any software that relies on contention timing (multicolor effects) will break on these machines without separate code paths.
+The most important difference for programmers: **the discrete-logic clones have no memory contention**. Code in `#4000`–`#7FFF` runs at full speed at all times. The designers used DRAM fast enough to be accessed twice per CPU memory cycle and wired a counter that hands out the slots in a fixed order — video, CPU, video, CPU — so the CPU's memory cycle always finds its slot and nothing waits. Software that relies on contention timing (multicolor effects) will break on these machines without separate code paths. The price of fixed slots is exact phase: the CPU's slot must coincide with the moment the Z80 latches data, which is where the Scorpion's one-T-state "Even M1" wait comes from ([Scorpion](#scorpion-zs-256), [contention_model.md](../../05_development/03_memory_and_io/contention_model.md#why-memory-slows-the-cpu--shared-dram-slots-and-who-waits)).
 
 ---
 
@@ -135,9 +135,9 @@ The practical impact: code that assumes INT fires at the top of the frame (like 
 
 ### No Contention
 
-The Pentagon has **zero memory contention**. Unlike the Ferranti ULA, which pauses the CPU by asserting the WAIT pin during screen memory reads, the Pentagon's discrete logic video circuit has **no mechanism to stall the CPU at all** — there is no WAIT generator connected to the screen address range.
+The Pentagon has **zero memory contention**. Unlike the Ferranti ULA, which stops the CPU by holding its clock during screen memory reads, the Pentagon's discrete logic video circuit has **no mechanism to stall the CPU at all** — no clock stretching, no WAIT generator, no M1 alignment. The designer-era Pentagon FAQ: "128k of NOT-CONTENDED memory (no slow areas)".
 
-Instead, the video counters and CPU share the RAM bus through **asynchronous time-division multiplexing**:
+Instead, the video counters and the CPU share the RAM through **synchronous time-division multiplexing** — fixed slots derived from the one 14 MHz master clock:
 
 ```mermaid
 graph LR
@@ -150,26 +150,17 @@ graph LR
     RAM --> SHIFT[Pixel shift register<br/>КР1533ИР8 (74LS165)<br/>8-bit parallel-in serial-out]
 ```
 
-The video counter runs from the same 14 MHz master clock that derives the CPU clock. It generates a continuous sequence of pixel and attribute addresses, reading 2 bytes per 8-pixel character cell (1 pixel byte + 1 attribute byte). These reads are synchronized to the video timing, not to the CPU bus state. The key insight:
+The video counter runs from the same 14 MHz master clock that derives the CPU clock (14/4 = 3.5 MHz). It generates a continuous sequence of pixel and attribute addresses, reading 2 bytes per 8-pixel character cell (1 pixel byte + 1 attribute byte), and the memory cycle is divided into fixed slots for the video and for the CPU. The key insight:
 
 | Aspect | Ferranti ULA (48K) | Pentagon discrete logic |
 |--------|-------------------|----------------------|
-| Video read timing | Synchronized to CPU — ULA waits for bus idle, or stalls CPU | **Asynchronous** — video counter runs independently |
-| Bus conflict resolution | ULA asserts WAIT, CPU pauses | **No conflict resolution** — both access freely |
+| Video read timing | Bursts during the paper, video has priority | **Fixed slots** from the 14 MHz clock, interleaved with the CPU's |
+| Bus conflict resolution | ULA stops the CPU clock until its fetch is done | **No conflict** — each side has its own slot |
 | CPU stalling | Yes — contention pattern 6,5,4,3,2,1,0,0 per 8T window | **None** — CPU never waits |
-| Video data reliability | Guaranteed — ULA always gets correct data | **Usually correct** — timing works out due to Z80 bus gaps |
+| Video data reliability | Guaranteed — ULA always gets correct data | Guaranteed — the video slot is reserved |
 | DRAM used | 4116 (lower 16K) + 4532 (upper 16K) | 4164 (64K × 1 bit × 8 chips) |
 
-In practice, the Pentagon's video reads rarely collide with CPU access because the Z80 bus has natural idle periods:
-
-- **M1 opcode fetch**: T3–T4 are used for instruction decode and DRAM refresh — the data bus is free
-- **Memory read/write**: The 3T bus cycle leaves gaps between consecutive accesses
-- **Internal processing**: Multi-T-state instructions (e.g., 16-bit arithmetic) don't use the bus at all
-
-When a collision does occur, the video circuit simply reads whatever is on the bus — but the designers timed the video counter so that reads fall in the gaps.
-
-> [!WARNING]
-> The "no contention" design means the CPU is never slowed down, but it also means there is **no guaranteed bandwidth reservation** for video. If the CPU performs extremely dense memory access to screen RAM (e.g., unrolled `LD (HL),A` in a tight loop), it can theoretically corrupt the video output. In practice this is rarely visible because the Z80's bus usage pattern leaves enough gaps for the video counter to read correctly.
+A document describing the Pentagon's exact slot order has not been found; the "no contention" part is not in doubt, and every emulator and FPGA re-creation models the Pentagon without CPU delays.
 
 Practical consequences:
 
@@ -245,25 +236,36 @@ The Scorpion ZS-256 (Скорпион), designed by Sergey Zonov in St. Petersbu
 | T-states per frame | **69,888** | **69,888** |
 | T-states per scanline | **224** | **224** |
 | Total scanlines | **312** | **312** |
-| Contention | `#4000`–`#7FFF` | Implementation-dependent |
+| Contention | `#4000`–`#7FFF` | **None**; Even M1 on opcode fetches from RAM |
 | ROM | Sinclair ROM | Custom Scorpion ROM |
 | Paper starts at | T=14,335 | T=14,344 |
 | Horizontal timing | ~48T left border + 128T screen + ~48T right border | 40T off-screen + 24T left border + 128T screen + 32T right border |
 
 The base frame size matches the 48K (312 lines × 224T = 69,888 T-states), but the **horizontal timing within each line is different**: the Scorpion's sync and border phases are shifted. The paper area also starts 9 T-states later (T=14,344 vs T=14,335).
 
-### Contention
+### Contention and Even M1
 
-The Scorpion's contention behavior varies by revision. Early models had limited or no contention — later revisions implemented a contention model closer to the 48K ULA for better software compatibility. For demoscene programming, the Scorpion is typically treated as having **mild or no contention** and tested on real hardware.
+The Scorpion has **no memory contention and no I/O contention on any board** — its video and CPU share the DRAM in fixed slots on the `H0`/`H1` phase counter (7 MHz). It has a different delay instead: an opcode fetch (M1) from **RAM** that would start on an odd T-state gets **one WAIT**, so every fetch from RAM starts on an even T-state ("Even M1"). ROM fetches, data reads and writes, I/O and interrupt acknowledge never wait; RAM mapped at `#0000` (`#1FFD` bit 0) counts as RAM. Source: the SC15.1 EPLD equations of the turbo board (ZS Company, 1996, [zx-pk.ru thread 940, post #40](https://zx-pk.ru/threads/940-scorpion-zs-256-turbo-(skhema)/page4.html)), confirmed by programmers on real machines — "on a Scorpion the T-state is always even on exit from HALT" (introspec, [zx-pk.ru thread 21212, post #25](https://zx-pk.ru/threads/21212-tajmingi-pentagon-128/page3.html)).
+
+In RAM at 3.5 MHz, each instruction therefore costs its Pentagon length rounded up to an even number: `NOP` 4 → 4, `LD A,n` 7 → 8, `INC HL` 6 → 6, `LD A,(IX+d)` 19 → 20, `OUT (n),A` 11 → 12. The same code in ROM runs at Pentagon speed.
+
+| Board | Even M1 |
+|---|---|
+| Yellow (1991–92) | Yes (probable) |
+| Green, and yellow boards with the Turbo+ upgrade | Yes, per the SC15.1 equations |
+| 2007 GAL re-creation ("TURBO 15.3", romychs/Scorpion256TPlus) | No |
+| Early RC-delay boards | Unknown |
+
+See [scorpion.md](scorpion.md#contention-and-the-even-m1-wait) for the equations, per-board evidence and emulator comparison.
 
 ### 7 MHz Turbo Mode
 
 The Scorpion's turbo mode doubles the CPU clock to 7 MHz:
 
 - **Effective T-states per frame double**: 139,776 T-states at 7 MHz in the same 69,888-T-state frame period
-- **Memory access still uses the same bus timing** — the CPU runs faster but RAM access speed doesn't change, so some memory-intensive operations don't scale linearly
+- **RAM accesses wait for a free slot** — at 7 MHz every RAM access waits until the CPU's DRAM slot comes round, and the CPU gets half as many slots during the paper as during the border. The turbo Scorpion is therefore screen-contended in its own, paper-dependent way (medium confidence: an analysis of the SC15.1 equations, no timing measurement found); writes go through a posted-write latch, so reads and fetches pay most of it
 - **I/O timing changes** — port access at 7 MHz completes faster
-- Software must explicitly enable turbo mode via a port write
+- Emulators (MAME, Xpeccy) switch turbo on with an `IN` from the `#7FFD` decode and off with an `IN` from `#1FFD` or a reset; the Scorpion ROM leaves turbo on, so timing-critical code must switch it off
 - Not all software is compatible with turbo mode — timing-sensitive code (interrupt handlers, multicolor) must account for the doubled clock
 
 ### Enhanced Features
@@ -272,7 +274,7 @@ The Scorpion's turbo mode doubles the CPU clock to 7 MHz:
 - **ROM configuration** — 2 ROM pages selectable via hardware
 - **Beta 128 disk interface** built-in
 - **Kempston joystick** port built-in
-- The Scorpion's discrete logic design is more complex than the Pentagon's, but still does not fully replicate the Ferranti ULA's bus arbitration — contention behavior varies by revision
+- The Scorpion's discrete logic design is more complex than the Pentagon's, but it does not replicate the Ferranti ULA's bus arbitration — no contention, only Even M1
 
 ---
 
@@ -294,9 +296,9 @@ The Kay 1024 (Кэй), manufactured by NEMO company in St. Petersburg (1998), is
 
 Base frame timing matches the 48K and Pentagon.
 
-### No Contention
+### No Contention at 3.5 MHz
 
-Like the Pentagon, the Kay 1024 has **no memory contention**. The CPU runs at full speed regardless of what address it accesses. This is a common trait among Russian discrete-logic clones — without the Ferranti ULA's custom bus arbitration circuit, there is simply no mechanism to stall the CPU during screen memory access.
+Like the Pentagon, the Kay 1024 has **no memory contention** in its normal 3.5 MHz mode. Its designers' article (NEMO, [zxpress.ru](https://zxpress.ru/article.php?id=15217)) calls it "the WAIT-free NORMAL (3.5 MHz) mode", which "makes multicolor possible" — implying that the older **Kay-256 did insert waits at 3.5 MHz**. In turbo the picture changes: IORQ is stretched (on the Kay-256 "1.5 to 2 times", stabilized on the 1024), and the effective clock for code in RAM is 6.3–7.0 MHz — a sign of lost arbitration slots.
 
 ### Enhanced Video Modes
 
@@ -326,7 +328,9 @@ The ATM Turbo is an enhanced ZX Spectrum clone that diverges more significantly 
 | CPU clock (turbo) | N/A | **7.0 MHz** |
 | T-states per frame | **69,888** | **~69,888** |
 | T-states per scanline | **224** | **224** (standard mode) |
-| Contention | `#4000`–`#7FFF` | Minimal / none |
+| Contention | `#4000`–`#7FFF` | **None** at 3.5 and 7 MHz |
+
+The ATM Turbo has no memory contention at either speed; the discrete DRAM interleave is not described in the documents found. The one documented CPU wait is the keyboard: on `IN A,(#FE)` the CPU "is stopped by the WAIT signal" until the 8031 keyboard controller answers (ATM Turbo 2+ architecture document, port `#FE` section). Turbo (7 MHz) is switched by port `#77` D3.
 
 ### Enhanced Video Modes
 
@@ -357,22 +361,23 @@ The ZX Spectrum Next (2017–2020) is the most capable FPGA-based Spectrum:
 | FPGA | Xilinx Spartan-6 (KS1) / Artix-7 (KS2) | KS1 = Issue 2B, KS2 = Issue 4 |
 | CPU speeds | 3.5 / 7 / 14 / 28 MHz | 4 speed modes, switchable at runtime |
 | Base timing | 48K-compatible | 69,888 T-states, 224T/line at 3.5 MHz |
-| Contention | **Configurable** | Can emulate 48K, 128K, +2A, Pentagon, or disable entirely |
+| Contention | **Emulated** | 48K / 128K / +3 timing at 3.5 MHz only (bank 5 / odd banks / banks ≥ 4); clock stretch in 48K/128K timing, WAIT in +3 timing; none in Pentagon timing, in any turbo, or when disabled by NextReg `#08` |
 | Enhanced video | Layer 2 (256×192×256 colors), tilemap, sprites | Hardware-accelerated, doesn't affect base timing |
 | Copper coprocessor | Programmable raster timing | Can change hardware registers at exact scanline positions |
 
 The Next's copper coprocessor is a game-changer for timing-sensitive effects — it's a tiny programmable state machine that runs in parallel with the CPU and can write to hardware registers at precisely defined T-state positions within the frame. This eliminates the need for carefully timed CPU loops for many effects.
 
-At 28 MHz (8× base speed), the CPU has 8× the T-states per frame — approximately 559,104 T-states — while the video timing remains locked to the original frame structure.
+At 28 MHz (8× base speed), the CPU has 8× the T-states per frame — approximately 559,104 T-states — while the video timing remains locked to the original frame structure. At 28 MHz every memory read from SRAM or the bank-5 video RAM gets one wait state; writes, refresh and I/O do not.
 
 ### ZX Evolution
 
-The ZX Evolution (Резидент / PentEvo, 2008–2011) is a Russian hybrid clone: it uses a **real Z80 CPU** and **real SRAM/DRAM**, with **Altera MAX CPLDs** (EPM7128S + EPM3032A) handling only address decoding, memory paging, and I/O port mapping — not implementing the core machine logic as an FPGA would.
+The ZX Evolution (Резидент / PentEvo, 2008–2011) is a Russian hybrid clone: it uses a **real Z80 CPU** and **real SRAM/DRAM**, with an **Altera EP1K50 FPGA** for video generation and memory arbitration, plus two CPLDs (EPM7128S + EPM3032A) for decoding — see [zx_evo.md](../newgen/zx_evo.md). The FPGA's DRAM arbiter gives the video 1/8 or 1/4 of the bandwidth, so the CPU does not stall at 3.5 and 7 MHz.
 
 - **Pentagon-compatible base timing** — 71,680 T-states, 320 lines, no contention
-- **Turbo mode** — 7 MHz and 14 MHz
+- **BaseConf 48K/128K rasters** (selected in the AVR setup) **emulate** 48K-style contention at 3.5 MHz only: `#4000`–`#7FFF` (plus `#C000`–`#FFFF` with an odd page in the 128K raster) and even ports
+- **Turbo mode** — 7 MHz (no waits) and 14 MHz (variable waits per access: an M1 waits 3–6 and a read 2–5 cycles of the 28 MHz clock depending on the DRAM phase, writes do not wait; external I/O drops to 7 MHz). TS-Conf at 14 MHz waits only on a cache miss
 - **Enhanced video** — multicolor, GigaScreen
-- **CPLDs**: Altera EPM7128S (main glue logic) + EPM3032A (auxiliary decoding) — used as programmable logic replacements for discrete TTL decoders, not as FPGA core implementations
+- **Programmable logic**: EP1K50 FPGA (video, DRAM arbiter) + EPM7128S (glue logic) + EPM3032A (auxiliary decoding)
 - Designed for maximum compatibility with the existing Russian ZX Spectrum software library
 - Also known as PentEvo (Pentagon Evolution) because it emulates the Pentagon 1024 SL at hardware level
 
@@ -410,11 +415,11 @@ Because MiSTer cores are written in Verilog and open-source, **any clone can be 
 | **Pentagon 512K** | **71,680** | 224 | **320** | **None** | None | None (CPLD address decoding) |
 | **Pentagon 1024K** | **71,680** | 224 | **320** | **None** | None | None (CPLD address decoding) |
 | **Pentagon 2048K** | **71,680** | 224 | **320** | **None** | None | None (CPLD address decoding) |
-| **Scorpion ZS-256** | 69,888 | 224 | 312 | Varies by revision | 7 MHz | 256K RAM |
-| **Kay 1024** | 69,888 | 224 | 312 | **None** | 7 MHz | GigaScreen, 512x192 (Kay 2006) |
-| **ATM Turbo** | ~69,888 | 224 | ~312 | Minimal | 7 MHz | 640x200, CP/M text mode |
-| **ZX Spectrum Next** | 69,888 (base) | 224 | 312 | **Configurable** | 7/14/28 MHz | Layer 2, tilemap, sprites, copper |
-| **ZX Evolution** | 71,680 (Pentagon) | 224 | 320 | **None** (Pentagon) | 7/14 MHz | GigaScreen, multicolor |
+| **Scorpion ZS-256** | 69,888 | 224 | 312 | **None**; Even M1 (+0/+1 T on opcode fetches from RAM) | 7 MHz (slot waits on RAM) | 256K RAM |
+| **Kay 1024** | 69,888 | 224 | 312 | **None** at 3.5 MHz | 7 MHz | GigaScreen, 512x192 (Kay 2006) |
+| **ATM Turbo** | ~69,888 | 224 | ~312 | **None** | 7 MHz | 640x200, CP/M text mode |
+| **ZX Spectrum Next** | 69,888 (base) | 224 | 312 | **Emulated** in 48K/128K/+3 timing at 3.5 MHz | 7/14/28 MHz | Layer 2, tilemap, sprites, copper |
+| **ZX Evolution** | 71,680 (Pentagon) | 224 | 320 | **None** (Pentagon raster); emulated in BaseConf 48K/128K rasters at 3.5 MHz | 7/14 MHz | GigaScreen, multicolor |
 | **MiSTer FPGA** | **Configurable** | **Configurable** | **Configurable** | **Configurable** | Variable | Depends on selected core |
 
 Compare with original Sinclair/Amstrad models:
@@ -449,7 +454,7 @@ graph TD
     QCONT -->|No| QPENT{Pentagon-compatible?}
     QPENT -->|Yes| PATHPENT[Use Pentagon path<br/>No contention<br/>Add extra NOP padding]
     QPENT -->|No| QSCORP{Scorpion / Kay?}
-    QSCORP -->|Yes| PATHSCORP[Use clone path<br/>Check turbo mode<br/>Minimal contention assumed]
+    QSCORP -->|Yes| PATHSCORP[Use clone path<br/>Switch turbo off<br/>No contention; Scorpion:<br/>RAM fetches even-aligned]
     QSCORP -->|No| PATHGEN[Generic fallback<br/>No contention assumed<br/>Test on real hardware]
     Q48 -->|No| QNEXT{ZX Spectrum Next?}
     QNEXT -->|Yes| PATHNEXT[Use Next-specific code<br/>Copper coprocessor available<br/>Hardware sprites and tilemap]
@@ -494,12 +499,17 @@ IN   A,(C)         ; Read hardware ID
 - **Sinclair Wiki, "Contended Memory"** ([sinclair.wiki.zxnet.co.uk](https://sinclair.wiki.zxnet.co.uk/wiki/Contended_memory)) — Per-model contention patterns including +2A/+3 gate array
 - **ZX Spectrum Next Developer Reference** ([zxspectrumnext.dev](https://zxspectrumnext.dev)) — Next-specific timing, copper coprocessor, and enhanced video modes
 - **Scorpion ZS-256 Programmer's Reference** (ZXPress) — Scorpion I/O ports and configuration
+- **SC15.1 EPLD equations** ([zx-pk.ru thread 940, post #40](https://zx-pk.ru/threads/940-scorpion-zs-256-turbo-(skhema)/page4.html)) — the Scorpion turbo board's WAIT logic: Even M1 in normal mode, slot waits in turbo
+- **Pentagon FAQ** ([zxspectrum.hal.varese.it](http://zxspectrum.hal.varese.it/static/documenti/pentagon.txt)) — "128k of NOT-CONTENDED memory (no slow areas)"
+- **Kay-1024 designers' article** ([zxpress.ru](https://zxpress.ru/article.php?id=15217)) — "WAIT-free NORMAL (3.5 MHz) mode", turbo IORQ stretching
 - **List of ZX Spectrum clones** ([en.wikipedia.org](https://en.wikipedia.org/wiki/List_of_ZX_Spectrum_clones)) — Comprehensive catalog
 
 ### Cross-References
 
 - [ula_timing.md](../original/ula_timing.md) — Ferranti ULA and Amstrad gate array timing, memory contention, multicolor effects
-- [z80_timing.md](../../01_cpu/z80_timing.md) — Z80-intrinsic timing: T-states, M-cycles, bus timing
+- [z80_timing.md](../../01_cpu/z80_timing.md) — Z80-intrinsic timing: T-states, M-cycles, bus timing (fetch vs read latch points)
+- [contention_model.md](../../05_development/03_memory_and_io/contention_model.md) — which machines contend and why; programming around the Scorpion's Even M1
+- [scorpion.md](scorpion.md) — Scorpion hardware, including the Even M1 equations
 - [z80_interrupts.md](../../01_cpu/z80_interrupts.md) — Interrupt timing per model, contention during interrupt handling
 - [z80_coding_practices.md](../../01_cpu/z80_coding_practices.md) — T-state budgeting, contention-aware coding patterns
 - [io_port_map.md](../../10_references/io_port_map.md) — Complete I/O port reference with per-model decoding bitmasks

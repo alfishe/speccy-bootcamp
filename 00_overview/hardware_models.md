@@ -131,7 +131,7 @@ These matrices compare models across tracks on the dimensions that matter most f
 | ZX Spectrum 128K / +2 | 311 | 228 | 70,908 | 49.90 Hz | Yes (odd banks only) | A (Sinclair) |
 | ZX Spectrum +2A / +3 | 311 | 228 | 70,908 | 49.90 Hz | Yes (`1-0-7-6-5-4-3-2`) | A (Sinclair) |
 | Pentagon 128K/1024K | 320 | 224 | 71,680 | 48.83 Hz | **None** | B (Pentagon) |
-| Scorpion ZS-256 | 312 | 228 | 70,944 | ~49.93 Hz | Revision-dependent | A (Sinclair) |
+| Scorpion ZS-256 | 312 | 228 | 70,944 | ~49.93 Hz | None; "Even M1" aligns opcode fetches from RAM to even T-states | A (Sinclair) |
 | ATM Turbo (3.5 MHz) | 312 | 228 | 70,908 | 49.90 Hz | None | A (Sinclair) |
 | ATM Turbo (7 MHz) | varies | varies | ~99,880 | varies | None | C (Divergent) |
 | Sprinter | varies | varies | ~285,714 | ~70 Hz | None | C (Divergent) |

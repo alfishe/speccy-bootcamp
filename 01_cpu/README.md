@@ -17,7 +17,7 @@ The article order follows the Zilog UM0080 User Manual chapter structure, then e
 | 3 | [z80_flags.md](z80_flags.md) | S, Z, H, P/V, N, C flags — per-instruction behavior, DAA, BCD arithmetic |
 | 4 | [z80_instruction_set.md](z80_instruction_set.md) | Complete ISA: 698 instructions, opcode encoding, timing, groups, decision guides |
 | 5 | [z80_undocumented.md](z80_undocumented.md) | IX/IY halves, SLL, MEMPTR, F3/F5, OUT (C),0, clone detection, R register |
-| 6 | [z80_timing.md](z80_timing.md) | T-states, M-cycles, bus timing, WAIT pin, per-instruction costs, prefix byte timing, DRAM refresh |
+| 6 | [z80_timing.md](z80_timing.md) | T-states, M-cycles, half-clock bus timing (fetch vs read latch points), WAIT pin vs clock stretching, per-instruction costs, prefix byte timing, DRAM refresh |
 | 7 | [z80_interrupts.md](z80_interrupts.md) | IM0/IM1/IM2, NMI, IFF1/IFF2, vector tables, EI latency, per-model timing |
 | 8 | [z80_vs_modern.md](z80_vs_modern.md) | Z80 vs x86-64/ARM64 comparison, register mapping, programming mindset shift |
 | 9 | [z80_coding_practices.md](z80_coding_practices.md) | Register discipline, instruction selection, arithmetic tricks, contention-aware coding, stack blitter |

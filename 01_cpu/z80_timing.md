@@ -7,7 +7,7 @@ The Z80's timing is built on a single concept: the **T-state** — one clock cyc
 This article covers the **Z80's own timing mechanics**: T-states, M-cycle types, bus timing signals, and per-instruction cost tables. These are universal to every Z80 system — a TRS-80, an MSX, an Amstrad CPC, and a ZX Spectrum all share these fundamentals.
 
 > [!NOTE]
-> The ZX Spectrum's Ferranti ULA imposes additional timing constraints on top of the Z80's baseline: **memory contention** during screen drawing, **frame timing** per video model, and **multicolor precision** requirements. These ULA-specific behaviors are covered in [ula_timing.md](../02_hardware/original/ula_timing.md). This article covers the Z80's intrinsic timing only.
+> The ZX Spectrum's Ferranti ULA imposes additional timing constraints on top of the Z80's baseline: **memory contention** during screen drawing, **frame timing** per video model, and **multicolor precision** requirements. These ULA-specific behaviors are covered in [ula_timing.md](../02_hardware/original/ula_timing.md). Soviet clones mostly have no contention at 3.5 MHz; the Scorpion ZS-256 instead aligns opcode fetches from RAM to even T-states ("Even M1") — see [contention_model.md](../05_development/03_memory_and_io/contention_model.md). This article covers the Z80's intrinsic timing only.
 
 ---
 
@@ -97,13 +97,21 @@ graph TD
 
 Key facts:
 
-- WAIT is sampled at the **falling edge of T2**
-- If WAIT is asserted, the Z80 inserts one Tw T-state and samples WAIT again at the next falling edge
+- In memory cycles (opcode fetch, read, write), WAIT is sampled at the **falling edge of T2**; in I/O cycles it is sampled at the falling edge of the automatic wait state that follows T2
+- If WAIT is asserted, the Z80 inserts one Tw T-state and samples WAIT again at the falling edge of that Tw
 - There is **no limit** on the number of wait states — the Z80 will wait indefinitely
 - WAIT affects **every** memory and I/O cycle type — M1 fetch, memory read/write, I/O read/write
 - WAIT does **not** affect internal processing cycles (no bus activity = no WAIT sampling)
+- A WAIT inserted in an M1 cycle lands between T2 and T3, so it also delays the refresh cycle (T3–T4) that follows
 
-On the ZX Spectrum, the ULA asserts WAIT to implement **memory contention** — pausing the CPU during screen memory access. For details, see [ula_timing.md](../02_hardware/original/ula_timing.md).
+Spectrum-family machines stall the CPU in two different ways, and the difference matters for which cycles can be slowed:
+
+| Mechanism | Machines | What it can delay |
+|---|---|---|
+| **Clock stretching** — the video chip holds the CPU clock, so the Z80 simply stops | Ferranti ULA (16K/48K/128K/+2); Next in 48K/128K timing | Any T-state whose address is contended, including internal cycles that leave a contended address on the bus, and I/O cycles |
+| **WAIT pin** — the Z80 inserts Tw states | Amstrad gate array (+2A/+3), Next in +3 timing, Scorpion ZS-256 ("Even M1") | Only real bus cycles; the +2A/+3 gate array uses it for `MREQ` cycles only, the Scorpion only for opcode fetches from RAM |
+
+See [contention_model.md](../05_development/03_memory_and_io/contention_model.md) for which machines contend and why, and [ula_timing.md](../02_hardware/original/ula_timing.md) for the Ferranti ULA's patterns.
 
 ---
 
@@ -173,7 +181,7 @@ Instructions that read additional bytes from memory take M1 + one or more memory
 |-------------|----------|-------|
 | `IN A,(#FE)` | 11 | M1 (4T) + port addr (3T) + I/O read (4T) |
 | `OUT (#FE),A` | 11 | M1 (4T) + port addr (3T) + I/O write (4T) |
-| `IN B,(C)` | 12 | M1 (4T) + CB prefix or extra cycle |
+| `IN B,(C)` | 12 | `ED` prefix M1 (4T) + M1 (4T) + I/O read (4T) |
 | `INI` | 16 | Complex multi-cycle sequence |
 
 > The I/O M-cycle always includes **1 automatic wait T-state** (Tw) — the Z80 inserts this to give I/O devices time to respond. External hardware can add additional wait states via the WAIT pin.
@@ -204,53 +212,73 @@ During each M-cycle, the Z80 asserts specific control pins to coordinate bus act
 ```mermaid
 graph LR
     subgraph "M1 Opcode Fetch — 4T"
-        T1A[T1: PC on addr bus<br/>M1=LOW] --> T2A[T2: MREQ=LOW, RD=LOW<br/>Memory decodes]
-        T2A --> T3A[T3: Data sampled<br/>R register incremented] --> T4A[T4: DRAM refresh<br/>RFSH=LOW, MREQ=LOW]
+        T1A[T1: PC on addr bus, M1=LOW<br/>mid-T1: MREQ=LOW, RD=LOW] --> T2A[T2: memory drives data<br/>WAIT sampled at end of T2]
+        T2A --> T3A[start of T3: opcode latched<br/>MREQ, RD, M1 released<br/>refresh address out, RFSH=LOW] --> T4A[T3-T4: DRAM refresh<br/>MREQ=LOW from mid-T3 to mid-T4]
     end
 ```
 
 ```mermaid
 graph LR
     subgraph "Memory Read — 3T"
-        T1B[T1: Address on bus] --> T2B[T2: MREQ=LOW, RD=LOW] --> T3B[T3: Data sampled]
+        T1B[T1: address on bus<br/>mid-T1: MREQ=LOW, RD=LOW] --> T2B[T2: memory drives data<br/>WAIT sampled at end of T2] --> T3B[mid-T3: data latched<br/>MREQ, RD released]
     end
 ```
 
 ```mermaid
 graph LR
     subgraph "Memory Write — 3T"
-        T1C[T1: Address on bus] --> T2C[T2: MREQ=LOW, WR=LOW<br/>Data on bus] --> T3C[T3: Data written]
+        T1C[T1: address on bus<br/>mid-T1: MREQ=LOW, data out] --> T2C[mid-T2: WR=LOW<br/>WAIT sampled at end of T2] --> T3C[mid-T3: WR, MREQ released<br/>memory has taken the byte]
     end
 ```
 
 ### Per-T-State Signal Activity
 
-The tables below show the exact signal state during each T-state of each M-cycle type. All active-LOW signals are shown as `L` (asserted) or `H` (not asserted).
+Each T-state has a rising-edge half (first half) and a falling-edge half (second half), and the Z80 changes its control lines on both edges. The tables below split each T-state into its two halves: `T1a` is the first half of T1, `T1b` the second half, and so on. Active-LOW signals are shown as `L` (asserted) or `H` (not asserted). The edges follow the timing diagrams in the Zilog Z80 CPU User Manual (UM0080, "Timing").
 
 #### M1 Opcode Fetch (4T)
 
-| T-state | Address bus | M1 | MREQ | RD | WR | RFSH | Data bus | Notes |
-|---------|-----------|-----|------|----|----|------|---------|-------|
-| T1 | PC | **L** | H | H | H | H | — | Z80 puts PC on address bus, asserts M1 |
-| T2 | PC | **L** | **L** | **L** | H | H | — | Memory decodes address, drives data bus |
-| T3 | PC | **L** | H | H | H | H | **D=input** | CPU samples data bus (opcode byte), R incremented |
-| T4 | R[6:0] | H | **L** | H | H | **L** | — | DRAM refresh cycle: refresh address on A6–A0 |
+| Half-T | Address bus | M1 | MREQ | RD | RFSH | Data bus | Notes |
+|--------|-------------|----|------|----|------|----------|-------|
+| T1a | PC | **L** | H | H | H | — | PC goes out on the rising edge of T1, together with M1 |
+| T1b | PC | **L** | **L** | **L** | H | — | MREQ and RD fall on the falling edge of T1 |
+| T2a | PC | **L** | **L** | **L** | H | — | Memory decodes and drives the data bus |
+| T2b | PC | **L** | **L** | **L** | H | — | WAIT sampled on the falling edge of T2 |
+| T3a | I·R (refresh) | H | H | H | **L** | — | **Opcode latched on the rising edge of T3**; the same edge releases MREQ, RD and M1 and puts the refresh address out (R on A6–A0, I on A15–A8) |
+| T3b | I·R | H | **L** | H | **L** | — | Refresh: MREQ falls again on the falling edge of T3 |
+| T4a | I·R | H | **L** | H | **L** | — | DRAM row refresh |
+| T4b | I·R | H | H | H | **L** | — | MREQ rises on the falling edge of T4; RFSH ends with T4 |
 
 #### Memory Read (3T)
 
-| T-state | Address bus | MREQ | RD | WR | Data bus | Notes |
-|---------|-----------|------|----|----|---------|-------|
-| T1 | Addr | H | H | H | — | Address setup |
-| T2 | Addr | **L** | **L** | H | — | Memory decodes, drives data bus |
-| T3 | Addr | H | H | H | **D=input** | CPU samples data bus |
+| Half-T | Address bus | MREQ | RD | Data bus | Notes |
+|--------|-------------|------|----|----------|-------|
+| T1a | Addr | H | H | — | Address goes out on the rising edge of T1 |
+| T1b | Addr | **L** | **L** | — | MREQ and RD fall on the falling edge of T1 |
+| T2a–T2b | Addr | **L** | **L** | — | Memory drives the data bus; WAIT sampled on the falling edge of T2 |
+| T3a | Addr | **L** | **L** | **D=input** | Data must be stable here |
+| T3b | Addr | H | H | — | **Data latched on the falling edge of T3**; the same edge releases MREQ and RD |
 
 #### Memory Write (3T)
 
-| T-state | Address bus | MREQ | RD | WR | Data bus | Notes |
-|---------|-----------|------|----|----|---------|-------|
-| T1 | Addr | H | H | H | — | Address setup |
-| T2 | Addr | **L** | H | **L** | **D=output** | CPU drives data bus, memory captures on T3 |
-| T3 | Addr | H | H | H | **D=output** | Data written to memory |
+| Half-T | Address bus | MREQ | WR | Data bus | Notes |
+|--------|-------------|------|----|----------|-------|
+| T1a | Addr | H | H | — | Address goes out on the rising edge of T1 |
+| T1b | Addr | **L** | H | **D=output** | MREQ falls on the falling edge of T1; the CPU drives the data |
+| T2a | Addr | **L** | H | **D=output** | Data settles |
+| T2b | Addr | **L** | **L** | **D=output** | WR falls on the falling edge of T2, once the data is stable; WAIT sampled on the same edge |
+| T3a | Addr | **L** | **L** | **D=output** | Memory takes the byte |
+| T3b | Addr | H | H | **D=output** | WR and MREQ rise on the falling edge of T3 |
+
+### Where the CPU Samples the Bus — Fetch vs Read
+
+The two read-type cycles differ in **when** the Z80 latches the data, and this detail decides how a machine that shares its memory with video must be built:
+
+| Cycle | Strobes active (MREQ + RD) | Data latched on | Window from MREQ fall to latch |
+|---|---|---|---|
+| **M1 opcode fetch** | falling edge of T1 → rising edge of T3 | **rising edge of T3** | 1.5 T |
+| **Memory read** | falling edge of T1 → falling edge of T3 | **falling edge of T3** | 2 T |
+
+An opcode fetch is half a clock shorter than a data read, and it cannot be stretched at the back: from the rising edge of T3 the address bus already carries the refresh address. Memory that can hand data to the CPU at any moment (a ROM, a static RAM, a DRAM the CPU owns alone) does not care. Memory whose data appears only in a **time slot at a fixed phase of the clock** (a DRAM that the CPU shares with a video circuit on a fixed schedule) can meet the longer read window at any T-state, but may meet the shorter fetch window only when the fetch starts on the right clock phase. The Scorpion ZS-256 is the known example: it inserts one WAIT into opcode fetches from RAM that start on an odd T-state ("Even M1"). See [contention_model.md](../05_development/03_memory_and_io/contention_model.md#why-memory-slows-the-cpu--shared-dram-slots-and-who-waits) for the full explanation.
 
 #### I/O Read (4T — includes 1 automatic wait)
 
@@ -258,25 +286,25 @@ The tables below show the exact signal state during each T-state of each M-cycle
 graph LR
     subgraph "I/O Read — 4T"
         T1D[T1: Port addr on bus] --> T2D[T2: IORQ=LOW, RD=LOW]
-        T2D --> TW["Tw: Auto wait<br/>(CPU inserts 1 idle T)"] --> T3D[T3: Data sampled]
+        T2D --> TW["Tw: Auto wait<br/>WAIT sampled at end of Tw"] --> T3D[mid-T3: data latched]
     end
 ```
 
-| T-state | Address bus | IORQ | RD | WR | Data bus | Notes |
-|---------|-----------|------|----|----|---------|-------|
-| T1 | Port addr | H | H | H | — | Port address on A7–A0 (full A15–A0 but only low byte is significant) |
-| T2 | Port addr | **L** | **L** | H | — | I/O device decodes port address |
-| Tw | Port addr | **L** | **L** | H | — | **Automatic wait T-state** — gives I/O devices one extra T to respond |
-| T3 | Port addr | H | H | H | **D=input** | CPU samples data bus |
+| T-state | Address bus | IORQ | RD | Data bus | Notes |
+|---------|-------------|------|----|----------|-------|
+| T1 | Port addr | H | H | — | Full 16-bit port address: A7–A0 from the instruction or C, A15–A8 from A or B |
+| T2 | Port addr | **L** | **L** | — | IORQ and RD fall on the rising edge of T2 |
+| Tw | Port addr | **L** | **L** | — | **Automatic wait T-state**; WAIT sampled on its falling edge |
+| T3 | Port addr | **L** → H | **L** → H | **D=input** | Data latched on the falling edge of T3; IORQ and RD rise on the same edge |
 
 #### I/O Write (4T — includes 1 automatic wait)
 
-| T-state | Address bus | IORQ | RD | WR | Data bus | Notes |
-|---------|-----------|------|----|----|---------|-------|
-| T1 | Port addr | H | H | H | — | Port address setup |
-| T2 | Port addr | **L** | H | **L** | **D=output** | I/O device selected, data driven |
-| Tw | Port addr | **L** | H | **L** | **D=output** | **Automatic wait T-state** — data held stable for I/O device |
-| T3 | Port addr | H | H | H | **D=output** | I/O device captures data |
+| T-state | Address bus | IORQ | WR | Data bus | Notes |
+|---------|-------------|------|----|----------|-------|
+| T1 | Port addr | H | H | **D=output** | Port address and data go out |
+| T2 | Port addr | **L** | **L** | **D=output** | IORQ and WR fall on the rising edge of T2 |
+| Tw | Port addr | **L** | **L** | **D=output** | **Automatic wait T-state**; WAIT sampled on its falling edge |
+| T3 | Port addr | **L** → H | **L** → H | **D=output** | IORQ and WR rise on the falling edge of T3 |
 
 > [!NOTE]
 > The automatic wait T-state (Tw) in I/O cycles is **built into the Z80** — it happens unconditionally, regardless of the WAIT pin. External hardware can add **additional** wait states via the WAIT pin on top of this automatic one. This is why I/O instructions take at least 4T per cycle instead of the 3T for memory cycles.
@@ -325,14 +353,16 @@ graph LR
 
 #### Per-T-State Refresh Detail
 
-| T-state | Address bus | MREQ | RFSH | RD | WR | Notes |
-|---------|-----------|------|------|----|----|-------|
-| T3 | PC (still) | H | H | H | H | Opcode data sampled by CPU |
-| T4 | R[6:0] | **L** | **L** | H | H | Refresh address on low 7 bits, DRAM refreshes row |
+| Half-T | Address bus | MREQ | RFSH | RD | WR | Notes |
+|--------|-------------|------|------|----|----|-------|
+| T3a | I (A15–A8), R (A6–A0) | H | **L** | H | H | The opcode was latched on the rising edge that started T3; refresh address out |
+| T3b | I, R | **L** | **L** | H | H | MREQ falls on the falling edge of T3 — DRAM `/RAS`-only refresh |
+| T4a | I, R | **L** | **L** | H | H | DRAM refreshes the row |
+| T4b | I, R | H | **L** | H | H | MREQ rises on the falling edge of T4 |
 
 #### Why M1 Takes 4T Instead of 3T
 
-The opcode data is actually available by the end of T2 (or during T3 at the latest). T3 is used for data sampling and internal instruction decode. T4 is used entirely for DRAM refresh — the Z80 "steals" these 2 T-states for refresh without any extra cost to the instruction. This is an elegant design:
+The Z80 latches the opcode on the rising edge of T3 — half a clock earlier than a data read latches its byte (falling edge of T3). The CPU spends T3 and T4 decoding the opcode, and uses the idle bus in those two T-states for the refresh cycle — the refresh comes at no extra cost to the instruction. This is an elegant design:
 
 - Every instruction that includes an M1 cycle (which is **all** of them) automatically refreshes one DRAM row
 - No separate refresh timer or DMA channel needed
@@ -447,7 +477,7 @@ Key facts:
 - The Z80 completes the **current M-cycle** before releasing the bus (it does not wait for the full instruction)
 - During bus release, the Z80 **stops DRAM refresh** — the external bus master is responsible for maintaining refresh if needed
 - The Z80 continues to sample BUSRQ every T-state; when released, it resumes immediately
-- On the ZX Spectrum, BUSRQ is **not used** by the ULA — the ULA uses WAIT for bus throttling instead. BUSRQ is available on the expansion bus edge connector
+- On the ZX Spectrum, BUSRQ is **not used** by the ULA — the Ferranti ULA throttles the CPU by stretching its clock, and the +2A/+3 gate array by pulling WAIT. BUSRQ is available on the expansion bus edge connector
 
 ---
 

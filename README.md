@@ -17,7 +17,7 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [z80_flags.md](01_cpu/z80_flags.md) | S, Z, H, P/V, N, C flags — per-instruction behavior, DAA, BCD arithmetic |
 | [z80_instruction_set.md](01_cpu/z80_instruction_set.md) | Complete ISA: 698 instructions, opcode encoding, timing, groups, decision guides |
 | [z80_undocumented.md](01_cpu/z80_undocumented.md) | IX/IY halves, SLL, MEMPTR, F3/F5, OUT (C),0, clone detection, R register |
-| [z80_timing.md](01_cpu/z80_timing.md) | T-states, M-cycles, bus timing, WAIT pin, per-instruction costs, DRAM refresh |
+| [z80_timing.md](01_cpu/z80_timing.md) | T-states, M-cycles, half-clock bus timing (opcode latched at T3 rising vs data at T3 falling), WAIT pin vs clock stretching, per-instruction costs, DRAM refresh |
 | [z80_interrupts.md](01_cpu/z80_interrupts.md) | IM0/IM1/IM2, NMI, IFF1/IFF2, vector tables, EI latency, per-model timing |
 | [z80_vs_modern.md](01_cpu/z80_vs_modern.md) | Z80 vs x86-64/ARM64 comparison, register mapping, programming mindset shift |
 | [z80_coding_practices.md](01_cpu/z80_coding_practices.md) | Register discipline, instruction selection, arithmetic tricks, contention-aware coding, stack blitter |
@@ -36,10 +36,11 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 
 | Article | Description |
 |---------|------------|
-| [clone_timing.md](02_hardware/clones/clone_timing.md) | Clone video timing — Pentagon, Scorpion, Kay, ATM Turbo, FPGA implementations, detection techniques |
+| [clone_timing.md](02_hardware/clones/clone_timing.md) | Clone video timing — Pentagon, Scorpion, Kay, ATM Turbo, FPGA implementations; why slot-based clones have no contention, Scorpion Even M1; detection techniques |
 | [clone_joysticks.md](02_hardware/clones/clone_joysticks.md) | Built-in Kempston on clone motherboards, Beta 128 coexistence, two-player conventions, single-standard software culture |
 | [atm_turbo.md](02_hardware/clones/atm_turbo.md) | ATM Turbo: CP/M mode, 7 MHz turbo, 4 video modes (320×200 16-color, 640×200, 80×25 text), IDE controller, flexible memory paging, 64-color RGBI palette |
-| [scorpion.md](02_hardware/clones/scorpion.md) | Scorpion ZS-256: Serge Zonov / Leningrad lineage, true 48K timing (69,888 T-states), Shadow Service Monitor debugger, port #1FFD turbo+extended paging, #FF floating bus (correct), SMUC ISA bridge, GMX 2 MB / 640×200×16, ProfROM |
+| [scorpion.md](02_hardware/clones/scorpion.md) | Scorpion ZS-256: Serge Zonov / Leningrad lineage, true 48K timing (69,888 T-states), no contention but "Even M1" fetch alignment (SC15.1 EPLD equations, boards, emulators), Shadow Service Monitor debugger, port #1FFD turbo+extended paging, #FF floating bus (correct), SMUC ISA bridge, GMX 2 MB / 640×200×16, ProfROM |
+| [profi.md](02_hardware/clones/profi.md) | Profi 5.03/1024: CMR0/CMR1 paging (#7FFD + #DFFD: page high bits, SCO window position, NOROM, SCR, DS80), extended screen 512×240 hardware multicolor (half-screen interleave, 16-color attribute byte, 16-of-256 palette protocol), ISA bus, VGA output, paper-offset quirk |
 
 #### New Generation
 
@@ -116,7 +117,7 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [memory_and_io_pentagon.md](05_development/03_memory_and_io/memory_and_io_pentagon.md) | Pentagon: #7FFD extended bank bits + #EFF7 control gate, Beta 128 FDC/TR-DOS, zero contention |
 | [memory_and_io_next.md](05_development/03_memory_and_io/memory_and_io_next.md) | ZX Spectrum Next: 2MB MMU, 8 KB pages, Layer 2/sprite/copper/DMA ports |
 | [screen_layout.md](05_development/03_memory_and_io/screen_layout.md) | Nonlinear framebuffer: three-thirds structure, address calculation, attribute file |
-| [contention_model.md](05_development/03_memory_and_io/contention_model.md) | Unified contention reference: per-model timing, Ferranti vs gate array patterns, I/O contention |
+| [contention_model.md](05_development/03_memory_and_io/contention_model.md) | Unified contention reference: why shared DRAM slows the CPU (clock stretch, WAIT, fixed slots), per-model table for all tracks, Ferranti vs gate array patterns, I/O contention, Scorpion Even M1 with T-counted example |
 | [bank_switching_patterns.md](05_development/03_memory_and_io/bank_switching_patterns.md) | Practical 128K+ paging: #7FFD, cross-bank access, double buffering, +2A/+3 modes |
 
 #### Interrupt Programming ✅ COMPLETE
@@ -145,8 +146,8 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [raster_timing.md](05_development/05_display_and_timing/raster_timing.md) | Beam position calculation, HALT-based sync, per-model raster maps, cross-platform strategy |
 | [color_system.md](05_development/05_display_and_timing/color_system.md) | Attribute byte, 8-color palette, attribute clash, ULAplus 64-color, Timex HiColor/HiRes |
 | [border_effects.md](05_development/05_display_and_timing/border_effects.md) | Border color via #FE, raster bars, rainbow borders, per-model timing |
-| [clone_video_modes.md](05_development/05_display_and_timing/clone_video_modes.md) | Clone video modes: GigaScreen, ATM hires, Profi 512×256, Kay CPLD, TS-Conf |
-| [video_frame_scorpion.md](05_development/05_display_and_timing/video_frame_scorpion.md) | Scorpion ZS-256 frame: 312 lines matching 48K macro timing, +9 T horizontal shift, revision-dependent contention, 7 MHz turbo |
+| [clone_video_modes.md](05_development/05_display_and_timing/clone_video_modes.md) | Clone video modes: GigaScreen, ATM hires, Profi 512×240, Kay CPLD, TS-Conf |
+| [video_frame_scorpion.md](05_development/05_display_and_timing/video_frame_scorpion.md) | Scorpion ZS-256 frame: 312 lines matching 48K macro timing, +9 T horizontal shift, no contention but Even M1 (RAM fetches on even T), 7 MHz turbo with paper-dependent slot waits |
 | [video_frame_other_soviet.md](05_development/05_display_and_timing/video_frame_other_soviet.md) | Long-tail Soviet clones: Kay 1024 (48K-clean), ATM Turbo 7 MHz anomaly (99,880 T-states), Profi paper offset, Byte, Quorum, Leningrad, LEC |
 | [video_frame_next.md](05_development/05_display_and_timing/video_frame_next.md) | ZX Spectrum Next: configurable timing modes (48K/128K/+2A/Pentagon), 4 CPU speeds (3.5/7/14/28 MHz), copper coprocessor |
 | [video_frame_sprinter.md](05_development/05_display_and_timing/video_frame_sprinter.md) | Sprinter: SVGA 70 Hz frame (not PAL 50 Hz), 20 MHz Z80, 5 video modes, music tempo 40% faster |

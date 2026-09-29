@@ -6,7 +6,7 @@ The Pentagon was the people's Spectrum — cheap, simple, built from discrete TT
 
 Designed by **Serge Zonov** in St. Petersburg as the professional successor to his popular **Leningrad** DIY clone (see [History & Development Timeline](#history--development-timeline)), the Scorpion packed a complete system onto a single board: **256K RAM**, **7 MHz turbo**, a built-in **Beta 128 disk controller**, **AY-3-8910/12 sound**, a **Centronics printer port**, and — uniquely — a **Shadow Service Monitor**: a full machine-code debugger with interactive reassembler, hardware/software tracing, and breakpoint support, burned into ROM and accessible at the press of a button.
 
-The Scorpion's defining technical characteristic was its **compatibility-first design**. Where the Pentagon adopted a non-standard frame timing (320 lines, 71,680 T-states — convenient for demoscene, but not Sinclair-matching) and the ATM Turbo added non-standard video modes, the Scorpion was engineered to be a **better ZX Spectrum 48K than the real thing**. Its video timing matches the 48K exactly: 312 lines, 69,888 T-states/frame, INT at T=0, proper `#FF` attribute readback, and black-level clamping on the video output. The result was a machine that ran 99% of ZX Spectrum software without modification — not just games, but also timing-sensitive productions that required adjustment on the Pentagon.
+The Scorpion's defining technical characteristic was its **compatibility-first design**. Where the Pentagon adopted a non-standard frame timing (320 lines, 71,680 T-states — convenient for demoscene, but not Sinclair-matching) and the ATM Turbo added non-standard video modes, the Scorpion was engineered to be a **better ZX Spectrum 48K than the real thing**. Its video timing matches the 48K exactly: 312 lines, 69,888 T-states/frame, INT at T=0, proper `#FF` attribute readback, and black-level clamping on the video output. Like the Pentagon it has **no memory contention**; its one CPU-timing quirk is **"Even M1"** — an opcode fetch from RAM that would start on an odd T-state waits one T-state (see [Contention and the Even M1 Wait](#contention-and-the-even-m1-wait)). The result was a machine that ran 99% of ZX Spectrum software without modification — not just games, but also timing-sensitive productions that required adjustment on the Pentagon.
 
 The Scorpion line went through three major revisions — **ZS-256** (1993, 3.5 MHz), **ZS-256 Turbo** (1995, 7 MHz), and **ZS-256 Turbo+** (1996–1998, 7 MHz with GAL chips replacing older PROMs). The **GMX** (Graphic Memory eXpander) mainboard expanded RAM to 2 MB and added 640×200×16 and 80×25 text video modes. The **SMUC** (Scorpion & MOA Universal Controller) bridged a real PC ISA bus onto the machine, enabling IDE hard drives and NE2000 networking. After production ceased around 1998, the community kept the platform alive: the [**romychs/Scorpion256TPlus**](https://github.com/romychs/Scorpion256TPlus) GitHub project reverse-engineered the Turbo+ schematics and PCB, producing open-source board revisions (v16.2.x "Black Edition") still being built by enthusiasts in the 2020s.
 
@@ -128,7 +128,7 @@ The Scorpion evolved through four major hardware configurations. The table below
 | **Memory paging** | `#7FFD` + `#1FFD` | Same | Same | `#7FFD` + `#1FFD` + `#DFFD` + `#78FD` |
 | **Video modes** | 256×192 Sinclair | Same | Same | Sinclair + **640×200×16** + **80×25 text** |
 | **Frame timing** | 48K-exact (69,888 T-states) | Same | Same | Same |
-| **Contention** | Implementation-dependent | Same | Same | Configurable |
+| **Contention** | **None**; Even M1 (+0/+1 T on opcode fetches from RAM) | Same at 3.5 MHz; 7 MHz: slot waits on RAM | Same as Turbo | None known; waits not documented |
 | **Port `#FF`** | Proper attribute readback | Same | Same | Same |
 | **INT formation** | Correct (T=0, like 48K) | Same | Same | Same |
 | **Beeper** | Yes (port `#FE`) | Yes | Yes | Yes |
@@ -190,7 +190,7 @@ The following table summarizes the key compatibility dimensions. For the full ti
 | **INT position** | T=0 (start of frame) | T=67,968 (line 304) — **non-standard** | T=0 | **T=0** |
 | **Port `#FF`** | ULA floating bus: current attribute byte | **Different** — independent video counter, not ULA-compatible | Attribute read | **ULA-compatible** floating bus |
 | **Black-level clamping** | Yes (ULA sync tip) | **Missing** — can cause display issues | Yes | **Yes** — fixed from Leningrad |
-| **Memory contention** | Yes (ULA delays CPU during screen read) | **None** | Minimal/none | **Implementation-dependent** (some revisions implement 48K-like contention) |
+| **Memory contention** | Yes (ULA delays CPU during screen read) | **None** | **None** (keyboard `IN #FE` waits for the 8031) | **None** — but opcode fetches from RAM are aligned to even T-states ("Even M1") |
 | **Software compatibility** | 100% (by definition) | ~90% generic, 95% with testing | ~90% generic, 95% with testing | **~99%** — the design target |
 
 ### Design Tradeoffs
@@ -277,7 +277,10 @@ Turbo mode is activated via two methods:
 The `RST 8` interface is part of the Shadow Service Monitor's API and allows programs to selectively enable turbo for computation-heavy sections while remaining at 3.5 MHz for timing-sensitive operations (disk access, tape, audio).
 
 > [!WARNING]
-> Software using cycle-exact timing (multicolor effects, tape loading, floppy access) must run at 3.5 MHz. The standard pattern: disable turbo, perform timing-critical I/O, re-enable turbo for computation. The `RST 8` interface handles this cleanly.
+> Software using cycle-exact timing (multicolor effects, tape loading, floppy access) must run at 3.5 MHz. The standard pattern: disable turbo, perform timing-critical I/O, re-enable turbo for computation. The `RST 8` interface handles this cleanly. At 7 MHz the CPU also waits for free RAM slots, more often during the paper — see [Turbo](#turbo-turbo-board-green-gmx).
+
+> [!NOTE]
+> MAME and Xpeccy implement the port-level switch as **read-triggered**: an `IN` from the `#7FFD` decode turns turbo on, an `IN` from `#1FFD` or a reset turns it off. The Scorpion ROM leaves turbo on.
 
 ### Turbo+ Glue Logic — the Three Decoded GALs
 
@@ -384,12 +387,15 @@ H1M     = INT·H1 + WR_BUFF·H1
 
 What this reveals:
 
-- **`WAIT_` is the turbo compatibility mechanism.** It asserts during interrupt processing and — when turbo is requested (`TRB_IN`) — on `M1` opcode fetches and on write cycles. At 7 MHz the DRAM and the I/O periphery cannot always complete in one CPU clock, so selected cycles are stretched; everywhere else the CPU runs at the full rate.
+- **`WAIT_` is the turbo compatibility mechanism** in this reading: it asserts during interrupt processing and — when turbo is requested (`TRB_IN`) — on `M1` opcode fetches and on write cycles. At 7 MHz the DRAM and the I/O periphery cannot always complete in one CPU clock, so selected cycles are stretched. (See the warning below: other decodes of the same file disagree.)
 - **`CLK_CPU` normally follows `CLK_7MHZ`**, but while `INT` is asserted it is driven by `!TRB_IN` instead — the interrupt entry path is forced into a defined clock phase regardless of the turbo state.
 - **DRAM steering is minimal**: `RAS_` simply follows `H1M`, and `WE` is forced inactive during `INT` and `H1` phases (`!WE` contains the terms `INT·H1` and `WR_BUFF·H1`) — a write-timing guard.
 - **`TRB` and `WR_BUFF` are not registers.** They are combinational latches built from their own output feedback (`WR_BUFF = H1M·!H1 + !INT·!WR_BUFF·H1M` holds itself). The single D flip-flop in the device is pin 15, clocked by `CLK_7MHZ`, latching `M1_ + WAIT_`.
 
-Two myths this fuse map kills: pin 22 is a **free OLMC**, not a "VCC pull-up"; and `BORDER_` (pin 9) together with `H0` (pin 11) appears in **no term whatsoever** — there is no "wait states during the border" logic in the Turbo+.
+Under this decode, pin 22 is a **free OLMC**, not a "VCC pull-up", and `BORDER_` (pin 9) together with `H0` (pin 11) appears in no term.
+
+> [!WARNING]
+> **This decode is one of several, and it disagrees with the original firmware.** The GAL22V10 column order used above is not the only one in circulation: the two write-ups in the romychs repository (`doc/turbo.md` and `doc/files/Scorpion_Turbo_Mode.md` §2.2) use different column maps and contradict each other. Decoding the same `turbo.jed` with MAME `jedutil`'s GAL22V10 fuse map gives `RAS_ := H0` and a CPU-clock equation that match the 1996 SC15.1 ABEL source — a cross-check of the map — and in that decode `M1_` appears in **no** product term, so this 2007 re-creation releases WAIT at all times in normal mode and has **no Even M1**. The original SC15.1 equations, by contrast, generate Even M1 in normal mode and use `BORDER_` (through `H1M = BORDER_ & H1`) to give the CPU fewer RAM slots during the paper in turbo. For the Scorpion's actual WAIT behavior, use the SC15.1 equations — see [Contention and the Even M1 Wait](#contention-and-the-even-m1-wait).
 
 ---
 ## Memory Architecture & Paging
@@ -408,7 +414,7 @@ The Scorpion's memory system provides **256 KB of RAM** organized as 16 pages of
 | **`#8000` paging** | **Fixed** (Bank 2) | **Fixed** (Bank 2) | **Fixed** (Bank 2) | **Switchable** |
 | **`#0000` paging** | ROM 0/1 or TR-DOS | ROM 0/1 or TR-DOS | ROM 0–3 or RAM-0 | ROM or RAM — any page |
 | **Extended paging** | N/A | `#7FFD` bits 6–7–5 (banks 8–63) | **`#1FFD`** (banks 8–15) | `#FDFD` / `#FF77` |
-| **Contention** | Banks 1, 3, 5, 7 | **None** | **Implementation-dependent** | **None** |
+| **Contention** | Banks 1, 3, 5, 7 | **None** | **None** (Even M1 on opcode fetches from RAM) | **None** |
 
 ### Memory Map — Operating Modes
 
@@ -524,7 +530,7 @@ But the **timing** is where the Scorpion excels:
 | **INT position** | **T=0** (start of frame) | **T=67,968** (line 304) — non-standard | **T=0** — Sinclair-matching | T=0 |
 | **Frame rate** | 50.08 Hz | **48.83 Hz** — non-standard | **50.08 Hz** — Sinclair-matching | ~50 Hz |
 | **Paper starts at** | T=14,335 | T=17,989 | T=14,344 (+9T offset) | — |
-| **Contention** | Yes (ULA delays CPU) | **None** | Implementation-dependent | Minimal |
+| **Contention** | Yes (ULA delays CPU) | **None** | **None**; Even M1 on RAM fetches | None |
 | **`#FF` floating bus** | Returns current ULA attribute byte | **Different** — independent counter, unreliable | **Proper** — returns current attribute | Attribute read |
 | **Black-level clamping** | Yes | **No** | **Yes** | Yes |
 
@@ -547,11 +553,86 @@ Decoding (Scorpion): %xxxxxxxxxx1xxx11 — checks A4, A3, A1, A0
                       (more selective than 48K's A0-only decode)
 ```
 
-### Contention
+### Contention and the Even M1 Wait
 
-The Scorpion's contention behavior **varies by revision**. Early ZS-256 models had limited or no contention (like the Pentagon). Later revisions — particularly the Turbo+ — implemented a contention model closer to the 48K ULA for better software compatibility. For demoscene programming, the Scorpion is typically treated as having **mild or no contention** and tested on real hardware.
+**The Scorpion has no memory contention and no I/O contention, on any board.** Its video logic is discrete: a counter chain clocked from 7 MHz (DD3, КР1533ИЕ7) produces the phase signals `H0` and `H1`, the CPU's DRAM row strobe is taken from `H0` (`RAS_.D = H0`), and the video reads in the other phase. At 3.5 MHz the CPU's read and write slots always exist, so a screen access never waits. Every emulator agrees on this.
 
-The key insight: because the Scorpion's frame timing matches Sinclair (69,888 T-states, 312 lines, INT at T=0), contention-free code still runs at the expected speed relative to the video frame — unlike the Pentagon, where the non-standard frame size means code written for 48K timing drifts relative to the Pentagon's raster position.
+What the Scorpion has instead is a one-T-state **WAIT on opcode fetches (M1) from RAM** that would start on an odd T-state — known on the scene as **"Even M1"**. Every opcode fetch from RAM therefore starts on an even T-state, at a cost of 0 or 1 T per instruction. Fetches from ROM, data reads and writes, I/O and interrupt acknowledge never wait.
+
+#### What the logic says
+
+The best primary source is the Scorpion's own EPLD equations for the turbo board — a JED file reverse-compiled to ABEL and posted on zx-pk.ru, with the header "MODULE SC15_1 … TITLE TURBO PLATA VER2.0 … AUTHOR ZS COMPANY SCORPION DATE 01.01.96 … device '85c220'" ([post #40 by deathsoft](https://zx-pk.ru/threads/940-scorpion-zs-256-turbo-(skhema)/page4.html)). The WAIT equation, with `TRB.Q` = turbo on and `RAM_` = active-low "memory read from RAM":
+
+```text
+WAIT_.D = IORQ_&M1_&!H0&!H1M # IORQ_&!WR_EN&RAM_ # H0&!H1M&!TRB.Q # M1_&!TRB.Q
+        # IORQ_&!M1_&H0&!H1M&!WAIT_.Q # !H0&H1M&!TRB.Q # RAM_&!TRB.Q # Pin13.Q
+```
+
+`WAIT_` is active low, so the CPU is released whenever any product term is 1. In normal mode (`TRB.Q = 0`) the terms `M1_&!TRB.Q`, `RAM_&!TRB.Q`, `H0&!H1M&!TRB.Q` and `!H0&H1M&!TRB.Q` release it for:
+
+- every cycle that is not M1 (`M1_ = 1`) — **data reads, writes and I/O never wait**;
+- every cycle that does not read RAM (`RAM_ = 1`) — **fetches from ROM never wait**, nor does the interrupt acknowledge (an M1 with `IORQ` and no memory read);
+- every M1 from RAM whose phase already fits (`H0 ≠ H1M`).
+
+What is left is **an opcode fetch from RAM that starts in the wrong phase**. It gets one wait state, and in the next T the phase fits.
+
+`RAM_` is a function of the chip selects, not of the address: RAM mapped at `#0000` through `#1FFD` bit 0 counts, ROM does not. This agrees with the one independent reading of the yellow board's schematic, by molodcov_alex ([ScorpEvo thread, post #86](https://zx-pk.ru/threads/13345-scorpevo-(scorpion-zs-na-baze-zx-evolution)/page9.html)): "если идет обращение к озу, а M1 == 0, то формируется wait на один такт" ("if there is a RAM access and M1 = 0, a one-clock wait is generated") — hedged by the author with "or so?".
+
+**Why only M1?** The Z80 latches an opcode on the rising edge of T3, half a clock earlier than a data byte (falling edge of T3), and then drives the refresh address. With the CPU's DRAM slot fixed to one clock phase, the longer data-read window contains the slot at either T-state parity, the fetch window at only one. This is a reading of the equations against the Z80 bus timing, not something a Scorpion document states: **low confidence for the reason, medium-high for the behavior.** See [contention_model.md](../../05_development/03_memory_and_io/contention_model.md#why-memory-slows-the-cpu--shared-dram-slots-and-who-waits) for the generic explanation (why ROM can be read on any T-state and shared DRAM cannot).
+
+#### Which boards
+
+| Board | Even M1 | Evidence |
+|---|---|---|
+| Yellow (1991–92) | Yes, on RAM fetches (probable) | The yellow schematic as read in the ScorpEvo thread, post #86; ZXMAK2 models it on the yellow board only |
+| Green | Yes, per the SC15.1 equations in normal mode (the green board carries the turbo EPLD as standard) | spensor, [thread 940 post #34](https://zx-pk.ru/threads/940-scorpion-zs-256-turbo-(skhema)/page4.html): "at least two firmwares and wiring schemes — one for the yellow-board modification, one standard for the green" |
+| Turbo+ upgrade of a yellow board | As green: the EPLD provides it | deathsoft, post #38: the yellow-board EPLD differs only on pins 3 (`/RAS`), 4 (`/TRB_OFF`) and 5 (`/TRB_ON`) |
+| 2007 re-creation GAL "TURBO 15.3" (`turbo.jed`, romychs/Scorpion256TPlus) | **No** | Decoded with MAME `jedutil`'s GAL22V10 fuse map, `M1_` (pin 10) appears in no product term and WAIT is always released in normal mode — see the note under [turbo.jed](#turbojed--cpu-clock-wait-and-dram-control-dd30) |
+| Early boards | Unknown | deathsoft, post #35: "the first Scorpions used a simplified circuit where many delays were set by RC chains" |
+
+Programmers confirm the effect on real machines. introspec, in the "Тайминги Pentagon 128" thread ([post #25](https://zx-pk.ru/threads/21212-tajmingi-pentagon-128/page3.html)): "Не работает на Scorpion c Even M1 … На скорпионе … всегда получается чётный такт на выходе из halt" ("does not work on a Scorpion with Even M1 … on a Scorpion the T-state is always even on exit from HALT").
+
+#### Worked example
+
+Code in RAM at `#8000`, starting on an even T-state:
+
+| Instruction | Length on a Pentagon | Next fetch would start on | Wait | Length on a Scorpion |
+|---|--:|---|--:|--:|
+| `NOP` | 4 | even | 0 | 4 |
+| `LD A,n` | 7 | odd | 1 | 8 |
+| `INC HL` | 6 | even | 0 | 6 |
+| `LD A,(IX+d)` (`DD` prefix M1 4 T + M1 4 T + 11 T) | 19 | odd | 1 | 20 |
+| `OUT (n),A` | 11 | odd | 1 | 12 |
+
+The same code in ROM — for example the 48 BASIC ROM — runs at Pentagon speed. Because every prefix M1 is 4 T, a prefixed instruction whose first fetch is even has its second fetch even too, so "round each instruction in RAM up to an even length" gives the same result as "align each M1 from RAM", as long as execution stays in RAM.
+
+> [!WARNING]
+> **Requires contended memory timing** — on the Scorpion, the fetch alignment. Consequences for cycle-exact code:
+> - Multicolor, border and beeper engines tuned on a Pentagon run slower from RAM by 1 T for every odd-length instruction in the timed path.
+> - Exit from `HALT` is always on an even T-state, so a `HALT`-synchronized effect cannot start on an odd phase.
+> - There is no 1-T delay step in RAM: timing-test engines that slide code through delays of every length (Rak's Timing Test `CODETIME`, the unreal-ng emulator's `ctprobe` probe) cannot measure a Scorpion.
+> - Code in ROM is unaffected.
+>
+> See [contention_model.md](../../05_development/03_memory_and_io/contention_model.md#scorpion--programming-around-even-m1) for a T-counted example.
+
+#### Turbo (Turbo+ board, green, GMX)
+
+- **Switching.** MAME (`sinclair/scorpion.cpp`) and Xpeccy model turbo as read-triggered: an `IN` from the `#7FFD` decode turns it on, an `IN` from `#1FFD` or a reset turns it off; the byte read is meaningless. The flip-flop DD9 feeds the EPLD's `TRB` input. The Scorpion ROM leaves turbo on, so a program that needs 3.5 MHz timing must switch it off itself.
+- **Waits in turbo.** The CPU clock becomes 7 MHz (`CLK_CPU = CLK_7MHZ & TRB.Q # RAS_.Q & !TRB.Q`). RAM reads and writes now wait unless `H0 = 0` and `H1M = 0`, where `H1M = BORDER_ & H1` in turbo, so during the border the CPU gets twice the slots it gets during the paper. Writes go through a posted-write latch (DD38, ИР22), so most of the cost falls on reads and fetches. **The turbo Scorpion is screen-contended in its own way** — a pattern tied to the paper area, not the Sinclair one. Confidence: medium (an analysis of the equations; no timing measurement found). Whether Even M1 survives in turbo is open; the equations suggest the slot waits replace it.
+- Not to be confused with the "TURBO" modification in Oberon #3 (1997, DR.DEATH), a cut on DD4 pin 15 that makes each line 228 T. It changes the frame, not the clock.
+
+#### How emulators model it
+
+| Emulator | What it does | Against the circuit |
+|---|---|---|
+| ZXMAK2, yellow board (`UlaScorpionYellow.cs`) | On an M1 at `#4000`–`#FFFF`: `CPU.Tact += CPU.Tact & 1` | Closest. Uses the address instead of the RAM select, so RAM at `#0000` (`#1FFD` bit 0) is missed |
+| ZXMAK2, green board (`UlaScorpionGreen.cs`) | No Even M1; 70,784 T frame | Disagrees with the SC15.1 equations |
+| MAME `scorpio` (`sinclair/scorpion.cpp`) | Every M1, **ROM included**: `if (total_cycles & 1) eat_cycles(1)` | Over-applies to ROM. The `profi`, `kay1024`, `quorum` and `bestzx` entries share the same state class and inherit it — an artifact |
+| MAME `scorpiontb` / `scorpiongmx` | Even M1 off; turbo doubles the clock, no turbo waits | Misses the normal-mode Even M1 and the turbo slot waits |
+| Xpeccy (`scrp.wait = yes`) | After each instruction, rounds an odd T count up to even | Equal to per-M1 alignment for code in RAM; wrong for ROM code and for interrupt entry |
+| Unreal Speccy (0.39 and the NedoPC fork) | `EvenM1` in the ini and the `SCORPION` preset; mask `0xC0` on PC's high byte ("PC ≥ `#4000`") | The ZXMAK2 rule; no code reading the field was found in the trees checked |
+
+The key insight: because the Scorpion's frame timing matches Sinclair (69,888 T-states, 312 lines, INT at T=0) and nothing slows the CPU during the paper, code that does not count T-states runs at Pentagon speed within a Sinclair-sized frame. Code that does count them must allow for Even M1.
 
 ### GMX Video Modes
 
@@ -1360,7 +1441,9 @@ Detecting the Scorpion requires testing for its unique combination of features: 
 
 ; This method distinguishes Scorpion from Pentagon:
 ; 1. Pentagon: no contention + non-standard frame size → code runs at different speed
-; 2. Scorpion: Sinclair-standard frame size → code runs at 48K speed
+; 2. Scorpion: Sinclair-standard frame size, no contention → code runs at
+;    Pentagon speed per instruction, except that opcode fetches from RAM are
+;    aligned to even T-states (Even M1): a 7-T instruction in RAM takes 8 T
 ```
 
 ### Method 4: Read Unique Serial Number
@@ -1395,7 +1478,7 @@ For the analytical comparison of design tradeoffs and philosophies, see [The Com
 | | Palette | 15 colors | 15 | 15 | **64** (RGBI) |
 | | Hardware scroll | No | No | No | **Yes** (vertical) |
 | **Timing** | T-states/frame | 70,908 | **71,680** (non-std) | **69,888** (Sinclair-match) | ~69,888 |
-| | Contention | Banks 1,3,5,7 | **None** | **Implementation-dependent** | **None** |
+| | Contention | Banks 1,3,5,7 | **None** | **None** (Even M1 at 3.5 MHz; slot waits at 7 MHz) | **None** |
 | | INT position | T=0 | **T=67,968** (non-std) | **T=0** (Sinclair-match) | T=0 |
 | | `#FF` floating bus | Yes | **No** (different) | **Yes** (Sinclair-match) | Yes |
 | **Sound** | Beeper | Yes | Yes | Yes | Yes |
@@ -1471,7 +1554,8 @@ Key implementation concerns for FPGA/emulator developers:
 3. **`#1FFD` dual function** — turbo control AND extended paging share the same port, with address bits selecting function
 4. **`#FE` selective decode** — checks A4, A3, A1, A0 (not just A0), reducing mirror ports
 5. **Shadow Service Monitor** — requires accurate NMI handling and complete CPU state save/restore (including R and IFF registers)
-6. **ProfROM plane switching** — implement the read-triggered protocol (read of `#0100 + 4·S` with the Service page mapped, 4×4 transition table, plane applies to all four pages at once — see [ProfROM Plane Switching](#profrom-plane-switching--the-read-triggered-protocol-dd41)). Note that the published `profrom.jed` is a non-functional stub
+6. **Even M1** — an opcode fetch (including prefix fetches) from **RAM** that would start on an odd T-state gets one wait; ROM fetches, data accesses, I/O and interrupt acknowledge never wait; RAM mapped at `#0000` counts. Normal (3.5 MHz) mode only — see [Contention and the Even M1 Wait](#contention-and-the-even-m1-wait). Do not apply it to ROM fetches (MAME does) or key it on the address (ZXMAK2 does)
+7. **ProfROM plane switching** — implement the read-triggered protocol (read of `#0100 + 4·S` with the Service page mapped, 4×4 transition table, plane applies to all four pages at once — see [ProfROM Plane Switching](#profrom-plane-switching--the-read-triggered-protocol-dd41)). Note that the published `profrom.jed` is a non-functional stub
 
 
 ---
@@ -1494,7 +1578,9 @@ Key implementation concerns for FPGA/emulator developers:
 | [cpm.md](../../04_operating_systems/cpm.md) | CP/M 2.2 on the Scorpion — memory mode with RAM-0 at `#0000` |
 | [is_dos.md](../../04_operating_systems/is_dos.md) | iS-DOS RAM-disk driver exploiting Scorpion extended memory banks |
 | [rom_versions.md](../../04_operating_systems/rom_versions.md) | Clone ROMs section — Scorpion BASIC 48, BASIC 128, TR-DOS 5.03, Shadow Service Monitor |
-| [contention_model.md](../../05_development/03_memory_and_io/contention_model.md) | Memory contention patterns — Scorpion's implementation-dependent contention vs Pentagon's zero contention |
+| [contention_model.md](../../05_development/03_memory_and_io/contention_model.md) | Memory contention across all models — why slot-based clones do not contend, why the Scorpion delays only opcode fetches from RAM |
+| [z80_timing.md](../../01_cpu/z80_timing.md#where-the-cpu-samples-the-bus--fetch-vs-read) | Z80 bus cycles — the opcode is latched half a clock earlier than a data byte, the root of Even M1 |
+| [video_frame_scorpion.md](../../05_development/05_display_and_timing/video_frame_scorpion.md) | Scorpion frame timing, turbo, and the effect of Even M1 on raster code |
 
 ### Primary Sources
 
@@ -1502,6 +1588,9 @@ Key implementation concerns for FPGA/emulator developers:
 |--------|-------------|
 | **ZX-Review #4 (1994)** — [zxpress.ru](https://zxpress.ru/book_articles.php?id=439) | Serge Zonov's own article describing the Scorpion ZS-256 design goals, architecture, and philosophy. The primary technical reference. |
 | **romychs/Scorpion256TPlus** — [GitHub](https://github.com/romychs/Scorpion256TPlus) | Open-source reverse-engineering of the Turbo+ schematics and PCB (v16.2.x "Black Edition"). Includes the three GAL JED fuse maps (`turbo.jed`, `profrom.jed`, `fapch.jed`), Gerber files, and component placement. |
+| **SC15.1 EPLD equations (ZS Company, 1996)** — [zx-pk.ru thread 940, post #40](https://zx-pk.ru/threads/940-scorpion-zs-256-turbo-(skhema)/page4.html) | The turbo board's EPLD (`85c220`) reverse-compiled to ABEL: the WAIT, clock and RAS equations behind Even M1 and the turbo slot waits. Posts #34–#38 in the same thread cover the yellow/green firmware variants. |
+| **ScorpEvo thread** — [zx-pk.ru thread 13345, post #86](https://zx-pk.ru/threads/13345-scorpevo-(scorpion-zs-na-baze-zx-evolution)/page9.html) | molodcov_alex's reading of the yellow-board schematic: one-clock WAIT on RAM accesses with M1 active. |
+| **"Тайминги Pentagon 128"** — [zx-pk.ru thread 21212, post #25](https://zx-pk.ru/threads/21212-tajmingi-pentagon-128/page3.html) | introspec: timing code failing on a Scorpion with Even M1; "the T-state is always even on exit from HALT". |
 | **grokipedia.com** — Scorpion ZS-256 article | Comprehensive encyclopedic article with full port tables, model comparison, and software ecosystem coverage. |
 | **interface1.net** — Scorpion clone page | Hardware specifications, model comparison, and photo gallery. |
 | **ZX Format #01** — [zxart.ee](https://zxart.ee) | Early article on Scorpion hardware innovations, Shadow Service Monitor, and the GMX expansion. |
@@ -1512,7 +1601,8 @@ Key implementation concerns for FPGA/emulator developers:
 | Source | Description |
 |--------|-------------|
 | **Black_Cat ports table** | The definitive Scorpion I/O port decoding reference, integrated into [io_port_map.md](../../10_references/io_port_map.md). |
-| **MAME `sinclair/scorpion.cpp`** | Emulator model of the Scorpion, including the ProfROM plane-switch behavior (`prof_plane_map`) — the behavioral reference for the read-triggered ROM protocol. |
+| **MAME `sinclair/scorpion.cpp`** | Emulator model of the Scorpion, including the ProfROM plane-switch behavior (`prof_plane_map`) — the behavioral reference for the read-triggered ROM protocol. Its Even M1 applies to ROM fetches too, which the circuit does not do. |
+| **ZXMAK2** — [github.com/zxmak/zxmak2](https://github.com/zxmak/zxmak2) | `UlaScorpionYellow.cs` models Even M1 on fetches at `#4000`–`#FFFF`; `UlaScorpionGreen.cs` has none. |
 | **boo_boo / Vladimir Kladov (2006)** | MEMPTR (WZ) register documentation — [research gist](https://gist.github.com/drhelius/8497817). Relevant to Scorpion emulator accuracy and Z80 clone detection. |
 | **ZX-PK forum** | Active Scorpion community discussions, hardware repair threads, and ProfROM documentation. |
 

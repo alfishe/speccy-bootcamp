@@ -44,7 +44,9 @@ Where a term has multiple meanings or is used differently across the three track
 
 - **Covox** — A simple resistor-ladder DAC attached to a Z80 parallel port, providing 8-bit sampled audio without a dedicated sound chip. Common on Soviet clones as an upgrade; also seen as the "SounDrive" interface. *See [covox_sounDrive.md](../06_sound/hardware/covox_sounDrive.md).*
 
-- **Contention** — The CPU-cycle-stealing behavior introduced by the ULA's simultaneous memory access for video generation. During the upper-RAM area (and contended I/O), the Z80 is stalled for variable numbers of T-states. The dominant performance constraint on original Spectrums. *See [ula_contention.md](../02_hardware/original/ula_contention.md) and [contention_timing.md](../05_development/05_display_and_timing/contention_timing.md).*
+- **Contention** — The CPU slowdown that happens when the video circuit and the CPU want the same memory and the video wins. On the Ferranti ULA machines (16K/48K/128K/+2) the ULA stops the CPU clock while it fetches screen bytes during the paper area; on the +2A/+3 the Amstrad gate array pulls the Z80's `WAIT` line instead. Only accesses to the contended RAM (`#4000`–`#7FFF` on the 48K; banks 1/3/5/7 on the 128K; banks 4–7 on the +2A/+3) and, on the Ferranti ULA, contended I/O are stalled, by 0–6 (0–7 on the gate array) T-states depending on the exact T-state. The Soviet clones (Pentagon, Scorpion, Profi, ATM Turbo, Kay-1024) give video and CPU fixed memory slots and have no contention at 3.5 MHz; the Next and ZX-Evo emulate it only in their Sinclair timing modes. *See [contention_model.md](../05_development/03_memory_and_io/contention_model.md), [ula_contention.md](../02_hardware/original/ula_contention.md) and [contention_timing.md](../05_development/05_display_and_timing/contention_timing.md).*
+
+- **Even M1** — The Scorpion ZS-256's one CPU-timing quirk: an opcode fetch (the Z80's M1 cycle, including prefix fetches) from **RAM** that would start on an odd T-state gets one wait state, so every fetch from RAM starts on an even T-state. Fetches from ROM, data reads and writes, I/O and interrupt acknowledge never wait. It is not contention — it does not depend on the screen — but it rounds each instruction in RAM up to an even length (`LD A,n` takes 8 T instead of 7) and makes exit from `HALT` always land on an even T-state. Normal (3.5 MHz) mode only. *See [scorpion.md](../02_hardware/clones/scorpion.md#contention-and-the-even-m1-wait) and [contention_model.md](../05_development/03_memory_and_io/contention_model.md#scorpion-zs-256--no-contention-but-even-m1).*
 
 - **DivIDE / DivMMC** — Two popular modern interfaces providing IDE/SD storage, typically with a `+3DOS`-like or `ESXDOS`-style resident ROM. The DivIDE was designed for the original Spectrum edge connector; the DivMMC uses the same protocol but runs at higher speeds. *See [divide_divmmc.md](../03_io/storage/divide_divmmc.md) and [esxdos.md](../04_operating_systems/esxdos.md).*
 
@@ -120,11 +122,11 @@ Where a term has multiple meanings or is used differently across the three track
 
 - **Bank switching** — See **Paging**.
 
-- **Contention pattern** — The specific sequence of CPU delays applied during contended memory or I/O access on the original Spectrums: `6-5-4-3-2-1-0-0` for 48K/128K/+2, `1-0-7-6-5-4-3-2` for +2A/+3 (gated by `MREQ`), and **no contention** on Pentagon/ATM Turbo/Profi. The pattern is the dominant per-model difference for timing-critical code. *See [ula_contention.md](../02_hardware/original/ula_contention.md) and [clone_timing.md](../02_hardware/clones/clone_timing.md).*
+- **Contention pattern** — The specific sequence of CPU delays applied during contended memory or I/O access on the original Spectrums: `6-5-4-3-2-1-0-0` for 48K/128K/+2, `1-0-7-6-5-4-3-2` for +2A/+3 (gated by `MREQ`, so no I/O contention), and **no contention** on Pentagon/Scorpion/ATM Turbo/Profi/Kay-1024 at 3.5 MHz (the Scorpion has **Even M1** instead). The pattern is the dominant per-model difference for timing-critical code. *See [ula_contention.md](../02_hardware/original/ula_contention.md) and [clone_timing.md](../02_hardware/clones/clone_timing.md).*
 
 - **Home bank** — The RAM bank currently paged into the `#C000-#FFFF` window on a 128K-style machine. On the 128K, this is selected by bits 0–2 of the `#7FFD` register. *See [memory_maps.md](../10_references/memory_maps.md) and [zx_spectrum_128.md](../02_hardware/original/zx_spectrum_128.md).*
 
-- **Lower RAM** — The 16 KB region `#4000-#7FFF` on the 48K Spectrum, containing the screen, system variables, and BASIC workspace. On the 16K Spectrum, this region is not installed. Contended on original Spectrums because the ULA reads it for video. *See [memory_maps.md](../10_references/memory_maps.md).*
+- **Lower RAM** — The 16 KB region `#4000-#7FFF` on the 48K Spectrum, containing the screen, system variables, and BASIC workspace. On the 16K Spectrum this is the only RAM fitted. Contended on the Sinclair machines because the ULA reads the screen from it. *See [memory_maps.md](../10_references/memory_maps.md).*
 
 - **`#1FFD`** — The paging register added by the +2A/+3 Amstrad ASIC. Bit 0 selects the special paging modes (including a CP/M-compatible 64 KB configuration with all 4 ROM banks and no screen paging). *See [zx_spectrum_plus2a_plus3.md](../02_hardware/original/zx_spectrum_plus2a_plus3.md) and [io_port_map.md](../10_references/io_port_map.md).*
 
@@ -140,7 +142,7 @@ Where a term has multiple meanings or is used differently across the three track
 
 - **Shadow screen** — The alternative screen location in bank 7 (`#C000` window on a 128K) used when bit 3 of `#7FFD` is set. Used for double-buffering — code writes to bank 7 while the ULA displays bank 5, then flips. *See [zx_spectrum_128.md](../02_hardware/original/zx_spectrum_128.md).*
 
-- **Upper RAM** — The 32 KB region `#8000-#FFFF` on the 48K Spectrum. Uncontended at `#8000-#BFFF`, contended at `#C000-#FFFF` (which is where the screen and ROM-related I/O live on a paged machine). Becomes the bank-paged region on the 128K.
+- **Upper RAM** — The 32 KB region `#8000-#FFFF` on the 48K Spectrum. Uncontended on the 48K — it is a separate DRAM bank that the ULA never reads. On the 128K the `#C000-#FFFF` quarter becomes the paged window, contended whenever an odd bank (1, 3, 5, 7) is paged in.
 
 ---
 

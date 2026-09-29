@@ -15,8 +15,8 @@ Video frame generation, per-model timing, raster synchronization, contention, fl
 | [raster_timing.md](raster_timing.md) | Beam position calculation, HALT-based sync, scanline-precise delays, per-model raster maps, cross-platform sync strategy |
 | [color_system.md](color_system.md) | Attribute byte format, 8-color palette (normal/bright), ULA hardware color generation, reference palettes, attribute clash, ULAplus 64-color extension, Timex HiColor/HiRes modes |
 | [border_effects.md](border_effects.md) | Border color via #FE, raster bars, rainbow borders, per-model timing, safe border writes, gradient effects |
-| [clone_video_modes.md](clone_video_modes.md) | Clone-specific video modes beyond standard ULA: GigaScreen, ATM Turbo hires, Profi 512×256, Kay CPLD modes, TS-Conf |
-| [video_frame_scorpion.md](video_frame_scorpion.md) | Scorpion ZS-256 frame: 312 lines matching 48K macro timing, +9 T horizontal shift, revision-dependent contention, 7 MHz turbo |
+| [clone_video_modes.md](clone_video_modes.md) | Clone-specific video modes beyond standard ULA: GigaScreen, ATM Turbo hires, Profi 512×240, Kay CPLD modes, TS-Conf |
+| [video_frame_scorpion.md](video_frame_scorpion.md) | Scorpion ZS-256 frame: 312 lines matching 48K macro timing, +9 T horizontal shift, no contention but Even M1 (RAM fetches on even T), 7 MHz turbo with paper-dependent slot waits |
 | [video_frame_other_soviet.md](video_frame_other_soviet.md) | Long-tail Soviet clones: Kay 1024 (48K-clean), ATM Turbo (7 MHz anomaly: 99,880 T-states), Profi (paper offset T=12,580), Byte, Quorum, Leningrad, LEC |
 | [video_frame_next.md](video_frame_next.md) | ZX Spectrum Next: configurable timing modes (48K/128K/+2A/Pentagon), 4 CPU speeds (3.5/7/14/28 MHz), copper coprocessor (WAIT/MOVE/STOP) |
 | [video_frame_sprinter.md](video_frame_sprinter.md) | Peters Plus Sprinter: SVGA 70 Hz frame (not PAL 50 Hz), 20 MHz Z80, 5 video modes, music tempo 40% faster |

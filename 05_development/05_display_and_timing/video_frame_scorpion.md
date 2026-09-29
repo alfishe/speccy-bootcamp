@@ -23,13 +23,14 @@ The Scorpion ZS-256 (Скорпион, designed by Sergey Zonov, St. Petersburg,
 │  Frame rate:             50.08 Hz (same as 48K)        │
 │                                                        │
 │  Paper starts at:        T=14,344 (vs T=14,335 on 48K) │
-│  Horizontal offset:      +9 T-states vs 48K             │
+│  Horizontal offset:      +9 T-states vs 48K            │
 │                                                        │
 │  INT position:           T=0, line 0 (same as 48K)     │
 │  INT duration:           32 T-states (same as 48K)     │
 │                                                        │
-│  Contention:             Revision-dependent             │
-│                          (early: none; late: 48K-like)  │
+│  Contention:             None (any board)              │
+│  Even M1:                +0/+1 T on opcode fetches     │
+│                          from RAM (not ROM)            │
 └────────────────────────────────────────────────────────┘
 ```
 
@@ -73,7 +74,7 @@ Scorpion frame layout (312 scanlines = 69,888 T-states):
 ├──────────────────────────────────────────────────┤ Line 64, T=14,344 ← +9T vs 48K
 │  Paper area: 192 lines, 43,008 T-states          │
 │  256×192 pixel display                           │
-│  Contention: revision-dependent                   │
+│  Contention: none (Even M1 on RAM fetches)       │
 ├──────────────────────────────────────────────────┤ Line 256, T=57,352
 │  Bottom border: 56 lines, 12,544 T-states        │
 └──────────────────────────────────────────────────┘ Line 312 = 0
@@ -84,40 +85,48 @@ Scorpion frame layout (312 scanlines = 69,888 T-states):
 
 ---
 
-## Contention — Revision Dependent
+## Contention — None, but Even M1
 
-Unlike the Pentagon (zero contention, by design) and the 48K (strict 6-5-4-3-2-1-0-0 contention, by ULA design), the Scorpion's contention behavior **depends on the motherboard revision**:
+Unlike the 48K (strict 6-5-4-3-2-1-0-0 contention, by ULA design), the Scorpion has **no memory contention and no I/O contention on any board**. Its video logic and the CPU share the DRAM in fixed slots on a 7 MHz phase counter, like the Pentagon, so an access to screen memory during the paper never waits.
 
-| Revision | Year | Glue logic | Contention |
-|---|---|---|---|
-| Scorpion ZS-256 (original) | 1996 | К555/КР1533 TTL | **None** — full-speed RAM like Pentagon |
-| Scorpion Gold | 1998 | Mixed TTL + GAL | **Mild** — partial 48K emulation |
-| Scorpion Black Edition | 2001 | GAL16V8/GAL22V10 | **48K-like** — implemented for software compatibility |
-| ProfROM upgrades | various | Reflashed GALs | Varies |
+What the Scorpion has instead is **"Even M1"**: an opcode fetch (M1) from **RAM** that would start on an odd T-state gets one WAIT, so every fetch from RAM starts on an even T-state. Fetches from ROM, data reads and writes, I/O and interrupt acknowledge never wait. The rule comes from the turbo board's SC15.1 EPLD equations (ZS Company, 1996) and matches programmers' reports from real machines — full details in [scorpion.md](../../02_hardware/clones/scorpion.md#contention-and-the-even-m1-wait); the generic explanation of why only fetches from shared DRAM are affected is in [contention_model.md](../03_memory_and_io/contention_model.md#why-memory-slows-the-cpu--shared-dram-slots-and-who-waits).
 
-For practical demoscene programming, the conservative assumption is **no contention** (treat Scorpion like Pentagon for memory access speed). For maximum compatibility with existing 48K software, treat it as 48K (assume 6-5-4-3-2-1-0-0).
+| Board | Even M1 at 3.5 MHz | 7 MHz turbo |
+|---|---|---|
+| Yellow (1991–92) | Yes (probable) | — (no turbo without the upgrade) |
+| Green / Turbo+ upgrade (SC15.1 EPLD) | Yes | Every RAM access waits for a free slot; fewer CPU slots during the paper |
+| 2007 GAL re-creation ("TURBO 15.3") | No | Per its own GAL |
+| Early RC-delay boards | Unknown | — |
+
+For raster code this means:
+
+- **Paper and border cost the same** at 3.5 MHz — there is no contention window to model.
+- **Code in RAM runs each instruction at its Pentagon length rounded up to an even number** (`LD A,n` 7 → 8, `DJNZ` taken 13 → 14, `OUT (n),A` 11 → 12). A 224-T line loop built from odd-length instructions tuned on a Pentagon will be longer on a Scorpion.
+- **Exit from `HALT` is always on an even T-state** ("на скорпионе … всегда получается чётный такт на выходе из halt" — introspec, [zx-pk.ru](https://zx-pk.ru/threads/21212-tajmingi-pentagon-128/page3.html)), so a `HALT`-synchronized effect can only start on an even phase.
+- **Code in ROM is unaffected.**
 
 > [!WARNING]
-> Code that depends on exact contention delays to time multicolor effects **will not produce identical output on all Scorpion revisions**. If you need pixel-stable multicolor, target the 48K or Pentagon explicitly and use Scorpion detection + a fallback path.
+> **Requires contended memory timing** — on the Scorpion, the fetch alignment. Multicolor or border code that needs 1-T resolution cannot get it from RAM: odd delays round up to even. Use even-length timed paths, or detect the Scorpion and use a separately tuned path. At 7 MHz the Turbo+ slot waits make the timing paper-dependent.
 
 ---
 
 ## 7 MHz Turbo Mode
 
-The Scorpion was the first widely-available Soviet clone with a hardware turbo mode. Toggling a Scorpion-specific I/O port doubles the CPU clock:
+The Scorpion was the first widely-available Soviet clone with a hardware turbo mode. Besides the front-panel button and the Shadow Monitor's `RST 8` calls, a port access doubles the CPU clock. MAME and Xpeccy model the switch as read-triggered — an `IN` from the `#7FFD` decode turns turbo on, an `IN` from `#1FFD` (or a reset) turns it off, and the byte read is meaningless:
 
 ```z80
-; Enable turbo mode (7 MHz)
-LD   BC,TURBO_PORT
-LD   A,1
-OUT  (C),A            ; CPU now runs at 7 MHz
-
-; ... compute-intensive work runs ~2× faster ...
-
-; Disable turbo mode (back to 3.5 MHz)
-XOR  A
-OUT  (C),A            ; Standard speed for timing-critical code
+; Turbo on/off as modeled by MAME and Xpeccy (read-triggered).
+TurboOn:
+        LD   BC,#7FFD
+        IN   A,(C)            ; any read of the #7FFD decode: 7 MHz
+        RET
+TurboOff:
+        LD   BC,#1FFD
+        IN   A,(C)            ; any read of the #1FFD decode: 3.5 MHz
+        RET
 ```
+
+The Scorpion ROM leaves turbo **on**, so code that needs 3.5 MHz timing must switch it off itself.
 
 ### What Changes at 7 MHz
 
@@ -126,14 +135,14 @@ OUT  (C),A            ; Standard speed for timing-critical code
 | CPU clock | 3.500000 MHz | 7.000000 MHz |
 | T-states per frame (CPU's view) | 69,888 | **139,776** |
 | Frame rate | 50.08 Hz | 50.08 Hz (unchanged — video still 312 lines × 224T at the original pixel clock) |
-| Effective CPU speed | 100% | **~180-200%** (memory access doesn't fully double) |
+| Effective CPU speed | 100% | **~180-200%** (RAM accesses wait for free DRAM slots, more during the paper) |
 | I/O port access | Normal timing | Faster (fewer T-states per OUT/IN) |
 
 ### What Doesn't Change
 
 - **Frame duration** — 19.97 ms either way; the video subsystem runs from the same 14 MHz master clock divided down.
 - **INT position** — still fires at line 0, T=0 (in CPU T-states: T=0 at 3.5 MHz, T=0 at 7 MHz).
-- **Memory bus timing** — DRAM access cycles are still tied to the original 3.5 MHz slots; the CPU gets twice as many slots but each individual access still takes the same wall-clock time.
+- **DRAM slot schedule** — the DRAM is still divided between video and CPU by the same 7 MHz phase counter. At 7 MHz the CPU often arrives outside its slot and waits for it; per the SC15.1 equations it gets twice as many slots during the border as during the paper, so the turbo Scorpion is **screen-contended in its own way** (medium confidence — no timing measurement found).
 
 ### Compatibility Implications
 
@@ -174,7 +183,7 @@ Frame rate:               50.08 Hz      50.08 Hz         48.83 Hz
 Paper starts at:          T=14,335      T=14,344 (+9T)   T=10,752
 Top border:               64 lines      64 lines         48 lines
 Bottom border:            56 lines      56 lines         48 lines
-Contention:               Strict        Revision-dep.    None
+Contention:               Strict        None (Even M1)   None
 Turbo mode:               No            7 MHz optional   Rare
 Binary compat with 48K:   (is 48K)      High             Medium
 ```
@@ -202,7 +211,7 @@ DetectScorpion:
     RET
 ```
 
-> Detection routines are fragile because the Scorpion's I/O layout overlaps with other clones. The most reliable method is **measuring the frame T-state count** (which distinguishes 312-line from 320-line machines) and then probing Scorpion-specific ports. See [clone_timing.md](../../02_hardware/clones/clone_timing.md#clone-detection) for the canonical decision tree.
+> Detection routines are fragile because the Scorpion's I/O layout overlaps with other clones. The most reliable method is **measuring the frame T-state count** (which distinguishes 312-line from 320-line machines) and then probing Scorpion-specific ports. See [clone_timing.md](../../02_hardware/clones/clone_timing.md#detection-techniques) for the canonical decision tree.
 
 ---
 
@@ -210,7 +219,7 @@ DetectScorpion:
 
 1. **Pixel-precise multicolor**: effects appear shifted 9 T-states (about 1 pixel) left of their 48K position. Realign by inserting a 9 T-state `NOP` slide before the timed loop.
 
-2. **Contention-dependent timing loops**: behavior depends on revision. If you relied on contention delay to slow down a loop, it may run too fast on early Scorpions.
+2. **Contention-dependent timing loops**: there is no contention, so a loop that relied on contention delays runs faster than on a 48K — but a loop in RAM with odd-length instructions runs slower than on a Pentagon, because each opcode fetch from RAM is aligned to an even T-state.
 
 3. **I/O port conflicts**: the Scorpion maps additional ports (`#1FFD`, Beta 128 registers) that may collide with hardware you assumed was 48K-only.
 
@@ -218,7 +227,7 @@ DetectScorpion:
 
 ### What Gets Better
 
-1. **Optional 2× speed**: compute-intensive sections can run at 7 MHz with a one-instruction port write.
+1. **Optional 2× speed**: compute-intensive sections can run at 7 MHz with a single port access.
 2. **256K RAM**: 4 banks of 64K available without external expansion.
 3. **Built-in disk + joystick**: no need for external Beta 128 or Kempston interfaces.
 4. **Predictable 50.08 Hz**: music plays at correct tempo (unlike Pentagon's 2.3% slowdown).
@@ -232,7 +241,8 @@ DetectScorpion:
 - [Video frame 48K](video_frame_48k.md) — base reference for the timing the Scorpion matches
 - [Video frame Pentagon](video_frame_pentagon.md) — the *other* major Soviet clone, with very different timing
 - [Video frame comparison](video_frame_comparison.md) — all models side-by-side
-- [Contention model](../03_memory_and_io/contention_model.md) — what contention is, why the Scorpion's varies
+- [Contention model](../03_memory_and_io/contention_model.md) — what contention is, why the Scorpion has none but aligns RAM fetches (Even M1)
+- [Z80 timing](../../01_cpu/z80_timing.md#where-the-cpu-samples-the-bus--fetch-vs-read) — when the Z80 latches data in a fetch vs a read
 - [Clone video modes](clone_video_modes.md) — non-standard video modes (hires, GigaScreen) on clones
 
 ---
@@ -241,5 +251,6 @@ DetectScorpion:
 
 - **Scorpion ZS-256 Programmer's Reference** — ZXPress magazine articles (1996–1998), Scorpion ROM documentation. Reproduced at [zx-pk.ru](https://zx-pk.ru).
 - **Unreal Speccy emulator** ([github.com/mkoloberdin/unrealspeccy](https://github.com/mkoloberdin/unrealspeccy)) — `unreal.ini` Scorpion preset: `FRAME=69888`, `PAPER=14364`, `LINE=224`, `INT=32`. Definitive timing values used by every other emulator.
-- **ZXMAK2 emulator** ([github.com/zxmak/zxmak2](https://github.com/zxmak/zxmak2)) — Scorpion model implementation with separate contention profiles for original vs Black Edition.
+- **ZXMAK2 emulator** ([github.com/zxmak/zxmak2](https://github.com/zxmak/zxmak2)) — two Scorpion models: the yellow board with Even M1 on fetches at `#4000`–`#FFFF` (`UlaScorpionYellow.cs`), and the green board with no Even M1 and a 70,784 T frame (`UlaScorpionGreen.cs`). Neither models contention.
+- **SC15.1 EPLD equations** — [zx-pk.ru thread 940, post #40](https://zx-pk.ru/threads/940-scorpion-zs-256-turbo-(skhema)/page4.html): the Scorpion turbo board's WAIT and clock logic (ZS Company, 1996).
 - **Sergey Zonov's original Scorpion documentation** — hardware schematics and I/O port tables, circulated on FidoNet in 1996-97 and archived at [Spectrum-computing.co.uk](https://spectrum-computing.co.uk).
