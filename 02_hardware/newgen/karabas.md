@@ -148,13 +148,20 @@ The **Karabas Pro** is the main model of the family, designed for users who want
 | **AY sound** | At Pentagon clock | Identical | Yes |
 | **INT timing** | Line 304, T=0 | Identical | Yes |
 
-The Karabas Pro also supports an optional **48K mode** (different timing — 69,888 T-states, 312 lines, 50.08 Hz, with contention) selectable at boot, for running Western software that depends on 48K timing.
+The Karabas Pro also supports an optional **48K mode** (different timing — 69,888 T-states, 312 lines, 50.08 Hz) selectable at boot, for running Western software that depends on 48K timing. Its FPGA sources ([karabas-pro](https://github.com/andykarpov/karabas-pro), `karabas_pro.vhd` and `memory.vhd`) show exactly when the CPU is delayed:
+
+- **Contention only in the optional "classic" screen mode**, at 3.5 MHz and outside the 80-column (DS80) mode: accesses to `#4000`–`#7FFF` (whatever page is mapped there) and even ports are delayed by **gating the CPU clock** — `WAIT_n` is tied high.
+- **None in the default Pentagon mode**: the video uses the second RAM slot of each 7 MHz cycle, so the CPU never stalls.
+- **14 MHz**: a counter stretches every `MREQ` cycle by about 400 ns ("CPU wait so that peripherals work in turbo").
+- **After each floppy-controller access** the CPU falls back to 3.5 MHz for a while.
+
+The original Profi board has none of these delays — see [profi.md](../clones/profi.md).
 
 ### Extensions Beyond Pentagon
 
 #### Turbo Mode (3.5 / 7 / 14 MHz)
 
-CPU speed is selectable via a port write (typically `#DFFD` bit 6 or a Karabas-specific port). As with the ZX Evolution, **always restore 3.5 MHz before accessing slow peripherals** (SD card, PS/2 keyboard).
+CPU speed is selectable via a port write (typically `#DFFD` bit 6 or a Karabas-specific port). As with the ZX Evolution, **always restore 3.5 MHz before accessing slow peripherals** (SD card, PS/2 keyboard). At 14 MHz every memory cycle carries a wait of about 400 ns, so the speedup over 7 MHz is well under 2×.
 
 #### Extended Memory — 512 KB
 

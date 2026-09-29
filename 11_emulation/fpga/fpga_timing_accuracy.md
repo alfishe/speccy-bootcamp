@@ -315,7 +315,7 @@ A: Copy protection (Speedlock, Alkatraz) measures contention patterns or specifi
 
 **Q: Does T-state precision matter for the Pentagon?**
 
-A: Yes, but the Pentagon's timing is *different* from the original Spectrum's (different scanline length, frame layout, contention pattern). For Pentagon compatibility (Russian software), the core must reproduce the *Pentagon's* specific timing, not the Sinclair's. The ZX Evolution does this exactly because it's a Pentagon successor.
+A: Yes, but the Pentagon's timing is *different* from the original Spectrum's (different frame layout and interrupt position, and no contention at all). For Pentagon compatibility (Russian software), the core must reproduce the *Pentagon's* specific timing, not the Sinclair's. The ZX Evolution does this exactly because it's a Pentagon successor.
 
 **Q: Can I use T80n instead of T80?**
 

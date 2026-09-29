@@ -62,7 +62,7 @@ The ZX Evolution's primary design goal is **exact Pentagon 1024 compatibility**.
 | Feature | Pentagon 1024 | ZX Evolution | Compatible? |
 |---|---|---|---|
 | **Memory banking** | `#7FFD` + `#EFF7` (extended paging) | Identical | Yes |
-| **Video timing** | 71,680 T-states, 320 lines, 48.83 Hz, no contention | Identical | Yes |
+| **Video timing** | 71,680 T-states, 320 lines, 48.83 Hz, no contention | Identical in the default Pentagon raster (BaseConf's optional 48K/128K rasters emulate Sinclair contention at 3.5 MHz — see [baseconf.md](baseconf.md#cpu-waits-and-emulated-contention)) | Yes |
 | **I/O port layout** | Standard Pentagon ports | Identical | Yes |
 | **Beta 128 disk interface** | VG93 (FD1793) at standard port addresses | Identical | Yes |
 | **AY-3-8910 sound** | At Pentagon port addresses and clock rate | Identical | Yes |

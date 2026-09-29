@@ -97,15 +97,15 @@ flowchart TB
     FDC["Beta 128 FDC<br/>WD1793 (КР1818ВГ93)<br/>+ TR-DOS ROM"] <-->|"DMA on /BUSREQ"| BUS
 ```
 
-### The Critical Difference: Dual-Ported Video RAM
+### The Critical Difference: Fixed Video and CPU Memory Slots
 
-The key architectural insight of the Pentagon is the **dual-port arrangement for the screen RAM**. On the Sinclair 48K/128K, the ULA reads pixel and attribute bytes from the same single-ported DRAM bank the CPU uses — and arbitrates conflicts by **stretching the CPU clock**. This is the physical cause of memory contention.
+The key architectural insight of the Pentagon is that **video and CPU never compete for the screen RAM**. On the Sinclair 48K/128K, the ULA reads pixel and attribute bytes from the same single-ported DRAM bank the CPU uses — and arbitrates conflicts by **stretching the CPU clock**. This is the physical cause of memory contention.
 
-The Pentagon takes a different approach: the video logic **reads the screen bytes through a separate bus port** that does not contend with the CPU. The exact mechanism varies by Pentagon revision (some use a true dual-ported RAM bank, others use fast-cycle time-sharing that completes the video fetch during the CPU's `/RFSH` cycle), but the **programmer-visible effect is the same**:
+The Pentagon takes a different approach: the CPU and the video logic read the **same DRAM in fixed, interleaved time slots** derived from the one 14 MHz master clock (the CPU runs at 14/4 MHz). Each side has its own slot, so neither waits. The designer-era Pentagon FAQ states it plainly: "128k of NOT-CONTENDED memory (no slow areas)" ([pentagon.txt](http://zxspectrum.hal.varese.it/static/documenti/pentagon.txt)). A document describing the exact slot order has not been found, but the **programmer-visible effect is not in doubt**:
 
 - **Zero memory contention** at any address, at any time
 - CPU runs at full 3.5 MHz **uninterrupted**
-- No clock stretching, no wait states, no 6-5-4-3-2-1-0 contention pattern
+- No clock stretching, no wait states, no 6-5-4-3-2-1-0 contention pattern — and, unlike the Scorpion, no alignment of opcode fetches ("Even M1"); see [contention_model.md](../../05_development/03_memory_and_io/contention_model.md#why-memory-slows-the-cpu--shared-dram-slots-and-who-waits)
 - No usable floating bus (the bus is never left floating)
 
 This single design choice — removing contention — is what gives the Pentagon its reputation as a "fast" Spectrum. Code that fits in the contended range (`#4000`–`#7FFF`) runs measurably faster on a Pentagon than on a Sinclair 48K, because every contended access on the 48K is a stolen T-state. The downside is that code which **depends on** contention delays — for example, some multicolor effects that race the beam using the known 6-5-4-3-2-1-0 pattern — breaks completely.

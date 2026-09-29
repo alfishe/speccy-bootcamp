@@ -167,12 +167,12 @@ The paging latch works identically to the Sinclair 128K (see [memory_and_io_128k
 
 ## Contention — None
 
-The Pentagon has **zero memory contention**. Video address generation uses discrete counter chips that run independently of the CPU bus. Code runs at full speed regardless of address or display position.
+The Pentagon has **zero memory contention** and no I/O contention. The video logic and the CPU share the DRAM, but in **fixed, separate time slots** derived from the 14 MHz master clock (CPU = 14 MHz / 4), so the CPU's access always finds its slot and never waits. The designer-era Pentagon FAQ: "128k of NOT-CONTENDED memory (no slow areas)". Code runs at full speed regardless of address or display position.
 
 This means:
 - **All code runs at the same speed** — whether in screen area, ROM, or upper RAM
 - **Multicolor effects that depend on contention delays will not work** without adaptation
-- **Floating bus behavior is absent or different** — reading contended memory during screen display does NOT return the byte the ULA is fetching (unlike 48K/128K)
+- **Floating bus behavior is absent** — reading an unattached I/O port (e.g. `#FF`) during screen display does not return the byte being fetched for the display (unlike 48K/128K); expect `#FF`
 - **I/O timing is deterministic** — `IN` and `OUT` take exactly the documented number of T-states
 
 > [!TIP]

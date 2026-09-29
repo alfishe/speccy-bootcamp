@@ -4,7 +4,7 @@
 
 This is the **synthesis article** for the display-and-timing section: a single reference comparing every ZX Spectrum-compatible platform's video frame timing on a uniform set of axes. If you need to know "what's the difference between model X and model Y?" or "will my software run on this machine?", start here.
 
-Each row in the tables below links to the dedicated per-model article for full details. For the underlying PAL fundamentals, see [video_frame_overview.md](video_frame_overview.md). For clone detection routines, see [clone_timing.md § Clone Detection](../../02_hardware/clones/clone_timing.md#clone-detection).
+Each row in the tables below links to the dedicated per-model article for full details. For the underlying PAL fundamentals, see [video_frame_overview.md](video_frame_overview.md). For clone detection routines, see [clone_timing.md § Clone Detection](../../02_hardware/clones/clone_timing.md#detection-techniques).
 
 ---
 
@@ -18,15 +18,15 @@ Every Spectrum-class machine, with the parameters that matter for software:
 | **Sinclair 128K / +2** | **70,908** | 311 | 228 | 50.02 Hz | Line 0, T=0 | Ferranti (odd banks only) | — | [128K](video_frame_128k.md) |
 | **Amstrad +2A / +3** | **70,908** | 311 | 228 | 50.02 Hz | Line 0, T=0 | Amstrad 1-0-7-6-5-4-3-2 | — | [+2A/+3](video_frame_plus2a_plus3.md) |
 | **Pentagon 128/1024** | **71,680** | **320** | 224 | **48.83 Hz** | Line 304, T=0 | **None** | — | [Pentagon](video_frame_pentagon.md) |
-| **Scorpion ZS-256** | 69,888 | 312 | 224 | 50.08 Hz | Line 0, T=0 | Revision-dep (+9 T shift) | 7 MHz | [Scorpion](video_frame_scorpion.md) |
-| **Kay 1024** | 69,888 | 312 | 224 | 50.08 Hz | Line 0, T=0 | **None** | 7 MHz | [Other Soviet](video_frame_other_soviet.md) |
-| **ATM Turbo 2+ (3.5 MHz)** | ~69,888 | ~312 | 224 | 50.08 Hz | Line 0, T=0 | Minimal | — | [Other Soviet](video_frame_other_soviet.md) |
-| **ATM Turbo 2+ (7 MHz)** | **~99,880** | ~312 | 224 (×2 nominal) | 50.08 Hz | Line 0, T=0 | Minimal | 7 MHz | [Other Soviet](video_frame_other_soviet.md) |
+| **Scorpion ZS-256** | 69,888 | 312 | 224 | 50.08 Hz | Line 0, T=0 | **None**; Even M1 on RAM fetches | 7 MHz | [Scorpion](video_frame_scorpion.md) |
+| **Kay 1024** | 69,888 | 312 | 224 | 50.08 Hz | Line 0, T=0 | **None** at 3.5 MHz | 7 MHz | [Other Soviet](video_frame_other_soviet.md) |
+| **ATM Turbo 2+ (3.5 MHz)** | ~69,888 | ~312 | 224 | 50.08 Hz | Line 0, T=0 | **None** | — | [Other Soviet](video_frame_other_soviet.md) |
+| **ATM Turbo 2+ (7 MHz)** | **~99,880** | ~312 | 224 (×2 nominal) | 50.08 Hz | Line 0, T=0 | **None** documented | 7 MHz | [Other Soviet](video_frame_other_soviet.md) |
 | **Profi 5.03** | 69,888 | 312 | 224 | 50.08 Hz | Line 0, T=0 | **None** | 5–7 MHz | [Other Soviet](video_frame_other_soviet.md) |
-| **Byte, Quorum, LEC** | 69,888 | 312 | 224 | 50.08 Hz | Line 0, T=0 | **None** | — | [Other Soviet](video_frame_other_soviet.md) |
-| **Leningrad 1/2** | **71,680** | **320** | 224 | **48.83 Hz** | Line 304, T=0 | **None** | — | [Other Soviet](video_frame_other_soviet.md) |
+| **Byte, Quorum, LEC** | 69,888 | 312 | 224 | 50.08 Hz | Line 0, T=0 | **None** known | — | [Other Soviet](video_frame_other_soviet.md) |
+| **Leningrad 1/2** | **71,680** | **320** | 224 | **48.83 Hz** | Line 304, T=0 | Disputed | — | [Other Soviet](video_frame_other_soviet.md) |
 | **Peters Plus Sprinter** | **~285,714** | ~525 | SVGA-derived | **70.00 Hz** | SVGA VSYNC | **None** | (base = 20 MHz) | [Sprinter](video_frame_sprinter.md) |
-| **ZX Evolution (BaseConf)** | **71,680** | **320** | 224 | **48.83 Hz** | Line 304, T=0 | **None** | 7/14 MHz | [ZX Evolution](video_frame_zxevo.md) |
+| **ZX Evolution (BaseConf)** | **71,680** | **320** | 224 | **48.83 Hz** | Line 304, T=0 | **None** (Pentagon raster); emulated in the 48K/128K rasters at 3.5 MHz | 7/14 MHz | [ZX Evolution](video_frame_zxevo.md) |
 | **ZX Evolution (TS-Conf)** | 71,680 | 320 | 224 | 48.83 Hz | Line 304, T=0 | **None** | 7/14 MHz | [ZX Evolution](video_frame_zxevo.md) |
 | **ZX Spectrum Next (48K mode)** | 69,888 | 312 | 224 | 50.08 Hz | Line 0, T=0 | Configurable (Ferranti) | 7/14/28 MHz | [Next](video_frame_next.md) |
 | **ZX Spectrum Next (128K mode)** | 70,908 | 311 | 228 | 50.02 Hz | Line 0, T=0 | Configurable | 7/14/28 MHz | [Next](video_frame_next.md) |
@@ -162,11 +162,13 @@ The exact delay tables for contended-memory accesses:
 | Sinclair 48K | `6-5-4-3-2-1-0-0` | +6T | Yes (A0=0 ports) |
 | Sinclair 128K / +2 | `6-5-4-3-2-1-0-0` (odd banks only) | +6T | Yes (A0=0 ports) |
 | Amstrad +2A / +3 | `1-0-7-6-5-4-3-2` | **+7T** | **No** |
-| Pentagon / Leningrad / ZX Evolution | None | 0T | No |
-| Scorpion | Revision-dependent | 0-6T | No |
-| Kay / Profi / ATM Turbo / Byte / Quorum / LEC | None | 0T | No |
-| Sprinter | None | 0T | No |
-| ZX Spectrum Next | Configurable per mode | 0-7T | Configurable |
+| Pentagon / ZX Evolution (Pentagon raster) | None | 0T | No |
+| Scorpion | None — but an opcode fetch from RAM on an odd T waits 1 T ("Even M1") | 0T contention, +1T alignment | No |
+| Kay-1024 / Profi / ATM Turbo | None at 3.5 MHz | 0T | No (ATM: keyboard `IN #FE` waits for its controller) |
+| Byte / Quorum / LEC | None known | 0T | No |
+| Leningrad-1 | Disputed (48K-like per ru.wikipedia; Even M1 per ZXMAK2) | ? | ? |
+| Sprinter | None at 3.5 MHz; main-DRAM waits at 21 MHz | 0T | No |
+| ZX Spectrum Next | Emulated in 48K/128K/+3 timing at 3.5 MHz only | 0-7T | 48K/128K timing: yes; +3 timing: no |
 | MiSTer FPGA | Per selected model | matches selected | matches selected |
 
 See [contention_timing.md](contention_timing.md) for the per-instruction T-state cost tables.
@@ -191,14 +193,14 @@ graph TD
     P3 -->|~99,880 T-states| ATM7[ATM Turbo 7 MHz]
     P3 -->|~285,714 T-states| SPR[Sprinter]
     
-    P5 -->|6-5-4-3-2-1-0-0 pattern| F48[48K-class: 48K/Scorpion/Kay/Profi]
-    P5 -->|No contention| P6
+    P5 -->|6-5-4-3-2-1-0-0 pattern| F48[48K or a 48K replica]
+    P5 -->|No contention| C312[312-line clone: Scorpion / Kay / Profi<br/>Scorpion: LD A,n in RAM takes 8 T]
     
     P6 -->|INT at line 0| F48
     P6 -->|INT at line 304| PENT[Pentagon / Leningrad / ZX Evolution]
 ```
 
-Practical detection code is in [clone_timing.md § Clone Detection](../../02_hardware/clones/clone_timing.md#clone-detection) and [video_frame_pentagon.md § Runtime Detection](video_frame_pentagon.md).
+Practical detection code is in [clone_timing.md § Clone Detection](../../02_hardware/clones/clone_timing.md#detection-techniques) and [video_frame_pentagon.md § Runtime Detection](video_frame_pentagon.md).
 
 ---
 
@@ -244,7 +246,7 @@ The classic test suite for validating machine-detection and timing code:
 | Probe `OUT (#FE),A` contention | +6T worst | +6T worst | **0T** | 0T | Distinguishes Ferranti from gate array |
 | Check `#7FFD` paging | No response | Works | Works | Works (typically) | Distinguishes 48K from 128K+ |
 | Check `#1FFD` extended paging | No response | No response | Works | Varies | Distinguishes +2A/+3 |
-| Time `LDIR` of 16,384 bytes in screen | ~330,000 T | ~330,000 T | ~330,000 T | ~286,000 T | Confirms no-contention clones |
+| Time `LDIR` of 16,384 bytes in screen | > 344,059 T (contended) | > 344,059 T (odd banks) | > 344,059 T | 344,059 T (21 × 16,384 − 5) | Confirms no-contention clones; a Scorpion running the `LDIR` from RAM takes 22 T per repeated byte (Even M1) |
 
 For real-world detection code, see [video_frame_pentagon.md](video_frame_pentagon.md) and the cross-platform sync strategy in [raster_timing.md](raster_timing.md).
 
@@ -293,7 +295,7 @@ For real-world detection code, see [video_frame_pentagon.md](video_frame_pentago
   - `FRAME=69888 PAPER=14364 CONTENTION=0` (Scorpion/Kay/ATM 3.5MHz/Profi)
   - `FRAME=71680 PAPER=14364 CONTENTION=0` (Pentagon/Leningrad)
   - `FRAME=99880 PAPER=14364 CONTENTION=0` (ATM Turbo 7 MHz)
-- **ZXMAK2 emulator** ([github.com/zxmak/zxmak2](https://github.com/zxmak/zxmak2)) — 16+ clone models with separate contention profiles. Source documents per-revision Scorpion contention and the ATM Turbo speedup anomaly.
+- **ZXMAK2 emulator** ([github.com/zxmak/zxmak2](https://github.com/zxmak/zxmak2)) — 16+ clone models. No Scorpion model is contended: the yellow-board model aligns opcode fetches at `#4000`–`#FFFF` to even T-states (Even M1), the green-board model does not.
 - **Fuse emulator** ([github.com/fuse-emulator/fuse](https://github.com/fuse-emulator/fuse)) — Western reference for Sinclair 48K/128K/+2/+2A/+3 timing. The `peripherals/ula.c` and `peripherals/plus3.c` files document exact contention patterns.
 - **ZEsarUX emulator** ([github.com/chernandezba/zesarux](https://github.com/chernandezba/zesarux)) — Implements both Ferranti and Amstrad contention with detailed per-cycle accuracy; supports ZX Spectrum Next and TS-Conf.
 - [Chris Smith, The ZX Spectrum ULA: How to Design a Microcomputer](http://www.zxdesign.info/) — the definitive hardware reference for the Sinclair-derived timing family.

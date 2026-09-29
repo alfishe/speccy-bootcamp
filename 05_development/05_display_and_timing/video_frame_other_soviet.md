@@ -2,7 +2,7 @@
 
 # Other Soviet Clone Video Frames — Kay, ATM Turbo, Profi, Byte, Quorum, Leningrad, LEC
 
-Beyond the two dominant Soviet clones — [Pentagon](video_frame_pentagon.md) (320 lines, 48.83 Hz, no contention) and [Scorpion](video_frame_scorpion.md) (312 lines, 50.08 Hz, revision-dependent contention) — there is a long tail of less common clones with their own timing quirks. Most match the 48K at the macro level (312 lines, 224 T-states, 69,888 T-states/frame), but differ in horizontal phase, contention behavior, and turbo modes.
+Beyond the two dominant Soviet clones — [Pentagon](video_frame_pentagon.md) (320 lines, 48.83 Hz, no contention) and [Scorpion](video_frame_scorpion.md) (312 lines, 50.08 Hz, no contention but "Even M1" alignment of opcode fetches from RAM) — there is a long tail of less common clones with their own timing quirks. Most match the 48K at the macro level (312 lines, 224 T-states, 69,888 T-states/frame), but differ in horizontal phase, contention behavior, and turbo modes.
 
 > [!NOTE]
 > This article covers the **video frame timing** of the long tail of Soviet clones. For hardware details (RAM, ROM, I/O ports, expansions), see [atm_turbo.md](../../02_hardware/clones/atm_turbo.md) and the planned [kay.md](../../02_hardware/clones/README.md), [profi.md](../../02_hardware/clones/README.md). The big-picture comparison across all clones lives in [clone_timing.md](../../02_hardware/clones/clone_timing.md).
@@ -14,7 +14,7 @@ Beyond the two dominant Soviet clones — [Pentagon](video_frame_pentagon.md) (3
 | Clone | Year | T/frame | Lines | Turbo | Contention | Notable |
 |---|---|---|---|---|---|---|
 | Pentagon 128 | 1989 | **71,680** | **320** | — | None | Most popular, weird 48.83 Hz |
-| Scorpion ZS-256 | 1996 | 69,888 | 312 | 7 MHz | Revision-dep. | +9 T horizontal shift |
+| Scorpion ZS-256 | 1996 | 69,888 | 312 | 7 MHz | None; Even M1 | +9 T horizontal shift |
 | Kay 1024 | 1998 | 69,888 | 312 | 7 MHz | None | GigaScreen on Kay 2006 |
 | ATM Turbo 2+ | 1994 | ~69,888 | ~312 | **7 MHz** | Minimal | 640×200 text mode for CP/M |
 | Profi 5.03 | 1991 | 69,888 | 312 | 5–7 MHz | None | **Paper offset +245 T-states** |
@@ -40,8 +40,8 @@ The Kay 1024 (Кэй, NEMO company, St. Petersburg, 1998) is a high-end clone wi
 | T-states/scanline | 224 | Same |
 | Frame rate | 50.08 Hz | Same |
 | Paper offset | T=14,336 | ~Same |
-| Contention | **None** | Differs |
-| Turbo | Optional 7 MHz | New |
+| Contention | **None** at 3.5 MHz (Kay-1024; the older Kay-256 had waits) | Differs |
+| Turbo | Optional 7 MHz (IORQ stretched; RAM code runs at an effective 6.3–7.0 MHz) | New |
 
 The Kay is **the cleanest Soviet clone to target** if you want 48K-compatible timing without contention headaches. It matches 48K timing exactly at the macro level and has no contention, so timing-sensitive code that breaks on Pentagon (due to 320-line frame) and on Scorpion (due to +9 T horizontal shift) runs cleanly.
 
@@ -69,11 +69,11 @@ The ATM Turbo (АТМ Турбо, designed by Alexander Kuzmin and Viktor Shcher
 | T-states/frame | ~69,888 | ~139,776 |
 | Scanlines | ~312 | ~312 (same) |
 | Frame rate | 50.08 Hz | 50.08 Hz |
-| Contention | Minimal / none | Minimal / none |
+| Contention | **None** | **None** |
 
 ### The 7 MHz Turbo Anomaly
 
-ATM Turbo's 7 MHz mode is unusual because it **doesn't merely double the CPU clock** — it also slightly alters memory access patterns. The reported frame T-state count at 7 MHz is approximately **99,880** in some sources rather than the expected 139,776 (2 × 69,888). This number comes from emulator presets (Unreal Speccy `ATM7MHz=99880`) and reflects that the memory bus runs at a divided clock between 3.5 and 7 MHz, so the CPU is sometimes stalled waiting for RAM slots.
+ATM Turbo's 7 MHz mode is unusual because it **doesn't merely double the CPU clock** — it also slightly alters memory access patterns. The reported frame T-state count at 7 MHz is approximately **99,880** in some sources rather than the expected 139,776 (2 × 69,888). This number comes from emulator presets (Unreal Speccy `ATM7MHz=99880`); the documents found do not explain it. The ATM Turbo 2+ architecture document describes no memory wait at either speed — its only documented CPU wait is the keyboard: `IN A,(#FE)` holds WAIT until the 8031 keyboard controller answers. Treat the 99,880 figure as an emulator convention, not a measured bus effect.
 
 ```
 ATM Turbo 7 MHz frame:
@@ -153,14 +153,14 @@ These are the smaller-volume Soviet clones. Their timing is well-documented in e
 
 - **Manufacturer**: USSR, ~1990
 - **Frame**: 69,888 T-states, 312 lines (48K-compatible)
-- **Contention**: None
+- **Contention**: None known — no primary description of its memory slots was found; KiCad schematics exist ([github.com/UncleRus/quorum-reborn](https://github.com/UncleRus/quorum-reborn)) and would settle it
 - **Notes**: Lower-cost Soviet alternative to the Scorpion. Limited expansion, no turbo mode.
 
 ### Leningrad 1 / Leningrad 2
 
 - **Manufacturer**: USSR, 1988
 - **Frame**: **71,680 T-states, 320 lines** (Pentagon precursor!)
-- **Contention**: None
+- **Contention**: **Disputed.** ru.wikipedia ("Клоны ZX Spectrum") says the Leningrad-1 has "the same CPU slowdown at addresses #4000 to #8000" as the 48K; ZXMAK2 instead models no contention and an Even M1 alignment on every fetch (`UlaLeningrad.cs`). No schematic-level description has been found
 - **Notes**: The Leningrad predates the Pentagon and uses the same 320-line counter. The Pentagon inherited its timing model. If you write code for Pentagon, it works on Leningrad with no changes.
 
 ### LEC 48 / LEC 528
@@ -178,7 +178,7 @@ These are the smaller-volume Soviet clones. Their timing is well-documented in e
 
 1. **No Ferranti ULA** — built from discrete TTL (early) or CPLD (late). Bus arbitration differs fundamentally from the original.
 
-2. **No contention, or contention-limited** — discrete logic rarely implements the precise CPU-stall pattern of the ULA. The conservative assumption is **zero contention**.
+2. **No contention at 3.5 MHz** — the designers gave the video and the CPU fixed, separate memory slots, so the CPU never waits for screen data (see [contention_model.md](../03_memory_and_io/contention_model.md#why-memory-slows-the-cpu--shared-dram-slots-and-who-waits)). Exceptions: the Scorpion aligns opcode fetches from RAM to even T-states ("Even M1"), the Kay-256 had waits (the Kay-1024 does not), and the Leningrad-1 is disputed.
 
 3. **312 or 320 scanlines, no in-between** — Soviet designers chose one of two binary counter patterns. 312 matches 48K (50.08 Hz); 320 matches Pentagon/Leningrad (48.83 Hz).
 
@@ -194,7 +194,7 @@ These are the smaller-volume Soviet clones. Their timing is well-documented in e
 
 2. **Paper vertical offset** — the Profi starts paper 1,755 T-states earlier than 48K. Other clones match 48K exactly.
 
-3. **Turbo speedup factor** — pure 2× for Scorpion/Kay, ~1.43× for ATM Turbo (memory-bus-limited), 1.4–2.0× for Profi depending on revision.
+3. **Turbo speedup factor** — under 2× wherever the CPU must wait for memory slots: the Scorpion Turbo+ waits for a free RAM slot (more during the paper), the Kay-1024 runs RAM code at an effective 6.3–7.0 MHz; emulator presets give ~1.43× for the ATM Turbo and 1.4–2.0× for the Profi depending on revision.
 
 4. **Video output standard** — composite, RGB, or VGA, all of which may affect visible picture geometry.
 
@@ -212,7 +212,7 @@ There is no universal detection routine. The most reliable heuristic combines:
 2. **Probe the contention pattern** by writing to screen RAM and measuring read-back time.
    - No slowdown → Pentagon-class (no contention)
    - 6-5-4-3-2-1-0-0 pattern → 48K-class
-   - Inconsistent → Scorpion (revision-dependent)
+   - No slowdown on data accesses, but an odd-length instruction such as `LD A,n` takes 8 T instead of 7 when run from RAM (and 7 T from ROM) → Scorpion (Even M1)
 
 3. **Probe paper offset** by reading `[number]` floating bus values at specific T-states.
    - Floating bus starts at T=14,335 → 48K-class
@@ -221,7 +221,7 @@ There is no universal detection routine. The most reliable heuristic combines:
 
 4. **Probe specific I/O ports** for the clone's banking extension registers.
 
-The canonical decision tree is in [clone_timing.md § Clone Detection](../../02_hardware/clones/clone_timing.md#clone-detection).
+The canonical decision tree is in [clone_timing.md § Clone Detection](../../02_hardware/clones/clone_timing.md#detection-techniques).
 
 ---
 
@@ -242,7 +242,7 @@ The canonical decision tree is in [clone_timing.md § Clone Detection](../../02_
 ## Primary Sources
 
 - **Unreal Speccy emulator** ([github.com/mkoloberdin/unrealspeccy](https://github.com/mkoloberdin/unrealspeccy)) — `unreal.ini` defines the per-model frame timings: `FRAME=69888` (48K/Scorpion/Kay/ATM 3.5MHz/Profi), `FRAME=71680` (Pentagon/Leningrad), `FRAME=99880` (ATM 7MHz), `PAPER=14364` (Scorpion), `PAPER=12580` (Profi). These presets are the de facto timing reference for all emulators.
-- **ZXMAK2 emulator** ([github.com/zxmak/zxmak2](https://github.com/zxmak/zxmak2)) — 16+ clone models with separate contention profiles. Source code documents per-revision Scorpion contention and the ATM Turbo speedup anomaly.
+- **ZXMAK2 emulator** ([github.com/zxmak/zxmak2](https://github.com/zxmak/zxmak2)) — 16+ clone models. Its Scorpion models have no contention: the yellow board aligns opcode fetches at `#4000`–`#FFFF` to even T-states (Even M1), the green board has neither; the Leningrad model applies Even M1 to every fetch.
 - **[zx-pk.ru](https://zx-pk.ru) forum threads** — Russian-language real-hardware measurements and clone-specific discussions. Notable threads: "Timing measurements on Profi 5.03", "ATM Turbo 7MHz real speed", "Kay 2006 GigaScreen details".
 - [SpeccyWiki](https://speccy.info) — Russian-language clone encyclopaedia with per-clone hardware specifications.
 - **[spectrum-computing.co.uk](https://spectrumcomputing.co.uk) hardware catalog** — clone hardware profiles with original documentation links.

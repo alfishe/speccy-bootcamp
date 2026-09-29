@@ -48,7 +48,7 @@ The Sprinter is the "more radical" approach: it does not try to clone the Pentag
 | **CPU** | **Zilog Z84C15** at 21 MHz (turbo) or 3.5 MHz (compatibility) — a full Z80 CPU with integrated peripherals (CTC, PIO, SIO, watchdog) |
 | **Logic** | **Altera reprogrammable PLD (PPLM)** — loaded from EEPROM at every power-on, rewritable in 3 minutes via software utility |
 | **RAM** | **4 MB SIMM** (installed standard) — hardware supports up to 64 MB but no PLD bitstream exists for >4 MB |
-| **Fast RAM** | **64 KB dedicated fast RAM** (zero wait-state access) |
+| **Fast RAM** | **64 KB dedicated fast RAM** (zero wait-state access). The main DRAM is clocked at 7 MHz, so at 21 MHz accesses to it wait; code and data in the fast RAM run "without waiting" (Aspect #3 review, zxpress.ru) |
 | **ROM** | **256 KB flash** (EEPROM) — holds the BIOS, 128K BASIC, Pentagon ROMs, and DOS |
 | **Video RAM** | **256 KB** (or 512 KB on upgraded units) — dedicated VideoOZU |
 | **FDC** | **Kr1818VG93** (Soviet WD1793 clone) — supports 3.5" (1.44 MB / 720 KB) and 5.25" (720 KB) drives |
@@ -99,10 +99,10 @@ In **Sprinter-ZX mode** (selected at boot via the configuration menu), the banki
 - `#4000–#7FFF` is bank 5 (fixed)
 - `#8000–#BFFF` is bank 2 (fixed)
 
-This allows existing Pentagon software to run, provided it does not depend on cycle-exact contention timing or floating-bus behavior. Different clone sub-modes (Pentagon, Scorpion) can be selected to handle software written for specific Russian clone timing.
+This allows existing Pentagon software to run, provided it does not depend on cycle-exact timing or floating-bus behavior. (The Pentagon itself has no contention; the video RAM here is a separate chip on its own bus, so screen access never delays the CPU.) Different clone sub-modes (Pentagon, Scorpion) can be selected to handle software written for specific Russian clone timing.
 
 > [!NOTE]
-> The Sprinter's Pentagon compatibility is "good enough" for **most** Pentagon software — roughly 80–90% of games and demos run correctly. The 10–20% that fail are typically cycle-exact demos that depend on contention timing. See [clone_timing.md](../clones/clone_timing.md) for the timing comparison.
+> The Sprinter's Pentagon compatibility is "good enough" for **most** Pentagon software — roughly 80–90% of games and demos run correctly. The 10–20% that fail are typically cycle-exact demos that depend on exact T-state timing. See [clone_timing.md](../clones/clone_timing.md) for the timing comparison.
 
 ---
 

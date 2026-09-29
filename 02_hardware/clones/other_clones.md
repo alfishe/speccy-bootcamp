@@ -27,7 +27,7 @@ The **Leningrad** (Ленинград, designed by **Serge Zonov**, Leningrad, 1
 The original Leningrad was a 48K-only machine with under 50 ICs:
 
 - **TTL reimplementation** of the ULA's video generation and memory arbitration
-- **No memory contention** (the Leningrad's video circuit reads independently of the CPU)
+- **Memory contention: disputed.** ru.wikipedia ("Клоны ZX Spectrum") says the Leningrad-1 has "the same CPU slowdown at addresses #4000 to #8000" as the 48K; the ZXMAK2 emulator instead models no contention and a one-T-state alignment of every opcode fetch to an even T-state (`UlaLeningrad.cs`, the "Even M1" rule known from the Scorpion). No schematic-level description has been found — test on real hardware before relying on either
 - **Approximate 48K timing** — close but not exact (the video counters were not precisely tuned)
 - **No disk support** — tape only
 - **No joystick** — Kempston was added as an expansion
@@ -155,6 +155,7 @@ The Quorum's timing is **approximately 48K-compatible** — close enough for mos
 ### Programming Considerations
 
 - **48K timing** with minor drift
+- **Contention**: none known, but no primary description of its memory slots or waits has been found; KiCad schematics of the board exist ([github.com/UncleRus/quorum-reborn](https://github.com/UncleRus/quorum-reborn)). (MAME's `quorum` entry aligns every opcode fetch to an even T-state only because it shares the Scorpion driver's state class — an emulator artifact, not a documented Quorum behavior.)
 - **Quorum 256** uses port `#DFFD` for extended paging (different bit layout from Kay and Profi)
 - **Т34ВГ1 gate array** has slightly different floating-bus behavior from the Ferranti ULA
 - **Integrated Kempston joystick** on all models
@@ -318,12 +319,12 @@ Romania was the first Eastern Bloc country to clone the Spectrum, and produced t
 | Clone | Year | Origin | Max RAM | Timing | Contention | Disk | Unique feature |
 |---|---|---|---|---|---|---|---|
 | **Moskva 48K/128K** | 1988 / 1989 | Moscow | 48 / 128K | Approx. 48K | None | None | First mass-produced Russian clone |
-| **Leningrad 1/2** | 1987 | Leningrad | 48 / 128K | Approx. 48K | None | Tape | Pentagon precursor (Serge Zonov design) |
+| **Leningrad 1/2** | 1987 | Leningrad | 48 / 128K | Approx. 48K | Disputed (48K-like or Even M1) | Tape | Pentagon precursor (Serge Zonov design) |
 | **Sintez** | ~1989 | Russia | 48K | 48K (no contention) | **None** (no slowdown) | Tape | Interface 2 joystick ports |
 | **Hobbit** | 1990 | Leningrad | 128K | 48K-exact | None | Optional | Cyrillic ROM, **CP/M + Forth/LOGO modes**, educational |
 | **Mikrosha** | 1989 | State factory | 48K | Approx. 48K | None | Tape | Integrated keyboard, non-standard matrix |
 | **Robik** | 1989–1994 | Selto-Rotor (former military) | 48K | 48K-exact | None | Tape | 55-key keyboard, military-grade build |
-| **Quorum 64/128/256** | 1990 | Moscow | 64/128/256K | Approx. 48K | None | Optional | Т34ВГ1 gate array |
+| **Quorum 64/128/256** | 1990 | Moscow | 64/128/256K | Approx. 48K | None known | Optional | Т34ВГ1 gate array |
 | **Delta / S-128 / SA / SB** | 1990–1991 | Zelenograd / Voronezh / Kazan / Tbilisi | 48–128K | **48K-exact** (turbo on S-128) | None | Optional | Possibly re-badged UK Spectrums; modular |
 | **LEC 48/528** | 1991 | Minsk | 48 / 528K | 48K-exact | None | Optional | Non-power-of-two 528K |
 | **Composite** | 1989 | Various | 128–512K | 48K | None | Some models | All-in-one form factor |

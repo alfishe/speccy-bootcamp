@@ -116,18 +116,18 @@ The most significant difference for programmers: **the Pentagon has no memory co
 
 ```
 48K ULA contention mechanism:
-  The ULA and CPU share the same DRAM bus
-  When ULA needs to fetch pixels, it asserts WAIT to delay CPU
+  The ULA and CPU share the same DRAM
+  When the ULA needs to fetch pixels, it stops the CPU clock
   This is bus arbitration — the ULA has priority
 
 Pentagon approach:
-  The video counter generates addresses independently
-  Pixel data is fetched from a separate buffer or during blank periods
-  CPU bus is never interrupted by video fetches
+  The video counter and the CPU read the same DRAM
+  in fixed, interleaved slots derived from the 14 MHz clock
+  Each side has its own slot — the CPU never waits
   Result: CPU always runs at full 3.5 MHz, no delays
 ```
 
-Actually, the Pentagon does fetch from the same RAM as the CPU — but the discrete logic implementation does not implement the wait-state mechanism of the original ULA. The CPU and video circuit access memory on different phases of the clock cycle, so they naturally interleave without contention.
+The Pentagon fetches the screen from the same RAM as the CPU, but it has no mechanism to stall the CPU — no clock stretching, no WAIT, no fetch alignment. The CPU and the video circuit access memory in different slots of the clock cycle, so they interleave without contention (the exact slot order is not documented; the absence of contention is — the Pentagon FAQ: "128k of NOT-CONTENDED memory"). Compare the Scorpion, which shares memory the same way but aligns opcode fetches from RAM to even T-states: [contention_model.md](../03_memory_and_io/contention_model.md#why-memory-slows-the-cpu--shared-dram-slots-and-who-waits).
 
 ### Practical Impact
 
@@ -139,20 +139,20 @@ FillScreen48K:
     LD   DE,#4001
     LD   BC,6144
     LD   (HL),#FF
-    LDIR              ; ~7 T-states per byte + contention
+    LDIR              ; 21 T-states per byte + contention
     RET
-; Effective time: ~30,000+ T-states during paper area
+; Base time: 6144 × 21 ≈ 129,000 T-states, plus contention on every access during the paper
 
 ; On Pentagon: same code runs at FULL SPEED
-; No contention means every byte transfer takes exactly 7 T-states
+; No contention means every byte transfer takes exactly 21 T-states (16 for the last)
 FillScreenPentagon:
     LD   HL,#4000
     LD   DE,#4001
     LD   BC,6144
     LD   (HL),#FF
-    LDIR              ; Always 7 T-states per byte
+    LDIR              ; Always 21 T-states per byte
     RET
-; Time: 6144 × 7 ≈ 43,008 T-states — 20-30% faster than 48K during paper
+; Time: 6144 × 21 ≈ 129,000 T-states — no contention penalty during the paper
 ```
 
 ---

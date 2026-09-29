@@ -20,7 +20,7 @@ A BaseConf is a **complete hardware definition** — changing it changes everyth
 
 | Aspect | Defined by BaseConf |
 |---|---|
-| **CPU clock** | **Real Z80** at 3.5 MHz (default) / 7 MHz (turbo, no wait states) / 14 MHz (mega-turbo, with wait states) |
+| **CPU clock** | **Real Z80** at 3.5 MHz (default) / 7 MHz (turbo, no wait states) / 14 MHz (mega-turbo, with wait states — see [CPU Waits](#cpu-waits-and-emulated-contention)) |
 | **Memory** | **4 MB RAM** (64 banks × 16 KB via Pentagon paging) + **512 KB ROM** (multiple ROM images selectable) |
 | **Video** | Standard Spectrum 256×192 + scan-doubled VGA output (RGB also available) |
 | **Sound** | **AY-3-8910** at `#FFFD`/`#BFFD`, beeper, Covox (PWM) |
@@ -96,6 +96,20 @@ BaseConf supports CPU speeds of **3.5 MHz, 7 MHz, and 14 MHz** — switchable at
 
 > [!WARNING]
 > Turbo mode accelerates access to **all** peripherals, including the Beta 128 FDC and the AY chip — which expect 3.5 MHz timing. Always restore 3.5 MHz before accessing these peripherals, or use the BIOS wrappers that handle it automatically.
+
+### CPU Waits and Emulated Contention
+
+The BaseConf RTL (`pentevo/fpga/base_trdemu`: `z80/zclock.v`, `z80/zmem.v`, `dram/arbiter.v`, `video/video_sync_h.v`) shows exactly when the Z80 is held:
+
+| Condition | CPU delay |
+|---|---|
+| Pentagon raster (default), 3.5 / 7 MHz | **None.** The DRAM arbiter works in blocks of 8 DRAM cycles and gives the video 1/8 (ZX modes) or 1/4 (other modes) of them, so the CPU always finds a free cycle |
+| 48K or 128K raster (chosen in the AVR setup), **3.5 MHz only** | **Emulated Sinclair contention** by stalling the clock with the 48K pattern: `#4000`–`#7FFF`, plus `#C000`–`#FFFF` with an odd page in the 128K raster, and even ports. The RTL comments call it "only 48k by now"; the +2A/+3 pattern is marked as probably incorrect |
+| 14 MHz | **Variable waits per access**, depending on the DRAM phase: an M1 waits 3–6 and a read 2–5 cycles of the 28 MHz clock; writes do not wait. External I/O drops to 7 MHz, and clock switches happen only at a refresh cycle |
+| DOS ROM switching in or out | A short stall |
+| `#BFF7` / `#BEF7` (Gluk clock), `#xxEF` (RS-232) | WAIT until the ATmega services the access (`z80/zwait.v`) |
+
+See [contention_model.md](../../05_development/03_memory_and_io/contention_model.md) for the cross-model picture.
 
 ### IDE Interface
 

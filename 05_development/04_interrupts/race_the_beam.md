@@ -432,7 +432,7 @@ Target hardware?
 | 128K / +2 | 228 | Floating bus (slight shift) | Same ULA, different bank layout |
 | +2A / +3 | 228 | Ast A. Moore variant | Gate array (different pattern) |
 | Pentagon | 224 | HALT + DJNZ only | None |
-| Scorpion | 224 (some revisions +9) | HALT + DJNZ | Revision-dependent |
+| Scorpion | 224 (some revisions +9) | HALT + DJNZ | None; Even M1 — opcode fetches from RAM start on even T-states, so exit from HALT is always on an even T ([details](../../02_hardware/clones/scorpion.md#contention-and-the-even-m1-wait)) |
 | Next (3.5 MHz) | 224 / 228 | Hardware line interrupt / copper | Configurable |
 | Sprinter | Variable (SVGA timing) | Not supported well | None |
 

@@ -35,12 +35,12 @@ The Sinclair ZX Spectrum 16K and 48K use a **fixed, non-paged** memory map. The 
 | `#0000–#3FFF` | 16384 | **ROM** — Sinclair BASIC interpreter, editor, tape routines, character set | No (ROM) |
 | `#4000–#57FF` | 6144 | **Screen pixel buffer (PIX)** — 256×192 pixels, 1 bpp, nonlinear layout | **Yes** (ULA reads for display) |
 | `#5800–#5AFF` | 768 | **Attribute file (ATTR)** — 32×24 cells, 1 byte per cell (INK/PAPER/BRIGHT/FLASH) | **Yes** |
-| `#5B00–#5BFF` | 256 | **Printer buffer** — output buffer for the ZX Printer | No |
-| `#5C00–#5CB5` | 182 | **System variables** — ROM workspace, flags, cursor position, etc. | No |
-| `#5CB6–` | varies | **Channel information area** — definitions for streams `K`, `S`, `P`, `R` | No |
-| (after channels) | varies | **Stream data** — 16 streams × 2 bytes | No |
-| `#5D00` ↑ | free | **BASIC program text** — tokenised program, grows upward | No |
-| (above program) | free | **Variables area** — numeric and string variables | No |
+| `#5B00–#5BFF` | 256 | **Printer buffer** — output buffer for the ZX Printer | **Yes** (whole `#4000–#7FFF` is contended) |
+| `#5C00–#5CB5` | 182 | **System variables** — ROM workspace, flags, cursor position, etc. | **Yes** |
+| `#5CB6–` | varies | **Channel information area** — definitions for streams `K`, `S`, `P`, `R` | **Yes** |
+| (after channels) | varies | **Stream data** — 16 streams × 2 bytes | **Yes** |
+| `#5D00` ↑ | free | **BASIC program text** — tokenised program, grows upward | **Yes** below `#8000`, no above |
+| (above program) | free | **Variables area** — numeric and string variables | **Yes** below `#8000`, no above |
 | `#FF58` ↓ | free | **UDG area** — User-Defined Graphics, grows downward from RAMTOP | No |
 | `#FF58` | — | **RAMTOP** — top of usable RAM, default `#FF57` on 48K, `#7F57` on 16K | No |
 | `#FF59`–`#FFFF` | ~150 | **Z80 machine stack** — grows downward from `#FFFF` | No |
@@ -100,9 +100,9 @@ The 128K (1986, the "Toastrack") and the Amstrad +2 (grey, 1987) use the **same 
 | Bank | Address when paged into `#C000` | Typical use | Contended? |
 |---|---|---|---|
 | 0 | `#C000` (default) | Main RAM | No |
-| 1 | `#C000` | General use | No |
+| 1 | `#C000` | General use | **Yes** (odd bank) |
 | 2 | `#8000` (fixed) | General use | No |
-| 3 | `#C000` | General use | No |
+| 3 | `#C000` | General use | **Yes** (odd bank) |
 | 4 | `#C000` | General use | No |
 | 5 | `#4000` (fixed) | **Main screen** (PIX + ATTR) | **Yes** |
 | 6 | `#C000` | General use | No |
@@ -186,14 +186,15 @@ The full breakdown with examples is in [memory_and_io_plus3.md](../05_developmen
 
 ## Pentagon 128K Memory Map
 
-The Pentagon is a Russian unofficial clone (see [pentagon.md](../02_hardware/clones/pentagon.md)) that closely follows the 128K/+2 architecture but with two important differences: **different contention** and **different port decoding** for compatibility.
+The Pentagon is a Russian unofficial clone (see [pentagon.md](../02_hardware/clones/pentagon.md)) that closely follows the 128K/+2 architecture but with two important differences: **no contention at all** (the video logic and the CPU use fixed, separate DRAM slots) and **different port decoding** for compatibility.
 
 ### Pentagon-Specific Behaviour
 
 | Item | 128K/+2 (Sinclair/Amstrad) | Pentagon |
 |---|---|---|
-| Contended banks | 0, 1, 3, 4, 5, 7 (slow access during display) | 1, 3, 5, 7 (only the "odd" banks) |
-| Uncontended banks | 2, 6 | 0, 2, 4, 6 (only the "even" banks) |
+| Contended banks | 1, 3, 5, 7 (slow access during display, wherever paged) | **None** — no memory contention at all |
+| Uncontended banks | 0, 2, 4, 6 | All banks |
+| I/O contention | Yes (Ferranti ULA, by port address) | **None** |
 | Display | ULA reads bank 5 (or 7 if shadow selected) | Same — ULA reads bank 5 (or 7) |
 | Port `#7FFD` paging | Bits 0–2 select any of 8 banks | Same |
 | Port `#1FFD` | Not implemented | Not implemented (only `#7FFD` is used) |
@@ -283,17 +284,17 @@ For pixel address calculation (the nonlinear layout: line `Y` → byte address `
 
 ## Contended Memory Regions
 
-When the ULA is reading the screen for display, it stalls the CPU with `WAIT_n` for short windows of time. The "contended" regions are the RAM areas the ULA touches. Accessing a contended address during display time adds extra T-states — the exact number depends on the model and the contention pattern.
+While the video chip is reading the screen during the paper area, it holds the CPU for a few T-states when the CPU's bus cycle touches memory that shares the video DRAM. The Ferranti ULA (48K, 128K, +2) does this by **stopping the CPU clock** and checks the address on every cycle — memory, internal (no-MREQ) and I/O; the Amstrad gate array (+2A/+3) pulls the Z80 `WAIT_n` pin, and only during `MREQ` cycles. The Soviet clones have no contention.
 
-| Model | Contended addresses (display-time) | Contention pattern |
-|---|---|---|
-| **48K** | `#4000–#7FFF` (banks always present) | Late timing — `+1` T-state per access inside contention window |
-| **128K / +2** | Banks 0, 1, 3, 4, 5, 7 when paged in | Late timing — `+1` to `+6` T-states, varies by cycle |
-| **+2A / +3** | Banks 4, 5, 6, 7 when paged in | Late timing, similar to 128K |
-| **Pentagon** | Banks 1, 3, 5, 7 when paged in | Early timing — `+1` T-state per access |
-| **Scorpion** | Banks 1, 3, 5, 7 (Sinclair mode) | Pentagon-compatible |
-| **ATM Turbo** | Varies by mode | N/A for non-Sinclair modes |
-| **ZX Spectrum Next** | Banks 5, 7 (compatibility mode) | Configurable; can be disabled |
+| Model | Contended memory (paper area only) | Contention pattern (per 8-T group) | I/O contended? |
+|---|---|---|---|
+| **16K / 48K** | `#4000–#7FFF` | `6,5,4,3,2,1,0,0` from T=14,335, 128 T per 224-T line | Yes — by port address (A0 = 0 and/or high byte `#40`–`#7F`) |
+| **128K / +2** | Banks **1, 3, 5, 7**, wherever paged | `6,5,4,3,2,1,0,0` from T=14,361, 128 T per 228-T line | Yes — as 48K, high byte checked against the current mapping |
+| **+2A / +3** | Banks **4, 5, 6, 7**, in any slot (including `#0000` in all-RAM modes) | `1,0,7,6,5,4,3,2` from T=14,361, 129 T per 228-T line (real hardware) | **No** (MREQ only) |
+| **Pentagon** | **None** | — | No |
+| **Scorpion ZS-256** | **None** | — (only "Even M1": a RAM opcode fetch on an odd T waits 1 T — see [Scorpion](../02_hardware/clones/scorpion.md#contention-and-the-even-m1-wait)) | No |
+| **ATM Turbo** | **None** | — | No |
+| **ZX Spectrum Next** | Emulated at 3.5 MHz only: bank 5 in 48K timing, odd banks in 128K timing, banks 4–7 in +3 timing; none in Pentagon timing, in any turbo mode, or when disabled by NextReg `#08` | As the emulated model | 48K/128K timing: yes; +3 timing: no |
 
 For exact contention delay tables per cycle and per model, see [timing_reference.md](timing_reference.md) and the deep-dive [contention_model.md](../05_development/03_memory_and_io/contention_model.md).
 
@@ -351,11 +352,11 @@ When writing code that must run on multiple models:
 |---|---|
 | Detect 48K vs 128K | Read system variable `LASTSL` at `#5C02` — bit pattern reveals ROM version; or check `#7FFF` (returns `#FF` on 16K, RAM on 48K+) |
 | Detect +2A/+3 vs 128K/+2 | Try writing to port `#1FFD` and reading back — if the value sticks, it's a +2A/+3 |
-| Detect Pentagon vs 128K | Time the contention pattern at a known contended address — Pentagon uses "early" timing, 128K uses "late" |
+| Detect Pentagon vs 128K | Time an access to a contended address during the paper area — the 128K is delayed, the Pentagon is not; or measure the frame length (71,680 vs 70,908 T-states) |
 | Detect ZX Spectrum Next | Read the `NEXTREG` registers via port `#243B` — if it responds, it's a Next |
 | Safe screen writes | Always write to bank 5 at `#4000–#5AFF` and set `#7FFD` bit 3 = 0 first; restore previous paging afterward |
-| Safe RAM access | Avoid banks 0, 1, 3, 4, 5, 7 for cycle-critical code; bank 2 at `#8000–#BFFF` is uncontended on every model |
-| Safe INT handler | IM 1 vectors through `#0038` — the ROM is always paged during INT, so this is safe; IM 2 requires the vector table to be in uncontended RAM |
+| Safe RAM access | For cycle-critical code avoid banks 1, 3, 5, 7 on the 128K/+2 and banks 4–7 on the +2A/+3; bank 2 at `#8000–#BFFF` (and bank 0) is uncontended on every model |
+| Safe INT handler | IM 1 vectors through `#0038` — the ROM is always paged during INT, so this is safe; IM 2: on the Ferranti-ULA machines keep `I` outside `#40`–`#7F` — `IR` is on the address bus during refresh and several internal T-states, which are then contended (and cause snow) |
 
 ---
 

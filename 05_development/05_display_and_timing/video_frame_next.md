@@ -99,7 +99,7 @@ OUT  (C),A
 
 - **Memory access doesn't fully scale** — DRAM/flash access has its own timing constraints; the speedup from 14→28 MHz is less than 2× for memory-heavy loops.
 - **I/O timing changes** — but the Next's I/O ports include wait-state insertion for legacy peripherals, so classic 48K-style port access still works correctly.
-- **Contention is re-derived** — when in 48K mode with contention enabled, the contention pattern matches the 48K ULA regardless of CPU speed.
+- **Contention exists only at 3.5 MHz** — in 48K/128K/+3 timing with contention enabled (NextReg `#08`), the pattern matches the emulated model; any turbo speed turns contention off. At 28 MHz a different delay applies instead: one wait state on every memory read from SRAM or bank-5 video RAM (writes, refresh and I/O do not wait).
 - **Copper doesn't change** — the copper runs at video timing, not CPU timing.
 
 ---

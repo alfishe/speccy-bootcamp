@@ -36,7 +36,7 @@ TS-Conf is path 3. It is the answer to: *"What would the Russian Spectrum look l
 | **Per-scanline palettes** | No | **Yes** — up to 16 sprite palettes + 4 tile palettes per line |
 | **VRAM** | Shares main RAM | **Dedicated graphics memory** (up to 4 MB addressing) |
 | **DMA** | No | **Full DMA controller** (DRAM-to-Device, Device-to-DRAM, DRAM-to-DRAM) |
-| **CPU cache** | No | **512 bytes zero-wait-state cache** (for 14 MHz mode) |
+| **CPU cache** | No | **512 bytes zero-wait-state cache** (for 14 MHz mode; a cache miss waits for the next DRAM cycle) |
 | **Interrupt sources** | Frame only | **Frame + Line + DMA** (separate IM2 vectors) |
 | **Turbo mode** | 3.5 / 7 / 14 MHz | **3.5 / 7 / 14 MHz** (same) |
 | **Text mode** | No | **Yes** — loadable font + hardware vertical scroll |
@@ -64,7 +64,7 @@ TS-Conf's sprite engine is **significantly more capable than commonly documented
 | **Per-sprite features** | X/Y mirror, palette offset, per-plane priority | Mirror, rotate 90°, palette offset, type |
 | **Collision detection** | Yes | Yes |
 
-Sprites are stored in dedicated VRAM and fetched independently of main RAM — there is **zero additional CPU contention** from the sprite engine. The base frame timing does not change (still Pentagon's 71,680 T-states, 320 lines, 48.83 Hz, no contention).
+Sprite, tile and bitmap fetches go through the FPGA's DRAM arbiter alongside the CPU and the DMA (`dram/arbiter.v` in the TS-Conf sources), not through a ULA-style contention circuit. At 3.5 and 7 MHz the CPU stalls **only** if video, sprites and DMA together leave no free DRAM cycle, and the CPU's priority can be lowered in favor of DMA; at 14 MHz a CPU cache hit costs nothing and a miss waits for the next DRAM cycle. There is no Sinclair-style contention, and the base frame timing does not change (still Pentagon's 71,680 T-states, 320 lines, 48.83 Hz).
 
 ### Tilemap and Graphic Planes
 

@@ -71,8 +71,8 @@ The Evolution's defining feature is its **two CPLD configurations**, which are e
 
 - Designed by Aleksandr Zhuravlev (`tsl`)
 - Adds **hardware sprites** (32 sprites × 64 patterns), **tilemap** (320×200 with 8×8 tiles), and **per-scanline palette** (like the Next's copper but simpler)
-- Adds **512 KB of dedicated VRAM** — sprites and tiles are fetched independently of main RAM, so there is **zero additional CPU contention**
-- Base frame timing **does not change** — still 71,680 T-states, 320 lines, 48.83 Hz, no contention on main RAM
+- Adds **512 KB of graphics memory** — sprite, tile and DMA fetches share the FPGA's DRAM arbiter with the CPU; at 3.5/7 MHz the CPU stalls only if they leave no free DRAM cycle, and at 14 MHz a CPU cache miss waits for the next DRAM cycle
+- Base frame timing **does not change** — still 71,680 T-states, 320 lines, 48.83 Hz, no Sinclair-style contention
 - TSR (Terminate-and-Stay-Resident) drivers provide a friendly API for the enhanced modes
 - Software must be **specifically written for TS-Conf** — classic Pentagon software does not see the enhancements
 
@@ -89,9 +89,9 @@ The Evolution supports two turbo speeds via a port write:
 |---|---|---|---|
 | 3.5 MHz (default) | 71,680 | 1.0× | Pentagon compatibility |
 | 7 MHz | 143,360 | 2.0× | Demos with heavy precalc |
-| 14 MHz | 286,720 | 4.0× | TS-Conf software, demoscene work |
+| 14 MHz | 286,720 | < 4.0× (variable memory waits) | TS-Conf software, demoscene work |
 
-Unlike the ATM Turbo (whose 7 MHz mode is bottlenecked by the memory bus to ~1.43× effective speedup), the Evolution's turbo modes deliver **close to the theoretical maximum speedup** because the SRAM used in the Evolution supports the higher clock without inserted wait states.
+At 7 MHz the Evolution inserts no waits, so the speedup is the full 2×. At 14 MHz the RTL inserts **variable waits per access** depending on the DRAM phase — in BaseConf an M1 waits 3–6 and a read 2–5 cycles of the 28 MHz clock, writes do not wait, and external I/O drops to 7 MHz; in TS-Conf a hit in the 512-byte CPU cache costs nothing and a miss waits for the next DRAM cycle. Memory-heavy code therefore gains less than 4×. In the BaseConf 48K/128K rasters (AVR setup), 48K-style contention is emulated at 3.5 MHz only — see [baseconf.md](../../02_hardware/newgen/baseconf.md#cpu-waits-and-emulated-contention).
 
 ```
 ATM Turbo 7 MHz:    99,880 T-states/frame (1.43× effective)

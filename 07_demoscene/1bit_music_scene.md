@@ -97,7 +97,7 @@ The second approach is used by all serious engines; the first is used only by ve
 
 The 48K, 128K, +2, +2A, +3, and Pentagon all have slightly different contention patterns. An engine that produces clean music on a 48K may produce buzzing or detuning on a +2A. This is a recurring problem for the 1-bit scene: an engine must be **per-model** to sound right on all Spectrums.
 
-The Pentagon, which has a slightly different ULA from any Sinclair-produced model, has its own contention pattern; Soviet-era 1-bit music is rare (most Soviet sceners used the AY chip), but the modern Russian scene does produce Pentagon-targeted beeper music.
+The Pentagon has no ULA and no contention at all — its video and CPU use separate memory slots, so beeper loops run at their plain Z80 T-state counts; Soviet-era 1-bit music is rare (most Soviet sceners used the AY chip), but the modern Russian scene does produce Pentagon-targeted beeper music.
 
 ---
 

@@ -76,45 +76,50 @@ The exact start of active display is critical for cycle-exact code (e.g., split-
 | 64–255 | Paper display (192 lines) |
 | 256–311 | Bottom border (56 lines) |
 
-The INT (interrupt) is asserted at **scanline 64**, the start of paper display. This is the canonical sync point for assembly programs.
+The INT (interrupt) is asserted at **T=0 of the frame**, 64 lines (14,336 T-states) **before** the first paper line; the first contended T-state follows at T=14,335. This is the canonical sync point for assembly programs.
 
 ---
 
-## Memory Contention — 48K Late Timing
+## Memory Contention — 48K
 
-When the ULA is reading display RAM (`#4000–#7FFF`) during paper display, it asserts `WAIT_n` to stall the CPU if the CPU tries to access that same range. The contention pattern is **late timing**: each contended access adds 0–6 T-states, depending on where in the ULA cycle the CPU access happens.
+When the ULA is fetching display data during the paper area and the CPU puts an address in `#4000–#7FFF` on the bus, the ULA **stops the CPU clock** (it does not use the Z80 `WAIT_n` pin) until its fetch is done. Each contended bus cycle adds 0–6 T-states, depending on where in the ULA's 8-T fetch group it starts.
+
+> [!WARNING]
+> **Requires contended memory timing.** On the Ferranti ULA (48K, 128K, +2) the check covers every T-state with a contended address on the bus — opcode fetches, data reads and writes, **internal (no-MREQ) T-states** such as `INC (HL)`'s extra T on `HL` or `JR`'s 5 extra T on `PC`, and I/O cycles (see [I/O Instructions](#io-instructions)). Naive per-instruction counts will be wrong.
 
 ### 48K Contention Delay Table
 
-| CPU access T-state (mod 8) | Delay added | Effective T-states |
-|---|---|---|
-| 0 | +6 | 6 |
-| 1 | +5 | 6 |
-| 2 | +4 | 6 |
-| 3 | +3 | 6 |
-| 4 | +2 | 6 |
-| 5 | +1 | 6 |
-| 6 | +0 | 6 |
-| 7 | +0 | 7 |
+The first contended T-state is **T=14,335** after the start of the interrupt (FUSE convention; some sources say 14,336 — the same event counted from 1). Each paper line then has a **128-T** contended window starting at 14,335 + n × 224 (n = 0–191); offset = (T − 14,335) mod 224.
 
-The contention pattern repeats every 8 T-states. So an opcode that takes 4 T-states and starts on T-state 0 of the cycle takes 4+6=10 T-states if it accesses `#4000–#7FFF`, but only 4 T-states if it accesses uncontended memory (`#8000–#FFFF` or ROM).
+| Offset within the 8-T group (offset mod 8, for offset < 128) | Delay added |
+|---|---|
+| 0 | +6 |
+| 1 | +5 |
+| 2 | +4 |
+| 3 | +3 |
+| 4 | +2 |
+| 5 | +1 |
+| 6 | +0 |
+| 7 | +0 |
+
+So an opcode fetch from `#4000–#7FFF` that starts on offset 0 takes 4+6=10 T-states; from uncontended memory (`#8000–#FFFF` or ROM) it takes 4. "Early/late timing": on some machines the whole pattern starts up to 1 T-state later; the Sinclair Wiki attributes this to ULA temperature, not to the board issue.
 
 ### When Contention Is Active
 
 | Range | Contended? |
 |---|---|
-| `#4000–#7FFF` | **Yes** — during paper display only |
+| `#4000–#7FFF` | **Yes** — inside the 128-T window of each of the 192 paper lines |
 | `#0000–#3FFF` (ROM) | No |
 | `#8000–#FFFF` | No |
 
-Paper display = scanlines 64–255, T-states 336–1359 within each scanline. Outside of these windows, the ULA is not touching `#4000–#7FFF` and access is uncontended.
+Outside these windows (top and bottom border, and the other 96 T-states of each paper line), the ULA is not fetching and access is uncontended.
 
 ### 48K Floating Bus
 
-Reading port `#FF` (or any port where `A0=1` and no peripheral decodes the address) returns **whatever the ULA is fetching** during contention. This is the **floating bus** — used to detect the current raster position without hardware timers. The byte returned is:
+Reading port `#FF` (or any port where `A0=1` and no peripheral decodes the address) returns **whatever the ULA is fetching** at that moment. This is the **floating bus** — used to detect the current raster position without hardware timers. The byte returned is:
 
-- During paper display: the next display byte the ULA will fetch (pixel or attribute)
-- Outside paper display: `#FF`
+- During the ULA's fetches in the paper area: the pixel or attribute byte being fetched
+- Outside the fetches (idle T-states of each 8-T group, border, blanking): `#FF`
 
 The floating bus is **not** reliable for cycle-exact timing — it has its own quirks and is best used for coarse position detection. See [floating_bus.md](../05_development/05_display_and_timing/floating_bus.md) for details.
 
@@ -122,7 +127,7 @@ The floating bus is **not** reliable for cycle-exact timing — it has its own q
 
 ## Memory Contention — 128K / +2 / +2A / +3
 
-The 128K and later models have a **different contention scheme** because the ULA's behavior changed (and the +2A/+3 use a different gate array entirely). Banks 1, 3, 5, and 7 (when paged into the contended region) are late-timing; banks 0, 2, 4, and 6 are uncontended. The pattern still repeats every 8 T-states, but the exact delay vs T-state value differs.
+The 128K/+2 keep the 48K's Ferranti-style contention — same `6,5,4,3,2,1,0,0` table, same clock stopping, internal cycles and I/O contended — but contend **pages** rather than an address range, start at **T=14,361**, and repeat every **228** T-states. The +2A/+3 use the Amstrad gate array, which contends differently (see below).
 
 ### 128K Contended Banks
 
@@ -137,32 +142,29 @@ The 128K and later models have a **different contention scheme** because the ULA
 | 6 | (when paged at `#C000`) | No |
 | 7 | (when paged at `#C000`) | Yes |
 
-### 128K Contention Delay Table
+### 128K / +2 Contention Delay Table
 
-The 128K contention pattern is also based on T-state mod 8, but the pattern is offset by 1 from the 48K:
+Identical to the 48K table, counted from the 128K onset: offset = (T − 14,361) mod 228, contended for offset < 128 on each of the 192 paper lines.
 
-| CPU access T-state (mod 8) | Delay added |
-|---|---|
-| 0 | +0 |
-| 1 | +5 |
-| 2 | +4 |
-| 3 | +3 |
-| 4 | +2 |
-| 5 | +1 |
-| 6 | +0 |
-| 7 | +0 |
+| Offset mod 8 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+|---|---|---|---|---|---|---|---|---|
+| Delay added | +6 | +5 | +4 | +3 | +2 | +1 | +0 | +0 |
 
 ### +2A / +3 Contention
 
-The +2A/+3 use the **Amstrad gate array** which behaves differently from the Sinclair ULA. Banks 4, 5, 6, and 7 are contended; banks 0, 1, 2, 3 are uncontended. The contention pattern is similar to the 128K but with subtle differences at the top of the screen (where the gate array's prefetch differs).
+The +2A/+3 use the **Amstrad gate array**, which pulls the Z80 `WAIT_n` pin, and **only during `MREQ` cycles**: no I/O contention and no contention of internal T-states. Banks 4, 5, 6 and 7 are contended **in any slot** (including `#0000` in the all-RAM special paging modes); banks 0–3 never. The pattern starts at T=14,361, repeats every 228 T-states, and uses different values:
 
-For most code, treating the +2A/+3 contention as "same as 128K" works correctly. For cycle-exact effects, see the deep dive in [contention_model.md](../05_development/03_memory_and_io/contention_model.md).
+| Offset mod 8 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+|---|---|---|---|---|---|---|---|---|
+| Delay added | +1 | +0 | +7 | +6 | +5 | +4 | +3 | +2 |
+
+The Sinclair Wiki's table gives the same delays T-state by T-state (14361 → 1, 14362 → 0, 14363 → 7, …, 14369 → 1, 14370 → 0, …) and says the pattern "repeats until 14490 tstates" — consistent with a 129-T window (last delayed T-state 14489). The contended window is **129 T** per line on real hardware — offset 128 still adds 1 T (Rak's Timing Test photos from a real +3 and +2A, redcode wiki "Timing-Test"); Fuse, MAME, ZXMAK2 and Xpeccy use 128. Treating the +2A/+3 as "same as 128K" gives wrong results for any contended access. For the deep dive see [contention_model.md](../05_development/03_memory_and_io/contention_model.md).
 
 ---
 
 ## Pentagon Timing Differences
 
-The Pentagon uses "early" contention (different from Sinclair's "late") and a slightly different video frame (320×224 pixels instead of 256×192). The exact T-state layout:
+The Pentagon has **no contention at all** — no memory contention and no I/O contention. Its video logic and the CPU use fixed, separate DRAM slots, so the CPU never waits ("128k of NOT-CONTENDED memory (no slow areas)", Pentagon FAQ). Its video frame is also longer. The exact T-state layout:
 
 | Item | Pentagon | 48K Sinclair |
 |---|---|---|
@@ -170,25 +172,11 @@ The Pentagon uses "early" contention (different from Sinclair's "late") and a sl
 | Frame scanlines | 320 | 312 |
 | Frame T-states | 71,680 | 69,888 |
 | Frame rate (Hz) | 48.83 | 50.08 |
-| INT line | 0 (start of frame) | 64 |
-| Contention type | Early (1 T-state delay) | Late (1–6 T-state delay) |
+| Contention | **None** | 0–6 T per contended bus cycle, `#4000–#7FFF` |
 
 The Pentagon's **48.83 Hz** is **not** standard PAL — it was chosen for hardware simplicity. This causes drift on European CRTs but is irrelevant on modern displays. Some Russian demos and games check for this difference.
 
-### Pentagon Contention Pattern
-
-| CPU access T-state (mod 8) | Delay added |
-|---|---|
-| 0 | +0 |
-| 1 | +0 |
-| 2 | +0 |
-| 3 | +0 |
-| 4 | +0 |
-| 5 | +0 |
-| 6 | +0 |
-| 7 | +1 |
-
-The Pentagon contention is **much gentler** than the Sinclair 48K — only one T-state of delay per access, and only at one specific position in the 8-T-state cycle.
+The Scorpion ZS-256 has no contention either; its one timing quirk is **"Even M1"** — an opcode fetch from RAM that would start on an odd T-state waits 1 T (ROM fetches, data accesses, I/O and interrupt acknowledge never wait). See [Scorpion](../02_hardware/clones/scorpion.md#contention-and-the-even-m1-wait).
 
 ---
 
@@ -200,13 +188,13 @@ The ULA pulls `INT_n` low at the start of every frame:
 
 | Model | INT line | INT T-state |
 |---|---|---|
-| 48K / 16K | Scanline 64 | ~T-state 14,336 (relative to frame start) |
-| 128K / +2 / +2A / +3 | Scanline 64 | ~T-state 14,336 |
-| Pentagon | Scanline 0 (start) | T-state 0 |
-| Scorpion | Scanline 64 (Sinclair mode) | ~T-state 14,336 |
+| 48K / 16K | Frame start, 64 lines before paper | T-state 0 (paper and contention start 14,335–14,336 T later) |
+| 128K / +2 / +2A / +3 | Frame start, 63 lines before paper | T-state 0 (contention starts 14,361 T later) |
+| Pentagon | Frame start | T-state 0 |
+| Scorpion | Frame start | T-state 0 |
 | ZX Spectrum Next | Configurable (line register) | Configurable |
 
-The Z80 takes about 13 T-states to acknowledge an INT (depending on interrupt mode), so the effective entry to your ISR is **~T-state 14,349 from frame start** on a 48K/128K. This is the canonical "first ISR instruction" timing reference for cycle-exact code.
+The Z80 takes about 13 T-states to acknowledge an INT (depending on interrupt mode), so the effective entry to your ISR is **~13 T-states after INT** (plus the time to finish the instruction in progress) on a 48K/128K — well before the first contended T-state at 14,335 (48K) / 14,361 (128K).
 
 ### Non-Maskable Interrupt (NMI)
 
@@ -218,7 +206,7 @@ The 48K ROM's `#0066` handler does a soft reset. Custom NMI handlers are used by
 
 The Z80's worst-case interrupt response latency is **21 T-states** (when an interrupt arrives during the slowest instruction, e.g., `LD (HL),n` with contention). Typical latency is **13 T-states** (no contention, simple instruction completing).
 
-For frame-cycle-accurate code (e.g., raster splits), assume your ISR entry is at **T-state ~14,349** plus the latency for the instruction that was in progress when INT fired. Most rasters handle this by inserting a known delay before doing anything timing-sensitive.
+For frame-cycle-accurate code (e.g., raster splits), assume your ISR entry is at **T-state ~13** plus the latency for the instruction that was in progress when INT fired. Most rasters handle this by inserting a known delay before doing anything timing-sensitive.
 
 ---
 
@@ -228,23 +216,25 @@ Quick reference for the most-used instructions. For the complete table, see [z80
 
 ### Load Instructions
 
-| Instruction | T-states (uncontended) | T-states (contended, worst case) |
+| Instruction | T-states (uncontended) | Memory bus cycles (each can add 0–6 T when its address is contended) |
 |---|---|---|
-| `LD r,n` | 7 | 13 |
-| `LD r,(HL)` | 7 | 13 |
-| `LD (HL),r` | 7 | 13 |
-| `LD A,(BC)` | 7 | 13 |
-| `LD A,(DE)` | 7 | 13 |
-| `LD A,(nn)` | 13 | 13 (ROM/uncontended) |
-| `LD (nn),A` | 13 | 13 |
-| `LD rr,nn` | 10 | 10 |
-| `LD HL,(nn)` | 16 | 16 |
-| `LD rr,(nn)` | 20 | 20 |
-| `LD SP,HL` | 6 | 6 |
-| `EX DE,HL` | 4 | 4 |
-| `EXX` | 4 | 4 |
-| `PUSH rr` | 11 | 11 |
-| `POP rr` | 10 | 10 |
+| `LD r,n` | 7 | 2 (fetch, operand) |
+| `LD r,(HL)` | 7 | 2 (fetch, read) |
+| `LD (HL),r` | 7 | 2 (fetch, write) |
+| `LD A,(BC)` | 7 | 2 |
+| `LD A,(DE)` | 7 | 2 |
+| `LD A,(nn)` | 13 | 4 (fetch, 2 operand bytes, read) |
+| `LD (nn),A` | 13 | 4 |
+| `LD rr,nn` | 10 | 3 |
+| `LD HL,(nn)` | 16 | 5 |
+| `LD rr,(nn)` | 20 | 6 (2 fetches for the `ED` prefix) |
+| `LD SP,HL` | 6 | 1 (+2 internal T on `IR`) |
+| `EX DE,HL` | 4 | 1 |
+| `EXX` | 4 | 1 |
+| `PUSH rr` | 11 | 3 (fetch, 2 stack writes; +1 internal T on `IR`) |
+| `POP rr` | 10 | 3 |
+
+Each cycle's delay depends on its own start T-state, so delays are not simply additive worst cases. On the Ferranti ULA the internal T-states are contended too when the address they leave on the bus is contended (e.g. `IR` when `I` is `#40`–`#7F`).
 
 ### Arithmetic Instructions
 
@@ -288,7 +278,7 @@ Quick reference for the most-used instructions. For the complete table, see [z80
 | `IND` | 16 | 16–22 |
 | `OUTD` | 16 | 16–22 |
 
-I/O instructions contend on the addressed port — `#FE` reads and writes contend if the ULA is mid-display, even when the CPU is otherwise idle. The contended T-state count varies with the cycle position, like memory contention.
+The "contended" column is indicative only. On the Ferranti ULA (48K, 128K, +2) the 4-T I/O cycle is contended by **port address**: the high byte (from A for `IN A,(n)`/`OUT (n),A`, from B for the `(C)` forms and block I/O — never from the program counter) and A0 select one of four patterns — high byte not `#40`–`#7F` and A0 = 1: `N:4` (uncontended); not `#40`–`#7F`, A0 = 0: `N:1, C:3`; `#40`–`#7F`, A0 = 1: `C:1, C:1, C:1, C:1`; `#40`–`#7F`, A0 = 0: `C:1, C:3` (Sinclair Wiki, *Contended I/O*). So `#FE` reads and writes are always contended inside the paper windows. On the 128K/+2 a high byte in `#C0`–`#FF` also counts while an odd page is at `#C000`. The +2A/+3 gate array never contends I/O. The opcode fetches are contended separately if the code runs from contended memory.
 
 ### Stack Operations
 
@@ -329,7 +319,7 @@ Quick reference for the most-used frame-relative T-state counts:
 | INT latency (typical) | 13 T-states | From INT_n low to ISR entry |
 | INT line | 64 (48K/128K) | Scanline where INT fires |
 | INT T-state | 14,336 | Relative to frame start |
-| ISR entry T-state | 14,349 | Realistic, with INT latency |
+| ISR entry T-state | ~13 | Realistic, with INT latency (IM 1, no instruction in progress) |
 | Paper display start | scanline 64 | Top of paper area |
 | Paper display end | scanline 255 | Bottom of paper area |
 | Border lines (top) | 8–63 | Above paper |

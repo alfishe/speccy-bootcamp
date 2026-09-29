@@ -395,7 +395,7 @@ A resident service OS (by Renat Mamedov, `2:5026/5.46@Fidonet`) burned into an u
 
 ## The 32K LPRINT III Cache
 
-Many 1024K machines carry a 32 KB **SRAM cache** for the `#0000`-`#3FFF` ROM area, built to the ZX LPRINT III schematic — usually a Western `11C256` (32K × 8). In turbo mode, code executing from this area incurs **no WAIT states**, which is what makes 7 MHz upgrades practical for ROM-heavy software.
+Many 1024K machines carry a 32 KB **SRAM cache** for the `#0000`-`#3FFF` ROM area, built to the ZX LPRINT III schematic — usually a Western `11C256` (32K × 8). In turbo mode, code executing from this area incurs **no WAIT states**, which is what makes 7 MHz upgrades practical for ROM-heavy software. (No turbo wait on the main RAM is documented for the Pentagon 1024SL either; at 3.5 MHz the machine has no contention and no wait of any kind.)
 
 ```
   IN A,(251)   ; enable cache

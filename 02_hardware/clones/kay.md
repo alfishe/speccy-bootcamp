@@ -4,7 +4,7 @@
 
 The **Kay 1024** (Кэй, NEMO company, St. Petersburg, 1991–1998) is the Soviet Spectrum's **professional tier** — a high-end clone built for users who wanted more than the Pentagon's bare-bones hobbyist design could offer. Where the Pentagon was a minimal DIY machine, the Kay was a **factory-assembled computer** with a proper case, integrated disk drive, hard-disk support, and the cleanest video timing of any Soviet clone.
 
-The Kay's defining characteristics — from a programmer's perspective — are: **48K-compatible timing** (69,888 T-states/frame, 312 scanlines, 50.08 Hz), **zero memory contention**, **1024K of RAM** with a different extended paging scheme than the Pentagon, and the **Nemo bus** — a proprietary expansion bus that became the foundation for an entire ecosystem of Russian peripherals.
+The Kay's defining characteristics — from a programmer's perspective — are: **48K-compatible timing** (69,888 T-states/frame, 312 scanlines, 50.08 Hz), **zero memory contention** in its normal 3.5 MHz mode (the designers called it "the WAIT-free NORMAL mode" — the older Kay-256 still had waits), **1024K of RAM** with a different extended paging scheme than the Pentagon, and the **Nemo bus** — a proprietary expansion bus that became the foundation for an entire ecosystem of Russian peripherals.
 
 > [!NOTE]
 > This article covers the **hardware platform**. For the Kay's frame timing and how it compares to other clones, see [video_frame_other_soviet.md](../../05_development/05_display_and_timing/video_frame_other_soviet.md). For the broader clone timing landscape, see [clone_timing.md](clone_timing.md).
@@ -216,7 +216,7 @@ This is the basic pattern; production code adds error handling (check the error 
 | Criterion | Kay 1024 | Pentagon 1024 |
 |---|---|---|
 | **Timing compatibility** | 48K-exact (69,888 T/frame, 312 lines) | Non-standard (71,680 T/frame, 320 lines) |
-| **Contention** | None | None |
+| **Contention** | None at 3.5 MHz (the Kay-256 had waits); in turbo IORQ is stretched and RAM code runs at an effective 6.3–7.0 MHz | None at 3.5 MHz |
 | **Extended paging port** | `#DFFD` (separate port) | `#7FFD` bits 5–7 (gate: `#EFF7`) |
 | **Expansion bus** | Nemo bus (60-pin) | Standard edge connector (56-pin) |
 | **Hard disk support** | Built-in IDE controller | Requires expansion |
@@ -249,6 +249,7 @@ This is the basic pattern; production code adds error handling (check the error 
 ## References
 
 - **NEMO company documentation** (1991–1998) — original Kay 1024 schematics and Nemo bus specification
+- **Kay-1024 designers' article** ([zxpress.ru](https://zxpress.ru/article.php?id=15217)) — "Без'WAIT'овый режим в NORMAL (3.5MHz)" (the WAIT-free NORMAL mode that makes multicolor possible), turbo IORQ stretching on the Kay-256 vs 1024
 - **[zx-pk.ru](https://zx-pk.ru) forum** — *Кэй 1024* subforum contains hardware variants, IDE controller schematics, and repair threads
 - [SpeccyWiki](https://speccy.info) — Kay 1024 and Kay 2006 NB articles with CPLD programming details
 - [Kay 2006 NB documentation](https://zx-pk.ru) — GigaScreen and multicolor mode specifications

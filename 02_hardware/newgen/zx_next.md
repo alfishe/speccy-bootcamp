@@ -912,16 +912,18 @@ Recommended practice:
 
 ## Compatibility Modes
 
-The Next can impersonate four classic machines via the **timing-mode NextReg `0x22`** (and its associated memory-map NextRegs). Switching modes at runtime lets a single binary support multiple Spectrums:
+The Next can impersonate four classic machines via the **machine-type / timing NextReg `#03`** (and its associated memory-map NextRegs). Switching modes at runtime lets a single binary support multiple Spectrums:
 
 | Mode | Memory map | Contention | Frame |
 |---|---|---|---|
 | **48K** | ROM + 16K contended + 32K uncontended | Yes (`#4000`–`#7FFF`) | 69,888 T-states, 312 lines, 50.08 Hz |
 | **128K / +2** | `#7FFD` paging | Yes (banks 1/3/5/7) | 70,908 T-states, 311 lines, 50.02 Hz |
-| **+2A / +3** | `#7FFD` + `#1FFD` paging | Yes (split banks) | 70,908 T-states, 311 lines, 50.02 Hz |
+| **+2A / +3** | `#7FFD` + `#1FFD` paging | Yes (banks 4–7 and up; memory only, no I/O contention) | 70,908 T-states, 311 lines, 50.02 Hz |
 | **Pentagon** | `#7FFD` + `#DFFD`/`#EFF7` paging | **No** | 71,680 T-states, 320 lines, 48.83 Hz |
 
-Classic software that runs on any of these machines will run on the Next. **Contention is emulated** in 48K/128K/+3 modes — even cycle-exact demos work.
+Classic software that runs on any of these machines will run on the Next. **Contention is emulated** in 48K/128K/+3 timing — even cycle-exact demos work — under three conditions: the CPU runs at **3.5 MHz** (any turbo speed turns contention off), the timing is not Pentagon, and contention has not been disabled in NextReg `#08`. In 48K timing it covers bank 5, in 128K timing the odd banks, in +3 timing banks 4 and up. The 48K and 128K timings stretch the CPU clock and contend I/O as the Ferranti ULA does; +3 timing uses WAIT on memory cycles only, like the Amstrad gate array.
+
+At **28 MHz** a different delay applies: every memory read from SRAM or from the bank-5 video RAM gets one wait state; writes, refresh and I/O do not. (Source: the Next's `zxnext.vhd` / `zxula.vhd` as cited by the jnext emulator's `contention.cpp`.) See [contention_model.md](../../05_development/03_memory_and_io/contention_model.md) for the cross-model picture.
 
 > [!WARNING]
 > The Pentagon mode is **not binary-compatible** with original Sinclair 128K software that depends on contention timing. Software must be specifically compiled for Pentagon (or written to handle the difference). See [video_frame_next.md](../../05_development/05_display_and_timing/video_frame_next.md) for the full timing comparison.
