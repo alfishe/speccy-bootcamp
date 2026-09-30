@@ -828,7 +828,7 @@ Compression is always applied **last**, after all manual optimisations, for thre
 2. **Compression is invisible at the source level.** Once compressed, the binary cannot be edited; the source must be edited, reassembled, and recompressed. Iterating on source-after-compression is wasteful.
 3. **Compression has a fixed depacker cost.** A ZX0 depacker is ~65–90 bytes; this is a fixed overhead that must be paid before any compressed byte is decompressed. Below a certain binary size, the depacker cost exceeds the savings.
 
-The order of operations is therefore: **squeeze → reuse → table-generate → assemble → compress**.
+The order of operations is therefore: **squeeze → reuse → table-generate → assemble → compress**. Note this doesn't mean "squeeze" and "compress" always want the same code — see [compression_mindset.md](compression_mindset.md) for cases where a deliberately *less* squeezed, more repetitive instruction sequence compresses smaller than the byte-optimal one.
 
 ### 8.2 ZX0 — The Current Standard
 
@@ -927,7 +927,7 @@ Rather than enumerate specific titles — the size-coding scene releases dozens 
 
 For the full breakdown of what 256 bytes can and cannot express, see [§3.3](#33-what-256-bytes-can-express). This section adds one named, sourced example that also **qualifies** the "no AY at all" line in §3.3:
 
-- **Self-generating decrunchers**: rather than unpacking a fixed payload, the binary writes a pseudo-random chain of `CALL` opcodes into free RAM at runtime (using a compact CMWC-style PRNG) and executes the resulting chain, producing a different, chaotic visual/audio result each run from a tiny fixed seed program. Example: **"Hole 17 enigma"** (RMDA, LoveByte'2021, 256 bytes, 48K+AY) — [ZXArt.ee entry](https://zxart.ee/prod/359194), [source + binaries](https://emulate.su/rmda/hole17.zip). It also drives a static AY **chord** from register values reused as code bytes: a chord fits in 256 bytes even though a sequenced tune does not (§3.3's "not achieved" list refers specifically to a real player + song data).
+- **Self-generating decrunchers**: rather than unpacking a fixed payload, the binary writes a pseudo-random chain of `CALL` opcodes into free RAM at runtime (using a compact CMWC-style PRNG) and executes the resulting chain, producing a different, chaotic visual/audio result each run from a tiny fixed seed program. Example: **"Hole 17 enigma"** (RMDA, LoveByte'2021, 256 bytes, 48K+AY) — [ZXArt.ee entry](https://zxart.ee/prod/359194), [source + binaries](https://emulate.su/rmda/hole17.zip). It also drives a static AY **chord** from register values reused as code bytes: a chord fits in 256 bytes even though a sequenced tune does not (§3.3's "not achieved" list refers specifically to a real player + song data). → Full mechanism (the `CALL` chain doubles as the renderer via the stack pointer, the chord doubles as boot code, and neither exists as separate "data"): [hole17_case_study.md](hole17_case_study.md).
 
 ### 9.2 The 1K Achievements
 
@@ -1010,8 +1010,10 @@ This article sits within the ZX Spectrum demoscene knowledge base and connects t
 - [multicolor_techniques.md](multicolor_techniques.md) — why multicolor is impractical at 256 bytes (§3.3 of this article).
 - [effects_catalog.md](effects_catalog.md) — which effects fit in size-coding budgets (cross-referenced from §3.3, §7.1, §7.7).
 - [compression_packing.md](compression_packing.md) — full treatment of ZX0, ZX1, ZX2, MegaLZ, Pletter (referenced extensively in §8).
+- [compression_mindset.md](compression_mindset.md) — the counter-intuitive flip side of §8: once a compressor is in the pipeline, "fewest raw bytes" and "smallest compressed output" can disagree, and squeeze decisions from §5 sometimes need to be reversed.
 - [demo_frameworks.md](demo_frameworks.md) — how larger demos sequence effects; 16K intros use a stripped-down framework.
 - [notable_demos.md](notable_demos.md) — specific size-coded intros with sources (cross-referenced from §9.5).
+- [hole17_case_study.md](hole17_case_study.md) — full mechanism behind the 256-byte "Hole 17 enigma" example in §9.1 (self-built `CALL`-chain rendering, code-as-AY-data).
 - [1bit_music_scene.md](1bit_music_scene.md) — the beeper music tradition used in 256B and 1K intros (cross-referenced from §6.5 and §9.2).
 - [README.md](README.md) — index of all demoscene articles.
 

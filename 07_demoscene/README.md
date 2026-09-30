@@ -4,7 +4,7 @@
 
 > The ZX Spectrum demoscene represents the **absolute apex** of what can be squeezed from a 3.5 MHz Z80, an attribute-based color system, and contended memory. This section documents the techniques, history, and culture that produced effects people still find hard to believe came from 1980s hardware.
 >
-> **Status**: All 11 articles are complete (CC BY-SA 4.0). Cross-references between articles are verified. The section is the deepest single-source reference on the ZX Spectrum demoscene available in English as of 2024.
+> **Status**: All 13 articles are complete (CC BY-SA 4.0). Cross-references between articles are verified. The section is the deepest single-source reference on the ZX Spectrum demoscene available in English as of 2024.
 
 ---
 
@@ -32,7 +32,8 @@ Demoscene techniques transcend normal game development. They push the hardware p
 | [multicolor_techniques.md](multicolor_techniques.md) | Multicolor / attribute interrupt: 8×1 and 8×2 color resolution, race-the-beam timing, per-model differences |
 | [precalc_trigonometry.md](precalc_trigonometry.md) | Sine tables, fixed-point math, interpolation, compression of lookup tables |
 | [compression_packing.md](compression_packing.md) | 25 crunchers across 4 generations: ZX0/ZX1/ZX2/MegaLZ/Pletter/HRUM, depackers, RCS, worked example |
-| [size_coding.md](size_coding.md) | 256 B / 1 K / 4 K / 16 K intro competitions: squeeze, reuse, math tricks, compression, ROM routines |
+| [size_coding.md](size_coding.md) | 256 B / 512 B / 1 K / 4 K / 16 K intro competitions: squeeze, reuse, math tricks, compression, ROM routines |
+| [compression_mindset.md](compression_mindset.md) | Writing code for the compressor, not the assembler: why verbose/repetitive code can compress smaller than hand-squeezed code, plus forward vs. backward depack budgeting |
 
 ### Frameworks & Notable Works
 
@@ -40,6 +41,7 @@ Demoscene techniques transcend normal game development. They push the hardware p
 |---------|-------------|
 | [demo_frameworks.md](demo_frameworks.md) | Demo frameworks: effect sequencing, music synchronisation, memory layout, ISR architecture, part transitions |
 | [notable_demos.md](notable_demos.md) | Analysis of landmark demos across four eras: Crack Intro (1986–89), Western Golden (1990–96), Soviet Peak (1996–2005), Modern Revival (2010–present) |
+| [hole17_case_study.md](hole17_case_study.md) | Case study: "Hole 17 enigma" (RMDA, 256 B) — self-built `CALL`-chain engine, stack-pointer-as-plotter rendering, code-as-AY-data, and why nothing in it has a single fixed role |
 | [1bit_music_scene.md](1bit_music_scene.md) | 1-bit beeper music scene: hardware, techniques, engine lineage (Henry → Follin → Wham → QChan → Octode → Pusher/Squeeker), composers, community — see also [06_sound](../06_sound/README.md) |
 
 ---

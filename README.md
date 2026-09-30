@@ -303,7 +303,8 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [multicolor_techniques.md](07_demoscene/multicolor_techniques.md) | Multicolor / attribute interrupt: 8×1 and 8×2 color resolution, race-the-beam timing, per-model differences |
 | [precalc_trigonometry.md](07_demoscene/precalc_trigonometry.md) | Sine tables, fixed-point math, interpolation, compression of lookup tables |
 | [compression_packing.md](07_demoscene/compression_packing.md) | 25 crunchers across 4 generations: ZX0/ZX1/ZX2/MegaLZ/Pletter/HRUM, depackers, RCS |
-| [size_coding.md](07_demoscene/size_coding.md) | 256 B / 1 K / 4 K / 16 K intro competitions: squeeze, reuse, math tricks, compression, ROM routines |
+| [size_coding.md](07_demoscene/size_coding.md) | 256 B / 512 B / 1 K / 4 K / 16 K intro competitions: squeeze, reuse, math tricks, compression, ROM routines |
+| [compression_mindset.md](07_demoscene/compression_mindset.md) | Writing code for the compressor, not the assembler: why verbose/repetitive code can compress smaller than hand-squeezed code, plus forward vs. backward depack budgeting |
 
 #### Frameworks & Notable Works
 
@@ -311,6 +312,7 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 |---------|-------------|
 | [demo_frameworks.md](07_demoscene/demo_frameworks.md) | Demo frameworks: effect sequencing, music synchronisation, memory layout, ISR architecture, part transitions |
 | [notable_demos.md](07_demoscene/notable_demos.md) | Analysis of landmark demos across four eras: Crack Intro (1986–89), Western Golden (1990–96), Soviet Peak (1996–2005), Modern Revival (2010–present) |
+| [hole17_case_study.md](07_demoscene/hole17_case_study.md) | Case study: "Hole 17 enigma" (RMDA, 256 B) — self-built `CALL`-chain engine, stack-pointer-as-plotter rendering, code-as-AY-data, and why nothing in it has a single fixed role |
 | [1bit_music_scene.md](07_demoscene/1bit_music_scene.md) | 1-bit beeper music scene: hardware, techniques, engine lineage, composers, community |
 
 *See [07_demoscene/README.md](07_demoscene/README.md) for the section index.*
