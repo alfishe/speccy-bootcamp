@@ -1,6 +1,6 @@
 [← Home](../README.md) · [Demoscene](README.md)
 
-# Size Coding — 1K / 4K / 16K Intro Competitions
+# Size Coding — 256B / 1K / 4K / 16K Intro Competitions
 
 > **Scope**: This article covers **size-limited intro competitions** — the demoscene tradition of building a complete audiovisual production in 256 bytes, 1 kilobyte, 4 kilobytes, or 16 kilobytes. It is the practical companion to [compression_packing.md](compression_packing.md) (the compressors used in the final squeeze), [effects_catalog.md](effects_catalog.md) (which effects fit in tight limits), and [z80_undocumented.md](../01_cpu/z80_undocumented.md) (the alternative encodings size-coders exploit).
 >
@@ -10,16 +10,16 @@
 
 ## Article Roadmap
 
-- §1 — Why size coding matters: the philosophy and history.
-- §2 — Competition categories: 256B, 1K, 4K, 16K rules and traditions.
-- §3 — The 256-byte barrier: what is and isn't possible at the extreme.
-- §4 — Sub-1K techniques: the toolkit for 256B and 1K intros.
-- §5 — Squeeze tricks: overlapping registers, RET tricks, ALU dual-use.
-- §6 — Reuse tricks: the BASIC ROM as a free library.
-- §7 — Math tricks: 8-bit LUTs, parallax, SMC generators.
-- §8 — Compressing code: when and how to apply ZX0 + depacker.
-- §9 — Notable 1K/256B Spectrum intros.
-- §10 — Cross-references.
+- [§1 — Why size coding matters](#1-why-size-coding-matters): the philosophy and history.
+- [§2 — Competition categories](#2-competition-categories): 256B, 512B, 1K, 4K, 16K rules and traditions.
+- [§3 — The 256-byte barrier](#3-the-256-byte-barrier): what is and isn't possible at the extreme.
+- [§4 — Sub-1K techniques](#4-sub-1k-techniques): the toolkit for 256B and 1K intros.
+- [§5 — Squeeze tricks](#5-squeeze-tricks): overlapping registers, RET tricks, ALU dual-use.
+- [§6 — Reuse tricks](#6-reuse-tricks--the-basic-rom-as-a-library): the BASIC ROM as a free library.
+- [§7 — Math tricks](#7-math-tricks): 8-bit LUTs, parallax, SMC generators.
+- [§8 — Compressing code](#8-compressing-the-final-binary): when and how to apply ZX0 + depacker.
+- [§9 — Notable 1K/256B Spectrum intros](#9-notable-size-coded-intros).
+- [§10 — Cross-references](#10-cross-references).
 
 ---
 
@@ -58,6 +58,10 @@ The 16K category is rare on stock Spectrum hardware because it overlaps with the
 
 ## 2. Competition Categories
 
+Competitions cluster into two natural groups: **sub-kilobyte** categories (256B, 512B), where every effect is a self-contained party trick, and **kilobyte-and-up** categories (1K, 4K, 16K), where a sequencer, real music, and multiple effects become possible.
+
+**Group A: Sub-Kilobyte (256B–512B)**
+
 ### 2.1 256 Bytes
 
 The 256-byte intro is the **most constrained** recognized category. On the Z80, 256 bytes is roughly:
@@ -66,16 +70,7 @@ The 256-byte intro is the **most constrained** recognized category. On the Z80, 
 - 100–150 instructions of carefully size-optimized code, or
 - 30–50 instructions plus a small data table.
 
-What 256 bytes can achieve:
-- A **plasma** effect using `AND`/`XOR` arithmetic on screen addresses.
-- A **raster bar** sequence (border-only, port `#FE` writes per scanline).
-- A **text scroll** using the ROM font (loaded from `#3D00` on the 48K).
-- A **rotating cube** wireframe with vertices hardcoded.
-
-What 256 bytes cannot easily achieve:
-- Any form of multicolor (the engine alone is too large — see [multicolor_techniques.md](multicolor_techniques.md)).
-- AY music (the smallest AY players are ~200 bytes, leaving no room for the player data).
-- More than one effect (no room for a transition or sequencer).
+For the full list of effects demonstrated in 256 bytes and what still doesn't fit, see [§3.3](#33-what-256-bytes-can-express) (the technical breakdown) and [§9.1](#91-the-256-byte-achievements) (named examples with sources).
 
 #### Rules Traditions
 
@@ -85,7 +80,19 @@ Most parties follow the **"true 256 bytes"** convention:
 - BASIC loaders are allowed but their size is **counted** in the 256-byte budget.
 - The intro must be loadable on stock hardware (typically the 48K or 128K, depending on the party).
 
-### 2.2 1 Kilobyte
+### 2.2 512 Bytes
+
+The **512-byte intro** is a less universal category than 256B or 1K — not every party runs it — but it appears often enough (Forever, Chaos Constructions, and occasional Revision-adjacent size-coding compos) to be a recognised midpoint. Doubling the 256B budget buys:
+
+- A second small effect, or one effect plus a minimal fade/transition.
+- A slightly larger sine or offset table (16–24 bytes instead of 8).
+- Room for a genuinely random seed (read from the ULA floating bus or R register) instead of a hardcoded pattern.
+
+What 512 bytes still cannot do: a real AY player (even the smallest is ~200 bytes of code before any tune data), or 8×1/8×2 multicolor. In practice most 512B Spectrum intros are best described as "a comfortable 256B intro" rather than "a cramped 1K intro" — the extra headroom removes desperation but not the fundamental one-effect ceiling. Where the category is run, its rules borrow 256B's conventions wholesale, just with the ≤256 byte limit raised to ≤512.
+
+**Group B: Kilobyte and Up (1K–16K)**
+
+### 2.3 1 Kilobyte
 
 The **1K intro** is the canonical size-coding category. 1,024 bytes is roughly 4× the budget of a 256B intro, enough to:
 
@@ -109,7 +116,7 @@ What still doesn't fit comfortably:
 
 The Spectrum-specific tradition is that 1K intros are typically **silent** or use beeper sound, because AY player overhead would consume most of the budget. AY-based 1K intros exist but are rare and use custom mini-players rather than the full PT3 engine.
 
-### 2.3 4 Kilobytes
+### 2.4 4 Kilobytes
 
 The **4K intro** is the bridge category between intros and demos. 4,096 bytes is enough for:
 
@@ -125,7 +132,7 @@ The 4K category is **less common on the ZX Spectrum** than on the Amiga or PC, b
 
 When 4K Spectrum intros do appear, they typically target the **Pentagon 128K** and use banked memory to get more than 4K of usable space across the lifetime of the intro. Loading data from a bank that isn't counted in the 4K limit is sometimes permitted, sometimes not — party-specific.
 
-### 2.4 16 Kilobytes
+### 2.5 16 Kilobytes
 
 The **16K intro** is essentially the "small megademo" category. 16,384 bytes is enough for:
 
@@ -191,12 +198,14 @@ A non-exhaustive list of effects that have been demonstrated in ≤256 bytes on 
 - **Sierpinski triangle** (chaos-game: 3 fixed points, random walk).
 - **Text scroll** using the 48K ROM font at `#3D00`.
 - **Rotating wireframe cube** (vertices hardcoded, projection in 16-bit).
-- **1-bit beeper tone** (a counter-driven `OUT (#FE),A` loop, no envelope, no music).
+- **Animated fire effect** (low-resolution, attribute-only).
+- **1-bit beeper tone** (a counter-driven `OUT (#FE),A` loop, no envelope, no music) or a **static AY chord** (registers set once, no sequencer — see the named example in §9.1).
+- **Self-generating decruncher**: instead of unpacking a fixed payload, the binary writes a pseudo-random chain of opcodes into free RAM at runtime and executes it, so each run produces a different result from the same tiny seed program — see the named example in §9.1.
 
 What 256 bytes has **never** achieved on stock Spectrum hardware, as of 2024:
 
 - Any **multicolor** effect (the rewrite engine is ~400 bytes minimum).
-- Any **AY music** (the smallest working AY loop is ~180 bytes, leaving no room for visual).
+- **Sequenced AY music** — a real player plus song data (the smallest working player alone is ~180 bytes, leaving no room for a tune or the visual). A single static chord is a different, much cheaper thing (see above).
 - Any **3D filled-polygon** renderer (the polygon scan converter alone is ~300 bytes).
 - A **two-effect** intro with a transition (no room for the transition code).
 
@@ -916,22 +925,9 @@ Rather than enumerate specific titles — the size-coding scene releases dozens 
 
 ### 9.1 The 256-Byte Achievements
 
-The 256-byte Spectrum category has, as of 2024, demonstrated:
+For the full breakdown of what 256 bytes can and cannot express, see [§3.3](#33-what-256-bytes-can-express). This section adds one named, sourced example that also **qualifies** the "no AY at all" line in §3.3:
 
-- **Mandelbrot fractals** with up to 16 levels of escape-time shading, using 8-bit fixed-point arithmetic.
-- **Plasma effects** (XOR-based and sine-based) at full frame rate.
-- **Border-only raster bars** with up to 8 simultaneous colors.
-- **Sierpinski triangles** via the chaos-game algorithm.
-- **Wireframe cube rotation** in 16-bit fixed-point.
-- **Beeper tones** (single pitch, no music) generated by counter loops.
-- **Text scrolls** using the 48K ROM font at `#3D00`.
-- **Animated fire effects** (low-resolution, attribute-only).
-
-What 256 bytes has **not** achieved, and likely never will on stock hardware:
-- Multicolor effects (8×2 or 8×1).
-- Full AY music.
-- 3D filled polygons.
-- Two effects with a transition.
+- **Self-generating decrunchers**: rather than unpacking a fixed payload, the binary writes a pseudo-random chain of `CALL` opcodes into free RAM at runtime (using a compact CMWC-style PRNG) and executes the resulting chain, producing a different, chaotic visual/audio result each run from a tiny fixed seed program. Example: **"Hole 17 enigma"** (RMDA, LoveByte'2021, 256 bytes, 48K+AY) — [ZXArt.ee entry](https://zxart.ee/prod/359194), [source + binaries](https://emulate.su/rmda/hole17.zip). It also drives a static AY **chord** from register values reused as code bytes: a chord fits in 256 bytes even though a sequenced tune does not (§3.3's "not achieved" list refers specifically to a real player + song data).
 
 ### 9.2 The 1K Achievements
 
