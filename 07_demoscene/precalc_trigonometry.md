@@ -2,6 +2,8 @@
 
 # Precalculated Trigonometry and Lookup Tables
 
+> **Type**: methodology
+>
 > **Scope**: This article covers the technique that makes almost every "advanced" Spectrum demo effect tractable: **precomputing trigonometric and arithmetic tables offline and storing them in RAM**, rather than computing values in real time. The Z80 has no hardware multiply or divide, no floating-point unit, and a 3.5 MHz clock; without precomputed tables, real-time 3D, plasma effects, tunnels, and rotation would be impossible. With them, the Spectrum scene produced some of the most ambitious 8-bit demoscene work ever achieved.
 >
 > The article is paired with [effects_catalog.md](effects_catalog.md) (which shows how these tables are used in practice) and [size_coding.md](size_coding.md) (which covers the special case of tables in 1K/4K intros where memory budget is critical).

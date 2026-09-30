@@ -2,6 +2,8 @@
 
 # Cross-Platform Demoscene Comparison
 
+> **Type**: history_culture
+>
 > **Scope**: This article compares the ZX Spectrum to its principal demoscene peers — the **Commodore 64**, **Amiga**, **Atari ST**, **MSX**, and **Amstrad CPC** — to highlight each platform's unique strengths, weaknesses, and the cross-pollination between scenes. It is the technical companion to [demoscene_history.md](demoscene_history.md) (which covers the cultural narrative), [soviet_demo_scene.md](soviet_demo_scene.md) (Pentagon-centric deep-dive), and [effects_catalog.md](effects_catalog.md) (Spectrum-specific techniques).
 >
 > **Why a cross-platform article?** Each platform's demoscene developed techniques *that only make sense in light of what the hardware does and does not provide*. The Spectrum's multicolor tradition is incomprehensible without contrasting it with the C64's hardware-sprite model; the AY-music cross-pollination between Spectrum and ST is invisible until you notice they share the same sound chip family. This article makes those contrasts explicit.

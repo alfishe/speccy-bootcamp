@@ -2,6 +2,8 @@
 
 # The Compression Mindset — Writing Code for the Compressor, Not for the Assembler
 
+> **Type**: methodology
+>
 > **Scope**: This article covers a specific, counter-intuitive discipline used by size-coders who ship a **compressed** binary (ZX0/ZX1/ZX2, see [compression_packing.md](compression_packing.md)): once a compressor sits between your source and the byte budget, "smallest instruction" and "smallest compressed output" stop being the same target, and the two can actively conflict. It is a companion to [size_coding.md](size_coding.md) §5 (squeeze tricks) and §8 (compressing the final binary), and to [compression_packing.md](compression_packing.md) §13 (in-place and backward depack).
 >
 > The observations here are attributed to ZX Spectrum size-coder **Maxim Muchkaev**, from a discussion of practical ZX2 budgeting (personal communication, 2026). They are a working practitioner's rule of thumb, not a formally benchmarked law — treat the byte counts as illustrative, and always re-measure on your own payload (§5 below).

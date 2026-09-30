@@ -2,6 +2,8 @@
 
 # The Soviet / Russian ZX Spectrum Demoscene
 
+> **Type**: history_culture
+>
 > **Scope**: This article is the deep dive into the Soviet and post-Soviet ZX Spectrum demoscene — the parallel tradition that emerged behind the Iron Curtain, scaled to dominate the platform from the mid-1990s to mid-2000s, and developed distinctive techniques, aesthetics, group culture, and infrastructure. It complements [demoscene_history.md](demoscene_history.md) (the cross-platform narrative) and is referenced from [compression_packing.md](compression_packing.md), [multicolor_techniques.md](multicolor_techniques.md), and [notable_demos.md](notable_demos.md).
 >
 > **Primary source**: Konstantin Elfimov (Elfh/Inward), *Brief History of Russian Speccy Demoscene and the story of Inward* (Mustekala magazine, 2008) — the only first-hand English-language account by a founding member of a major Russian group. Other primary sources are disk magazines (*Body*, *Spectrofon*, *ZX-Format*, *Error*), FidoNet echomail archives, and the Russian-language forum archives at zx-pk.ru and nedoPC.ru.

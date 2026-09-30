@@ -2,6 +2,8 @@
 
 # Size Coding — 256B / 1K / 4K / 16K Intro Competitions
 
+> **Type**: methodology
+>
 > **Scope**: This article covers **size-limited intro competitions** — the demoscene tradition of building a complete audiovisual production in 256 bytes, 1 kilobyte, 4 kilobytes, or 16 kilobytes. It is the practical companion to [compression_packing.md](compression_packing.md) (the compressors used in the final squeeze), [effects_catalog.md](effects_catalog.md) (which effects fit in tight limits), and [z80_undocumented.md](../01_cpu/z80_undocumented.md) (the alternative encodings size-coders exploit).
 >
 > The article is descriptive rather than tutorial: it explains what techniques exist, why they work, and how much they save. Full working source for each trick is out of scope; refer to the source releases of the intros cited in [notable_demos.md](notable_demos.md).

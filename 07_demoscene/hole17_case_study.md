@@ -2,6 +2,8 @@
 
 # Case Study: "Hole 17 enigma" — A 256-Byte Intro Where Code, Data, Music, and Picture Are One Object
 
+> **Type**: case_study
+>
 > **Scope**: A line-by-line technical dissection of **"Hole 17 enigma"** (RMDA, LoveByte'2021, ZX Spectrum 48K+AY, 256 bytes; code by `.ded^RMDA`) — [ZXArt.ee entry](https://zxart.ee/prod/359194), [source + binaries](https://emulate.su/rmda/hole17.zip). It is referenced from [size_coding.md §9.1](size_coding.md#91-the-256-byte-achievements) as the named example behind the "self-generating decruncher" and "static AY chord" claims there; this article is where the mechanism is actually worked out.
 >
 > The point of this case study is **not** the byte count. Plenty of 256-byte intros hit that target with a static effect and a squeeze table (see [size_coding.md](size_coding.md) §5). What makes Hole17 worth a dedicated article is that it has almost no "effect code" and no "data" in the conventional sense at all — the picture, the sound, the randomness, and the program are the **same bytes and the same CPU registers**, reinterpreted depending on when and how they're touched. All source quotes below are from `hole17.asm` as released by the author.

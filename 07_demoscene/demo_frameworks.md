@@ -2,6 +2,8 @@
 
 # Demo Frameworks — Effect Sequencing and Music Sync
 
+> **Type**: concept
+>
 > **Scope**: This article covers the **runtime architecture of a ZX Spectrum demo** — the code that decides which effect runs when, how transitions between effects are handled, how music is kept in sync with visuals, and how memory is managed across a multi-part production. It is the practical companion to [effects_catalog.md](effects_catalog.md) (which catalogs the effects themselves), [compression_packing.md](compression_packing.md) (which provides the depackers frameworks call), [multicolor_techniques.md](multicolor_techniques.md) (whose engines a framework must schedule around the ISR), and [notable_demos.md](notable_demos.md) (which catalogs the demos built on these frameworks).
 >
 > The article is descriptive rather than tutorial: it explains what a framework is responsible for, what design choices exist, and what trade-offs each choice implies. Working source code for specific frameworks is out of scope; refer to the source releases of the demos cited in [notable_demos.md](notable_demos.md).

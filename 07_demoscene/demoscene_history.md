@@ -2,6 +2,8 @@
 
 # ZX Spectrum Demoscene History
 
+> **Type**: history_culture
+>
 > **Scope**: This article traces the full history of the ZX Spectrum demoscene from 1986 to the present, covering Western origins, the Soviet explosion, the migration era, and the modern revival. It is the canonical narrative companion to [soviet_demo_scene.md](soviet_demo_scene.md) (which deep-dives the Russian/Ukrainian Pentagon-centric scene), [notable_demos.md](notable_demos.md) (technical analysis of landmark works), and [demoscene_platforms.md](demoscene_platforms.md) (cross-platform comparisons).
 >
 > **Primary archives**: [zxdemo.org](https://zxdemo.org/) (Gasman's long-running archive, now powered by Demozoo), [bbb.retroscene.org](https://bbb.retroscene.org/) (VBI's Russian-curated archive), [zxart.ee](https://zxart.ee/) (Estonian archive covering demos, music, and graphics), and [Demozoo](https://demozoo.org/) itself for cross-platform party results.

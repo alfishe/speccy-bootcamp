@@ -2,6 +2,8 @@
 
 # 1-Bit Music Scene — Beeper Synthesis as a Subculture
 
+> **Type**: concept
+>
 > **Scope**: This article covers the **ZX Spectrum 1-bit "beeper" music subculture**: the composers, engines, techniques, and community that turned a single bit of output hardware into one of the most distinctive soundscapes in 8-bit computing. The technical synthesis details are covered in [../06_sound/synthesis/beeper_synthesis.md](../06_sound/synthesis/beeper_synthesis.md); this article is the scene-and-people companion, covering who made the music, what tools they built, and how the community evolved from 1982 to the present.
 >
 > The 1-bit scene is unusual in the demoscene because it is **partly orthogonal to the demo scene**: many of its most important figures are game soundtrack composers (Tim Follin, Ben Daglish) rather than demosceners, and many of its modern engines are developed by hobbyists who do not make demos at all. The article therefore includes substantial coverage of game music and of standalone engine development, alongside the demoscene side.

@@ -2,6 +2,8 @@
 
 # Visual Effects Catalog
 
+> **Type**: reference
+>
 > **Scope**: This article is a comprehensive technical catalog of the **visual effects** used in ZX Spectrum demoscene work, with implementation notes, T-state cost estimates, and known limitations for each. It is the practical companion to [multicolor_techniques.md](multicolor_techniques.md) (the raster-timing foundation most effects rely on), [precalc_trigonometry.md](precalc_trigonometry.md) (the math tables most effects consume), and [demo_frameworks.md](demo_frameworks.md) (how effects are sequenced into a multi-part demo).
 >
 > The catalog is descriptive rather than tutorial-style: each effect gets a section explaining what it looks like, how it works at the algorithmic level, what the per-frame cost is on stock Spectrum hardware, and what the variant forms are. Source code for each effect is not included; refer to the source releases of the demos cited in [notable_demos.md](notable_demos.md) for working implementations.

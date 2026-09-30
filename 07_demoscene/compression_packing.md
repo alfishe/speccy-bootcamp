@@ -2,6 +2,8 @@
 
 # Compression and Packing — The ZX Spectrum Packer Ecosystem
 
+> **Type**: methodology
+>
 > **Scope**: This article is the canonical reference for data compression on the ZX Spectrum. It covers ~25 packers from 1991 to the present, organized into four generations, with the Introspec 2017 corpus benchmarks, depacker size/speed comparisons, format internals for the most-used packers, and practical integration guidance for both demos and games.
 >
 > **Companion article**: [09_toolchain/asset_tools.md](../09_toolchain/asset_tools.md) § Asset Compression covers compression as one stage of the broader asset pipeline (build-time invocation, Makefile integration, asset manifest format). The present article is the deep dive on the algorithms, formats, and depackers themselves.

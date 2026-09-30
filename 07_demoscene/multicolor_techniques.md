@@ -2,6 +2,8 @@
 
 # Multicolor Techniques — 8×1 and 8×2 Color Resolution
 
+> **Type**: concept
+>
 > **Scope**: This article covers the most technically demanding technique in the ZX Spectrum's demoscene repertoire: **changing the attribute bytes synchronously with the CRT beam** to achieve a per-pixel or per-scanline color resolution that the hardware was never designed to provide. Multicolor work is what separates casual Spectrum coders from elite ones; it requires cycle-exact timing, deep knowledge of the ULA's behavior, and a willingness to fight the hardware for every last T-state.
 >
 > The article is paired with [precalc_trigonometry.md](precalc_trigonometry.md) (which supplies the table-driven math that most multicolor effects consume), [effects_catalog.md](effects_catalog.md) (which shows finished effects built on multicolor), and [soviet_demo_scene.md](soviet_demo_scene.md) §5.1 (the cultural context for why Soviet sceners pushed multicolor further than anyone else).

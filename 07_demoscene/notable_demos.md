@@ -2,6 +2,8 @@
 
 # Notable Demos — Analysis of Landmark Works
 
+> **Type**: history_culture
+>
 > **Scope**: This article catalogs **specific ZX Spectrum demos that pushed the platform past its perceived limits**, with analysis of what each achieved and why it mattered. It is the empirical companion to the technique-focussed articles ([effects_catalog.md](effects_catalog.md), [multicolor_techniques.md](multicolor_techniques.md), [precalc_trigonometry.md](precalc_trigonometry.md)) and the historical articles ([demoscene_history.md](demoscene_history.md), [soviet_demo_scene.md](soviet_demo_scene.md)).
 >
 > The article is deliberately selective: rather than list every demo ever released (Pouet.net and ZXArt.ee do that), it covers the **landmark works** that defined genres, introduced techniques, or represented the state of the art at their moment of release. Each entry includes the year, group, target platform, the techniques it pioneered or perfected, and where to find more detail.
