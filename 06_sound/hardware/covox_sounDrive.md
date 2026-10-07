@@ -124,7 +124,7 @@ Version 1.05 simplifies to four DAC ports with different decoding and adds an al
 | **Right A** | `#F9` (249) | `xxxxxxxx11111001` | `xxxxxxxxxxB0A1` | W | Right |
 | **Right B** | `#FB` (251) | `xxxxxxxx11111011` | `xxxxxxxxxxB0A1` | W | Right |
 
-The high-range ports (`#F1`–`#FB`) provide compatibility with existing Covox software that used the `#FB` port on ATM Turbo and Pentagon machines.
+The high-range ports (`#F1`–`#FB`) are what the VELESOFT DAC database calls **mode 2** (decode `xxxxxxxx1111B0A1`, mask `#F5`): because `#FB` *is* the plain Covox port, **mono Covox software works unchanged on a fitted SoundDrive** — the sample simply plays through the Right B channel. Both port sets have real users: v1.02-era software (e.g. the *Balldreams 2* demo) writes the primary `#0F/#1F/#4F/#5F` set, while v1.05-era titles prefer the high mirrors. Sources: VELESOFT DAC-for-ZX database; BC Info Guide #4 (Black_Cat, 2008).
 
 ### Stereo Channel Layout
 

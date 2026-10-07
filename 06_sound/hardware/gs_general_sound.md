@@ -28,7 +28,7 @@ This article covers the GS hardware architecture, the command protocol, sample f
 | **Channel (GS sense)** | One of 4 independent sample-mixing voices on the GS DAC |
 
 > [!NOTE]
-> **GS firmware versions vary.** The original GS shipped with multiple firmware revisions, some incompatible. NeoGS uses an extended firmware that supports more commands. Software targeting GS should probe the firmware version at startup and degrade gracefully if commands are missing. Most production software assumes the **v1.4 or later** firmware.
+> **GS firmware versions vary.** The classic firmware line is **1.04 / 1.05a** (the ZX-MultiSound clone carries 1.05b); NeoGS extends the command set with its own firmware supporting SD-card storage and MP3. Software targeting GS should probe with a command/reply round-trip (see Detection below) and degrade gracefully if commands go unanswered.
 
 ---
 
@@ -42,7 +42,7 @@ graph TB
         ZXCPU[Main Z80 @ 3.5 MHz]
         ZXBUS[ZX Bus]
         ZXPORTS["ZX I/O Ports
-#B3 / #B7 / #BB / #BF"]
+#B3 data / #BB command"]
     end
     
     subgraph "General Sound Board"
@@ -51,10 +51,10 @@ frozen state controller"]
         RESET[Reset Controller
 + jumpers]
         GSROM["Firmware ROM
-16 KB"]
+16 KB (1.04 / 1.05a)"]
         GSRAM["Main RAM
-64 KB / 128 KB"]
-        GSCPU["GS Z80 @ 14 MHz"]
+128-512 KB"]
+        GSCPU["GS Z80 @ 12 MHz"]
         MIX["4-channel DAC Mixer
 8-bit signed samples"]
         DAC["4-channel Audio DAC
@@ -64,8 +64,8 @@ frozen state controller"]
     end
     
     ZXCPU -->|OUT / IN instructions| ZXBUS
-    ZXBUS -->|partial decode
-A15=0, A7=1, #B3..#BF| ZXPORTS
+    ZXBUS -->|low-byte decode
+#B3 / #BB| ZXPORTS
     ZXPORTS <-->|command bytes out
 status bytes in| BUSIF
     BUSIF <-->|mailbox handshake
@@ -108,114 +108,106 @@ This is invisible to the GS firmware — the freeze appears as a brief bus stall
 
 ---
 
-## Communication Protocol
+## Communication Protocol — the Mailbox
 
-The main ZX CPU and the GS communicate through **four I/O ports** decoded on the GS board. These ports form a small mailbox — the ZX writes commands and parameters, the GS reads them and writes status responses.
+The ZX and the GS card talk through a **two-port mailbox**, verified against the shipped firmware source (`COM_L/COM_H/INIT_H/LOAD_L.a80` of GS 1.04/1.05):
 
 ### Port Map
 
-| Port | Decoding | Direction | Function |
-|---|---|---|---|
-| `#B3` | A7=0, A0=1 (low decode) | ZX→GS | **System / Status**: reset, enable, status read |
-| `#B7` | A7=0, A0=1 | ZX→GS | **Command / Parameter**: write command bytes |
-| `#BB` | A7=0, A0=1 | ZX→GS | **Address register**: set GS-RAM pointer (for sample upload) |
-| `#BF` | A7=0, A0=1 | ZX↔GS | **Data port**: read or write GS-RAM at the current pointer |
+| Port | Direction | Function |
+|---|---|---|
+| `#xxB3` | ZX→GS write | **Data** byte (parameters in, replies out on read) |
+| `#xxB3` | ZX←GS read | **Output register** (`OUTRG`) — the GS's reply byte |
+| `#xxBB` | ZX→GS write | **Command** byte |
+| `#xxBB` | ZX←GS read | **Status**: bit 7 = data flag (a reply awaits in `#B3`), bit 0 = command flag (command not yet consumed), bits 1–6 read as 1 |
 
-> [!WARNING]
-> **Port decoding varies by revision.** The original GS uses `#B3`–`#BF`. Some clones (notably Profi) use a different range. Software that detects GS should probe the standard ports first, then fall back to non-standard ports for known clone variants. NeoGS preserves the original port mapping for compatibility.
+Decode is on the **low byte** (`#B3`/`#BB`, any high byte). The classic card asserts IORQGE on reads only; the `#33` **control port** exists on the NeoGS / ZXM-GS variants (bit 7 = card reset; ZXM-GS adds bit 4 = disable), **not** on the classic card.
 
-### Status Register (Read from `#B3`)
+### The data-first rule
 
-```
-System / Status register:
-  bit 7: GS active (0 = GS is reset or absent)
-  bit 6: GS firmware ready (0 = busy, 1 = ready for commands)
-  bit 5: GS Z80 is in frozen state
-  bit 4: Reserved
-  bit 3: Reserved
-  bit 2..0: Firmware version code (low 3 bits)
-```
-
-Software reads this port to determine whether the GS is present, what firmware version is running, and whether the GS is ready to accept commands.
-
-### Command Format
-
-GS commands are **variable-length byte sequences** written to port `#B7`. The first byte is the command code; subsequent bytes are parameters. Some commands have no parameters, others have up to 7.
+Parameterized commands (`#13`, `#16`, `#30`, `#31`, …) consume their parameter at dispatch time — so the host must write the **data byte to `#B3` first**, then the command to `#BB`:
 
 ```z80
 ; -------------------------------------------------------
-; Send a command byte to the GS.
+; Send a command byte (no parameter) to the GS.
 ; Entry: A = command byte
-; Destroys: A, B, C
 ; -------------------------------------------------------
 GS_SEND_CMD:
-    LD   BC,#B3           ; status port
-    IN   A,(C)            ; read status
-    AND  #40              ; ready bit
-    JR   Z, GS_SEND_CMD   ; wait until GS is ready
-    LD   BC,#B7           ; command port
-    OUT  (C),A            ; send command byte
-    RET
+        LD   BC,#BB           ; command/status port
+        IN   A,(C)            ; read status
+        RRA                   ; bit 0 = command flag
+        JR   C, GS_SEND_CMD   ; wait until the GS consumed the previous one
+        OUT  (C),A            ; send the command
+        RET
+
+; Send command with one parameter: data FIRST (#B3), then command (#BB)
+GS_SEND_P1:                   ; entry: A = param, D = command
+        PUSH DE
+        LD   BC,#B3
+        OUT  (C),A            ; parameter
+        POP  DE
+        LD   B,#BB
+        OUT  (C),D            ; command consumes the parameter
+        RET
 ```
 
-### Standard Command Set (Firmware v1.4+)
+### Command set (verified against the firmware source)
 
-| Command | Bytes | Description |
+| Command | Action | Reply via `#B3` |
 |---|---|---|
-| `#00` | 1 | **No-op** — increment internal command counter for debugging |
-| `#01` | 1 | **Stop all channels** — silence the GS immediately |
-| `#02` | 2 (`#02, channel`) | **Stop one channel** — silence the specified channel |
-| `#03` | 7 (`#03, ch, addr_lo, addr_hi, len_lo, len_hi, freq`) | **Play sample** — start playback of a sample in GS-RAM |
-| `#04` | 3 (`#04, ch, volume`) | **Set volume** — change a channel's volume (0..255) |
-| `#05` | 3 (`#05, ch, freq_lo, freq_hi`) | **Set frequency** — change a channel's sample rate |
-| `#06` | 5 (`#06, src_lo, src_hi, dst_lo, dst_hi, len_lo, len_hi`) | **Upload sample** — copy sample data from ZX-RAM to GS-RAM |
-| `#07` | 3 (`#07, ch, loop_mode`) | **Set loop mode** — 0=one-shot, 1=loop |
-| `#08` | 3 (`#08, ch, position`) | **Set position** — seek within a playing sample |
-| `#09` | 1 | **Get version** — write firmware version to status register |
+| `#00` | reset flags (consumes one dummy parameter) | — |
+| `#01`/`#02`/`#03` | DAC to midpoint / volume latches to `#3F` / volume latches to 0 | — |
+| `#04`–`#0D` | direct channel select + data/volume latch family | — |
+| `#0E` | **Covox stream mode**: following `#B3` bytes feed DACs 0+2 until the next command | — |
+| `#13`/`#16`/`#17`/`#18` | memory ops: jump / put byte / get byte / set pointer | `#17`: byte |
+| `#20`/`#21` | total / free RAM query (3 bytes: L, H, count) | 3 bytes; `#21` clears `ERRCODE` |
+| `#22`/`#23` | page peek / page count | `#22`: `#00`; `#23`: pages−1 |
+| `#2A`/`#2B` | **MODVOL / FXVOL** — music / effects volume (get-then-set, clamp `#40`) | old value |
+| `#2C`/`#2D`/`#2E` | select current module / sample / FX (0 = query count) | old value |
+| `#30` | **module upload**: opens a fresh module slot, following `#B3` bytes stream in | 1 |
+| `#D2` | (during upload) finish the stream, parse and store the module | — |
+| `#31` | **start playback** — parameter 0 = current module; parameter > module count = error (zeroes `CURMOD`) | module # / `#00` on error |
+| `#32`/`#33` | stop (freeze position) / continue | old module # |
+| `#34`/`#35` | MODFADE / **MTVOL** module master volume (get-then-set) | old value |
+| `#36`/`#37` | query `#FF` / full module-system reset | `#36`: `#FF` |
+| `#38`–`#3E` | FX upload / select+play / channel mask / fades / FXMVOL | see firmware |
+| `#40`–`#49` | SFX channel fields (parameters consumed, nothing played on music-only firmware) | `#42/45/46/47`: `#00` |
+| `#50`/`#58`/`#80`/`#A0` | SFX sub-command protocols (selector byte follows, then 0–3 data bytes) | `#58`: `#58` |
+| `#60`/`#61`/`#62` | song position / pattern position / combined (`song<<6 \| row`) | 1 byte |
+| `#63`/`#64` | 4× channel real sample (`#7F` = none) / 4× channel row volume (0–63) | 4 bytes |
+| `#66`/`#67`/`#68` | external tempo / MTSPEED / MTBPM query | `#67`/`#68`: 1 byte |
+| `#F0` | `ERRCODE` query | `ERRCODE` |
+| `#F3`/`#F4` | INITVAR soft reset / POST reboot (volumes `#40`, module system cleared) | — |
 
-### Sample Upload Sequence
+> [!WARNING]
+> **The official programming guide and the shipped firmware disagree** on `#50`: the guide documents "#50 set global volume / #51 query", but in the firmware `#50` is the SFX sub-command protocol and there is **no `#51` handler** (it falls through as a bare acknowledge). Master volume lives on `#35` (MTVOL); music-level scaling on `#2A` (MODVOL). Software written against the guide's table will silently misbehave on real hardware — trust the firmware.
 
-The most common operation: copy a sample from ZX-RAM to GS-RAM, then play it. This sequence is wrapped in a high-level routine that hides the port dance.
+### Module upload and playback
 
 ```mermaid
 sequenceDiagram
     participant ZX as Main ZX Z80
-    participant GS as GS Z80
+    participant GS as GS Z80 (12 MHz)
     participant RAM as GS-RAM
-    
-    ZX->>GS: Reset GS (write to #B3)
-    ZX->>GS: Wait for ready bit
-    ZX->>GS: Send UPLOAD command (#06)
-    ZX->>GS: Send source address + length
-    loop For each byte of sample
-        ZX->>GS: Write byte to #BF (data port)
-        GS->>RAM: Store at current pointer
-        GS->>GS: Increment pointer
+    ZX->>GS: #BB ← #30 (open module slot)
+    loop every byte of the module
+        ZX->>GS: #B3 ← data byte (stream)
+        GS->>RAM: store into the module slot
     end
-    ZX->>GS: Send PLAY command (#03)
-    ZX->>GS: Send GS-RAM address + frequency
-    GS->>RAM: Read sample bytes
-    GS->>GS: Mix at requested rate
-    GS->>GS: Output to DAC
+    ZX->>GS: #BB ← #D2 (finish: parse + store)
+    ZX->>GS: #B3 ← 0, #BB ← #31 (start current module)
+    GS->>GS: sequencer: 37.5 kHz quantum, tick = 750 quanta = 20 ms
+    GS->>RAM: one DAC fetch per channel per interrupt
+    GS->>GS: volume latch 0-63 = rowvol x (MODVOL x MTVOL >> 12)
 ```
 
-### Readback: How the ZX Knows What GS Is Doing
+The sequencer runs on the card's **37.5 kHz quantum clock** (320 cycles of the 12 MHz CPU clock per quantum): the default tick is `TICKLEN = 750` quanta = 20 ms (50 ticks/s), and a ProTracker `Fxx` tempo rescales it to `37500 / (0.4 × BPM)` quanta. Each quantum feeds one DAC fetch (`LD A,(DE)`) per channel — that 37.5 kHz fetch cadence is the GS's characteristic sampling rate.
 
-The status register at `#B3` is the only mechanism for the ZX to query GS state. For more detail (e.g., "is channel 2 still playing?"), the GS exposes a small status region in GS-RAM. The ZX writes to `#BB` to set the pointer, then reads from `#BF` to retrieve status bytes.
+After reset the firmware spends **0.3–1.1 s in POST** before accepting commands (`#F4` reboots through POST; `#F3` skips the wait). Detection software must allow for this window.
 
-The standard GS-RAM status region (firmware v1.4+) is at GS-RAM addresses `#FF00`..`#FFFF`:
+### Readback: how the ZX knows what GS is doing
 
-```
-GS-RAM #FF00:  Channel 0 state (0=stopped, 1=playing, 2=paused)
-GS-RAM #FF01:  Channel 1 state
-GS-RAM #FF02:  Channel 2 state
-GS-RAM #FF03:  Channel 3 state
-GS-RAM #FF04:  Global flags
-GS-RAM #FF05..#FF1F: Reserved
-GS-RAM #FF20..#FF3F: Per-channel current position (16-bit, low/high bytes)
-```
-
-Software polls these bytes to know when a sample has finished, to implement retriggering, or to start the next note in a sequence.
+Replies come through `#B3` (bit 7 of the `#BB` status announces one is waiting): get-then-set volume commands return their **old value**, `#31` returns the started module number, `#36` returns `#FF`, and the `#60`–`#68` family reports song position, per-channel sample (`#63`) and per-channel row volume (`#64`) — the standard polling path for players and editors. `#F0` returns the last `ERRCODE`.
 
 ---
 
@@ -223,34 +215,13 @@ Software polls these bytes to know when a sample has finished, to implement retr
 
 GS samples are raw **8-bit signed PCM** (range `#80`..`#7F`, i.e. -128..+127). There is no header, no compression, and no special framing — the firmware reads raw bytes from GS-RAM and feeds them to the DAC. Sample metadata (length, default rate, loop points) lives in the player's data structures, not in the sample itself.
 
-### Sample Layout in GS-RAM
+### Memory and upload
 
-```
-GS-RAM addresses:
-  #0000..#BFFF  Sample storage area (48 KB)
-  #C000..#FBFF  Song data, instruments, additional samples
-  #FC00..#FEFF  Firmware working area (do not overwrite)
-  #FF00..#FFFF  Status region (read-only from ZX side)
-```
+RAM is 128–512 KB on the classic card (2–4 MB on NeoGS); the firmware's `#20`/`#21`/`#23` commands report the fitted geometry. Samples and modules enter GS-RAM only through the **`#30` command stream** — there is no pointer-register/window mechanism on the ZX side. On the GS's own Z80, the firmware pages its RAM through a page register (GS-side port 0, bits 0–6) and sets the four 6-bit DAC volumes through GS-side ports 6–9; DAC sample data is fetched from `#6000–#7FFF` with the channel number in A9–A8 — facts verified from card RTL and relevant to anyone writing GS-side code.
 
-Original 64 KB GS RAM splits roughly 48 KB for samples + 16 KB for firmware working data. NeoGS with 128 KB RAM roughly doubles the sample capacity.
+### Sample rate — the 37.5 kHz quantum
 
-### Sample Rate Encoding
-
-Sample rate is set per-channel via the PLAY command (`#03`) or the SET FREQUENCY command (`#05`). The encoding is a **divisor**:
-
-```
-Sample rate = 14,000,000 / (divisor × 8) Hz
-```
-
-| Divisor | Sample Rate | Use case |
-|---|---|---|
-| `#4F` (79) | ~22.15 kHz | Maximum useful rate, music |
-| `#5E` (94) | ~18.62 kHz | Slightly lower quality |
-| `#7E` (126) | ~13.89 kHz | Speech, lower-quality samples |
-| `#A0` (160) | ~10.94 kHz | Drum loops |
-
-Per-channel rate can be changed dynamically, allowing pitch-shifting effects. The firmware resamples the source sample to match the requested rate.
+There is no per-channel rate register. The firmware feeds each DAC once per **37.5 kHz quantum** (the card's sample-fetch cadence, one `LD A,(DE)` per channel per interrupt); module tempo then comes from the sequencer tick (`Fxx` rescales `TICKLEN = 37500 / (0.4 × BPM)` quanta). Pitch effects are produced by the ProTracker engine's period math on the GS CPU, not by reprogramming a sampling divisor.
 
 ### Sample Format Comparison
 
@@ -282,7 +253,7 @@ A typical GS music module uses:
 - **16-32 KB** for a long sample (vocal phrase, sustained instrument)
 - **1-4 KB** for the song data (note sequences, patterns)
 
-Original GS (64 KB total) fits ~30 seconds of dense music. NeoGS (128 KB) fits ~60-90 seconds. Longer music requires runtime sample swapping — a slow operation that limits itself to between-song transitions.
+A 512 KB classic GS fits a few minutes of dense module music; NeoGS with 2–4 MB removes the ceiling for most uses. Longer music on the classic card requires runtime module swapping — a slow operation that limits itself to between-song transitions.
 
 ---
 
@@ -292,114 +263,91 @@ GS programming from the ZX side is fundamentally different from programming the 
 
 ### Detection
 
+There is no "GS present" bit. The reliable probe is a **command/reply round-trip**: send the `#36` query (whose documented reply is `#FF`), then wait briefly for the data flag and check the reply byte. Allow for the **0.3–1.1 s POST window** after a cold reset — commands sent during POST are lost.
+
 ```z80
 ; -------------------------------------------------------
-; Detect General Sound hardware.
+; Detect General Sound hardware by round-trip.
 ; Exit:  A = 0 if no GS, A = 1 if GS present
-; Destroys: AF, BC
+; Destroys: AF, BC, DE
 ; -------------------------------------------------------
 GS_DETECT:
-    LD   BC,#B3           ; status port
-    IN   A,(C)
-    AND  #80              ; bit 7 = GS active
-    RET  Z                ; bit 7 = 0 -> no GS
-    LD   A,1
-    RET
+        LD   BC,#BB           ; command port
+        LD   A,#36            ; query command (replies #FF)
+        OUT  (C),A
+        LD   E,#30            ; ~0.5 s timeout allowance
+GS_DET_W:
+        LD   D,#FF
+GS_DET_L:
+        IN   A,(C)            ; status: bit 7 = reply waiting
+        RLA
+        JR   C,GS_DET_R
+        DEC  D
+        JR   NZ,GS_DET_L
+        DEC  E
+        JR   NZ,GS_DET_W
+        XOR  A                ; timed out -> no GS
+        RET
+GS_DET_R:
+        LD   BC,#B3
+        IN   A,(C)            ; the reply
+        CP   #FF
+        LD   A,1
+        RET  Z
+        XOR  A                ; wrong reply -> treat as absent
+        RET
 ```
 
-For higher confidence, software can additionally check the firmware version (in bits 0..2 of the status register) and require v1.4 or later.
+For higher confidence, follow up with the `#20` RAM-size query and sanity-check the three reply bytes against a plausible geometry (128–512 KB classic, 2–4 MB NeoGS).
 
-### Upload a Sample
+### Upload and Play a Module
 
-This routine copies a sample from ZX-RAM into GS-RAM. The ZX-RAM source address is `(HL)`; the GS-RAM destination is `(DE)`; the length is `(BC)` bytes.
+Samples and modules reach the GS through the `#30` stream (see the sequence diagram above). A minimal player:
 
 ```z80
 ; -------------------------------------------------------
-; Upload a sample from ZX-RAM to GS-RAM.
-; Entry: HL = ZX-RAM source address
-;        DE = GS-RAM destination address
-;        BC = length in bytes
-; Destroys: AF, BC, DE, HL
+; Stream a module (HL = data, BC = length) and play it.
+; Uses GS_SEND_CMD / GS_SEND_P1 from the protocol section.
 ; -------------------------------------------------------
-GS_UPLOAD_SAMPLE:
-    ; 1. Wait for GS ready
-    CALL GS_WAIT_READY
-
-    ; 2. Set GS-RAM pointer to DE via port #BB
-    LD   A,E
-    OUT  (#BB),A          ; low byte of GS-RAM address
-    LD   A,D
-    OUT  (#BB),A          ; high byte of GS-RAM address
-
-    ; 3. Copy bytes via port #BF
-    LD   A,B
-    OR   C
-    RET  Z                ; length = 0 -> done
-UPLOAD_LOOP:
-    LD   A,(HL)
-    OUT  (#BF),A          ; write byte to GS-RAM at current pointer
-    INC  HL
-    DEC  BC
-    LD   A,B
-    OR   C
-    JR   NZ,UPLOAD_LOOP
-    RET
-
-GS_WAIT_READY:
-    PUSH BC
-    LD   BC,#B3
-WAIT_LOOP:
-    IN   A,(C)
-    AND  #40              ; bit 6 = ready
-    JR   Z,WAIT_LOOP
-    POP  BC
-    RET
+GS_PLAY_MODULE:
+        LD   A,#30
+        CALL GS_SEND_CMD      ; open a fresh module slot
+        LD   A,B
+        OR   C
+        RET  Z
+GS_UP_LOOP:
+        LD   A,(HL)
+        LD   BC,#B3
+        OUT  (C),A            ; stream byte
+        INC  HL
+        DEC  BC
+        LD   A,B
+        OR   C
+        JR   NZ,GS_UP_LOOP
+        LD   A,#D2
+        CALL GS_SEND_CMD      ; finish: parse + store
+        XOR  A                ; parameter 0 ...
+        LD   D,#31
+        CALL GS_SEND_P1       ; ... start current module
+        RET
 ```
 
-### Play a Sample
+### Covox Stream — immediate DAC output
 
-This routine starts playback of a sample stored in GS-RAM on a specific channel.
+The `#0E` command turns the card into a streaming Covox: every subsequent `#B3` byte feeds DACs 0 and 2 directly until the next command byte arrives. This is the fastest path for raw sample playback and needs no module structure:
 
 ```z80
-; -------------------------------------------------------
-; Play a sample on a GS channel.
-; Entry: A = channel (0..3)
-;        DE = GS-RAM address of sample
-;        BC = sample length in bytes
-;        L = sample rate divisor (e.g. #4F for 22 kHz)
-; Destroys: AF, BC, DE, HL
-; -------------------------------------------------------
-GS_PLAY_SAMPLE:
-    PUSH AF               ; save channel
-    PUSH DE               ; save sample address
-    PUSH BC               ; save length
-
-    CALL GS_WAIT_READY
-
-    ; Send PLAY command: #03, channel, addr_lo, addr_hi,
-    ;                    len_lo, len_hi, freq
-    LD   A,#03
-    OUT  (#B7),A          ; command byte
-    POP  BC               ; restore length
-    POP  DE               ; restore address
-    POP  AF               ; restore channel
-    OUT  (#B7),A          ; channel byte
-    LD   A,E
-    OUT  (#B7),A          ; addr low
-    LD   A,D
-    OUT  (#B7),A          ; addr high
-    LD   A,C
-    OUT  (#B7),A          ; length low
-    LD   A,B
-    OUT  (#B7),A          ; length high
-    LD   A,L              ; rate divisor
-    OUT  (#B7),A          ; frequency
-    RET
+GS_COVOX_STREAM:
+        LD   A,#0E
+        CALL GS_SEND_CMD
+        ; ... then OUT (#B3),sample in the main loop / interrupt
+        ; exit the mode by sending any other command
+        RET
 ```
 
 ### Per-Frame Music Update
 
-A complete music player runs from the ULA frame interrupt (50 Hz or 60 Hz). The ISR reads the current pattern from the song data, sends PLAY commands for any newly-triggered notes, and updates per-channel volumes and frequencies for sustained notes.
+A complete music player runs from the ULA frame interrupt (50 Hz or 60 Hz). The ISR reads the current pattern from the song data, updates module-system volumes and positions through the mailbox (`#2A`/`#34`/`#35`, `#60`-`#68` queries).
 
 ```z80
 ; -------------------------------------------------------
@@ -433,9 +381,9 @@ The main CPU's cost for GS music is small because the actual mixing happens on t
 | Operation | Count per frame | T-states each | Total |
 |---|---|---|---|
 | Wait for GS ready | ~4 | ~21 (if immediately ready) | ~85 |
-| PLAY commands (avg. 1-2 new notes) | ~14 bytes each | ~21 | ~600 |
-| VOLUME/FREQUENCY updates | ~12 bytes | ~21 | ~250 |
-| Bank-switch and pointer management | n/a | n/a | ~150 |
+| Mailbox traffic (notes, volume/fade updates) | ~20-40 bytes | ~21 | ~600 |
+| Status polls / replies | ~4 bytes | ~21 | ~90 |
+| Module stream bursts (between songs) | amortized | — | ~0 |
 | **Total per frame** | | | **~1,100 T-states** |
 
 This is **2%** of the 50 Hz frame budget on a stock 128K. The GS frees the remaining 98% for graphics, game logic, or other audio (AY/TurboSound can run in parallel).
@@ -452,14 +400,13 @@ The first commercial General Sound board:
 
 | Spec | Value |
 |---|---|
-| **GS Z80 clock** | 14 MHz (crystal oscillator) |
-| **RAM** | 64 KB static RAM |
-| **ROM** | 16 KB EEPROM (firmware) |
-| **Firmware version** | 1.0 through 1.7 (multiple revisions) |
-| **DAC** | 4× 8-bit R-2R ladders |
-| **Output** | Stereo line out, mono headphone |
-| **Bus interface** | ZX Spectrum expansion edge connector |
-| **Power** | +5V / +12V from host (the +12V powers the op-amps) |
+| **GS Z80 clock** | 12 MHz |
+| **RAM** | 128–512 KB SRAM |
+| **ROM** | 16 KB (firmware 1.04 / 1.05a) |
+| **Interrupt rate** | 37.5 kHz sequencer quantum |
+| **DAC** | 4 channels, 8-bit, 6-bit volume gates |
+| **Output** | Stereo line out |
+| **Bus interface** | ZX-bus / NemoBus card; host ports `#B3`/`#BB`, IORQGE on reads |
 
 The original GS is the reference for all software compatibility. NeoGS and FPGA implementations preserve its port mapping, command set, and firmware behavior.
 
@@ -467,23 +414,15 @@ The original GS is the reference for all software compatibility. NeoGS and FPGA 
 
 NeoGS is a modern redesign by Russian enthusiasts. The goals are increased RAM, faster CPU, improved firmware, and lower power consumption.
 
-| Spec | Original GS | NeoGS | Improvement |
-|---|---|---|---|
-| **GS Z80 clock** | 14 MHz | 14 MHz (same) | — |
-| **RAM** | 64 KB | 128 KB or 512 KB | 2-8× more sample storage |
-| **ROM** | 16 KB | 32 KB (extended firmware) | More built-in commands |
-| **Firmware** | v1.7 (last official) | v2.x (NeoGS extensions) | Backward-compatible |
-| **DAC** | 4-channel 8-bit | 4-channel 8-bit (or 8-channel via firmware) | Optional 8-channel mixing |
-| **Output** | Stereo line, mono headphone | Stereo line, mono headphone, SPDIF | Digital output added |
-| **Power** | +5V / +12V | +5V only | Drops the +12V requirement |
+| Spec | Original GS | NeoGS |
+|---|---|---|
+| **GS Z80** | real Z80 @ 12 MHz | FPGA Z80-compatible core |
+| **RAM** | 128–512 KB | 2–4 MB |
+| **Extra ports** | — | `#33` control (bit 7 = card reset; shared with ZXM-GS) |
+| **Firmware** | 1.04 / 1.05a | extended set, SD-card storage and MP3 playback |
+| **Bus needs** | IORQGE | IORQGE, `/WAIT`, `/CSROM`, `/RDROM` |
 
-NeoGS firmware is a **superset** of original GS. Software written for original GS runs unmodified. New commands include:
-
-- `#10` — Set panning per channel (left/right/center)
-- `#11` — Set master volume
-- `#12` — Read sample position with finer granularity
-- `#13` — Trigger sample with envelope (attack/decay/sustain/release)
-- `#14` — Set channel-specific clock (for pitch-shifting tricks)
+NeoGS firmware is a **superset** of the original GS command set: software written for the classic card runs unmodified, and the mailbox protocol is shared. The extensions live in the SFX sub-command families (`#50`/`#58`/`#80`/`#A0`) and the storage features — verify what is present with a `#36`/`#20` round-trip before relying on them.
 
 ### Scorpion GMX Integrated GS
 
@@ -495,7 +434,7 @@ GMX's integration advantage: there is no expansion cable, no edge-connector wear
 
 Several FPGA ZX reimplementations include software-emulated GS:
 
-- **TS-Conf**: Optional GS emulation, accessible through the standard `#B3`–`#BF` ports.
+- **TS-Conf**: the ZX Evolution's ZX-bus slots accept a real GS/NeoGS card; the host ports are the standard `#B3`/`#BB`.
 - **Universe**: Similar, with extended sample RAM.
 - **ZX Spectrum Next**: **No native GS support** — the Next provides DMA audio instead, which serves a similar role but with a different programming model.
 
@@ -542,51 +481,53 @@ The GS occupies a unique niche in the ZX Spectrum sound ecosystem. The decision 
 
 ## Pitfalls and Common Mistakes
 
-### Pitfall 1: Forgotten Firmware Version Check
+### Pitfall 1: The Guide's Command Table Lies About `#50`/`#51`
 
-**Symptom**: Software that uses NeoGS-specific commands (`#10`..`#14`) crashes or produces no output on original GS hardware.
+**Symptom**: Software written against the official programming guide's "#50 set global volume / #51 query" changes nothing — or corrupts an SFX setup.
 
-**Cause**: The original GS firmware v1.x does not recognize the extended command codes. The behavior is undefined — sometimes the commands are silently dropped, sometimes they corrupt firmware state.
+**Cause**: In the shipped firmware `#50` is the **SFX sub-command protocol** (a selector byte follows), and there is **no `#51` handler** at all. Master volume is `#35` (MTVOL); music scaling is `#2A` (MODVOL).
 
-**Fix**: Probe the firmware version at startup (bits 0..2 of status register `#B3`). If v1.x, disable NeoGS-specific commands and fall back to the v1 command set.
+**Fix**: Use `#35`/`#2A`; detect the card's dialect with a `#36` reply round-trip before sending extension commands.
 
 ### Pitfall 2: Unsigned vs. Signed Sample Confusion
 
 **Symptom**: Imported Covox/WAV samples play with distorted, metallic timbre on the GS.
 
-**Cause**: GS samples are **signed** (-128..+127). Covox/WAV samples are **unsigned** (0..255). Mixing them up produces severe clipping and phase inversion.
+**Cause**: GS module samples are **signed** (-128..+127). Covox/WAV samples are **unsigned** (0..255). Mixing them up produces severe clipping and phase inversion.
 
 **Bad code**:
 
 ```z80
-; Upload raw WAV bytes without conversion
+; Stream raw WAV bytes into a module upload without conversion
 LD   A,(HL)
-OUT  (#BF),A        ; BUG: signedness wrong
+LD   BC,#B3
+OUT  (C),A          ; BUG: signedness wrong
 ```
 
-**Correct**: XOR with `#80` to flip the signedness:
+**Correct**: XOR with `#80` to flip the signedness before streaming:
 
 ```z80
 LD   A,(HL)
 XOR  #80            ; convert unsigned to signed
-OUT  (#BF),A
+LD   BC,#B3
+OUT  (C),A
 ```
 
-### Pitfall 3: Race Condition on Sample Upload
+### Pitfall 3: A Command Mid-Upload Aborts the Load
 
-**Symptom**: Sample playback produces random noise for the first ~50 ms, then plays correctly.
+**Symptom**: A module streamed with `#30` ends up truncated or unparsed; `#D2` reports garbage.
 
-**Cause**: The ZX started the PLAY command before the upload completed. The GS firmware reads partially-uploaded sample data — the tail of the buffer contains garbage.
+**Cause**: The firmware's loader wakes on **any** command flag: a command that arrives mid-stream aborts the load handler unless it is `#D2` itself. A polling loop or interrupt handler that helpfully sends a status query or volume update during the upload kills the transfer.
 
-**Fix**: Always verify the upload completed before sending PLAY. The GS sets a "done" flag in the status region after each UPLOAD command — poll it.
+**Fix**: Mask interrupts around the stream, send nothing but data bytes until `#D2`, and respect the **data-first rule** — parameter to `#B3` *before* command to `#BB` — for `#30`/`#31`.
 
-### Pitfall 4: Buffer Overflow During Sample Upload
+### Pitfall 4: Sending Commands During POST
 
-**Symptom**: GS firmware crashes after uploading a large sample.
+**Symptom**: The first commands after power-on are silently lost; the card later works fine.
 
-**Cause**: The upload exceeded GS-RAM capacity. Original GS has 64 KB; overwriting the firmware working area at `#FC00`..`#FEFF` corrupts internal state.
+**Cause**: the firmware spends **0.3–1.1 s in POST** after reset before it accepts anything (`#F4` reboots through POST; `#F3` skips the wait).
 
-**Fix**: Track the next-free-pointer in your software and abort the upload if it would cross into `#FC00`.
+**Fix**: Delay or poll with the `#36` round-trip before the first real command.
 
 ---
 

@@ -94,34 +94,54 @@ The original Kempston mouse has a **unique pinout** — it is NOT compatible wit
 
 ```
 Bit 7  6   5   4   3   2   1   0
- ?    ?   ?   ?   ?   MB  MR  ML
+ Whl whl whl whl  1   MB  MR  ML
 ```
 
-- Bit 0 = Left Mouse Button (1 = pressed)
-- Bit 1 = Right Mouse Button (1 = pressed)
-- Bit 2 = Middle Mouse Button (1 = pressed, on compatible mice only — the original Kempston had only 2 buttons)
-- Bits 3-7: undefined, usually read as 0
-
-Buttons are **active-high** — opposite convention from the keyboard and joystick matrix.
+- Buttons are **active-low over an `#FF` base** — a *pressed* button reads as **0**, idle reads 1 (the opposite of the "active-high" claim that circulates; verified against the port guides and the ZX Evolution FPGA, which returns `{wheel, 1'b1, buttons}`)
+- **Bit 0 = Left, bit 1 = Right, bit 2 = Middle** — the assignment per Black_Cat's port guide (BC Info Guide #4) and the KB port map. Beware: two widely used emulators (ZXMAK2, zxsp's header) swap D0/D1 to right/left; software compared against them may encode the opposite order
+- **Bit 3 reads as a constant 1** on the reference implementations
+- **Bits 7-4 = scroll wheel counter** where a wheel exists (upper nibble of the same register — not a separate port; without a wheel they read as part of the `#FF` base)
 
 ### Reading the mouse (Kempston)
 
 ```z80
 read_kempston_mouse:
         LD   BC, #FBDF
-        IN   A, (C)              ; A = X position (0-255)
+        IN   A, (C)              ; A = X position (0-255, wraps)
         LD   (MOUSE_X), A
 
         LD   BC, #FFDF
-        IN   A, (C)              ; A = Y position (0-255)
+        IN   A, (C)              ; A = Y position (0-255, wraps)
         LD   (MOUSE_Y), A
 
         LD   BC, #FADF
-        IN   A, (C)              ; A = buttons
-        AND  #07                 ; bits 0-2 only
+        IN   A, (C)              ; A = #FF base: 0 bit = pressed
+        CPL                      ; -> 1 = pressed, wheel nibble inverted
+        AND  #07                 ; buttons only
         LD   (MOUSE_BTN), A
         RET
 ```
+
+### Per-model address decoding — there is no single mask
+
+The interface is a card; the machine is a bus, and **each machine's decoder answers a different subset of the address lines**. The canonical decode qualifies on **A9 = 1, A5 = 0**, then A8 separates buttons from axis and A10 separates X from Y — every other line is a don't-care, giving 8192 mirrors for the button port and 4096 per axis (the button register even answers at both `#FADF` and `#FEDF`, because A10 is not decoded when A8 = 0). BC Info Guide #4 documents a second flavour, the **"USSR" variant**: it drops A9 entirely, adds A7 = 1 and **A0 = 1**, and therefore answers only on odd addresses (2048 mirrors per port):
+
+| Variant | Buttons | X | Y |
+|---|---|---|---|
+| Standard | A9=1, A8=0, A5=0 | A10=0, A9=1, A8=1, A5=0 | A10=1, A9=1, A8=1, A5=0 |
+| USSR | A10=0, A8=0, A7=1, A5=0, **A0=1** | A10=0, A8=1, A7=1, A5=0, A0=1 | A10=1, A8=1, A7=1, A5=0, A0=1 |
+
+> [!WARNING]
+> **The ZX Evolution decodes more strictly than the original hardware**: its FPGA requires the whole low byte `#DF` (`KMOUSE = 8'hDF`), where the original decodes only A5. A program that uses a mirrored mouse port works on a Pentagon and fails on a ZX-Evo. Per BC Info Guide #4's model legend, the built-in mouse is documented for the ZX Spectrum, KAY-1024SL, Pentagon 128 and Profi; on Scorpion, ATM Turbo and Pentagon-1024SL it is an add-on card whose decode follows the card.
+
+Two more verified bus-level behaviors:
+
+- **The Kempston joystick collision is structural.** The joystick decodes A5 = 0 alone on original hardware — and the mouse ports (`#DF` low byte) sit inside that window. Severity is per-model: the KAY-1024SL joystick decodes **A0 alone** (it answers every odd port, mouse ports included); the Pentagon-1024SL decodes A5 = 0 + A0 = 1, which the mouse ports also satisfy. Robust joystick handlers must skip the three mouse addresses.
+- **TR-DOS gating varies by machine**: ZXMAK2 suppresses the mouse while TR-DOS is paged; Xpeccy registers it non-DOS-only for Pentagon/Scorpion/ATM but DOS-agnostic for Pentevo. Software probing from inside TR-DOS may see different results per machine.
+
+### Presence detection — there is no presence bit
+
+Software infers the mouse from the ports themselves: the classic heuristic compares X against Y and treats **equal** values as "no mouse fitted". Consequently an implementation must reset the counters to **two different, non-zero** values (the reference emulator uses 31 and 85) — a zero-initialized mouse reads as absent.
 
 ### Tracking position (the rollover problem)
 
@@ -299,7 +319,7 @@ A microcontroller translates these PS/2 packets into the Kempston protocol by ma
 
 6. **The Kempston Mouse `#FADF` button port and the Kempston joystick `#1F` port are NOT the same thing.** Don't confuse them. The joystick port is `#001F`; the mouse button port is `#FADF`. They have different addresses because A15-A5 differ.
 
-7. **Kempston Mouse middle button is rarely supported.** The original Kempston Mouse had only 2 buttons; bit 2 of `#FADF` was always 0. The Kempston Mouse Turbo and most modern emulators support a middle button, but old software may not check it.
+7. **Kempston Mouse middle button is rarely supported.** The original Kempston Mouse had only 2 buttons; bit 2 of `#FADF` read as 1 (idle) on those units. The Kempston Mouse Turbo and most modern implementations support a middle button, but old software may not check it.
 
 8. **PS/2 mouse on the Next is opt-in for new software.** Legacy software sees the Kempston Mouse ports; new software can use NextReg `0x05` for raw PS/2 access. Don't use both at once.
 

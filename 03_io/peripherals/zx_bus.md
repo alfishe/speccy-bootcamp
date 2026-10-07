@@ -31,6 +31,31 @@ The Spectrum's edge connector is a **superset** of the earlier ZX80/ZX81 expansi
 
 Soviet and Czech clones (Pentagon, Scorpion, Leningrad, Didaktik, Quorum) adopted the same logical signals but sometimes used **2.5 mm pitch** instead of 2.54 mm, and occasionally added extra pins for clone-specific features (extra RAM banking, alternate video modes). Soviet peripherals generally do not physically fit a Western Spectrum without an adapter, and the addition of clone-specific pins means a Western peripheral may not work even with a mechanical adapter. See [02_hardware/clones/README.md](../../02_hardware/clones/README.md) for the clone ecosystem.
 
+### The Soviet ZX-Bus / NemoBus — IORQGE and arbitration
+
+The clone ecosystem formalized its own bus discipline, usually called the **ZX-bus / NemoBus** (the 2×30 edge connector of Pentagon-class machines and the ZX Evolution). Two signals Western documentation barely mentions make it work:
+
+- **`IORQGE`** — a card raises it to claim an I/O cycle; the machine's own port decoder then stays silent for that cycle. It is the poor man's plug-and-play: cards can share a machine without decode fights, and machines can hide their built-ins behind it. (Polarity is a card design decision — e.g. the ZX-MultiSound drives it **active high** through a buffer tied to +5 V.)
+- **`/DOS` / `/IODOS`** — tell a card whether the TR-DOS ROM is paged, so disk-port hardware can activate only in DOS. Not all cards decode them: the ZX-MultiSound instead sets a flag at every M1 fetch from `#0000–#3FFF` (a *ROM lock*, coarser than /DOS).
+
+Each machine then picks an **arbitration model** — verified per board from the machine schematics:
+
+| Machine | Arbitration | Meaning for a card |
+|---|---|---|
+| Pentagon 128 (ZX-bus retrofitted — the 1991 board has no expansion connector), Scorpion ZS-256 | **CardWins** | a card's IORQGE hides the cycle from the board — but board ports *without* IORQGE-gated cards still fight |
+| ZX Evolution (BaseConf / TS-Conf), Profi | **BoardWins** | the board hides its own ports from the slots: a card at `#FB` on TS-Conf is dead because `#FB` is the board Covox, and `#xEF` is ZiFi |
+| 48K | **UlaOnly** | IORQGE silences only the `#FE` ULA port |
+| 128K, +2A/+3 | **None** | no IORQGE at all — ZX-bus cards need an adapter on the Sinclair edge |
+
+Card-side differences matter as much as machine-side: most cards detect an I/O cycle from `/IORQ` ("Iorq" cards), but some (the ZX-MultiSound) detect it from **RD/WR without M1 and without MREQ** ("RdWr") — because "the /IORQ lines are useless on the ZX-Evo" (the designer's own comment). An RdWr card still sees cycles a BoardWins machine hides, which is why its SounDrive channel `#1F` works on a ZX-Evo while an Iorq card's is dead. Practical verified consequences:
+
+- **Nemo IDE** asserts IORQGE on the whole `#06/#00` address group outside DOS — on a CardWins machine it shadows the `#FE` and `#7FFD` decodes;
+- **ZX-WiFi v1.0–1.1** boards lack IORQGE and fight the Scorpion Turbo+ `#FF` decode (fixed in v1.2+);
+- **+12 V is not guaranteed**: the Scorpion carries it only on the control port, the ZX-Evo only with jumper J4 fitted (the ZX-MultiSound *requires* +12 V and needs an adapter where it is absent);
+- the **Profi bus** adds `/OUTIORQ`, which masks the PROM-decoded ports from cards;
+- on TS-Conf the slots **never see INTA**, and the ZX-Evo's AY sits in a socket — plugging a bus card that takes over the AY role (ZX-MultiSound with its YM DIP on) means **physically removing the YM2149**, or the two fight over `#FFFD` reads;
+- the Sprinter's ISA-8 slots are reached through a **memory window**: ISA cards never compete with a Z80 port, so ZX-bus cards there work only via the ISA adapter's translation.
+
 ---
 
 ## Full Pinout (Cross-Model Composite)
