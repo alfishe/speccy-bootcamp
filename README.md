@@ -72,6 +72,7 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 |---------|------------|
 | [trdos.md](04_operating_systems/trdos.md) | TR-DOS: the Soviet flat filesystem standard for Pentagon/Beta 128, 128 file slots, hook codes API, why it dominated the Russian scene |
 | [plus3dos.md](04_operating_systems/plus3dos.md) | +3 DOS: Amstrad's CP/M-compatible DOS for +2A/+3, BDOS layer, RSX-based BASIC integration (`LOAD "a:..."`, `CAT`, `FORMAT`) |
+| [nedoos.md](04_operating_systems/nedoos.md) | NedoOS: multitasking OS for ATM Turbo 2 / ZX-Evo (nightly): kernels per board, 16 tasks, network stack, Moon Rabbit browser |
 | [esxdos.md](04_operating_systems/esxdos.md) | ESXDOS: modern Western DOS for DivIDE/DivMMC, FAT16/32, 8 KB dot-command overlays, hook codes API at `#0084` |
 | [is_dos.md](04_operating_systems/is_dos.md) | IS-DOS: 1990s Russian hierarchical filesystem alternative, MS-DOS-compatible 32-byte directory entries, subdirectories, attributes, jump-table API |
 | [nedo_dos.md](04_operating_systems/nedo_dos.md) | NedoDOS: modern DOS for ZX Evolution/NedoPC, FAT16/32 with VFAT long filenames, SD/CF/IDE, multiple partitions, NedoDOS Commander |

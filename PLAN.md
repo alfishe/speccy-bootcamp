@@ -516,6 +516,8 @@ zx/
 | `README.md` | Index + New Gen ecosystem overview | Planned |
 | `zx_next.md` | ZX Spectrum Next complete hardware reference: layer architecture, 28MHz accelerator, Layer 2 framebuffer, sprites, tilemap, copper, DMA, joystick system, Z80N extensions, SD, WiFi, RTC, ESP | Planned |
 | `sprinter.md` | Peters Plus Sprinter: 21MHz Z84C15, 4MB RAM, Altera ACEX EP1K30 FPGA (reconfigurable), copy accelerator, soft port map, IDE, ISA | ✅ |
+| `cdrom_ide.md` | CD-ROM via ATAPI on ZX IDE boards: packet protocol, `#EB14` signature, AUTORUN.ZX CD-boot standard, ERS loader, CDDA/MMC-3 | ✅ |
+| `nedoos.md` | NedoOS multitasking OS: rolling release, kernels, drive letters, network, players | ✅ |
 | `sprinter_firmware.md` | Sprinter firmware & sources: PLD configurations (Sprinter-1/2, ZX+AY, Game, DooM, Video), bitstream loading, RAM copy accelerator, BIOS 2.02→3.07, Estex DSS 1.52→1.71, board history sp97→sp2016s, source repositories | ✅ |
 | `zx_evo.md` | ZX Evolution: Z80-based with Altera FPGA + ATmega MCU, PS/2 keyboard/mouse, IDE, SVGA — real hardware, not FPGA core recreation | Planned |
 | `ts_conf.md` | TS-Conf: FPGA ZX Spectrum config for ZX Evo — `#xxAF` registers, 2 tile layers + 85 sprites (3 layers), 4 modes × 4 geometries, RGB555 CRAM, 9-task DMA, CPU cache, 4 INT vectors, shared 4 MB DRAM | ✅ |

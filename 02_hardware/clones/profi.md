@@ -162,6 +162,20 @@ The disk and peripheral ports on **both board generations** are decoded by a **K
 
 Three claims this corrects: the SYS ROM (TR-DOS paged) does **not** see the extended map (it needs CP/M on *and* ROM14=1); in CP/M mode the TR-DOS latch makes no difference (CP/M holds A2 high — emulators that require DOS off in CP/M are wrong); and the v3 FDC answers at **both A15 values** (contra the classic port table). The extended map's IDE ports `#8B/#AB/#CB/#EB` are the footprint the Profi IDE adapter (mirror-latch pair `#CB`/`#EB`) answers on — see [ide_interface.md](../../03_io/storage/ide_interface.md).
 
+### Profi+ — the PC-periphery variant
+
+The **Profi+** ("Personal Computer PROFI Plus") piles on real PC-style peripheral chips, driven by **Vadim's ROM BIOS Plus** (versions 0.241 through 0.41h1, 2014–2026; DOS Navigator 2.0.16 requires 0.40+) and his **PQ-DOS** (a DOS Navigator-oriented DOS booting from floppy or a FAT16 hard disk):
+
+| Unit | Chip | Extended-map ports |
+|---|---|---|
+| Parallel port | KR580VV55 (8255) | `#87` A, `#A7` B, `#C7` C, `#E7` control |
+| Baud-rate timer | KR580VI53 (8253 PIT) | `#8F`/`#AF`/`#CF` counters, `#EF` control |
+| Serial port | KR580VV51A (8251 USART) | `#D3` data, `#F3` command/status |
+| COM control | — | `#B3` (write D0 = COM interrupt enable) |
+| RTC | KR512VI1 | `#FF/#DF` address, `#BF/#9F` data |
+
+The 8255 is the same physical chip as the stock Profi's (Kempston on port A, Covox on B/C) — the extended addresses are its A7=1 aliases in the extended map. The catch: **stock boards never decode the extended map while the SYS ROM runs** (CP/M and ROM14 only). Making the BIOS Plus board test pass on a real 5.x board needs **Djoni's replacement decoder PROM "V0.03"** (2014, zx-pk.ru thread 23036), which gives the SYS ROM the extended ports and TR-DOS the RTC; the Karabas-Pro FPGA re-creation implements the same rule (`(cpm and rom14) or (dos and not rom14)`, fixed 2020 for PQ-DOS).
+
 The machine has a single 16 KB **projection window** that can show any RAM page, and CMR1 bit 3 chooses where it sits — producing two memory models:
 
 | Window position (`SCO`) | `#0000` | `#4000` | `#8000` | `#C000` |

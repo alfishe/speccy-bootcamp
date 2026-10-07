@@ -279,6 +279,14 @@ TR-DOS disks are bootable: when a Pentagon is powered on with a TR-DOS disk in d
 
 A bootable demo disk therefore contains a `boot.B` that loads the demo's first part. This is why a Soviet demo disk runs automatically when inserted at power-on — no commands needed.
 
+### The autostart mechanism, precisely (and its limits)
+
+Verified against the real TR-DOS ROMs (verified 2026-09-18 with cold-start frames):
+
+- The cold start does not magically execute `boot.B`: the ROM **builds the BASIC line `RUN "boot"` at address `#027B`** on entry (the DOS entry lives at `#3D00`–`#3DFF`). Any tool that wants different behavior — emulators autostarting single-file disks, demo menus — patches or hooks that one builder; a disk with exactly one BASIC file is started by rewriting the line to `RUN "<name>"`, leaving the image untouched.
+- A disk with **several** BASIC files and no `boot` has no defined autostart: utilities that want one inject a `boot.B` of their own (the classic lightweight-commander trick).
+- The **ZX Evolution does not share this path**: its BaseConf ROM runs **EVO-DOS from ROM page 29 of the 512 KB flash**, with different reset code and **no `RUN "boot"` builder** at `#027B` — disks there boot through the ERS service menu ("B. HDD boot" / TR-DOS item), not through the classic TR-DOS cold start.
+
 ### 4.5 Examples
 
 A complete BASIC session loading and running a demo:

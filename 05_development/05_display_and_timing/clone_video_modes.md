@@ -69,6 +69,17 @@ GigaScreen activation varies by machine:
 
 - **Flicker**: On 50 Hz display, the 25 Hz alternation of each attribute set produces visible flicker, especially with high-contrast color pairs (e.g., red/cyan). Dark-on-dark combinations flicker less.
 - **LCD displays**: Frame blending is less effective on LCD panels with fast pixel response. Emulators often provide a "GigaScreen blend" filter to simulate CRT persistence.
+
+### Rendering GigaScreen correctly — what the modern "ZXDLSS" work established
+
+Rendering a GigaScreen demo on modern hardware is its own problem: naive per-pixel frame averaging smears everything that *moves*, and ghosting looks worse than the flicker it replaces. The verified principles from recent scanline-analysis work ("never worse than the raw frame"):
+
+1. **Separate detection from mixing.** First decide *which* pixels belong to an intentional temporal mix (stable content alternating between two palettes across frames) and which are ordinary motion; then a mixer combines only the detected samples. When the detector is unsure, the pixel is shown exactly as rendered.
+2. **Mix in the right light domain.** A plain sRGB average is the weakest model; converting to **linear light** before averaging (the eye integrates emitted light) is the sane default, and a CRT-calibrated variant (gamma 2.4–2.8 with black level) tracks real tubes closer still. Perceptual-space (OKLab) averaging keeps hue steadiest for wildly different color pairs.
+3. **Historical references are calibrated pair tables.** Unreal Speccy's hand-tuned mixed levels for attribute pairs (the ZZ/ZN/NN/NB/BB/ZB six) and its windowed-sinc temporal filter (12/8 Hz cutoffs) remain the classic CRT-calibrated baselines to compare against; Spectaculator/Xpeccy plugin blends are the other lineage.
+4. **Run per emulated frame, before the framebuffer latch** — the host display rate must not influence the mix; phosphor-decay models add age-dependent, per-channel weights (P22 green decays slowest).
+
+Because every sample is one of 16 palette colors, mixer results are table-precomputable — even exotic user formulas cost nothing per frame.
 - **Brightness halving**: Each color is displayed only half the time, so the perceived brightness drops. Compensate by using bright variants.
 
 ### Practical Use

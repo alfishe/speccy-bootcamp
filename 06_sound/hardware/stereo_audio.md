@@ -425,6 +425,11 @@ The dispute reached its peak in the mid-1990s with the rise of the demoscene par
 
 ### Modern Resolution
 
+The modern answer converges on two facts, both verified across emulator and hardware sources:
+
+1. **Per-machine defaults are settled**: the clones (Pentagon, Scorpion, ATM Turbo 2+, ZXM-Phoenix, ZX-Evo in both BaseConf and TS-Conf firmwares) are **ABC**; the **Profi is ACB** (its FPGA re-creation, Karabas-Pro, defaults to ACB with ABC selectable); the Western **Melodik** interface is ACB. Fuse, Unreal Speccy, Xpeccy and the Karabas-Pro RTL all agree on this split — it is the one place the "holy war" has a documented answer.
+2. **A real Sinclair machine has no stereo at all** — "classic Spectrum = ABC" is an emulator convention, not a hardware fact. FPGA machines (ZX Spectrum Next's `turbosound.vhd`: 0 = ABC default, 1 = ACB) make the routing a runtime register write, ending the argument per-program rather than per-machine.
+
 The holy war has not been *resolved* — Russian and Western chiptune communities still have different default routings. But modern tools (Vortex Tracker II, Arkos Tracker, configurable emulators) make the routing explicit and switchable, removing the original cause of the dispute (platform lock-in). Modern composers simply pick a routing and document it.
 
 The ZX Spectrum Next's software-configurable routing is the ultimate resolution: any module can play in any routing with a single register write. The holy war persists only on legacy hardware.

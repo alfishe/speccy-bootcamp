@@ -806,15 +806,48 @@ Decoding: `%xxxxxxxx0BA11111` — address bits B and A select the register.
 
 ### SMUC Ports (Turbo+ Only)
 
-The SMUC (Scorpion & MOA Universal Controller) bridges a PC ISA bus onto the Scorpion, enabling connection of ISA expansion cards:
+The SMUC (Scorpion & MOA Universal Controller; expanded as "Spectrum Multi Unit Controller" in some sources) is an add-on card that brings PC-style parts to the Scorpion — more than a bare ISA bridge. Its sub-devices, verified across the emulators and the disassembled ProfROM 4.01 firmware:
 
-| Port | Function |
+| Sub-device | Chip | Function |
+|---|---|---|
+| IDE bridge | 16-bit ATA split into two 8-bit halves by a latch | two drives (master/slave); ProfROM mounts disk images and boots |
+| Clock/CMOS | Dallas **DS1685** (MC146818-compatible) | ProfROM menu clock; RTC periodic interrupt |
+| Settings memory | **24C16** — 2 KB serial I²C EEPROM, write-protected | ProfROM configuration, checksum at `#00FE/#00FF` |
+| Interrupt controller | Intel **8259** (optional; absent in card v2.0) | probed by ProfROM, tested with RTC → 8259 → Z80 IM2 chains |
+| Virtual FDD register | one latch (`#7FBA`) | lets the ProfROM TR-DOS replace floppy drives A/B with hard-disk images |
+| ISA window | 8-bit ISA I/O `#200`–`#3FF` | resets/probes an ISA card at `#7AFE` |
+
+**Gating — the card answers only with the TR-DOS ports on.** SMUC rides the Scorpion's "DOS" signal exactly like the Beta 128 ports: a BASIC program doing `OUT 65466,0` outside TR-DOS reaches the ULA, not SMUC. Ordinary software therefore reaches the card by **calling into the TR-DOS ROM** (`#3D2F` with a return address of `#3FF3` for `IN A,(C)` / `#3FF0` for `OUT (C),A`) — the idiom the savelij and NedoOS drivers use.
+
+Full port map (decode: A12=A11=1, A7=1, A6=0, A5=1, A1=1, A0=0 fixed; A15/A13/A2 pick the sub-device):
+
+| Port | Sub-device |
 |------|----------|
-| `#18E6`–`#7FFE` | ISA bus bridge — maps ISA I/O space `#200`–`#3FF` onto Scorpion ports |
-| `#5FBA` | SMUC version read |
-| `#5FBE` | SMUC revision read |
+| `#5FBA` | version (read-only) |
+| `#5FBE` | revision (read-only) |
+| `#7FBA` | virtual-FDD latch |
+| `#7EBE`/`#7FBE` | 8259 (A8 = the 8259's A0) |
+| `#DFBA` | DS1685 address/data (`#FFBA` D7 selects phase) |
+| `#D8BE` | IDE data high-byte latch |
+| `#FFBA` | system register (see below) |
+| `#F8BE`–`#FFBE` | IDE registers (A10–A8 = register 0–7) |
+| `#18E6`–`#7FFE` | ISA I/O `#200`–`#3FF` |
 
-The SMUC was used to connect **ISA IDE hard drive controllers**, **NE2000-compatible ISA network cards**, and **ISA RTC chips**. See [ide_interface.md](../../03_io/storage/ide_interface.md) for details on the SMUC IDE implementation.
+The **`#FFBA` system register** (write; power-on value `#F7`, per ProfROM):
+
+| Bit | Role |
+|---|---|
+| D7 | 1 = the IDE **control block** (`#FEBE` becomes device control / alternate status); also selects the RTC phase on `#DFBA` writes (1 = data, 0 = address) |
+| D6 | EEPROM clock (SCL) |
+| D5 | EEPROM write protect |
+| D4 | EEPROM data (SDA) |
+| D3 | interrupt enable — the 8259 output reaches the Z80 `/INT` only while set |
+| D2–D1 | keep 1 (firmware always writes them set) |
+| D0 | **IDE reset — 0 = reset** (the firmware pulses 0 then 1; runs at 1) |
+
+Reads return SDA on D6 and the IDE INTRQ on D7 (hardware intent; most emulators hold D7 = 1 and no reference software reads it).
+
+The SMUC was used to connect **ISA IDE hard drive controllers**, **NE2000-compatible ISA network cards**, and **ISA RTC chips**. See [ide_interface.md](../../03_io/storage/ide_interface.md) for the IDE protocol layer.
 
 ---
 ## Shadow Service Monitor

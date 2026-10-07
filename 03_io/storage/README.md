@@ -79,6 +79,7 @@ The mass-storage subsystem — the IDE and SD interfaces that gave the Spectrum 
 |------|-------|-------|
 | [ide_interface.md](ide_interface.md) | **IDE / PATA interfaces** — generic IDE block diagram, 40-pin connector pinout, port maps compared (DivIDE/SMUC/Nemo/ZC/ATM/KAY), Z80 read loop sketch | 385 |
 | [divide_divmmc.md](divide_divmmc.md) | **DivIDE / DivMMC hardware** — board architecture, NMI boot, conmem/mapram paging, divman/divese TR-DOS image emulation, card setup workflow (hardware companion to esxdos.md) | 261 |
+| [cdrom_ide.md](cdrom_ide.md) | **CD-ROM via ATAPI** — packet commands over IDE, `#EB14` drive signature, ISO 9660, the `AUTORUN.ZX` CD-boot standard (Info Guide #9 / Time Gal), ZX-Evo ERS loader walkthrough, per-software command sets, CDDA playback and MMC-3 semantics |
 | [sd_interface.md](sd_interface.md) | **SD card interfaces (SD-SPI)** — SPI command frame, 5-step init handshake (CMD0/CMD8/CMD55+ACMD41/CMD58), Z80 bit-bang sketch, port maps (DivMMC/ZXMMC/Next/ZC), throughput table | 295 |
 
 **Filesystem and image formats:**

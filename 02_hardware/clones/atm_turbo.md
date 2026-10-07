@@ -103,6 +103,18 @@ The three major ATM Turbo revisions differ significantly in hardware capabilitie
 | **AY-3-8910/12** | Yes (3 channels) | Yes (3 channels, 8910 or 8912) | Yes (3 channels) |
 | **ADC** | No | **Yes** (1 channel, К1113ПВ1, 9-bit) | **Yes** (8 channels, К5712ПВ1 / 1108ПВ1 + К155ИД17, ~200 kHz) |
 | **Floppy controller** | Beta 128 (TR-DOS v5.03) | Beta 128 with **PLL** (digital phase-locked loop) | Beta 128 with PLL |
+
+### Extended-mode video geometry (verified against three independent renderers)
+
+A common modeling mistake is to give the ATM extended modes (640×200 multicolor, 320×200 EGA-style, 80×25 text) a left/right border margin like the ZX screen. They have **none**: three independently implemented renderer classes (ZXMAK2's `Atm320Renderer`, `Atm640Renderer`, `AtmTxtRenderer`) all set **zero side border with `fullFrameWidth == screenWidth`**, leaving only the real top/bottom border (28 lines each). Also verified: video-page selection in these modes follows **`#7FFD` bit 3 only** (not bits 3+6), and the register is read **live** — mid-frame writes take effect immediately, which period-accurate software exploits.
+
+### The keyboard controller — an i8031 behind every `IN #FE`
+
+From the Turbo 2+ (v7.xx boards) onward, the keyboard interface is a whole microcontroller: an **1816ВЕ31 (i8031-family; AT89S52 in later builds)** that services **every** `IN #FE` keyboard read, carries the **PC/XT/AT (PS/2) keyboard**, a **clock**, and the **RS-232 serial port**. Consequences worth knowing:
+
+- a keyboard read can **hold the Z80's WAIT line until the MCU answers** — one of the machine's few I/O-related delays (see [contention_timing.md](../../05_development/05_display_and_timing/contention_timing.md));
+- the serial port is register/protocol-compatible with software that expects an 8250-style UART behind the MCU (NedoOS's ESP kernels and Moon Rabbit's `uart-atm` driver both talk through it);
+- the MCU firmware exists in versions **2.2 through 4.1** (the 4.x sources and binaries surfaced in 2026), so "the ATM keyboard" is really a small firmware-driven subsystem, not a latch.
 | **IDE controller** | **No** | **Yes** (HDD + CD-ROM) | **Yes** (HDD + CD-ROM) |
 | **Port #FF** | No | **Yes** (floating bus / attribute read) | Yes |
 | **Sound amplifier** | Yes (2×1 W stereo) | Yes (2×1 W stereo) | No (removed) |
