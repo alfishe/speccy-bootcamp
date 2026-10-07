@@ -270,6 +270,7 @@ All revisions use the same port addresses and are software-compatible. Hardware 
 ## References and Further Reading
 
 - [Mick Laboratory: ZXM-SoundCard](http://micklab.ru/My%20Soundcard/ZXMSoundCard.htm) *(in Russian)* — Full schematics, CPLD firmware source, and bills of materials for every revision.
+- [ZX-MultiSound](zx_multisound.md) — the other Russian all-in-one card (UzixLS): same TSFM + SAA + SounDrive trio, plus a General Sound coprocessor clone and a SAM2695 MIDI wavetable — side-by-side comparison there.
 - [TurboSound FM](turbosound_fm.md) — Deep dive on the YM2203 OPN chips and FM programming.
 - [SAA1099](saa1099.md) — Philips PSG architecture and register map.
 - [Covox & SounDrive](covox_sounDrive.md) — DAC subsystem details and sample playback techniques.

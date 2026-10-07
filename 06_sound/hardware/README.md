@@ -51,6 +51,13 @@
 | [gs_general_sound.md](gs_general_sound.md) | **General Sound / NeoGS** — Dedicated Z80-based sound coprocessor. 4-channel sample mixing, command protocol, 64KB/128KB RAM, zero CPU cost |
 | [dma_usc.md](dma_usc.md) | **DMA USC** — Intel 8237 DMA-based autonomous sample playback. Zero CPU cost during playback |
 
+### Combined / Multi-Engine Cards
+
+| Article | Description |
+|---------|-------------|
+| [zxm_soundcard.md](zxm_soundcard.md) | **ZXM-SoundCard** (Mick Laboratory) — TSFM (2 × YM2203) + SAA1099 + SounDrive on one open-source NemoBus card, revision history 00 → Extreme |
+| [zx_multisound.md](zx_multisound.md) | **ZX-MultiSound** (UzixLS) — five engines on one open NemoBus card: TSFM (2 × YM2203) + **General Sound clone @ 16 MHz / 1-2 MB** + SAA1099 + 4-channel SounDrive (sigma-delta DACs) + **SAM2695 MIDI wavetable** via YM IOA2; verified port map, control byte vs classic TSFM, mixer gains, DIP polarity trap |
+
 ### Modern / FPGA
 
 | Article | Description |

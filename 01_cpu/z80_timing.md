@@ -386,6 +386,20 @@ When the Z80 executes `HALT`, it enters a low-power state where it **continues t
 > [!NOTE]
 > On the ZX Spectrum, the ULA asserts INT once per frame (~50 Hz), which wakes the CPU from HALT. The maximum HALT duration is therefore ~20 ms (one frame period), well within even the 2 ms DRAM refresh window. The phantom NOPs during HALT ensure continuous refresh.
 
+#### Where the HALT idle fetch reads — PC+1, not the HALT itself
+
+The idle M1 cycles are **real bus cycles**, and their address matters on every contention-sensitive machine. After decoding `HALT` (`#76`), the program counter has already been incremented past the opcode — so each phantom NOP **fetches from `PC+1`, the byte *after* the HALT instruction**, while the refresh address on the bus is `I:R` as for any M1 (Zilog UM0080; verified in RTL-level emulator work against the Ferranti ULA, +2A/+3 gate array and clone wait models). Consequences that bite real software and emulators alike:
+
+| Machine | What the PC+1 fetch changes |
+|---|---|
+| 48K / 128K (Ferranti ULA) | each idle fetch takes contention waits **as if executing at PC+1** — a HALT at `#7FFF` contends as `#8000` (uncontended RAM) |
+| +2A/+3 | the floating-bus latch holds the byte at **PC+1** after the HALT — a floating-bus probe during HALT returns the wrong byte if the model fetches at PC |
+| Scorpion ZS-256 | the **Even M1** wait is decided by the RAM select of **PC+1** — a HALT at `#3FFF` with ROM at `#0000` waits as a RAM fetch at `#4000` |
+| ZX Evolution @ 14 MHz | the CPU code-word cache fills with the word containing **PC+1** — halted wait patterns depend on HALT's address parity |
+| TR-DOS / ZX-Evo DOS traps | a HALT placed on the **last byte before a trapped fetch range** (`#3Dxx`) now triggers the trap with its idle fetch, exactly as hardware does |
+
+Only the *address* changes; the fetched byte is discarded, R still increments per idle M1, and an INT or NMI acknowledge steps PC past the HALT before the push as usual. ULA snow is unaffected — it is driven by the refresh address `I:R`, not the fetch address.
+
 ---
 
 ## Instruction Overlap and the R Register

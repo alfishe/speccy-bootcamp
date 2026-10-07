@@ -47,6 +47,8 @@ Hardware reference for every sound device across all three tracks (Original, Sov
 | [gs_general_sound.md](hardware/gs_general_sound.md) | General Sound / NeoGS: dedicated Z80-based sound card, 4-channel sample mixing, command protocol |
 | [dma_usc.md](hardware/dma_usc.md) | DMA USC: Intel 8237 DMA-based autonomous sample playback, zero CPU cost |
 | [moonsound.md](hardware/moonsound.md) | MoonSound (OPL4/YMF278B): 24-channel wavetable + 18-channel FM synthesis |
+| [zxm_soundcard.md](hardware/zxm_soundcard.md) | ZXM-SoundCard (Mick Laboratory): TSFM + SAA1099 + SounDrive combined open-source card |
+| [zx_multisound.md](hardware/zx_multisound.md) | ZX-MultiSound (UzixLS): TSFM + GS clone @ 16 MHz + SAA1099 + SounDrive + SAM2695 MIDI wavetable — five engines, one card |
 | [zx_next_audio.md](hardware/zx_next_audio.md) | ZX Spectrum Next audio: 3× FPGA AY + beeper + DMA sample playback |
 
 ### [Synthesis Techniques](synthesis/README.md)
