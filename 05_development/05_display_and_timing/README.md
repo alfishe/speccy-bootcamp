@@ -19,7 +19,7 @@ Video frame generation, per-model timing, raster synchronization, contention, fl
 | [video_frame_scorpion.md](video_frame_scorpion.md) | Scorpion ZS-256 frame: 312 lines matching 48K macro timing, +9 T horizontal shift, no contention but Even M1 (RAM fetches on even T), 7 MHz turbo with paper-dependent slot waits |
 | [video_frame_other_soviet.md](video_frame_other_soviet.md) | Long-tail Soviet clones: Kay 1024 (48K-clean), ATM Turbo (7 MHz anomaly: 99,880 T-states), Profi (paper offset T=12,580), Byte, Quorum, Leningrad, LEC |
 | [video_frame_next.md](video_frame_next.md) | ZX Spectrum Next: configurable timing modes (48K/128K/+2A/Pentagon), 4 CPU speeds (3.5/7/14/28 MHz), copper coprocessor (WAIT/MOVE/STOP) |
-| [video_frame_sprinter.md](video_frame_sprinter.md) | Peters Plus Sprinter: SVGA 70 Hz frame (not PAL 50 Hz), 20 MHz Z80, 5 video modes, music tempo 40% faster |
+| [video_frame_sprinter.md](video_frame_sprinter.md) | Peters Plus Sprinter: PAL-family frame (312 lines @ 50.08 Hz = Pentagon's 69,888 T exactly, or 320 lines @ ~48.8 Hz), 42 MHz FPGA clock tree, selectable INT timing, no contention |
 | [video_frame_zxevo.md](video_frame_zxevo.md) | ZX Evolution (PentEvo): real Z80 + Altera MAX CPLDs, Pentagon-compatible base timing, BaseConf vs TS-Conf configurations |
 | [contention_timing.md](contention_timing.md) | Per-T-state delay tables (Ferranti 6-5-4-3-2-1-0-0, Amstrad 1-0-7-6-5-4-3-2), per-instruction contended cost tables, I/O contention |
 | [interlace_and_flicker.md](interlace_and_flicker.md) | Spectrum's non-interlaced output, 50 Hz perception threshold, attribute flicker, GigaScreen flicker math, CRT vs LCD behavior |

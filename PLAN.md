@@ -515,7 +515,8 @@ zx/
 |---|---|---|
 | `README.md` | Index + New Gen ecosystem overview | Planned |
 | `zx_next.md` | ZX Spectrum Next complete hardware reference: layer architecture, 28MHz accelerator, Layer 2 framebuffer, sprites, tilemap, copper, DMA, joystick system, Z80N extensions, SD, WiFi, RTC, ESP | Planned |
-| `sprinter.md` | Peters Plus Sprinter: 21MHz Z84C15, 4MB RAM, Altera PLD-based video, IDE, ISA, PS/2 | Planned |
+| `sprinter.md` | Peters Plus Sprinter: 21MHz Z84C15, 4MB RAM, Altera ACEX EP1K30 FPGA (reconfigurable), copy accelerator, soft port map, IDE, ISA | ✅ |
+| `sprinter_firmware.md` | Sprinter firmware & sources: PLD configurations (Sprinter-1/2, ZX+AY, Game, DooM, Video), bitstream loading, RAM copy accelerator, BIOS 2.02→3.07, Estex DSS 1.52→1.71, board history sp97→sp2016s, source repositories | ✅ |
 | `zx_evo.md` | ZX Evolution: Z80-based with Altera FPGA + ATmega MCU, PS/2 keyboard/mouse, IDE, SVGA — real hardware, not FPGA core recreation | Planned |
 | `ts_conf.md` | TS-Conf: FPGA ZX Spectrum config for ZX Evo — sprites, tiles, 512K VRAM, turbo modes | Planned |
 | `baseconf.md` | Baseconf: standard ZX Evo configuration, classic Spectrum compatibility | Planned |
@@ -715,7 +716,7 @@ zx/
 | `video_frame_scorpion.md` | **Scorpion frame**: 312 lines matching 48K macro timing, +9 T horizontal shift, revision-dependent contention, 7 MHz turbo | ✅ |
 | `video_frame_other_soviet.md` | Other Soviet clone frames: Kay 1024 (48K-clean), ATM Turbo (7 MHz anomaly: 99,880 T-states), Profi (paper offset T=12,580), Byte, Quorum, Leningrad, LEC | ✅ |
 | `video_frame_next.md` | **ZX Spectrum Next frame**: configurable timing modes (48K/128K/+2A/Pentagon), 4 CPU speeds (3.5/7/14/28 MHz), copper coprocessor | ✅ |
-| `video_frame_sprinter.md` | **Sprinter frame**: SVGA 70 Hz timing (not PAL 50 Hz), 20 MHz Z80, 5 video modes, music tempo 40% faster | ✅ |
+| `video_frame_sprinter.md` | **Sprinter frame**: PAL-family 50.08 Hz (312 lines = 69,888 T = Pentagon exactly) or 320-line 48.8 Hz option, 42 MHz FPGA clock tree, selectable INT timing, no contention | ✅ |
 | `video_frame_zxevo.md` | **ZX Evolution frame**: real Z80 + Altera MAX CPLDs, Pentagon base, BaseConf vs TS-Conf configurations | ✅ |
 | `video_frame_comparison.md` | **Frame timing comparison matrix**: all models side-by-side — scanline count, T-states/line, INT position, contention, turbo, compatibility matrix, detection decision tree | ✅ |
 

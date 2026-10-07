@@ -47,6 +47,8 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | Article | Description |
 |---------|------------|
 | [zx_next.md](02_hardware/newgen/zx_next.md) | ZX Spectrum Next complete hardware reference: layer stack, NextReg system, Layer 2 framebuffer, hardware sprites, tilemap, copper, DMA, joystick system, Z80N extensions |
+| [sprinter.md](02_hardware/newgen/sprinter.md) | Peters Plus Sprinter (2000): Z84C15 @ 21 MHz, 4 MB RAM, Altera ACEX EP1K30 reconfigured from flash at boot, per-cell video modes (320×256×256 / 640×256×16), RAM-based soft port map, copy accelerator, IDE, ISA-8 |
+| [sprinter_firmware.md](02_hardware/newgen/sprinter_firmware.md) | Sprinter firmware & sources: PLD configurations and bitstream loading, RAM copy accelerator (`LD r,r` opcodes, `#C7` scale), BIOS 2.02→3.07, Estex DSS 1.52→1.71, board history sp97→sp2016s 1996–2026, source-repository catalog |
 
 ### 04 — Operating Systems ✅ COMPLETE
 
@@ -150,7 +152,7 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [video_frame_scorpion.md](05_development/05_display_and_timing/video_frame_scorpion.md) | Scorpion ZS-256 frame: 312 lines matching 48K macro timing, +9 T horizontal shift, no contention but Even M1 (RAM fetches on even T), 7 MHz turbo with paper-dependent slot waits |
 | [video_frame_other_soviet.md](05_development/05_display_and_timing/video_frame_other_soviet.md) | Long-tail Soviet clones: Kay 1024 (48K-clean), ATM Turbo 7 MHz anomaly (99,880 T-states), Profi paper offset, Byte, Quorum, Leningrad, LEC |
 | [video_frame_next.md](05_development/05_display_and_timing/video_frame_next.md) | ZX Spectrum Next: configurable timing modes (48K/128K/+2A/Pentagon), 4 CPU speeds (3.5/7/14/28 MHz), copper coprocessor |
-| [video_frame_sprinter.md](05_development/05_display_and_timing/video_frame_sprinter.md) | Sprinter: SVGA 70 Hz frame (not PAL 50 Hz), 20 MHz Z80, 5 video modes, music tempo 40% faster |
+| [video_frame_sprinter.md](05_development/05_display_and_timing/video_frame_sprinter.md) | Sprinter: PAL-family frame (312 lines @ 50.08 Hz = Pentagon's 69,888 T exactly, or 320 lines @ ~48.8 Hz), 42 MHz FPGA clock tree, selectable INT timing, no contention |
 | [video_frame_zxevo.md](05_development/05_display_and_timing/video_frame_zxevo.md) | ZX Evolution (PentEvo): real Z80 + Altera MAX CPLDs, Pentagon-compatible base, BaseConf vs TS-Conf configurations |
 | [contention_timing.md](05_development/05_display_and_timing/contention_timing.md) | Per-T-state delay tables (Ferranti 6-5-4-3-2-1-0-0, Amstrad 1-0-7-6-5-4-3-2), per-instruction contended cost tables |
 | [interlace_and_flicker.md](05_development/05_display_and_timing/interlace_and_flicker.md) | Non-interlaced output, 50 Hz perception threshold, attribute flicker, GigaScreen flicker math, CRT vs LCD |
