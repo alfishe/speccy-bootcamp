@@ -49,6 +49,10 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [zx_next.md](02_hardware/newgen/zx_next.md) | ZX Spectrum Next complete hardware reference: layer stack, NextReg system, Layer 2 framebuffer, hardware sprites, tilemap, copper, DMA, joystick system, Z80N extensions |
 | [sprinter.md](02_hardware/newgen/sprinter.md) | Peters Plus Sprinter (2000): Z84C15 @ 21 MHz, 4 MB RAM, Altera ACEX EP1K30 reconfigured from flash at boot, per-cell video modes (320×256×256 / 640×256×16), RAM-based soft port map, copy accelerator, IDE, ISA-8 |
 | [sprinter_firmware.md](02_hardware/newgen/sprinter_firmware.md) | Sprinter firmware & sources: PLD configurations and bitstream loading, RAM copy accelerator (`LD r,r` opcodes, `#C7` scale), BIOS 2.02→3.07, Estex DSS 1.52→1.71, board history sp97→sp2016s 1996–2026, source-repository catalog |
+| [zx_evo.md](02_hardware/newgen/zx_evo.md) | ZX Evolution (2007): hybrid Z80 + Altera FPGA + ATmega MCU, Pentagon 1024 hardware compatibility, modern extensions (turbo/IDE/SD/PS-2) |
+| [baseconf.md](02_hardware/newgen/baseconf.md) | BaseConf (default ZX Evolution firmware): Pentagon 1024 profile, `#7FFD`/`#DFFD`/`#EFF7` paging, Nemo IDE (16-bit words, both byte orders), turbo + emulated contention, revisions A/B/C |
+| [ts_conf.md](02_hardware/newgen/ts_conf.md) | TS-Conf enhanced firmware: `#xxAF` register space, shared-DRAM architecture, 2 tile layers + 85 sprites in 3 layers, 4 modes × 4 geometries, RGB555 CRAM, 9-task DMA, CPU cache, 4 INT vectors |
+| [vdac2.md](02_hardware/newgen/vdac2.md) | VDAC2: FT812 EVE2 GPU card for the ZX Evolution IDE slot — display lists, coprocessor, 640×480/800×600/1024×768 @ 57–85 Hz, SPI + DMA programming, msel, VDAC lineage, DXT trick, VDAC2 games, emulation |
 
 ### 04 — Operating Systems ✅ COMPLETE
 

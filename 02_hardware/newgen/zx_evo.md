@@ -146,7 +146,8 @@ The ZX Evolution's hardware is defined by its **firmware** — the bitstream loa
 | Firmware | Purpose | See |
 |---|---|---|
 | **BaseConf** | The default — Pentagon 1024 compatibility with extensions | [baseconf.md](baseconf.md) |
-| **TS-Conf** | Enhanced video — sprites, tilemap, 512K VRAM, turbo | [ts_conf.md](ts_conf.md) |
+| **TS-Conf** | Enhanced video — sprites, tilemap, CRAM palette, DMA, turbo | [ts_conf.md](ts_conf.md) |
+| **VDAC2** (TS-Conf family) | FT812 GPU card in the IDE slot — 640×480 to 1024×768, millions of colors | [vdac2.md](vdac2.md) |
 
 Switching between configurations requires **reflashing the CPLD bitstream** (or loading a different bitstream from SD card on later revisions). It is not a runtime switch — the machine boots into one configuration and stays there until reboot. This is fundamentally different from the ZX Spectrum Next's runtime mode switching.
 

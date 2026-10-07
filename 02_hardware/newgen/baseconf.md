@@ -10,7 +10,7 @@
 For software developers, BaseConf is the **"known-good target"** for ZX Evolution software. If your program runs under BaseConf, it runs on the vast majority of ZX Evolution boards in the field. This article covers BaseConf as a programmer-visible configuration: what hardware it presents, how the memory map differs from a bare Pentagon 1024, what extra ports it exposes, and what compatibility pitfalls exist.
 
 > [!NOTE]
-> This article covers the **firmware configuration** (what the Z80 sees). For the underlying hardware platform (real Z80 + CPLD + ATmega), see [zx_evo.md](zx_evo.md). For the **OS-level details** (boot ROM, dot commands, file system), see [evo_os.md](../../04_operating_systems/evo_os.md). For the enhanced firmware alternative (sprites, tilemap, 512K VRAM), see [ts_conf.md](ts_conf.md).
+> This article covers the **firmware configuration** (what the Z80 sees). For the underlying hardware platform (real Z80 + CPLD + ATmega), see [zx_evo.md](zx_evo.md). For the **OS-level details** (boot ROM, dot commands, file system), see [evo_os.md](../../04_operating_systems/evo_os.md). For the enhanced firmware alternative (sprites, tilemap, DMA, RGB555 CRAM), see [ts_conf.md](ts_conf.md); for the FT812 video card of the TS-Conf family, see [vdac2.md](vdac2.md).
 
 ---
 
@@ -30,6 +30,16 @@ A BaseConf is a **complete hardware definition** — changing it changes everyth
 | **Board** | MiniITX form factor (172 × 170 mm), 2 ZXBUS slots, ATX or +5/+12 V power |
 
 In short, BaseConf is the **hardware definition of the ZX Evolution as the Z80 sees it**. Changing the BaseConf changes what hardware the Z80 sees.
+
+```mermaid
+flowchart TB
+    Z80["Real Z80 @ 3.5/7/14 MHz"] <--> FPGA["EP1K50 FPGA — BaseConf bitstream<br/>paging #7FFD/#DFFD/#EFF7 · Pentagon video · AY/Covox<br/>Beta-128 FDC · Nemo IDE · Gluk CMOS · turbo"]
+    FPGA <--> RAM["4 MB DRAM"]
+    FPGA <--> ROM["512 KB flash ROM<br/>(TR-DOS / 128 / 48 / service)"]
+    FPGA --> VID["RGB + scan-doubled VGA"]
+    FPGA <--> AVR["ATmega128<br/>PS/2 kbd+mouse · SD SPI · RS-232 · RTC<br/>bootloader + TEST&SERVICE"]
+    FPGA <--> BUS["2 x ZXBUS slots"]
+```
 
 ---
 
@@ -111,17 +121,16 @@ The BaseConf RTL (`pentevo/fpga/base_trdemu`: `z80/zclock.v`, `z80/zmem.v`, `dra
 
 See [contention_model.md](../../05_development/03_memory_and_io/contention_model.md) for the cross-model picture.
 
-### IDE Interface
+### IDE Interface — Nemo IDE, 16-bit words over two byte accesses
 
-BaseConf provides an **8-bit IDE interface** for CompactFlash cards and hard disks. The IDE controller is mapped to ports in the `#A0`–`#B7` range (Kay-compatible):
+BaseConf builds in the **Nemo IDE** controller (the IDE logic lives in the same RTL for BaseConf and TS-Conf: [`pentevo/fpga/base/z80/zports.v`](https://github.com/tslabs/zx-evo/blob/master/pentevo/fpga/base/z80/zports.v)). The ATA data register is **16 bits**, assembled from two 8-bit Z80 accesses; the hardware accepts **both byte orders** and tells them apart automatically:
 
-| Port | Function |
-|---|---|
-| `#A0` | IDE data (read/write 8 bits at a time) |
-| `#A1`–`#A7` | IDE register select (error, features, sector count, LBA low/mid/high, device/head) |
-| `#B0`–`#B7` | IDE status / command / control |
+| Order | Read | Write |
+|---|---|---|
+| **Nemo** | `IN #10` = low byte, `IN #11` = latched high byte | `OUT #11,hi` then `OUT #10,lo` writes the word |
+| **DivIDE** | first `IN #10` = low, second `IN #10` = high | first `OUT #10,lo`, second `OUT #10,hi` |
 
-The IDE interface is **8-bit** (not 16-bit) — each 16-bit word from the drive requires two port reads. This is the same limitation as the Kay's IDE; software written for the Kay IDE works on BaseConf with minor adjustments.
+The port decode uses the low address byte: `rrr10000` (`#10`, `#30` … `#F0`) select ATA registers via `A7..A5`, `#C8` is the alternate-status/control port, and `#11` is the high-byte latch (not a bus cycle). An access to any other IDE port cancels a half-completed pair. Compared with an 8-bit Kay-style interface this halves the port traffic per sector — software written for the Nemo IDE (including ZX-Evo BIOS and the emulators' `NEMO-DIVIDE` scheme) works unchanged.
 
 ### SD Card via SPI
 
@@ -159,16 +168,14 @@ The TR-DOS ROM is **banked into the memory map on demand** — when software cal
 
 ## Compatibility Profiles
 
-Beyond the default Pentagon 1024 profile, BaseConf implements several **alternative compatibility profiles** — each presents a different classic machine to the Z80:
+Beyond the default Pentagon 1024 profile, the AVR setup selects the **raster/contention profile** (Pentagon default with no contention; 48K or 128K raster with emulated Sinclair contention at 3.5 MHz), and the boot menu selects among several **machine personalities**:
 
 | Profile | What it does |
 |---|---|
 | **Pentagon 1024** (default) | Most Russian software; default daily use |
-| **Pentagon 128** | Older Pentagon-128 software with compatibility issues |
+| **Pentagon 128 / 48K / 128K raster** | Older software expecting 128K paging locks or Sinclair contention |
 | **ATM Turbo** | ATM Turbo-specific software (alternative Russian clone with its own video modes) |
-| **48K** | Original Sinclair software that misbehaves on clones |
-| **128K** | Original 128K/+2 software |
-| **TS-Conf** | Modern TS-Conf-aware software (requires TS-Conf BaseConf — see [ts_conf.md](ts_conf.md)) |
+| **TS-Conf** (separate firmware, not a BaseConf profile) | Modern TS-Conf-aware software — see [ts_conf.md](ts_conf.md) and [vdac2.md](vdac2.md) |
 
 Switching profiles is a **reboot operation** — the user selects the new BaseConf in the boot menu, and the CPLD is reprogrammed on the next power cycle. This is fundamentally different from the ZX Spectrum Next's runtime mode switching.
 
@@ -221,7 +228,8 @@ If you have a board without revision markings, the **QFP-packaged Z80** and **Mi
 ## Cross-References
 
 - [ZX Evolution hardware platform](zx_evo.md) — physical board, real Z80 + CPLD + ATmega
-- [TS-Conf firmware](ts_conf.md) — the enhanced firmware (sprites, tilemap, 512K VRAM)
+- [TS-Conf firmware](ts_conf.md) — the enhanced firmware (sprites, tilemap, DMA, CRAM)
+- [VDAC2 — FT812 video card](vdac2.md) — the GPU extension of the TS-Conf family
 - [ZX Evolution FPGA internals](../../11_emulation/fpga/zxevo.md) — CPLD design, bitstream architecture
 - [Evo OS](../../04_operating_systems/evo_os.md) — OS-level details, dot commands, file system
 - [Pentagon 128](../clones/pentagon.md) — the BaseConf's primary compatibility target
@@ -233,11 +241,13 @@ If you have a board without revision markings, the **QFP-packaged Z80** and **Mi
 
 ## References
 
-- **NedoPC ZX Evolution page** ([nedopc.com/zxevo/zxevo_eng.php](http://nedopc.com/zxevo/zxevo_eng.php)) — official hardware documentation, schematics (rev B/C), bill of materials, user manual, soldering manual, and firmware downloads
-- [BaseConf source](https://nedopc.com/) — official BaseConf bitstream source and build instructions
-- **TS-Conf official docs** ([github.com/tslabs/zx-evo](https://github.com/tslabs/zx-evo)) — alternative firmware (sprites, tilemap, DMA) — see [ts_conf.md](ts_conf.md)
-- **BruXy ZX Evolution review** ([bruxy.regnet.cz](https://bruxy.regnet.cz/web/8bit/EN/zx-evolution/)) — independent hands-on review with hardware photos, monitor compatibility tests, and software demonstrations
-- **Andrew Lazarev's ZX Evolution site** ([zx.andrew-lazarev.com/en/](https://zx.andrew-lazarev.com/en/)) — community-maintained programming guides and software archive
-- **[zx-pk.ru](https://zx-pk.ru) forum** — *ZX Evolution* subforum with BaseConf programming guides, SD/IDE/RTC tutorials, and user-ported software (Russian)
-- [Pentagon 1024 specification](https://zx-pk.ru/) — the original hardware specification that BaseConf implements
+All links verified live (October 2026).
+
+- **BaseConf RTL sources** — [tslabs/zx-evo `pentevo/fpga/base`](https://github.com/tslabs/zx-evo/tree/master/pentevo/fpga/base) (LVD's Verilog; the `base_trdemu` contention-emulation variant is cited in the RTL notes), released alongside TS-Conf in the same repository
+- **NedoPC ZX Evolution page** — [nedopc.com/zxevo/zxevo_eng.php](http://nedopc.com/zxevo/zxevo_eng.php): schematics (rev B/C), bill of materials, user and soldering manuals, firmware downloads
+- [zxevo.ru](https://zxevo.ru) — community wiki and file hub (Russian)
+- **TS-Conf** — the sibling firmware: [ts_conf.md](ts_conf.md), sources [tslabs/zx-evo](https://github.com/tslabs/zx-evo); its FT812 video card: [vdac2.md](vdac2.md)
+- **BruXy ZX Evolution review** ([bruxy.regnet.cz](https://bruxy.regnet.cz/web/8bit/EN/zx-evolution/)) — independent hands-on review with hardware photos and monitor compatibility tests
+- **Andrew Lazarev's ZX Evolution site** ([zx.andrew-lazarev.com/en/](https://zx.andrew-lazarev.com/en/)) — community programming guides and software archive
+- **[zx-pk.ru](https://zx-pk.ru) forum** — *ZX Evolution* subforum: BaseConf programming guides, SD/IDE/RTC tutorials (Russian)
 - **Tetroid (Novosibirsk) distribution** — `tetroid@inbox.ru`, `tetroid.nedopc.com` — current manufacturer and support contact

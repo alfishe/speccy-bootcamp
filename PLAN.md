@@ -518,8 +518,9 @@ zx/
 | `sprinter.md` | Peters Plus Sprinter: 21MHz Z84C15, 4MB RAM, Altera ACEX EP1K30 FPGA (reconfigurable), copy accelerator, soft port map, IDE, ISA | ✅ |
 | `sprinter_firmware.md` | Sprinter firmware & sources: PLD configurations (Sprinter-1/2, ZX+AY, Game, DooM, Video), bitstream loading, RAM copy accelerator, BIOS 2.02→3.07, Estex DSS 1.52→1.71, board history sp97→sp2016s, source repositories | ✅ |
 | `zx_evo.md` | ZX Evolution: Z80-based with Altera FPGA + ATmega MCU, PS/2 keyboard/mouse, IDE, SVGA — real hardware, not FPGA core recreation | Planned |
-| `ts_conf.md` | TS-Conf: FPGA ZX Spectrum config for ZX Evo — sprites, tiles, 512K VRAM, turbo modes | Planned |
-| `baseconf.md` | Baseconf: standard ZX Evo configuration, classic Spectrum compatibility | Planned |
+| `ts_conf.md` | TS-Conf: FPGA ZX Spectrum config for ZX Evo — `#xxAF` registers, 2 tile layers + 85 sprites (3 layers), 4 modes × 4 geometries, RGB555 CRAM, 9-task DMA, CPU cache, 4 INT vectors, shared 4 MB DRAM | ✅ |
+| `vdac2.md` | VDAC2: FT812 EVE2 GPU card for the ZX Evolution IDE slot — display lists, coprocessor, 1 MB RAM_G, 640×480/800×600/1024×768 @ 57–85 Hz, SPI (`#57`/`#77`) + DMA, msel, VDAC lineage, DXT trick, games, emulation | ✅ |
+| `baseconf.md` | Baseconf: standard ZX Evo configuration, Pentagon 1024 compatibility, `#7FFD`/`#DFFD`/`#EFF7`, Nemo IDE (16-bit words, both orders), turbo + emulated contention, revisions A/B/C | ✅ |
 | `zx_uno.md` | ZX-Uno: FPGA-based, ULAplus, Turbo, AY, SPI, WiFi | Planned |
 | `karabas.md` | Karabas family (Karabas 128 / Karabas Pro / Peridot): open-source Z80 + Altera MAX II CPLD clones, three tiers (Sinclair 128K exact, Pentagon 128 + turbo/SD, expandable with WiFi/RTC/GPIO) | Planned |
 
