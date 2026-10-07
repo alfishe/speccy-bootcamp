@@ -153,6 +153,8 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [color_system.md](05_development/05_display_and_timing/color_system.md) | Attribute byte, 8-color palette, attribute clash, ULAplus 64-color, Timex HiColor/HiRes |
 | [border_effects.md](05_development/05_display_and_timing/border_effects.md) | Border color via #FE, raster bars, rainbow borders, per-model timing |
 | [clone_video_modes.md](05_development/05_display_and_timing/clone_video_modes.md) | Clone video modes: GigaScreen, ATM hires, Profi 512×240, Kay CPLD, TS-Conf |
+| [spec256.md](05_development/05_display_and_timing/spec256.md) | Spec256: 256-color Z80_GFX co-processing model — lockstep shadow CPU, 8 planes per address, .gfx/.cfg formats, emulators and FPGA cores |
+| [zxpoly.md](02_hardware/clones/zxpoly.md) | ZX-Poly: four lockstep Z80s vs attribute clash (1994 concept, never manufactured) — SIMD bitplane platform, adapted-games corpus |
 | [video_frame_scorpion.md](05_development/05_display_and_timing/video_frame_scorpion.md) | Scorpion ZS-256 frame: 312 lines matching 48K macro timing, +9 T horizontal shift, no contention but Even M1 (RAM fetches on even T), 7 MHz turbo with paper-dependent slot waits |
 | [video_frame_other_soviet.md](05_development/05_display_and_timing/video_frame_other_soviet.md) | Long-tail Soviet clones: Kay 1024 (48K-clean), ATM Turbo 7 MHz anomaly (99,880 T-states), Profi paper offset, Byte, Quorum, Leningrad, LEC |
 | [video_frame_next.md](05_development/05_display_and_timing/video_frame_next.md) | ZX Spectrum Next: configurable timing modes (48K/128K/+2A/Pentagon), 4 CPU speeds (3.5/7/14/28 MHz), copper coprocessor |

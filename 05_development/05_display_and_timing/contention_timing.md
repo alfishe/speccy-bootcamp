@@ -66,6 +66,31 @@ The pattern `1, 0, 7, 6, 5, 4, 3, 2` is **not** a rotation of the Ferranti value
 | ZX-Uno, MiSTer (48K mode) | Replicates Ferranti 6-5-4-3-2-1-0-0 |
 | ZX-Uno, MiSTer (+2A mode) | Replicates Amstrad 1-0-7-6-5-4-3-2 |
 
+### Why the circuit decides it — four mechanisms
+
+"Contention" is a family of different circuits, and which family a machine belongs to predicts everything else about its delays:
+
+1. **Clock stretching** (Ferranti ULA): the ULA stops the CPU clock while it owns the bus. Because the ULA watches only address lines and MREQ/IORQ — not the cycle type — *internal* cycles that merely put a contended address on the bus also stall, and I/O cycles with a contended high byte stall too.
+2. **WAIT pulling** (Amstrad gate array, Scorpion, most FPGA machines): the Z80's WAIT pin stretches the *current* cycle only. The gate array gates on MREQ — hence **no I/O contention and no internal-cycle contention** on +2A/+3.
+3. **Fixed slot interleaving** (Soviet discrete clones): memory runs at 2–4× the CPU rate and a counter hands out video/CPU slots in a fixed pattern. At 3.5 MHz the CPU always finds its slot — nothing ever waits. The price is exact phase alignment, which is exactly where the Scorpion's **Even M1** wait comes from: an opcode fetch must not start on an odd T-state.
+4. **Arbitration** (FPGA machines: ZX-Evo, Next, Karabas-Pro): bandwidth is abundant, so at 3.5 MHz nothing contends — any Sinclair-style contention is **emulated by rule** in compatibility modes and switched off in turbo.
+
+### Turbo-mode delays — the slowdowns that are not contention
+
+| Machine (turbo) | Delay | Verified against |
+|---|---|---|
+| **Scorpion Turbo+** (7 MHz) | in turbo, **every** RAM access (any page, read or write) waits for the next CPU slot: every 4 T during the paper, every 2 T in the border; an opcode fetch waits 1 T more. Every I/O cycle costs +2 T. Turbo is switched on by `IN` from `#7FFD`, off by `IN` from `#1FFD` or reset; the CPU drops to 3.5 MHz while `/INT` is active | decoded SC15.1 EPLD fuse map, simulated |
+| **ATM Turbo 2+ v7.10** (7 MHz, `#77` bit 3) | every RAM access waits 2–3 T for the CPU's slot; a keyboard `IN (#FE)` holds WAIT until the 8031 controller answers | v7.10 schematic + assembly manual |
+| **ZX-Evo BaseConf @ 14 MHz** | a RAM read or M1 that misses both one-word caches (code and data) waits 2–3 T depending on clock parity; hits and writes never wait; external I/O (AY, VG93 in shadow) costs a fixed +3 T (8 fclk); clock switches are immediate | RTL (`zclock.v`, `zmem.v`) |
+| **ZX-Evo TS-Conf @ 14 MHz** | waits on cache misses (M1 +3..6 fclk, read +2..5); the CPU stalls only when video + DMA + sprites consume the full DRAM bandwidth; DMA can be given priority over the CPU | RTL (`zmem.v`, `arbiter.v`) |
+| **Kay-1024 turbo** | IORQ stretched; effective RAM clock 6.3–7.0 MHz after arbitration losses (designer's own figures) | designer article |
+| **Karabas-Pro @ 14 MHz** | ~400 ns WAIT on every MREQ cycle; turbo drops to 3.5 MHz after an FDC access; its optional "classic" screen mode adds real 48K-style contention at 3.5 MHz | RTL |
+| **ZX Spectrum Next @ 28 MHz** | 1 wait on every memory read from SRAM / bank-5 BRAM; **any turbo speed turns Sinclair-style contention off** | VHDL |
+| **Sprinter @ 21 MHz** | waits on the 7 MHz main DRAM only; the 64 KB fast RAM never waits; separate VRAM bus, so no video contention ever | review + MAME |
+
+> [!NOTE]
+> The pattern to remember: at 3.5 MHz the clone world is contention-free by design, and the Sinclair machines contend by circuit necessity. In turbo the situation inverts — the clones' fast clock outruns their DRAM interleave, so *they* acquire waits, while the FPGA machines simply keep arbitrating.
+
 ---
 
 ## Per-Scanline Contention Maps

@@ -80,10 +80,32 @@ Every IDE interface occupies a distinct I/O footprint. The table below summarise
 | Interface | Primary footprint | Width | Host clones | Native DOS |
 |---|---|---|---|---|
 | **DivIDE** | `#E3`–`#E7` (+ `#A3`–`#A7` mirror) | 8-bit windowed | DivIDE, DivIDE clones, ZX Evolution (compat) | ESXDOS |
-| **Nemo IDE** | Pentagon-specific (port-mapped) | 8-bit paired | Pentagon, Profi | Raw / IS-DOS |
+| **Profi IDE** | `(p & #9F) = #8B`: `#xxCB`/`#xxEB` (+ write `#06AB`) | 16-bit via **mirror latches** | Profi | IS-DOS / Profi ROM |
+| **Nemo IDE** | `#10`, `#30` … `#F0` (CS0) + `#C8` (CS1) + latch `#11` | 16-bit word from two bytes | Pentagon, ZX Evolution (`NEMO-DIVIDE`) | Raw / IS-DOS / FAT |
 | **KAY IDE** | KAY-1024 internal (`#08`–`#0F` family) | 8-bit paired | KAY-1024 | Raw / FAT |
-| **ATM Turbo / Z-Controller IDE** | `#FF0F`–`#FFEF` (8 regs) | 8-bit paired | ATM Turbo, Sprinter, Z-Controller | ATM ROM / FAT |
-| **SMUC** | `#D8BE` + `#F8BE`–`#FFBE` | 16-bit ISA | Scorpion, ZX Evolution | Custom / FAT |
+| **ATM Turbo IDE** | `(p & #1F) = #0F`: `#xx0F` … `#xxEF` | 16-bit, latch at A8=1 | ATM Turbo 2+ | ATM ROM / FAT |
+| **SMUC** | `#F8BE`–`#FFBE` + latch `#D8BE`, control `#FFBA` | 16-bit ISA bridge | Scorpion | Custom / FAT |
+
+### 3.2 Verified port tables (consensus across UnrealSpeccy, ZXMAK2, Xpeccy, MAME, pico-spec, Karabas-Pro and ZX-Evo RTL)
+
+All these boards are "8-bit Z80 bus to a 16-bit IDE drive" adapters. They differ in only three things: **which ports reach which ATA register**, **how the 16-bit data word is split into two bytes** (the latch pattern), and **when the board answers** (the gate). Everything behind that is one shared ATA core.
+
+| Board | Ports | Register from | CS1 (control) | High byte | Gate | INTRQ |
+|---|---|---|---|---|---|---|
+| **Profi** | `(p & #9F) = #8B`: `#xxCB` / `#xxEB` | A10..A8 | write `#06AB` only | **mirror latches**: read `#CB` = register + `#EB` = latch; write `#CB` = latch + `#EB` = register | Profi EXT mode (`#DFFD.5` + `#7FFD.4`) | not wired |
+| **Nemo** | A2=A1=0, CS0 when A4A3=10: `#10 #30 … #F0` | A7..A5 | `#C8` = register 6 | latch port `#11`: read `#10` then `#11`; write `#11` then `#10` | TR-DOS ports **off** | not wired |
+| **Nemo-A8** | as Nemo | A7..A5 | `#C8` | latch at A8=1 (`#110`) | TR-DOS ports off | not wired |
+| **Nemo-DivIDE / ZX-Evo** | as Nemo + RTL aliases | A7..A5 | `#C8` | Nemo latch **or** two `#10` accesses (low then high) | always (Evo) | not wired |
+| **ATM Turbo 2+** | `(p & #1F) = #0F`: `#xx0F … #xxEF` | A7..A5 | none (no SRST) | latch at A8=1 (`#FF0F`), Nemo order | TR-DOS ports **on** | **yes**: bit 6 of the `#7FFD`-class read `(p & #8202) = #0200` |
+| **SMUC** | `#F8BE`–`#FFBE`, latch `#D8BE` | A10..A8 | `#FFBA` bit 7 turns `#FEBE` into the control block | latch, Nemo order | TR-DOS ports on | emulators differ |
+
+**The Profi mirror-latch trap.** To read one word `#1234`: `IN A,(#00CB)` returns `#34` and latches `#12`; `IN A,(#00EB)` returns `#12`. To write `#ABCD`: `OUT (#00CB),#AB` only fills the write latch; `OUT (#00EB),#CD` sends `#ABCD`. A decoder that treats "A5 = high byte" the same in both directions gets exactly one direction wrong.
+
+**The ATM INTRQ bit.** After `OUT (#FFEF),#20` (READ SECTORS) the drive raises INTRQ when the sector is ready; `IN A,(#7FFD)` then has **bit 6 = 0** (bits 5–0 read `#3F`). The ATM ROM polls this port instead of the status register.
+
+Gates are opposite by design: Nemo answers only when the **TR-DOS ports are off** (DOS drivers page TR-DOS out first), ATM only when they are **on** (TR-DOS active or ATM3 shadow). Soft reset (SRST): Profi via `#06AB` bit 2, Nemo family via `#C8` bit 2, ATM has no CS1 and therefore no software reset path. On the references' known disagreements: UnrealSpeccy clears INTRQ on an alternate-status read too (against the ATA standard — status reads only is the correct rule), and Xpeccy's Nemo `#C8` maps to the head register (a bug; CS1 register 6 is correct).
+
+**+3-family note.** The **+3e** ROMs (Garry Lancaster) pick the interface **at ROM build time** — one image per interface (simple 8-bit IDE, ZXATASP via an 8255 PPI at `#009F`–`#039F`, ZXCF with CF forced into 8-bit mode via SET FEATURES `#01`, registers at `#xxBF` + memory control `#10BF`, or SD through the Z-Controller ports `#57`/`#77`). The "simple 8-bit" interface reads only the **low byte of each word** — a 10 MB drive stores 5 MB; RS-IDE `.hdf` images mark this with a "halved" flag. ZXCF and ZXATASP page their own RAM into `#0000–#3FFF` and trap the NMI entry `#0066`.
 
 ### 3.1 Why the footprints differ
 

@@ -147,6 +147,21 @@ CMR0 keeps its 128K layout with two Profi-specific footnotes:
 - **Bit 5 — paging lock.** Once set, further writes to `#7FFD` are ignored until NOROM maps RAM over the ROM and clears the lock. (The designers originally intended this bit to gate palette-register access in CP/M mode; the hardware authors note that palette writes work with or without it — the gating never actually functioned.)
 - **Bit 4 — ROM select / CP/M port modifier.** In Spectrum mode it picks the ROM page as on any 128K. In CP/M mode, `ROM14=1` combined with CMR1 bit 5 (`CPM=1`) switches the peripheral map: with `ROM14=0` the I/O space is addressed as in **PROFI+ V3.2**; with the modifier active roughly **30 additional ports** become available.
 
+### The K556RT4 decoder PROM — the verified port map
+
+The disk and peripheral ports on **both board generations** are decoded by a **K556RT4 PROM (256×4)** — v3.2 carries it as U5 on the controller board, v4.0/4.01/5.0 as D10 on the main board. The PROM wiring (traced from the v3.2 MDESK re-trace and the v5 `PROF5-10` text schematic, and read out of both dumped tables) settles every long-standing dispute about the Profi's port map:
+
+- **Inputs**: ADR0/1/5/6/7 on A4/A5/A0/A1/A4; **A2 = 0 only while TR-DOS is paged AND CP/M is off** (v5: `NAND(DISK,/CPM)`; v3: the BAS output of the DISK/CPM latch) — so **CP/M forces the TR-DOS latch irrelevant**; A7 = `/CPM`; **A3 differs: ADR15 on v3.2, ROM14 on v5** (v3.2 has no ROM14 input at all).
+- **Outputs** (active low): VG93 /CS, the FDC system register, the 8255 /CS — plus, on v5, an extra line driving an ИД4 splitter into **IDE, COM (8251), timer/control and RTC**.
+
+| CP/M | TR-DOS | v3.2 | v4/v5 (`ROM14=0`) | v5 (`ROM14=1`) |
+|---|---|---|---|---|
+| off | off | 8255 `#1F/#3F/#5F/#7F` | same | — |
+| off | on | VG93 `#1F..#7F`, system `#FF` | same | — |
+| on | any | VG93 `#1F..#7F`, system `#BF`, **both A15 values** | same | **extended map**: VG93 `#83/#A3/#C3/#E3` · 8255 `#87/#A7/#C7/#E7` · IDE `#8B/#AB/#CB/#EB` · COM `#8F..` · timer/control `#93..` · RTC `#9F/#BF/#DF/#FF` · system register at `#3F` |
+
+Three claims this corrects: the SYS ROM (TR-DOS paged) does **not** see the extended map (it needs CP/M on *and* ROM14=1); in CP/M mode the TR-DOS latch makes no difference (CP/M holds A2 high — emulators that require DOS off in CP/M are wrong); and the v3 FDC answers at **both A15 values** (contra the classic port table). The extended map's IDE ports `#8B/#AB/#CB/#EB` are the footprint the Profi IDE adapter (mirror-latch pair `#CB`/`#EB`) answers on — see [ide_interface.md](../../03_io/storage/ide_interface.md).
+
 The machine has a single 16 KB **projection window** that can show any RAM page, and CMR1 bit 3 chooses where it sits — producing two memory models:
 
 | Window position (`SCO`) | `#0000` | `#4000` | `#8000` | `#C000` |

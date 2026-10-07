@@ -969,23 +969,30 @@ Software should still treat the chip as "position unknown" after any reset: issu
 
 The standard WD1793/ВГ93 setup on the Spectrum (1 MHz FDC clock, 250 kbit/s MFM) is reliable but slow. A standard TR-DOS disk holds about 80 KB of data per side and takes about 4 seconds to load fully. As the Spectrum clone scene matured in the 1990s, various "turbo" modifications emerged to push the FDC faster.
 
-### 9.1 The clock-doubling mod
+### 9.1 "Turbo VG" — the clock-doubling mod, as the hardware actually does it
 
-The simplest and most common turbo mod is to **double the FDC's master clock** from 1 MHz to 2 MHz. As described in §8.4, this halves the step rate and doubles the data rate:
+Doubling CLC from 1 MHz to 2 MHz halves the chip's own timers: step rates become 3/6/10/15 ms (the 1 MHz figures are their doubles, 6/12/20/30) and the head settle becomes 15 ms (30 ms at 1 MHz — the datasheet's "additional 15 milliseconds" is the 2 MHz number). Two things it does **not** double on real clones:
 
-| Parameter | 1 MHz clock (standard) | 2 MHz clock (turbo) |
-|-----------|------------------------|----------------------|
-| Data rate | 250 kbit/s MFM | 500 kbit/s MFM |
-| Bit cell | 4 µs | 2 µs |
-| Byte window | 32 µs | 16 µs |
-| Step rate (00) | 6 ms | 3 ms |
-| Bytes per track | ~6250 | ~12500 |
+- **The read data rate.** The bit rate the chip *reads* comes from the external data separator (RCLK / RAW READ), which the board keeps at 250 kbit/s. Reading is unaffected by CLK either way.
+- **The write data rate — deliberately.** The write stream is CLK-derived: writing at 2 MHz lays a 500 kbit/s track onto a 250 kbit/s disk. The first Pentagon turbo mod did exactly that and **destroyed disks** (Spectrofon #10, 1995) — later mods drop back to 1 MHz before any write.
 
-A 2 MHz clock lets the FDC read and write at "high density" (HD) rates — the same rate used by PC 5.25" HD and 3.5" HD floppies. With HD-capable disks and drives, a Spectrum can store ~160 KB per side (twice the standard density).
+On standard clones, "turbo VG" is therefore used **only for head positioning**, and the switching is **automatic hardware, not software** — TR-DOS is unchanged, and no ROM in the corpus toggles a turbo bit:
 
-The mod is purely a hardware change: feed the FDC's CLC input 2 MHz instead of 1 MHz — a crystal swap on interfaces with their own FDC crystal, a different clock tap where the board derives it. No software change is required for the FDC itself, though software that depends on specific timing (e.g., copy protection) will need updates. Most modern TR-DOS versions (e.g., TR-DOS 6.10+ for the Pentagon) detect the clock speed automatically and adjust their timing loops accordingly.
+| Machine | How 2 MHz is selected | What is doubled | Switch-back |
+|---|---|---|---|
+| Pentagon + Spectrofon #10/#12/#14, Black Crow #02 mods | multiplexer (КП11) on pin 24, driven by a flip-flop from WG/DRQ | CLK only | before writing (write gate) or at first DRQ |
+| Pentagon 1024SL 1.4 | inherited the raw Spectrofon #10 scheme | CLK | write strobe — **writes corrupted disks** (fixed in v2.x: fixed 1 MHz) |
+| ZX-Evo BaseConf / TS-Conf (VG93 clock from the FPGA) | automatic: STEP rising edge sets turbo, **first DRQ clears it** | CLK only; RCLK fixed 250 kHz | first DRQ |
+| Karabas-Pro (MB8877A) | same STEP/DRQ scheme in the CPLD; can be disabled (port `#028B` bit 2, OSD) | CLK only | first DRQ |
+| Sprinter Sp2000 (720 KB) | PLD `TURBING`: set by STE, held until WSTB/RSTB | CLK only while positioning | read/write strobe |
+| Scorpion Turbo+, ATM Turbo 2+ | none — fixed 1 MHz | — | — |
 
-The downside: HD floppies are physically different from DD floppies (different magnetic coating, different coercivity). Writing HD data to a DD floppy produces unreliable results. The mod requires HD disks (marked "2D" or "HD") and an HD drive.
+**True HD (1.44 MB) needs three things doubled together**: CLK (2 MHz), the separator (500 kbit/s), and an HD drive/medium. Two machines do it for real:
+
+- **Sprinter Sp2000**: a PLD latch selects the 1.44 MB mode via `LD A,#21 : OUT (#BD),A` (A13 distinguishes `#21BD` from `#01BD`) — CLK permanently 2 MHz *and* the separator from 14 MHz. The BIOS auto-probes density: on a READ ADDRESS timeout it flips the rate and retries (a rate/medium mismatch yields no address marks → Record Not Found).
+- **Pentagon "AXLR" HD mod** (Deja Vu #07/#09, 1999): port `#FF` bit 7, doubling CLK *and* adding a 16 MHz oscillator for the PLL separator.
+
+And a hard CPU limit: at 500 kbit/s a byte arrives every 16 µs = **56 T-states at 3.5 MHz**, while the fastest TR-DOS transfer loop costs **58 T per byte** — Lost Data is guaranteed. At 7 MHz (112 T) it works; as the AXLR author put it, "без турбы это не работает" ("without turbo it does not work"). The Sprinter's 21 MHz CPU (336 T/byte) serves HD comfortably.
 
 ### 9.2 The external data-separator PLL
 

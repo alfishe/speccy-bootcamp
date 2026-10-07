@@ -32,7 +32,7 @@ This article covers the OPL4's architecture, the two synthesis engines, port dec
 | **Wave RAM** | Optional SRAM (typically 256 KB or 512 KB) for loading custom samples |
 
 > [!NOTE]
-> **MoonSound is rare on real ZX hardware.** Most MoonSound-targeting ZX music runs in software emulators — primarily **ZEsarUX** (which implements the full OPL4 register interface at the standard `#C2`/`#C3` + `#7E`/`#F4` ports). The FPGA MoonSound cores that exist (MiSTer, DE10-Lite) target the MSX platform, not the ZX. Software authors should target the OPL4 register interface as documented in the Yamaha datasheet rather than relying on ZX-specific quirks. The interface is identical across MSX MoonSound and ZX MoonSound.
+> **MoonSound is rare on real ZX hardware.** Most MoonSound-targeting ZX music runs in software emulators — primarily **ZEsarUX** (which implements the full OPL4 register interface at the standard MSX MoonSound ports — FM banks `#C4`/`#C5` and `#C6`/`#C7`, wavetable registers `#7E`/`#7F`). The FPGA MoonSound cores that exist (MiSTer, DE10-Lite) target the MSX platform, not the ZX. Software authors should target the OPL4 register interface as documented in the Yamaha datasheet rather than relying on ZX-specific quirks. The interface is identical across MSX MoonSound and ZX MoonSound.
 
 ## Comparison: MoonSound vs. TSFM vs. AY
 
@@ -261,7 +261,7 @@ Two port schemes exist for MoonSound on ZX Spectrum hardware:
 The ZXM-MoonSound scheme decodes only bits 7–2 of the low byte, giving 4 mirror addresses per port (1024 mirrors total across the 16-bit address space).
 
 > [!WARNING]
-> **Check your target platform's port scheme.** ZEsarUX uses MSX-compatible ports (`#C2`/`#C3` + `#7E`/`#F4`). ZXM-MoonSound hardware uses `#C4`–`#C7`. Software targeting both should probe both schemes during detection, or ship with a compile-time port selection option.
+> **Port scheme (verified against the ZXM-MoonSound card and openMSX).** The interface is identical everywhere: the OPL4 FM section's **two register banks** at **`#C4`/`#C5`** and **`#C6`/`#C7`** (status read at `#C4`), and the **wavetable register/data pair at `#7E`/`#7F`** (sample memory is reached *through* wavetable registers 2/6 with auto-increment, not a separate port). The ZX card decodes the low byte, with a JP1 option choosing whether the windows are DOS-gated; there is no `#C2`/`#C3`/`#F4` variant — treat any source claiming that as confusing MoonSound with MSX-AUDIO.
 
 ### FM Register Map (OPL3 subset)
 
@@ -298,6 +298,16 @@ Voice N base register = N × 8
 
 So voice 0 occupies registers `#00`–`#06`, voice 1 occupies `#08`–`#0E`, and so on up to voice 23 at `#B8`–`#BE`. The base register select is done by writing the register number to port `#7E`.
 
+### Verified chip-level quirks (against openMSX, the de-facto reference core)
+
+- **Wave-header addressing**: for a tone number `wave` and header bank `hdr = (reg 2 >> 2) & 7` (bits 4..2), the 12-byte sample header lives at `wave < 384 || hdr == 0 ? wave × 12 : hdr × 0x80000 + (wave − 384) × 12`. Header bytes 7–11 additionally rewrite wave-table banks 5–9 observably. A wrong fetch here is the classic cause of "wrong instrument" symptoms.
+- **The octave field is signed** (`+5` bits 4..0): negative octaves are legal and combine with the sample's base pitch from the header. Treating it unsigned is the classic "wrong notes" bug; the degenerate value `oct == −8` is a defined no-step guard.
+- **The 44.1 kHz is exact**: the 24 PCM slots advance once per **768 master clocks** of the 33.8688 MHz crystal — 33,868,800 / 768 = 44,100 Hz precisely.
+- **FM timers**: T1 counts `(0x100 − load) × 4` and T2 `× 16` on the 684-clock FM grid (49,516.4 Hz), giving 0.08–20.5 ms and 0.32–82 ms periods; expiry sets status bits 6/5.
+- **The load (LD) status bit is bit 1 (`#02`)**, not bit 7. The real-hardware-measured busy windows: **56 master-clock cycles** after an FM register write, **88** after a wavetable register write, **28** after a memory write, **38** after a memory read.
+- **Writes during LD are applied immediately** — LD only reports the sampling of wave/memory data; there is no write guard. A driver polling LD incorrectly and writing into the wrong window is the classic "wrong rhythm and wrong instruments from one root cause" bug.
+- **Memory map**: linear ROM `#000000–#1FFFFF` (2 MB), SRAM from `#200000` (the ZXM card: 1 MB on chip-selects /MCS6+/MCS7); accesses beyond the fitted devices float high as `#FF`; ROM writes are discarded. The memory mode bit is register 2 bit 1 (both populations map identically on this card).
+
 ```z80
 ; -------------------------------------------------------
 ; Write to a wavetable register.
@@ -317,7 +327,7 @@ MOONSOUND_WAVE_WRITE:
 
 ### Read Behavior
 
-The FM side supports reading the status register at port `#C2` (read mode) — same as the YM2203, returns timer and busy bits. The wavetable side is **write-only** — reads return floating bus values. Software must track wavetable state internally.
+The FM side supports reading the status register at port `#C2` (read mode) — same as the YM2203, returns timer and busy bits. The wavetable side is *mostly* write-only, with **documented readback quirks** (verified against openMSX, the de-facto reference core): register 2 reads back `(v & #1F) | #20`; register 6 is the memory-access window, gated by MA with **auto-increment** (reads return `#FF` while MA = 0); registers 3/4 mask to 6 bits. Everything else reads `#FF`. Software should still shadow the state it cares about.
 
 ### Reset and Initialization
 

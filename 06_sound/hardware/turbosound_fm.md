@@ -100,48 +100,33 @@ The YM2203 has **three separate analog output pins**:
 
 The SSG and FM sections are mixed externally by the host system. On the ZX Spectrum TSFM boards, the typical circuit routes both outputs through summing resistors into a single op-amp, producing a mono mix. Some boards added a stereo path with SSG on one channel and FM on the other for separation.
 
-### Clock and Timing
+### Clock and Timing — the board doubles the socket's AY clock
 
-The YM2203 expects a **4 MHz clock input** (master clock) on its `MCLK` pin. Internally, the chip divides this down:
+**The TSFM board has no oscillator of its own.** It takes the AY clock pin from the host socket and doubles it in the CPLD (`CLK2OUT = INTDELAY_OUT xor CLK1`), driving both YM2203s from the result. Verified against the NedoPC board logic source (2006 and 2022 revisions) and the rev. C schematic; the reference emulator does the same (`Chip2203->clock = ayfq × 2`).
 
-| Subsystem | Internal Clock | Notes |
-|---|---|---|
-| FM engine | MCLK / 144 ≈ 27.78 kHz | The FM operator phase accumulators update at this rate |
-| SSG engine | MCLK / 8 / 2 = MCLK / 16 = 250 kHz | Half the AY's typical rate — **important** for SSG compat |
-| Timer A | MCLK / 64 = 62.5 kHz | Used for periodic interrupts |
-| Timer B | MCLK / 1024 ≈ 3.91 kHz | Slower timer for longer periods |
+So **YM2203 clock = 2 × host AY clock**, and the SSG tone clock **matches the host AY exactly** — no period rescaling needed:
 
-> [!WARNING]
-> **Clock mismatch on ZX builds.** Stock Sinclair/Amstrad machines use different crystal architectures. Original 128K "Toastrack" and grey +2 models use a 17.734475 MHz master crystal, divided by 10 to feed the AY chip at 1.7734 MHz. Later Amstrad +2A/+3 models use a 35.469 MHz crystal divided by 20 for the same AY clock. The YM2203, however, needs **4 MHz** — and there is no 4 MHz tap available on any stock ZX board. Most TSFM builds add a dedicated 4 MHz crystal oscillator. Some Pentagon clones use a 14.0 MHz master crystal and tap a 7 MHz signal divided by 2 to drive the TSFM — but this changes the SSG section's tuning (now 1.75 MHz SSG instead of 1.7734 MHz, matching the Pentagon's standard 1.75 MHz AY clock).
+| Host | AY clock | YM2203 clock | FM sample rate (prescaler /6 → clock/72) |
+|---|---|---|---|
+| Pentagon, ZX Evolution | 1.75 MHz | 3.5 MHz | 48,611 Hz |
+| Sinclair 128K / +2 / +3 | 1.7734 MHz | 3.5469 MHz | 49,262 Hz |
 
-If the YM2203 is clocked at the standard 4 MHz, the SSG section runs at 250 kHz — significantly slower than the AY's typical 1.7734 MHz or 1.7500 MHz. **Software that targets the YM2203's SSG must use different period values than software written for the standard ZX AY.** The frequency formula on the YM2203 SSG section is:
-
-```
-F(tone) = MCLK / (16 × period) = 4,000,000 / (16 × period) = 250,000 / period Hz
-```
-
-Versus the standard ZX 128K AY:
-
-```
-F(tone) = 1,773,400 / (16 × period) = 110,837 / period Hz
-```
-
-So the same period value produces a tone **2.255× higher** on the YM2203's SSG than on the ZX AY. Players that want to mix TSFM's SSG with the standard AY must apply a per-chip frequency scaling.
+A convenient invariant for emulators: **one YM2203 master clock = one CPU T-state on every model** (the AY clock is CPU/2, doubled back). With the default prescaler /6: an FM sample period is 12 × 6 = **72 T-states**, the busy window after a data write is 32 × 6 = **192 T-states**, and one FM sample spans 4.5 AY generator ticks.
 
 ```mermaid
 flowchart LR
-    subgraph ZX ["Standard ZX Spectrum (128K)"]
-        XTAL1["17.734 MHz Crystal"] -->|÷10| AY["AY-3-8912<br/>1.7734 MHz"]
-        AY -->|÷16| TONE1["110.8 kHz Tone Clock"]
+    subgraph HOST ["Host machine (any AY socket)"]
+        AYCLK["AY clock pin<br/>1.75 MHz Pentagon / 1.7734 MHz Sinclair"]
     end
-    
-    subgraph TSFM ["TurboSound FM Expansion"]
-        XTAL2["4.00 MHz Dedicated Crystal"] -->|÷1| YM["YM2203 SSG<br/>4.00 MHz"]
-        YM -->|÷16| TONE2["250.0 kHz Tone Clock"]
+    subgraph TSFM ["TurboSound FM board"]
+        DBL["CPLD clock doubler<br/>xor delay line"] --> YM["2 x YM2203<br/>3.5 / 3.5469 MHz"]
+        YM -->|÷16| SSGTone["SSG tone clock<br/>= host AY tone clock"]
+        YM -->|÷72| FMS["FM sample<br/>48.6-49.3 kHz"]
     end
-    
-    TONE1 -.->|Differs by factor of 2.255x| TONE2
+    AYCLK --> DBL
 ```
+
+The datasheet's nominal 4 MHz (as used on PC sound cards) yields a 250 kHz SSG clock — but **no ZX-hosted TSFM runs that way**; on real boards SSG period values are interchangeable with the host AY's. (The ZX-MultiSound card is the exception with its own fixed 3.5 MHz DDS oscillator — see [zx_multisound.md](zx_multisound.md).)
 
 > [!NOTE]
 > **Why 17.734 MHz?** When designing the 128K, Sinclair wanted to eliminate video dot-crawl. They synchronized the entire machine to the PAL color subcarrier standard (`4.43361875 MHz`). The master crystal is exactly 4× this value: **`17.734475 MHz`**. The ULA divides this by 5 to get the CPU clock (`3.5469 MHz`), and by 10 to get the AY clock (`1.7734 MHz`). Finally, the AY internally divides its input clock by 16 to derive its base tone generator frequency (`110.8 kHz`).
@@ -338,73 +323,31 @@ This lets modulators run at integer multiples of the carrier (2×, 3×, 4×) —
 
 ---
 
-## Port Decoding and Bank-Select
+## Port Protocol — the AY-socket control byte (verified against the board CPLD)
 
-TSFM systems use a multi-bank selection scheme that extends standard TurboSound. The CPU sees several distinct "sound chips" — the primary AY, optionally a second AY for standard TS, and the YM2203 — all addressed through a unified port interface.
+The TSFM plugs into the machine's **AY socket** (40-pin AY-3-8910 or 28-pin AY-3-8912); a small EPM7032S CPLD sits between the socket and the two YM2203s. There is no separate bank port: everything rides the standard AY bus phases (`OUT #FFFD` = latch address, `OUT #BFFD` = write data, `IN #FFFD` = read; BC2 is tied high).
 
-### The YM2203 Bus Interface
+### The control byte — `OUT #FFFD` with value `#F8–#FF`
 
-The YM2203 uses a different bus protocol than the AY. Instead of `BDIR`/`BC1`, it uses a more conventional address/data strobe scheme:
+An address-phase write whose **top five bits are `11111`** never reaches either YM2203 (`/WR` is held inactive, so the chips' address latches stay untouched) and instead updates three CPLD latches:
 
-| Pin | Name | Function |
-|---|---|---|
-| A0 | Address bit | 0 = register select (write) / status (read); 1 = data (read/write) |
-| /CS | Chip select | 0 = chip active |
-| /RD | Read strobe | 0 = read cycle |
-| /WR | Write strobe | 0 = write cycle |
-| /IC | Reset | 0 = reset (active low) |
-| /INT | Interrupt output | Pulses low when timer expires |
-
-This is the standard 8-bit peripheral bus protocol used by most Yamaha chips. The A0 bit selects between register index and data, so the YM2203 occupies **two consecutive port addresses**:
-
-| Port | Function |
-|---|---|
-| Base + 0 | Register index (A0=0) |
-| Base + 1 | Register data (A0=1) |
-
-### Standard ZX Spectrum TSFM Port Map
-
-The most common TSFM scheme extends the TurboSound bank-select to support both a second AY and a YM2203. The bank-select register uses **2 bits**:
-
-```
-Bank-select register:
-  bit 0: AY chip select (0 = primary, 1 = secondary)
-  bit 1: TSFM enable (0 = AY family, 1 = YM2203)
-
-  CS1 CS0 | Active chip
-   0   0  |  AY chip 0 (primary, standard 128K behavior)
-   0   1  |  AY chip 1 (secondary TurboSound)
-   1   0  |  YM2203 (FM + SSG)
-   1   1  |  (reserved — unused on most boards)
-```
-
-```mermaid
-flowchart LR
-    Z80["Z80 CPU"] -->|OUT (Port #FF)| Latch["Bank-Select Register\n(Bits 0, 1)"]
-    Z80 -->|OUT (#FFFD / #BFFD)| Demux{"TSFM Demux\nLogic"}
-    Latch -.-> Demux
-    
-    Demux -->|CS0=0, CS1=0| AY0["AY Chip 0\n(BDIR/BC1)"]
-    Demux -->|CS0=1, CS1=0| AY1["AY Chip 1\n(BDIR/BC1)"]
-    Demux -->|CS1=1| YM["YM2203\n(/CS, A0)"]
-```
-
-The AY ports `#FFFD`/`#BFFD` are routed based on the bank-select:
-
-- **CS0 = 0**: writes to `#FFFD` go to AY chip 0's address latch
-- **CS0 = 1**: writes to `#FFFD` go to AY chip 1's address latch
-- **CS1 = 1**: writes to `#FFFD` go to the YM2203's A0=0 input (register index), and `#BFFD` goes to A0=1 (data)
-
-This means the same `#FFFD`/`#BFFD` protocol that programs the AY works for the YM2203, **as long as the bank-select is set to the TSFM bank**. The AY protocol (BDIR/BC1 = inactive/address/data) and the YM2203 protocol (A0=0/A0=1 with /WR strobes) are isomorphic enough that they map cleanly onto the same CPU-side access.
-
-### Per-Clone Port Variants
-
-| Board | Bank Port | YM2203 Bank Value | Notes |
+| Bit | Latch | 0 | 1 |
 |---|---|---|---|
-| **Profi TurboSound FM** | `#F4` | `#02` (CS1=1, CS0=0) | Profi used its standard non-`#FF` port, extended for TSFM |
-| **ATM Turbo FM expansion** | `#FF` | `#02` | Extension board for ATM Turbo 2+, mostly homebrew |
-| **Custom Pentagon TSFM** | `#FF` | `#02` | DIY daughterboard; rare, undocumented variants exist |
-| **TS-Conf (FPGA) TSFM mode** | `#FF` | `#02` | Modern FPGA spec includes optional YM2203 emulation |
+| 0 | chip select | chip 1 (primary) | chip 2 |
+| 1 | read mode of `IN #FFFD` | status register | selected register |
+| 2 | FM mute | FM on | **FM muted** (both chips, one bit) |
+
+Software conventions agree on this numbering: TFM Compiler 1.2 (rev. C mode) uses `statuschip0 = %11111000`, `statuschip1 = %11111001`; the TFD music format's `#FD` marker means "second chip". Two historical dialects to know about: rev. A boards could not mute FM and their software used `#FC`/`#FD`; TFM Compiler's `US031DX` build used `#FE`/`#FF` for status. (The ZX-MultiSound card deviates deliberately — top **four** bits, and the byte *does* latch into the selected YM2203: see [zx_multisound.md](zx_multisound.md).)
+
+**Reset state**: chip 1 selected, status-read mode, **FM muted** — a program must clear bit 2 before FM is audible.
+
+### Per-clone reality
+
+| Host | TSFM presence | Notes |
+|---|---|---|
+| Any machine with an AY socket | add-on card | a 48K needs an AY interface first |
+| ZX Evolution rev. D | TurboSound connector on the board | |
+| FPGA firmwares (TS-Conf, BaseConf, MiSTer cores) | built-in | MiSTer's core differs from the CPLD in three places — treat the CPLD as ground truth |
 
 ### Read Behavior and Status
 
@@ -451,20 +394,20 @@ TSFM_WRITE_FM:
 
 This is byte-for-byte identical to writing an AY register — the bank-select hardware routes the access to the correct chip. The trick is to **set the bank correctly first**.
 
-### Selecting the TSFM Bank
+### Selecting the TSFM Chip
 
 ```z80
 ; -------------------------------------------------------
-; Select the YM2203 chip as the active sound target.
+; Select chip 1, keep FM audible, status-read mode.
 ; Destroys: A
 ; -------------------------------------------------------
 TSFM_SELECT:
-    LD   A,#02           ; CS1=1, CS0=0 = YM2203 active
-    OUT  (#FF),A         ; bank-select register
-    RET
+        LD   A,#F8           ; %11111000: control byte, chip 0,
+        OUT  (#FFFD),A       ; status reads, FM unmuted
+        RET
+; #F9 selects chip 2; bit 1 set -> register reads;
+; bit 2 set -> FM muted (also the reset state!)
 ```
-
-After this call, all `#FFFD`/`#BFFD` writes go to the YM2203. Reads from `#FFFD` (the address port) return the **YM2203 status register** — timer bits, not AY register values.
 
 ### Setting Up an FM Voice (Channel 1, Algorithm 7, All Carriers)
 
@@ -654,14 +597,7 @@ Software that detects TSFM should respect the following compatibility matrix:
 
 ### SSG Compatibility Mode
 
-The YM2203's SSG section is **functionally identical** to the YM2149, but its **clock is different** (typically 250 kHz from the YM2203's 4 MHz master clock, versus 1.7734 MHz on the standard ZX AY). Software that wants to play an AY module on the YM2203's SSG channels must apply a frequency scaling factor:
-
-```
-Period(YM2203 SSG) = Period(ZX AY) × (1,773,400 / 250,000)
-                   = Period(ZX AY) × 7.094
-```
-
-This is awkward — period values are integers, and the scaling factor is irrational. In practice, TSFM composers write new music for the SSG section using the YM2203's tuning, rather than reusing AY modules directly.
+The YM2203's SSG section is **functionally identical to the YM2149, and on a real TSFM board it runs at the same tone clock as the host AY** (the CPLD doubles the socket's AY clock; see Clock and Timing). AY modules therefore play on the SSG channels with **no period rescaling** — the "×7.094 scaling" advice circulating in some documentation applies only to a hypothetical 4 MHz-clocked chip, not to ZX-hosted boards.
 
 ---
 
@@ -731,27 +667,13 @@ On the ZX Spectrum, TSFM never reached the popularity of standard TurboSound. Re
 
 ## Pitfalls and Common Mistakes
 
-### Pitfall 1: Wrong Clock on SSG Side
+### Pitfall 1: Assuming a Different SSG Clock
 
-**Symptom**: Notes played on the YM2203's SSG channels sound wildly out of tune compared to the same notes on the ZX AY.
+**Symptom**: A ported player pre-scales AY period values "for the YM2203's slower SSG clock" — and the notes come out wrong on real hardware.
 
-**Cause**: The YM2203's SSG section runs at a different clock than the ZX AY. Software reusing AY period values will be out of tune.
+**Cause**: A widespread myth (born from the datasheet's 4 MHz nominal clock) says the YM2203's SSG runs at 250 kHz and needs ×2.255-rescaled periods. On the actual board the CPLD **doubles the socket's AY clock**, so the SSG tone clock equals the host AY's — plain AY period tables are correct as-is.
 
-**Bad code**:
-
-```z80
-; Reusing ZX AY period values for the YM2203 SSG:
-LD   A,PeriodTable-NoteCode  ; period from ZX AY table
-OUT  (C),A
-```
-
-**Correct**: Apply the clock scaling factor (×7.094 for stock 4 MHz YM2203) or generate a separate period table for the SSG:
-
-```z80
-; PeriodTable_SSG is pre-computed for the YM2203 clock
-LD   A,(PeriodTable_SSG-NoteCode)
-OUT  (C),A
-```
+**Fix**: Use the host AY period table unchanged; only a card with its own fixed oscillator (the ZX-MultiSound's 3.5 MHz DDS) differs, and even there the rate equals the Pentagon AY clock.
 
 ### Pitfall 2: Bank Leak Across ISRs
 
