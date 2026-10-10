@@ -322,6 +322,7 @@ Licensed under [CC BY-SA 4.0](LICENSE).
 | [demo_frameworks.md](07_demoscene/demo_frameworks.md) | Demo frameworks: effect sequencing, music synchronisation, memory layout, ISR architecture, part transitions |
 | [notable_demos.md](07_demoscene/notable_demos.md) | Analysis of landmark demos across four eras: Crack Intro (1986–89), Western Golden (1990–96), Soviet Peak (1996–2005), Modern Revival (2010–present) |
 | [hole17_case_study.md](07_demoscene/hole17_case_study.md) | Case study: "Hole 17 enigma" (RMDA, 256 B) — self-built `CALL`-chain engine, stack-pointer-as-plotter rendering, code-as-AY-data, and why nothing in it has a single fixed role |
+| [thelink_case_study.md](07_demoscene/thelink_case_study.md) | Case study: "The Link" (Alone Coder, 2009, Pentagon 1024 + NeoGS) — the sound card's 24 MHz Z80 as a graphics coprocessor: pictures fetched through the ROM window by NeoGS ZX-DMA, the per-frame ZX/card handshake, interrupt-safe `PUSH` blits, a byte-exact rebuild from source |
 | [1bit_music_scene.md](07_demoscene/1bit_music_scene.md) | 1-bit beeper music scene: hardware, techniques, engine lineage, composers, community |
 
 *See [07_demoscene/README.md](07_demoscene/README.md) for the section index.*

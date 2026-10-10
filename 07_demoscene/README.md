@@ -4,7 +4,7 @@
 
 > The ZX Spectrum demoscene represents the **absolute apex** of what can be squeezed from a 3.5 MHz Z80, an attribute-based color system, and contended memory. This section documents the techniques, history, and culture that produced effects people still find hard to believe came from 1980s hardware.
 >
-> **Status**: All 13 articles are complete (CC BY-SA 4.0). Cross-references between articles are verified. The section is the deepest single-source reference on the ZX Spectrum demoscene available in English as of 2024.
+> **Status**: All 14 articles are complete (CC BY-SA 4.0). Cross-references between articles are verified. The section is the deepest single-source reference on the ZX Spectrum demoscene available in English as of 2024.
 
 ---
 
@@ -42,6 +42,7 @@ Demoscene techniques transcend normal game development. They push the hardware p
 | [demo_frameworks.md](demo_frameworks.md) | Demo frameworks: effect sequencing, music synchronisation, memory layout, ISR architecture, part transitions |
 | [notable_demos.md](notable_demos.md) | Analysis of landmark demos across four eras: Crack Intro (1986–89), Western Golden (1990–96), Soviet Peak (1996–2005), Modern Revival (2010–present) |
 | [hole17_case_study.md](hole17_case_study.md) | Case study: "Hole 17 enigma" (RMDA, 256 B) — self-built `CALL`-chain engine, stack-pointer-as-plotter rendering, code-as-AY-data, and why nothing in it has a single fixed role |
+| [thelink_case_study.md](thelink_case_study.md) | Case study: "The Link" (Alone Coder, 2009, Pentagon 1024 + NeoGS) — the sound card's 24 MHz Z80 as a graphics coprocessor: pictures fetched through the ROM window by NeoGS ZX-DMA, the per-frame ZX/card handshake, interrupt-safe `PUSH` blits, a byte-exact rebuild from source |
 | [1bit_music_scene.md](1bit_music_scene.md) | 1-bit beeper music scene: hardware, techniques, engine lineage (Henry → Follin → Wham → QChan → Octode → Pusher/Squeeker), composers, community — see also [06_sound](../06_sound/README.md) |
 
 ---

@@ -416,7 +416,7 @@ NeoGS is a modern redesign by Russian enthusiasts. The goals are increased RAM, 
 
 | Spec | Original GS | NeoGS |
 |---|---|---|
-| **GS Z80** | real Z80 @ 12 MHz | FPGA Z80-compatible core |
+| **GS Z80** | real Z80 @ 12 MHz | real Z80 beside the FPGA, clock 10 / 12 / 20 / 24 MHz selected by `GSCFG0` bits 5–4 |
 | **RAM** | 128–512 KB | 2–4 MB |
 | **Extra ports** | — | `#33` control (bit 7 = card reset; shared with ZXM-GS) |
 | **Firmware** | 1.04 / 1.05a | extended set, SD-card storage and MP3 playback |
@@ -450,6 +450,7 @@ The GS software ecosystem is small but active:
 - **Arkos Tracker 2/3**: Modern multi-platform tracker with GS export (experimental).
 - **Game soundtracks**: Several Soviet games use GS for music, including *Black Crow* and various Russian RPGs.
 - **Demoscene**: GS music appears in late-1990s demos by groups like *Dual Crew* and *Skull Jam*.
+- **NeoGS as a coprocessor**: *The Link* (Alone Coder, 2009) plays nothing on the card — it runs its effects on the NeoGS Z80 at 24 MHz and fetches every picture through the card's ZX-DMA; see [The Link case study](../../07_demoscene/thelink_case_study.md).
 
 ---
 
